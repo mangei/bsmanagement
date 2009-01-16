@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment/>
+<entry key="nextId.buchung">40</entry>
+<entry key="dao.language">SQLdao.SQLLanguageDAO</entry>
+<entry key="dao.kunde">SQLdao.SQLKundeDAO</entry>
+<entry key="system.languageDirectory">languages</entry>
+<entry key="nextId.bundesland">0</entry>
+<entry key="system.imagesDirectory">images</entry>
+<entry key="dao.staat">SQLdao.SQLStaatDAO</entry>
+<entry key="nextId.ort">0</entry>
+<entry key="nextId.zimmer">0</entry>
+<entry key="dao.buchung">SQLdao.SQLBuchungDAO</entry>
+<entry key="nextId.kunde">148</entry>
+<entry key="system.language">de</entry>
+<entry key="nextId.staat">0</entry>
+<entry key="dao.ort">SQLdao.SQLOrtDAO</entry>
+<entry key="system.pluginsDirectory">plugins</entry>
+<entry key="dao.bundesland">SQLdao.SQLBundeslandDAO</entry>
+</properties>
