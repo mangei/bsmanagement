@@ -1,0 +1,1 @@
+copy "C:\Dokumente und Einstellungen\ManuelG\Eigene Dateien\NetBeansProjects\Internatsverwaltungsprojekt\StudentManagementModul\dist\StudentManagementModul.jar" "C:\Dokumente und Einstellungen\ManuelG\Eigene Dateien\NetBeansProjects\Internatsverwaltungsprojekt\BoardingSchoolManagement\modules\StudentManagementModul.jar"

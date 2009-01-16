@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Modul-Name: cw.studentmanagementmodul.StudentManagementModul
+Modul-Dependencies: cw.customermanagementmodul.CustomerManagementModul
