@@ -12,7 +12,7 @@ import java.util.ServiceLoader;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.ejb.Ejb3Configuration;
 
 /**
  * Manages all modules of the application
@@ -179,7 +179,7 @@ public class ModulManager {
      * Regitsters all Annotated Classes
      * @param configuration AnnotationConfiguration for Hibernate
      */
-    public static void registerAnnotationClasses(AnnotationConfiguration configuration) {
+    public static void registerAnnotationClasses(Ejb3Configuration configuration) {
         ServiceLoader<AnnotatedClass> annotatedClasses = ServiceLoader.load(AnnotatedClass.class);
         for (AnnotatedClass a : annotatedClasses) {
             configuration.addAnnotatedClass(a.getClass());

@@ -106,7 +106,7 @@ public class BoardingSchoolManagement {
         ////////////////////////////////////////////////////////////////////
             ss.setText("Module werden geladen...");
             ModulManager.loadModules();
-            ModulManager.registerAnnotationClasses(HibernateUtil.getAnnotationConfiguration());
+            ModulManager.registerAnnotationClasses(HibernateUtil.getConfiguration());
 
         ////////////////////////////////////////////////////////////////////
         // Connect to database
@@ -223,8 +223,8 @@ public class BoardingSchoolManagement {
         // Save the properties
         PropertiesManager.saveProperties();
 
-        // Close the hibernate session
-        HibernateUtil.getSession().close();
+        // Close the hibernate entity manager
+        HibernateUtil.getEntityManager().close();
 
         // Dispose the GUI
         GUIManager.getInstance().dispose();

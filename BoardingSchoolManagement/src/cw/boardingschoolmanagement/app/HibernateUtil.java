@@ -1,9 +1,8 @@
 package cw.boardingschoolmanagement.app;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import org.hibernate.ejb.Ejb3Configuration;
 
 /**
  * This is an helperclass for Hibernate with some basic and necessary methods.
@@ -12,40 +11,49 @@ import org.hibernate.cfg.AnnotationConfiguration;
  */
 public class HibernateUtil {
 
-    private static SessionFactory sessionFactory;
-    private static AnnotationConfiguration annotationConfiguration;
-    private static Session session;
+    private static EntityManagerFactory entityManagerFactory;
+    private static EntityManager entityManager;
+    private static Ejb3Configuration configuration;
     
 
     static {
-        try {
-            annotationConfiguration = new AnnotationConfiguration();
-        } catch (Throwable ex) {
-            // Log exception!
-            throw new ExceptionInInitializerError(ex);
-        }
+
+        configuration = new Ejb3Configuration().
+
+            // HSQLDB
+//            setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect").
+//            setProperty("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver").
+//            setProperty("hibernate.connection.url", "jdbc:hsqldb:mem:employeemanagement").
+//            setProperty("hibernate.connection.username", "sa").
+//            setProperty("hibernate.connection.password", "").
+
+            // MYSQL
+            setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect").
+            setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver").
+            setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/internat").
+            setProperty("hibernate.connection.username", "scott").
+            setProperty("hibernate.connection.password", "tiger").
+
+            setProperty("hibernate.connection.pool_size", "1").
+            setProperty("hibernate.connection.autocommit", "true").
+            setProperty("hibernate.cache.provider_class", "org.hibernate.cache.HashtableCacheProvider").
+            setProperty("hibernate.hbm2ddl.auto", "update").
+            setProperty("hibernate.show_sql", "true").
+            setProperty("hibernate.format_sql", "true").
+            setProperty("hibernate.use_sql_comments", "true");
     }
 
-    public static AnnotationConfiguration getAnnotationConfiguration() {
-        return annotationConfiguration;
+    public static Ejb3Configuration getConfiguration() {
+        return configuration;
     }
 
     public static void configure() {
-        annotationConfiguration.configure();
-        while(sessionFactory == null) {
-            try {
-                sessionFactory = annotationConfiguration.buildSessionFactory();
-            } catch (Exception hibernateException) {
-                System.out.println("Exception:" + hibernateException);
-            }
-        }
-        getSession();
+        entityManagerFactory = configuration.buildEntityManagerFactory();
+        entityManager = entityManagerFactory.createEntityManager();
     }
 
-    public static Session getSession() throws HibernateException {
-        if(session == null) {
-            session = sessionFactory.openSession();
-        }
-        return session;
+    public static synchronized EntityManager getEntityManager() {
+        return entityManager;
     }
+
 }
