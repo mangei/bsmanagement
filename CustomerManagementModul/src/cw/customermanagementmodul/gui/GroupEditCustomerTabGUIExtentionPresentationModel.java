@@ -41,7 +41,7 @@ public class GroupEditCustomerTabGUIExtentionPresentationModel {
     private void initModels() {
         selectionCustomerGroups = new SelectionInList<Group>(customer.getGroups());
         
-        List<Group> otherGroups = GroupManager.getGroups();
+        List<Group> otherGroups = GroupManager.getInstance().getAll();
         otherGroups.removeAll(selectionCustomerGroups.getList());
         selectionGroups = new SelectionInList<Group>(otherGroups);
 

@@ -61,7 +61,7 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
         cancelAction = new CancelAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
         deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
 
-        accountingSelection = new SelectionInList<Accounting>(AccountingManager.getAccountings());
+        accountingSelection = new SelectionInList<Accounting>(AccountingManager.getInstance().getAll());
 
         updateActionEnablement();
     }
@@ -103,7 +103,7 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
                         public void buttonPressed(ButtonEvent evt) {
 
                             if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                AccountingManager.saveAccounting(a);
+                                AccountingManager.getInstance().save(a);
                                 if (accountingAlreadyCreated) {
                                     GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde aktualisiert.");
                                 } else {
@@ -154,7 +154,7 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
                 public void run() {
                     Accounting a = accountingSelection.getSelection();
 
-                    a = AccountingManager.cancelAnAccounting(a);
+                    a = AccountingManager.getInstance().cancelAnAccounting(a);
                     accountingSelection.getList().add(a);
 
                     GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde storniert...");
@@ -182,7 +182,7 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
                     Accounting a = accountingSelection.getSelection();
 
                     accountingSelection.getList().remove(a);
-                    AccountingManager.removeAccounting(a);
+                    AccountingManager.getInstance().remove(a);
 
                     GUIManager.setLoadingScreenVisible(false);
                 }
@@ -228,7 +228,7 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
 
                     public void buttonPressed(ButtonEvent evt) {
                         if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                            AccountingManager.saveAccounting(a);
+                            AccountingManager.getInstance().save(a);
                             GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde aktualisiert.");
                         }
                         if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {

@@ -1,22 +1,19 @@
 package cw.customermanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import com.jgoodies.binding.beans.Model;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.hibernate.NonUniqueResultException;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import cw.customermanagementmodul.pojo.Group;
 
 /**
  * Manages Groups
  * @author CreativeWorkers.at
  */
-public class GroupManager extends Model {
+public class GroupManager extends AbstractPOJOManager<Group> {
 
     private static GroupManager instance;
-    private static Logger logger = Logger.getLogger(CustomerManager.class);
+    private static Logger logger = Logger.getLogger(GroupManager.class);
     
     private GroupManager() {
     }
@@ -28,54 +25,12 @@ public class GroupManager extends Model {
         return instance;
     }
 
-    public static void saveGroup(Group g) {
-        Session ses = HibernateUtil.getSession();
-        Transaction tran = ses.beginTransaction();
-        ses.saveOrUpdate(g);
-        tran.commit();
+    public int size() {
+        return ( (Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM Group").getResultList().iterator().next() ).intValue();
     }
 
-    public static void removeGroup(Group g) {
-        Session sess = HibernateUtil.getSession();
-        Transaction tran = sess.beginTransaction();
-        sess.delete(g);
-        tran.commit();
-    }
-
-    public static Group getRootGroup() {
-        Group g;
-        try {
-            g = (Group) HibernateUtil.getSession().createQuery("SELECT g FROM Group g WHERE parent=null").uniqueResult();
-
-        } catch (NonUniqueResultException e) {
-            g = (Group) HibernateUtil.getSession().createQuery("SELECT g FROM Group g WHERE parent=null").list().get(0);
-        }
-        if (g == null) {
-            g = new Group();
-            g.setName("Alle");
-            saveGroup(g);
-        }
-
-//        Group g2 = new Group("Schüler");
-//        g.getChildren().add(g2);
-//        saveGroup(g2);
-
-        return g;
-    }
-
-    public static Group getGroup(Long id) {
-        if (id < 0) {
-            return null;
-        }
-
-        Group g = (Group) HibernateUtil.getSession().createQuery("SELECT g FROM Group g WHERE id=" + id).uniqueResult();
-
-        return g;
-    }
-
-    public static List getGroups() {
-        List list = HibernateUtil.getSession().createQuery("SELECT g FROM Group g").list();
-
-        return list;
+    @Override
+    public List<Group> getAll() {
+        return HibernateUtil.getEntityManager().createQuery("FROM Group").getResultList();
     }
 }

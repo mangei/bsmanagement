@@ -18,7 +18,7 @@ public class CustomerHomeGUIExtentionPresentationModel {
     }
 
     private void initModels() {
-        sizeCustomersValueModel = new ValueHolder("Kunden: " + CustomerManager.getSize());
+        sizeCustomersValueModel = new ValueHolder("Kunden: " + CustomerManager.getInstance().size());
     }
 
     private void initEventHandling() {

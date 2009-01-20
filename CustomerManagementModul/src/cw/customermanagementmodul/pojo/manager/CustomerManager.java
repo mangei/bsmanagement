@@ -1,11 +1,9 @@
 package cw.customermanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import com.jgoodies.binding.beans.Model;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Group;
 
@@ -13,7 +11,7 @@ import cw.customermanagementmodul.pojo.Group;
  * Manages Customers
  * @author CreativeWorkers.at
  */
-public class CustomerManager extends Model {
+public class CustomerManager extends AbstractPOJOManager<Customer> {
 
     private static CustomerManager instance;
     private static Logger logger = Logger.getLogger(CustomerManager.class);
@@ -28,54 +26,20 @@ public class CustomerManager extends Model {
         return instance;
     }
 
-    /**
-     * Saves a customer
-     * @param customer Customer
-     */
-    public static void saveCustomer(Customer customer) {
-        Session ses = HibernateUtil.getSession();
-        ses.beginTransaction();
-        ses.saveOrUpdate(customer);
-        ses.getTransaction().commit();
-    }
-
-    public static void removeCustomer(Customer customer) {
-        Session sess = HibernateUtil.getSession();
-        Transaction tran = sess.beginTransaction();
-        sess.delete(customer);
-        tran.commit();
-    }
-
-    public static List<Customer> getCustomers() {
-        Session ses = HibernateUtil.getSession();
-        Transaction tran = ses.beginTransaction();
-        
-        List<Customer> list = ses.createQuery("FROM Customer").list();
-        tran.commit();
-
-        return list;
-    }
-
-    public static List<Customer> getCustomers(Group group) {
+    public List<Customer> getAll(Group group) {
         if(group != null) {
             throw new NullPointerException();
         }
 
-        Session ses = HibernateUtil.getSession();
-        Transaction tran = ses.beginTransaction();
-
-        List<Customer> list = ses.createQuery("FROM Customer WHERE group.id=" + group.getId()).list();
-        tran.commit();
-
-        return list;
+        return HibernateUtil.getEntityManager().createQuery("FROM Customer WHERE group.id=" + group.getId()).getResultList();
     }
 
-    public static int getSize() {
-        int size = 0;
+    public int size() {
+        return ( (Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM Customer").getResultList().iterator().next() ).intValue();
+    }
 
-        Session ses = HibernateUtil.getSession();
-        size = ( (Long) ses.createQuery("SELECT COUNT(*) FROM Customer").iterate().next() ).intValue();
-
-        return size;
+    @Override
+    public List<Customer> getAll() {
+        return HibernateUtil.getEntityManager().createQuery("FROM Customer").getResultList();
     }
 }

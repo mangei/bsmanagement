@@ -25,7 +25,7 @@ public class GroupCustomerSelectorFilterExtentionPresentationModel {
 
     public void initModels() {
         groupSelection = new DefaultListModel();
-        List<Group> groupList = GroupManager.getGroups();
+        List<Group> groupList = GroupManager.getInstance().getAll();
         for (int i = 0, l = groupList.size(); i < l; i++) {
             groupSelection.addElement(groupList.get(i));
         }

@@ -1,12 +1,10 @@
 package cw.customermanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import com.jgoodies.binding.beans.Model;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import cw.customermanagementmodul.pojo.Accounting;
 import cw.customermanagementmodul.pojo.Customer;
 
@@ -14,7 +12,7 @@ import cw.customermanagementmodul.pojo.Customer;
  *
  * @author CreativeWorkers.at
  */
-public class AccountingManager extends Model
+public class AccountingManager extends AbstractPOJOManager<Accounting>
 {
 
     private static AccountingManager instance;
@@ -30,22 +28,12 @@ public class AccountingManager extends Model
         return instance;
     }
     
-    public static void saveAccounting(Accounting a) {
-        Session ses = HibernateUtil.getSession();
-        ses.beginTransaction();
-        ses.saveOrUpdate(a);
-        ses.getTransaction().commit();
-    }
-    
-    public static void removeAccounting(Accounting a) {
-
-    }
-
     /**
      * Cancel an accounting.
      * @param a Accounting
+     * @return the new Accounting
      */
-    public static Accounting cancelAnAccounting(Accounting a) {
+    public Accounting cancelAnAccounting(Accounting a) {
         if(a != null && a.getId() != null) {
             Accounting cancelA = new Accounting();
             cancelA.setCustomer(a.getCustomer());
@@ -54,34 +42,25 @@ public class AccountingManager extends Model
             cancelA.setAccountingDate(new Date());
             cancelA.setCategory(a.getCategory());
             cancelA.setDescription("STORNO: " + a.getDescription());
-            saveAccounting(cancelA);
+            save(cancelA);
             return cancelA;
         }
         return null;
     }
-    
-    public static Accounting getAccounting(int id) {
-        if(id < 0)
-            return null;
 
-        Accounting a = (Accounting) HibernateUtil.getSession().createQuery("SELECT a FROM Accounting a WHERE id=" + id).uniqueResult();
-        return a;
+    public int size() {
+        return ( (Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM Accounting").getResultList().iterator().next() ).intValue();
+    }
+
+    @Override
+    public List<Accounting> getAll() {
+        return HibernateUtil.getEntityManager().createQuery("FROM Accounting").getResultList();
     }
     
-    public static List<Accounting> getAccountings() {
-        Session ses = HibernateUtil.getSession();
-        Transaction tran = ses.beginTransaction();
-        List list = ses.createQuery("FROM Accounting").list();
-        tran.commit();
-        return list;
+    public List<Accounting> getAll(Customer c) {
+        return HibernateUtil.getEntityManager().createQuery("FROM Accounting a WHERE a.costumer.id=" + c.getId()).getResultList();
     }
+
     
-    public static List<Accounting> getAccountings(Customer c) {
-        Session ses = HibernateUtil.getSession();
-        Transaction tran = ses.beginTransaction();
-        List list = ses.createQuery("SELECT a FROM Accounting a WHERE a.customer.id = " + c.getId()).list();
-        tran.commit();
-        return list;
-    }
     
 }

@@ -57,7 +57,7 @@ public class CustomerSelectorPresentationModel {
         filterChange = new ValueHolder(false);
 
         customerListModel = new ExtendedListModel();
-        customerListModel.addAll(CustomerManager.getCustomers());
+        customerListModel.addAll(CustomerManager.getInstance().getAll());
 
         customerTableModel = new CustomerTableModel(customerListModel);
 
@@ -76,7 +76,7 @@ public class CustomerSelectorPresentationModel {
                 if(evt.getNewValue() == Boolean.FALSE) { return; }
 
                 List<Customer> customers = new ArrayList<Customer>();
-                customers.addAll(CustomerManager.getCustomers());
+                customers.addAll(CustomerManager.getInstance().getAll());
 
                 // Filter the elements
                 for (CustomerSelectorFilterExtention ex : extentions) {

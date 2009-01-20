@@ -45,7 +45,7 @@ public class GroupManagementPresentationModel {
         editGroupAction = new EditGroupAction("Gruppe bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/group_edit.png"));
         removeGroupAction = new RemoveGroupAction("Gruppe löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/group_remove.png"));
 
-        groupSelection = new SelectionInList<Group>(GroupManager.getGroups());
+        groupSelection = new SelectionInList<Group>(GroupManager.getInstance().getAll());
         customerSelection = new SelectionInList<Customer>();
     }
 
@@ -99,7 +99,7 @@ public class GroupManagementPresentationModel {
 
                         public void buttonPressed(ButtonEvent evt) {
                             if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                GroupManager.saveGroup(group);
+                                GroupManager.getInstance().save(group);
                                 if (customerAlreadyCreated) {
                                     GUIManager.getStatusbar().setTextAndFadeOut("Gruppe wurde aktualisiert.");
                                 } else {
@@ -148,7 +148,7 @@ public class GroupManagementPresentationModel {
 
                         public void buttonPressed(ButtonEvent evt) {
                             if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                GroupManager.saveGroup(group);
+                                GroupManager.getInstance().save(group);
                                 GUIManager.getStatusbar().setTextAndFadeOut("Gruppe wurde aktualisiert.");
                             }
                             if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
@@ -185,7 +185,7 @@ public class GroupManagementPresentationModel {
                     String name = group.getName();
 
                     groupSelection.getList().remove(group);
-                    GroupManager.removeGroup(group);
+                    GroupManager.getInstance().remove(group);
 
                     GUIManager.setLoadingScreenVisible(false);
                     GUIManager.getStatusbar().setTextAndFadeOut("Gruppe '" + name + "' wurde gelöscht.");
