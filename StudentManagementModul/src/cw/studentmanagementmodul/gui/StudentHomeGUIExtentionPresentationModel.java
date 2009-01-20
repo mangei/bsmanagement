@@ -18,7 +18,7 @@ public class StudentHomeGUIExtentionPresentationModel {
     }
 
     private void initModels() {
-        sizeStudentsValueModel = new ValueHolder("Schüler: " + StudentManager.getSizeActive());
+        sizeStudentsValueModel = new ValueHolder("Schüler: " + StudentManager.getInstance().sizeActive());
     }
 
     private void initEventHandling() {

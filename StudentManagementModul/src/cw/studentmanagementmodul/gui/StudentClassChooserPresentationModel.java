@@ -102,7 +102,7 @@ public class StudentClassChooserPresentationModel {
         // Load root organisationUnits and studentClasses
         OrganisationUnit organisationUnit;
         MutableTreeNode node;
-        List<OrganisationUnit> roots = OrganisationUnitManager.getOrganisationUnitRoots();
+        List<OrganisationUnit> roots = OrganisationUnitManager.getInstance().getRoots();
 
         // add the first organisationUnits
         for (int i = 0, l = roots.size(); i < l; i++) {
@@ -127,7 +127,7 @@ public class StudentClassChooserPresentationModel {
         }
 
         // add the classes
-        List<StudentClass> studentClasses = StudentClassManager.getStudentClasses(organisationUnit);
+        List<StudentClass> studentClasses = StudentClassManager.getInstance().getAll(organisationUnit);
         StudentClass studentClass;
         for (int i = 0, l = studentClasses.size(); i < l; i++) {
             studentClass = studentClasses.get(i);

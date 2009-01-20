@@ -45,7 +45,7 @@ public class DeleteOrganisationUnitPresentationModel {
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/studentmanagementmodul/images/cancel.png"));
         deleteAllAction = new DeleteAllAction();
         moveAllAction = new MoveAllAction();
-        List<OrganisationUnit> organisationUnitList = OrganisationUnitManager.getOrganisationUnits();
+        List<OrganisationUnit> organisationUnitList = OrganisationUnitManager.getInstance().getAll();
         // Remove self
         organisationUnitList.remove(organisationUnit);
         // Remove children
@@ -64,7 +64,9 @@ public class DeleteOrganisationUnitPresentationModel {
     ////////////////////////////////////////////////////////////////////////////
 
     private void removeChildren(List<OrganisationUnit> list, OrganisationUnit org) {
-        if(org == null) return;
+        if(org == null) {
+            return;
+        }
 
         OrganisationUnit child;
         for(int i=0,l=org.getChildren().size(); i<l; i++) {

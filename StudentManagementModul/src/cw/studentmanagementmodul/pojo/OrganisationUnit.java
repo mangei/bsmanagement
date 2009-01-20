@@ -63,6 +63,7 @@ public class OrganisationUnit
 //            }
 //
         };
+        studentClasses = new ArrayList<StudentClass>();
     }
 
     @Override

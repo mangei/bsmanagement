@@ -92,7 +92,7 @@ public class StudentClassManagementPresentationModel {
         // Load root organisationUnits and studentClasses
         OrganisationUnit organisationUnit;
         MutableTreeNode node;
-        List<OrganisationUnit> roots = OrganisationUnitManager.getOrganisationUnitRoots();
+        List<OrganisationUnit> roots = OrganisationUnitManager.getInstance().getRoots();
 
         // add the first organisationUnits
         for (int i = 0, l = roots.size(); i < l; i++) {
@@ -117,7 +117,7 @@ public class StudentClassManagementPresentationModel {
         }
 
         // add the classes
-        List<StudentClass> studentClasses = StudentClassManager.getStudentClasses(organisationUnit);
+        List<StudentClass> studentClasses = StudentClassManager.getInstance().getAll(organisationUnit);
         StudentClass studentClass;
         for (int i = 0, l = studentClasses.size(); i < l; i++) {
             studentClass = studentClasses.get(i);
@@ -187,7 +187,7 @@ public class StudentClassManagementPresentationModel {
 
                         public void buttonPressed(ButtonEvent evt) {
                             if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                OrganisationUnitManager.saveOrganisationUnit(organisationUnit);
+                                OrganisationUnitManager.getInstance().save(organisationUnit);
                                 if (customerAlreadyCreated) {
                                     GUIManager.getStatusbar().setTextAndFadeOut("Bereich wurde aktualisiert.");
                                 } else {
@@ -256,7 +256,7 @@ public class StudentClassManagementPresentationModel {
 
                         public void buttonPressed(ButtonEvent evt) {
                             if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                OrganisationUnitManager.saveOrganisationUnit(organisationUnit);
+                                OrganisationUnitManager.getInstance().save(organisationUnit);
                                 GUIManager.getStatusbar().setTextAndFadeOut("Bereich wurde aktualisiert.");
                             }
                             if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
@@ -288,7 +288,7 @@ public class StudentClassManagementPresentationModel {
                 Object object = ((DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent()).getUserObject();
                 if (object instanceof OrganisationUnit) {
                     final OrganisationUnit organisationUnit = (OrganisationUnit) object;
-                    final DeleteOrganisationUnitPresentationModel model = new DeleteOrganisationUnitPresentationModel((OrganisationUnit)organisationUnit);
+                    final DeleteOrganisationUnitPresentationModel model = new DeleteOrganisationUnitPresentationModel(organisationUnit);
                     DeleteOrganisationUnitView view = new DeleteOrganisationUnitView(model);
 
                     JPanel panel = view.buildPanel();
@@ -311,7 +311,7 @@ public class StudentClassManagementPresentationModel {
                                 if(model.getChoice() == DeleteOrganisationUnitPresentationModel.DELETE_ALL) {
                                     // Delete the object and all his children
 
-                                    OrganisationUnitManager.removeOrganisationUnit(organisationUnit);
+                                    OrganisationUnitManager.getInstance().remove(organisationUnit);
                                     studentClassTreeModel.removeNodeFromParent(organisationUnitNode);
 
 
@@ -342,16 +342,16 @@ public class StudentClassManagementPresentationModel {
                                         childObject = childNode.getUserObject();
                                         if(childObject instanceof OrganisationUnit) {
                                             ((OrganisationUnit)childObject).setParent(newOrganisationUnit);
-                                            OrganisationUnitManager.saveOrganisationUnit(((OrganisationUnit)childObject));
+                                            OrganisationUnitManager.getInstance().save(((OrganisationUnit)childObject));
                                         } else if(childObject instanceof StudentClass) {
                                             ((StudentClass)childObject).setOrganisationUnit(organisationUnit);
-                                            StudentClassManager.saveStudentClass((StudentClass)childObject);
+                                            StudentClassManager.getInstance().save((StudentClass)childObject);
                                         }
                                     }
 
                                     // Remove the old one
                                     studentClassTreeModel.removeNodeFromParent(organisationUnitNode);
-                                    OrganisationUnitManager.removeOrganisationUnit(organisationUnit);
+                                    OrganisationUnitManager.getInstance().remove(organisationUnit);
                                 }
 
                                 
@@ -404,7 +404,7 @@ public class StudentClassManagementPresentationModel {
 
                         public void buttonPressed(ButtonEvent evt) {
                             if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                StudentClassManager.saveStudentClass(studentClass);
+                                StudentClassManager.getInstance().save(studentClass);
                                 if (customerAlreadyCreated) {
                                     GUIManager.getStatusbar().setTextAndFadeOut("Klasse wurde aktualisiert.");
                                 } else {
@@ -481,7 +481,7 @@ public class StudentClassManagementPresentationModel {
 
                         public void buttonPressed(ButtonEvent evt) {
                             if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                StudentClassManager.saveStudentClass(studentClass);
+                                StudentClassManager.getInstance().save(studentClass);
                                 GUIManager.getStatusbar().setTextAndFadeOut("Klasse wurde aktualisiert.");
                             }
                             if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
@@ -524,7 +524,7 @@ public class StudentClassManagementPresentationModel {
                                 GUIManager.setLoadingScreenText("Klasse wird gelöscht...");
 
                                 studentClassTreeModel.removeNodeFromParent(node);
-                                StudentClassManager.removeStudentClass((StudentClass) object);
+                                StudentClassManager.getInstance().remove((StudentClass) object);
 
                             }
                         }
@@ -554,7 +554,7 @@ public class StudentClassManagementPresentationModel {
                     if (i == JOptionPane.OK_OPTION) {
                         GUIManager.setLoadingScreenText("Schüler steigen in die nächste Klasse auf...");
 
-                        List<Student> list = StudentManager.getStudents();
+                        List<Student> list = StudentManager.getInstance().getAll();
                         Student tmp;
                         for (int j = 0, l = list.size(); j < l; j++) {
                             tmp = list.get(j);

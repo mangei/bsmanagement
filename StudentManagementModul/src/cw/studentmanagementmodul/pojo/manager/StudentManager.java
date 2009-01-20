@@ -1,18 +1,19 @@
 package cw.studentmanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
-import org.hibernate.Session;
 import org.apache.log4j.Logger;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.studentmanagementmodul.pojo.Student;
+import javax.persistence.NoResultException;
 
 /**
  * Manages Students
  * @author CreativeWorkers.at
  */
-public class StudentManager
-{
+public class StudentManager extends AbstractPOJOManager<Student> {
+
     private static StudentManager instance;
     private static Logger logger = Logger.getLogger(StudentManager.class);
 
@@ -20,52 +21,31 @@ public class StudentManager
     }
 
     public static StudentManager getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new StudentManager();
         }
         return instance;
     }
 
-    public static void saveStudent(Student student) {
-        System.out.println("student: " + student.getCustomer());
-        System.out.println("student: " + student.getCustomer().getForename());
-        Session ses = HibernateUtil.getSession();
-        ses.beginTransaction();
-        ses.saveOrUpdate(student);
-        ses.getTransaction().commit();
+    public int size() {
+        return ((Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM Student").getResultList().iterator().next()).intValue();
     }
 
-    public static List<Student> getStudents() {
-        Session ses = HibernateUtil.getSession();
-        ses.beginTransaction();
-        List<Student> list = (List<Student>) HibernateUtil.getSession().createQuery("FROM Student").list();
-        ses.getTransaction().commit();
-        return list;
+    @Override
+    public List<Student> getAll() {
+        return HibernateUtil.getEntityManager().createQuery("FROM Student").getResultList();
     }
-    
-    public static Student getStudent(Customer customer) {
-        Session ses = HibernateUtil.getSession();
-        ses.beginTransaction();
-        Student student = (Student) ses.createQuery("SELECT s FROM Student s WHERE id=" + customer.getId()).uniqueResult();
-        ses.getTransaction().commit();
+
+    public Student get(Customer customer) {
+        Student student = null;
+        try {
+            student = (Student) HibernateUtil.getEntityManager().createQuery("FROM Student WHERE id=" + customer.getId()).getSingleResult();
+        } catch (NoResultException ex) {
+        }
         return student;
     }
 
-    public static int getSize() {
-        int size = 0;
-
-        Session ses = HibernateUtil.getSession();
-        size = ( (Long) ses.createQuery("SELECT COUNT(*) FROM Student").iterate().next() ).intValue();
-
-        return size;
-    }
-    
-    public static int getSizeActive() {
-        int size = 0;
-
-        Session ses = HibernateUtil.getSession();
-        size = ( (Long) ses.createQuery("SELECT COUNT(*) FROM Student WHERE active=true").iterate().next() ).intValue();
-
-        return size;
+    public int sizeActive() {
+        return ((Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM Student WHERE active=true").getResultList().iterator().next()).intValue();
     }
 }

@@ -60,7 +60,7 @@ public class EditOrganisationUnitPresentationModel extends PresentationModel<Org
         saveCancelButtonAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/save_cancel.png"));
 
         // Load all organisationUnits
-        List<OrganisationUnit> organisationUnitList = OrganisationUnitManager.getOrganisationUnits();
+        List<OrganisationUnit> organisationUnitList = OrganisationUnitManager.getInstance().getAll();
         // Add the null object, if there is no parent
         organisationUnitList.add(0, null);
         // Remove self
@@ -98,7 +98,9 @@ public class EditOrganisationUnitPresentationModel extends PresentationModel<Org
     ////////////////////////////////////////////////////////////////////////////
 
     private void removeChildren(List<OrganisationUnit> list, OrganisationUnit org) {
-        if(org == null) return;
+        if(org == null) {
+            return;
+        }
 
         OrganisationUnit child;
         for(int i=0,l=org.getChildren().size(); i<l; i++) {

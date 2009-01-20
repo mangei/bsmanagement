@@ -13,7 +13,7 @@ import cw.studentmanagementmodul.pojo.manager.StudentManager;
  *
  * @author Manuel Geier
  */
-public class StudentCustomerGUIExtention
+public class StudentEditCustomerGUITabExtention
 implements EditCustomerGUITabExtention
 {
     private static StudentCustomerGUIExtentionView view;
@@ -22,7 +22,7 @@ implements EditCustomerGUITabExtention
     
     public void initPresentationModel(Customer customer, ValueModel unsaved) {
 
-        student = StudentManager.getStudent(customer);
+        student = StudentManager.getInstance().get(customer);
         if(student == null) {
             student = new Student(customer);
         }
@@ -37,7 +37,7 @@ implements EditCustomerGUITabExtention
 
     public void save() {
         presentationModel.save();
-        StudentManager.saveStudent(student);
+        StudentManager.getInstance().save(student);
     }
 
     public void reset() {

@@ -1,10 +1,9 @@
 package cw.studentmanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 import cw.studentmanagementmodul.pojo.OrganisationUnit;
 import cw.studentmanagementmodul.pojo.StudentClass;
 
@@ -12,7 +11,7 @@ import cw.studentmanagementmodul.pojo.StudentClass;
  *
  * @author CreativeWorkers.at
  */
-public class StudentClassManager
+public class StudentClassManager extends AbstractPOJOManager<StudentClass>
 {
     private static StudentClassManager instance;
     private static Logger logger = Logger.getLogger(StudentClassManager.class);
@@ -27,39 +26,16 @@ public class StudentClassManager
         return instance;
     }
 
-    public static void saveStudentClass(StudentClass studentClass) {
-        Session ses = HibernateUtil.getSession();
-        ses.beginTransaction();
-        ses.saveOrUpdate(studentClass);
-        ses.getTransaction().commit();
+    public int size() {
+        return ( (Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM StudentClass").getResultList().iterator().next() ).intValue();
     }
 
-    public static void removeStudentClass(StudentClass studentClass) {
-        if(studentClass.getOrganisationUnit() != null) {
-            studentClass.getOrganisationUnit().getStudentClasses().remove(studentClass);
-        }
-
-        Session sess = HibernateUtil.getSession();
-        Transaction tran = sess.beginTransaction();
-        sess.delete(studentClass);
-        tran.commit();
+    @Override
+    public List<StudentClass> getAll() {
+        return HibernateUtil.getEntityManager().createQuery("FROM StudentClass").getResultList();
     }
 
-    public static List<StudentClass> getStudentClasses() {
-        Session ses = HibernateUtil.getSession();
-        Transaction tran = ses.beginTransaction();
-        List<StudentClass> list = ses.createQuery("FROM StudentClass").list();
-        tran.commit();
-        
-        return list;
-    }
-
-    public static List<StudentClass> getStudentClasses(OrganisationUnit organisationUnit) {
-        Session ses = HibernateUtil.getSession();
-        Transaction tran = ses.beginTransaction();
-        List<StudentClass> list = ses.createQuery("FROM StudentClass WHERE organisationUnit=" + organisationUnit.getId() + "ORDER BY name").list();
-        tran.commit();
-
-        return list;
+    public List<StudentClass> getAll(OrganisationUnit organisationUnit) {
+        return HibernateUtil.getEntityManager().createQuery("FROM StudentClass WHERE organisationUnit=" + organisationUnit.getId() + "ORDER BY name").getResultList();
     }
 }

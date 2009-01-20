@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import cw.customermanagementmodul.pojo.Customer;
+import javax.persistence.CascadeType;
 
 /**
  * 
@@ -57,7 +58,7 @@ public class Student
         return builder.toString();
     }
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     public StudentClass getStudentClass() {
         return studentClass;
     }
@@ -80,7 +81,7 @@ public class Student
         firePropertyChange(PROPERTYNAME_ID, old, id);
     }
 
-    @OneToOne
+    @OneToOne(cascade=CascadeType.ALL)
     public Customer getCustomer() {
         return customer;
     }
