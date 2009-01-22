@@ -65,6 +65,7 @@ public class CustomerManagementPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
+            GUIManager.getInstance().lockMenu();
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
@@ -93,6 +94,7 @@ public class CustomerManagementPresentationModel {
                             if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                                 model.removeButtonListener(this);
                                 GUIManager.changeToLastView();
+                                GUIManager.getInstance().unlockMenu();
                             }
                         }
                     });
