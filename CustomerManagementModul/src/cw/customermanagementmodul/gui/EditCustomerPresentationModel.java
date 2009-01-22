@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerGUITabExtention;
 import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import javax.swing.Icon;
 
 /**
@@ -35,7 +36,14 @@ public class EditCustomerPresentationModel
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
+    private Action clearLocationDataAction;
     private ButtonListenerSupport support;
+
+    private List<String> titleList;
+    private List<String> postOfficeNumberList;
+    private List<String> cityList;
+    private List<String> provinceList;
+    private List<String> countryList;
 
     public EditCustomerPresentationModel(Customer customer) {
         this(customer, "");
@@ -65,6 +73,8 @@ public class EditCustomerPresentationModel
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
         saveCancelButtonAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
 
+        clearLocationDataAction = new ClearLocationDataAction("");
+
         support = new ButtonListenerSupport();
 
 //        PropertyConnector.connectAndUpdate(
@@ -79,6 +89,12 @@ public class EditCustomerPresentationModel
 //                    unsaved,
 //                    saveCancelButtonAction,
 //                    ComponentValueModel.PROPERTYNAME_ENABLED);
+
+        titleList               = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_TITLE);
+        postOfficeNumberList    = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_POSTOFFICENUMBER);
+        cityList                = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_CITY);
+        provinceList            = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_PROVINCE);
+        countryList             = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_COUNTRY);
 
         getBufferedModel(Customer.PROPERTYNAME_TITLE).addValueChangeListener(new SaveListener());
         getBufferedModel(Customer.PROPERTYNAME_FORENAME).addValueChangeListener(new SaveListener());
@@ -169,9 +185,38 @@ public class EditCustomerPresentationModel
         return saveCancelButtonAction;
     }
 
+    public Action getClearLocationDataAction() {
+        return clearLocationDataAction;
+    }
+
     public String getHeaderText() {
         return headerText;
     }
+
+    public List<String> getTitleList() {
+        return titleList;
+    }
+
+    public List<String> getPostOfficeNumberList() {
+        return postOfficeNumberList;
+    }
+
+    public List<String> getCityList() {
+        return cityList;
+    }
+
+    public List<String> getProvinceList() {
+        return provinceList;
+    }
+
+    public List<String> getCountryList() {
+        return countryList;
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Action classes
+    ////////////////////////////////////////////////////////////////////////////
 
     private class SaveAction
             extends AbstractAction {
@@ -255,6 +300,26 @@ public class EditCustomerPresentationModel
         }
     }
 
+    private class ClearLocationDataAction extends AbstractAction {
+
+        public ClearLocationDataAction(String name) {
+            super(name);
+        }
+
+        {
+            putValue(Action.SHORT_DESCRIPTION, "Ortsdaten leeren");
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).setValue("");
+            getBufferedModel(Customer.PROPERTYNAME_CITY).setValue("");
+            getBufferedModel(Customer.PROPERTYNAME_PROVINCE).setValue("");
+            getBufferedModel(Customer.PROPERTYNAME_COUNTRY).setValue("");
+        }
+
+    }
+
+
     public void saveCustomer() {
 
         triggerCommit();
@@ -277,5 +342,80 @@ public class EditCustomerPresentationModel
 
     public ValueModel getUnsaved() {
         return unsaved;
+    }
+
+    public void firePostOfficeNumberLostFocus() {
+        String postOfficeNumber = (String) getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).getValue();
+
+        if(!postOfficeNumber.isEmpty()) {
+            String city = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_POSTOFFICENUMBER, postOfficeNumber, Customer.PROPERTYNAME_CITY);
+            String province = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_POSTOFFICENUMBER, postOfficeNumber, Customer.PROPERTYNAME_PROVINCE);
+            String country = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_POSTOFFICENUMBER, postOfficeNumber, Customer.PROPERTYNAME_COUNTRY);
+
+            if(city != null &&
+                    ((String)getBufferedModel(Customer.PROPERTYNAME_CITY).getValue()).isEmpty()) {
+                getBufferedModel(Customer.PROPERTYNAME_CITY).setValue(city);
+
+                if(province != null &&
+                        ((String)getBufferedModel(Customer.PROPERTYNAME_PROVINCE).getValue()).isEmpty()) {
+                    getBufferedModel(Customer.PROPERTYNAME_PROVINCE).setValue(province);
+
+                    if(country != null &&
+                            ((String)getBufferedModel(Customer.PROPERTYNAME_COUNTRY).getValue()).isEmpty()) {
+                        getBufferedModel(Customer.PROPERTYNAME_COUNTRY).setValue(country);
+                    }
+                }
+            }
+        }
+    }
+
+    public void fireCityLostFocus() {
+        String city = (String) getBufferedModel(Customer.PROPERTYNAME_CITY).getValue();
+
+        if(!city.isEmpty()) {
+            String postOfficeNumber = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_CITY, city, Customer.PROPERTYNAME_POSTOFFICENUMBER);
+            String province = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_CITY, city, Customer.PROPERTYNAME_PROVINCE);
+            String country = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_CITY, city, Customer.PROPERTYNAME_COUNTRY);
+
+            if(postOfficeNumber != null &&
+                    ((String)getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).getValue()).isEmpty()) {
+                getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).setValue(postOfficeNumber);
+
+                if(province != null &&
+                        ((String)getBufferedModel(Customer.PROPERTYNAME_PROVINCE).getValue()).isEmpty()) {
+                    getBufferedModel(Customer.PROPERTYNAME_PROVINCE).setValue(province);
+
+                    if(country != null &&
+                            ((String)getBufferedModel(Customer.PROPERTYNAME_COUNTRY).getValue()).isEmpty()) {
+                        getBufferedModel(Customer.PROPERTYNAME_COUNTRY).setValue(country);
+                    }
+                }
+            }
+//
+//            postOfficeNumber    = (postOfficeNumber == null)    ? "" : postOfficeNumber;
+//            province            = (province == null)            ? "" : province;
+//            country             = (country == null)             ? "" : country;
+//
+//            getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).setValue(postOfficeNumber);
+//            getBufferedModel(Customer.PROPERTYNAME_PROVINCE).setValue(province);
+//            getBufferedModel(Customer.PROPERTYNAME_COUNTRY).setValue(country);
+        }
+    }
+
+    public void fireProvinceLostFocus() {
+        String province = (String) getBufferedModel(Customer.PROPERTYNAME_PROVINCE).getValue();
+
+        if(!province.isEmpty()) {
+            String country = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_PROVINCE, province, Customer.PROPERTYNAME_COUNTRY);
+
+            if(country != null &&
+                    ((String)getBufferedModel(Customer.PROPERTYNAME_COUNTRY).getValue()).isEmpty()) {
+                getBufferedModel(Customer.PROPERTYNAME_COUNTRY).setValue(country);
+            }
+
+//            country = (country == null) ? "" : country;
+//
+//            getBufferedModel(Customer.PROPERTYNAME_COUNTRY).setValue(country);
+        }
     }
 }

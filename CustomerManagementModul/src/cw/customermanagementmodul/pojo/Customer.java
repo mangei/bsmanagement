@@ -38,7 +38,7 @@ public class Customer
     private String surname              = "";
     private boolean gender              = true;
     private String street               = "";
-    private Integer postOfficeNumber;
+    private String postOfficeNumber     = "";
     private String city                 = "";
     private String province             = "";
     private String country              = "";
@@ -324,14 +324,14 @@ public class Customer
     }
 
     @Column(name="postofficenumber")
-    public Integer getPostOfficeNumber() {
+    public String getPostOfficeNumber() {
         return postOfficeNumber;
     }
 
-    public void setPostOfficeNumber(Integer postOfficeNumber) {
-        Integer old = this.postOfficeNumber;
+    public void setPostOfficeNumber(String postOfficeNumber) {
+        String old = this.postOfficeNumber;
         this.postOfficeNumber = postOfficeNumber;
-        firePropertyChange(PROPERTYNAME_ACTIVE, old, active);
+        firePropertyChange(PROPERTYNAME_POSTOFFICENUMBER, old, postOfficeNumber);
     }
 
     @Column(name="province")
@@ -342,7 +342,7 @@ public class Customer
     public void setProvince(String province) {
         String old = this.province;
         this.province = province;
-        firePropertyChange(PROPERTYNAME_ACTIVE, old, active);
+        firePropertyChange(PROPERTYNAME_PROVINCE, old, province);
     }
 
     @Column(name="country")
@@ -350,10 +350,10 @@ public class Customer
         return country;
     }
 
-    public void setCountry(String state) {
+    public void setCountry(String country) {
         String old = this.country;
-        this.country = state;
-        firePropertyChange(PROPERTYNAME_ACTIVE, old, active);
+        this.country = country;
+        firePropertyChange(PROPERTYNAME_COUNTRY, old, country);
     }
 
     @Id

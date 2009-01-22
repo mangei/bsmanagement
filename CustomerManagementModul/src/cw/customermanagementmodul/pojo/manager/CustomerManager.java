@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Group;
+import javax.persistence.NoResultException;
 
 /**
  * Manages Customers
@@ -42,4 +43,17 @@ public class CustomerManager extends AbstractPOJOManager<Customer> {
     public List<Customer> getAll() {
         return HibernateUtil.getEntityManager().createQuery("FROM Customer").getResultList();
     }
+
+    public List<String> getList(String attribute) {
+        return HibernateUtil.getEntityManager().createQuery("SELECT str("+attribute+") FROM Customer WHERE "+attribute+" IS NOT NULL").getResultList();
+    }
+
+    public String getResult(String attribute1, String value1, String attribute2) {
+        try {
+            return (String) HibernateUtil.getEntityManager().createQuery("SELECT str(" + attribute2 + ") FROM Customer WHERE " + attribute1 + " IS NOT NULL AND " + attribute1 + "='" + value1 + "'").setMaxResults(1).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
 }
