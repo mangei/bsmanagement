@@ -1,5 +1,6 @@
 package cw.boardingschoolmanagement.app;
 
+import cw.boardingschoolmanagement.gui.SplashScreen;
 import cw.boardingschoolmanagement.gui.HomeView;
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
 import cw.boardingschoolmanagement.gui.component.JMenuPanel;

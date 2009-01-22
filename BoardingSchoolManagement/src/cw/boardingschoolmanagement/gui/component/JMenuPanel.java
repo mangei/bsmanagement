@@ -27,7 +27,6 @@ import org.jvnet.lafwidget.animation.FadeKind;
  * @author Manuel Geier
  */
 public class JMenuPanel
-//extends JComponent
         extends JList {
 
     private List<Category> categories;
@@ -36,7 +35,6 @@ public class JMenuPanel
     private Item startItem;
 
     public JMenuPanel() {
-//        setLayout(null);
         categories = new ArrayList<Category>();
         jListList = new ArrayList();
         
@@ -255,6 +253,19 @@ public class JMenuPanel
 //        g.drawLine(0, 0, getWidth(), 0);
         setOpaque(false);
         super.paintComponent(g);
+
+        if(!isEnabled()) {
+            g.setColor(new Color(0, 0, 0, 20));
+            g.fillRect(0, 0, getWidth(), getHeight());
+
+            int abs = 5;
+
+            for(int i=abs, h=getHeight(); i<h; i++) {
+                if(i%abs == 0) {
+                    g.drawLine(0, i, h, i);
+                }
+            }
+        }
     }
 
     private class Renderer
@@ -449,6 +460,18 @@ public class JMenuPanel
         @Override
         public String toString() {
             return item.getText();
+        }
+    }
+
+    public void lock() {
+        if(isEnabled()) {
+            this.setEnabled(false);
+        }
+    }
+
+    public void unlock() {
+        if(!isEnabled()) {
+            this.setEnabled(true);
         }
     }
 }

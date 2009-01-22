@@ -1,5 +1,6 @@
-package cw.boardingschoolmanagement.app;
+package cw.boardingschoolmanagement.gui;
 
+import cw.boardingschoolmanagement.app.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;

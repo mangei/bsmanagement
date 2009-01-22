@@ -3,7 +3,7 @@ package cw.boardingschoolmanagement.manager;
 import cw.boardingschoolmanagement.app.ApplicationListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.BoardingSchoolManagement;
-import cw.boardingschoolmanagement.app.LoadingGlass;
+import cw.boardingschoolmanagement.gui.LoadingGlass;
 import cw.boardingschoolmanagement.exception.NotInitializedException;
 import cw.boardingschoolmanagement.gui.component.JHeader;
 import cw.boardingschoolmanagement.gui.component.JMenuPanel;
@@ -323,4 +323,11 @@ extends JFrame
         return header;
     }
 
+    public void lockMenu() {
+        MenuManager.getSideMenu().lock();
+    }
+
+    public void unlockMenu() {
+        MenuManager.getSideMenu().unlock();
+    }
 }
