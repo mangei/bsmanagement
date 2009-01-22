@@ -26,7 +26,8 @@ import cw.customermanagementmodul.pojo.Customer;
 public class EditCustomerView {
 
     private EditCustomerPresentationModel model;
-    
+
+    private JPanel pGender;
     private JTextField tfAnrede;
     private JTextField tfVorname;
     private JTextField tfVorname2;
@@ -54,6 +55,7 @@ public class EditCustomerView {
 
     private void initComponents() {
 
+        pGender             = CWComponentFactory.createTrueFalsePanel(model.getBufferedModel(Customer.PROPERTYNAME_GENDER), "Herr", "Frau", model.getModel(Customer.PROPERTYNAME_GENDER).booleanValue());
         tfAnrede            = CWComponentFactory.createTextField(model.getBufferedModel(Customer.PROPERTYNAME_TITLE), false);
         tfVorname           = CWComponentFactory.createTextField(model.getBufferedModel(Customer.PROPERTYNAME_FORENAME), false);
         tfVorname2          = CWComponentFactory.createTextField(model.getBufferedModel(Customer.PROPERTYNAME_FORENAME2), false);
@@ -118,47 +120,49 @@ public class EditCustomerView {
         
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu",
-                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
+                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
 
         PanelBuilder builder = new PanelBuilder(layout,panel.getContentPanel());
         
         CellConstraints cc = new CellConstraints();
         builder.addSeparator("Allgemein:",  cc.xyw(1, 1, 7));
-        builder.addLabel("Anrede:",         cc.xy(1, 3));
-        builder.add(tfAnrede,               cc.xy(3, 3));
-        builder.addLabel("Vorname:",        cc.xy(1, 5));
-        builder.add(tfVorname,              cc.xy(3, 5));
-        builder.addLabel("2. Vorname:",     cc.xy(5, 5));
-        builder.add(tfVorname2,             cc.xy(7, 5));
-        builder.addLabel("Nachname",        cc.xy(1, 7));
-        builder.add(tfNachname,             cc.xyw(3, 7, 5));
-        builder.addLabel("Geburtsdatum:",   cc.xy(1, 9));
-        builder.add(dcGeburtsdatum,         cc.xy(3, 9));
+        builder.addLabel("Geschlecht:",     cc.xy(1, 3));
+        builder.add(pGender,                cc.xy(3, 3));
+        builder.addLabel("Titel:",          cc.xy(1, 5));
+        builder.add(tfAnrede,               cc.xy(3, 5));
+        builder.addLabel("Vorname:",        cc.xy(1, 7));
+        builder.add(tfVorname,              cc.xy(3, 7));
+        builder.addLabel("2. Vorname:",     cc.xy(5, 7));
+        builder.add(tfVorname2,             cc.xy(7, 7));
+        builder.addLabel("Nachname",        cc.xy(1, 9));
+        builder.add(tfNachname,             cc.xyw(3, 9, 5));
+        builder.addLabel("Geburtsdatum:",   cc.xy(1, 11));
+        builder.add(dcGeburtsdatum,         cc.xy(3, 11));
 
-        builder.addSeparator("Adresse:",    cc.xyw(1, 11, 7));
-        builder.addLabel("Straße:",        cc.xy(1, 13));
-        builder.add(tfStrasse,              cc.xyw(3, 13, 5));
-        builder.addLabel("PLZ:",            cc.xy(1, 15));
-        builder.add(tfPlz,                  cc.xy(3, 15));
-        builder.addLabel("Ort:",            cc.xy(5, 15));
-        builder.add(tfOrt,                  cc.xy(7, 15));
-        builder.addLabel("Bundesland:",     cc.xy(1, 17));
-        builder.add(tfBundesland,           cc.xy(3, 17));
-        builder.addLabel("Staat:",          cc.xy(5, 17));
-        builder.add(tfStaat,                cc.xy(7, 17));
+        builder.addSeparator("Adresse:",    cc.xyw(1, 13, 7));
+        builder.addLabel("Straße:",        cc.xy(1, 15));
+        builder.add(tfStrasse,              cc.xyw(3, 15, 5));
+        builder.addLabel("PLZ:",            cc.xy(1, 17));
+        builder.add(tfPlz,                  cc.xy(3, 17));
+        builder.addLabel("Ort:",            cc.xy(5, 17));
+        builder.add(tfOrt,                  cc.xy(7, 17));
+        builder.addLabel("Bundesland:",     cc.xy(1, 19));
+        builder.add(tfBundesland,           cc.xy(3, 19));
+        builder.addLabel("Staat:",          cc.xy(5, 19));
+        builder.add(tfStaat,                cc.xy(7, 19));
         
-        builder.addSeparator("Kontakt:",    cc.xyw(1, 19, 7));
-        builder.addLabel("Mobiltelefon:",   cc.xy(1, 21));
-        builder.add(tfMobiltelefon,         cc.xyw(3, 21, 3));
-        builder.addLabel("Festnetztelefon", cc.xy(1, 23));
-        builder.add(tfFestnetztelefon,      cc.xyw(3, 23, 3));
-        builder.addLabel("Fax:",            cc.xy(1, 25));
-        builder.add(tfFax,                  cc.xyw(3, 25, 3));
-        builder.addLabel("eMail:",          cc.xy(1, 27));
-        builder.add(tfEmail,                cc.xyw(3, 27, 3));
+        builder.addSeparator("Kontakt:",    cc.xyw(1, 21, 7));
+        builder.addLabel("Mobiltelefon:",   cc.xy(1, 23));
+        builder.add(tfMobiltelefon,         cc.xyw(3, 23, 3));
+        builder.addLabel("Festnetztelefon", cc.xy(1, 25));
+        builder.add(tfFestnetztelefon,      cc.xyw(3, 25, 3));
+        builder.addLabel("Fax:",            cc.xy(1, 27));
+        builder.add(tfFax,                  cc.xyw(3, 27, 3));
+        builder.addLabel("eMail:",          cc.xy(1, 29));
+        builder.add(tfEmail,                cc.xyw(3, 29, 3));
 
-        builder.addSeparator("Bemerkung",   cc.xyw(1, 29, 7));
-        builder.add(taBemerkung,            cc.xyw(1, 31, 7));
+        builder.addSeparator("Bemerkung",   cc.xyw(1, 31, 7));
+        builder.add(taBemerkung,            cc.xyw(1, 33, 7));
 
         tabs.addTab("Allgemein", panel);
         

@@ -36,7 +36,7 @@ public class Customer
     private String forename             = "";
     private String forename2            = "";
     private String surname              = "";
-    private String gender               = "";
+    private boolean gender              = true;
     private String street               = "";
     private Integer postOfficeNumber;
     private String city                 = "";
@@ -50,9 +50,9 @@ public class Customer
     private Date creationdate;
     private String comment              = "";
     
-    private List<Group> groups;
+    private List<Group> groups          = new ArrayList<Group>();
 
-    private List<Accounting> accountings;
+    private List<Accounting> accountings = new ArrayList<Accounting>();
     
     // Properties - Constants
     public final static String PROPERTYNAME_ID = "id";
@@ -79,70 +79,8 @@ public class Customer
     
     
     public Customer() {
-       // this(true, "", "", "", "", "", "", 0, "", new Date(), "", "", "", "", new Date(), "");
     }
     
-    public Customer(boolean active, String title, String forename, String forename2,
-                  String surname, String gender, String street, Integer postOfficeNumber, String city, Date birthday,
-                  String landlinephone, String mobilephone, String fax, String email,
-                  Date creationdate, String comment
-                  ) {
-//        this(CustomerCollection.getNextId(),active, title, forename, forename2, surname, gender, street, postOfficeNumber, city, birthday, landlinephone, mobilephone, fax, email, creationdate, comment);
-        this(null,active, title, forename, forename2, surname, gender, street, postOfficeNumber, city, birthday, landlinephone, mobilephone, fax, email, creationdate, comment);
-    }
-    
-    public Customer(Long id, boolean active, String title, String forename, String forename2,
-                  String surname, String gender, String street, Integer postOfficeNumber, String city, Date birthday,
-                  String landlinephone, String mobilephone, String fax, String email,
-                  Date creationdate, String comment
-                  ){
-        
-        this.id = id;
-        this.active = active;
-        this.title = title;
-        this.forename = forename;
-        this.forename2 = forename2;
-        this.surname = surname;
-        this.gender = gender;
-        this.street = street;
-        this.postOfficeNumber = postOfficeNumber;
-        this.city = city;
-        this.birthday = birthday;
-        this.landlinephone = landlinephone;
-        this.mobilephone = mobilephone;
-        this.fax = fax;
-        this.email = email;
-        this.creationdate = creationdate;
-        this.comment = comment;
-
-        groups = new ArrayList<Group>() {
-//            @Override
-//            public boolean add(Group g) {
-//                System.out.println("Customer.addGroup: " + g.getName());
-//                g.getCustomers().add(Customer.this);
-//                return super.add(g);
-//            }
-//
-//            @Override
-//            public boolean remove(Object o) {
-//                if (o instanceof Group) {
-//                    ((Group) o).getCustomers().remove(Customer.this);
-//                    System.out.println("Customer.removeGroup: " + ((Group) o).getName());
-//                }
-//                return super.remove(o);
-//            }
-//
-//            @Override
-//            public Group remove(int index) {
-//                Group g = super.remove(index);
-//                System.out.println("Customer.removeGroup: " + g.getName());
-//                g.getCustomers().remove(Customer.this);
-//                return g;
-//            }
-        };
-        accountings = new ArrayList<Accounting>();
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -252,13 +190,21 @@ public class Customer
         firePropertyChange(PROPERTYNAME_SURNAME, old, surname);
     }
 
+    /**
+     * Returns the gender
+     * @return true -> man, false -> woman
+     */
     @Column(name="gender")
-    public String getGender() {
+    public boolean getGender() {
         return gender;
     }
 
-    public void setGender(String gender) {
-        String old = this.gender;
+    /**
+     * Sets the gender
+     * @param gender true -> man, false -> woman
+     */
+    public void setGender(boolean gender) {
+        boolean old = this.gender;
         this.gender = gender;
         firePropertyChange(PROPERTYNAME_GENDER, old, gender);
     }
