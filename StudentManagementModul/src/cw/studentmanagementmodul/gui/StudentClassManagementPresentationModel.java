@@ -13,6 +13,7 @@ import javax.swing.Action;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -29,6 +30,7 @@ import cw.studentmanagementmodul.pojo.manager.OrganisationUnitManager;
 import cw.studentmanagementmodul.pojo.manager.StudentClassManager;
 import cw.studentmanagementmodul.pojo.manager.StudentManager;
 import javax.swing.Icon;
+import javax.swing.event.TreeModelListener;
 
 /**
  *
@@ -74,9 +76,10 @@ public class StudentClassManagementPresentationModel {
     }
 
     public void initEventHandling() {
-        ActionTreeSelectionListener actionTreeSelectionListener = new ActionTreeSelectionListener();
-        actionTreeSelectionListener.updateActions();
-        studentClassTreeSelectionModel.addTreeSelectionListener(actionTreeSelectionListener);
+        ActionTreeChangeListener actionTreeChangeListener = new ActionTreeChangeListener();
+        actionTreeChangeListener.updateActions();
+        studentClassTreeSelectionModel.addTreeSelectionListener(actionTreeChangeListener);
+        studentClassTreeModel.addTreeModelListener(actionTreeChangeListener);
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -391,7 +394,15 @@ public class StudentClassManagementPresentationModel {
                         Object parent = ((DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent()).getUserObject();
                         if (parent instanceof OrganisationUnit) {
                             studentClass.setOrganisationUnit((OrganisationUnit) parent);
+                        } else {
+
+                            // Automaticlly select the first OrganisationUnit if no OrganisationUnit is selected
+                            studentClass.setOrganisationUnit(OrganisationUnitManager.getInstance().getAll(0,1).get(0));
                         }
+                    } else {
+
+                        // Automaticlly select the first OrganisationUnit if no OrganisationUnit is selected
+                        studentClass.setOrganisationUnit(OrganisationUnitManager.getInstance().getAll(0,1).get(0));
                     }
 
                     final EditStudentClassPresentationModel model = new EditStudentClassPresentationModel(studentClass, "Klasse erstellen");
@@ -424,6 +435,7 @@ public class StudentClassManagementPresentationModel {
                                 }
                             }
                             if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+
                                 // Remove Listeners
                                 model.removeButtonListener(this);
                                 studentClass.removePropertyChangeListener(organisationUnitChanged);
@@ -579,9 +591,25 @@ public class StudentClassManagementPresentationModel {
     ////////////////////////////////////////////////////////////////////////////
     // Other classes
     ////////////////////////////////////////////////////////////////////////////
-    private class ActionTreeSelectionListener implements TreeSelectionListener {
+    private class ActionTreeChangeListener implements TreeSelectionListener, TreeModelListener {
 
         public void valueChanged(TreeSelectionEvent e) {
+            updateActions();
+        }
+
+        public void treeNodesChanged(TreeModelEvent e) {
+            updateActions();
+        }
+
+        public void treeNodesInserted(TreeModelEvent e) {
+            updateActions();
+        }
+
+        public void treeNodesRemoved(TreeModelEvent e) {
+           updateActions();
+        }
+
+        public void treeStructureChanged(TreeModelEvent e) {
             updateActions();
         }
 
@@ -616,6 +644,12 @@ public class StudentClassManagementPresentationModel {
                     removeStudentClassAction.setEnabled(false);
                 }
             }
+
+            // Only enable the New StudentClass function, if there is already a OrganisationUnit
+            newStudentClassAction.setEnabled(OrganisationUnitManager.getInstance().size() != 0);
+
+            // Only enable the MoveUpStudentClass function, if there are StudentClasses
+            moveUpStudentClassAction.setEnabled(StudentClassManager.getInstance().size() != 0);
         }
     }
 

@@ -10,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import cw.customermanagementmodul.pojo.Customer;
 import javax.persistence.CascadeType;
+import org.hibernate.annotations.Cascade;
 
 /**
  * 
@@ -81,7 +82,8 @@ public class Student
         firePropertyChange(PROPERTYNAME_ID, old, id);
     }
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne(cascade={CascadeType.REMOVE, CascadeType.PERSIST})
+    @Cascade({org.hibernate.annotations.CascadeType.DELETE, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
     public Customer getCustomer() {
         return customer;
     }

@@ -25,6 +25,9 @@ implements EditCustomerGUITabExtention
         student = StudentManager.getInstance().get(customer);
         if(student == null) {
             student = new Student(customer);
+            
+            // TODO TEST  'v'
+//            StudentManager.getInstance().save(student);
         }
         presentationModel = new StudentCustomerGUIExtentionPresentationModel(student, unsaved);
 

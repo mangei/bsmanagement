@@ -62,7 +62,6 @@ public class EditStudentClassPresentationModel extends PresentationModel<Student
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/cancel.png"));
         saveCancelButtonAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/save_cancel.png"));
 
-//        List<OrganisationUnit> organisationUnitList = OrganisationUnitManager.getOrganisationUnitLeafs();
         List<OrganisationUnit> organisationUnitList = OrganisationUnitManager.getInstance().getAll();
         selectionOrganisationUnit = new SelectionInList<OrganisationUnit>(organisationUnitList);
         

@@ -5,6 +5,7 @@ import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
 import org.apache.log4j.Logger;
 import cw.studentmanagementmodul.pojo.OrganisationUnit;
+import javax.persistence.Query;
 
 /**
  * Manages OrganisationUnits
@@ -32,6 +33,10 @@ public class OrganisationUnitManager extends AbstractPOJOManager<OrganisationUni
     @Override
     public List<OrganisationUnit> getAll() {
         return HibernateUtil.getEntityManager().createQuery("FROM OrganisationUnit").getResultList();
+    }
+
+    public List<OrganisationUnit> getAll(int from, int limit) {
+        return HibernateUtil.getEntityManager().createQuery("FROM OrganisationUnit").setFirstResult(from).setMaxResults(limit).getResultList();
     }
 
     public List<OrganisationUnit> getRoots() {
