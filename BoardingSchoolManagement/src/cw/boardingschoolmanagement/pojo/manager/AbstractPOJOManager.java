@@ -1,6 +1,9 @@
 package cw.boardingschoolmanagement.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
+import cw.boardingschoolmanagement.app.POJOManagerEvent;
+import cw.boardingschoolmanagement.app.POJOManagerListener;
+import cw.boardingschoolmanagement.app.POJOManagerListenerSupport;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -8,7 +11,21 @@ import javax.persistence.EntityManager;
  *
  * @author ManuelG
  */
-public abstract class AbstractPOJOManager<T> {
+public abstract class AbstractPOJOManager<T>{
+
+    protected POJOManagerListenerSupport pojoManagerListenerSupport;
+
+    public AbstractPOJOManager() {
+        pojoManagerListenerSupport = new POJOManagerListenerSupport();
+    }
+
+    public void removePOJOManagerListener(POJOManagerListener listener) {
+        pojoManagerListenerSupport.removePOJOManagerListener(listener);
+    }
+
+    public void addPOJOManagerListener(POJOManagerListener listener) {
+        pojoManagerListenerSupport.addPOJOManagerListener(listener);
+    }
 
     public void save(T obj) {
         EntityManager em = HibernateUtil.getEntityManager();
@@ -19,7 +36,10 @@ public abstract class AbstractPOJOManager<T> {
         em.getTransaction().commit();
     }
 
-    public void remove(T obj) {
+    public void delete(T obj) {
+
+        pojoManagerListenerSupport.firePOJOManagerDelete(obj);
+
         EntityManager em = HibernateUtil.getEntityManager();
         if(em.contains(obj)) {
             em.getTransaction().begin();

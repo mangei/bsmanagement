@@ -20,13 +20,13 @@ public class ButtonEvent{
     public static final int NO_BUTTON = 8;
     public static final int DELETE_BUTTON = 9;
     
-    public int type;
+    private int type;
     
     public ButtonEvent(int type) {
-	this.type = type;
+        this.type = type;
     }
 
     public int getType() {
-	return type;
+        return type;
     }
 }
