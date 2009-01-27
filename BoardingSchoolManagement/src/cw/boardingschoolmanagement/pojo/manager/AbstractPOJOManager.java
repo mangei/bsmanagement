@@ -1,9 +1,9 @@
 package cw.boardingschoolmanagement.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.app.POJOManagerEvent;
-import cw.boardingschoolmanagement.app.POJOManagerListener;
-import cw.boardingschoolmanagement.app.POJOManagerListenerSupport;
+import cw.boardingschoolmanagement.app.CascadeEvent;
+import cw.boardingschoolmanagement.app.CascadeListener;
+import cw.boardingschoolmanagement.app.CascadeListenerSupport;
 import java.util.List;
 import javax.persistence.EntityManager;
 
@@ -13,18 +13,18 @@ import javax.persistence.EntityManager;
  */
 public abstract class AbstractPOJOManager<T>{
 
-    protected POJOManagerListenerSupport pojoManagerListenerSupport;
+    protected CascadeListenerSupport cascadeListenerSupport;
 
     public AbstractPOJOManager() {
-        pojoManagerListenerSupport = new POJOManagerListenerSupport();
+        cascadeListenerSupport = new CascadeListenerSupport();
     }
 
-    public void removePOJOManagerListener(POJOManagerListener listener) {
-        pojoManagerListenerSupport.removePOJOManagerListener(listener);
+    public void removeCascadeListener(CascadeListener listener) {
+        cascadeListenerSupport.removeCascadeListener(listener);
     }
 
-    public void addPOJOManagerListener(POJOManagerListener listener) {
-        pojoManagerListenerSupport.addPOJOManagerListener(listener);
+    public void addCascadeListener(CascadeListener listener) {
+        cascadeListenerSupport.addCascadeListener(listener);
     }
 
     public void save(T obj) {
@@ -38,7 +38,7 @@ public abstract class AbstractPOJOManager<T>{
 
     public void delete(T obj) {
 
-        pojoManagerListenerSupport.firePOJOManagerDelete(obj);
+        cascadeListenerSupport.fireCascadeDelete(obj);
 
         EntityManager em = HibernateUtil.getEntityManager();
         if(em.contains(obj)) {

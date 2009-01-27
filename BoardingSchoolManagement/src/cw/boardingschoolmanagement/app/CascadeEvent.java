@@ -1,15 +1,15 @@
 package cw.boardingschoolmanagement.app;
 
 /**
- * Descripes an POJOManagerEvent.
+ * Descripes an CascadeEvent.
  *
- * @see POJOManagerListener
- * @see POJOManagerListenerSupport
- * @see POJOManagerAdapter
+ * @see CascadeListener
+ * @see CascadeListenerSupport
+ * @see CascadeAdapter
  *
  * @author Manuel Geier (CreativeWorkers)
  */
-public class POJOManagerEvent{
+public class CascadeEvent{
 
     public static final int TYPE_DELETE = 1;
 //    public static final int TYPE_UPDATE = 2;
@@ -24,7 +24,7 @@ public class POJOManagerEvent{
 //    private int referentialAction;
     private int type;
 
-    public POJOManagerEvent(Object object, int type) {
+    public CascadeEvent(Object object, int type) {
         this.object = object;
         this.type = type;
 //        this.referentialAction = referentialAction;

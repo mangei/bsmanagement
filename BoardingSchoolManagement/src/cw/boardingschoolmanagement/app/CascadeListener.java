@@ -6,13 +6,13 @@ package cw.boardingschoolmanagement.app;
  *
  * Update is not supported yet (not necessary).
  *
- * @see POJOManagerEvent
- * @see POJOManagerListenerSupport
- * @see POJOManagerAdapter
+ * @see CascadeEvent
+ * @see CascadeListenerSupport
+ * @see CascadeAdapter
  *
  * @author Manuel Geier (CreativeWorkers)
  */
-public interface POJOManagerListener extends java.util.EventListener {
-    void deleteAction(POJOManagerEvent evt);
-//    void updateAction(POJOManagerEvent evt);
+public interface CascadeListener extends java.util.EventListener {
+    void deleteAction(CascadeEvent evt);
+//    void updateAction(CascadeEvent evt);
 }
