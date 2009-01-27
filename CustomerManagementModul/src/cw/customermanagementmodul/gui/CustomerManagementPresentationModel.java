@@ -141,7 +141,7 @@ public class CustomerManagementPresentationModel {
                     String surname = c.getSurname();
 
                     customerSelectorPresentationModel.remove(c);
-                    CustomerManager.getInstance().remove(c);
+                    CustomerManager.getInstance().delete(c);
 
                     GUIManager.setLoadingScreenVisible(false);
                     GUIManager.getStatusbar().setTextAndFadeOut("'" + forename + " " + surname + "' wurde gelöscht.");

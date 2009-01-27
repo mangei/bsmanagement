@@ -185,7 +185,7 @@ public class GroupManagementPresentationModel {
                     String name = group.getName();
 
                     groupSelection.getList().remove(group);
-                    GroupManager.getInstance().remove(group);
+                    GroupManager.getInstance().delete(group);
 
                     GUIManager.setLoadingScreenVisible(false);
                     GUIManager.getStatusbar().setTextAndFadeOut("Gruppe '" + name + "' wurde gelöscht.");

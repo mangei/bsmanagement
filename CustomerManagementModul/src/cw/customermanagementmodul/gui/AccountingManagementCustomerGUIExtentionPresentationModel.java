@@ -182,7 +182,7 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
                     Accounting a = accountingSelection.getSelection();
 
                     accountingSelection.getList().remove(a);
-                    AccountingManager.getInstance().remove(a);
+                    AccountingManager.getInstance().delete(a);
 
                     GUIManager.setLoadingScreenVisible(false);
                 }

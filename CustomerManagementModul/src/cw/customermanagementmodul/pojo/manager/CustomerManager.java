@@ -55,5 +55,4 @@ public class CustomerManager extends AbstractPOJOManager<Customer> {
             return null;
         }
     }
-
 }
