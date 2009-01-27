@@ -314,7 +314,7 @@ public class StudentClassManagementPresentationModel {
                                 if(model.getChoice() == DeleteOrganisationUnitPresentationModel.DELETE_ALL) {
                                     // Delete the object and all his children
 
-                                    OrganisationUnitManager.getInstance().remove(organisationUnit);
+                                    OrganisationUnitManager.getInstance().delete(organisationUnit);
                                     studentClassTreeModel.removeNodeFromParent(organisationUnitNode);
 
 
@@ -354,7 +354,7 @@ public class StudentClassManagementPresentationModel {
 
                                     // Remove the old one
                                     studentClassTreeModel.removeNodeFromParent(organisationUnitNode);
-                                    OrganisationUnitManager.getInstance().remove(organisationUnit);
+                                    OrganisationUnitManager.getInstance().delete(organisationUnit);
                                 }
 
                                 
@@ -536,7 +536,7 @@ public class StudentClassManagementPresentationModel {
                                 GUIManager.setLoadingScreenText("Klasse wird gelöscht...");
 
                                 studentClassTreeModel.removeNodeFromParent(node);
-                                StudentClassManager.getInstance().remove((StudentClass) object);
+                                StudentClassManager.getInstance().delete((StudentClass) object);
 
                             }
                         }
