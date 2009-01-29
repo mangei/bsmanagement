@@ -38,4 +38,5 @@ public class StudentClassManager extends AbstractPOJOManager<StudentClass>
     public List<StudentClass> getAll(OrganisationUnit organisationUnit) {
         return HibernateUtil.getEntityManager().createQuery("FROM StudentClass WHERE organisationUnit=" + organisationUnit.getId() + "ORDER BY name").getResultList();
     }
+
 }

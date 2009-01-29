@@ -41,7 +41,7 @@ public class Student
         this.customer = customer;
     }
     
-     @Override
+    @Override
     public boolean equals(Object obj) {
         if(obj == null) {
             return false;
@@ -61,7 +61,7 @@ public class Student
         return builder.toString();
     }
 
-    @OneToOne(cascade=CascadeType.ALL)
+    @OneToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     public StudentClass getStudentClass() {
         return studentClass;
     }
@@ -84,8 +84,7 @@ public class Student
         firePropertyChange(PROPERTYNAME_ID, old, id);
     }
 
-    @OneToOne()
-    @OnDelete(action=OnDeleteAction.CASCADE)
+    @OneToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
 //    @Cascade({org.hibernate.annotations.CascadeType.DELETE, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
     public Customer getCustomer() {
         return customer;

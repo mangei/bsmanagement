@@ -1,14 +1,12 @@
 package cw.studentmanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.app.CascadeEvent;
-import cw.boardingschoolmanagement.app.CascadeListener;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
 import org.apache.log4j.Logger;
 import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import cw.studentmanagementmodul.pojo.Student;
+import cw.studentmanagementmodul.pojo.StudentClass;
 import javax.persistence.NoResultException;
 
 /**
@@ -21,15 +19,6 @@ public class StudentManager extends AbstractPOJOManager<Student> {
     private static Logger logger = Logger.getLogger(StudentManager.class);
 
     private StudentManager() {
-
-        CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
-            public void deleteAction(CascadeEvent evt) {
-                Customer customer = (Customer) evt.getObject();
-                Student student = get(customer);
-                delete(student);
-            }
-        });
-
     }
 
     public static StudentManager getInstance() {
@@ -46,6 +35,10 @@ public class StudentManager extends AbstractPOJOManager<Student> {
     @Override
     public List<Student> getAll() {
         return HibernateUtil.getEntityManager().createQuery("FROM Student").getResultList();
+    }
+    
+    public List<Student> getAll(StudentClass studentClass) {
+        return HibernateUtil.getEntityManager().createQuery("FROM Student WHERE studentClass.id=" + studentClass.getId()).getResultList();
     }
 
     public Student get(Customer customer) {

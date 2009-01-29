@@ -52,6 +52,10 @@ public class DeleteOrganisationUnitPresentationModel {
         removeChildren(organisationUnitList, organisationUnit);
         organisationUnitSelection = new SelectionInList<OrganisationUnit>(organisationUnitList);
         choice = DELETE_ALL;
+
+        if(organisationUnitList.size() == 0) {
+            moveAllAction.setEnabled(false);
+        }
     }
 
     private void initEventHandling() {

@@ -161,6 +161,7 @@ public class StudentClassManagementPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
+            GUIManager.getInstance().lockMenu();
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
@@ -214,6 +215,7 @@ public class StudentClassManagementPresentationModel {
                                 model.removeButtonListener(this);
                                 organisationUnit.removePropertyChangeListener(organisationUnitChanged);
                                 GUIManager.changeToLastView();
+                                GUIManager.getInstance().unlockMenu();
                             }
                         }
                     });
@@ -233,6 +235,7 @@ public class StudentClassManagementPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
+            GUIManager.getInstance().lockMenu();
             GUIManager.setLoadingScreenText("Bereich wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
@@ -267,6 +270,7 @@ public class StudentClassManagementPresentationModel {
                                 model.removeButtonListener(this);
                                 organisationUnit.removePropertyChangeListener(organisationUnitChanged);
                                 GUIManager.changeToLastView();
+                                GUIManager.getInstance().unlockMenu();
                             }
                         }
                     });
@@ -380,6 +384,7 @@ public class StudentClassManagementPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
+            GUIManager.getInstance().lockMenu();
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
@@ -440,6 +445,7 @@ public class StudentClassManagementPresentationModel {
                                 model.removeButtonListener(this);
                                 studentClass.removePropertyChangeListener(organisationUnitChanged);
                                 GUIManager.changeToLastView();
+                                GUIManager.getInstance().unlockMenu();
                             }
                         }
                     });
@@ -459,6 +465,7 @@ public class StudentClassManagementPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
+            GUIManager.getInstance().lockMenu();
             GUIManager.setLoadingScreenText("Klasse wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
@@ -501,6 +508,7 @@ public class StudentClassManagementPresentationModel {
                                 model.removeButtonListener(this);
                                 studentClass.removePropertyChangeListener(organisationUnitChanged);
                                 GUIManager.changeToLastView();
+                                GUIManager.getInstance().unlockMenu();
                             }
                         }
                     });

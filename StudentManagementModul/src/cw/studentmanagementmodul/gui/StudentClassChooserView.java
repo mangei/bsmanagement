@@ -6,11 +6,9 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import java.awt.Color;
+import cw.studentmanagementmodul.gui.renderer.StudentClassTreeCellRenderer;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import org.jdesktop.swingx.JXTree;
@@ -38,6 +36,7 @@ public class StudentClassChooserView {
         trStudentClass  = CWComponentFactory.createTree(model.getStudentClassTreeModel());
         trStudentClass.setSelectionModel(model.getStudentClassTreeSelectionModel());
         trStudentClass.setCellRenderer(model.getStudentClassTreeCellRenderer());
+        trStudentClass.setCellRenderer(new StudentClassTreeCellRenderer());
         
         bTreeExpand = CWComponentFactory.createButton(new AbstractAction("", CWUtils.loadIcon("cw/studentmanagementmodul/images/tree_expand.png")) {
             public void actionPerformed(ActionEvent e) {

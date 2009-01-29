@@ -92,7 +92,7 @@ public class OrganisationUnit
         firePropertyChange(PROPERTYNAME_NAME, old, name);
     }
 
-    @ManyToOne
+    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     public OrganisationUnit getParent() {
         return parent;
     }
@@ -122,7 +122,7 @@ public class OrganisationUnit
         firePropertyChange(PROPERTYNAME_ID, old, id);
     }
 
-    @OneToMany(mappedBy = "parent", cascade=CascadeType.REMOVE)
+    @OneToMany(mappedBy = "parent", cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @OrderBy("name")
     public List<OrganisationUnit> getChildren() {
         return children;

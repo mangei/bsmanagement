@@ -2,6 +2,7 @@ package cw.studentmanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -59,7 +60,7 @@ public class StudentClass
         firePropertyChange(PROPERTYNAME_NAME, old, name);
     }
 
-    @OneToOne
+    @OneToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     public StudentClass getNextStudentClass() {
         return nextStudentClass;
     }
@@ -70,7 +71,7 @@ public class StudentClass
         firePropertyChange(PROPERTYNAME_NEXTSTUDENTCLASS, old, nextKlasse);
     }
 
-    @ManyToOne
+    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     public OrganisationUnit getOrganisationUnit() {
         return organisationUnit;
     }
