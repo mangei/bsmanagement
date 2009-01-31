@@ -1,5 +1,9 @@
 package cw.boardingschoolmanagement.gui.component;
 
+import com.jgoodies.binding.beans.Model;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.JideSwingUtilities;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -7,10 +11,14 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicPanelUI;
 
@@ -23,6 +31,8 @@ public class JViewPanel extends JPanel {
     private JButtonPanel buttonPanel;
     private JPanel topPanel;
     private JPanel contentPanel;
+    private JPanel mainPanel;
+    private HeaderInfoPanel headerInfoPanel;
     private HeaderInfo headerInfo;
 
     // Alignment of the header
@@ -31,29 +41,32 @@ public class JViewPanel extends JPanel {
     public static final int RIGHT = JLabel.RIGHT;
 
     public JViewPanel() {
-        this("");
+        this(new HeaderInfo());
     }
 
     public JViewPanel(String headerText) {
-        this(headerText, null);
+        this(new HeaderInfo(headerText));
     }
 
-    public JViewPanel(String headerText, JComponent comp) {
-        setName(headerText);
+    public JViewPanel(HeaderInfo headerInfo) {
+        if(headerInfo == null) throw new NullPointerException("headerInfo is null");
+
+        this.headerInfo = headerInfo;
+
+        setName(headerInfo.getHeaderText());
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(0, 0, 0, 0));
 
         int gab = 10;
-        JPanel mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setBorder(new EmptyBorder(gab, gab, gab, gab));
+        mainPanel = new JPanel(new BorderLayout());
         mainPanel.setUI(new ViewPanelUI());
+        mainPanel.setBorder(new EmptyBorder(gab, gab, gab, gab));
 
         buttonPanel = new JButtonPanel();
         buttonPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
 
         JPanel topInfoActionPanel = new JPanel(new BorderLayout());
-        headerInfo = new HeaderInfo(headerText);
-        topInfoActionPanel.add(headerInfo, BorderLayout.NORTH);
+        topInfoActionPanel.add(headerInfoPanel = new HeaderInfoPanel(headerInfo), BorderLayout.NORTH);
         topInfoActionPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(topInfoActionPanel, BorderLayout.NORTH);
@@ -62,31 +75,31 @@ public class JViewPanel extends JPanel {
         topPanel.setOpaque(false);
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
-
+        // ContentPanel
         contentPanel = new JPanel();
         contentPanel.setLayout(new BorderLayout());
-        contentPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+        contentPanel.setBorder(new EmptyBorder(0,0,0,0));
         contentPanel.setOpaque(false);
         mainPanel.add(contentPanel, BorderLayout.CENTER);
-
-        // Initial Component
-        if (comp != null) {
-            contentPanel.add(comp);
-        }
 
         add(mainPanel, BorderLayout.CENTER);
 
         // Borderline
-        setBorder(BorderFactory.createLineBorder(new Color(215, 220, 228)));
+        setBorder(BorderFactory.createLineBorder(BORDERCOLOR));
     }
 
-    public String getHeaderText() {
-        return headerInfo.getHeaderText();
-    }
+    private static Color BORDERCOLOR = new Color(215, 220, 228);
 
-    public void setHeaderText(String headerText) {
-        headerInfo.setHeaderText(headerText);
-    }
+//    @Override
+//    protected void paintComponent(Graphics g) {
+//        super.paintComponent(g);
+//        g.setColor(BORDERCOLOR);
+//        int h = getHeight();
+//        int w = getWidth();
+//        g.drawLine(0, 0, w, 0);
+//        g.drawLine(0, h, w, h);
+//
+//    }
 
     public JButtonPanel getButtonPanel() {
         return buttonPanel;
@@ -96,67 +109,162 @@ public class JViewPanel extends JPanel {
         return topPanel;
     }
 
+    /**
+     * Return the panel for the contents.<br>
+     * Default LayoutManager is  the BorderLayout.
+     * @return JPanel ContentPanel
+     */
     public JPanel getContentPanel() {
         return contentPanel;
     }
 
-    public void setHeaderAlignment(int alignment) {
-        headerInfo.setHeaderAlignment(alignment);
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
-    public int getHeaderAlignment() {
-        return headerInfo.getHeaderAlignment();
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        headerInfoPanel.setHeaderInfo(headerInfo);
     }
 
-    private class HeaderInfo extends JPanel {
+    public void setInnerPanelBorder(Border border) {
+        mainPanel.setBorder(border);
+    }
 
-        private JLabel label;
+    public static class HeaderInfo extends Model {
 
-        public HeaderInfo(String text) {
-            setUI(new HeaderPanelUI());
+        private String headerText;
+        private String description;
+        private Icon icon;
+        private Icon smallIcon;
 
-            int gab = 3;
-
-            label = new JLabel();
-            label.setOpaque(false);
-            label.setForeground(new Color(56, 61, 65));
-            label.setFont(getFont().deriveFont(Font.BOLD, (float) 12));
-            label.setText(text);
-            label.setBorder(new EmptyBorder(gab, gab + 5, gab, gab));
-            label.setHorizontalAlignment(JLabel.CENTER);
-
-            setLayout(new BorderLayout());
-            add(label, BorderLayout.CENTER);
+        public HeaderInfo() {
+            this("");
         }
 
-//        @Override
-//        public Dimension getMaximumSize() {
-//            if (headerText.isEmpty()) {
-//                return new Dimension(0, 0);
-//            }
-//            return super.getMaximumSize();
-//        }
+        public HeaderInfo(String headerText) {
+            this(headerText, "");
+        }
+
+        public HeaderInfo(String headerText, String description) {
+            this(headerText, description, null, null);
+        }
+
+        public HeaderInfo(String headerText, String description, Icon icon, Icon smallIcon) {
+            this.headerText = headerText;
+            this.description = description;
+            this.icon = icon;
+            this.smallIcon = smallIcon;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public void setDescription(String description) {
+            String old = this.description;
+            this.description = description;
+            firePropertyChange("description", old, description);
+        }
 
         public String getHeaderText() {
-            return label.getText();
+            return headerText;
         }
 
         public void setHeaderText(String headerText) {
-            label.setText(headerText);
-            if(headerText.isEmpty()) {
-                setVisible(false);
+            String old = this.headerText;
+            this.headerText = headerText;
+            firePropertyChange("headerText", old, headerText);
+        }
+
+        public Icon getIcon() {
+            return icon;
+        }
+
+        public Icon getSmallIcon() {
+            return smallIcon;
+        }
+
+        public void setIcons(Icon icon, Icon smallIcon) {
+            Icon old = this.icon;
+            this.icon = icon;
+            firePropertyChange("icon", old, icon);
+            old = this.smallIcon;
+            this.smallIcon = smallIcon;
+            firePropertyChange("smallIcon", old, smallIcon);
+        }
+
+    }
+
+    private static class HeaderInfoPanel extends JPanel implements PropertyChangeListener {
+
+        private JLabel lHeaderText;
+        private JLabel lDescription;
+        private JLabel lImage;
+
+        private HeaderInfo headerInfo;
+
+        public HeaderInfoPanel(HeaderInfo headerInfo) {
+
+            this.headerInfo = headerInfo;
+            headerInfo.addPropertyChangeListener(this);
+
+            setUI(new HeaderPanelUI());
+            int gab = 3;
+            setBorder(new EmptyBorder(gab, gab + 5, gab, gab));
+            setOpaque(false);
+
+            lHeaderText = new JLabel();
+            if(headerInfo.getDescription().isEmpty()) {
+                lHeaderText.setFont(getFont().deriveFont(Font.BOLD, (float) 12));
             } else {
-                setVisible(true);
+                lHeaderText.setFont(getFont().deriveFont(Font.BOLD, (float) 13));
             }
+            lHeaderText.setForeground(new Color(56, 61, 65));
+
+            if(headerInfo.getDescription().isEmpty()) {
+                lHeaderText.setHorizontalAlignment(JLabel.CENTER);
+            }
+
+            lDescription = new JLabel();
+            lDescription.setForeground(Color.DARK_GRAY);
+
+            lImage = new JLabel();
+
+            FormLayout layout = new FormLayout(
+                    "2dlu, pref, 10dlu, 2dlu, pref:grow",
+                    "2dlu, pref, pref, 2dlu, "
+            );
+
+            PanelBuilder builder = new PanelBuilder(layout, this);
+            CellConstraints cc = new CellConstraints();
+            builder.add(lHeaderText, cc.xyw(4, 2, 2));
+            builder.add(lDescription, cc.xy(5, 3));
+            builder.add(lImage, cc.xywh(2, 2, 1, 2));
+
+            updateHeaderInfo();
         }
 
-        public void setHeaderAlignment(int alignment) {
-            label.setHorizontalAlignment(alignment);
+        public HeaderInfo getHeaderInfo() {
+            return headerInfo;
         }
 
-        public int getHeaderAlignment() {
-            return label.getHorizontalAlignment();
+        public void setHeaderInfo(HeaderInfo headerInfo) {
+            this.headerInfo.removePropertyChangeListener(this);
+            this.headerInfo = headerInfo;
+            this.headerInfo.addPropertyChangeListener(this);
+            updateHeaderInfo();
         }
+
+        private void updateHeaderInfo() {
+            lHeaderText.setText(headerInfo.getHeaderText());
+            lDescription.setText(headerInfo.getDescription());
+            lImage.setIcon(headerInfo.getIcon());
+        }
+
+        public void propertyChange(PropertyChangeEvent evt) {
+            updateHeaderInfo();
+        }
+
     }
 
     private class ViewPanelUI extends BasicPanelUI {
@@ -181,7 +289,7 @@ public class JViewPanel extends JPanel {
         }
     }
 
-    private class HeaderPanelUI extends BasicPanelUI {
+    private static class HeaderPanelUI extends BasicPanelUI {
 
         private final Color bottomBorderColor = new Color(215, 220, 228);
         private final Color lightGrayColor = new Color(234, 237, 241);

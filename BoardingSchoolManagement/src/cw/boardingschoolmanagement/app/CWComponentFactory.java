@@ -12,6 +12,10 @@ import cw.boardingschoolmanagement.gui.component.CWJTextArea;
 import cw.boardingschoolmanagement.gui.component.CWJTextField;
 import cw.boardingschoolmanagement.gui.component.CWJXList;
 import cw.boardingschoolmanagement.gui.component.CWJXTable;
+import cw.boardingschoolmanagement.gui.component.JBackPanel;
+import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -429,6 +433,40 @@ public class CWComponentFactory {
     public static JPanel createPanel(LayoutManager layout) {
         JPanel panel = new JPanel(layout);
         panel.setOpaque(false);
+        return panel;
+    }
+
+    public static JBackPanel createBackPanel(JPanel panel) {
+        return createBackPanel(panel, "Zurück");
+    }
+
+    public static JBackPanel createBackPanel(JPanel panel, String backText) {
+        JBackPanel backPanel = new JBackPanel(panel, backText);
+        return backPanel;
+    }
+
+    public static JViewPanel createViewPanel() {
+        return new JViewPanel();
+    }
+
+    public static JViewPanel createViewPanel(HeaderInfo headerInfo) {
+        return createViewPanel(headerInfo, null);
+    }
+
+    public static JViewPanel createViewPanel(String headerText, JComponent comp) {
+        return createViewPanel(new HeaderInfo(headerText), comp);
+    }
+
+    public static JViewPanel createViewPanel( JComponent comp) {
+        return createViewPanel(new HeaderInfo(), comp);
+    }
+
+    public static JViewPanel createViewPanel(HeaderInfo headerInfo, JComponent comp) {
+        if(headerInfo == null) headerInfo = new HeaderInfo();
+        JViewPanel panel = new JViewPanel(headerInfo);
+        if(comp != null) {
+            panel.getContentPanel().add(comp, BorderLayout.CENTER);
+        }
         return panel;
     }
 }

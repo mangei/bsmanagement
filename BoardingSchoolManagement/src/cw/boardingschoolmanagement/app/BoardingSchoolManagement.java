@@ -161,7 +161,7 @@ public class BoardingSchoolManagement extends Application {
             {
                 putValue(Action.SHORT_DESCRIPTION, "Startseite anzeigen");
             }
-
+            
             public void actionPerformed(ActionEvent e) {
                 GUIManager.setLoadingScreenText("Startseite werden geladen...");
                 GUIManager.setLoadingScreenVisible(true);

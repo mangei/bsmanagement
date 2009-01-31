@@ -50,6 +50,7 @@ public class HeaderButtonUI2 extends BasicButtonUI {
     public void installDefaults(AbstractButton b) {
         b.setOpaque(false);
         b.setForeground(Color.DARK_GRAY);
+//        b.setForeground(Color.WHITE);
         b.setBorder(BorderFactory.createEmptyBorder(4, 10, 4, 10));
         super.installDefaults(b);
     }
@@ -85,7 +86,7 @@ public class HeaderButtonUI2 extends BasicButtonUI {
 
     private static final Color ENABLED_BORDER = new Color(215, 220, 228);
     private static final Color ENABLED_DARK = new Color(234, 237, 241);
-    private static final Color ENABLED_LIGHT = Color.WHITE;
+    private static final Color ENABLED_LIGHT = new Color(255, 255, 255);
     private static final Color DISABLED_BORDER = new Color(215, 220, 228);
     private static final Color DISABLED_DARK = new Color(158, 158, 158);
     private static final Color DISABLED_LIGHT = new Color(204, 204, 204);

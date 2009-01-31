@@ -20,10 +20,10 @@ public class JBackPanel {
     private JPanel panel;
 
     public JBackPanel(JPanel panel) {
-        this("", panel);
+        this(panel, "");
     }
 
-    public JBackPanel(String backText, JPanel panel) {
+    public JBackPanel(JPanel panel, String backText) {
         if(panel == null) throw new NullPointerException("panel is null");
 
         mainPanel = new JPanel(new BorderLayout());

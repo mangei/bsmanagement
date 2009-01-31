@@ -1,7 +1,14 @@
 package cw.boardingschoolmanagement.gui.component;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
 import java.util.LinkedList;
+import javax.swing.AbstractAction;
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -12,46 +19,63 @@ import javax.swing.JPanel;
  */
 public class JPathPanel extends JPanel {
 
-    private String separator = " >> ";
-//    private LinkedList entries;
-
-    private JLabel path;
+    private JLabel separator;
+    private JPanel pathPanel;
 
     public JPathPanel() {
-//        entries = new LinkedList();
-
-        path = new JLabel();
-        
         setLayout(new BorderLayout());
-        add(path, BorderLayout.CENTER);
+
+        setBackground(new Color(201,208,218));
+        setBorder(BorderFactory.createMatteBorder(1, 1, 1, 1,new Color(178,187,200)));
+
+        pathPanel = new JPanel();
+        pathPanel.setOpaque(false);
+        pathPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        add(pathPanel, BorderLayout.CENTER);
+        
+        separator = new JLabel(">");
+
+        add(new JButton(new AbstractAction("   X   ") {
+            public void actionPerformed(ActionEvent e) {
+                JPathPanel.this.setVisible(false);
+            }
+        }), BorderLayout.EAST);
     }
 
-//    public void addPathEntry(String name) {
-//        entries.push(name);
-//        reloadPath();
-//    }
-//
-//    public void removeLastPathEntry() {
-//        entries.pop();
-//        reloadPath();
-//    }
-//
-//    public void clearPath() {
-//        entries.clear();
-//        reloadPath();
-//    }
-
     public void reloadPath(LinkedList<JComponent> lastComponents, JComponent shownComponent) {
-        StringBuilder pathStr = new StringBuilder("<html><b>Pfad:</b></html> ");
-        System.out.println("size1: " + lastComponents.size());
-        for(int i=0, l=lastComponents.size(); i<l; i++) {
-            pathStr.append(lastComponents.get(i).getName());
-            pathStr.append(separator);
+
+        pathPanel.removeAll();
+
+        pathPanel.add(new JLabel("Sie sind hier: "));
+        
+        for (int i = 0, l = lastComponents.size(); i < l; i++) {
+            pathPanel.add(createLabel(lastComponents.get(i)));
+            pathPanel.add(separator);
         }
-        pathStr.append(shownComponent.getName());
-        path.setText(pathStr.toString());
-        System.out.println("size2: " + lastComponents.size());
-        System.out.println("path: " + pathStr.toString());
-        validate();
+
+        JLabel l = createLabel(shownComponent);
+        l.setFont(l.getFont().deriveFont(Font.BOLD));
+        pathPanel.add(l);
+
+        pathPanel.validate();
+        pathPanel.repaint();
+    }
+
+    private JLabel createLabel(JComponent comp) {
+        JViewPanel viewPanel;
+        JLabel label = new JLabel();
+        if (comp instanceof JViewPanel) {
+            viewPanel = (JViewPanel) comp;
+            label.setText(viewPanel.getHeaderInfo().getHeaderText());
+            label.setToolTipText(viewPanel.getHeaderInfo().getDescription());
+            label.setIcon(viewPanel.getHeaderInfo().getSmallIcon());
+        } else {
+            System.out.println("KKK");
+            label.setText(comp.getName());
+        }
+
+        System.out.println("comp: " + comp.getName());
+        System.out.println("label: " + label.getText());
+        return label;
     }
 }

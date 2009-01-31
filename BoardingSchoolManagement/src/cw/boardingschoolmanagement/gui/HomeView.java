@@ -2,7 +2,9 @@ package cw.boardingschoolmanagement.gui;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.util.List;
 import javax.swing.JPanel;
 
@@ -29,7 +31,12 @@ public class HomeView
     public JPanel buildPanel() {
         initComponents();
 
-        JViewPanel panel = new JViewPanel("Startseite");
+        JViewPanel panel = new JViewPanel(new HeaderInfo(
+                "Startseite",
+                "<html>Sie befinden sich auf der Startseite.</html>",
+                CWUtils.loadIcon("cw/boardingschoolmanagement/images/home_32.png"),
+                CWUtils.loadIcon("cw/boardingschoolmanagement/images/home_16.png")
+        ));
 
         List<JPanel> panels = model.getExtentionPanels();
         StringBuilder rows = new StringBuilder();

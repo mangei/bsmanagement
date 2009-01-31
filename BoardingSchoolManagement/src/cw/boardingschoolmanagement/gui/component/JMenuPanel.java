@@ -466,12 +466,14 @@ public class JMenuPanel
     public void lock() {
         if(isEnabled()) {
             this.setEnabled(false);
+            this.repaint();
         }
     }
 
     public void unlock() {
         if(!isEnabled()) {
             this.setEnabled(true);
+            this.repaint();
         }
     }
 }

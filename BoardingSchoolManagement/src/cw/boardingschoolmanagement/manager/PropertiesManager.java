@@ -40,9 +40,6 @@ public class PropertiesManager {
         PropertiesManager pM = getInstance();
 
         String property = pM.properties.getProperty(name);
-        if (property == null) {
-            throw new PropertyElementDoesNotExistException("Propertyname: " + name);
-        }
 
         return property;
     }
