@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import cw.customermanagementmodul.pojo.Posting;
+import javax.swing.JComboBox;
 
 /**
  *
@@ -21,6 +22,7 @@ public class EditPostingView {
     private EditPostingPresentationModel model;
     
     private JTextField tfDescription;
+    private JComboBox cbPostingCategory;
     private JTextField tfValue;
     private JDateChooser dcPostingEntryDate;
     private JPanel pLiabilitiesAssets;
@@ -37,6 +39,7 @@ public class EditPostingView {
 
     private void initComponents() {
         tfDescription           = CWComponentFactory.createTextField(model.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION),false);
+        cbPostingCategory       = CWComponentFactory.createComboBox(model.getPostingCategorySelection());
 //        tfValue                = CWComponentFactory.createFormattedTextField(model.getBufferedModel(Accounting.PROPERTYNAME_AMOUNT), NumberFormat.getNumberInstance());
 //        tfValue.setHorizontalAlignment(JTextField.RIGHT);
         tfValue                 = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Posting.PROPERTYNAME_AMOUNT));
@@ -49,10 +52,10 @@ public class EditPostingView {
                 (Boolean)(model.getModel(Posting.PROPERTYNAME_LIABILITIESASSETS).getValue())
         );
 
-        bSave       = new JButton(model.getSaveButtonAction());
-        bReset      = new JButton(model.getResetButtonAction());
-        bCancel     = new JButton(model.getCancelButtonAction());
-        bSaveCancel = new JButton(model.getSaveCancelButtonAction());
+        bSave       = CWComponentFactory.createButton(model.getSaveButtonAction());
+        bReset      = CWComponentFactory.createButton(model.getResetButtonAction());
+        bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
     }
 
     private void initEventHandling() {
@@ -71,22 +74,24 @@ public class EditPostingView {
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout(
-                "right:pref, 4dlu, pref, 4dlu, 50dlu:grow:right",
-                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
+                "right:pref, 4dlu, pref, 4dlu, right:200dlu",
+                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
         
         PanelBuilder builder = new PanelBuilder(layout,panel.getContentPanel());
         builder.setDefaultDialogBorder();
 
         CellConstraints cc = new CellConstraints();
-        builder.addLabel("Bezeichnung:", cc.xy(1, 1));
-        builder.add(tfDescription, cc.xyw(3, 1, 3));
-        builder.addLabel("Betrag:", cc.xy(1, 3));
-        builder.add(tfValue, cc.xy(3, 3));
-        builder.addLabel("€", cc.xy(5, 3));
-        builder.addLabel("Art:", cc.xy(1, 5));
-        builder.add(pLiabilitiesAssets, cc.xyw(3, 5, 3));
-        builder.addLabel("Eingangsdatum:", cc.xy(1, 7));
-        builder.add(dcPostingEntryDate, cc.xy(3, 7));
+        builder.addLabel("Bezeichnung:",        cc.xy(1, 1));
+        builder.add(tfDescription,              cc.xyw(3, 1, 3));
+        builder.addLabel("Kategorie:",          cc.xy(1, 3));
+        builder.add(cbPostingCategory,          cc.xyw(3, 3, 3));
+        builder.addLabel("Betrag:",             cc.xy(1, 5));
+        builder.add(tfValue,                    cc.xy(3, 5));
+        builder.addLabel("€",                   cc.xy(5, 5));
+        builder.addLabel("Art:",                cc.xy(1, 7));
+        builder.add(pLiabilitiesAssets,         cc.xyw(3, 7, 3));
+        builder.addLabel("Eingangsdatum:",      cc.xy(1, 9));
+        builder.add(dcPostingEntryDate,         cc.xy(3, 9));
 
         initEventHandling();
 

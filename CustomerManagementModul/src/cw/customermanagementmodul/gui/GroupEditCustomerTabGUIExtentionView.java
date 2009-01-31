@@ -39,8 +39,7 @@ public class GroupEditCustomerTabGUIExtentionView {
     public JPanel buildPanel() {
         initComponents();
 
-        JViewPanel panel = new JViewPanel();
-        panel.setName("Gruppen");
+        JViewPanel panel = new JViewPanel("Gruppen");
 
         FormLayout layout = new FormLayout(
                 "200dlu, 4dlu, pref, 4dlu, 200dlu",
@@ -50,10 +49,10 @@ public class GroupEditCustomerTabGUIExtentionView {
         PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
         CellConstraints cc = new CellConstraints();
 
-        builder.add(new JViewPanel("Aktive Gruppen", liCustomerGroups), cc.xywh(1, 1, 1, 5));
+        builder.add(CWComponentFactory.createViewPanel("Aktive Gruppen", liCustomerGroups), cc.xywh(1, 1, 1, 5));
         builder.add(bAdd,               cc.xy(3, 2));
         builder.add(bRemove,            cc.xy(3, 4));
-        builder.add(new JViewPanel("Andere Gruppen", liGroups), cc.xywh(5, 1, 1, 5));
+        builder.add(CWComponentFactory.createViewPanel("Andere Gruppen", liGroups), cc.xywh(5, 1, 1, 5));
 
         initEventHandling();
 

@@ -3,6 +3,7 @@ package cw.customermanagementmodul.gui;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import javax.swing.event.ListSelectionEvent;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import java.awt.event.ActionEvent;
@@ -27,17 +28,12 @@ public class CustomerManagementPresentationModel {
     private Action newAction;
     private Action editAction;
     private Action deleteAction;
-    private String headerText;
 
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
 
+    private HeaderInfo headerInfo;
+
     public CustomerManagementPresentationModel() {
-        this("");
-    }
-
-    public CustomerManagementPresentationModel(String headerText) {
-        this.headerText = headerText;
-
         initModels();
         initEventHandling();
     }
@@ -48,6 +44,13 @@ public class CustomerManagementPresentationModel {
         deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        
+        headerInfo = new HeaderInfo(
+                "Kunden verwalten",
+                "Sie befinden sich Kundenverwaltungsbereich. Hier haben Sie einen Überblick über alle Kunden.<br>test",
+                CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
+                CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
+        );
     }
 
     private void initEventHandling() {
@@ -76,7 +79,7 @@ public class CustomerManagementPresentationModel {
                 public void run() {
 
                     final Customer c = new Customer();
-                    final EditCustomerPresentationModel model = new EditCustomerPresentationModel(c, "Kunde erstellen");
+                    final EditCustomerPresentationModel model = new EditCustomerPresentationModel(c, new HeaderInfo("Kunden erstellen"));
                     final EditCustomerView editView = new EditCustomerView(model);
                     model.addButtonListener(new ButtonListener() {
 
@@ -168,10 +171,6 @@ public class CustomerManagementPresentationModel {
     // Getter methods for the model
     ////////////////////////////////////////////////////////////////////////////
 
-    public String getHeaderText() {
-        return headerText;
-    }
-
     public Action getNewAction() {
         return newAction;
     }
@@ -184,11 +183,16 @@ public class CustomerManagementPresentationModel {
         return editAction;
     }
 
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
     public CustomerSelectorPresentationModel getCustomerSelectorPresentationModel() {
         return customerSelectorPresentationModel;
     }
 
     public void editSelectedItem(EventObject e) {
+        GUIManager.getInstance().lockMenu();
         GUIManager.setLoadingScreenText("Kunde wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
 
@@ -197,7 +201,7 @@ public class CustomerManagementPresentationModel {
             public void run() {
 
                 final Customer c = customerSelectorPresentationModel.getSelectedCustomer();
-                final EditCustomerPresentationModel model = new EditCustomerPresentationModel(c, "Kunde bearbeiten");
+                final EditCustomerPresentationModel model = new EditCustomerPresentationModel(c, new HeaderInfo("Kunde bearbeiten"));
                 final EditCustomerView editView = new EditCustomerView(model);
                 model.addButtonListener(new ButtonListener() {
 
@@ -209,6 +213,7 @@ public class CustomerManagementPresentationModel {
                         if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                             model.removeButtonListener(this);
                             GUIManager.changeToLastView();
+                            GUIManager.getInstance().unlockMenu();
                         }
                     }
                 });
@@ -225,14 +230,6 @@ public class CustomerManagementPresentationModel {
     // Event Handling *********************************************************
     private void updateActionEnablement() {
         boolean hasSelection = !customerSelectorPresentationModel.isSelectionEmpty();
-
-        System.out.println("hasSelection: " + hasSelection);
-        System.out.println("mode: " + customerSelectorPresentationModel.getSelectionMode());
-        switch(customerSelectorPresentationModel.getSelectionMode()) {
-            case ListSelectionModel.SINGLE_SELECTION: System.out.println("SINGLE");
-            case ListSelectionModel.MULTIPLE_INTERVAL_SELECTION: System.out.println("MULTIPLE");
-            case ListSelectionModel.SINGLE_INTERVAL_SELECTION: System.out.println("SINGLE_INTERVAL");
-        }
 
         if(!hasSelection) {
             editAction.setEnabled(false);

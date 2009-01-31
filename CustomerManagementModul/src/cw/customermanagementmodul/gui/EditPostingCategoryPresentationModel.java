@@ -5,31 +5,27 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.Date;
-import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.PostingCategory;
-import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
 
 /**
  *
  * @author CreativeWorkers.at
  */
-public class EditPostingPresentationModel
-        extends PresentationModel<Posting> {
+public class EditPostingCategoryPresentationModel
+        extends PresentationModel<PostingCategory> {
 
-    private Posting posting;
-    private SelectionInList<PostingCategory> postingCategorySelection;
+    private PostingCategory postingCategory;
     private ValueModel unsaved;
     
     private Action resetButtonAction;
@@ -39,9 +35,9 @@ public class EditPostingPresentationModel
     
     private ButtonListenerSupport support;
     
-    public EditPostingPresentationModel(Posting posting) {
-        super(posting);
-        this.posting = posting;
+    public EditPostingCategoryPresentationModel(PostingCategory postingCategory) {
+        super(postingCategory);
+        this.postingCategory = postingCategory;
 
         support = new ButtonListenerSupport();
         
@@ -57,15 +53,7 @@ public class EditPostingPresentationModel
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
         saveCancelButtonAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
 
-        List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAll();
-        postingCategories.add(0, null);
-        postingCategorySelection = new SelectionInList<PostingCategory>(postingCategories);
-        postingCategorySelection.setSelection(getBean().getPostingCategory());
-
-        getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(new SaveListener());
-        getBufferedModel(Posting.PROPERTYNAME_AMOUNT).addValueChangeListener(new SaveListener());
-        getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(new SaveListener());
-        getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).addValueChangeListener(new SaveListener());
+        getBufferedModel(PostingCategory.PROPERTYNAME_KEY).addValueChangeListener(new SaveListener());
     }
     
     public void initEventHandling() {
@@ -105,10 +93,6 @@ public class EditPostingPresentationModel
 
     public void addButtonListener(ButtonListener listener) {
         support.addButtonListener(listener);
-    }
-
-    public SelectionInList<PostingCategory> getPostingCategorySelection() {
-        return postingCategorySelection;
     }
     
     public Action getSaveButtonAction() {

@@ -18,12 +18,13 @@ import java.awt.Font;
  *
  * @author Manuel Geier
  */
-public class PostingManagementEditCustomerTabGUIExtentionView
+public class PostingManagementView
 {
     private JButton bNew;
     private JButton bEdit;
     private JButton bCancel;
     private JButton bDelete;
+    private JButton bManagePostingCategories;
 
     private CWJXTable tPostings;
 
@@ -31,17 +32,18 @@ public class PostingManagementEditCustomerTabGUIExtentionView
     private JLabel lAssets;
     private JLabel lSaldo;
     
-    private PostingManagementEditCustomerTabGUIExtentionPresentationModel model;
+    private PostingManagementPresentationModel model;
     
-    public PostingManagementEditCustomerTabGUIExtentionView(PostingManagementEditCustomerTabGUIExtentionPresentationModel model) {
+    public PostingManagementView(PostingManagementPresentationModel model) {
         this.model = model;
     }
     
     private void initComponents() {
-        bNew    = CWComponentFactory.createButton(model.getNewButtonAction());
-        bEdit   = CWComponentFactory.createButton(model.getEditButtonAction());
-        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
-        bDelete = CWComponentFactory.createButton(model.getDeleteButtonAction());
+        bNew    = CWComponentFactory.createButton(model.getNewAction());
+        bEdit   = CWComponentFactory.createButton(model.getEditAction());
+        bCancel = CWComponentFactory.createButton(model.getCancelAction());
+        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
+        bManagePostingCategories = CWComponentFactory.createButton(model.getManagePostingCategoriesAction());
         
         tPostings = CWComponentFactory.createTable("Keine Buchungen vorhanden");
         tPostings.setModel(model.createPostingTableModel(model.getPostingSelection()));
@@ -72,6 +74,7 @@ public class PostingManagementEditCustomerTabGUIExtentionView
         panel.getButtonPanel().add(bEdit);
         panel.getButtonPanel().add(bCancel);
         panel.getButtonPanel().add(bDelete);
+        panel.getButtonPanel().add(bManagePostingCategories);
 
         FormLayout layout = new FormLayout(
                 "4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref:grow",

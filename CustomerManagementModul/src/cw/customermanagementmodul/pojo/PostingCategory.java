@@ -3,6 +3,7 @@ package cw.customermanagementmodul.pojo;
 import com.jgoodies.binding.beans.Model;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import java.util.List;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -36,11 +37,11 @@ public class PostingCategory
     /**
      * Create a new posting-category
      * @param name Name of the posting-category
-     * @param code The code of the category
+     * @param key The key of the category
      */
-    public PostingCategory(String name, String code) {
+    public PostingCategory(String name, String key) {
         this.name = name;
-        this.key = code;
+        this.key = key;
     }
 
     @Override
@@ -94,6 +95,7 @@ public class PostingCategory
      * Get the key of the posting-category
      * @return key
      */
+    @Column(name="categoryKey")
     public String getKey() {
         return key;
     }
@@ -112,7 +114,7 @@ public class PostingCategory
      * Get the list of all postings, which have this posting-category
      * @return postings
      */
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "postingCategory")
     public List<Posting> getPostings() {
         return postings;
     }

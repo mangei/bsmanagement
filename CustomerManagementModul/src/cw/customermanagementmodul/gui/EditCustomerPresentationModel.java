@@ -7,6 +7,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -31,7 +32,7 @@ public class EditCustomerPresentationModel
 
     private Customer customer;
     private ValueModel unsaved;
-    private String headerText;
+    private HeaderInfo headerInfo;
     private Action resetButtonAction;
     private Action saveButtonAction;
     private Action cancelButtonAction;
@@ -46,13 +47,13 @@ public class EditCustomerPresentationModel
     private List<String> countryList;
 
     public EditCustomerPresentationModel(Customer customer) {
-        this(customer, "");
+        this(customer, new HeaderInfo());
     }
 
-    public EditCustomerPresentationModel(Customer customer, String headerText) {
+    public EditCustomerPresentationModel(Customer customer, HeaderInfo headerInfo) {
         super(customer);
         this.customer = customer;
-        this.headerText = headerText;
+        this.headerInfo = headerInfo;
 
         initModels();
         initEventHandling();
@@ -189,8 +190,8 @@ public class EditCustomerPresentationModel
         return clearLocationDataAction;
     }
 
-    public String getHeaderText() {
-        return headerText;
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
     public List<String> getTitleList() {
@@ -226,9 +227,8 @@ public class EditCustomerPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-//            saveCustomer();
+
             triggerCommit();
-            unsaved.setValue(false);
 
             support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
 
@@ -236,6 +236,8 @@ public class EditCustomerPresentationModel
             for (EditCustomerGUITabExtention addon : addons) {
                 addon.save();
             }
+
+            unsaved.setValue(false);
         }
     }
 

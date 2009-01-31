@@ -1,5 +1,6 @@
 package cw.customermanagementmodul.gui;
 
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -36,8 +37,7 @@ public class CustomerManagementView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel();
-        panel.setHeaderText(model.getHeaderText());
+        JViewPanel panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
 
         panel.getButtonPanel().add(bNew);
         panel.getButtonPanel().add(bEdit);

@@ -20,6 +20,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 
 /**
  * The CostumerManagement Modul
@@ -43,18 +44,37 @@ implements Modul
                 putValue(Action.SHORT_DESCRIPTION, "Kunden verwalten");
             }
 
-            public void actionPerformed(ActionEvent e) {
-                GUIManager.setLoadingScreenText("Kunden werden geladen...");
-                GUIManager.setLoadingScreenVisible(true);
+            private CustomerManagementPresentationModel model;
+            private CustomerManagementView view;
+            private JPanel panel;
 
-                new Thread(new Runnable() {
-                    public void run() {
-                        GUIManager.changeView(new CustomerManagementView(new CustomerManagementPresentationModel("Kunden verwalten")).buildPanel());
-                        GUIManager.setLoadingScreenVisible(false);
-                    }
-                }).start();
-            }
+            public void actionPerformed(ActionEvent e) {
+                if(panel == null) {
+
+                    GUIManager.setLoadingScreenText("Kunden werden geladen...");
+                    GUIManager.setLoadingScreenVisible(true);
+
+                    new Thread(new Runnable() {
+                        public void run() {
+                            if(model == null) {
+                                model = new CustomerManagementPresentationModel();
+                            }
+                            if(view == null) {
+                                view = new CustomerManagementView(model);
+                            }
+                            if(panel == null) {
+                                panel = view.buildPanel();
+                            }
+
+                            GUIManager.changeView(panel);
+                            GUIManager.setLoadingScreenVisible(false);
+                        }
+                    }).start();
+                } else
+                    GUIManager.changeView(panel);
+                }
         }), "manage");
+        
         sideMenu.addItem(new JButton(new AbstractAction(
                 "Gruppen", CWUtils.loadIcon("cw/customermanagementmodul/images/group.png")) {
 
@@ -62,17 +82,37 @@ implements Modul
                 putValue(Action.SHORT_DESCRIPTION, "Gruppen verwalten");
             }
 
+            private GroupManagementPresentationModel model;
+            private GroupManagementView view;
+            private JPanel panel;
+
             public void actionPerformed(ActionEvent e) {
-                GUIManager.setLoadingScreenText("Gruppen werden geladen...");
-                GUIManager.setLoadingScreenVisible(true);
+                if(panel == null) {
 
-                new Thread(new Runnable() {
+                    GUIManager.setLoadingScreenText("Gruppen werden geladen...");
+                    GUIManager.setLoadingScreenVisible(true);
 
-                    public void run() {
-                        GUIManager.changeView(new GroupManagementView(new GroupManagementPresentationModel("Gruppen verwalten")).buildPanel());
-                        GUIManager.setLoadingScreenVisible(false);
-                    }
-                }).start();
+                    new Thread(new Runnable() {
+
+                        public void run() {
+                            if(model == null) {
+                                model = new GroupManagementPresentationModel("Gruppen verwalten");
+                            }
+                            if(view == null) {
+                                view = new GroupManagementView(model);
+                            }
+                            if(panel == null) {
+                                panel = view.buildPanel();
+                            }
+
+                            GUIManager.changeView(panel);
+                            GUIManager.setLoadingScreenVisible(false);
+                        }
+                    }).start();
+                }
+                else {
+                    GUIManager.changeView(panel);
+                }
             }
         }), "manage");
 
@@ -81,7 +121,7 @@ implements Modul
                 PostingCategory accountingCategory = (PostingCategory) evt.getObject();
                 List<Posting> accountings = PostingManager.getInstance().getAll(accountingCategory);
                 for(int i=0, l=accountings.size(); i<l; i++) {
-                    accountings.get(i).setCategory(null);
+                    accountings.get(i).setPostingCategory(null);
                 }
             }
         });

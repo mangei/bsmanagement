@@ -7,11 +7,16 @@ package cw.customermanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 /**
  *
  * @author ManuelG
  */
+@Entity
 public class ReversePosting
         extends Model
         implements AnnotatedClass
@@ -24,6 +29,8 @@ public class ReversePosting
     public ReversePosting() {
     }
 
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     public Long getId() {
         return id;
     }

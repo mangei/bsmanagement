@@ -2,11 +2,8 @@ package cw.customermanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
-import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
-import cw.customermanagementmodul.pojo.Posting;
-import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.PostingCategory;
 
 /**

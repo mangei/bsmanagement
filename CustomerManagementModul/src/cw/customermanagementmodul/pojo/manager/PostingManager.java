@@ -41,7 +41,7 @@ public class PostingManager extends AbstractPOJOManager<Posting>
             cancelA.setLiabilities(!a.isLiabilities());
             cancelA.setAmount(a.getAmount());
             cancelA.setPostingDate(new Date());
-            cancelA.setCategory(a.getCategory());
+            cancelA.setPostingCategory(a.getPostingCategory());
             cancelA.setDescription("STORNO: " + a.getDescription());
             save(cancelA);
             return cancelA;

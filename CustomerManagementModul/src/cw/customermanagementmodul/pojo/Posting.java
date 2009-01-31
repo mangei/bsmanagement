@@ -29,7 +29,7 @@ public class Posting
     private String description;
     private boolean liabilitiesAssets;
     private double amount;
-    private PostingCategory category;
+    private PostingCategory postingCategory;
 //    private String source;
 
     // Properties - Constants
@@ -38,7 +38,7 @@ public class Posting
     public final static String PROPERTYNAME_POSTINGDATE = "postingDate";
     public final static String PROPERTYNAME_POSTINGENTRYDATE = "postingEntryDate";
     public final static String PROPERTYNAME_AMOUNT = "amount";
-    public final static String PROPERTYNAME_CATEGORY = "category";
+    public final static String PROPERTYNAME_CATEGORY = "postingCategory";
     public final static String PROPERTYNAME_CUSTOMER = "customer";
     public final static String PROPERTYNAME_LIABILITIESASSETS = "liabilitiesAssets";
 //    public final static String PROPERTYNAME_SOURCE = "source";
@@ -172,14 +172,14 @@ public class Posting
     }
 
     @ManyToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    public PostingCategory getCategory() {
-        return category;
+    public PostingCategory getPostingCategory() {
+        return postingCategory;
     }
 
-    public void setCategory(PostingCategory category) {
-        PostingCategory old = this.category;
-        this.category = category;
-        firePropertyChange(PROPERTYNAME_CATEGORY, old, category);
+    public void setPostingCategory(PostingCategory postingCategory) {
+        PostingCategory old = this.postingCategory;
+        this.postingCategory = postingCategory;
+        firePropertyChange(PROPERTYNAME_CATEGORY, old, postingCategory);
     }
 
 //    public String getSource() {

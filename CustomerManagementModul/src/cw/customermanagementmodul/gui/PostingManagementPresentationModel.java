@@ -8,6 +8,8 @@ import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.JBackPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -34,7 +36,7 @@ import javax.swing.table.TableColumnModel;
  *
  * @author Manuel Geier
  */
-public class PostingManagementEditCustomerTabGUIExtentionPresentationModel {
+public class PostingManagementPresentationModel {
 
     private Customer customer;
 
@@ -42,23 +44,17 @@ public class PostingManagementEditCustomerTabGUIExtentionPresentationModel {
     private Action editAction;
     private Action cancelAction;
     private Action deleteAction;
+    private Action managePostingCategoriesAction;
     private SelectionInList<Posting> postingSelection;
     private ValueModel saldoValue;
     private ValueModel liabilitiesValue;
     private ValueModel assetsValue;
 
-    /**
-     * Constructor if you want to load all accountings
-     */
-    public PostingManagementEditCustomerTabGUIExtentionPresentationModel() {
+    public PostingManagementPresentationModel() {
         this(null);
     }
 
-    /**
-     * Constructor if you want to load all accountings from one customer
-     * @param customer Customer
-     */
-    public PostingManagementEditCustomerTabGUIExtentionPresentationModel(Customer customer) {
+    public PostingManagementPresentationModel(Customer customer) {
         this.customer = customer;
 
         initModels();
@@ -70,6 +66,7 @@ public class PostingManagementEditCustomerTabGUIExtentionPresentationModel {
         editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/money_edit.png"));
         cancelAction = new CancelAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
         deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
+        managePostingCategoriesAction = new ManagePostingCategoriesAction("Kategorien", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_categories.png"));
 
         postingSelection = new SelectionInList<Posting>(PostingManager.getInstance().getAll(customer));
 
@@ -237,6 +234,45 @@ public class PostingManagementEditCustomerTabGUIExtentionPresentationModel {
         }
     }
 
+    private class ManagePostingCategoriesAction
+            extends AbstractAction {
+
+        public ManagePostingCategoriesAction(String name, Icon icon) {
+            super(name, icon);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            GUIManager.setLoadingScreenText("Buchungskategorien verwalten...");
+            GUIManager.setLoadingScreenVisible(true);
+
+            new Thread(new Runnable() {
+
+                public void run() {
+                    
+                    final PostingCategoryManagementPresentationModel model = new PostingCategoryManagementPresentationModel();
+                    final PostingCategoryManagementView view = new PostingCategoryManagementView(model);
+
+//                    final JDialog d = new JDialog(GUIManager.getInstance(), "Kategorien verwalten",false);
+//                    d.getContentPane().add(view.buildPanel());
+//
+//                    d.addWindowListener(new WindowAdapter() {
+//                        @Override
+//                        public void windowClosing(WindowEvent e) {
+//                            d.setVisible(false);
+//                            d.dispose();
+//                        }
+//                    });
+//a
+//                    d.setVisible(true);
+
+
+                    GUIManager.changeView(CWComponentFactory.createBackPanel(view.buildPanel()).getPanel(), true);
+                    GUIManager.setLoadingScreenVisible(false);
+                }
+            }).start();
+        }
+    }
+
     public TableModel createPostingTableModel(ListModel listModel) {
         return new PostingTableModel(listModel);
     }
@@ -245,16 +281,19 @@ public class PostingManagementEditCustomerTabGUIExtentionPresentationModel {
         return new PostingTableColumnModel();
     }
 
-    public Action getDeleteButtonAction() {
+    public Action getDeleteAction() {
         return deleteAction;
     }
 
-    public Action getEditButtonAction() {
+    public Action getEditAction() {
         return editAction;
     }
 
-    public Action getCancelButtonAction() {
+    public Action getCancelAction() {
         return cancelAction;
+    }
+    public Action getManagePostingCategoriesAction() {
+        return managePostingCategoriesAction;
     }
 
     public ValueModel getAssetsValue() {
@@ -273,7 +312,7 @@ public class PostingManagementEditCustomerTabGUIExtentionPresentationModel {
         return postingSelection;
     }
 
-    public Action getNewButtonAction() {
+    public Action getNewAction() {
         return newAction;
     }
 
@@ -317,7 +356,7 @@ public class PostingManagementEditCustomerTabGUIExtentionPresentationModel {
 
         @Override
         public int getColumnCount() {
-            return 6;
+            return 7;
         }
 
         @Override
@@ -335,6 +374,8 @@ public class PostingManagementEditCustomerTabGUIExtentionPresentationModel {
                     return "Eingangsdatum";
                 case 5:
                     return "Buchungsdatum";
+                case 6:
+                    return "Kategorie";
                 default:
                     return "";
             }
@@ -360,6 +401,12 @@ public class PostingManagementEditCustomerTabGUIExtentionPresentationModel {
                     return a.getPostingEntryDate();
                 case 5:
                     return a.getPostingDate();
+                case 6:
+                    if(a.getPostingCategory() != null) {
+                        return a.getPostingCategory();
+                    } else {
+                        return "";
+                    }
                 default:
                     return "";
             }

@@ -224,8 +224,7 @@ public class EditCustomerView {
     public JPanel buildPanel() {
         initComponents();
         
-        JViewPanel mainPanel = new JViewPanel("Gruppe bearbeiten");
-        mainPanel.setHeaderText(model.getHeaderText());
+        JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
         
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
         

@@ -2,8 +2,8 @@ package cw.customermanagementmodul.extentions;
 
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerGUITabExtention;
 import com.jgoodies.binding.value.ValueModel;
-import cw.customermanagementmodul.gui.PostingManagementEditCustomerTabGUIExtentionPresentationModel;
-import cw.customermanagementmodul.gui.PostingManagementEditCustomerTabGUIExtentionView;
+import cw.customermanagementmodul.gui.PostingManagementPresentationModel;
+import cw.customermanagementmodul.gui.PostingManagementView;
 import javax.swing.JComponent;
 import cw.customermanagementmodul.pojo.Customer;
 
@@ -14,14 +14,14 @@ import cw.customermanagementmodul.pojo.Customer;
 public class PostingEditCustomerTabGUIExtention
         implements EditCustomerGUITabExtention {
 
-    private static PostingManagementEditCustomerTabGUIExtentionPresentationModel model;
+    private static PostingManagementPresentationModel model;
     
     public void initPresentationModel(final Customer c, ValueModel unsaved) {
-        model = new PostingManagementEditCustomerTabGUIExtentionPresentationModel(c);
+        model = new PostingManagementPresentationModel(c);
     }
     
     public JComponent getView() {
-        return new PostingManagementEditCustomerTabGUIExtentionView(model).buildPanel();
+        return new PostingManagementView(model).buildPanel();
     }
 
     public void save() {
