@@ -79,7 +79,14 @@ public class CustomerManagementPresentationModel {
                 public void run() {
 
                     final Customer c = new Customer();
-                    final EditCustomerPresentationModel model = new EditCustomerPresentationModel(c, new HeaderInfo("Kunden erstellen"));
+                    final EditCustomerPresentationModel model = new EditCustomerPresentationModel(
+                            c,
+                            new HeaderInfo(
+                                "Kunden erstellen",
+                                "Bearbeiten sie hier alle Informationen über Ihren Kunden.",
+                                CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png"),
+                                CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png")
+                    ));
                     final EditCustomerView editView = new EditCustomerView(model);
                     model.addButtonListener(new ButtonListener() {
 
@@ -201,7 +208,14 @@ public class CustomerManagementPresentationModel {
             public void run() {
 
                 final Customer c = customerSelectorPresentationModel.getSelectedCustomer();
-                final EditCustomerPresentationModel model = new EditCustomerPresentationModel(c, new HeaderInfo("Kunde bearbeiten"));
+                final EditCustomerPresentationModel model = new EditCustomerPresentationModel(
+                        c,
+                        new HeaderInfo(
+                            "Kunden bearbeiten",
+                            "Bearbeiten sie hier alle Informationen über Ihren Kunden.",
+                            CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"),
+                            CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")
+                ));
                 final EditCustomerView editView = new EditCustomerView(model);
                 model.addButtonListener(new ButtonListener() {
 
