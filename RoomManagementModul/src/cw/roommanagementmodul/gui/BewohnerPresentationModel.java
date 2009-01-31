@@ -1,0 +1,553 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package cw.roommanagementmodul.gui;
+
+
+import com.jgoodies.binding.PresentationModel;
+import com.jgoodies.binding.adapter.AbstractTableAdapter;
+import com.jgoodies.binding.adapter.ComboBoxAdapter;
+import com.jgoodies.binding.list.SelectionInList;
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.customermanagementmodul.pojo.Customer;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Date;
+import java.util.EventObject;
+import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ComboBoxModel;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
+import javax.swing.SwingUtilities;
+import javax.swing.table.TableModel;
+
+import cw.roommanagementmodul.pojo.Bewohner;
+import cw.roommanagementmodul.pojo.BewohnerHistory;
+import cw.roommanagementmodul.pojo.GebuehrZuordnung;
+import cw.roommanagementmodul.pojo.Zimmer;
+import cw.roommanagementmodul.pojo.manager.BewohnerHistoryManager;
+import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
+import cw.roommanagementmodul.pojo.manager.BewohnerManager;
+import cw.roommanagementmodul.pojo.manager.KautionManager;
+
+/**
+ *
+ * @author Dominik
+ */
+public class BewohnerPresentationModel extends PresentationModel<BewohnerManager> {
+
+    private BewohnerManager bewohnerManager;
+    private String headerText;
+    private GebuehrZuordnungManager gebZuordnungManager;
+    private BewohnerHistoryManager historyManager;
+    private Action gebuehrZuordnungAction;
+    private Action gebAction;
+    private Action deleteAction;
+    private Action editBewohnerAction;
+    private Action historyAction;
+    private Action inaktiveAction;
+    private Action detailAction;
+    private Action kautionAction;
+    private SelectionInList<Bewohner> bewohnerSelection;
+
+    public BewohnerPresentationModel(BewohnerManager bewohnerManager) {
+        super(bewohnerManager);
+        this.bewohnerManager = bewohnerManager;
+        historyManager = BewohnerHistoryManager.getInstance();
+        gebZuordnungManager = GebuehrZuordnungManager.getInstance();
+        initModels();
+        this.initEventHandling();
+
+    }
+
+    public BewohnerPresentationModel(BewohnerManager bewohnerManager, String header) {
+        super(bewohnerManager);
+        this.bewohnerManager = bewohnerManager;
+        this.headerText = header;
+        historyManager = BewohnerHistoryManager.getInstance();
+        gebZuordnungManager = GebuehrZuordnungManager.getInstance();
+        initModels();
+        this.initEventHandling();
+    }
+
+    private void initModels() {
+
+        gebAction = new GebAction();
+        deleteAction = new DeleteAction();
+        setGebuehrZuordnungAction(new GebuehrZuordnungAction());
+        editBewohnerAction = new EditBewohnerAction();
+        historyAction = new HistoryAction();
+        inaktiveAction = new InaktiveAction();
+        kautionAction = new KautionAction();
+        setDetailAction(new DetailAction());
+        bewohnerSelection = new SelectionInList<Bewohner>(getBewohnerManager().getBewohner(true));
+        updateActionEnablement();
+    }
+
+    public TableModel createBewohnerTableModel(ListModel listModel) {
+        return new BewohnerTableModel(listModel);
+    }
+
+    public ComboBoxModel createComboModel(SelectionInList list) {
+        return new ComboBoxAdapter(list);
+    }
+
+    private void updateActionEnablement() {
+        boolean hasSelection = getBewohnerSelection().hasSelection();
+        getDeleteAction().setEnabled(hasSelection);
+        gebAction.setEnabled(hasSelection);
+        getGebuehrZuordnungAction().setEnabled(hasSelection);
+        editBewohnerAction.setEnabled(hasSelection);
+        historyAction.setEnabled(hasSelection);
+        detailAction.setEnabled(hasSelection);
+    }
+
+    private void initEventHandling() {
+        getBewohnerSelection().addPropertyChangeListener(
+                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
+                new SelectionEmptyHandler());
+    }
+
+    public SelectionInList<Bewohner> getBewohnerSelection() {
+        return bewohnerSelection;
+    }
+
+    public Action getGebAction() {
+        return gebAction;
+    }
+
+    public Action getEditBewohnerAction() {
+        return editBewohnerAction;
+    }
+
+    public Action getDeleteAction() {
+        return deleteAction;
+    }
+
+    public Action getHistoryAction() {
+        return historyAction;
+    }
+
+    public String getHeaderText() {
+        return headerText;
+    }
+
+    /**
+     * @return the bewohnerManager
+     */
+    public BewohnerManager getBewohnerManager() {
+        return bewohnerManager;
+    }
+
+    /**
+     * @param bewohnerManager the bewohnerManager to set
+     */
+    public void setBewohnerManager(BewohnerManager bewohnerManager) {
+        this.bewohnerManager = bewohnerManager;
+    }
+
+    /**
+     * @return the inaktiveAction
+     */
+    public Action getInaktiveAction() {
+        return inaktiveAction;
+    }
+
+    /**
+     * @return the gebuehrZuordnungAction
+     */
+    public Action getGebuehrZuordnungAction() {
+        return gebuehrZuordnungAction;
+    }
+
+    /**
+     * @param gebuehrZuordnungAction the gebuehrZuordnungAction to set
+     */
+    public void setGebuehrZuordnungAction(Action gebuehrZuordnungAction) {
+        this.gebuehrZuordnungAction = gebuehrZuordnungAction;
+    }
+
+    /**
+     * @return the detailAction
+     */
+    public Action getDetailAction() {
+        return detailAction;
+    }
+
+    /**
+     * @param detailAction the detailAction to set
+     */
+    public void setDetailAction(Action detailAction) {
+        this.detailAction = detailAction;
+    }
+
+    /**
+     * @return the kautionAction
+     */
+    public Action getKautionAction() {
+        return kautionAction;
+    }
+
+    public void deleteBewohner() {
+        Bewohner b = getBewohnerSelection().getSelection();
+        List<BewohnerHistory> list = historyManager.getBewohnerHistory(b);
+
+        long time, lastTime = 0;
+        int lastDateIdx = 0;
+        for (int i = 0; i < list.size(); i++) {
+            time = list.get(i).getLastDatestamp().getTime();
+            if (time > lastTime) {
+                lastTime = time;
+                lastDateIdx = i;
+            }
+        }
+
+        if (list.get(lastDateIdx).getBis() == null) {
+            list.get(lastDateIdx).setBis(new Date());
+            historyManager.save(list.get(lastDateIdx));
+        }
+
+        b.setZimmer(null);
+        b.setVon(null);
+        b.setBis(null);
+        b.setActive(false);
+
+        bewohnerSelection.setList(bewohnerManager.getBewohner(true));
+    }
+
+    private class DeleteAction
+            extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/delete.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            Bewohner b = getBewohnerSelection().getSelection();
+
+            int k = JOptionPane.showConfirmDialog(null, "Bewohner: " + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + " in denn Inaktiv Bereich verschieben?", "Verschieben", JOptionPane.OK_CANCEL_OPTION);
+            if (k == JOptionPane.OK_OPTION) {
+                if (b.getKautionStatus() == Bewohner.EINGEZAHLT) {
+                    int j = JOptionPane.showConfirmDialog(null, "Der Status der Kaution befindet sich auf EINGEZAHLT!  \n \n Trotzdem verschieben?", "Kaution", JOptionPane.OK_CANCEL_OPTION);
+                    if (j == JOptionPane.OK_OPTION) {
+                        deleteBewohner();
+                    }
+                } else {
+                    deleteBewohner();
+                }
+            }
+        }
+    }
+
+    private class GebAction
+            extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/money_add.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            gebSelectedItem(e);
+        }
+    }
+
+    private class GebuehrZuordnungAction
+            extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            gebZuordnungSelectedItem(e);
+        }
+    }
+
+    private class DetailAction
+            extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/zoom.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            detailSelectedItem(e);
+        }
+    }
+
+    private class EditBewohnerAction
+            extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange_edit.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            final Bewohner b = bewohnerSelection.getSelection();
+            final Zimmer zTemp = b.getZimmer();
+            Customer c = b.getCustomer();
+            final EditBewohnerZimmerPresentationModel model = new EditBewohnerZimmerPresentationModel(b, c.getSurname() + " " + c.getForename());
+            final EditBewohnerZimmerView editBewohnerView = new EditBewohnerZimmerView(model);
+            model.addButtonListener(new ButtonListener() {
+
+                public void buttonPressed(ButtonEvent evt) {
+                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        getBewohnerManager().save(b);
+
+                        if (zTemp == null) {
+                            historyManager.saveBewohnerHistory(b);
+                        } else {
+                            if (!zTemp.equals(b.getZimmer())) {
+                                historyManager.saveBewohnerHistory(b);
+                            }
+                        }
+                        GUIManager.getStatusbar().setTextAndFadeOut("Bewohner wurde aktualisiert.");
+                    }
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+
+                        model.removeButtonListener(this);
+                        GUIManager.changeToLastView();
+                    }
+                }
+            });
+            GUIManager.changeView(editBewohnerView.buildPanel(), true);
+
+        }
+    }
+
+    private class InaktiveAction
+            extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange_remove.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+
+            final InaktiveBewohnerPresentationModel model = new InaktiveBewohnerPresentationModel(getBewohnerManager(), "Inaktive Bewohner");
+            final InaktiveBewohnerView inaktiveBewohnerView = new InaktiveBewohnerView(model);
+
+            GUIManager.changeView(inaktiveBewohnerView.buildPanel(), true);
+
+        }
+    }
+
+    private class KautionAction
+            extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/money_dollar.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+
+            final KautionPresentationModel model = new KautionPresentationModel(KautionManager.getInstance(), "Kautionen Verwalten");
+            final KautionView kautionView = new KautionView(model);
+
+            GUIManager.changeView(kautionView.buildPanel(), true);
+
+        }
+    }
+
+    private class HistoryAction
+            extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/date.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            final Bewohner b = bewohnerSelection.getSelection();
+            Customer c = b.getCustomer();
+            final HistoryPresentationModel model = new HistoryPresentationModel(b, c.getSurname() + " " + c.getForename());
+            final HistoryView editBewohnerView = new HistoryView(model);
+            model.addButtonListener(new ButtonListener() {
+
+                public void buttonPressed(ButtonEvent evt) {
+
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+
+                        model.removeButtonListener(this);
+                        GUIManager.changeToLastView();
+                    }
+                }
+            });
+            GUIManager.changeView(editBewohnerView.buildPanel(), true);
+
+        }
+    }
+
+    private final class SelectionEmptyHandler implements PropertyChangeListener {
+
+        public void propertyChange(PropertyChangeEvent evt) {
+            updateActionEnablement();
+        }
+    }
+
+    // Event Handling *********************************************************
+    public MouseListener getDoubleClickHandler() {
+        return new DoubleClickHandler();
+    }
+
+    private final class DoubleClickHandler extends MouseAdapter {
+
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
+                detailSelectedItem(e);
+            }
+        }
+    }
+
+    private void gebSelectedItem(EventObject e) {
+        //final Bewohner b = getBewohnerSelection().getSelection();
+        final GebuehrZuordnung gb = new GebuehrZuordnung();
+        Customer c = bewohnerSelection.getSelection().getCustomer();
+        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, c.getSurname() + " " + c.getForename());
+        final GebBewohnerView gebView = new GebBewohnerView(model);
+        model.addButtonListener(new ButtonListener() {
+
+            public void buttonPressed(ButtonEvent evt) {
+                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    gb.setBewohner(bewohnerSelection.getSelection());
+
+                    gebZuordnungManager.save(gb);
+                    GUIManager.getStatusbar().setTextAndFadeOut("Zuordnung wurde aktualisiert.");
+                }
+                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    model.removeButtonListener(this);
+                    GUIManager.changeToLastView();
+                }
+            }
+        });
+        GUIManager.changeView(gebView.buildPanel(), true);
+    }
+
+    private void gebZuordnungSelectedItem(EventObject e) {
+        Customer c = bewohnerSelection.getSelection().getCustomer();
+        final GebZuordnungBewohnerPresentationModel model = new GebZuordnungBewohnerPresentationModel(this.getBewohnerSelection().getSelection(), c.getSurname() + " " + c.getForename());
+        final GebZuordnunglBewohnerView detailView = new GebZuordnunglBewohnerView(model);
+        model.addButtonListener(new ButtonListener() {
+
+            public void buttonPressed(ButtonEvent evt) {
+                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    //gb.setBewohner(bewohnerSelection.getSelection());
+                    //gebZuordnungManager.saveGebuehrZuordnung(gb);
+                    GUIManager.getStatusbar().setTextAndFadeOut("Zuordnung wurde aktualisiert.");
+                }
+                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    model.removeButtonListener(this);
+                    GUIManager.changeToLastView();
+                }
+            }
+        });
+        GUIManager.changeView(detailView.buildPanel(), true);
+    }
+
+    private void detailSelectedItem(EventObject e) {
+        if (bewohnerSelection.getSelection() != null) {
+            Customer c = bewohnerSelection.getSelection().getCustomer();
+            final DetailBewohnerPresentationModel model = new DetailBewohnerPresentationModel(this.getBewohnerSelection().getSelection(), c.getSurname() + " " + c.getForename());
+            final DetailBewohnerView detailView = new DetailBewohnerView(model);
+
+            GUIManager.changeView(detailView.buildPanel(), true);
+        }
+
+    }
+
+    private class BewohnerTableModel extends AbstractTableAdapter<Bewohner> {
+
+        private ListModel listModel;
+
+        public BewohnerTableModel(ListModel listModel) {
+            super(listModel);
+            this.listModel = listModel;
+        }
+
+        @Override
+        public int getColumnCount() {
+            return 7;
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            switch (column) {
+                case 0:
+                    return "Nachname";
+                case 1:
+                    return "Vorname";
+                case 2:
+                    return "Einzahler";
+                case 3:
+                    return "Zimmer";
+                case 4:
+                    return "Bereich";
+                case 5:
+                    return "Kaution";
+                case 6:
+                    return "Kaution Status";
+                default:
+                    return "";
+            }
+        }
+
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+
+            return false;
+        }
+
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Bewohner b = (Bewohner) listModel.getElementAt(rowIndex);
+            switch (columnIndex) {
+                case 0:
+                    return b.getCustomer().getSurname();
+                case 1:
+                    return b.getCustomer().getForename();
+                case 2:
+                    if (b.getEinzahler() != null) {
+                        return b.getEinzahler().getSurname() + " " + b.getEinzahler().getForename();
+                    } else {
+                        return b.getCustomer().getSurname() + " " + b.getCustomer().getForename();
+                    }
+                case 3:
+                    return b.getZimmer();
+
+                case 4:
+                    if (b.getZimmer() != null) {
+                        return b.getZimmer().getBereich();
+                    } else {
+                        return "-";
+                    }
+
+                case 5:
+                    return b.getKaution();
+                case 6:
+                    switch (b.getKautionStatus()) {
+                        case Bewohner.EINGEZAHLT:
+                            return "Eingezahlt";
+                        case Bewohner.KEINE_KAUTION:
+                            return "Keine Kaution";
+                        case Bewohner.NICHT_EINGEZAHLT:
+                            return "Nicht Eingezahlt";
+                        case Bewohner.ZURUECK_GEZAHLT:
+                            return "Zurück gezahlt";
+                    }
+
+                default:
+                    return "";
+            }
+
+        }
+    }
+}
