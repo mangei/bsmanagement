@@ -5,6 +5,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import java.awt.event.ComponentAdapter;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -35,7 +36,15 @@ public class WelcomeHomeGUIExtentionView {
     public JPanel buildPanel() {
         initComponents();
 
-        JViewPanel panel  = new JViewPanel("Willkommen");
+        JViewPanel panel  = new JViewPanel("Willkommen") {
+
+            @Override
+            protected void finalize() throws Throwable {
+
+
+                super.finalize();
+            }
+        };
 
         FormLayout layout = new FormLayout(
                 "fill:pref:grow",
