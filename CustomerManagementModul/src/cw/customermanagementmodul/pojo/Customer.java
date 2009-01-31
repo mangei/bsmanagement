@@ -52,7 +52,7 @@ public class Customer
     
     private List<Group> groups          = new ArrayList<Group>();
 
-    private List<Accounting> accountings = new ArrayList<Accounting>();
+    private List<Posting> accountings = new ArrayList<Posting>();
     
     // Properties - Constants
     public final static String PROPERTYNAME_ID = "id";
@@ -382,12 +382,12 @@ public class Customer
 
     
     @OneToMany(mappedBy = "customer")
-    public List<Accounting> getAccountings() {
+    public List<Posting> getAccountings() {
         return accountings;
     }
 
-    public void setAccountings(List<Accounting> accountings) {
-        List<Accounting> old = this.accountings;
+    public void setAccountings(List<Posting> accountings) {
+        List<Posting> old = this.accountings;
         this.accountings = accountings;
         firePropertyChange(PROPERTYNAME_ACCOUNTINGS, old, accountings);
     }

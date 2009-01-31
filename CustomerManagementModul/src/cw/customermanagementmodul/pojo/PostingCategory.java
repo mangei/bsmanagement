@@ -10,49 +10,49 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
 /**
- * This class represents a category of the accountings. <br>
- * The code is necessary, to connect extentions to a category.
+ * This class represents a category of the postings. <br>
+ * The key is necessary, to connect extentions to a category.
  * @author CreativeWorkers.at
  */
 @Entity
-public class AccountingCategory
+public class PostingCategory
         extends Model
         implements AnnotatedClass {
     
     private Long id;
     private String name;
-    private String code;
-    private List<Accounting> accountings;
+    private String key;
+    private List<Posting> postings;
     
     // Properties - Constants
     public final static String PROPERTYNAME_ID = "id";
     public final static String PROPERTYNAME_NAME = "name";
-    public final static String PROPERTYNAME_CODE = "code";
-    public final static String PROPERTYNAME_ACCOUNTINGS = "accountings";
+    public final static String PROPERTYNAME_KEY = "key";
+    public final static String PROPERTYNAME_POSTINGS = "postings";
     
-    public AccountingCategory(){
+    public PostingCategory(){
     }
 
     /**
-     * Create a new accounting-category
-     * @param name Name of the accounting-category
+     * Create a new posting-category
+     * @param name Name of the posting-category
      * @param code The code of the category
      */
-    public AccountingCategory(String name, String code) {
+    public PostingCategory(String name, String code) {
         this.name = name;
-        this.code = code;
+        this.key = code;
     }
 
     @Override
     public boolean equals(Object obj){  
-        if(this.getId()!=((AccountingCategory)obj).getId()){
+        if(this.getId()!=((PostingCategory)obj).getId()){
             return false;
         }
         return true;
     }
 
     /**
-     * Get the identical number of the accounting-category
+     * Get the identical number of the posting-category
      * @return id
      */
     @Id
@@ -73,7 +73,7 @@ public class AccountingCategory
     }
 
     /**
-     * Get the name of accounting-category
+     * Get the name of posting-category
      * @return name
      */
     public String getName() {
@@ -81,7 +81,7 @@ public class AccountingCategory
     }
 
     /**
-     * Set the name of the accounting-category
+     * Set the name of the posting-category
      * @param name New name
      */
     public void setName(String name) {
@@ -91,40 +91,40 @@ public class AccountingCategory
     }
 
     /**
-     * Get the code of the accounting-category
-     * @return code
+     * Get the key of the posting-category
+     * @return key
      */
-    public String getCode() {
-        return code;
+    public String getKey() {
+        return key;
     }
 
     /**
-     * Set the name of the accounting-category
-     * @param code New code
+     * Set the key of the posting-category
+     * @param key New key
      */
-    public void setCode(String code) {
-        String old = this.code;
-        this.code = code;
-        firePropertyChange("code", old, code);
+    public void setKey(String key) {
+        String old = this.key;
+        this.key = key;
+        firePropertyChange(PROPERTYNAME_KEY, old, key);
     }
 
     /**
-     * Get the list of all accountings, which have this accounting-category
-     * @return accountings
+     * Get the list of all postings, which have this posting-category
+     * @return postings
      */
     @OneToMany(mappedBy = "category")
-    public List<Accounting> getAccountings() {
-        return accountings;
+    public List<Posting> getPostings() {
+        return postings;
     }
 
     /**
-     * Set the new list of accountings for this accounting-category
-     * @param accountings
+     * Set the new list of postings for this posting-category
+     * @param postings
      */
-    public void setAccountings(List<Accounting> accountings) {
-        List<Accounting> old = this.accountings;
-        this.accountings = accountings;
-        firePropertyChange(PROPERTYNAME_ACCOUNTINGS, old, name);
+    public void setPostings(List<Posting> postings) {
+        List<Posting> old = this.postings;
+        this.postings = postings;
+        firePropertyChange(PROPERTYNAME_POSTINGS, old, postings);
     }
     
 }

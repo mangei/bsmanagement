@@ -10,12 +10,15 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JToggleButton;
 import javax.swing.table.TableCellRenderer;
 import cw.customermanagementmodul.pojo.Customer;
 import java.awt.BorderLayout;
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
 
 /**
  * @author CreativeWorkers.at
@@ -26,6 +29,9 @@ public class CustomerSelectorView {
     private JToggleButton bToggleSearch;
     private CWJXTable tCustomers;
 
+    private JButton bSaveHeader;
+    private JButton bLoadHeader;
+
     public CustomerSelectorView(CustomerSelectorPresentationModel m) {
         model = m;
     }
@@ -33,6 +39,22 @@ public class CustomerSelectorView {
     private void initComponents() {
         tCustomers = CWComponentFactory.createTable(model.getCustomerTableModel(), "Keine Kunden vorhanden");
         tCustomers.setSelectionModel(model.getCustomerSelectionModel());
+
+        bSaveHeader = CWComponentFactory.createButton(new AbstractAction("Save") {
+
+            public void actionPerformed(ActionEvent e) {
+                tCustomers.saveHeader();
+            }
+        });
+
+        bLoadHeader = CWComponentFactory.createButton(new AbstractAction("Load") {
+
+            public void actionPerformed(ActionEvent e) {
+                tCustomers.loadHeader();
+            }
+        });
+
+        tCustomers.loadHeader();
     }
 
     private void initEventHandling() {
@@ -61,6 +83,9 @@ public class CustomerSelectorView {
         if (model.getEastPanel() != null) {
             panel.add(model.getEastPanel(), BorderLayout.EAST);
         }
+
+        panel.add(bSaveHeader, BorderLayout.WEST);
+        panel.add(bLoadHeader, BorderLayout.SOUTH);
 
         FormLayout layout = new FormLayout(
                 "fill:pref:grow",

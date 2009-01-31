@@ -1,6 +1,5 @@
 package cw.customermanagementmodul.gui;
 
-import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.model.ExtendedListModel;
@@ -23,6 +22,7 @@ import java.awt.BorderLayout;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import javax.swing.JPanel;
+import javax.swing.table.AbstractTableModel;
 
 /**
  * @author CreativeWorkers.at
@@ -33,7 +33,6 @@ public class CustomerSelectorPresentationModel {
     private CustomerTableModel customerTableModel;
     private ExtendedListModel customerListModel;
     private ExtendedListSelectionModel customerSelectionModel;
-    private int selectionMode;
     private List<CustomerSelectorFilterExtention> extentions;
     private ValueModel filterChange;
     private JPanel northPanel;
@@ -41,12 +40,38 @@ public class CustomerSelectorPresentationModel {
     private JPanel westPanel;
     private JPanel eastPanel;
 
+    private List<Customer> customers;
+    private int selectionMode;
+    private boolean filtering;
+
     public CustomerSelectorPresentationModel() {
-        this(ListSelectionModel.SINGLE_SELECTION);
+        this(null);
+    }
+
+    public CustomerSelectorPresentationModel(boolean filtering) {
+        this(null, ListSelectionModel.SINGLE_SELECTION, filtering);
     }
 
     public CustomerSelectorPresentationModel(int selectionMode) {
+        this(null, selectionMode, true);
+    }
+
+    public CustomerSelectorPresentationModel(List<Customer> customers) {
+        this(customers, ListSelectionModel.SINGLE_SELECTION, true);
+    }
+
+    public CustomerSelectorPresentationModel(List<Customer> customers, boolean filtering) {
+        this(customers, ListSelectionModel.SINGLE_SELECTION, filtering);
+    }
+
+    public CustomerSelectorPresentationModel(List<Customer> customers, int selectionMode) {
+        this(customers, selectionMode, true);
+    }
+
+    public CustomerSelectorPresentationModel(List<Customer> customers, int selectionMode, boolean filtering) {
+        this.customers = customers;
         this.selectionMode = selectionMode;
+        this.filtering = filtering;
 
         initModels();
         initExtentions();
@@ -57,7 +82,12 @@ public class CustomerSelectorPresentationModel {
         filterChange = new ValueHolder(false);
 
         customerListModel = new ExtendedListModel();
-        customerListModel.addAll(CustomerManager.getInstance().getAll());
+
+        if(customers != null) {
+            customerListModel.addAll(customers);
+        } else {
+            customerListModel.addAll(CustomerManager.getInstance().getAll());
+        }
 
         customerTableModel = new CustomerTableModel(customerListModel);
 
@@ -67,57 +97,74 @@ public class CustomerSelectorPresentationModel {
 
     private void initEventHandling() {
 
-        // If a filter has changed, reload the table
-        filterChange.addValueChangeListener(new PropertyChangeListener() {
+        if(filtering == true) {
+        
+            // If a filter has changed, reload the table
+            filterChange.addValueChangeListener(new PropertyChangeListener() {
 
-            public void propertyChange(PropertyChangeEvent evt) {
+                public void propertyChange(PropertyChangeEvent evt) {
 
-                // If there is really a change
-                if(evt.getNewValue() == Boolean.FALSE) { return; }
+                    // If there is really a change
+                    if(evt.getNewValue() == Boolean.FALSE) { return; }
 
-                List<Customer> customers = new ArrayList<Customer>();
-                customers.addAll(CustomerManager.getInstance().getAll());
+                    List<Customer> customers = new ArrayList<Customer>();
+                    customers.addAll(CustomerManager.getInstance().getAll());
 
-                // Filter the elements
-                for (CustomerSelectorFilterExtention ex : extentions) {
-                    customers = ex.filter(customers);
+                    // Filter the elements
+                    for (CustomerSelectorFilterExtention ex : extentions) {
+                        customers = ex.filter(customers);
+                    }
+
+                    // Delete
+                    int size = customerListModel.size();
+                    if(size > 0) {
+                        customerListModel.removeAllElements();
+                        customerTableModel.fireTableRowsDeleted(0, size-1);
+                    }
+
+                    // Add
+                    customerListModel.addAll(customers);
+                    size = customerListModel.size();
+                    if(size > 0) {
+                        customerTableModel.fireTableRowsInserted(0, size-1);
+                    }
+
+                    filterChange.setValue(false);
                 }
+            });
 
-                // Delete
-                customerListModel.removeAllElements();
-
-                // Add
-                customerListModel.addAll(customers);
-
-                filterChange.setValue(false);
+            for (CustomerSelectorFilterExtention ex : extentions) {
+                ex.initEventHandling();
             }
-        });
-
-        for (CustomerSelectorFilterExtention ex : extentions) {
-            ex.initEventHandling();
+            
         }
     }
 
     private void initExtentions() {
-        // Load extentions
-        extentions = (List<CustomerSelectorFilterExtention>) ModulManager.getExtentions(CustomerSelectorFilterExtention.class);
 
-        for (CustomerSelectorFilterExtention ex : extentions) {
+        if(filtering) {
 
-            ex.init(filterChange);
+            // Load extentions
+            extentions = (List<CustomerSelectorFilterExtention>) ModulManager.getExtentions(CustomerSelectorFilterExtention.class);
 
-            if (ex.getPosition().equals(BorderLayout.NORTH)) {
-                northPanel = ex.getPanel();
+            for (CustomerSelectorFilterExtention ex : extentions) {
+
+                ex.init(filterChange);
+
+                if (ex.getPosition().equals(BorderLayout.NORTH)) {
+                    northPanel = ex.getPanel();
+                }
+                if (ex.getPosition().equals(BorderLayout.SOUTH)) {
+                    southPanel = ex.getPanel();
+                }
+                if (ex.getPosition().equals(BorderLayout.WEST)) {
+                    westPanel = ex.getPanel();
+                }
+                if (ex.getPosition().equals(BorderLayout.EAST)) {
+                    eastPanel = ex.getPanel();
+                }
             }
-            if (ex.getPosition().equals(BorderLayout.SOUTH)) {
-                southPanel = ex.getPanel();
-            }
-            if (ex.getPosition().equals(BorderLayout.WEST)) {
-                westPanel = ex.getPanel();
-            }
-            if (ex.getPosition().equals(BorderLayout.EAST)) {
-                eastPanel = ex.getPanel();
-            }
+            
         }
     }
 
@@ -149,6 +196,25 @@ public class CustomerSelectorPresentationModel {
     }
 
 
+    public void setCustomers(List<Customer> customers) {
+
+        System.out.println("size: " + customers.size());
+
+        // Delete
+        int size = customerListModel.size();
+        if(size > 0) {
+            customerListModel.removeAllElements();
+            customerTableModel.fireTableRowsDeleted(0, size-1);
+        }
+
+        // Add
+        customerListModel.addAll(customers);
+        size = customerListModel.size();
+        if(size > 0) {
+            customerTableModel.fireTableRowsInserted(0, size-1);
+        }
+    }
+
     ////////////////////////////////////////////////////////////////////////////
     // Methods
     ////////////////////////////////////////////////////////////////////////////
@@ -158,6 +224,12 @@ public class CustomerSelectorPresentationModel {
 
     public void remove(Customer c) {
         customerListModel.remove(c);
+    }
+
+    public void remove(List<Customer> list) {
+        for(int i=0, l=list.size(); i<l; i++) {
+            customerListModel.remove(list.get(i));
+        }
     }
 
     public void remove(int idx) {
@@ -231,13 +303,17 @@ public class CustomerSelectorPresentationModel {
         }
     }
 
-    public static class CustomerTableModel extends AbstractTableAdapter<Customer> {
+    public static class CustomerTableModel extends AbstractTableModel {
 
         private ListModel listModel;
 
         public CustomerTableModel(ListModel listModel) {
-            super(listModel);
             this.listModel = listModel;
+        }
+
+
+        public int getRowCount() {
+            return listModel.getSize();
         }
 
         @Override
@@ -337,5 +413,6 @@ public class CustomerSelectorPresentationModel {
                     return "";
             }
         }
+
     }
 }

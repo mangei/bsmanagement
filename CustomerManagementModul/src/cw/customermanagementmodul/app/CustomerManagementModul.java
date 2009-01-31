@@ -1,14 +1,20 @@
 package cw.customermanagementmodul.app;
 
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.app.CascadeEvent;
+import  cw.boardingschoolmanagement.app.CascadeListener;
 import cw.boardingschoolmanagement.gui.component.JMenuPanel;
-import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
 import cw.customermanagementmodul.gui.CustomerManagementPresentationModel;
 import cw.customermanagementmodul.gui.CustomerManagementView;
 import cw.customermanagementmodul.gui.GroupManagementPresentationModel;
 import cw.customermanagementmodul.gui.GroupManagementView;
+import cw.customermanagementmodul.pojo.Posting;
+import cw.customermanagementmodul.pojo.PostingCategory;
+import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
+import cw.customermanagementmodul.pojo.manager.PostingManager;
+import cw.boardingschoolmanagement.interfaces.Modul;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -69,6 +75,26 @@ implements Modul
                 }).start();
             }
         }), "manage");
+
+        PostingCategoryManager.getInstance().addCascadeListener(new CascadeListener() {
+            public void deleteAction(CascadeEvent evt) {
+                PostingCategory accountingCategory = (PostingCategory) evt.getObject();
+                List<Posting> accountings = PostingManager.getInstance().getAll(accountingCategory);
+                for(int i=0, l=accountings.size(); i<l; i++) {
+                    accountings.get(i).setCategory(null);
+                }
+            }
+        });
+
+//        GroupManager.getInstance().addCascadeListener(new CascadeListener() {
+//            public void deleteAction(CascadeEvent evt) {
+//                Group group = (Group) evt.getObject();
+//                List<Customer> customer = CustomerManager.getInstance().getAll(group);
+//                for(int i=0, l=customer.size(); i<l; i++) {
+//                    customer.get(i).setCategory(null);
+//                }
+//            }
+//        });
     }
 
     public List<Class> getDependencies() {

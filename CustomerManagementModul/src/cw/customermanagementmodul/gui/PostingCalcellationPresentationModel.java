@@ -15,16 +15,16 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
-import cw.customermanagementmodul.pojo.Accounting;
+import cw.customermanagementmodul.pojo.Posting;
 
 /**
  *
  * @author CreativeWorkers.at
  */
-public class EditAccountingPresentationModel
-        extends PresentationModel<Accounting> {
+public class PostingCalcellationPresentationModel
+        extends PresentationModel<Posting> {
 
-    private Accounting accounting;
+    private Posting posting;
     private ValueModel unsaved;
     
     private Action resetButtonAction;
@@ -34,9 +34,9 @@ public class EditAccountingPresentationModel
     
     private ButtonListenerSupport support;
     
-    public EditAccountingPresentationModel(Accounting accounting) {
+    public PostingCalcellationPresentationModel(Posting accounting) {
         super(accounting);
-        this.accounting = accounting;
+        this.posting = accounting;
 
         support = new ButtonListenerSupport();
         
@@ -52,10 +52,10 @@ public class EditAccountingPresentationModel
 
         support = new ButtonListenerSupport();
         
-        getBufferedModel(Accounting.PROPERTYNAME_ACCOUNTINGENTRYDATE).addValueChangeListener(new SaveListener());
-        getBufferedModel(Accounting.PROPERTYNAME_AMOUNT).addValueChangeListener(new SaveListener());
-        getBufferedModel(Accounting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(new SaveListener());
-        getBufferedModel(Accounting.PROPERTYNAME_LIABILITIESASSETS).addValueChangeListener(new SaveListener());
+        getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(new SaveListener());
+        getBufferedModel(Posting.PROPERTYNAME_AMOUNT).addValueChangeListener(new SaveListener());
+        getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(new SaveListener());
+        getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).addValueChangeListener(new SaveListener());
     }
     
     public void initEventHandling() {
@@ -121,7 +121,7 @@ public class EditAccountingPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            saveAccounting();
+            save();
             unsaved.setValue(false);
             support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
         }
@@ -137,7 +137,7 @@ public class EditAccountingPresentationModel
         public void actionPerformed(ActionEvent e) {
             int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
             if(i == JOptionPane.OK_OPTION) {
-                resetAccounting();
+                reset();
                 unsaved.setValue(false);
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
             }
@@ -158,7 +158,7 @@ public class EditAccountingPresentationModel
                i = JOptionPane.showOptionDialog(null, "Daten wurden geändert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,null,  options, options[0] );
             }
             if(i == 0) {
-                saveAccounting();
+                save();
             }
             if(i == 0 || i == 1) {
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
@@ -174,17 +174,17 @@ public class EditAccountingPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            saveAccounting();
+            save();
             support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
         }
     }
     
-    public void saveAccounting() {
-        getBufferedModel(Accounting.PROPERTYNAME_ACCOUNTINGDATE).setValue(new Date());
+    public void save() {
+        getBufferedModel(Posting.PROPERTYNAME_POSTINGDATE).setValue(new Date());
         triggerCommit();
     }
     
-    public void resetAccounting() {
+    public void reset() {
         triggerFlush();
     }
 }

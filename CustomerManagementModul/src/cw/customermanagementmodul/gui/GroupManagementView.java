@@ -24,6 +24,7 @@ public class GroupManagementView {
     private JButton bRemoveGroup;
     private CWJXList liGroups;
     private CWJXList liCustomers;
+    private CustomerSelectorView customerSelectorView;
 
     public GroupManagementView(GroupManagementPresentationModel model) {
         this.model = model;
@@ -35,6 +36,7 @@ public class GroupManagementView {
         bRemoveGroup =  CWComponentFactory.createButton(model.getRemoveGroupAction());
         liGroups =      CWComponentFactory.createList(model.getGroupSelection(), "Keine Gruppen vorhanden");
         liCustomers =   CWComponentFactory.createList(model.getCustomerSelection(), "Bitte Gruppe auswählen");
+        customerSelectorView = new CustomerSelectorView(model.getCustomerSelectorPresentationModel());
     }
 
     private void initEventHandling() {
@@ -45,8 +47,6 @@ public class GroupManagementView {
                 } else if(liCustomers.getModel().getSize() == 0) {
                     liCustomers.setEmptyText("Keine Kunden in dieser Gruppe vorhanden");
                 }
-
-                System.out.println("size: " + liCustomers.getModel().getSize());
             }
         });
     }
@@ -62,7 +62,7 @@ public class GroupManagementView {
         buttonPanel.add(bRemoveGroup);
 
         FormLayout layout = new FormLayout(
-                "pref:grow, 4dlu, pref:grow",
+                "170dlu, 4dlu, pref:grow",
                 "fill:pref:grow"
         );
 
@@ -70,7 +70,8 @@ public class GroupManagementView {
         CellConstraints cc = new CellConstraints();
 
         builder.add(liGroups, cc.xy(1,1));
-        builder.add(liCustomers, cc.xy(3,1));
+//        builder.add(liCustomers, cc.xy(3,1));
+        builder.add(customerSelectorView.buildPanel(), cc.xy(3,1));
 
         initEventHandling();
 

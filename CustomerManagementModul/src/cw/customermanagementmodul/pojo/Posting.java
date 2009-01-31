@@ -3,6 +3,7 @@ package cw.customermanagementmodul.pojo;
 import com.jgoodies.binding.beans.Model;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -12,50 +13,53 @@ import javax.persistence.Temporal;
 import javax.persistence.Transient;
 
 /**
- * This is an Accounting-Class which representes one Accounting.<br>
- * All needed informations are saved. Also the the accounting-category.
+ * This is an Posting-Class which representes one Posting.<br>
+ * All needed informations are saved. Also the the posting-category.
  * @author CreativeWorkers.at
  */
 @Entity
-public class Accounting
+public class Posting
         extends Model
         implements AnnotatedClass {
 
     private Long id;
-    private Date accountingDate;
-    private Date accountingEntryDate;
+    private Date postingDate;
+    private Date postingEntryDate;
     private Customer customer;
     private String description;
     private boolean liabilitiesAssets;
     private double amount;
-    private AccountingCategory category;
+    private PostingCategory category;
+//    private String source;
+
     // Properties - Constants
     public final static String PROPERTYNAME_ID = "id";
     public final static String PROPERTYNAME_DESCRIPTION = "description";
-    public final static String PROPERTYNAME_ACCOUNTINGDATE = "accountingDate";
-    public final static String PROPERTYNAME_ACCOUNTINGENTRYDATE = "accountingEntryDate";
+    public final static String PROPERTYNAME_POSTINGDATE = "postingDate";
+    public final static String PROPERTYNAME_POSTINGENTRYDATE = "postingEntryDate";
     public final static String PROPERTYNAME_AMOUNT = "amount";
     public final static String PROPERTYNAME_CATEGORY = "category";
     public final static String PROPERTYNAME_CUSTOMER = "customer";
     public final static String PROPERTYNAME_LIABILITIESASSETS = "liabilitiesAssets";
+//    public final static String PROPERTYNAME_SOURCE = "source";
 
     /**
      * Empty accounting. You need to set the costumer!
      */
-    public Accounting() {
+    public Posting() {
     }
 
     /**
-     * Accounting with an customer predefined
+     * Posting with an customer predefined
      * @param customer
      */
-    public Accounting(Customer customer) {
+    public Posting(Customer customer) {
         this.customer = customer;
     }
 
     @Override
     public boolean equals(Object obj) {
-        if (this.getId() == ((Accounting) obj).getId()) {
+        if (this.getId() == ((Posting) obj).getId()) {
             return true;
         } else {
             return false;
@@ -73,25 +77,25 @@ public class Accounting
     }
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    public Date getAccountingDate() {
-        return accountingDate;
+    public Date getPostingDate() {
+        return postingDate;
     }
 
-    public void setAccountingDate(Date accountingDate) {
-        Date old = this.accountingDate;
-        this.accountingDate = accountingDate;
-        firePropertyChange(PROPERTYNAME_ACCOUNTINGDATE, old, accountingDate);
+    public void setPostingDate(Date postingDate) {
+        Date old = this.postingDate;
+        this.postingDate = postingDate;
+        firePropertyChange(PROPERTYNAME_POSTINGDATE, old, postingDate);
     }
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    public Date getAccountingEntryDate() {
-        return accountingEntryDate;
+    public Date getPostingEntryDate() {
+        return postingEntryDate;
     }
 
-    public void setAccountingEntryDate(Date accountingEntryDate) {
-        Date old = this.accountingEntryDate;
-        this.accountingEntryDate = accountingEntryDate;
-        firePropertyChange(PROPERTYNAME_ACCOUNTINGENTRYDATE, old, accountingEntryDate);
+    public void setPostingEntryDate(Date postingEntryDate) {
+        Date old = this.postingEntryDate;
+        this.postingEntryDate = postingEntryDate;
+        firePropertyChange(PROPERTYNAME_POSTINGENTRYDATE, old, postingEntryDate);
     }
 
     @Id
@@ -156,7 +160,7 @@ public class Accounting
         return !liabilitiesAssets;
     }
 
-    @ManyToOne
+    @ManyToOne(cascade={CascadeType.ALL})
     public Customer getCustomer() {
         return customer;
     }
@@ -167,14 +171,25 @@ public class Accounting
         firePropertyChange(PROPERTYNAME_CUSTOMER, old, customer);
     }
 
-    @ManyToOne
-    public AccountingCategory getCategory() {
+    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    public PostingCategory getCategory() {
         return category;
     }
 
-    public void setCategory(AccountingCategory category) {
-        AccountingCategory old = this.category;
+    public void setCategory(PostingCategory category) {
+        PostingCategory old = this.category;
         this.category = category;
         firePropertyChange(PROPERTYNAME_CATEGORY, old, category);
     }
+
+//    public String getSource() {
+//        return source;
+//    }
+//
+//    public void setSource(String source) {
+//        String old = this.source;
+//        this.source = source;
+//        firePropertyChange(PROPERTYNAME_SOURCE, old, source);
+//    }
+
 }

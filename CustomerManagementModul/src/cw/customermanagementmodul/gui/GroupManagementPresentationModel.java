@@ -13,7 +13,9 @@ import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Group;
 import cw.customermanagementmodul.pojo.manager.GroupManager;
+import java.util.ArrayList;
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -26,6 +28,7 @@ public class GroupManagementPresentationModel {
     private Action removeGroupAction;
     private SelectionInList<Group> groupSelection;
     private SelectionInList<Customer> customerSelection;
+    private CustomerSelectorPresentationModel customerSelectorPresentationModel;
 
     private String headerText;
 
@@ -47,6 +50,8 @@ public class GroupManagementPresentationModel {
 
         groupSelection = new SelectionInList<Group>(GroupManager.getInstance().getAll());
         customerSelection = new SelectionInList<Customer>();
+
+        customerSelectorPresentationModel = new CustomerSelectorPresentationModel(new ArrayList(), false);
     }
 
     private void initEventHandling() {
@@ -56,19 +61,23 @@ public class GroupManagementPresentationModel {
 
         groupSelection.addValueChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
-                int size = customerSelection.getSize();
-                if(size > 0) {
-                    customerSelection.getList().clear();
-                    customerSelection.fireIntervalRemoved(0, size-1);
-                }
+                
+//                int size = customerSelection.getSize();
+//                if(size > 0) {
+//                    customerSelection.getList().clear();
+//                    customerSelection.fireIntervalRemoved(0, size-1);
+//                }
                 if(groupSelection.hasSelection()) {
                     if(groupSelection.getSelection().getCustomers().size() > 0) {
-                        customerSelection.getList().addAll(groupSelection.getSelection().getCustomers());
-                        customerSelection.fireIntervalAdded(0, customerSelection.getSize()-1);
+                        customerSelectorPresentationModel.setCustomers(groupSelection.getSelection().getCustomers());
+//                        customerSelection.getList().addAll(groupSelection.getSelection().getCustomers());
+//                        customerSelection.fireIntervalAdded(0, customerSelection.getSize()-1);
                     }
                 }
+
             }
         });
+        updateActionEnablement();
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -82,6 +91,7 @@ public class GroupManagementPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
+            GUIManager.getInstance().lockMenu();
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
@@ -113,6 +123,7 @@ public class GroupManagementPresentationModel {
                             if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                                 model.removeButtonListener(this);
                                 GUIManager.changeToLastView();
+                                GUIManager.getInstance().unlockMenu();
                             }
                         }
                         
@@ -133,6 +144,7 @@ public class GroupManagementPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
+            GUIManager.getInstance().lockMenu();
             GUIManager.setLoadingScreenText("Gruppe wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
@@ -154,6 +166,7 @@ public class GroupManagementPresentationModel {
                             if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                                 model.removeButtonListener(this);
                                 GUIManager.changeToLastView();
+                                GUIManager.getInstance().unlockMenu();
                             }
                         }
                         
@@ -174,21 +187,27 @@ public class GroupManagementPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.setLoadingScreenText("Gruppe wird gelöscht...");
+            GUIManager.setLoadingScreenText("Gruppe löschen...");
             GUIManager.setLoadingScreenVisible(true);
 
             new Thread(new Runnable() {
 
                 public void run() {
-                    Group group = groupSelection.getSelection();
+                    int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die ausgewählte Gruppe löschen?", "Gruppe löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if (i == JOptionPane.OK_OPTION) {
+                        Group group = groupSelection.getSelection();
 
-                    String name = group.getName();
 
-                    groupSelection.getList().remove(group);
-                    GroupManager.getInstance().delete(group);
+                        String name = group.getName();
 
+                        groupSelection.getList().remove(group);
+                        GroupManager.getInstance().delete(group);
+
+                        
+                        GUIManager.getStatusbar().setTextAndFadeOut("Gruppe '" + name + "' wurde gelöscht.");
+                    }
+                    
                     GUIManager.setLoadingScreenVisible(false);
-                    GUIManager.getStatusbar().setTextAndFadeOut("Gruppe '" + name + "' wurde gelöscht.");
                 }
             }).start();
         }
@@ -234,6 +253,10 @@ public class GroupManagementPresentationModel {
 
     public String getHeaderText() {
         return headerText;
+    }
+
+    public CustomerSelectorPresentationModel getCustomerSelectorPresentationModel() {
+        return customerSelectorPresentationModel;
     }
 
 }

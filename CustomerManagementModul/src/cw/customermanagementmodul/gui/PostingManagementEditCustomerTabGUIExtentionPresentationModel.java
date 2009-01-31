@@ -3,9 +3,11 @@ package cw.customermanagementmodul.gui;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.customermanagementmodul.pojo.manager.AccountingManager;
+import cw.customermanagementmodul.pojo.manager.PostingManager;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,21 +15,26 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.EventObject;
+import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListDataEvent;
 import javax.swing.table.TableModel;
 import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.customermanagementmodul.pojo.Accounting;
+import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.Customer;
 import javax.swing.Icon;
+import javax.swing.event.ListDataListener;
+import javax.swing.table.DefaultTableColumnModel;
+import javax.swing.table.TableColumnModel;
 
 /**
  *
  * @author Manuel Geier
  */
-public class AccountingManagementCustomerGUIExtentionPresentationModel {
+public class PostingManagementEditCustomerTabGUIExtentionPresentationModel {
 
     private Customer customer;
 
@@ -35,12 +42,15 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
     private Action editAction;
     private Action cancelAction;
     private Action deleteAction;
-    private SelectionInList<Accounting> accountingSelection;
+    private SelectionInList<Posting> postingSelection;
+    private ValueModel saldoValue;
+    private ValueModel liabilitiesValue;
+    private ValueModel assetsValue;
 
     /**
      * Constructor if you want to load all accountings
      */
-    public AccountingManagementCustomerGUIExtentionPresentationModel() {
+    public PostingManagementEditCustomerTabGUIExtentionPresentationModel() {
         this(null);
     }
 
@@ -48,7 +58,7 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
      * Constructor if you want to load all accountings from one customer
      * @param customer Customer
      */
-    public AccountingManagementCustomerGUIExtentionPresentationModel(Customer customer) {
+    public PostingManagementEditCustomerTabGUIExtentionPresentationModel(Customer customer) {
         this.customer = customer;
 
         initModels();
@@ -61,15 +71,52 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
         cancelAction = new CancelAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
         deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
 
-        accountingSelection = new SelectionInList<Accounting>(AccountingManager.getInstance().getAll());
+        postingSelection = new SelectionInList<Posting>(PostingManager.getInstance().getAll(customer));
+
+        saldoValue = new ValueHolder();
+        liabilitiesValue = new ValueHolder();
+        assetsValue = new ValueHolder();
 
         updateActionEnablement();
     }
 
     private void initEventHandling() {
-        accountingSelection.addPropertyChangeListener(
+        postingSelection.addPropertyChangeListener(
                 SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
                 new SelectionEmptyHandler());
+        postingSelection.addListDataListener(new ListDataListener() {
+
+            public void intervalAdded(ListDataEvent e) {
+                calculateValues();
+            }
+
+            public void intervalRemoved(ListDataEvent e) {
+                calculateValues();
+            }
+
+            public void contentsChanged(ListDataEvent e) {
+                calculateValues();
+            }
+        });
+        calculateValues();
+    }
+
+    private void calculateValues() {
+        List<Posting> list = postingSelection.getList();
+        double liabilities=0, assets=0, saldo=0;
+        for(int i=0,l=list.size(); i<l; i++) {
+            Posting p = list.get(i);
+            if(p.isAssets()) {
+                assets = assets + p.getAmount();
+                saldo = saldo + p.getAmount();
+            } else {
+                liabilities = liabilities + p.getAmount();
+                saldo = saldo - p.getAmount();
+            }
+        }
+        liabilitiesValue.setValue(Double.toString(liabilities));
+        assetsValue.setValue(Double.toString(assets));
+        saldoValue.setValue(Double.toString(saldo));
     }
 
     public void save() {
@@ -93,23 +140,23 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
 
                 public void run() {
 
-                    final Accounting a = new Accounting(customer);
-                    final EditAccountingPresentationModel model = new EditAccountingPresentationModel(a);
-                    final EditAccountingView editView = new EditAccountingView(model);
+                    final Posting a = new Posting(customer);
+                    final EditPostingPresentationModel model = new EditPostingPresentationModel(a);
+                    final EditPostingView editView = new EditPostingView(model);
                     model.addButtonListener(new ButtonListener() {
 
-                        boolean accountingAlreadyCreated = false;
+                        boolean postingAlreadyCreated = false;
 
                         public void buttonPressed(ButtonEvent evt) {
 
                             if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                AccountingManager.getInstance().save(a);
-                                if (accountingAlreadyCreated) {
+                                PostingManager.getInstance().save(a);
+                                if (postingAlreadyCreated) {
                                     GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde aktualisiert.");
                                 } else {
                                     GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde erstellt.");
-                                    accountingAlreadyCreated = true;
-                                    accountingSelection.getList().add(a);
+                                    postingAlreadyCreated = true;
+                                    postingSelection.getList().add(a);
                                 }
                             }
                             if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
@@ -152,10 +199,10 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
             new Thread(new Runnable() {
 
                 public void run() {
-                    Accounting a = accountingSelection.getSelection();
+                    Posting a = postingSelection.getSelection();
 
-                    a = AccountingManager.getInstance().cancelAnAccounting(a);
-                    accountingSelection.getList().add(a);
+                    a = PostingManager.getInstance().cancelAnAccounting(a);
+                    postingSelection.getList().add(a);
 
                     GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde storniert...");
 
@@ -179,10 +226,10 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
             new Thread(new Runnable() {
 
                 public void run() {
-                    Accounting a = accountingSelection.getSelection();
+                    Posting a = postingSelection.getSelection();
 
-                    accountingSelection.getList().remove(a);
-                    AccountingManager.getInstance().delete(a);
+                    postingSelection.getList().remove(a);
+                    PostingManager.getInstance().delete(a);
 
                     GUIManager.setLoadingScreenVisible(false);
                 }
@@ -190,8 +237,12 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
         }
     }
 
-    public TableModel createBuchungTableModel(ListModel listModel) {
-        return new BuchungTableModel(listModel);
+    public TableModel createPostingTableModel(ListModel listModel) {
+        return new PostingTableModel(listModel);
+    }
+
+    public TableColumnModel createPostingTableColumnModel() {
+        return new PostingTableColumnModel();
     }
 
     public Action getDeleteButtonAction() {
@@ -206,8 +257,20 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
         return cancelAction;
     }
 
-    public SelectionInList<Accounting> getAccountingSelection() {
-        return accountingSelection;
+    public ValueModel getAssetsValue() {
+        return assetsValue;
+    }
+
+    public ValueModel getLiabilitiesValue() {
+        return liabilitiesValue;
+    }
+
+    public ValueModel getSaldoValue() {
+        return saldoValue;
+    }
+
+    public SelectionInList<Posting> getPostingSelection() {
+        return postingSelection;
     }
 
     public Action getNewButtonAction() {
@@ -221,14 +284,14 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
         new Thread(new Runnable() {
 
             public void run() {
-                final Accounting a = accountingSelection.getSelection();
-                final EditAccountingPresentationModel model = new EditAccountingPresentationModel(a);
-                final EditAccountingView editView = new EditAccountingView(model);
+                final Posting a = postingSelection.getSelection();
+                final EditPostingPresentationModel model = new EditPostingPresentationModel(a);
+                final EditPostingView editView = new EditPostingView(model);
                 model.addButtonListener(new ButtonListener() {
 
                     public void buttonPressed(ButtonEvent evt) {
                         if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                            AccountingManager.getInstance().save(a);
+                            PostingManager.getInstance().save(a);
                             GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde aktualisiert.");
                         }
                         if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
@@ -243,11 +306,11 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
         }).start();
     }
 
-    private class BuchungTableModel extends AbstractTableAdapter<Accounting> {
+    private class PostingTableModel extends AbstractTableAdapter<Posting> {
 
         private ListModel listModel;
 
-        public BuchungTableModel(ListModel listModel) {
+        public PostingTableModel(ListModel listModel) {
             super(listModel);
             this.listModel = listModel;
         }
@@ -283,7 +346,7 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
         }
 
         public Object getValueAt(int rowIndex, int columnIndex) {
-            Accounting a = (Accounting) listModel.getElementAt(rowIndex);
+            Posting a = (Posting) listModel.getElementAt(rowIndex);
             switch (columnIndex) {
                 case 0:
                     return a.getDescription();
@@ -294,13 +357,17 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
                 case 3:
                     return a.isAssets() ? a.getAmount() : "";
                 case 4:
-                    return a.getAccountingEntryDate();
+                    return a.getPostingEntryDate();
                 case 5:
-                    return a.getAccountingDate();
+                    return a.getPostingDate();
                 default:
                     return "";
             }
         }
+    }
+
+    private class PostingTableColumnModel extends DefaultTableColumnModel {
+        
     }
 
     // Event Handling *********************************************************
@@ -319,7 +386,7 @@ public class AccountingManagementCustomerGUIExtentionPresentationModel {
     }
 
     private void updateActionEnablement() {
-        boolean hasSelection = accountingSelection.hasSelection();
+        boolean hasSelection = postingSelection.hasSelection();
         editAction.setEnabled(hasSelection);
         cancelAction.setEnabled(hasSelection);
         deleteAction.setEnabled(hasSelection);

@@ -43,7 +43,7 @@ public class GroupEditCustomerTabGUIExtentionView {
         panel.setName("Gruppen");
 
         FormLayout layout = new FormLayout(
-                "pref:grow, 4dlu, pref, 4dlu, pref:grow",
+                "200dlu, 4dlu, pref, 4dlu, 200dlu",
                 "pref:grow, pref, 4dlu, pref, pref:grow"
         );
 

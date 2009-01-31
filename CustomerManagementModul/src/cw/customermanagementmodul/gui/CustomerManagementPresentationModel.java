@@ -15,7 +15,9 @@ import java.util.EventObject;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 import cw.customermanagementmodul.pojo.Customer;
+import java.util.List;
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
 
 /**
  * @author CreativeWorkers.at
@@ -46,11 +48,11 @@ public class CustomerManagementPresentationModel {
         deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-
     }
 
     private void initEventHandling() {
         customerSelectorPresentationModel.addListSelectionListener(new SelectionHandler());
+        updateActionEnablement();
     }
 
 
@@ -129,22 +131,33 @@ public class CustomerManagementPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
 
-            GUIManager.setLoadingScreenText("Kunde wird gelöscht...");
+            GUIManager.setLoadingScreenText("Kunden löschen...");
             GUIManager.setLoadingScreenVisible(true);
 
             new Thread(new Runnable() {
 
                 public void run() {
-                    Customer c = customerSelectorPresentationModel.getSelectedCustomer();
+                    List<Customer> customers = customerSelectorPresentationModel.getSelectedCustomers();
 
-                    String forename = c.getForename();
-                    String surname = c.getSurname();
+                    int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die ausgewählten Kunden löschen?", "Kunden löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if (i == JOptionPane.OK_OPTION) {
 
-                    customerSelectorPresentationModel.remove(c);
-                    CustomerManager.getInstance().delete(c);
+                        String statusBarText;
+                        if(customers.size() == 1) {
+                            String forename = customers.get(0).getForename();
+                            String surname = customers.get(0).getSurname();
+                            statusBarText = "'" + forename + " " + surname +  "' wurde gelöscht.";
+                        } else {
+                            statusBarText = customers.size() + " Kunden wurden gelöscht.";
+                        }
+
+                        customerSelectorPresentationModel.remove(customers);
+                        CustomerManager.getInstance().delete(customers);
+
+                        GUIManager.getStatusbar().setTextAndFadeOut(statusBarText);
+                    }
 
                     GUIManager.setLoadingScreenVisible(false);
-                    GUIManager.getStatusbar().setTextAndFadeOut("'" + forename + " " + surname + "' wurde gelöscht.");
                 }
             }).start();
         }

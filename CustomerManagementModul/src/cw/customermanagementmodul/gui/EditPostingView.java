@@ -5,25 +5,24 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
-import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import cw.customermanagementmodul.pojo.Accounting;
+import cw.customermanagementmodul.pojo.Posting;
 
 /**
  *
  * @author CreativeWorkers.at
  */
-public class EditAccountingView {
+public class EditPostingView {
 
-    private EditAccountingPresentationModel model;
+    private EditPostingPresentationModel model;
     
     private JTextField tfDescription;
     private JTextField tfValue;
-    private JDateChooser dcAccountingEntryDate;
+    private JDateChooser dcPostingEntryDate;
     private JPanel pLiabilitiesAssets;
     
     private JButton bSave;
@@ -32,22 +31,22 @@ public class EditAccountingView {
     private JButton bSaveCancel;
     
 
-    public EditAccountingView(EditAccountingPresentationModel model) {
+    public EditPostingView(EditPostingPresentationModel model) {
         this.model = model;
     }
 
     private void initComponents() {
-        tfDescription           = CWComponentFactory.createTextField(model.getBufferedModel(Accounting.PROPERTYNAME_DESCRIPTION),false);
+        tfDescription           = CWComponentFactory.createTextField(model.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION),false);
 //        tfValue                = CWComponentFactory.createFormattedTextField(model.getBufferedModel(Accounting.PROPERTYNAME_AMOUNT), NumberFormat.getNumberInstance());
 //        tfValue.setHorizontalAlignment(JTextField.RIGHT);
-        tfValue                 = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Accounting.PROPERTYNAME_AMOUNT));
-        dcAccountingEntryDate   = CWComponentFactory.createDateChooser(model.getBufferedModel(Accounting.PROPERTYNAME_ACCOUNTINGENTRYDATE));
+        tfValue                 = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Posting.PROPERTYNAME_AMOUNT));
+        dcPostingEntryDate      = CWComponentFactory.createDateChooser(model.getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE));
 
         pLiabilitiesAssets = CWComponentFactory.createTrueFalsePanel(
-                model.getBufferedModel(Accounting.PROPERTYNAME_LIABILITIESASSETS),
+                model.getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS),
                 "Soll",
                 "Haben",
-                (Boolean)(model.getModel(Accounting.PROPERTYNAME_LIABILITIESASSETS).getValue())
+                (Boolean)(model.getModel(Posting.PROPERTYNAME_LIABILITIESASSETS).getValue())
         );
 
         bSave       = new JButton(model.getSaveButtonAction());
@@ -87,7 +86,7 @@ public class EditAccountingView {
         builder.addLabel("Art:", cc.xy(1, 5));
         builder.add(pLiabilitiesAssets, cc.xyw(3, 5, 3));
         builder.addLabel("Eingangsdatum:", cc.xy(1, 7));
-        builder.add(dcAccountingEntryDate, cc.xy(3, 7));
+        builder.add(dcPostingEntryDate, cc.xy(3, 7));
 
         initEventHandling();
 
