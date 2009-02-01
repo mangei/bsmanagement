@@ -70,12 +70,8 @@ public class JPathPanel extends JPanel {
             label.setToolTipText(viewPanel.getHeaderInfo().getDescription());
             label.setIcon(viewPanel.getHeaderInfo().getSmallIcon());
         } else {
-            System.out.println("KKK");
             label.setText(comp.getName());
         }
-
-        System.out.println("comp: " + comp.getName());
-        System.out.println("label: " + label.getText());
         return label;
     }
 }

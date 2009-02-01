@@ -76,7 +76,6 @@ extends JTextField
                     
                     // Wenn der Inhalt NICHT OK ist
                     
-                    System.out.println("Panelxxx: " + panel);
                     // Wenn das Panel nicht existiert, soll es erstellt werden
                     if(panel==null) {
                         

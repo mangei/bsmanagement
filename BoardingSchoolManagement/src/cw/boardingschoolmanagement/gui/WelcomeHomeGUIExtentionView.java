@@ -37,7 +37,7 @@ public class WelcomeHomeGUIExtentionView {
         initComponents();
 
         JViewPanel panel  = CWComponentFactory.createViewPanel(new HeaderInfo(
-                "Willkommen", "Willkommen auf der bla bla bla"
+                "Willkommen"
         ));
 
         FormLayout layout = new FormLayout(

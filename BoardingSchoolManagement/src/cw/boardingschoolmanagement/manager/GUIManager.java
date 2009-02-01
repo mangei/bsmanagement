@@ -187,7 +187,7 @@ public class GUIManager
         add(header = new JHeader(), BorderLayout.NORTH);
 
         JPanel rightPanel = new JPanel(new BorderLayout());
-        rightPanel.add(pathPanel, BorderLayout.NORTH);
+        rightPanel.add(pathPanel, BorderLayout.SOUTH);
         rightPanel.add(componentView, BorderLayout.CENTER);
 
         splitPane.add(createSidePanel(), JSplitPane.LEFT);
@@ -265,21 +265,7 @@ public class GUIManager
     }
 
     private void reloadPath() {
-
         pathPanel.reloadPath(lastComponents, shownComponent);
-
-        System.out.println("----------------------------------------------------");
-        Iterator<JComponent> iterator = lastComponents.iterator();
-        StringBuffer path = new StringBuffer("PFAD: ");
-        while (iterator.hasNext()) {
-            JComponent jComponent = iterator.next();
-            path.append(" >> ");
-            path.append(jComponent.getName());
-        }
-        path.append(" >> " + shownComponent.getName());
-        System.out.println(path.toString());
-        System.out.println("----------------------------------------------------");
-//        lPath.setText(path.toString());
     }
 
     private static void changeView2(JComponent comp, boolean saveOldView) {
@@ -296,7 +282,7 @@ public class GUIManager
             // Alte Speichern
             if (saveOldView) {
                 // Alte Speichern
-                gM.lastComponents.add(gM.shownComponent);
+                gM.lastComponents.push(gM.shownComponent);
             } else {
                 // Die alten löschen, wenn sie nicht gespeichert werden sollen
                 gM.lastComponents.clear();
