@@ -7,7 +7,6 @@ package cw.boardingschoolmanagement.app;
 import java.awt.Component;
 import java.beans.DefaultPersistenceDelegate;
 import java.beans.XMLEncoder;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;

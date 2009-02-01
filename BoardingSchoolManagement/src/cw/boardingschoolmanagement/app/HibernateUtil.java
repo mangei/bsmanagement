@@ -52,7 +52,7 @@ public class HibernateUtil {
         entityManager = entityManagerFactory.createEntityManager();
     }
 
-    public static synchronized EntityManager getEntityManager() {
+    public static EntityManager getEntityManager() {
         return entityManager;
     }
 

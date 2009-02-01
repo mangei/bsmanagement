@@ -18,7 +18,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
-import org.jdesktop.application.Application;
 import org.jvnet.substance.SubstanceLookAndFeel;
 import org.jvnet.substance.button.StandardButtonShaper;
 import org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel;
@@ -30,7 +29,7 @@ import org.jvnet.substance.utils.SubstanceConstants;
  * 
  * @author Manuel Geier (CreativeWorkers)
  */
-public class BoardingSchoolManagement extends Application {
+public class BoardingSchoolManagement {
 
     private static BoardingSchoolManagement instance;
     private static Logger logger = Logger.getLogger(BoardingSchoolManagement.class);
@@ -54,11 +53,6 @@ public class BoardingSchoolManagement extends Application {
     }
 
     private BoardingSchoolManagement() {
-    }
-
-    @Override
-    protected void startup() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     private void start() {
