@@ -2,6 +2,7 @@ package cw.boardingschoolmanagement.app;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.swing.JOptionPane;
 import org.hibernate.ejb.Ejb3Configuration;
 
 /**
@@ -48,11 +49,24 @@ public class HibernateUtil {
     }
 
     public static void configure() {
-        entityManagerFactory = configuration.buildEntityManagerFactory();
-        entityManager = entityManagerFactory.createEntityManager();
+
+        try {
+
+            entityManagerFactory = configuration.buildEntityManagerFactory();
+            entityManager = entityManagerFactory.createEntityManager();
+
+        } catch (Exception e) {
+            System.out.println("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
+            JOptionPane.showMessageDialog(null, "Datenbankverbindung konnte nicht aufgebaut werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
+            System.exit(0);
+        }
+
     }
 
     public static EntityManager getEntityManager() {
+        if(!entityManager.isOpen()) {
+            entityManager = entityManagerFactory.createEntityManager();
+        }
         return entityManager;
     }
 
