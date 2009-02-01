@@ -43,8 +43,6 @@ public class GroupCustomerSelectorFilterExtentionPresentationModel {
 
             public void valueChanged(ListSelectionEvent e) {
 
-                System.out.println("xxx");
-//
 //                // Get the number of customers
 //                int size = customerListModel.size();
 //
