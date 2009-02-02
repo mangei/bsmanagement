@@ -7,7 +7,6 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWJXTable;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -50,8 +49,7 @@ public class PostingCategoryManagementView
         initComponents();
         initEventHandling();
         
-        JViewPanel panel = new JViewPanel();
-        panel.setName("Kategorien");
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
 
         panel.getButtonPanel().add(bNew);
         panel.getButtonPanel().add(bEdit);

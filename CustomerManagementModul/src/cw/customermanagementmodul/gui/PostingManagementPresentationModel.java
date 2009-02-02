@@ -66,7 +66,7 @@ public class PostingManagementPresentationModel {
         editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/money_edit.png"));
         cancelAction = new CancelAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
         deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
-        managePostingCategoriesAction = new ManagePostingCategoriesAction("Kategorien", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_categories.png"));
+        managePostingCategoriesAction = new ManagePostingCategoriesAction("Kategorien", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category.png"));
 
         postingSelection = new SelectionInList<Posting>(PostingManager.getInstance().getAll(customer));
 

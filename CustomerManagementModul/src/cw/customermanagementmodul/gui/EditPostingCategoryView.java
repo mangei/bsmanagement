@@ -47,9 +47,9 @@ public class EditPostingCategoryView {
     public JPanel buildPanel() {
         initComponents();
         
-        JViewPanel panel = new JViewPanel("Kategorien verwalten");
-        JButtonPanel buttonPanel = panel.getButtonPanel();
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
         
+        JButtonPanel buttonPanel = panel.getButtonPanel();
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bReset);

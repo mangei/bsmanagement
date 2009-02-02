@@ -5,6 +5,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -23,6 +24,7 @@ import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.PostingCategory;
 import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
 import javax.swing.Icon;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumnModel;
 
@@ -38,6 +40,7 @@ public class PostingCategoryManagementPresentationModel {
     private Action editAction;
     private Action deleteAction;
     private SelectionInList<PostingCategory> postingCategorySelection;
+    private HeaderInfo headerInfo;
 
     public PostingCategoryManagementPresentationModel() {
         this(null);
@@ -51,19 +54,25 @@ public class PostingCategoryManagementPresentationModel {
     }
 
     public void initModels() {
-        newAction = new NewAction("Neu", CWUtils.loadIcon("cw/customermanagementmodul/images/money_add.png"));
-        editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/money_edit.png"));
-        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
+        newAction = new NewAction("Neu", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_add.png"));
+        editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_edit.png"));
+        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_delete.png"));
 
         postingCategorySelection = new SelectionInList<PostingCategory>(PostingCategoryManager.getInstance().getAll());
 
-        updateActionEnablement();
+        headerInfo = new HeaderInfo(
+                "Buchungskategorien verwalten",
+                "Hier können Sie Kategorien die sie für die Buchen benötigen einsehen und verwalten.",
+                CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category.png"),
+                CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category.png")
+                );
     }
 
     private void initEventHandling() {
         postingCategorySelection.addPropertyChangeListener(
                 SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
                 new SelectionEmptyHandler());
+        updateActionEnablement();
     }
 
 
@@ -81,6 +90,7 @@ public class PostingCategoryManagementPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
+            GUIManager.getInstance().lockMenu();
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
@@ -89,7 +99,14 @@ public class PostingCategoryManagementPresentationModel {
                 public void run() {
 
                     final PostingCategory pc = new PostingCategory();
-                    final EditPostingCategoryPresentationModel model = new EditPostingCategoryPresentationModel(pc);
+                    final EditPostingCategoryPresentationModel model = new EditPostingCategoryPresentationModel(
+                            pc,
+                            new HeaderInfo(
+                                "Buchungskategorie erstellen",
+                                "Hier können Sie eine neue Buchungskategorie erstellen.",
+                                CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_add.png"),
+                                CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_add.png")
+                            ));
                     final EditPostingCategoryView editView = new EditPostingCategoryView(model);
                     model.addButtonListener(new ButtonListener() {
 
@@ -110,6 +127,7 @@ public class PostingCategoryManagementPresentationModel {
                             if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                                 model.removeButtonListener(this);
                                 GUIManager.changeToLastView();
+                                GUIManager.getInstance().unlockMenu();
                             }
                         }
                     });
@@ -147,10 +165,20 @@ public class PostingCategoryManagementPresentationModel {
             new Thread(new Runnable() {
 
                 public void run() {
-                    PostingCategory pc = postingCategorySelection.getSelection();
+                    
+                    // Securityquestion
+                    int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die ausgewählte Kategorie löschen?", "Buchungskategorie löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if (i == JOptionPane.OK_OPTION) {
 
-                    postingCategorySelection.getList().remove(pc);
-                    PostingCategoryManager.getInstance().delete(pc);
+                        // Get the selected category
+                        PostingCategory pc = postingCategorySelection.getSelection();
+
+                        // Remove the category from the list
+                        postingCategorySelection.getList().remove(pc);
+
+                        // Delete the category
+                        PostingCategoryManager.getInstance().delete(pc);
+                    }
 
                     GUIManager.setLoadingScreenVisible(false);
                 }
@@ -182,7 +210,12 @@ public class PostingCategoryManagementPresentationModel {
         return newAction;
     }
 
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
     private void editSelectedItem(EventObject e) {
+        GUIManager.getInstance().lockMenu();
         GUIManager.setLoadingScreenText("Kategorie wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
 
@@ -190,7 +223,14 @@ public class PostingCategoryManagementPresentationModel {
 
             public void run() {
                 final PostingCategory pc = postingCategorySelection.getSelection();
-                final EditPostingCategoryPresentationModel model = new EditPostingCategoryPresentationModel(pc);
+                final EditPostingCategoryPresentationModel model = new EditPostingCategoryPresentationModel(
+                        pc,
+                        new HeaderInfo(
+                            "Buchungskategorie bearbeiten",
+                            "Hier können Sie eine Buchungskategorie bearbeiten.",
+                            CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_edit.png"),
+                            CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_edit.png")
+                        ));
                 final EditPostingCategoryView editView = new EditPostingCategoryView(model);
                 model.addButtonListener(new ButtonListener() {
 
@@ -202,6 +242,7 @@ public class PostingCategoryManagementPresentationModel {
                         if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                             model.removeButtonListener(this);
                             GUIManager.changeToLastView();
+                            GUIManager.getInstance().unlockMenu();
                         }
                     }
                 });

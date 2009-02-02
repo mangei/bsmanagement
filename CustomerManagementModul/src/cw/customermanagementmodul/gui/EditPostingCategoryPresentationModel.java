@@ -7,15 +7,14 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Date;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
-import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.PostingCategory;
 
 /**
@@ -32,12 +31,14 @@ public class EditPostingCategoryPresentationModel
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
-    
+
+    private HeaderInfo headerInfo;
     private ButtonListenerSupport support;
     
-    public EditPostingCategoryPresentationModel(PostingCategory postingCategory) {
+    public EditPostingCategoryPresentationModel(PostingCategory postingCategory, HeaderInfo headerInfo) {
         super(postingCategory);
         this.postingCategory = postingCategory;
+        this.headerInfo = headerInfo;
 
         support = new ButtonListenerSupport();
         
@@ -53,7 +54,7 @@ public class EditPostingCategoryPresentationModel
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
         saveCancelButtonAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
 
-        getBufferedModel(PostingCategory.PROPERTYNAME_KEY).addValueChangeListener(new SaveListener());
+        getBufferedModel(PostingCategory.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());
     }
     
     public void initEventHandling() {
@@ -109,6 +110,10 @@ public class EditPostingCategoryPresentationModel
 
     public Action getSaveCancelButtonAction() {
         return saveCancelButtonAction;
+    }
+
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
     private class SaveAction
@@ -178,7 +183,6 @@ public class EditPostingCategoryPresentationModel
     }
     
     public void save() {
-        getBufferedModel(Posting.PROPERTYNAME_POSTINGDATE).setValue(new Date());
         triggerCommit();
     }
     
