@@ -94,6 +94,17 @@ public class Group
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if(obj == null) return false;
+        if(!(obj instanceof Group)) return false;
+        if (this.getId() == ((Group) obj).getId()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
     public String toString() {
         return name;
     }

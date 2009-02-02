@@ -59,6 +59,8 @@ public class Posting
 
     @Override
     public boolean equals(Object obj) {
+        if(obj == null) return false;
+        if(!(obj instanceof Posting)) return false;
         if (this.getId() == ((Posting) obj).getId()) {
             return true;
         } else {

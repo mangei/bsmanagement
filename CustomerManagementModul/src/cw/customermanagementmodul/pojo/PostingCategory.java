@@ -45,7 +45,9 @@ public class PostingCategory
     }
 
     @Override
-    public boolean equals(Object obj){  
+    public boolean equals(Object obj){
+        if(obj == null) return false;
+        if(!(obj instanceof PostingCategory)) return false;
         if(this.getId()!=((PostingCategory)obj).getId()){
             return false;
         }
