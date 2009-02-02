@@ -58,6 +58,10 @@ public class LoadingGlass extends JComponent {
         int verticalIconOffset = -20;
         int iconRadius = 8;
 
+        if(!drawLoadingIcon) {
+            verticalTextOffset = 0;
+        }
+
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
