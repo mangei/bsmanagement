@@ -1,4 +1,4 @@
-package cw.boardingschoolmanagement.gui;
+package cw.boardingschoolmanagement.gui.component;
 
 import cw.boardingschoolmanagement.app.*;
 import java.awt.Color;

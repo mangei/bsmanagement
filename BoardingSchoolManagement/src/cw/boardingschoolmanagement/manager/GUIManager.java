@@ -3,7 +3,7 @@ package cw.boardingschoolmanagement.manager;
 import cw.boardingschoolmanagement.app.ApplicationListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.BoardingSchoolManagement;
-import cw.boardingschoolmanagement.gui.LoadingGlass;
+import cw.boardingschoolmanagement.gui.component.LoadingGlass;
 import cw.boardingschoolmanagement.exception.NotInitializedException;
 import cw.boardingschoolmanagement.gui.component.JHeader;
 import cw.boardingschoolmanagement.gui.component.JMenuPanel;
@@ -113,7 +113,7 @@ public class GUIManager
 //        shownComponent.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 1, new Color(178,187,200)));
 
         // GlassPane for the loading screen
-        setGlassPane(glassPane = new LoadingGlass(rootPane));
+        setGlassPane(glassPane = new LoadingGlass(rootPane, false));
 
         // Um den richtigen Mauszeiger anzuzeigen, da beim Look'n&Feel nach dem 
         // ändern der Größe ein falscher Cursor angezeigt wird.
@@ -421,11 +421,21 @@ public class GUIManager
         return header;
     }
 
+    private int lockCount = 0;
+
     public void lockMenu() {
-        MenuManager.getSideMenu().lock();
+        if(lockCount == 0) {
+            MenuManager.getSideMenu().lock();
+        }
+        lockCount++;
     }
 
     public void unlockMenu() {
-        MenuManager.getSideMenu().unlock();
+        if(lockCount == 1) {
+            MenuManager.getSideMenu().unlock();
+        }
+        if(lockCount > 0) {
+            lockCount--;
+        }
     }
 }

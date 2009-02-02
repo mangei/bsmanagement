@@ -1,5 +1,6 @@
-package cw.boardingschoolmanagement.gui;
+package cw.boardingschoolmanagement.gui.component;
 
+import cw.boardingschoolmanagement.gui.*;
 import cw.boardingschoolmanagement.app.*;
 import java.awt.Color;
 import java.awt.Component;
@@ -28,10 +29,11 @@ import javax.swing.event.MouseInputAdapter;
 public class LoadingGlass extends JComponent {
 
     private String text;
-    ImageIcon img;
+    private ImageIcon iconImage;
+    boolean drawLoadingIcon;
 
-    public LoadingGlass(Container contentPane) {
-        img = CWUtils.loadIcon("cw/boardingschoolmanagement/images/loadingicon.gif");
+    public LoadingGlass(Container contentPane, boolean drawLoadingIcon) {
+        iconImage = CWUtils.loadIcon("cw/boardingschoolmanagement/images/loadingicon.gif");
         text = "";
         setOpaque(false);
 
@@ -39,6 +41,7 @@ public class LoadingGlass extends JComponent {
         addMouseListener(listener);
         addMouseMotionListener(listener);
 
+        this.drawLoadingIcon = drawLoadingIcon;
     }
 
     private static Color GRAY = new Color(200, 200, 200, 100);
@@ -49,9 +52,11 @@ public class LoadingGlass extends JComponent {
     protected void paintComponent(Graphics g) {
         int w = getWidth();
         int h = getHeight();
-        int textOffset = 20;
         int arc = 10;
         int strWidth = g.getFontMetrics().stringWidth(text);
+        int verticalTextOffset = 20;
+        int verticalIconOffset = -20;
+        int iconRadius = 8;
 
         Graphics2D g2d = (Graphics2D) g;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -61,26 +66,39 @@ public class LoadingGlass extends JComponent {
         g2d.fillRect(0, 0, w, h);
 
         // Text Background
-        Shape backgroundText = new RoundRectangle2D.Double((double) (w - strWidth) / 2 - 10, (double) h/2-15 + textOffset, (double) strWidth + 20, (double) 20, (double) arc, (double) arc);
+        Shape backgroundText = new RoundRectangle2D.Double(
+                (w - strWidth) / 2 - 10,
+                h/2+verticalTextOffset-15,
+                strWidth + 20,
+                20,
+                arc,arc
+        );
         g2d.setColor(LIGHT_GRAY);
         g2d.fill(backgroundText);
         g2d.setColor(BLACK);
         g2d.draw(backgroundText);
 
-        // Loading Icon Background
-        Shape backgroundIcon = new Ellipse2D.Double(w/2 - img.getIconWidth() + 5, h/2 - img.getIconHeight() - 7, 21, 21);
-        g2d.setColor(LIGHT_GRAY);
-        g2d.fill(backgroundIcon);
-        g2d.setColor(BLACK);
-        g2d.draw(backgroundIcon);
+        if(drawLoadingIcon) {
+            // Loading Icon Background
+            Shape backgroundIcon = new Ellipse2D.Double(
+                    w/2 - iconImage.getIconWidth()/2 - iconRadius/2 - 1,
+                    h/2 - iconImage.getIconHeight()/2 - iconRadius/2 + verticalIconOffset + 7,
+                    iconImage.getIconWidth()+iconRadius,
+                    iconImage.getIconHeight()+iconRadius
+            );
+            g2d.setColor(LIGHT_GRAY);
+            g2d.fill(backgroundIcon);
+            g2d.setColor(BLACK);
+            g2d.draw(backgroundIcon);
 
-        // Loading Icon
-        g.drawImage(img.getImage(), (w - img.getIconWidth()) / 2, h / 2 - 20, this);
+            // Loading Icon
+            g.drawImage(iconImage.getImage(), (w - iconImage.getIconWidth()) / 2, h / 2 + verticalIconOffset, this);
+        }
 
         // Draw Text
         g.setColor(BLACK);
         g.setFont(g.getFont().deriveFont(Font.BOLD));
-        g.drawString(text, (w - strWidth) / 2, h / 2 + textOffset);
+        g.drawString(text, (w - strWidth) / 2, h / 2 + verticalTextOffset);
     }
 
     public void setText(String text) {
