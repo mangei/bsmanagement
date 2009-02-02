@@ -58,6 +58,7 @@ public class LoadingGlass extends JComponent {
         int verticalIconOffset = -20;
         int iconRadius = 8;
 
+        // If ther is no loadingIcon, then draw the text in the center
         if(!drawLoadingIcon) {
             verticalTextOffset = 0;
         }
@@ -82,7 +83,9 @@ public class LoadingGlass extends JComponent {
         g2d.setColor(BLACK);
         g2d.draw(backgroundText);
 
+        // Draw the Loading icon if it should be drawn
         if(drawLoadingIcon) {
+
             // Loading Icon Background
             Shape backgroundIcon = new Ellipse2D.Double(
                     w/2 - iconImage.getIconWidth()/2 - iconRadius/2 - 1,

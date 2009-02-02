@@ -1,10 +1,17 @@
 package cw.boardingschoolmanagement.gui.ui;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
 
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.Shape;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.geom.RoundRectangle2D;
 import javax.swing.ButtonModel;
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
@@ -16,81 +23,89 @@ import javax.swing.plaf.basic.BasicButtonUI;
  *  
  */
 public class JButtonPanelButtonUI
-  extends BasicButtonUI {
+        extends BasicButtonUI {
 
-  private static Color blueishBackgroundOver = new Color(224, 232, 246);
-  private static Color blueishBorderOver = new Color(152, 180, 226);
+    private static Color blueishBackgroundOver = new Color(224, 232, 246);
+    private static Color blueishBorderOver = new Color(152, 180, 226);
+    private static Color blueishBackgroundSelected = new Color(193, 210, 238);
+    private static Color blueishBorderSelected = new Color(49, 106, 197);
 
-  private static Color blueishBackgroundSelected = new Color(193, 210, 238);
-  private static Color blueishBorderSelected = new Color(49, 106, 197);
+    public JButtonPanelButtonUI() {
+        super();
+    }
 
-  public JButtonPanelButtonUI() {
-    super();
-  }
+    public void installUI(JComponent c) {
+        super.installUI(c);
 
-  public void installUI(JComponent c) {
-    super.installUI(c);
+        AbstractButton button = (AbstractButton) c;
+        button.setRolloverEnabled(true);
+        button.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+    }
 
-    AbstractButton button = (AbstractButton)c;
-    button.setRolloverEnabled(false);
-    button.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
-  }
+    private static Color BORDER = new Color(200,200,200);
+    private static Color FILL = new Color(230,230,230);
 
-  public void paint(Graphics g, JComponent c) {
-//    AbstractButton button = (AbstractButton)c;
-//    if (button.getModel().isRollover()
-//      || button.getModel().isArmed()
-//      || button.getModel().isSelected()) {
-//      Color oldColor = g.getColor();
-//      if (button.getModel().isSelected()) {
-//        g.setColor(blueishBackgroundSelected);
-//      } else {
-//        g.setColor(blueishBackgroundOver);
-//      }
-//      g.fillRect(0, 0, c.getWidth() - 1, c.getHeight() - 1);
-//
-//      if (button.getModel().isSelected()) {
-//        g.setColor(blueishBorderSelected);
-//      } else {
-//        g.setColor(blueishBorderOver);
-//      }
-//      g.drawRect(0, 0, c.getWidth() - 1, c.getHeight() - 1);
-//
-//      g.setColor(oldColor);
-//    }
+    public void paint(Graphics g, JComponent c) {
 
-    super.paint(g, c);
+        AbstractButton button = (AbstractButton) c;
+        if (button.getModel().isRollover() && button.getModel().isEnabled()) {
+            Color oldColor = g.getColor();
 
-  }
+            int x = 0;
+            int y = 0;
+            int w = c.getWidth()-1;
+            int h = c.getHeight()-1;
+            int arc = 6;
 
-  protected void paintText(Graphics g, JComponent c, Rectangle textRect, String text) {
-        AbstractButton b = (AbstractButton) c;                       
+            Graphics2D g2d = (Graphics2D) g;
+            g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // Button Background
+            Shape backgroundText = new RoundRectangle2D.Double(
+                    x,
+                    y,
+                    w,
+                    h,
+                    arc,arc
+            );
+            g2d.setColor(FILL);
+            g2d.fill(backgroundText);
+            g2d.setColor(BORDER);
+            g2d.draw(backgroundText);
+
+            g.setColor(oldColor);
+        }
+
+        super.paint(g, c);
+    }
+
+    protected void paintText(Graphics g, JComponent c, Rectangle textRect, String text) {
+        AbstractButton b = (AbstractButton) c;
         ButtonModel model = b.getModel();
 //        FontMetrics fm = SwingUtilities2.getFontMetrics(c, g);
 //        int mnemonicIndex = b.getDisplayedMnemonicIndex();
-        
+
         FontMetrics fm = g.getFontMetrics();
 
-	/* Draw the Text */
-	if(model.isEnabled()) {
-	    /*** paint the text normally */
-	    g.setColor(b.getForeground());
+        /* Draw the Text */
+        if (model.isEnabled()) {
+            /*** paint the text normally */
+            g.setColor(b.getForeground());
             g.drawString(text, textRect.x + getTextShiftOffset(), textRect.y + fm.getAscent() + getTextShiftOffset());
 //	    SwingUtilities2.drawStringUnderlineCharAt(c, g,text, mnemonicIndex,
 //					  textRect.x + getTextShiftOffset(),
 //					  textRect.y + fm.getAscent() + getTextShiftOffset());
-	}
-	else {
-	    /*** paint the text disabled ***/
+        } else {
+            /*** paint the text disabled ***/
 //	    g.setColor(b.getBackground());
-	    g.setColor(Color.LIGHT_GRAY);
+            g.setColor(Color.LIGHT_GRAY);
             g.drawString(text, textRect.x + getTextShiftOffset(), textRect.y + fm.getAscent() + getTextShiftOffset());
 //	    SwingUtilities2.drawStringUnderlineCharAt(c, g,text, mnemonicIndex,
 //					  textRect.x, textRect.y + fm.getAscent());
 //	    g.setColor(b.getBackground().darker());
 //	    SwingUtilities2.drawStringUnderlineCharAt(c, g,text, mnemonicIndex,
 //					  textRect.x, textRect.y + fm.getAscent());
-	}
+        }
     }
-  
 }

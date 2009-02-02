@@ -1,6 +1,5 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.ui.JButtonPanelUI;
 import com.jidesoft.swing.JideSwingUtilities;
 import com.l2fprod.common.swing.JButtonBar;
@@ -10,10 +9,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.border.EmptyBorder;
 
 /**
@@ -31,10 +27,10 @@ public class JButtonPanel extends JButtonBar {
     }
     
     public void add(JButton button) {
-        button.setContentAreaFilled(false);
-        button.setBorder(new EmptyBorder(10,10,10,10));
-        button.setFocusable(false);
-        button.setFont(button.getFont().deriveFont(Font.PLAIN));
+//        button.setContentAreaFilled(false);
+//        button.setBorder(new EmptyBorder(10,10,10,10));
+//        button.setFocusable(false);
+//        button.setFont(button.getFont().deriveFont(Font.PLAIN));
         super.add(button);
     }
 
