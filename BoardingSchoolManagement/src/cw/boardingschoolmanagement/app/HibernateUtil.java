@@ -70,4 +70,9 @@ public class HibernateUtil {
         return entityManager;
     }
 
+    public static void close(){
+        entityManager.close();
+        entityManagerFactory.close();
+    }
+
 }

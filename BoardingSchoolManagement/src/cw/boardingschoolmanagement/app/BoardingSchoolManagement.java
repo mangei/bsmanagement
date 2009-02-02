@@ -224,8 +224,8 @@ public class BoardingSchoolManagement {
         // Save the properties
         PropertiesManager.saveProperties();
 
-        // Close the hibernate entity manager
-        HibernateUtil.getEntityManager().close();
+        // Close hibernate
+        HibernateUtil.close();
 
         // Dispose the GUI
         GUIManager.getInstance().dispose();

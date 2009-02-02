@@ -6,9 +6,14 @@ import java.awt.Component;
 import java.awt.Container;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.RoundRectangle2D;
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
@@ -26,7 +31,7 @@ public class LoadingGlass extends JComponent {
     ImageIcon img;
 
     public LoadingGlass(Container contentPane) {
-        img = new ImageIcon("images/loadingicon.gif");
+        img = CWUtils.loadIcon("cw/boardingschoolmanagement/images/loadingicon.gif");
         text = "";
         setOpaque(false);
 
@@ -36,16 +41,46 @@ public class LoadingGlass extends JComponent {
 
     }
 
+    private static Color GRAY = new Color(200, 200, 200, 100);
+    private static Color LIGHT_GRAY = new Color(217, 217, 217);
+    private static Color BLACK = new Color(0, 0, 0, 0.5f);
+
     @Override
     protected void paintComponent(Graphics g) {
-        g.setColor(new Color(200, 200, 200, 100));
-//        g.fillRect(getX(), getY(), getWidth(), getHeight());
-        g.fillRect(0, 0, getWidth(), getHeight());
-        g.drawImage(img.getImage(), (getWidth() - img.getIconWidth()) / 2, getHeight() / 2 - 20, this);
-        g.setColor(new Color(0, 0, 0, 0.5f));
+        int w = getWidth();
+        int h = getHeight();
+        int textOffset = 20;
+        int arc = 10;
+        int strWidth = g.getFontMetrics().stringWidth(text);
+
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        // Background
+        g2d.setColor(GRAY);
+        g2d.fillRect(0, 0, w, h);
+
+        // Text Background
+        Shape backgroundText = new RoundRectangle2D.Double((double) (w - strWidth) / 2 - 10, (double) h/2-15 + textOffset, (double) strWidth + 20, (double) 20, (double) arc, (double) arc);
+        g2d.setColor(LIGHT_GRAY);
+        g2d.fill(backgroundText);
+        g2d.setColor(BLACK);
+        g2d.draw(backgroundText);
+
+        // Loading Icon Background
+        Shape backgroundIcon = new Ellipse2D.Double(w/2 - img.getIconWidth() + 5, h/2 - img.getIconHeight() - 7, 21, 21);
+        g2d.setColor(LIGHT_GRAY);
+        g2d.fill(backgroundIcon);
+        g2d.setColor(BLACK);
+        g2d.draw(backgroundIcon);
+
+        // Loading Icon
+        g.drawImage(img.getImage(), (w - img.getIconWidth()) / 2, h / 2 - 20, this);
+
+        // Draw Text
+        g.setColor(BLACK);
         g.setFont(g.getFont().deriveFont(Font.BOLD));
-        int strl = g.getFontMetrics().stringWidth(text);
-        g.drawString(text, (getWidth() - strl) / 2, getHeight() / 2 + 20);
+        g.drawString(text, (w - strWidth) / 2, h / 2 + textOffset);
     }
 
     public void setText(String text) {
