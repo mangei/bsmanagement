@@ -63,6 +63,7 @@ public class ZimmerModul implements Modul {
     }
 
     public void init() {
+        System.out.println("hihohi");
         MenuManager.getSideMenu().addCategory("BEWOHNER", "bewohner", 2);
 
         MenuManager.getSideMenu().addItem(new JButton(new AbstractAction(

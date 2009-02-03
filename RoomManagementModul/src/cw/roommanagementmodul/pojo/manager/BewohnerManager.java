@@ -41,9 +41,7 @@ public class BewohnerManager extends AbstractPOJOManager<Bewohner> {
 
     public List<Bewohner> getBewohner(boolean activ) {
         EntityManager entityManager = HibernateUtil.getEntityManager();
-        EntityTransaction tran = entityManager.getTransaction();
         List<Bewohner> list = entityManager.createQuery("SELECT b FROM Bewohner b where b.active = " + activ).getResultList();
-        tran.commit();
         return list;
     }
 

@@ -36,7 +36,7 @@ import javax.swing.AbstractAction;
  *
  * @author Dominik
  */
-public class InaktiveBewohnerPresentationModel extends PresentationModel<BewohnerManager> {
+public class InaktiveBewohnerPresentationModel {
 
     private BewohnerManager bewohnerManager;
     private String headerText;
@@ -52,7 +52,6 @@ public class InaktiveBewohnerPresentationModel extends PresentationModel<Bewohne
     private ButtonListenerSupport support;
 
     public InaktiveBewohnerPresentationModel(BewohnerManager bewohnerManager, String header) {
-        super(bewohnerManager);
         this.bewohnerManager = bewohnerManager;
         this.headerText = header;
         historyManager = BewohnerHistoryManager.getInstance();

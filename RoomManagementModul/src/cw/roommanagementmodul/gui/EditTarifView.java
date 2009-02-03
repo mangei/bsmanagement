@@ -4,26 +4,27 @@
  */
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.BorderLayout;
-import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import cw.roommanagementmodul.pojo.Tarif;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 
 /**
@@ -40,8 +41,7 @@ public class EditTarifView {
     public JLabel lAb;
     public JLabel lBis;
     public JLabel lTarif;
-    public JFormattedTextField tfTarif;
-    
+    public CWCurrencyTextField tfTarif;
 
     public EditTarifView(EditTarifPresentationModel model) {
         this.model = model;
@@ -66,32 +66,36 @@ public class EditTarifView {
         lBis = new JLabel("Bis: ");
         lTarif = new JLabel("Tarif: ");
 
-        tfTarif = BasicComponentFactory.createFormattedTextField(model.getBufferedModel(Tarif.PROPERTYNAME_TARIF), NumberFormat.getCurrencyInstance());
-        tfTarif.getDocument().addDocumentListener(new UpdateDocument());
+        //tfTarif = BasicComponentFactory.createFormattedTextField(model.getBufferedModel(Tarif.PROPERTYNAME_TARIF), NumberFormat.getCurrencyInstance());
+        tfTarif = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Tarif.PROPERTYNAME_TARIF));
+
 
         model.getDcVon().getJCalendar().setDecorationBordersVisible(false);
         model.getDcVon().getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
         model.getDcVon().getJCalendar().getDayChooser().setWeekOfYearVisible(false);
         PropertyConnector.connectAndUpdate(model.getBufferedModel(Tarif.PROPERTYNAME_AB), model.getDcVon(), "date");
 
-        Date vonDate = model.getVonDate();
-        if (vonDate != null) {
-            model.getDcVon().setDate(vonDate);
-            //model.getDcVon().setEnabled(false);
-        }
-        if(model.getHeaderText().equals("Edit")){
-
-            
-
-        }
-        
         model.getDcBis().getJCalendar().setDecorationBordersVisible(false);
         model.getDcBis().getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
         model.getDcBis().getJCalendar().getDayChooser().setWeekOfYearVisible(false);
         PropertyConnector.connectAndUpdate(model.getBufferedModel(Tarif.PROPERTYNAME_BIS), model.getDcBis(), "date");
+
+        if (model.getHeaderText().equals("Tarif erstellen")) {
+            Date vonDate = model.getVonDate();
+            if (vonDate != null) {
+                model.getDcVon().setDate(vonDate);
+                model.getUnsaved().setValue(false);
+            }
+        }
+        if(model.getHeaderText().equals("Tarif bearbeiten")){
+            model.setOldVon(model.getDcVon().getDate());
+            model.setOldBis(model.getDcBis().getDate());
+
+        }
+
+
+
     }
-
-
 
     public JComponent buildPanel() {
         initComponents();
@@ -140,11 +144,11 @@ public class EditTarifView {
     public class UpdateDocument implements DocumentListener {
 
         public void insertUpdate(DocumentEvent e) {
-            try {
-                tfTarif.commitEdit();
-            } catch (ParseException ex) {
-                Logger.getLogger(EditTarifView.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            try {
+//                tfTarif.commitEdit();
+//            } catch (ParseException ex) {
+//                Logger.getLogger(EditTarifView.class.getName()).log(Level.SEVERE, null, ex);
+//            }
 
         }
 

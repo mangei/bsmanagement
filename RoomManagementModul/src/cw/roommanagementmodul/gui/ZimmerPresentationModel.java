@@ -36,7 +36,7 @@ import javax.swing.table.TableModel;
  *
  * @author Dominik
  */
-public class ZimmerPresentationModel extends PresentationModel<ZimmerManager> {
+public class ZimmerPresentationModel  {
 
     private ZimmerManager zimmerManager;
     private Action newAction;
@@ -48,7 +48,7 @@ public class ZimmerPresentationModel extends PresentationModel<ZimmerManager> {
     private SelectionInList<Zimmer> zimmerSelection;
 
     public ZimmerPresentationModel(ZimmerManager zimmerManager) {
-        super(zimmerManager);
+        
         this.zimmerManager = zimmerManager;
         initModels();
         this.initEventHandling();
@@ -56,7 +56,7 @@ public class ZimmerPresentationModel extends PresentationModel<ZimmerManager> {
     }
 
     public ZimmerPresentationModel(ZimmerManager zimmerManager, String header) {
-        super(zimmerManager);
+        
         this.zimmerManager = zimmerManager;
         this.headerText = header;
         initModels();

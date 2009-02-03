@@ -4,7 +4,6 @@
  */
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.PresentationModel;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
@@ -30,17 +29,21 @@ import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreeModel;
 import cw.roommanagementmodul.pojo.manager.BereichManager;
 import cw.roommanagementmodul.pojo.Bereich;
+import cw.roommanagementmodul.pojo.Zimmer;
+import cw.roommanagementmodul.pojo.manager.ZimmerManager;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Dominik
  */
-public class BereichPresentationModel extends PresentationModel<BereichManager> {
+public class BereichPresentationModel {
 
     private Bereich selectedBereich;
+    private Zimmer selectedZimmer;
     private DefaultMutableTreeNode selectedNode;
     private BereichManager bereichManager;
+    private ZimmerManager zimmerManager;
     private TreeSelectionListener bereichListener;
     private DefaultTreeModel treeModel;
     private DefaultMutableTreeNode rootTree;
@@ -50,9 +53,11 @@ public class BereichPresentationModel extends PresentationModel<BereichManager> 
     private Action deleteAction;
     private Action backAction;
     private String headerText;
+    private Action newZimmerAction;
+    private Action editZimmerAction;
+    private Action deleteZimmerAction;
 
     public BereichPresentationModel(BereichManager bereichManager) {
-        super(bereichManager);
         selectedBereich = null;
         this.bereichManager = bereichManager;
         initModels();
@@ -61,9 +66,9 @@ public class BereichPresentationModel extends PresentationModel<BereichManager> 
     }
 
     BereichPresentationModel(BereichManager bereichManager, String header) {
-        super(bereichManager);
         selectedBereich = null;
         this.bereichManager = bereichManager;
+        this.zimmerManager = ZimmerManager.getInstance();
         this.headerText = header;
         initModels();
         this.initEventHandling();
@@ -78,7 +83,12 @@ public class BereichPresentationModel extends PresentationModel<BereichManager> 
         deleteAction = new DeleteAction();
         deleteAction.setEnabled(false);
         backAction = new BackAction();
+        setNewZimmerAction(new NewZimmerAction());
+        setEditZimmerAction(new EditZimmerAction());
+        setDeleteZimmerAction(new DeleteZimmerAction());
         bereichListener = new BereichTreeListener();
+        getEditZimmerAction().setEnabled(false);
+        getDeleteZimmerAction().setEnabled(false);
 
         Bereich internatBereich;
         if (bereichManager.existRoot() == false) {
@@ -160,6 +170,48 @@ public class BereichPresentationModel extends PresentationModel<BereichManager> 
         return headerText;
     }
 
+    /**
+     * @return the newZimmerAction
+     */
+    public Action getNewZimmerAction() {
+        return newZimmerAction;
+    }
+
+    /**
+     * @param newZimmerAction the newZimmerAction to set
+     */
+    public void setNewZimmerAction(Action newZimmerAction) {
+        this.newZimmerAction = newZimmerAction;
+    }
+
+    /**
+     * @return the editZimmerAction
+     */
+    public Action getEditZimmerAction() {
+        return editZimmerAction;
+    }
+
+    /**
+     * @param editZimmerAction the editZimmerAction to set
+     */
+    public void setEditZimmerAction(Action editZimmerAction) {
+        this.editZimmerAction = editZimmerAction;
+    }
+
+    /**
+     * @return the deleteZimmerAction
+     */
+    public Action getDeleteZimmerAction() {
+        return deleteZimmerAction;
+    }
+
+    /**
+     * @param deleteZimmerAction the deleteZimmerAction to set
+     */
+    public void setDeleteZimmerAction(Action deleteZimmerAction) {
+        this.deleteZimmerAction = deleteZimmerAction;
+    }
+
     private class NewAction
             extends AbstractAction {
 
@@ -169,7 +221,7 @@ public class BereichPresentationModel extends PresentationModel<BereichManager> 
 
         public void actionPerformed(ActionEvent e) {
             final Bereich b = new Bereich();
-            final EditBereichPresentationModel model = new EditBereichPresentationModel(b, "Bereich erstellen",selectedBereich);
+            final EditBereichPresentationModel model = new EditBereichPresentationModel(b, "Bereich erstellen", selectedBereich);
             final EditBereichView editView = new EditBereichView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -225,14 +277,14 @@ public class BereichPresentationModel extends PresentationModel<BereichManager> 
                 treeModel.removeNodeFromParent(node);
 
                 bereichManager.delete(b);
-            }else{
-                if(b.getParentBereich()!=null){
+            } else {
+                if (b.getParentBereich() != null) {
                     JOptionPane.showMessageDialog(null, "Löschen nicht möglich! \nEs befinden sich Zimmer in dieser Bereichsstruktur.");
-                }else{
+                } else {
                     JOptionPane.showMessageDialog(null, "Internat kann nicht gelöscht werden.");
                 }
 
-                
+
             }
 
 
@@ -242,13 +294,13 @@ public class BereichPresentationModel extends PresentationModel<BereichManager> 
     private boolean checkZimmer(Bereich b) {
 
         boolean check;
-        if(b.getZimmerList()!=null && b.getZimmerList().size() > 0){
+        if (b.getZimmerList() != null && b.getZimmerList().size() > 0) {
             return true;
         }
         if (b.getChildBereichList() != null) {
             for (int i = 0; i < b.getChildBereichList().size(); i++) {
-                check= checkZimmer(b.getChildBereichList().get(i));
-                if(check==true){
+                check = checkZimmer(b.getChildBereichList().get(i));
+                if (check == true) {
                     return check;
                 }
             }
@@ -292,7 +344,7 @@ public class BereichPresentationModel extends PresentationModel<BereichManager> 
 
     private void editSelectedItem(EventObject e) {
         final Bereich b = selectedBereich;
-        final EditBereichPresentationModel model = new EditBereichPresentationModel(b, "Bereich bearbeiten",null);
+        final EditBereichPresentationModel model = new EditBereichPresentationModel(b, "Bereich bearbeiten", null);
         final EditBereichView editView = new EditBereichView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -333,12 +385,37 @@ public class BereichPresentationModel extends PresentationModel<BereichManager> 
             JTree tree = (JTree) e.getSource();
 
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
+            if (node != null && node.getUserObject() instanceof Bereich) {
+                selectedNode = node;
+                setSelectedBereich((Bereich) node.getUserObject());
+                selectedZimmer = null;
+
+                //Buttons umschalten:
+                getEditAction().setEnabled(true);
+                getDeleteAction().setEnabled(true);
+
+                getEditZimmerAction().setEnabled(false);
+                getDeleteZimmerAction().setEnabled(false);
+            }
+            if (node != null && node.getUserObject() instanceof Zimmer) {
+                selectedZimmer = (Zimmer) node.getUserObject();
+                selectedNode = node;
+                selectedBereich = null;
+
+                //Buttons umschalten
+                getEditAction().setEnabled(false);
+                getDeleteAction().setEnabled(false);
+                getEditZimmerAction().setEnabled(true);
+                getDeleteZimmerAction().setEnabled(true);
+            }
             if (node == null) {
                 setSelectedBereich(null);
+                selectedZimmer = null;
+                getEditAction().setEnabled(false);
+                getDeleteAction().setEnabled(false);
                 return;
             }
-            selectedNode = node;
-            setSelectedBereich((Bereich) node.getUserObject());
+
         }
     }
 
@@ -348,11 +425,17 @@ public class BereichPresentationModel extends PresentationModel<BereichManager> 
         bereichManager.refreshBereich(rootBereich);
         List<Bereich> childList = rootBereich.getChildBereichList();
         DefaultMutableTreeNode node;
-        if (childList != null) {
+        if (childList != null && childList.size() != 0) {
             for (int i = 0; i < childList.size(); i++) {
                 node = new DefaultMutableTreeNode(childList.get(i), true);
                 rootTree.add(node);
                 initTree(node);
+            }
+        } else {
+            if (rootBereich.getZimmerList() != null || rootBereich.getZimmerList().size() != 0) {
+                for (int i = 0; i < rootBereich.getZimmerList().size(); i++) {
+                    rootTree.add(new DefaultMutableTreeNode(rootBereich.getZimmerList().get(i), true));
+                }
             }
         }
         return childList;
@@ -367,20 +450,166 @@ public class BereichPresentationModel extends PresentationModel<BereichManager> 
         return parentNode;
     }
 
+    private DefaultMutableTreeNode searchZimmerTreeNode(TreeModel treeModel, Zimmer z) {
+        DefaultMutableTreeNode root = (DefaultMutableTreeNode) treeModel.getRoot();
+
+        if (root.getUserObject() instanceof Zimmer && root.getUserObject().equals(z)) {
+            return root;
+        }
+        DefaultMutableTreeNode parentNode = searchZimmerTreeNode(root.children(), z);
+        return parentNode;
+    }
+
+    private DefaultMutableTreeNode searchZimmerTreeNode(Enumeration children, Zimmer z) {
+
+        while (children.hasMoreElements()) {
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) children.nextElement();
+            if (node.getUserObject() instanceof Zimmer) {
+                if (node.getUserObject().equals(z)) {
+                    return node;
+                } else {
+                    node = searchZimmerTreeNode(node.children(), z);
+                }
+                if (node != null) {
+                    return node;
+                }
+            }
+        }
+        return null;
+    }
+
     private DefaultMutableTreeNode searchTreeNode(Enumeration children, Bereich parentBereich) {
 
         while (children.hasMoreElements()) {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) children.nextElement();
-            if (node.getUserObject().equals(parentBereich)) {
-                return node;
-            } else {
-                node = searchTreeNode(node.children(), parentBereich);
+            if (node.getUserObject() instanceof Bereich) {
+                if (node.getUserObject().equals(parentBereich)) {
+                    return node;
+                } else {
+                    node = searchTreeNode(node.children(), parentBereich);
+                }
+
+                if (node != null) {
+                    return node;
+                }
+
             }
-            if (node != null) {
-                return node;
-            }
+
         }
         return null;
+    }
+
+    private class NewZimmerAction
+            extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/door_add.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            final Zimmer z = new Zimmer();
+            final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, "Zimmer erstellen");
+            final EditZimmerView editView = new EditZimmerView(model);
+            model.addButtonListener(new ButtonListener() {
+
+                public void buttonPressed(ButtonEvent evt) {
+                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        zimmerManager.save(z);
+                    }
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        model.removeButtonListener(this);
+
+                        //TREE Aktualisieren
+                        DefaultMutableTreeNode bereichNode = searchTreeNode(treeModel, z.getBereich());
+                        bereichNode.add(new DefaultMutableTreeNode(z));
+
+                        GUIManager.changeToLastView();
+                        GUIManager.getStatusbar().setTextAndFadeOut("Zimmer wurde erstellt.");
+                    }
+                }
+            });
+            GUIManager.changeView(editView.buildPanel(), true);
+
+
+        }
+    }
+
+    private class EditZimmerAction
+            extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/door_edit.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            editZimmerSelectedItem(e);
+        }
+    }
+
+    private class DeleteZimmerAction
+            extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/door_remove.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            Zimmer z = selectedZimmer;
+            if (z.getBewohnerList() == null || z.getBewohnerList().size() == 0) {
+                DefaultMutableTreeNode bereichNode = searchTreeNode(treeModel, z.getBereich());
+                Enumeration children = bereichNode.children();
+                DefaultMutableTreeNode node = null;
+                while (children.hasMoreElements()) {
+                    node = (DefaultMutableTreeNode) children.nextElement();
+                    if (node.getUserObject().equals(z)) {
+                        break;
+                    }
+                }
+                if (node != null) {
+                    treeModel.removeNodeFromParent(node);
+                    zimmerManager.delete(z);
+                }
+
+            } else {
+                Object[] options = {"Ok"};
+                JOptionPane.showOptionDialog(null, "Zimmer " + z.getName() + " enthält Bewohner!", "Warnung", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+            }
+
+        }
+    }
+
+    private void editZimmerSelectedItem(EventObject e) {
+        final Zimmer z = selectedZimmer;
+        final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, "Zimmer bearbeiten");
+        final EditZimmerView editView = new EditZimmerView(model);
+        model.addButtonListener(new ButtonListener() {
+
+            public void buttonPressed(ButtonEvent evt) {
+                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    zimmerManager.save(z);
+
+                    //Alten Node entfernen:
+
+                    DefaultMutableTreeNode zimmerNode = searchZimmerTreeNode(treeModel, z);
+                    if (zimmerNode != null) {
+                        treeModel.removeNodeFromParent(zimmerNode);
+                    }
+
+                    //Neuen Node hinzufügen:
+                    DefaultMutableTreeNode bereichNode = searchTreeNode(treeModel, z.getBereich());
+                    bereichNode.add(new DefaultMutableTreeNode(z));
+
+                    GUIManager.getStatusbar().setTextAndFadeOut("Zimmer wurde aktualisiert.");
+                }
+
+                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    model.removeButtonListener(this);
+                    GUIManager.changeToLastView();
+                }
+
+            }
+        });
+        GUIManager.changeView(editView.buildPanel(), true);
     }
 }
 

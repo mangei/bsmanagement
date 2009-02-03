@@ -8,6 +8,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.roommanagementmodul.pojo.Bereich;
+import cw.roommanagementmodul.pojo.Zimmer;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.JButton;
@@ -30,6 +31,9 @@ public class BereichView {
     private JButton bEdit;
     private JButton bDelete;
     private JButton bBack;
+    private JButton bZimmerNew;
+    private JButton bZimmerEdit;
+    private JButton bZimmerDelete;
     private JTree bereichTree;
 
     public BereichView(BereichPresentationModel m) {
@@ -39,7 +43,7 @@ public class BereichView {
     private void initComponents() {
 
         bNew = new JButton(model.getNewAction());
-        bNew.setText("Neu");
+        bNew.setText("Neuer Bereich");
         bEdit = new JButton(model.getEditAction());
         bEdit.setText("Bearbeiten");
         bDelete = new JButton(model.getDeleteAction());
@@ -47,8 +51,13 @@ public class BereichView {
         bBack = new JButton(model.getBackAction());
         bBack.setText("Zurück");
 
+        bZimmerNew = new JButton(model.getNewZimmerAction());
+        bZimmerNew.setText("Neues Zimmer");
+        bZimmerEdit = new JButton(model.getEditZimmerAction());
+        bZimmerEdit.setText("Bearbeiten");
+        bZimmerDelete = new JButton(model.getDeleteZimmerAction());
+        bZimmerDelete.setText("Löschen");
 
-        System.out.println("init");
         model.initTree(model.getRootTree());
         bereichTree = new JTree(model.getTreeModel());
 
@@ -60,7 +69,6 @@ public class BereichView {
         renderer.setClosedIcon(CWUtils.loadIcon("cw/roommanagementmodul/images/box.png"));
         renderer.setLeafIcon(CWUtils.loadIcon("cw/roommanagementmodul/images/box.png"));
         bereichTree.setCellRenderer(renderer);
-        bereichTree.getSelectionModel().addTreeSelectionListener(new MyTreeSelectionListener());
 
     }
 
@@ -75,69 +83,64 @@ public class BereichView {
         panel.getButtonPanel().add(bNew);
         panel.getButtonPanel().add(bEdit);
         panel.getButtonPanel().add(bDelete);
+        panel.getButtonPanel().add(bZimmerNew);
+        panel.getButtonPanel().add(bZimmerEdit);
+        panel.getButtonPanel().add(bZimmerDelete);
         panel.getButtonPanel().add(bBack);
         panel.getContentPanel().add(bereichTree, BorderLayout.CENTER);
 
 
         return panel;
     }
-    
-    class MyRenderer extends DefaultTreeCellRenderer {
-    
 
-    public MyRenderer() {
-        
-    }
+    class MyRenderer extends DefaultTreeCellRenderer {
+
+        public MyRenderer() {
+        }
 
         @Override
-    public Component getTreeCellRendererComponent(
-                        JTree tree,
-                        Object value,
-                        boolean sel,
-                        boolean expanded,
-                        boolean leaf,
-                        int row,
-                        boolean hasFocus) {
+        public Component getTreeCellRendererComponent(
+                JTree tree,
+                Object value,
+                boolean sel,
+                boolean expanded,
+                boolean leaf,
+                int row,
+                boolean hasFocus) {
 
-        super.getTreeCellRendererComponent(
-                        tree, value, sel,
-                        expanded, leaf, row,
-                        hasFocus);
-        if (isRoot(value)) {
-            setIcon(CWUtils.loadIcon("cw/boardingschoolmanagement/images/house.png"));
-            
-        } else {
-            setIcon(CWUtils.loadIcon("cw/roommanagementmodul/images/box.png"));
-        } 
+            super.getTreeCellRendererComponent(
+                    tree, value, sel,
+                    expanded, leaf, row,
+                    hasFocus);
 
-        return this;
-    }
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+            if (node.getUserObject() instanceof Zimmer) {
+                setIcon(CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"));
+            } else {
+                if (isRoot(value)) {
+                    setIcon(CWUtils.loadIcon("cw/boardingschoolmanagement/images/house.png"));
 
-    protected boolean isRoot(Object value) {
-        DefaultMutableTreeNode node =
-                (DefaultMutableTreeNode)value;
-        Bereich bereich =(Bereich)(node.getUserObject());
-                
-        if (bereich.getParentBereich()==null) {
-            return true;
-        }
-
-        return false;
-    }
-}
-    class MyTreeSelectionListener implements TreeSelectionListener{
-
-        public void valueChanged(TreeSelectionEvent e) {
-            if(e.getNewLeadSelectionPath()==null){
-                model.getEditAction().setEnabled(false);
-            model.getDeleteAction().setEnabled(false);
-            }else{
-                model.getEditAction().setEnabled(true);
-            model.getDeleteAction().setEnabled(true);
+                } else {
+                    setIcon(CWUtils.loadIcon("cw/roommanagementmodul/images/box.png"));
+                }
             }
-            
+
+
+            return this;
         }
 
+        protected boolean isRoot(Object value) {
+            DefaultMutableTreeNode node =
+                    (DefaultMutableTreeNode) value;
+            Bereich bereich = (Bereich) (node.getUserObject());
+
+            if (bereich.getParentBereich() == null) {
+                return true;
+            }
+
+            return false;
+        }
     }
+
 
 }

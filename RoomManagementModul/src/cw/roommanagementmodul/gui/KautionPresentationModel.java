@@ -30,7 +30,7 @@ import cw.roommanagementmodul.pojo.manager.KautionManager;
  *
  * @author Dominik
  */
-public class KautionPresentationModel extends PresentationModel<KautionManager>{
+public class KautionPresentationModel{
 
      private KautionManager kautionManager;
     private Action newAction;
@@ -44,7 +44,6 @@ public class KautionPresentationModel extends PresentationModel<KautionManager>{
 
 
     KautionPresentationModel(KautionManager kautionManager, String header) {
-        super(kautionManager);
         this.kautionManager = kautionManager;
         this.headerText = header;
         initModels();

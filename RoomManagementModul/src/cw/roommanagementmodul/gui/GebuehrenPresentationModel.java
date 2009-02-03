@@ -32,7 +32,7 @@ import cw.roommanagementmodul.pojo.manager.GebuehrenKatManager;
  *
  * @author Dominik
  */
-public class GebuehrenPresentationModel extends PresentationModel<GebuehrenManager> {
+public class GebuehrenPresentationModel  {
 
     private GebuehrenManager gebuehrenManager;
     private Action newAction;
@@ -44,7 +44,6 @@ public class GebuehrenPresentationModel extends PresentationModel<GebuehrenManag
     private SelectionInList<Gebuehr> gebuehrenSelection;
 
     public GebuehrenPresentationModel(GebuehrenManager gebuehrenManager) {
-        super(gebuehrenManager);
         this.gebuehrenManager = gebuehrenManager;
         initModels();
         this.initEventHandling();
@@ -52,7 +51,6 @@ public class GebuehrenPresentationModel extends PresentationModel<GebuehrenManag
     }
 
     public GebuehrenPresentationModel(GebuehrenManager gebuehrenManager, String header) {
-        super(gebuehrenManager);
         this.gebuehrenManager = gebuehrenManager;
         this.headerText = header;
         initModels();

@@ -41,10 +41,8 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
     private String headerText;
     private JDateChooser dcVon;
     private JDateChooser dcBis;
-    private boolean cancel;
-    private Tarif bisNullTarif = null;
-    private boolean bisNull = false;
-    private Date vonDateBefore;
+    private Date recommendedDate;
+    private Date oldVon,  oldBis,  newVon,  newBis;
 
     public EditTarifPresentationModel(Tarif tarif) {
         super(tarif);
@@ -56,7 +54,6 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
 
     EditTarifPresentationModel(Tarif tarif, String header) {
         super(tarif);
-        cancel = true;
         this.tarif = tarif;
         tarifManager = TarifManager.getInstance();
         this.headerText = header;
@@ -65,8 +62,8 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
     }
 
     private void initEventHandling() {
-        unsaved = new ValueHolder();
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
+        setUnsaved(new ValueHolder());
+        getUnsaved().addValueChangeListener(new PropertyChangeListener() {
 
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
@@ -80,7 +77,7 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
                 }
             }
         });
-        unsaved.setValue(false);
+        getUnsaved().setValue(false);
     }
 
     private void initModels() {
@@ -154,6 +151,76 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
         this.dcBis = dcBis;
     }
 
+    /**
+     * @return the unsaved
+     */
+    public ValueModel getUnsaved() {
+        return unsaved;
+    }
+
+    /**
+     * @param unsaved the unsaved to set
+     */
+    public void setUnsaved(ValueModel unsaved) {
+        this.unsaved = unsaved;
+    }
+
+    /**
+     * @return the oldVon
+     */
+    public Date getOldVon() {
+        return oldVon;
+    }
+
+    /**
+     * @param oldVon the oldVon to set
+     */
+    public void setOldVon(Date oldVon) {
+        this.oldVon = oldVon;
+    }
+
+    /**
+     * @return the oldBis
+     */
+    public Date getOldBis() {
+        return oldBis;
+    }
+
+    /**
+     * @param oldBis the oldBis to set
+     */
+    public void setOldBis(Date oldBis) {
+        this.oldBis = oldBis;
+    }
+
+    /**
+     * @return the newVon
+     */
+    public Date getNewVon() {
+        return newVon;
+    }
+
+    /**
+     * @param newVon the newVon to set
+     */
+    public void setNewVon(Date newVon) {
+        this.newVon = newVon;
+    }
+
+    /**
+     * @return the newBis
+     */
+    public Date getNewBis() {
+        return newBis;
+    }
+
+    /**
+     * @param newBis the newBis to set
+     */
+    public void setNewBis(Date newBis) {
+        this.newBis = newBis;
+    }
+
     private class SaveAction
             extends AbstractAction {
 
@@ -163,34 +230,166 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
 
         public void actionPerformed(ActionEvent e) {
 
-            saveTarif();
-            unsaved.setValue(false);
-            support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
+            if (validateData() == true) {
+                saveTarif();
+                getUnsaved().setValue(false);
+                support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
+            }
 
         }
     }
 
-    public int checkChronoDate() {
-        Calendar von = dcVon.getCalendar();
-        Calendar bis = dcBis.getCalendar();
-        int check = 0;
-        if (bisNull == true) {
-            Calendar vonDateB = Calendar.getInstance();
-            vonDateB.setTime(vonDateBefore);
-            vonDateB.add(Calendar.DATE, 2);
-            if (vonDateB.getTimeInMillis() > von.getTimeInMillis()) {
-                return 2;
+    private boolean validateData() {
+
+        if (this.headerText.equals("Tarif erstellen")) {
+            return validateNewTarifData();
+        }
+        if (this.headerText.equals("Tarif bearbeiten")) {
+            return validateEditTarifData();
+        }
+        return false;
+
+
+    }
+
+    private boolean validateEditTarifData() {
+
+        if (checkFilledOut() == false) {
+            JOptionPane.showMessageDialog(null, "Es müssen alle Felder ausgefüllt werden.");
+            return false;
+        }
+
+        if (checkChrono() == false) {
+            JOptionPane.showMessageDialog(null, "Bis-Datum muss ich chronologisch nach dem Von-Datum befinden.");
+            return false;
+        }
+
+        if (checkMoreTarifErrorEdit() == false) {
+            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten könnten möglicherweise zur Überschneidung mehrere Tarife führen! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
+            if (answer == 1) {
+                return false;
             }
         }
 
-        if (bis != null) {
+        if (checkNoTarifErrorEdit() == false) {
+            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten könnten möglicherweise zu einem lückenhaften Tarif Bestand führen! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
+            if (answer == 1) {
+                return false;
+            }
+        }
+        return true;
+    }
 
-            if (dcBis.getDate().getTime() < dcVon.getDate().getTime()) {
-                check = 1;
+    private boolean checkNoTarifErrorEdit() {
+
+        if (this.dcVon.getDate().getTime() > this.oldVon.getTime()) {
+            List<Tarif> l = tarifManager.getAll();
+            for (int i = 0; i < l.size(); i++) {
+                if (l.get(i).getBis().getTime() < this.oldVon.getTime()) {
+                    return false;
+                }
             }
         }
 
-        return check;
+        if (this.dcBis.getDate().getTime() < this.oldBis.getTime()) {
+            List<Tarif> l = tarifManager.getAll();
+            for (int i = 0; i < l.size(); i++) {
+                if (l.get(i).getAb().getTime() > this.oldBis.getTime()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+
+
+    }
+
+    private boolean checkMoreTarifErrorEdit() {
+
+        if (this.dcVon.getDate().getTime() < this.oldVon.getTime()) {
+            List<Tarif> l = tarifManager.getAll();
+            for (int i = 0; i < l.size(); i++) {
+                if (l.get(i).getBis().getTime() < this.oldVon.getTime()) {
+                    return false;
+                }
+            }
+        }
+
+        if (this.dcBis.getDate().getTime() > this.oldBis.getTime()) {
+            List<Tarif> l = tarifManager.getAll();
+            for (int i = 0; i < l.size(); i++) {
+                if (l.get(i).getAb().getTime() > this.oldBis.getTime()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean validateNewTarifData() {
+        if (checkFilledOut() == false) {
+            JOptionPane.showMessageDialog(null, "Es müssen alle Felder ausgefüllt werden.");
+            return false;
+        }
+
+        if (checkChrono() == false) {
+            JOptionPane.showMessageDialog(null, "Bis-Datum muss ich chronologisch nach dem Von-Datum befinden.");
+            return false;
+        }
+
+        if (checkMoreTarifError() == false) {
+            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten würden zur Überschneidung mehrere Tarife führen! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
+            if (answer == 1) {
+                return false;
+            }
+        }
+
+        if (checkNoTarifError() == false) {
+            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten würden zu einem lückenhaften Tarif Bestand führen! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
+            if (answer == 1) {
+                return false;
+            }
+        }
+        return true;
+
+    }
+
+    //Kontrolliert ob die Daten zu einem lückenhaften Tarifbestand führen würden
+    private boolean checkNoTarifError() {
+        if (this.recommendedDate != null) {
+            if (dcVon.getDate().getTime() > this.recommendedDate.getTime()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //Kontrolliert die Daten ob es zu einer Tarif Überschneidung kommt
+    private boolean checkMoreTarifError() {
+        if (this.recommendedDate != null) {
+            if (dcVon.getDate().getTime() < this.recommendedDate.getTime()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    //Kontrolliert ob Datumsfelder ausgefüllt sind
+    private boolean checkFilledOut() {
+        if (dcVon.getDate() == null || dcBis.getDate() == null) {
+            return false;
+        }
+        return true;
+
+    }
+
+    //Kontroliert ob das Bis-Datum chronologisch nach dem Von-Datum ist
+    private boolean checkChrono() {
+        if (dcBis.getDate().getTime() <= dcVon.getDate().getTime()) {
+            return false;
+        }
+        return true;
     }
 
     public Date getVonDate() {
@@ -198,27 +397,21 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
         List<Tarif> tarifList = tarifManager.getTarif(getBean().getGebuehr());
 
         long latestDate = 0;
-        Date bisDate = null;
-        vonDateBefore = null;
+        recommendedDate = null;
         for (int i = 0; i < tarifList.size(); i++) {
-            if (tarifList.get(i).getAb().getTime() > latestDate) {
-                latestDate = tarifList.get(i).getAb().getTime();
-                bisDate = tarifList.get(i).getBis();
-                vonDateBefore = tarifList.get(i).getAb();
-                bisNullTarif = tarifList.get(i);
+            if (tarifList.get(i).getBis().getTime() > latestDate) {
+                latestDate = tarifList.get(i).getBis().getTime();
             }
         }
 
-        if (bisDate != null) {
+        if (latestDate != 0) {
             Calendar cd = Calendar.getInstance();
-            cd.setTime(bisDate);
+            cd.setTimeInMillis(latestDate);
             cd.add(Calendar.DATE, 1);
-            bisDate = cd.getTime();
-        } else {
-            bisNull = true;
+            recommendedDate = cd.getTime();
         }
 
-        return bisDate;
+        return recommendedDate;
 
     }
 
@@ -238,7 +431,7 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
             if (i == JOptionPane.OK_OPTION) {
                 // TODO Wartedialog
                 resetTarif();
-                unsaved.setValue(false);
+                getUnsaved().setValue(false);
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
             }
         }
@@ -257,7 +450,7 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
 
         public void actionPerformed(ActionEvent e) {
             int i = 1;
-            if ((Boolean) unsaved.getValue() == true) {
+            if ((Boolean) getUnsaved().getValue() == true) {
                 Object[] options = {"Speichern", "Nicht Speichern", "Abbrechen"};
                 i = JOptionPane.showOptionDialog(null, "Daten wurden geändert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             }
@@ -281,11 +474,10 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
 
         public void actionPerformed(ActionEvent e) {
 
-            saveTarif();
-            support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
-            cancel = true;
-
-
+            if (validateData() == true) {
+                saveTarif();
+                support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
+            }
         }
     }
 
@@ -296,7 +488,7 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
         }
 
         public void updateState() {
-            unsaved.setValue(true);
+            getUnsaved().setValue(true);
         }
     }
 }

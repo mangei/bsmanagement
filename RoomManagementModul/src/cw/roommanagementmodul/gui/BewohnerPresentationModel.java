@@ -44,7 +44,7 @@ import cw.roommanagementmodul.pojo.manager.KautionManager;
  *
  * @author Dominik
  */
-public class BewohnerPresentationModel extends PresentationModel<BewohnerManager> {
+public class BewohnerPresentationModel  {
 
     private BewohnerManager bewohnerManager;
     private String headerText;
@@ -61,7 +61,7 @@ public class BewohnerPresentationModel extends PresentationModel<BewohnerManager
     private SelectionInList<Bewohner> bewohnerSelection;
 
     public BewohnerPresentationModel(BewohnerManager bewohnerManager) {
-        super(bewohnerManager);
+        //super(bewohnerManager);
         this.bewohnerManager = bewohnerManager;
         historyManager = BewohnerHistoryManager.getInstance();
         gebZuordnungManager = GebuehrZuordnungManager.getInstance();
@@ -71,7 +71,7 @@ public class BewohnerPresentationModel extends PresentationModel<BewohnerManager
     }
 
     public BewohnerPresentationModel(BewohnerManager bewohnerManager, String header) {
-        super(bewohnerManager);
+        //super(bewohnerManager);
         this.bewohnerManager = bewohnerManager;
         this.headerText = header;
         historyManager = BewohnerHistoryManager.getInstance();

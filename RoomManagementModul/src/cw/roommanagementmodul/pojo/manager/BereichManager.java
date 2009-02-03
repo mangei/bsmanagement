@@ -11,6 +11,8 @@ import cw.roommanagementmodul.pojo.Bereich;
 import java.util.ArrayList;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import org.apache.log4j.Logger;
 
 /**
@@ -34,49 +36,42 @@ public class BereichManager extends AbstractPOJOManager<Bereich> {
 
     public boolean existRoot() {
         EntityManager entityManager = HibernateUtil.getEntityManager();
-        EntityTransaction tran = entityManager.getTransaction();
-        Object obj = entityManager.createQuery("select b from Bereich b where b.parentBereich is null").getSingleResult();
-        tran.commit();
-        if (obj == null) {
+        Query query = entityManager.createQuery("select b from Bereich b where b.parentBereich is null");
+        
+        try{
+            Object obj= query.getSingleResult();
+        }catch(NoResultException ex){
             return false;
-        } else {
-            return true;
         }
+        
+        return true;
 
     }
 
     public Bereich getRoot() {
         EntityManager entityManager = HibernateUtil.getEntityManager();
-        EntityTransaction tran = entityManager.getTransaction();
         Bereich bereich = (Bereich) entityManager.createQuery("select b from Bereich b where b.parentBereich is null").getSingleResult();
-        tran.commit();
         return bereich;
 
     }
 
     public void refreshBereich(Bereich bereich) {
         EntityManager entityManager = HibernateUtil.getEntityManager();
-        EntityTransaction tran = entityManager.getTransaction();
         entityManager.refresh(bereich);
-        tran.commit();
 
 
     }
 
     public List<Bereich> getBereich() {
         EntityManager entityManager = HibernateUtil.getEntityManager();
-        EntityTransaction tran = entityManager.getTransaction();
         List list = entityManager.createQuery("SELECT b FROM Bereich b").getResultList();
-        tran.commit();
         return list;
     }
 
     public List<Bereich> getBereichLeaf() {
 
         EntityManager entityManager = HibernateUtil.getEntityManager();
-        EntityTransaction tran = entityManager.getTransaction();
         List<Bereich> list = entityManager.createQuery("SELECT b FROM Bereich b").getResultList();
-        tran.commit();
         List<Bereich> leafList= new ArrayList<Bereich>();
         for(int i=0;i<list.size();i++){
             if(list.get(i).getChildBereichList()==null || list.get(i).getChildBereichList().size()==0){
