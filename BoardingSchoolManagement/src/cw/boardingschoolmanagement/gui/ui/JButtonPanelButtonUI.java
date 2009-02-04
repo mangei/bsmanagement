@@ -9,8 +9,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Shape;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.RoundRectangle2D;
 import javax.swing.ButtonModel;
 import javax.swing.AbstractButton;
@@ -76,6 +74,9 @@ public class JButtonPanelButtonUI
     }
 
     protected void paintText(Graphics g, JComponent c, Rectangle textRect, String text) {
+        Graphics2D g2d = (Graphics2D) g;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+        
         AbstractButton b = (AbstractButton) c;
         ButtonModel model = b.getModel();
 //        FontMetrics fm = SwingUtilities2.getFontMetrics(c, g);
