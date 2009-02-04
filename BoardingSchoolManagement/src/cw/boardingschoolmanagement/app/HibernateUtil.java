@@ -64,9 +64,9 @@ public class HibernateUtil {
     }
 
     public static EntityManager getEntityManager() {
-        if(!entityManager.isOpen()) {
-            entityManager = entityManagerFactory.createEntityManager();
-        }
+//        if(!entityManager.isOpen()) {
+//            entityManager = entityManagerFactory.createEntityManager();
+//        }
         return entityManager;
     }
 
