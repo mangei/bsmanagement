@@ -19,16 +19,15 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Iterator;
 import java.util.LinkedList;
 import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.border.EmptyBorder;
+import org.jdesktop.application.SingleFrameApplication;
 
 /**
  * Manages the Graphic User Interface (GUI) of the application.
@@ -36,7 +35,7 @@ import javax.swing.border.EmptyBorder;
  * @author Manuel Geier (CreativeWorkers)
  */
 public class GUIManager
-        extends JFrame {
+        extends SingleFrameApplication {
 
     private static GUIManager instance;
     /**
@@ -51,17 +50,21 @@ public class GUIManager
     private JSplitPane splitPane;
     private JPanel componentView;
     private JPathPanel pathPanel;
+    private JFrame frame;
 
     /**
      * @param title Titel der Applikation
      * @param comp Komponente die am Start angezeigt wird
      */
     private GUIManager(String title) {
-        super(title);
 
-        setIconImage(CWUtils.loadImage("cw/boardingschoolmanagement/images/building.png"));
-        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-        addWindowListener(new WindowAdapter() {
+        frame = this.getMainFrame();
+
+        frame.setTitle(title);
+
+        frame.setIconImage(CWUtils.loadImage("cw/boardingschoolmanagement/images/building.png"));
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        frame.addWindowListener(new WindowAdapter() {
 
             @Override
             public void windowClosing(WindowEvent e) {
@@ -113,15 +116,15 @@ public class GUIManager
 //        shownComponent.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 1, new Color(178,187,200)));
 
         // GlassPane for the loading screen
-        setGlassPane(glassPane = new LoadingGlass(rootPane, false));
+        frame.setGlassPane(glassPane = new LoadingGlass(frame.getRootPane(), false));
 
         // Um den richtigen Mauszeiger anzuzeigen, da beim Look'n&Feel nach dem 
         // ändern der Größe ein falscher Cursor angezeigt wird.
-        addComponentListener(new ComponentAdapter() {
+        frame.addComponentListener(new ComponentAdapter() {
 
             @Override
             public void componentResized(ComponentEvent e) {
-                GUIManager.this.setCursor(null);
+                frame.setCursor(null);
             }
         });
 
@@ -130,30 +133,30 @@ public class GUIManager
 
 
         // Set the size of the window
-        setSize(new Dimension(
+        frame.setSize(new Dimension(
                 Integer.parseInt(PropertiesManager.getProperty("application.gui.width", "800")),
                 Integer.parseInt(PropertiesManager.getProperty("application.gui.height", "650"))));
 
         // Set the state of the window
-        setExtendedState(Integer.parseInt(PropertiesManager.getProperty("application.gui.extendedState", Integer.toString(JFrame.NORMAL))));
+        frame.setExtendedState(Integer.parseInt(PropertiesManager.getProperty("application.gui.extendedState", Integer.toString(JFrame.NORMAL))));
 
         // Save the size if the application closes and the window is not maximized
         BoardingSchoolManagement.getInstance().addApplicationListener(new ApplicationListener() {
 
             public void applicationClosing() {
-                if (GUIManager.this.getExtendedState() == JFrame.MAXIMIZED_BOTH || GUIManager.this.getExtendedState() != JFrame.ICONIFIED) {
-                    PropertiesManager.setProperty("application.gui.extendedState", Integer.toString(GUIManager.this.getExtendedState()));
+                if (frame.getExtendedState() == JFrame.MAXIMIZED_BOTH || frame.getExtendedState() != JFrame.ICONIFIED) {
+                    PropertiesManager.setProperty("application.gui.extendedState", Integer.toString(frame.getExtendedState()));
                 }
 
-                if (GUIManager.this.getExtendedState() != JFrame.MAXIMIZED_BOTH) {
-                    PropertiesManager.setProperty("application.gui.width", Integer.toString(GUIManager.this.getWidth()));
-                    PropertiesManager.setProperty("application.gui.height", Integer.toString(GUIManager.this.getHeight()));
+                if (frame.getExtendedState() != JFrame.MAXIMIZED_BOTH) {
+                    PropertiesManager.setProperty("application.gui.width", Integer.toString(frame.getWidth()));
+                    PropertiesManager.setProperty("application.gui.height", Integer.toString(frame.getHeight()));
                 }
             }
         });
 
         // Center the window
-        CWUtils.centerWindow(this);
+        CWUtils.centerWindow(frame);
     }
 
     public static GUIManager getInstance() {
@@ -183,8 +186,8 @@ public class GUIManager
      * Generiert die Oberfläche
      */
     private void generateGUI() {
-        setLayout(new BorderLayout());
-        add(header = new JHeader(), BorderLayout.NORTH);
+        frame.setLayout(new BorderLayout());
+        frame.add(header = new JHeader(), BorderLayout.NORTH);
 
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.add(pathPanel, BorderLayout.SOUTH);
@@ -196,13 +199,13 @@ public class GUIManager
         componentView.add(shownComponentScrollPane = createScrollPane(shownComponent), BorderLayout.CENTER);
 //        splitPane.add(shownComponentScrollPane = createScrollPane(shownComponent), JSplitPane.RIGHT);
 
-        add(splitPane, BorderLayout.CENTER);
+        frame.add(splitPane, BorderLayout.CENTER);
 
 //        add(createSidePanel(), BorderLayout.WEST);
 //        add(shownComponentScrollPane = createScrollPane(shownComponent), BorderLayout.CENTER);
 
 //        add(MenuManager.getToolBar(),BorderLayout.PAGE_START);
-        add(statusbar = new StatusBar(), BorderLayout.SOUTH);
+        frame.add(statusbar = new StatusBar(), BorderLayout.SOUTH);
     }
 //
 //    /**
@@ -437,5 +440,10 @@ public class GUIManager
         if(lockCount > 0) {
             lockCount--;
         }
+    }
+
+    @Override
+    protected void startup() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

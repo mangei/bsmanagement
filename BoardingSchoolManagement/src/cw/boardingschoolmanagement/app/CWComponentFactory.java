@@ -81,19 +81,20 @@ public class CWComponentFactory {
         return dc;
     }
 
-    public static CWJXTable createTable() {
-        return createTable("");
-    }
+//    There is no need for the method
+//    public static CWJXTable createTable() {
+//        return createTable("");
+//    }
 
     public static CWJXTable createTable(String emptyText) {
         return createTable(null, emptyText);
     }
-    
-    public static CWJXTable createTable(TableModel tableModel) {
-        return createTable(tableModel, "");
-    }
 
     public static CWJXTable createTable(TableModel tableModel, final String emptyText) {
+        return createTable(null, emptyText, null);
+    }
+    
+    public static CWJXTable createTable(TableModel tableModel, final String emptyText, String tableStateName) {
         CWJXTable table;
         
         if (tableModel != null) {
@@ -102,12 +103,15 @@ public class CWComponentFactory {
             table = new CWJXTable();
         }
 
-        table.setEmptyText(emptyText);
-
         table.setColumnControlVisible(true);
         table.setAutoCreateRowSorter(true);
         table.setPreferredScrollableViewportSize(new Dimension(10, 10));
         table.setHighlighters(HighlighterFactory.createSimpleStriping());
+
+        table.setEmptyText(emptyText);
+        table.setTableStateName(tableStateName);
+
+        table.loadTableState();
 
         return table;
     }

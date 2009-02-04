@@ -35,13 +35,13 @@ public class HibernateUtil {
             setProperty("hibernate.connection.username", "scott").
             setProperty("hibernate.connection.password", "tiger").
 
-            setProperty("hibernate.connection.pool_size", "1").
+//            setProperty("hibernate.connection.pool_size", "1").
             setProperty("hibernate.connection.autocommit", "true").
-            setProperty("hibernate.cache.provider_class", "org.hibernate.cache.HashtableCacheProvider").
+//            setProperty("hibernate.cache.provider_class", "org.hibernate.cache.HashtableCacheProvider").
             setProperty("hibernate.hbm2ddl.auto", "update").
-            setProperty("hibernate.show_sql", "true").
-            setProperty("hibernate.format_sql", "true").
-            setProperty("hibernate.use_sql_comments", "true");
+            setProperty("hibernate.show_sql", "true");
+//            setProperty("hibernate.format_sql", "true").
+//            setProperty("hibernate.use_sql_comments", "true");
     }
 
     public static Ejb3Configuration getConfiguration() {
@@ -70,7 +70,8 @@ public class HibernateUtil {
         return entityManager;
     }
 
-    public static void close(){
+    public static void close() {
+        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAUUUUUUUUUUUUUUUUUUUUUAAAAAAAAAAAAAAAAA");
         entityManager.close();
         entityManagerFactory.close();
     }

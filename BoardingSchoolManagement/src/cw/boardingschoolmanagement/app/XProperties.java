@@ -210,6 +210,7 @@ public class XProperties {
         public SortKeyState getSortKeyState() {
             return sortKeyState;
         }
+
     }
 
     /**
@@ -275,6 +276,9 @@ public class XProperties {
         private int modelIndex;
         private boolean visible;
         private int viewIndex;
+
+        public ColumnState() {
+        }
 
         /**
          * Constructor used by the custom PersistenceDelegate.

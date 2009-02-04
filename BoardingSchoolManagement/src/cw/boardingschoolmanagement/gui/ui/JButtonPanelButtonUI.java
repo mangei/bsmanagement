@@ -25,11 +25,6 @@ import javax.swing.plaf.basic.BasicButtonUI;
 public class JButtonPanelButtonUI
         extends BasicButtonUI {
 
-    private static Color blueishBackgroundOver = new Color(224, 232, 246);
-    private static Color blueishBorderOver = new Color(152, 180, 226);
-    private static Color blueishBackgroundSelected = new Color(193, 210, 238);
-    private static Color blueishBorderSelected = new Color(49, 106, 197);
-
     public JButtonPanelButtonUI() {
         super();
     }
@@ -44,7 +39,7 @@ public class JButtonPanelButtonUI
     }
 
     private static Color BORDER = new Color(200,200,200);
-    private static Color FILL = new Color(230,230,230);
+    private static Color FILL = new Color(235,235,235);
 
     public void paint(Graphics g, JComponent c) {
 

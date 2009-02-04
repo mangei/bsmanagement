@@ -2,29 +2,53 @@ package cw.boardingschoolmanagement.gui.component;
 
 import cw.boardingschoolmanagement.app.ObjectSaver;
 import cw.boardingschoolmanagement.app.XProperties;
+import cw.boardingschoolmanagement.app.XProperties.XTableState;
+import cw.boardingschoolmanagement.manager.PropertiesManager;
 import java.awt.Color;
 import java.awt.Graphics;
-import javax.swing.table.TableColumnModel;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Icon;
 import javax.swing.table.TableModel;
 import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.table.ColumnControlButton;
 
 /**
- *
+ * This is a extended JXTable with following additional features: <br>
+ *  + You can set an text which is shown when the table is empty
+ *  + You can save and load the table state (view)
  * @author ManuelG
  */
 public class CWJXTable extends JXTable {
 
     private String emptyText = "";
+    private String tableStateName = "";
 
-    public CWJXTable(TableModel dm, TableColumnModel cm) {
-        super(dm, cm);
-    }
+    private static String tableStateDirectory = PropertiesManager.getProperty("application.gui.tableStateDirectory", "tableStates");
+
+    private static String PROPERTYNAME_TABLESTATENAME = "tableStateName";
 
     public CWJXTable(TableModel dm) {
         super(dm);
+        init();
     }
 
     public CWJXTable() {
+        init();
+    }
+
+    private void init() {
+        installColumnControl();
+    }
+
+    private void installColumnControl() {
+        setColumnControl(new CWColumnControlButton(this));
     }
 
     @Override
@@ -47,131 +71,104 @@ public class CWJXTable extends JXTable {
         return emptyText;
     }
 
-    public void saveHeader() {
+    public void saveTableState() {
+        if(tableStateName == null || tableStateName.isEmpty()) {
+            return;
+        }
+
+        File dir = new File(tableStateDirectory);
+        if(!dir.exists()) {
+            dir.mkdir();
+        }
+
+        String path = dir.getName() + System.getProperty("file.separator") + tableStateName + ".xml";
+
         new XProperties().registerPersistenceDelegates();
         XProperties.XTableProperty x = new XProperties.XTableProperty();
         Object tableState = x.getSessionState(this);
-        ObjectSaver.save(tableState, "table.txt");
-
+        ObjectSaver.save(tableState, path);
     }
 
 //    Object tableState;
 
-    public void loadHeader() {
-        Object tableState = ObjectSaver.load("table.txt");
+    public void loadTableState() {
+        if(tableStateName == null || tableStateName.isEmpty()) {
+            return;
+        }
+
+        File dir = new File(tableStateDirectory);
+        if(!dir.exists()) {
+            dir.mkdir();
+        }
+
+        String path = dir.getName() + System.getProperty("file.separator") + tableStateName + ".xml";
+
+        XTableState tableState = (XTableState) ObjectSaver.load(path);
         if (tableState != null) {
             XProperties.XTableProperty x = new XProperties.XTableProperty();
             x.setSessionState(this, tableState);
         }
+
+        // We have to install the column control again, because it got removed by the loading process
+        installColumnControl();
     }
-//      /**
-//  * Attendance Save Header
-//  *
-//  *
-//  * @param pathname The relative path and filename
-//  *
-//  * @return Returns true if successful, false if not
-//  */
-//  public boolean saveHeader(){
-//
-//    //if(table.getModel().getValueAt(table.getSelectedRow(), table.getSelectedColumn()).equals(null))
-//      //table.getModel().setValueAt("",table.getSelectedRow(), table.getSelectedColumn());
-//
-//    //if(!(table.getSelectedColumn() == 0)) table.setColumnSelectionInterval(0,0);
-//
-//    /*try{
-//      if (table.isEditing()) { //To keep last value while saving
-//        TableCellEditor tc = table.getCellEditor();
-//        // To cancel the editing
-//        //tc.cancelCellEditing();
-//        // Or to keep the editor's current value
-//        if(tc != null)tc.stopCellEditing();
-//      }
-//    }
-//    catch(Exception d){
-//      d.printStackTrace();
-//    }*/
-//
-//
-//
-//
-//
-//    try{
-//      FileOutputStream fos2 = new FileOutputStream(pathname + "/"+tablepath);
-//      ObjectOutputStream oos2 = new ObjectOutputStream(fos2);
-//      this.removeEditor();
-//      TableColumnModel tcm = (TableColumnModel)this.getColumnModel();
-//      oos2.writeObject(tcm);
-//
-//        //oos.writeObject(tm);
-//      oos2.close();
-//      fos2.close();
-//      this.setFocusable(true);
-//
-//    }
-//    catch(Exception e){
-//      System.out.println(e.getMessage());
-//      e.printStackTrace();
-//      return false;
-//    }
-//
-//    return true;
-//  }
-//
-//
-//  private static String tablepath = "table.txt";
-//  private static String pathname = "tablepath";
-//
-//  /**
-//   *
-//   * Load a file header
-//   *
-//   * @param pathname The relative path and filename
-//   *
-//   * @return Returns true if successful, false if not
-//   */
-//  public boolean loadHeader(){
-//    //create a JTableHeader to hold the model of the header
-//    TableColumnModel tcm = null;
-//
-//    try{
-//      //create FileInputStream and ObjectInputStream go get the table header
-//      FileInputStream fis2 = new FileInputStream(pathname +
-//                                                 "/"+tablepath);
-//      ObjectInputStream ois2 = new ObjectInputStream(fis2);
-//
-//      //get the JTableHeader from the file
-//      tcm = (TableColumnModel) (ois2.readObject());
-//
-//      //set the JTableHeader and close the input streams
-//      this.setColumnModel(tcm);
-//
-//      ois2.close();
-//      fis2.close();
-//    }
-//    catch(Exception e){
-//      try{
-//        //try to make the file if it didnt exist
-//
-//        File outputFile2 = new File(pathname + "/"+tablepath);
-//        if(outputFile2.exists()) throw new Exception("Fine");
-//        else{
-//          JTable temp = new JTable(this.getRowCount(), this.getColumnCount());
-//          this.setColumnModel(temp.getColumnModel());
-////          this.getColumnModel().getColumn(0).setHeaderValue("Last Name, First Name");
-//          saveHeader();
-//        }
-//      }
-//      catch(Exception f){
-//        System.out.println(e.getMessage());
-//        System.out.println(f.getMessage());
-//        if(f.getMessage().equals("Fine")) return true;
-//        return false;
-//      }
-//
-//    }
-//
-//    return true;
-//  }
-//
+
+    public String getTableStateName() {
+        return tableStateName;
+    }
+
+    public void setTableStateName(String tableStateName) {
+        String old = this.tableStateName;
+        this.tableStateName = tableStateName;
+        firePropertyChange(PROPERTYNAME_TABLESTATENAME, old, tableStateName);
+    }
+
+    private class CWColumnControlButton extends ColumnControlButton {
+
+        private Action saveTableStateAction;
+        private Action loadTableStateAction;
+
+        public CWColumnControlButton(JXTable table) {
+            super(table);
+
+            List<Action> actions = new ArrayList<Action>();
+
+            saveTableStateAction = new AbstractAction("Ansicht speichern") {
+                public void actionPerformed(ActionEvent e) {
+                    saveTableState();
+                }
+            };
+
+            loadTableStateAction = new AbstractAction("Ansicht zurücksetzen") {
+                public void actionPerformed(ActionEvent e) {
+                    loadTableState();
+                }
+            };
+
+            actions.add(saveTableStateAction);
+            actions.add(loadTableStateAction);
+
+            popup.addAdditionalActionItems(actions);
+
+            // Update the actions
+            CWJXTable.this.addPropertyChangeListener(PROPERTYNAME_TABLESTATENAME, new PropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent evt) {
+                    updateActions();
+                }
+            });
+            updateActions();
+
+        }
+
+        private void updateActions() {
+            String tableStateName = CWJXTable.this.getTableStateName();
+            if(tableStateName == null || tableStateName.isEmpty()) {
+                saveTableStateAction.setEnabled(false);
+                loadTableStateAction.setEnabled(false);
+            } else {
+                saveTableStateAction.setEnabled(true);
+                loadTableStateAction.setEnabled(true);
+            }
+        }
+    }
 }

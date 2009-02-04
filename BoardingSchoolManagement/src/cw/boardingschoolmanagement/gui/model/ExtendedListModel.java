@@ -17,7 +17,7 @@ public class ExtendedListModel extends DefaultListModel {
     public void addAll(Collection c) {
         Iterator it = c.iterator();
         while(it.hasNext()) {
-            addElement(it.next());
+            add(it.next());
         }
     }
 

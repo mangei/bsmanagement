@@ -138,7 +138,7 @@ public class BoardingSchoolManagement {
         ////////////////////////////////////////////////////////////////////
             ss.close();
             MenuManager.getSideMenu().loadStartItem();
-            GUIManager.getInstance().setVisible(true);
+            GUIManager.getInstance().getMainFrame().setVisible(true);
 
         } catch (UnsupportedLookAndFeelException ex) {
             logger.error(null, ex);
@@ -206,7 +206,7 @@ public class BoardingSchoolManagement {
 
         // Check if the user really wants to close the application
         int opt = JOptionPane.showConfirmDialog(
-                GUIManager.getInstance(),
+                GUIManager.getInstance().getMainFrame(),
                 "Internatsverwaltung wirklich beenden?",
                 "Beenden",
                 JOptionPane.YES_NO_OPTION,
@@ -228,7 +228,7 @@ public class BoardingSchoolManagement {
         HibernateUtil.close();
 
         // Dispose the GUI
-        GUIManager.getInstance().dispose();
+        GUIManager.getInstance().getMainFrame().dispose();
 
         // Exit the application
         System.exit(0);
