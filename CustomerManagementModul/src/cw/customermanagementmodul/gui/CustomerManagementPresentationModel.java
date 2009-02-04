@@ -245,6 +245,9 @@ public class CustomerManagementPresentationModel {
     private void updateActionEnablement() {
         boolean hasSelection = !customerSelectorPresentationModel.isSelectionEmpty();
 
+         System.out.println("UPDATE ACTIONS: " + hasSelection);
+         System.out.println("UPDATE ACTIONS: " + customerSelectorPresentationModel.getSelectedCount());
+
         if(!hasSelection) {
             editAction.setEnabled(false);
             deleteAction.setEnabled(false);
@@ -263,7 +266,7 @@ public class CustomerManagementPresentationModel {
 
     }
 
-    private final class SelectionHandler implements PropertyChangeListener, ListSelectionListener {
+    private class SelectionHandler implements PropertyChangeListener, ListSelectionListener {
 
         public void propertyChange(PropertyChangeEvent evt) {
             updateActionEnablement();

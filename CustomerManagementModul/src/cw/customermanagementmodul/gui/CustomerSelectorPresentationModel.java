@@ -44,34 +44,30 @@ public class CustomerSelectorPresentationModel {
     private int selectionMode;
     private boolean filtering;
 
-    public CustomerSelectorPresentationModel() {
-        this(null);
-    }
+    private static final String defaultCustomerTableStateName = "cw.customerboardingmanagement.CustomerSelectorView.customerTableState";
+    private String customerTableStateName = "cw.customerboardingmanagement.CustomerSelectorView.customerTableState";
 
-    public CustomerSelectorPresentationModel(boolean filtering) {
-        this(null, ListSelectionModel.SINGLE_SELECTION, filtering);
+    public CustomerSelectorPresentationModel() {
+        this(null, ListSelectionModel.SINGLE_SELECTION, true, defaultCustomerTableStateName);
     }
 
     public CustomerSelectorPresentationModel(int selectionMode) {
-        this(null, selectionMode, true);
+        this(null, selectionMode, true, defaultCustomerTableStateName);
     }
 
     public CustomerSelectorPresentationModel(List<Customer> customers) {
-        this(customers, ListSelectionModel.SINGLE_SELECTION, true);
+        this(customers, ListSelectionModel.SINGLE_SELECTION, true, defaultCustomerTableStateName);
     }
 
     public CustomerSelectorPresentationModel(List<Customer> customers, boolean filtering) {
-        this(customers, ListSelectionModel.SINGLE_SELECTION, filtering);
+        this(customers, ListSelectionModel.SINGLE_SELECTION, filtering, defaultCustomerTableStateName);
     }
 
-    public CustomerSelectorPresentationModel(List<Customer> customers, int selectionMode) {
-        this(customers, selectionMode, true);
-    }
-
-    public CustomerSelectorPresentationModel(List<Customer> customers, int selectionMode, boolean filtering) {
+    public CustomerSelectorPresentationModel(List<Customer> customers, int selectionMode, boolean filtering, String customerTableStateName) {
         this.customers = customers;
         this.selectionMode = selectionMode;
         this.filtering = filtering;
+        this.customerTableStateName = customerTableStateName;
 
         initModels();
         initExtentions();
@@ -224,11 +220,12 @@ public class CustomerSelectorPresentationModel {
 
     public void remove(Customer c) {
         customerListModel.remove(c);
+        customerSelectionModel.setSelectionInterval(-1, -1);
     }
 
     public void remove(List<Customer> list) {
         for(int i=0, l=list.size(); i<l; i++) {
-            customerListModel.remove(list.get(i));
+            remove(list.get(i));
         }
     }
 
@@ -260,6 +257,10 @@ public class CustomerSelectorPresentationModel {
 
     public int getSelectedCount() {
         return customerSelectionModel.getSelectedCount();
+    }
+
+    public String getCustomerTableStateName() {
+        return customerTableStateName;
     }
 
     public void removeListSelectionListener(ListSelectionListener l) {
