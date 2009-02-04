@@ -14,7 +14,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.Icon;
 import javax.swing.table.TableModel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.table.ColumnControlButton;
@@ -31,6 +30,7 @@ public class CWJXTable extends JXTable {
     private String tableStateName = "";
 
     private static String tableStateDirectory = PropertiesManager.getProperty("application.gui.tableStateDirectory", "tableStates");
+    private static boolean persistenceDelegatesRegisted = false;
 
     private static String PROPERTYNAME_TABLESTATENAME = "tableStateName";
 
@@ -83,7 +83,11 @@ public class CWJXTable extends JXTable {
 
         String path = dir.getName() + System.getProperty("file.separator") + tableStateName + ".xml";
 
-        new XProperties().registerPersistenceDelegates();
+        if(!persistenceDelegatesRegisted) {
+            new XProperties().registerPersistenceDelegates();
+            persistenceDelegatesRegisted = true;
+        }
+        
         XProperties.XTableProperty x = new XProperties.XTableProperty();
         Object tableState = x.getSessionState(this);
         ObjectSaver.save(tableState, path);
@@ -102,6 +106,11 @@ public class CWJXTable extends JXTable {
         }
 
         String path = dir.getName() + System.getProperty("file.separator") + tableStateName + ".xml";
+
+        if(!persistenceDelegatesRegisted) {
+            new XProperties().registerPersistenceDelegates();
+            persistenceDelegatesRegisted = true;
+        }
 
         XTableState tableState = (XTableState) ObjectSaver.load(path);
         if (tableState != null) {
