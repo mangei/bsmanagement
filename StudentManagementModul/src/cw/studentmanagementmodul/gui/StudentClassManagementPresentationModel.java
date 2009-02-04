@@ -3,6 +3,7 @@ package cw.studentmanagementmodul.gui;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -22,7 +23,6 @@ import javax.swing.tree.DefaultTreeSelectionModel;
 import javax.swing.tree.MutableTreeNode;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeSelectionModel;
-import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.studentmanagementmodul.pojo.OrganisationUnit;
 import cw.studentmanagementmodul.pojo.Student;
 import cw.studentmanagementmodul.pojo.StudentClass;
@@ -299,13 +299,13 @@ public class StudentClassManagementPresentationModel {
                     DeleteOrganisationUnitView view = new DeleteOrganisationUnitView(model);
 
                     JPanel panel = view.buildPanel();
-                    final JDialog d = new JDialog(GUIManager.getInstance(), true);
+                    final JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
                     d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                     d.setTitle(panel.getName());
                     d.add(panel);
                     d.pack();
                     d.setResizable(false);
-                    CWUtils.centerWindow(d, GUIManager.getInstance());
+                    CWUtils.centerWindow(d, GUIManager.getInstance().getMainFrame());
 
                     // Add the Listener
                     model.addButtonListener(new ButtonListener() {
