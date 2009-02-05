@@ -4,7 +4,6 @@
  */
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
@@ -12,9 +11,10 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.roommanagementmodul.pojo.manager.BereichManager;
+import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.manager.ZimmerManager;
 import cw.roommanagementmodul.pojo.Zimmer;
+import cw.roommanagementmodul.pojo.manager.BereichManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -28,35 +28,34 @@ import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
-
-
-
+import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
  *
  * @author Dominik
  */
-public class ZimmerPresentationModel  {
+public class ZimmerPresentationModel {
 
     private ZimmerManager zimmerManager;
     private Action newAction;
     private Action editAction;
     private Action deleteAction;
-    private Action bereichAction;
+    private Action backAction;
     private String headerText;
     private ButtonListenerSupport support;
     private SelectionInList<Zimmer> zimmerSelection;
+    private BereichPresentationModel bereichModel;
 
     public ZimmerPresentationModel(ZimmerManager zimmerManager) {
-        
+
         this.zimmerManager = zimmerManager;
         initModels();
         this.initEventHandling();
 
     }
 
-    public ZimmerPresentationModel(ZimmerManager zimmerManager, String header) {
-        
+    public ZimmerPresentationModel(ZimmerManager zimmerManager, String header, BereichPresentationModel bereichModel) {
+        this.bereichModel = bereichModel;
         this.zimmerManager = zimmerManager;
         this.headerText = header;
         initModels();
@@ -68,7 +67,7 @@ public class ZimmerPresentationModel  {
         newAction = new NewAction();
         editAction = new EditAction();
         deleteAction = new DeleteAction();
-        bereichAction = new BereichAction();
+        setBackAction(new BackAction());
 
         zimmerSelection = new SelectionInList<Zimmer>(zimmerManager.getAll());
         updateActionEnablement();
@@ -114,12 +113,22 @@ public class ZimmerPresentationModel  {
         support.addButtonListener(listener);
     }
 
-    public Action getBereichAction() {
-        return bereichAction;
-    }
-
     public String getHeaderText() {
         return headerText;
+    }
+
+    /**
+     * @return the backAction
+     */
+    public Action getBackAction() {
+        return backAction;
+    }
+
+    /**
+     * @param backAction the backAction to set
+     */
+    public void setBackAction(Action backAction) {
+        this.backAction = backAction;
     }
 
     private class NewAction
@@ -177,23 +186,39 @@ public class ZimmerPresentationModel  {
             if (z.getBewohnerList() == null || z.getBewohnerList().size() == 0) {
                 zimmerManager.delete(z);
                 zimmerSelection.setList(zimmerManager.getAll());
-            }else{
+            } else {
                 Object[] options = {"Ok"};
-                JOptionPane.showOptionDialog(null, "Zimmer "+ z.getName() + " enthält Bewohner!", "Warnung", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                JOptionPane.showOptionDialog(null, "Zimmer " + z.getName() + " enthält Bewohner!", "Warnung", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             }
 
         }
     }
 
-    private class BereichAction
+    private class BackAction
             extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/box.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/arrow_left.png"));
         }
 
         public void actionPerformed(ActionEvent e) {
-            bereichSelectedItem(e);
+            Bereich internatBereich;
+            BereichManager bereichManager = BereichManager.getInstance();
+            if (bereichManager.existRoot() == false) {
+                internatBereich = new Bereich("Internat", null);
+                bereichManager.save(internatBereich);
+            } else {
+                internatBereich = bereichManager.getRoot();
+            }
+
+            bereichModel.setRootTree(new DefaultMutableTreeNode(internatBereich, true));
+            bereichModel.getTreeModel().setRoot(bereichModel.getRootTree());
+            bereichModel.initTree(bereichModel.getRootTree());
+            bereichModel.getTreeModel().reload();
+            System.out.println("back");
+            GUIManager.changeToLastView();  // Zur Übersicht wechseln
+
+
         }
     }
 
@@ -258,8 +283,11 @@ public class ZimmerPresentationModel  {
                 case 0:
                     return z.getName();
                 case 1:
-                    if(z.getBereich()!=null){return z.getBereich().getName();}
-                    else{return "-";}
+                    if (z.getBereich() != null) {
+                        return z.getBereich().getName();
+                    } else {
+                        return "-";
+                    }
                 case 2:
                     return z.getAnzBetten();
                 default:
@@ -290,25 +318,5 @@ public class ZimmerPresentationModel  {
             }
         });
         GUIManager.changeView(editView.buildPanel(), true);
-    }
-
-    private void bereichSelectedItem(EventObject e) {
-        final BereichPresentationModel model = new BereichPresentationModel(BereichManager.getInstance(), "Bereiche verwalten");
-        final BereichView bereichView = new BereichView(model);
-        model.addButtonListener(new ButtonListener() {
-
-            public void buttonPressed(ButtonEvent evt) {
-                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                    GUIManager.getStatusbar().setTextAndFadeOut("Bereich wurde aktualisiert.");
-                }
-
-                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                    model.removeButtonListener(this);
-                    GUIManager.changeToLastView();
-                }
-
-            }
-        });
-        GUIManager.changeView(bereichView.buildPanel(), true);
     }
 }

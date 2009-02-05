@@ -26,7 +26,7 @@ public class ZimmerView {
     private JButton bNew;
     private JButton bEdit;
     private JButton bDelete;
-    private JButton bBereich;
+    private JButton bBack;
     private JXTable tZimmer;
 
     public ZimmerView(ZimmerPresentationModel m) {
@@ -35,16 +35,16 @@ public class ZimmerView {
 
     private void initComponents() {
 
-        
+
         bNew = new JButton(model.getNewAction());
         bNew.setText("Neu");
         bEdit = new JButton(model.getEditAction());
         bEdit.setText("Bearbeiten");
         bDelete = new JButton(model.getDeleteAction());
         bDelete.setText("Löschen");
-        bBereich = new JButton(model.getBereichAction());
-        bBereich.setText("Bereiche");
-        
+
+        bBack = new JButton(model.getBackAction());
+        bBack.setText("Zurück");
 
         tZimmer = new JXTable();
         tZimmer.setColumnControlVisible(true);
@@ -70,7 +70,7 @@ public class ZimmerView {
         panel.getButtonPanel().add(bNew);
         panel.getButtonPanel().add(bEdit);
         panel.getButtonPanel().add(bDelete);
-        panel.getButtonPanel().add(bBereich);
+        panel.getButtonPanel().add(bBack);
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
         panel.getTopPanel().setLayout(layout);

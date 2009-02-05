@@ -13,9 +13,8 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.event.TreeSelectionEvent;
-import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
@@ -30,11 +29,11 @@ public class BereichView {
     private JButton bNew;
     private JButton bEdit;
     private JButton bDelete;
-    private JButton bBack;
     private JButton bZimmerNew;
     private JButton bZimmerEdit;
     private JButton bZimmerDelete;
     private JTree bereichTree;
+    private JButton viewTimmerTabelle;
 
     public BereichView(BereichPresentationModel m) {
         this.model = m;
@@ -48,8 +47,7 @@ public class BereichView {
         bEdit.setText("Bearbeiten");
         bDelete = new JButton(model.getDeleteAction());
         bDelete.setText("Löschen");
-        bBack = new JButton(model.getBackAction());
-        bBack.setText("Zurück");
+
 
         bZimmerNew = new JButton(model.getNewZimmerAction());
         bZimmerNew.setText("Neues Zimmer");
@@ -57,6 +55,9 @@ public class BereichView {
         bZimmerEdit.setText("Bearbeiten");
         bZimmerDelete = new JButton(model.getDeleteZimmerAction());
         bZimmerDelete.setText("Löschen");
+
+        viewTimmerTabelle= new JButton(model.getViewTabelleAction());
+        viewTimmerTabelle.setText("Zimmer Tabelle");
 
         model.initTree(model.getRootTree());
         bereichTree = new JTree(model.getTreeModel());
@@ -86,8 +87,8 @@ public class BereichView {
         panel.getButtonPanel().add(bZimmerNew);
         panel.getButtonPanel().add(bZimmerEdit);
         panel.getButtonPanel().add(bZimmerDelete);
-        panel.getButtonPanel().add(bBack);
-        panel.getContentPanel().add(bereichTree, BorderLayout.CENTER);
+        panel.getButtonPanel().add(viewTimmerTabelle);
+        panel.getContentPanel().add(new JScrollPane(bereichTree), BorderLayout.CENTER);
 
 
         return panel;

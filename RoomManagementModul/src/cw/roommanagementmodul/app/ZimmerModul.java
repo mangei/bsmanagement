@@ -6,6 +6,8 @@ import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
 import cw.customermanagementmodul.pojo.Customer;
+import cw.roommanagementmodul.gui.BereichPresentationModel;
+import cw.roommanagementmodul.gui.BereichView;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -13,16 +15,14 @@ import javax.swing.Action;
 import javax.swing.JButton;
 import cw.roommanagementmodul.pojo.manager.BewohnerManager;
 import cw.roommanagementmodul.pojo.manager.GebuehrenManager;
-import cw.roommanagementmodul.pojo.manager.ZimmerManager;
 import cw.roommanagementmodul.gui.BewohnerPresentationModel;
 import cw.roommanagementmodul.gui.BewohnerView;
 import cw.roommanagementmodul.gui.GebLaufPresentationModel;
 import cw.roommanagementmodul.gui.GebLaufView;
 import cw.roommanagementmodul.gui.GebuehrenPresentationModel;
 import cw.roommanagementmodul.gui.GebuehrenView;
-import cw.roommanagementmodul.gui.ZimmerPresentationModel;
-import cw.roommanagementmodul.gui.ZimmerView;
 import cw.roommanagementmodul.pojo.Bewohner;
+import cw.roommanagementmodul.pojo.manager.BereichManager;
 
 /**
  * @author Jeitler Dominik
@@ -103,7 +103,7 @@ public class ZimmerModul implements Modul {
                 putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"));
 //                    putValue( Action.LARGE_ICON_KEY, IconManager.getIcon("user", 32) );
             }
-            ZimmerManager zimmerManager;
+            BereichManager bereichManager;
 
             public void actionPerformed(ActionEvent e) {
 
@@ -113,9 +113,9 @@ public class ZimmerModul implements Modul {
                 new Thread(new Runnable() {
 
                     public void run() {
-                        zimmerManager = ZimmerManager.getInstance();
+                        bereichManager = BereichManager.getInstance();
 
-                        GUIManager.changeView(new ZimmerView(new ZimmerPresentationModel(zimmerManager, "Zimmer verwalten")).buildPanel());
+                        GUIManager.changeView(new BereichView(new BereichPresentationModel(bereichManager, "Bereich und Zimmer verwalten")).buildPanel());
                         GUIManager.setLoadingScreenVisible(false);
 
                     }
