@@ -93,7 +93,7 @@ public class CWComponentFactory {
     public static CWJXTable createTable(TableModel tableModel, final String emptyText) {
         return createTable(null, emptyText, null);
     }
-    
+
     public static CWJXTable createTable(TableModel tableModel, final String emptyText, String tableStateName) {
         CWJXTable table;
         
@@ -104,7 +104,7 @@ public class CWComponentFactory {
         }
 
         table.setColumnControlVisible(true);
-        table.setAutoCreateRowSorter(true);
+//        table.setAutoCreateRowSorter(true);
         table.setPreferredScrollableViewportSize(new Dimension(10, 10));
         table.setHighlighters(HighlighterFactory.createSimpleStriping());
 
@@ -217,6 +217,13 @@ public class CWComponentFactory {
         JPanel panel = createPanel();
         panel.add(bTrue);
         panel.add(bFalse);
+
+        panel.addPropertyChangeListener("enabled", new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                bTrue.setEnabled((Boolean)evt.getNewValue());
+                bFalse.setEnabled((Boolean)evt.getNewValue());
+            }
+        });
 
         return panel;
     }

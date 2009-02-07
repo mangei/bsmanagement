@@ -7,11 +7,7 @@ import cw.boardingschoolmanagement.manager.PropertiesManager;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.table.TableModel;
@@ -34,6 +30,9 @@ public class CWJXTable extends JXTable {
 
     private static String PROPERTYNAME_TABLESTATENAME = "tableStateName";
 
+    private Action saveTableStateAction;
+    private Action loadTableStateAction;
+
     public CWJXTable(TableModel dm) {
         super(dm);
         init();
@@ -44,12 +43,27 @@ public class CWJXTable extends JXTable {
     }
 
     private void init() {
-        installColumnControl();
+//        installColumnControl();
+        
+        saveTableStateAction = new AbstractAction("Ansicht speichern") {
+            public void actionPerformed(ActionEvent e) {
+                saveTableState();
+            }
+        };
+
+        loadTableStateAction = new AbstractAction("Ansicht zurücksetzen") {
+            public void actionPerformed(ActionEvent e) {
+                loadTableState();
+            }
+        };
+
+        this.getActionMap().put(ColumnControlButton.COLUMN_CONTROL_MARKER + "ZsaveAction", saveTableStateAction);
+        this.getActionMap().put(ColumnControlButton.COLUMN_CONTROL_MARKER + "ZloadAction", loadTableStateAction);
     }
 
-    private void installColumnControl() {
-        setColumnControl(new CWColumnControlButton(this));
-    }
+//    private void installColumnControl() {
+//        setColumnControl(new CWColumnControlButton(this));
+//    }
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -118,8 +132,8 @@ public class CWJXTable extends JXTable {
             x.setSessionState(this, tableState);
         }
 
-        // We have to install the column control again, because it got removed by the loading process
-        installColumnControl();
+//         We have to install the column control again, because it got removed by the loading process
+//        installColumnControl();
     }
 
     public String getTableStateName() {
@@ -132,52 +146,52 @@ public class CWJXTable extends JXTable {
         firePropertyChange(PROPERTYNAME_TABLESTATENAME, old, tableStateName);
     }
 
-    private class CWColumnControlButton extends ColumnControlButton {
-
-        private Action saveTableStateAction;
-        private Action loadTableStateAction;
-
-        public CWColumnControlButton(JXTable table) {
-            super(table);
-
-            List<Action> actions = new ArrayList<Action>();
-
-            saveTableStateAction = new AbstractAction("Ansicht speichern") {
-                public void actionPerformed(ActionEvent e) {
-                    saveTableState();
-                }
-            };
-
-            loadTableStateAction = new AbstractAction("Ansicht zurücksetzen") {
-                public void actionPerformed(ActionEvent e) {
-                    loadTableState();
-                }
-            };
-
-            actions.add(saveTableStateAction);
-            actions.add(loadTableStateAction);
-
-            popup.addAdditionalActionItems(actions);
-
-            // Update the actions
-            CWJXTable.this.addPropertyChangeListener(PROPERTYNAME_TABLESTATENAME, new PropertyChangeListener() {
-                public void propertyChange(PropertyChangeEvent evt) {
-                    updateActions();
-                }
-            });
-            updateActions();
-
-        }
-
-        private void updateActions() {
-            String tableStateName = CWJXTable.this.getTableStateName();
-            if(tableStateName == null || tableStateName.isEmpty()) {
-                saveTableStateAction.setEnabled(false);
-                loadTableStateAction.setEnabled(false);
-            } else {
-                saveTableStateAction.setEnabled(true);
-                loadTableStateAction.setEnabled(true);
-            }
-        }
-    }
+//    private class CWColumnControlButton extends ColumnControlButton {
+//
+//        private Action saveTableStateAction;
+//        private Action loadTableStateAction;
+//
+//        public CWColumnControlButton(JXTable table) {
+//            super(table);
+//
+//            List<Action> actions = new ArrayList<Action>();
+//
+//            saveTableStateAction = new AbstractAction("Ansicht speichern") {
+//                public void actionPerformed(ActionEvent e) {
+//                    saveTableState();
+//                }
+//            };
+//
+//            loadTableStateAction = new AbstractAction("Ansicht zurücksetzen") {
+//                public void actionPerformed(ActionEvent e) {
+//                    loadTableState();
+//                }
+//            };
+//
+//            actions.add(saveTableStateAction);
+//            actions.add(loadTableStateAction);
+//
+//            popup.addAdditionalActionItems(actions);
+//
+//            // Update the actions
+//            CWJXTable.this.addPropertyChangeListener(PROPERTYNAME_TABLESTATENAME, new PropertyChangeListener() {
+//                public void propertyChange(PropertyChangeEvent evt) {
+//                    updateActions();
+//                }
+//            });
+//            updateActions();
+//
+//        }
+//
+//        private void updateActions() {
+//            String tableStateName = CWJXTable.this.getTableStateName();
+//            if(tableStateName == null || tableStateName.isEmpty()) {
+//                saveTableStateAction.setEnabled(false);
+//                loadTableStateAction.setEnabled(false);
+//            } else {
+//                saveTableStateAction.setEnabled(true);
+//                loadTableStateAction.setEnabled(true);
+//            }
+//        }
+//    }
 }

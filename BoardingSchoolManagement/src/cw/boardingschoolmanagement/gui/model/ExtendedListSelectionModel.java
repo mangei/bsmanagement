@@ -1,12 +1,22 @@
 package cw.boardingschoolmanagement.gui.model;
 
 import javax.swing.DefaultListSelectionModel;
+import org.jdesktop.swingx.JXTable;
 
 /**
  *
  * @author ManuelG
  */
 public class ExtendedListSelectionModel extends DefaultListSelectionModel {
+
+    private JXTable table;
+
+    public ExtendedListSelectionModel() {
+    }
+
+    public ExtendedListSelectionModel(JXTable table) {
+        this.table = table;
+    }
 
     public boolean hasSelection() {
         return !isSelectionEmpty();
@@ -33,7 +43,15 @@ public class ExtendedListSelectionModel extends DefaultListSelectionModel {
         if(isSelectionEmpty()) {
             return -1;
         }
-        return getMinSelectionIndex();
+
+        int idx = -1;
+        if(table != null) {
+            idx = table.convertRowIndexToModel(getMinSelectionIndex());
+        } else {
+            idx = getMinSelectionIndex();
+        }
+
+        return idx;
     }
 
     public int[] getSelectedIndizes() {
@@ -45,7 +63,11 @@ public class ExtendedListSelectionModel extends DefaultListSelectionModel {
 
         for(int i=getMinSelectionIndex(), j= getMaxSelectionIndex(), k=0; i<=j; i++) {
             if(isSelectedIndex(i)) {
-                li[k] = i;
+                if(table != null) {
+                    li[k] = table.convertRowIndexToModel(i);
+                } else {
+                    li[k] = i;
+                }
                 k++;
             }
         }
