@@ -7,12 +7,14 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWJXTable;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import java.awt.Font;
+import javax.swing.JComboBox;
 
 /**
  *
@@ -26,6 +28,9 @@ public class PostingManagementView
     private JButton bDelete;
     private JButton bManagePostingCategories;
 
+    private JComboBox cbFilterYear;
+    private JComboBox cbFilterMonth;
+
     private CWJXTable tPostings;
 
     private JLabel lLiabilities;
@@ -33,7 +38,7 @@ public class PostingManagementView
     private JLabel lSaldo;
     
     private PostingManagementPresentationModel model;
-    
+
     public PostingManagementView(PostingManagementPresentationModel model) {
         this.model = model;
     }
@@ -44,11 +49,20 @@ public class PostingManagementView
         bCancel = CWComponentFactory.createButton(model.getCancelAction());
         bDelete = CWComponentFactory.createButton(model.getDeleteAction());
         bManagePostingCategories = CWComponentFactory.createButton(model.getManagePostingCategoriesAction());
-        
-        tPostings = CWComponentFactory.createTable("Keine Buchungen vorhanden");
-        tPostings.setModel(model.createPostingTableModel(model.getPostingSelection()));
-        tPostings.setSelectionModel(new SingleListSelectionAdapter(
-                model.getPostingSelection().getSelectionIndexHolder()));
+
+        cbFilterYear    = CWComponentFactory.createComboBox(model.getFilterYearSelection());
+        cbFilterMonth   = CWComponentFactory.createComboBox(model.getFilterMonthSelection());
+
+        tPostings = CWComponentFactory.createTable(
+                model.createPostingTableModel(model.getPostingSelection()),
+                "Keine Buchungen vorhanden",
+                "cw.customerboardingmanagement.PostingManagementView.postingTableState"
+                );
+        tPostings.setSelectionModel(
+                new SingleListSelectionAdapter(
+                    new JXTableSelectionConverter(
+                        model.getPostingSelection().getSelectionIndexHolder(),
+                        tPostings)));
         tPostings.getColumnModel().getColumn(4).setCellRenderer(new DateTimeTableCellRenderer(true));
         tPostings.getColumnModel().getColumn(5).setCellRenderer(new DateTimeTableCellRenderer());
 
@@ -77,20 +91,38 @@ public class PostingManagementView
         panel.getButtonPanel().add(bDelete);
         panel.getButtonPanel().add(bManagePostingCategories);
 
+        JPanel pFilter = new JPanel();
+        pFilter.setOpaque(false);
+
         FormLayout layout = new FormLayout(
-                "4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref:grow",
-                "fill:pref:grow, 4dlu, pref"
+                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref",
+                "pref"
         );
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, pFilter);
         CellConstraints cc = new CellConstraints();
         
-        builder.add(new JScrollPane(tPostings), cc.xyw(1, 1, 12));
-        builder.addLabel("Soll:", cc.xy(2, 3));
-        builder.add(lLiabilities, cc.xy(4, 3));
-        builder.addLabel("Haben:", cc.xy(6, 3));
-        builder.add(lAssets, cc.xy(8, 3));
-        builder.addLabel("Saldo:", cc.xy(10, 3));
-        builder.add(lSaldo, cc.xy(12, 3));
+        builder.addLabel("Filter:", cc.xy(1, 1));
+        builder.addLabel("Jahr:", cc.xy(3, 1));
+        builder.add(cbFilterYear, cc.xy(5, 1));
+        builder.addLabel("Monat:", cc.xy(7, 1));
+        builder.add(cbFilterMonth, cc.xy(9, 1));
+
+
+        layout = new FormLayout(
+                "4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref:grow",
+                "pref, 4dlu, fill:pref:grow, 4dlu, pref"
+        );
+        builder = new PanelBuilder(layout, panel.getContentPanel());
+        cc = new CellConstraints();
+        
+        builder.add(pFilter, cc.xyw(1, 1, 12));
+        builder.add(new JScrollPane(tPostings), cc.xyw(1, 3, 12));
+        builder.addLabel("Soll:", cc.xy(2, 5));
+        builder.add(lLiabilities, cc.xy(4, 5));
+        builder.addLabel("Haben:", cc.xy(6, 5));
+        builder.add(lAssets, cc.xy(8, 5));
+        builder.addLabel("Saldo:", cc.xy(10, 5));
+        builder.add(lSaldo, cc.xy(12, 5));
 
         // Buttons am Anfang deaktivieren
         bEdit.setEnabled(false);

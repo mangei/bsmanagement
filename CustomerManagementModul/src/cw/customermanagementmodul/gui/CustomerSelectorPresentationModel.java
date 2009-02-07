@@ -23,6 +23,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.table.AbstractTableModel;
+import org.jdesktop.swingx.JXTable;
 
 /**
  * @author CreativeWorkers.at
@@ -55,12 +56,20 @@ public class CustomerSelectorPresentationModel {
         this(null, selectionMode, true, defaultCustomerTableStateName);
     }
 
+    public CustomerSelectorPresentationModel(int selectionMode, String customerTableStateName) {
+        this(null, selectionMode, true, customerTableStateName);
+    }
+
     public CustomerSelectorPresentationModel(List<Customer> customers) {
         this(customers, ListSelectionModel.SINGLE_SELECTION, true, defaultCustomerTableStateName);
     }
 
     public CustomerSelectorPresentationModel(List<Customer> customers, boolean filtering) {
         this(customers, ListSelectionModel.SINGLE_SELECTION, filtering, defaultCustomerTableStateName);
+    }
+
+    public CustomerSelectorPresentationModel(List<Customer> customers, boolean filtering, String customerTableStateName) {
+        this(customers, ListSelectionModel.SINGLE_SELECTION, filtering, customerTableStateName);
     }
 
     public CustomerSelectorPresentationModel(List<Customer> customers, int selectionMode, boolean filtering, String customerTableStateName) {
@@ -183,8 +192,18 @@ public class CustomerSelectorPresentationModel {
         return customerTableModel;
     }
 
-    public DefaultListSelectionModel getCustomerSelectionModel() {
-        return customerSelectionModel;
+    public DefaultListSelectionModel createCustomerSelectionModel(JXTable table) {
+        ExtendedListSelectionModel newCustomerSelectionModel = new ExtendedListSelectionModel(table);
+        newCustomerSelectionModel.setSelectionMode(selectionMode);
+
+        // Transfer the old listeners to the new one
+        for(ListSelectionListener l : customerSelectionModel.getListSelectionListeners()) {
+            newCustomerSelectionModel.addListSelectionListener(l);
+        }
+
+        customerSelectionModel = newCustomerSelectionModel;
+
+        return newCustomerSelectionModel;
     }
 
     public int getSelectionMode() {
@@ -237,6 +256,7 @@ public class CustomerSelectorPresentationModel {
         if (customerSelectionModel.isSelectionEmpty()) {
             return null;
         }
+
         return (Customer) customerListModel.get(customerSelectionModel.getSelectedIndex());
     }
 
@@ -244,6 +264,7 @@ public class CustomerSelectorPresentationModel {
         List<Customer> list = new ArrayList<Customer>();
 
         int[] indizes = customerSelectionModel.getSelectedIndizes();
+
         for (int i = 0; i < indizes.length; i++) {
             list.add((Customer) customerListModel.get(indizes[i]));
         }

@@ -9,7 +9,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JBackPanel;
+import cw.boardingschoolmanagement.app.CalendarUtil;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -27,6 +27,11 @@ import javax.swing.table.TableModel;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.pojo.ReversePosting;
+import cw.customermanagementmodul.pojo.manager.ReversePostingManager;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import javax.swing.Icon;
 import javax.swing.event.ListDataListener;
 import javax.swing.table.DefaultTableColumnModel;
@@ -49,6 +54,9 @@ public class PostingManagementPresentationModel {
     private ValueModel saldoValue;
     private ValueModel liabilitiesValue;
     private ValueModel assetsValue;
+    
+    private SelectionInList<String> filterYearSelection;
+    private SelectionInList<String> filterMonthSelection;
 
     public PostingManagementPresentationModel() {
         this(null);
@@ -74,27 +82,71 @@ public class PostingManagementPresentationModel {
         liabilitiesValue = new ValueHolder();
         assetsValue = new ValueHolder();
 
-        updateActionEnablement();
+        List<String> months = new ArrayList<String>();
+        months.add("-");
+        months.add(CalendarUtil.getMonth(Calendar.JANUARY));
+        months.add(CalendarUtil.getMonth(Calendar.FEBRUARY));
+        months.add(CalendarUtil.getMonth(Calendar.MARCH));
+        months.add(CalendarUtil.getMonth(Calendar.APRIL));
+        months.add(CalendarUtil.getMonth(Calendar.MAY));
+        months.add(CalendarUtil.getMonth(Calendar.JUNE));
+        months.add(CalendarUtil.getMonth(Calendar.JULY));
+        months.add(CalendarUtil.getMonth(Calendar.AUGUST));
+        months.add(CalendarUtil.getMonth(Calendar.SEPTEMBER));
+        months.add(CalendarUtil.getMonth(Calendar.OCTOBER));
+        months.add(CalendarUtil.getMonth(Calendar.NOVEMBER));
+        months.add(CalendarUtil.getMonth(Calendar.DECEMBER));
+
+        filterYearSelection = new SelectionInList<String>();
+        filterMonthSelection = new SelectionInList<String>(months);
+        filterMonthSelection.setSelectionIndex(0);
+        loadFilterYears();
+        filterYearSelection.setSelectionIndex(0);
     }
 
     private void initEventHandling() {
         postingSelection.addPropertyChangeListener(
                 SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
                 new SelectionEmptyHandler());
-        postingSelection.addListDataListener(new ListDataListener() {
+//        postingSelection.addListDataListener(new ListDataListener() {
+//
+//            public void intervalAdded(ListDataEvent e) {
+//                change(e);
+//            }
+//
+//            public void intervalRemoved(ListDataEvent e) {
+//                change(e);
+//            }
+//
+//            public void contentsChanged(ListDataEvent e) {
+//                change(e);
+//            }
+//
+//            private void change(ListDataEvent e) {
+//                calculateValues();
+//            }
+//        });
 
-            public void intervalAdded(ListDataEvent e) {
-                calculateValues();
-            }
-
-            public void intervalRemoved(ListDataEvent e) {
-                calculateValues();
-            }
-
-            public void contentsChanged(ListDataEvent e) {
-                calculateValues();
+        filterYearSelection.addValueChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                updateFilters();
             }
         });
+
+        filterMonthSelection.addValueChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                updateFilters();
+            }
+        });
+        
+        updateActionEnablement();
+        
+        updateEvents();
+    }
+
+    public void updateEvents() {
+        loadFilterYears();
+        updateFilters();
         calculateValues();
     }
 
@@ -114,6 +166,87 @@ public class PostingManagementPresentationModel {
         liabilitiesValue.setValue(Double.toString(liabilities));
         assetsValue.setValue(Double.toString(assets));
         saldoValue.setValue(Double.toString(saldo));
+    }
+
+    private void loadFilterYears() {
+        String oldSelection = filterYearSelection.getSelection();
+
+        int size = filterYearSelection.getList().size();
+        if(size > 0) {
+            filterYearSelection.getList().clear();
+            filterYearSelection.fireIntervalRemoved(0, size-1);
+        }
+
+        List<String> years = PostingManager.getInstance().getYears();
+        years.add(0, "-");
+        
+        filterYearSelection.getList().addAll(years);
+        
+        size = filterYearSelection.getList().size();
+        if(size > 0) {
+            filterYearSelection.fireIntervalAdded(0, size-1);
+        }
+
+        filterYearSelection.setSelection(oldSelection);
+    }
+
+    public void updateFilters() {
+        int size = postingSelection.getList().size();
+        if(size > 0) {
+            postingSelection.getList().clear();
+            postingSelection.fireIntervalRemoved(0, size-1);
+        }
+
+        boolean filterPassed;
+        Posting p;
+        int year;
+        GregorianCalendar calendar = new GregorianCalendar();
+        List<Posting> all = PostingManager.getInstance().getAll(customer);
+
+        if((filterYearSelection.getSelectionIndex() == 0 && filterMonthSelection.getSelectionIndex() == 0)) {
+            postingSelection.getList().addAll(all);
+        } else {
+
+            for(int i=0, l=all.size(); i<l; i++) {
+
+                filterPassed = true;
+                p = all.get(i);
+
+                if(p.getPostingEntryDate() != null) {
+
+                    calendar.setTimeInMillis(p.getPostingEntryDate().getTime());
+
+
+                    if(filterYearSelection.getSelectionIndex() > 0) {
+
+                        String yearStr = filterYearSelection.getSelection();
+                        year = Integer.parseInt(yearStr);
+
+                        if(calendar.get(Calendar.YEAR) != year) {
+                            filterPassed = false;
+                        }
+                    }
+                    if(filterPassed && filterMonthSelection.getSelectionIndex() > 0) {
+                        int monthIdx = filterMonthSelection.getSelectionIndex() - 1;
+
+                        if(calendar.get(Calendar.MONTH) != monthIdx) {
+                            filterPassed = false;
+                        }
+                    }
+                } else {
+                    filterPassed = false;
+                }
+
+                if(filterPassed) {
+                    postingSelection.getList().add(p);
+                }
+            }
+        }
+
+        size = postingSelection.getList().size();
+        if(size > 0) {
+            postingSelection.fireIntervalAdded(0, size-1);
+        }
     }
 
     public void save() {
@@ -154,6 +287,9 @@ public class PostingManagementPresentationModel {
                                     GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde erstellt.");
                                     postingAlreadyCreated = true;
                                     postingSelection.getList().add(a);
+                                    int idx = postingSelection.getList().indexOf(a);
+                                    postingSelection.fireIntervalAdded(idx, idx);
+                                    updateEvents();
                                 }
                             }
                             if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
@@ -196,14 +332,59 @@ public class PostingManagementPresentationModel {
             new Thread(new Runnable() {
 
                 public void run() {
-                    Posting a = postingSelection.getSelection();
 
-                    a = PostingManager.getInstance().cancelAnAccounting(a);
-                    postingSelection.getList().add(a);
+                    final ReversePosting reversePosting = new ReversePosting();
+                    
+                    Posting posting = postingSelection.getSelection();
+                    Posting posting2 = new Posting(posting.getCustomer());
 
-                    GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde storniert...");
+                    posting2.setAmount(posting.getAmount());
+                    posting2.setLiabilitiesAssets(!posting.isLiabilitiesAssets());
+                    posting2.setPostingCategory(posting.getPostingCategory());
 
+                    reversePosting.setPosting(posting);
+                    reversePosting.setReversePosting(posting2);
+
+
+                    final EditReversePostingPresentationModel model = new EditReversePostingPresentationModel(reversePosting);
+                    final EditReversePostingView editView = new EditReversePostingView(model);
+                    model.addButtonListener(new ButtonListener() {
+
+                        boolean postingAlreadyCreated = false;
+
+                        public void buttonPressed(ButtonEvent evt) {
+
+                            if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                                ReversePostingManager.getInstance().save(reversePosting);
+                                if (postingAlreadyCreated) {
+                                    GUIManager.getStatusbar().setTextAndFadeOut("Storno wurde aktualisiert.");
+                                } else {
+                                    GUIManager.getStatusbar().setTextAndFadeOut("Storno wurde erstellt.");
+                                    postingAlreadyCreated = true;
+                                    postingSelection.getList().add(reversePosting.getReversePosting());
+                                    int idx = postingSelection.getList().indexOf(reversePosting.getReversePosting());
+                                    postingSelection.fireIntervalAdded(idx, idx);
+                                    updateEvents();
+                                }
+                            }
+                            if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                                model.removeButtonListener(this);
+                                GUIManager.changeToLastView();
+                            }
+                        }
+                    });
+                    GUIManager.changeView(editView.buildPanel(), true);
                     GUIManager.setLoadingScreenVisible(false);
+                    
+
+
+//                    Posting a = postingSelection.getSelection();
+//
+//                    a = PostingManager.getInstance().cancelAnAccounting(a);
+//                    postingSelection.getList().add(a);
+//
+//                    GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde storniert...");
+//                    GUIManager.setLoadingScreenVisible(false);
                 }
             }).start();
         }
@@ -225,8 +406,11 @@ public class PostingManagementPresentationModel {
                 public void run() {
                     Posting a = postingSelection.getSelection();
 
+                    int idx = postingSelection.getList().indexOf(a);
                     postingSelection.getList().remove(a);
+                    postingSelection.fireIntervalRemoved(idx, idx);
                     PostingManager.getInstance().delete(a);
+                    updateEvents();
 
                     GUIManager.setLoadingScreenVisible(false);
                 }
@@ -316,6 +500,14 @@ public class PostingManagementPresentationModel {
         return newAction;
     }
 
+    public SelectionInList<String> getFilterMonthSelection() {
+        return filterMonthSelection;
+    }
+
+    public SelectionInList<String> getFilterYearSelection() {
+        return filterYearSelection;
+    }
+
     private void editSelectedItem(EventObject e) {
         GUIManager.setLoadingScreenText("Buchung wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
@@ -324,14 +516,17 @@ public class PostingManagementPresentationModel {
 
             public void run() {
                 final Posting a = postingSelection.getSelection();
-                final EditPostingPresentationModel model = new EditPostingPresentationModel(a);
+                final EditPostingPresentationModel model = new EditPostingPresentationModel(a, true);
                 final EditPostingView editView = new EditPostingView(model);
                 model.addButtonListener(new ButtonListener() {
 
                     public void buttonPressed(ButtonEvent evt) {
                         if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                             PostingManager.getInstance().save(a);
+                            int idx = postingSelection.getList().indexOf(a);
+                            postingSelection.fireContentsChanged(idx, idx);
                             GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde aktualisiert.");
+                            updateEvents();
                         }
                         if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                             model.removeButtonListener(this);

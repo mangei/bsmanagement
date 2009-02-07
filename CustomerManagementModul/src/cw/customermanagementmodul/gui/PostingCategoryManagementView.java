@@ -7,6 +7,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWJXTable;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -36,8 +37,11 @@ public class PostingCategoryManagementView
         
         tPostingsCategories = CWComponentFactory.createTable("Keine Kategorien vorhanden");
         tPostingsCategories.setModel(model.createPostingCategoryTableModel(model.getPostingCategorySelection()));
-        tPostingsCategories.setSelectionModel(new SingleListSelectionAdapter(
-                model.getPostingCategorySelection().getSelectionIndexHolder()));
+        tPostingsCategories.setSelectionModel(
+                new SingleListSelectionAdapter(
+                    new JXTableSelectionConverter(
+                        model.getPostingCategorySelection().getSelectionIndexHolder(),
+                        tPostingsCategories)));
 
     }
     

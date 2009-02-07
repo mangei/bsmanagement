@@ -23,7 +23,7 @@ public class EditPostingView {
     
     private JTextField tfDescription;
     private JComboBox cbPostingCategory;
-    private JTextField tfValue;
+    private JTextField tfAmount;
     private JDateChooser dcPostingEntryDate;
     private JPanel pLiabilitiesAssets;
     
@@ -42,7 +42,7 @@ public class EditPostingView {
         cbPostingCategory       = CWComponentFactory.createComboBox(model.getPostingCategorySelection());
 //        tfValue                = CWComponentFactory.createFormattedTextField(model.getBufferedModel(Accounting.PROPERTYNAME_AMOUNT), NumberFormat.getNumberInstance());
 //        tfValue.setHorizontalAlignment(JTextField.RIGHT);
-        tfValue                 = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Posting.PROPERTYNAME_AMOUNT));
+        tfAmount                = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Posting.PROPERTYNAME_AMOUNT));
         dcPostingEntryDate      = CWComponentFactory.createDateChooser(model.getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE));
 
         pLiabilitiesAssets = CWComponentFactory.createTrueFalsePanel(
@@ -56,6 +56,9 @@ public class EditPostingView {
         bReset      = CWComponentFactory.createButton(model.getResetButtonAction());
         bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
+
+        tfAmount.setEnabled(!model.isEditMode());
+        pLiabilitiesAssets.setEnabled(!model.isEditMode());
     }
 
     private void initEventHandling() {
@@ -74,7 +77,7 @@ public class EditPostingView {
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout(
-                "right:pref, 4dlu, pref, 4dlu, right:200dlu",
+                "right:pref, 4dlu, pref, 4dlu, left:200dlu",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
         
         PanelBuilder builder = new PanelBuilder(layout,panel.getContentPanel());
@@ -86,7 +89,7 @@ public class EditPostingView {
         builder.addLabel("Kategorie:",          cc.xy(1, 3));
         builder.add(cbPostingCategory,          cc.xyw(3, 3, 3));
         builder.addLabel("Betrag:",             cc.xy(1, 5));
-        builder.add(tfValue,                    cc.xy(3, 5));
+        builder.add(tfAmount,                    cc.xy(3, 5));
         builder.addLabel("€",                   cc.xy(5, 5));
         builder.addLabel("Art:",                cc.xy(1, 7));
         builder.add(pLiabilitiesAssets,         cc.xyw(3, 7, 3));

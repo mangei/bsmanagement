@@ -43,7 +43,10 @@ public class CustomerManagementPresentationModel {
         editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"));
         deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
 
-        customerSelectorPresentationModel = new CustomerSelectorPresentationModel(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
+                ListSelectionModel.MULTIPLE_INTERVAL_SELECTION,
+                "cw.customerboardingmanagement.CustomerManangementView.customerTableState"
+                );
         
         headerInfo = new HeaderInfo(
                 "Kunden verwalten",

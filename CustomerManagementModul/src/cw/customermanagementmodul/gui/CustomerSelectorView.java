@@ -12,7 +12,6 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.JToggleButton;
 import javax.swing.table.TableCellRenderer;
 import cw.customermanagementmodul.pojo.Customer;
 import java.awt.BorderLayout;
@@ -30,8 +29,12 @@ public class CustomerSelectorView {
     }
 
     private void initComponents() {
-        tCustomers = CWComponentFactory.createTable(model.getCustomerTableModel(), "Keine Kunden vorhanden", model.getCustomerTableStateName());
-        tCustomers.setSelectionModel(model.getCustomerSelectionModel());
+        tCustomers = CWComponentFactory.createTable(
+                model.getCustomerTableModel(),
+                "Keine Kunden vorhanden",
+                model.getCustomerTableStateName());
+        tCustomers.setSelectionModel(model.createCustomerSelectionModel(tCustomers));
+//        tCustomers.setSelectionModel(model.getCustomerSelectionModel());
     }
 
     private void initEventHandling() {

@@ -19,19 +19,22 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.PostingCategory;
+import cw.customermanagementmodul.pojo.ReversePosting;
 import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
 
 /**
  *
  * @author CreativeWorkers.at
  */
-public class EditPostingPresentationModel
+public class EditReversePostingPresentationModel
         extends PresentationModel<Posting> {
 
-    private Posting posting;
+    private PresentationModel<Posting> postingPresentationModel;
+//    private PresentationModel<Posting> reversePostingPresentationModel;
+
+    private ReversePosting reversePosting;
     private SelectionInList<PostingCategory> postingCategorySelection;
     private ValueModel unsaved;
-    private boolean editMode;
     
     private Action resetButtonAction;
     private Action saveButtonAction;
@@ -40,14 +43,9 @@ public class EditPostingPresentationModel
     
     private ButtonListenerSupport support;
     
-    public EditPostingPresentationModel(Posting posting) {
-        this(posting, false);
-    }
-
-    public EditPostingPresentationModel(Posting posting, boolean editMode) {
-        super(posting);
-        this.posting = posting;
-        this.editMode = editMode;
+    public EditReversePostingPresentationModel(ReversePosting reversePosting) {
+        super(reversePosting.getReversePosting());
+        this.reversePosting = reversePosting;
 
         support = new ButtonListenerSupport();
         
@@ -67,6 +65,9 @@ public class EditPostingPresentationModel
         postingCategories.add(0, null);
         postingCategorySelection = new SelectionInList<PostingCategory>(postingCategories);
         postingCategorySelection.setSelection(getBean().getPostingCategory());
+
+        postingPresentationModel = new PresentationModel<Posting>(reversePosting.getPosting());
+//        reversePostingPresentationModel = new PresentationModel<Posting>((Posting)getBufferedModel(ReversePosting.PROPERTYNAME_REVERSEPOSTING).getValue());
 
         getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(new SaveListener());
         getBufferedModel(Posting.PROPERTYNAME_AMOUNT).addValueChangeListener(new SaveListener());
@@ -134,9 +135,13 @@ public class EditPostingPresentationModel
         return saveCancelButtonAction;
     }
 
-    public boolean isEditMode() {
-        return editMode;
+    public PresentationModel<Posting> getPostingPresentationModel() {
+        return postingPresentationModel;
     }
+
+//    public PresentationModel<Posting> getReversePostingPresentationModel() {
+//        return reversePostingPresentationModel;
+//    }
 
     private class SaveAction
             extends AbstractAction {

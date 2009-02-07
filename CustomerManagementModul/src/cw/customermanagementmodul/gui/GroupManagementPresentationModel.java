@@ -51,7 +51,11 @@ public class GroupManagementPresentationModel {
         groupSelection = new SelectionInList<Group>(GroupManager.getInstance().getAll());
         customerSelection = new SelectionInList<Customer>();
 
-        customerSelectorPresentationModel = new CustomerSelectorPresentationModel(new ArrayList(), false);
+        customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
+                new ArrayList(),
+                false,
+                "cw.customerboardingmanagement.GroupManangementView.customerTableState"
+                );
     }
 
     private void initEventHandling() {

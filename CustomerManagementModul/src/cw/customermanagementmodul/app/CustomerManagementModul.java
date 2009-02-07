@@ -57,15 +57,15 @@ public class CustomerManagementModul
                     new Thread(new Runnable() {
 
                         public void run() {
-                            if (model == null) {
+//                            if (model == null) {
                                 model = new CustomerManagementPresentationModel();
-                            }
-                            if (view == null) {
+//                            }
+//                            if (view == null) {
                                 view = new CustomerManagementView(model);
-                            }
-                            if (panel == null) {
+//                            }
+//                            if (panel == null) {
                                 panel = view.buildPanel();
-                            }
+//                            }
 
                             GUIManager.changeView(panel);
                             GUIManager.setLoadingScreenVisible(false);
@@ -96,15 +96,15 @@ public class CustomerManagementModul
                     new Thread(new Runnable() {
 
                         public void run() {
-                            if (model == null) {
+//                            if (model == null) {
                                 model = new GroupManagementPresentationModel("Gruppen verwalten");
-                            }
-                            if (view == null) {
+//                            }
+//                            if (view == null) {
                                 view = new GroupManagementView(model);
-                            }
-                            if (panel == null) {
+//                            }
+//                            if (panel == null) {
                                 panel = view.buildPanel();
-                            }
+//                            }
 
                             GUIManager.changeView(panel);
                             GUIManager.setLoadingScreenVisible(false);
@@ -136,15 +136,15 @@ public class CustomerManagementModul
                     new Thread(new Runnable() {
 
                         public void run() {
-                            if (model == null) {
+//                            if (model == null) {
                                 model = new PostingCategoryManagementPresentationModel();
-                            }
-                            if (view == null) {
+//                            }
+//                            if (view == null) {
                                 view = new PostingCategoryManagementView(model);
-                            }
-                            if (panel == null) {
+//                            }
+//                            if (panel == null) {
                                 panel = view.buildPanel();
-                            }
+//                            }
 
                             GUIManager.changeView(panel);
                             GUIManager.setLoadingScreenVisible(false);
