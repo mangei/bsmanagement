@@ -56,7 +56,7 @@ public class DateTimeTableCellRenderer extends DefaultTableCellRenderer {
             }
             cell.setText(builder.toString());
         } else {
-            cell.setText("<<Not a Date-object>>");
+            cell.setText("");
         }
 
         return cell;

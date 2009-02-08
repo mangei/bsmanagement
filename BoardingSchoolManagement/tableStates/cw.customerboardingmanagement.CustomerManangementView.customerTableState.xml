@@ -40,8 +40,8 @@
    </void> 
    <void index="4"> 
     <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
-     <int>65</int> 
-     <int>65</int> 
+     <int>80</int> 
+     <int>80</int> 
      <int>4</int> 
      <boolean>true</boolean> 
      <int>4</int> 
@@ -115,14 +115,14 @@
      <int>30</int> 
      <int>30</int> 
      <int>12</int> 
-     <boolean>false</boolean> 
-     <int>-1</int> 
+     <boolean>true</boolean> 
+     <int>12</int> 
     </object> 
    </void> 
    <void index="13"> 
     <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
-     <int>36</int> 
-     <int>36</int> 
+     <int>34</int> 
+     <int>75</int> 
      <int>13</int> 
      <boolean>false</boolean> 
      <int>-1</int> 
@@ -130,8 +130,8 @@
    </void> 
    <void index="14"> 
     <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
-     <int>65</int> 
-     <int>65</int> 
+     <int>32</int> 
+     <int>75</int> 
      <int>14</int> 
      <boolean>false</boolean> 
      <int>-1</int> 

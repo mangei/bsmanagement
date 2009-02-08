@@ -75,5 +75,8 @@ public class ExtendedListSelectionModel extends DefaultListSelectionModel {
         return li;
     }
 
+    public int convertRowIndexToModel(int idx) {
+        return table.convertRowIndexToModel(idx);
+    }
 
 }
