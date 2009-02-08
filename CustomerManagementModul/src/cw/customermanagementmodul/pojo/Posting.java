@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
+import org.hibernate.annotations.Cascade;
 
 /**
  * This is an Posting-Class which representes one Posting.<br>
@@ -162,7 +163,8 @@ public class Posting
         return !liabilitiesAssets;
     }
 
-    @ManyToOne(cascade={CascadeType.ALL})
+    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
+    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
     public Customer getCustomer() {
         return customer;
     }

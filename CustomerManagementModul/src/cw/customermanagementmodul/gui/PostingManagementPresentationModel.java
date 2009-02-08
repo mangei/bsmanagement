@@ -22,7 +22,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
-import javax.swing.event.ListDataEvent;
 import javax.swing.table.TableModel;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Posting;
@@ -33,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.Icon;
-import javax.swing.event.ListDataListener;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumnModel;
 
@@ -48,7 +46,7 @@ public class PostingManagementPresentationModel {
     private Action newAction;
     private Action editAction;
     private Action cancelAction;
-    private Action deleteAction;
+//    private Action deleteAction;
     private Action managePostingCategoriesAction;
     private SelectionInList<Posting> postingSelection;
     private ValueModel saldoValue;
@@ -73,7 +71,7 @@ public class PostingManagementPresentationModel {
         newAction = new NewAction("Neu", CWUtils.loadIcon("cw/customermanagementmodul/images/money_add.png"));
         editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/money_edit.png"));
         cancelAction = new CancelAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
-        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
+//        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
         managePostingCategoriesAction = new ManagePostingCategoriesAction("Kategorien", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category.png"));
 
         postingSelection = new SelectionInList<Posting>(PostingManager.getInstance().getAll(customer));
@@ -390,33 +388,33 @@ public class PostingManagementPresentationModel {
         }
     }
 
-    private class DeleteAction
-            extends AbstractAction {
-
-        public DeleteAction(String name, Icon icon) {
-            super(name, icon);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            GUIManager.setLoadingScreenText("Buchung wird gelöscht...");
-            GUIManager.setLoadingScreenVisible(true);
-
-            new Thread(new Runnable() {
-
-                public void run() {
-                    Posting a = postingSelection.getSelection();
-
-                    int idx = postingSelection.getList().indexOf(a);
-                    postingSelection.getList().remove(a);
-                    postingSelection.fireIntervalRemoved(idx, idx);
-                    PostingManager.getInstance().delete(a);
-                    updateEvents();
-
-                    GUIManager.setLoadingScreenVisible(false);
-                }
-            }).start();
-        }
-    }
+//    private class DeleteAction
+//            extends AbstractAction {
+//
+//        public DeleteAction(String name, Icon icon) {
+//            super(name, icon);
+//        }
+//
+//        public void actionPerformed(ActionEvent e) {
+//            GUIManager.setLoadingScreenText("Buchung wird gelöscht...");
+//            GUIManager.setLoadingScreenVisible(true);
+//
+//            new Thread(new Runnable() {
+//
+//                public void run() {
+//                    Posting a = postingSelection.getSelection();
+//
+//                    int idx = postingSelection.getList().indexOf(a);
+//                    postingSelection.getList().remove(a);
+//                    postingSelection.fireIntervalRemoved(idx, idx);
+//                    PostingManager.getInstance().delete(a);
+//                    updateEvents();
+//
+//                    GUIManager.setLoadingScreenVisible(false);
+//                }
+//            }).start();
+//        }
+//    }
 
     private class ManagePostingCategoriesAction
             extends AbstractAction {
@@ -465,9 +463,9 @@ public class PostingManagementPresentationModel {
         return new PostingTableColumnModel();
     }
 
-    public Action getDeleteAction() {
-        return deleteAction;
-    }
+//    public Action getDeleteAction() {
+//        return deleteAction;
+//    }
 
     public Action getEditAction() {
         return editAction;
@@ -631,7 +629,7 @@ public class PostingManagementPresentationModel {
         boolean hasSelection = postingSelection.hasSelection();
         editAction.setEnabled(hasSelection);
         cancelAction.setEnabled(hasSelection);
-        deleteAction.setEnabled(hasSelection);
+//        deleteAction.setEnabled(hasSelection);
     }
 
     private final class SelectionEmptyHandler implements PropertyChangeListener {

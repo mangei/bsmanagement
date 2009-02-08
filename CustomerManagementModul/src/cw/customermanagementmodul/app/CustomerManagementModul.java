@@ -17,6 +17,10 @@ import cw.customermanagementmodul.pojo.manager.PostingManager;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.customermanagementmodul.gui.PostingCategoryManagementPresentationModel;
 import cw.customermanagementmodul.gui.PostingCategoryManagementView;
+import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.pojo.Group;
+import cw.customermanagementmodul.pojo.manager.CustomerManager;
+import cw.customermanagementmodul.pojo.manager.GroupManager;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -168,18 +172,22 @@ public class CustomerManagementModul
             }
         });
 
-//        GroupManager.getInstance().addCascadeListener(new CascadeListener() {
-//            public void deleteAction(CascadeEvent evt) {
-//                Group group = (Group) evt.getObject();
-//                List<Customer> customer = CustomerManager.getInstance().getAll(group);
-//                for(int i=0, l=customer.size(); i<l; i++) {
-//                    customer.get(i).setCategory(null);
-//                }
-//            }
-//        });
-    }
+        GroupManager.getInstance().addCascadeListener(new CascadeListener() {
+            public void deleteAction(CascadeEvent evt) {
+                Group group = (Group) evt.getObject();
+                List<Customer> customers = CustomerManager.getInstance().getAll(group);
+                for(int i=0, l=customers.size(); i<l; i++) {
+                    customers.get(i).getGroups().remove(group);
+                }
+            }
+        });
 
-    public List<Class> getDependencies() {
-        return null;
+        CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
+            public void deleteAction(CascadeEvent evt) {
+                Customer customer = (Customer) evt.getObject();
+                List<Posting> postings = PostingManager.getInstance().getAll(customer);
+                PostingManager.getInstance().delete(postings);
+            }
+        });
     }
 }

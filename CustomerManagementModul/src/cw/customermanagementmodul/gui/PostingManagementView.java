@@ -25,7 +25,7 @@ public class PostingManagementView
     private JButton bNew;
     private JButton bEdit;
     private JButton bCancel;
-    private JButton bDelete;
+//    private JButton bDelete;
     private JButton bManagePostingCategories;
 
     private JComboBox cbFilterYear;
@@ -47,7 +47,7 @@ public class PostingManagementView
         bNew    = CWComponentFactory.createButton(model.getNewAction());
         bEdit   = CWComponentFactory.createButton(model.getEditAction());
         bCancel = CWComponentFactory.createButton(model.getCancelAction());
-        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
+//        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
         bManagePostingCategories = CWComponentFactory.createButton(model.getManagePostingCategoriesAction());
 
         cbFilterYear    = CWComponentFactory.createComboBox(model.getFilterYearSelection());
@@ -88,7 +88,7 @@ public class PostingManagementView
         panel.getButtonPanel().add(bNew);
         panel.getButtonPanel().add(bEdit);
         panel.getButtonPanel().add(bCancel);
-        panel.getButtonPanel().add(bDelete);
+//        panel.getButtonPanel().add(bDelete);
         panel.getButtonPanel().add(bManagePostingCategories);
 
         JPanel pFilter = new JPanel();
@@ -124,10 +124,6 @@ public class PostingManagementView
         builder.addLabel("Saldo:", cc.xy(10, 5));
         builder.add(lSaldo, cc.xy(12, 5));
 
-        // Buttons am Anfang deaktivieren
-        bEdit.setEnabled(false);
-        bDelete.setEnabled(false);
-        
         return panel;
     }
 

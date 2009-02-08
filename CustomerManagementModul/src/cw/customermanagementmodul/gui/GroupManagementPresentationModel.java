@@ -76,7 +76,11 @@ public class GroupManagementPresentationModel {
                         customerSelectorPresentationModel.setCustomers(groupSelection.getSelection().getCustomers());
 //                        customerSelection.getList().addAll(groupSelection.getSelection().getCustomers());
 //                        customerSelection.fireIntervalAdded(0, customerSelection.getSize()-1);
+                    } else {
+                        customerSelectorPresentationModel.setCustomers(null);
                     }
+                }  else {
+                    customerSelectorPresentationModel.setCustomers(null);
                 }
 
             }

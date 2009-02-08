@@ -7,11 +7,9 @@ import cw.boardingschoolmanagement.gui.model.ExtendedListSelectionModel;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.customermanagementmodul.extentions.interfaces.CustomerSelectorFilterExtention;
 import java.beans.PropertyChangeEvent;
-import javax.swing.Action;
 import javax.swing.table.TableModel;
 import java.util.Date;
 import java.util.List;
-import javax.swing.DefaultListSelectionModel;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
@@ -30,7 +28,6 @@ import org.jdesktop.swingx.JXTable;
  */
 public class CustomerSelectorPresentationModel {
 
-    private Action sucheButtonAction;
     private CustomerTableModel customerTableModel;
     private ExtendedListModel customerListModel;
     private ExtendedListSelectionModel customerSelectionModel;
@@ -180,19 +177,12 @@ public class CustomerSelectorPresentationModel {
     ////////////////////////////////////////////////////////////////////////////
     // Getter methods for the model
     ////////////////////////////////////////////////////////////////////////////
-    public TableModel getCustomerTableModel(ListModel listModel) {
-        return new CustomerTableModel(listModel);
-    }
-
-    public Action getSucheButtonAction() {
-        return sucheButtonAction;
-    }
 
     public CustomerTableModel getCustomerTableModel() {
         return customerTableModel;
     }
 
-    public DefaultListSelectionModel createCustomerSelectionModel(JXTable table) {
+    public ExtendedListSelectionModel createCustomerSelectionModel(JXTable table) {
         ExtendedListSelectionModel newCustomerSelectionModel = new ExtendedListSelectionModel(table);
         newCustomerSelectionModel.setSelectionMode(selectionMode);
 
@@ -206,14 +196,16 @@ public class CustomerSelectorPresentationModel {
         return newCustomerSelectionModel;
     }
 
+    public ExtendedListSelectionModel getCustomerSelectionModel() {
+        return customerSelectionModel;
+    }
+
     public int getSelectionMode() {
         return selectionMode;
     }
 
 
     public void setCustomers(List<Customer> customers) {
-
-        System.out.println("size: " + customers.size());
 
         // Delete
         int size = customerListModel.size();
@@ -223,10 +215,12 @@ public class CustomerSelectorPresentationModel {
         }
 
         // Add
-        customerListModel.addAll(customers);
-        size = customerListModel.size();
-        if(size > 0) {
-            customerTableModel.fireTableRowsInserted(0, size-1);
+        if(customers != null) {
+            customerListModel.addAll(customers);
+            size = customerListModel.size();
+            if(size > 0) {
+                customerTableModel.fireTableRowsInserted(0, size-1);
+            }
         }
     }
 
@@ -235,11 +229,17 @@ public class CustomerSelectorPresentationModel {
     ////////////////////////////////////////////////////////////////////////////
     public void add(Customer c) {
         customerListModel.add(c);
+        int idx = customerListModel.indexOf(c);
+        customerTableModel.fireTableRowsInserted(idx, idx);
     }
 
     public void remove(Customer c) {
+        int idx = customerListModel.indexOf(c);
         customerListModel.remove(c);
-        customerSelectionModel.setSelectionInterval(-1, -1);
+//        int convertedIdx = customerSelectionModel.convertRowIndexToModel(idx);
+//        customerTableModel.fireTableRowsDeleted(convertedIdx, convertedIdx);
+        customerTableModel.fireTableRowsDeleted(idx, idx);
+//        customerSelectionModel.removeSelectionInterval(idx, idx);
     }
 
     public void remove(List<Customer> list) {
@@ -248,9 +248,10 @@ public class CustomerSelectorPresentationModel {
         }
     }
 
-    public void remove(int idx) {
-        customerListModel.remove(idx);
-    }
+//    public void remove(int idx) {
+//        customerListModel.remove(idx);
+//        customerSelectionModel.removeIndexInterval(idx, idx);
+//    }
 
     public Customer getSelectedCustomer() {
         if (customerSelectionModel.isSelectionEmpty()) {

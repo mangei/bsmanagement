@@ -97,6 +97,8 @@ public class EditCustomerPresentationModel
         provinceList            = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_PROVINCE);
         countryList             = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_COUNTRY);
 
+        getBufferedModel(Customer.PROPERTYNAME_ACTIVE).addValueChangeListener(new SaveListener());
+        getBufferedModel(Customer.PROPERTYNAME_GENDER).addValueChangeListener(new SaveListener());
         getBufferedModel(Customer.PROPERTYNAME_TITLE).addValueChangeListener(new SaveListener());
         getBufferedModel(Customer.PROPERTYNAME_FORENAME).addValueChangeListener(new SaveListener());
         getBufferedModel(Customer.PROPERTYNAME_FORENAME2).addValueChangeListener(new SaveListener());

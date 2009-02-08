@@ -4,7 +4,6 @@ import com.jgoodies.binding.beans.Model;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,7 +18,7 @@ import javax.persistence.Table;
  * @author ManuelG
  */
 @Entity
-@Table(name = "groups")
+@Table(name="Groups")
 public class Group
         extends Model
         implements AnnotatedClass {
@@ -123,7 +122,6 @@ public class Group
         firePropertyChange(PROPERTYNAME_CUSTOMERS, old, customers);
     }
 
-    @Column(name = "isDeletable")
     public boolean isDeletable() {
         return deletable;
     }
@@ -135,7 +133,6 @@ public class Group
     }
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {
         return id;
@@ -147,7 +144,6 @@ public class Group
         firePropertyChange(PROPERTYNAME_ID, old, id);
     }
 
-    @Column(name = "name")
     public String getName() {
         return name;
     }

@@ -9,8 +9,6 @@ import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 /**
  *
@@ -23,7 +21,7 @@ public class GroupManagementView {
     private JButton bEditGroup;
     private JButton bRemoveGroup;
     private CWJXList liGroups;
-    private CWJXList liCustomers;
+//    private CWJXList liCustomers;
     private CustomerSelectorView customerSelectorView;
 
     public GroupManagementView(GroupManagementPresentationModel model) {
@@ -35,20 +33,20 @@ public class GroupManagementView {
         bEditGroup =    CWComponentFactory.createButton(model.getEditGroupAction());
         bRemoveGroup =  CWComponentFactory.createButton(model.getRemoveGroupAction());
         liGroups =      CWComponentFactory.createList(model.getGroupSelection(), "Keine Gruppen vorhanden");
-        liCustomers =   CWComponentFactory.createList(model.getCustomerSelection(), "Bitte Gruppe auswählen");
+//        liCustomers =   CWComponentFactory.createList(model.getCustomerSelection(), "Bitte Gruppe auswählen");
         customerSelectorView = new CustomerSelectorView(model.getCustomerSelectorPresentationModel());
     }
 
     private void initEventHandling() {
-        liGroups.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent e) {
-                if(liGroups.getSelectionModel().isSelectionEmpty()) {
-                    liCustomers.setEmptyText("Bitte Gruppe auswählen");
-                } else if(liCustomers.getModel().getSize() == 0) {
-                    liCustomers.setEmptyText("Keine Kunden in dieser Gruppe vorhanden");
-                }
-            }
-        });
+//        liGroups.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
+//            public void valueChanged(ListSelectionEvent e) {
+//                if(liGroups.getSelectionModel().isSelectionEmpty()) {
+//                    liCustomers.setEmptyText("Bitte Gruppe auswählen");
+//                } else if(liCustomers.getModel().getSize() == 0) {
+//                    liCustomers.setEmptyText("Keine Kunden in dieser Gruppe vorhanden");
+//                }
+//            }
+//        });
     }
 
     public JPanel buildPanel() {

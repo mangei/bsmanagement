@@ -6,14 +6,12 @@ import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.Type;
 
@@ -23,15 +21,14 @@ import org.hibernate.annotations.Type;
  * Beinhaltet alle Buchungen die einen Kunden betreffen
  **/
 @Entity
-@Table(name = "customers")
 public class Customer
         extends Model
         implements AnnotatedClass {
 
     private Long id;
-    private boolean active;
     
     //General Information
+    private boolean active              = true;
     private String title                = "";
     private String forename             = "";
     private String forename2            = "";
@@ -146,7 +143,6 @@ public class Customer
         return buf.toString();
     }
 
-    @Column(name="title")
     public String getTitle() {
         return title;
     }
@@ -157,7 +153,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_TITLE, old, title);
     }
 
-    @Column(name="forename")
     public String getForename() {
         return forename;
     }
@@ -168,7 +163,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_FORENAME, old, forename);
     }
 
-    @Column(name="forename2")
     public String getForename2() {
         return forename2;
     }
@@ -179,7 +173,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_FORENAME2, old, forename2);
     }
 
-    @Column(name="surname")
     public String getSurname() {
         return surname;
     }
@@ -194,7 +187,6 @@ public class Customer
      * Returns the gender
      * @return true -> man, false -> woman
      */
-    @Column(name="gender")
     public boolean getGender() {
         return gender;
     }
@@ -209,7 +201,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_GENDER, old, gender);
     }
     
-    @Column(name="street")
     public String getStreet() {
         return street;
     }
@@ -220,7 +211,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_STREET, old, street);
     }
 
-    @Column(name="city")
     public String getCity() {
         return city;
     }
@@ -231,7 +221,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_CITY, old, city);
     }
 
-    @Column(name="birthday")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     public Date getBirthday() {
         return birthday;
@@ -244,7 +233,6 @@ public class Customer
         
     }
 
-    @Column(name="landlinephone")
     public String getLandlinephone() {
         return landlinephone;
     }
@@ -255,7 +243,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_LANDLINEPHONE, old, landlinephone);
     }
 
-    @Column(name="mobilephone")
     public String getMobilephone() {
         return mobilephone;
     }
@@ -266,7 +253,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_MOBILEPHONE, old, mobilephone);
     }
 
-    @Column(name="fax")
     public String getFax() {
         return fax;
     }
@@ -277,7 +263,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_FAX, old, fax);
     }
 
-    @Column(name="email")
     public String getEmail() {
         return email;
     }
@@ -288,7 +273,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_EMAIL, old, email);
     }
 
-    @Column(name="creationdate")
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     public Date getCreationdate() {
         return creationdate;
@@ -300,7 +284,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_CREATIONDATE, old, erstelldatum);
     }
 
-    @Column(name="comment")
     @Type(type="text")
     public String getComment() {
         return comment;
@@ -312,7 +295,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_COMMENT, old, comment);
     }
 
-    @Column(name="isActive")
     public boolean isActive() {
         return active;
     }
@@ -323,7 +305,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_ACTIVE, old, active);
     }
 
-    @Column(name="postofficenumber")
     public String getPostOfficeNumber() {
         return postOfficeNumber;
     }
@@ -334,7 +315,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_POSTOFFICENUMBER, old, postOfficeNumber);
     }
 
-    @Column(name="province")
     public String getProvince() {
         return province;
     }
@@ -345,7 +325,6 @@ public class Customer
         firePropertyChange(PROPERTYNAME_PROVINCE, old, province);
     }
 
-    @Column(name="country")
     public String getCountry() {
         return country;
     }
@@ -357,7 +336,6 @@ public class Customer
     }
 
     @Id
-    @Column(name="id")
     @GeneratedValue(strategy=GenerationType.AUTO)
     public Long getId() {
         return id;
