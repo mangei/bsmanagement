@@ -35,6 +35,14 @@ public class CustomerManager extends AbstractPOJOManager<Customer> {
         return HibernateUtil.getEntityManager().createQuery("FROM Customer WHERE group.id=" + group.getId()).getResultList();
     }
 
+    public List<Customer> getAllActive(Group group) {
+        if(group != null) {
+            throw new NullPointerException();
+        }
+
+        return HibernateUtil.getEntityManager().createQuery("FROM Customer WHERE WHERE active=true AND group.id=" + group.getId()).getResultList();
+    }
+
     public int size() {
         return ( (Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM Customer").getResultList().iterator().next() ).intValue();
     }
@@ -42,6 +50,10 @@ public class CustomerManager extends AbstractPOJOManager<Customer> {
     @Override
     public List<Customer> getAll() {
         return HibernateUtil.getEntityManager().createQuery("FROM Customer").getResultList();
+    }
+
+    public List<Customer> getAllActive() {
+        return HibernateUtil.getEntityManager().createQuery("FROM Customer WHERE active=true").getResultList();
     }
 
     public List<String> getList(String attribute) {

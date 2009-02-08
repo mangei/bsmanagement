@@ -1,11 +1,13 @@
 package cw.customermanagementmodul.gui;
 
+import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWJXTable;
 import cw.boardingschoolmanagement.gui.component.JNotNullLabel;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -30,11 +32,15 @@ public class CustomerSelectorView {
 
     private void initComponents() {
         tCustomers = CWComponentFactory.createTable(
-                model.getCustomerTableModel(),
+                model.createCustomerTableModel(model.getCustomerSelection()),
                 "Keine Kunden vorhanden",
-                model.getCustomerTableStateName());
-        tCustomers.setSelectionModel(model.createCustomerSelectionModel(tCustomers));
-//        tCustomers.setSelectionModel(model.getCustomerSelectionModel());
+                model.getCustomerTableStateName()
+                );
+        tCustomers.setSelectionModel(
+                new SingleListSelectionAdapter(
+                    new JXTableSelectionConverter(
+                        model.getCustomerSelection().getSelectionIndexHolder(),
+                        tCustomers)));
     }
 
     private void initEventHandling() {

@@ -13,10 +13,8 @@ import cw.boardingschoolmanagement.manager.GUIManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.EventObject;
-import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionListener;
 import cw.customermanagementmodul.pojo.Customer;
-import java.util.List;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
@@ -44,7 +42,7 @@ public class CustomerManagementPresentationModel {
         deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
-                ListSelectionModel.MULTIPLE_INTERVAL_SELECTION,
+                CustomerManager.getInstance().getAllActive(),
                 "cw.customerboardingmanagement.CustomerManangementView.customerTableState"
                 );
         
@@ -57,7 +55,7 @@ public class CustomerManagementPresentationModel {
     }
 
     private void initEventHandling() {
-        customerSelectorPresentationModel.addListSelectionListener(new SelectionHandler());
+        customerSelectorPresentationModel.getCustomerSelection().addValueChangeListener(new SelectionHandler());
         updateActionEnablement();
     }
 
@@ -150,22 +148,18 @@ public class CustomerManagementPresentationModel {
             new Thread(new Runnable() {
 
                 public void run() {
-                    List<Customer> customers = customerSelectorPresentationModel.getSelectedCustomers();
+                    Customer customer = customerSelectorPresentationModel.getSelectedCustomer();
 
                     int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die ausgewählten Kunden löschen?", "Kunden löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                     if (i == JOptionPane.OK_OPTION) {
 
                         String statusBarText;
-                        if(customers.size() == 1) {
-                            String forename = customers.get(0).getForename();
-                            String surname = customers.get(0).getSurname();
-                            statusBarText = "'" + forename + " " + surname +  "' wurde gelöscht.";
-                        } else {
-                            statusBarText = customers.size() + " Kunden wurden gelöscht.";
-                        }
+                        String forename = customer.getForename();
+                        String surname = customer.getSurname();
+                        statusBarText = "'" + forename + " " + surname +  "' wurde gelöscht.";
 
-                        customerSelectorPresentationModel.remove(customers);
-                        CustomerManager.getInstance().delete(customers);
+                        customerSelectorPresentationModel.remove(customer);
+                        CustomerManager.getInstance().delete(customer);
 
                         GUIManager.getStatusbar().setTextAndFadeOut(statusBarText);
                     }
@@ -246,27 +240,10 @@ public class CustomerManagementPresentationModel {
 
     // Event Handling *********************************************************
     private void updateActionEnablement() {
-        boolean hasSelection = !customerSelectorPresentationModel.isSelectionEmpty();
+        boolean hasSelection = !customerSelectorPresentationModel.getCustomerSelection().isSelectionEmpty();
 
-         System.out.println("UPDATE ACTIONS: " + hasSelection);
-         System.out.println("UPDATE ACTIONS: " + customerSelectorPresentationModel.getSelectedCount());
-
-        if(!hasSelection) {
-            editAction.setEnabled(false);
-            deleteAction.setEnabled(false);
-        } else if (customerSelectorPresentationModel.getSelectionMode() == ListSelectionModel.SINGLE_SELECTION) {
-            editAction.setEnabled(hasSelection);
-            deleteAction.setEnabled(hasSelection);
-        } else if (customerSelectorPresentationModel.getSelectionMode() == ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {
-            if(customerSelectorPresentationModel.getSelectedCount() == 1) {
-                editAction.setEnabled(true);
-                deleteAction.setEnabled(true);
-            } else {
-                editAction.setEnabled(false);
-                deleteAction.setEnabled(true);
-            }
-        }
-
+        editAction.setEnabled(hasSelection);
+        deleteAction.setEnabled(hasSelection);
     }
 
     private class SelectionHandler implements PropertyChangeListener, ListSelectionListener {
