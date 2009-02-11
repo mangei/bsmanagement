@@ -60,6 +60,10 @@ public abstract class AbstractPOJOManager<T>{
     }
 
     public void delete(List<T> list) {
+        if(list == null) {
+            return;
+        }
+
         for(int i=0, l=list.size(); i<l; i++) {
             delete(list.get(i));
         }

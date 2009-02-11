@@ -83,6 +83,8 @@ public class ActiveRoundMenuButtonUI extends BasicLabelUI {
 //        g.setColor(COLOR3);
 //        g.drawLine(x, h, w, h);
 
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+
         super.paint(g,c);
     }
 }
