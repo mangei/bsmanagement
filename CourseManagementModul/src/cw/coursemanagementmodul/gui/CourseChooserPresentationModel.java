@@ -1,0 +1,411 @@
+/*
+ * To change this template, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package cw.coursemanagementmodul.gui;
+
+import com.jgoodies.binding.adapter.AbstractTableAdapter;
+import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jidesoft.swing.CheckBoxListSelectionModel;
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import java.awt.Component;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.List;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.DefaultListModel;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.JPanel;
+import javax.swing.JSeparator;
+import javax.swing.ListCellRenderer;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.TableModel;
+import cw.coursemanagementmodul.pojo.Activity;
+import cw.coursemanagementmodul.pojo.Course;
+import cw.coursemanagementmodul.pojo.Subject;
+import cw.coursemanagementmodul.pojo.manager.ActivityManager;
+import cw.coursemanagementmodul.pojo.manager.CourseManager;
+import cw.coursemanagementmodul.pojo.manager.SubjectManager;
+
+/**
+ *
+ * @author André Salmhofer
+ */
+public class CourseChooserPresentationModel{
+    
+    //Definieren der Objekte in der oberen Leiste
+    private Action addButtonAction;
+    private Action cancelButtonAction;
+    //********************************************
+    
+    //Liste der Kurse
+    private SelectionInList<Course> courseSelection;
+    //**********************************************
+
+    private CheckBoxListSelectionModel activitySelectionModel;
+    private DefaultListModel activityModel;
+
+    private CheckBoxListSelectionModel subjectSelectionModel;
+    private DefaultListModel subjectModel;
+    
+    private String headerText;
+    private Course courseItem;
+    
+    private ButtonListenerSupport support;
+    private ButtonEvent buttonEvent;
+    
+    private ValueModel nameVM;
+    private ValueModel vonVM;
+    private ValueModel bisVM;
+    private ValueModel priceVM;
+
+    private HeaderInfo headerInfo;
+    
+    public CourseChooserPresentationModel(Course course) {
+        initModels();
+        initEventHandling();
+        buttonEvent = new ButtonEvent(ButtonEvent.OK_BUTTON);
+
+        headerInfo = new HeaderInfo(
+                "Alle Ferienkurse",
+                "<html>Sie befinden sich im Kurs-Auswahlbereich.<br/>Hier können Sie dem Kursteilnehmer" +
+                " einen Kurs mit beliebig vielen Aktivitäten und Gegenständen zuweisen!</html>",
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
+    }
+    
+    //**************************************************************************
+    //Initialisieren der Objekte
+    //**************************************************************************
+    public void initModels() {
+        //Anlegen der Aktionen, für die Buttons
+        addButtonAction = new AddAction("Hinzufügen");
+        cancelButtonAction = new CancelButtonAction("Schließen");
+        courseSelection = new SelectionInList<Course>(CourseManager.getInstance().getAll());
+        support = new ButtonListenerSupport();
+        
+        //----------------------------------------------------------------------
+        nameVM = new ValueHolder();
+        vonVM = new ValueHolder();
+        bisVM = new ValueHolder();
+        priceVM = new ValueHolder();
+        //----------------------------------------------------------------------
+
+        activitySelectionModel = new CheckBoxListSelectionModel();
+        activitySelectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+
+        activityModel = new DefaultListModel();
+        List<Activity> activityList = ActivityManager.getInstance().getAll();
+        for (int i=0, l=activityList.size(); i<l; i++) {
+            activityModel.addElement(activityList.get(i));
+        }
+
+        subjectSelectionModel = new CheckBoxListSelectionModel();
+        subjectSelectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
+        
+        activitySelectionModel.addListSelectionListener(new ListSelectionListener() {
+
+            public void valueChanged(ListSelectionEvent e) {
+                System.out.println("e: " + e.toString() + " " + e.getSource());
+
+                System.out.println("min: " + activitySelectionModel.getMinSelectionIndex());
+                System.out.println("max: " + activitySelectionModel.getMaxSelectionIndex());
+            }
+        });
+
+        subjectModel = new DefaultListModel();
+        List<Subject> subjectList = SubjectManager.getInstance().getAll();
+        for (int i=0, l=subjectList.size(); i<l; i++) {
+            subjectModel.addElement(subjectList.get(i));
+        }
+    }
+    //**************************************************************************
+    
+    //**************************************************************************
+    //Methode, die ein CourseTableModel erzeugt.
+    //Die private Klasse befindet sich in der gleichen Datei
+    //**************************************************************************
+    TableModel createCourseTableModel(SelectionInList<Course> courseSelection) {
+        return new CourseTableModel(courseSelection);
+    }
+    //**************************************************************************
+     
+    
+    private void initEventHandling() {
+        courseSelection.addPropertyChangeListener(
+                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
+                new SelectionEmptyHandler());
+        courseSelection.addValueChangeListener(new PropertyChangeListener() {
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                updateCourseLabels();
+            }
+        });
+        updateCourseLabels();
+        
+    }
+    
+    private void updateCourseLabels(){
+        if(courseSelection.hasSelection()){
+            nameVM.setValue(courseSelection.getSelection().getName());
+            vonVM.setValue(courseSelection.getSelection().getBeginDate() + "");
+            bisVM.setValue(courseSelection.getSelection().getEndDate() + "");
+            priceVM.setValue(courseSelection.getSelection().getPrice() + "");
+        }
+        else{
+            nameVM.setValue("");
+            vonVM.setValue("");
+            bisVM.setValue("");
+            priceVM.setValue("");
+        }
+        
+    }
+    
+    //**************************************************************************
+    //Private Klasse, die Events behandelt, die das Neuanlegen
+    //von Kursen beinhaltet
+    //**************************************************************************
+    private class AddAction extends AbstractAction{
+          {
+            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/add.png") );
+          }
+         
+         private AddAction(String name) {
+            super(name);
+         }
+
+        public void actionPerformed(ActionEvent e) {
+            courseItem = courseSelection.getSelection();
+            support.fireButtonPressed(buttonEvent);
+        }
+    }
+    //**************************************************************************
+    
+    //**************************************************************************
+    //Klasse zum Beenden des Eingabeformulars. Wechselt anschließend
+    //in die letzte View
+    //**************************************************************************
+    private class CancelButtonAction extends AbstractAction{
+        {
+            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/cancel.png") );
+        }
+        
+        public void actionPerformed(ActionEvent e){
+            GUIManager.changeToLastView();
+        }
+        
+        private CancelButtonAction(String string){
+            super(string);
+        }
+    }
+    //**************************************************************************
+    
+    //**************************************************************************
+    //Getter.- und Setter-Methoden
+    //**************************************************************************
+    public Action getAddButtonAction() {
+        return addButtonAction;
+    }
+
+    public void setAddButtonAction(Action newButtonAction) {
+        this.addButtonAction = newButtonAction;
+    }
+    
+    public Action getCancelButtonAction() {
+        return cancelButtonAction;
+    }
+
+    public void removeButtonListener(ButtonListener listener) {
+        support.removeButtonListener(listener);
+    }
+
+    public void addButtonListener(ButtonListener listener) {
+        support.addButtonListener(listener);
+    }
+    //**************************************************************************
+    
+    
+    
+    private final class SelectionEmptyHandler implements PropertyChangeListener {
+
+        public void propertyChange(PropertyChangeEvent evt) {
+            //updateActionEnablement();
+        }
+    }
+    
+    public SelectionInList<Course> getCourseSelection(){
+        return courseSelection;
+    }
+    
+    //**************************************************************************
+    //CourseTableModel, das die Art der Anzeige von Kursen regelt.
+    //**************************************************************************
+    private class CourseTableModel extends AbstractTableAdapter<Course> {
+
+        private ListModel listModel;
+
+        public CourseTableModel(ListModel listModel) {
+            super(listModel);
+            this.listModel = listModel;
+        }
+
+        @Override
+        public int getColumnCount() {
+            return 3;
+        }
+
+        @Override
+        public String getColumnName(int column) {
+            switch (column) {
+                case 0:
+                    return "Kursname";
+                case 1:
+                    return "Von";
+                case 2:
+                    return "Bis";
+                default:
+                    return "";
+            }
+        }
+
+        @Override
+        public boolean isCellEditable(int rowIndex, int columnIndex) {
+            return false;
+        }
+
+        public Object getValueAt(int rowIndex, int columnIndex) {
+            Course course = (Course) listModel.getElementAt(rowIndex);
+            switch (columnIndex) {
+                case 0:
+                    return course.getName();
+                case 1:
+                    return course.getBeginDate();
+                case 2:
+                    return course.getEndDate();
+                default:
+                    return "";
+            }
+        }
+    }
+
+    public Course getCourseItem() {
+        return courseItem;
+    }
+
+    public void setCourseItem(Course courseItem) {
+        this.courseItem = courseItem;
+    }
+
+    public ValueModel getBisVM() {
+        return bisVM;
+    }
+
+    public ValueModel getNameVM() {
+        return nameVM;
+    }
+
+    public ValueModel getPriceVM() {
+        return priceVM;
+    }
+
+    public ValueModel getVonVM() {
+        return vonVM;
+    }
+    //**************************************************************************
+    
+    private class ActivityListCellRenderer implements ListCellRenderer{
+        private JPanel panel;
+        private JLabel name;
+        private JLabel desc;
+        private CellConstraints cc;
+        private FormLayout layout;
+        private JSeparator sep;
+
+        public ActivityListCellRenderer(){
+            panel = new JPanel();
+            name = new JLabel();
+            desc = new JLabel();
+            layout = new FormLayout("pref", "pref, pref, 2dlu, pref");
+            cc = new CellConstraints();
+            sep = new JSeparator();
+        }
+
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            name.setFont(new Font(((Activity)value).getName(), 1, 15));
+            name.setText(((Activity)value).getName());
+            desc.setText(((Activity)value).getDescription());
+            panel.setLayout(layout);
+            panel.add(name, cc.xy(1, 1));
+            panel.add(desc, cc.xy(1, 4));
+            panel.add(sep, cc.xyw(1, 2, 1));
+            return panel;
+        }
+    }
+
+    ActivityListCellRenderer createActivityListCellRenderer(){
+        return new ActivityListCellRenderer();
+    }
+
+     private class SubjectListCellRenderer implements ListCellRenderer{
+        private JPanel panel;
+        private JLabel name;
+        private CellConstraints cc;
+        private FormLayout layout;
+
+        public SubjectListCellRenderer(){
+            panel = new JPanel();
+            name = new JLabel();
+            layout = new FormLayout("pref", "pref");
+            cc = new CellConstraints();
+        }
+
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            name.setText(((Subject)value).getName());
+            panel.setLayout(layout);
+            panel.add(name, cc.xy(1, 1));
+
+            return panel;
+        }
+    }
+
+    SubjectListCellRenderer createSubjectListCellRenderer(){
+        return new SubjectListCellRenderer();
+    }
+
+    public CheckBoxListSelectionModel getActivitySelectionModel() {
+        return activitySelectionModel;
+    }
+
+    public DefaultListModel getActivityModel() {
+        return activityModel;
+    }
+
+    public CheckBoxListSelectionModel getSubjectSelection() {
+        return subjectSelectionModel;
+    }
+
+    public DefaultListModel getSubjectModel() {
+        return subjectModel;
+    }
+
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+}

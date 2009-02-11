@@ -1,0 +1,124 @@
+/*
+ * Die Course View representiert das Startfenster,
+ * dass angezeigt wird, wenn man auf 'Kurs' in der
+ * linken Auswahlliste klickt.
+ */
+
+package cw.coursemanagementmodul.gui;
+
+import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
+import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.decorator.HighlighterFactory;
+
+/**
+ *
+ * @author André Salmhofer
+ */
+public class CourseDetailView{
+    private CourseDetailPresentationModel detailModel;
+    
+    //Definieren der Objekte in der oberen Leiste
+    private JButton printButton;
+    private JButton cancelButton;
+    
+    private JLabel courseName;
+    private JLabel beginDate;
+    private JLabel endDate;
+    private JLabel price;
+    
+    private JLabel vCourseName;
+    private JLabel vBeginDate;
+    private JLabel vEndDate;
+    private JLabel vPrice;
+    
+    private JLabel descLabel;
+    //********************************************
+    
+    //Tabelle zur Darstellung der angelegten Kurse
+    private JXTable coursePartTable;//Kursteilnehmer eines Kurses
+    private JTextField searchTextField;
+    //********************************************
+    
+    public CourseDetailView(CourseDetailPresentationModel detailModel) {
+        this.detailModel = detailModel;
+    }
+    
+    private void initEventHandling() {
+    }
+    
+    //******************************************************************
+    //In dieser Methode werden alle oben definierten Objekte instanziert
+    //******************************************************************
+    public void initComponents(){
+        cancelButton = CWComponentFactory.createButton(detailModel.getCancelAction());
+        printButton =  CWComponentFactory.createButton(detailModel.getPrintAction());
+        
+        coursePartTable = CWComponentFactory.createTable("");
+        coursePartTable.setColumnControlVisible(true);
+        coursePartTable.setAutoCreateRowSorter(true);
+        coursePartTable.setPreferredScrollableViewportSize(new Dimension(10,10));
+        coursePartTable.setHighlighters(HighlighterFactory.createSimpleStriping());
+        
+        coursePartTable.setModel(detailModel.createCoursePartTableModel(detailModel.getCoursePartSelection()));
+        coursePartTable.setSelectionModel(
+                new SingleListSelectionAdapter(
+                detailModel.getCoursePartSelection().getSelectionIndexHolder()));
+        
+        courseName = CWComponentFactory.createLabel("Kursname:");
+        beginDate = CWComponentFactory.createLabel("Beginn:");
+        endDate = CWComponentFactory.createLabel("Ende:");
+        price = CWComponentFactory.createLabel("Preis:");
+        descLabel = CWComponentFactory.createLabel("Alle Kursteilnehmer des Kurses:");
+        
+        vCourseName = CWComponentFactory.createLabel(detailModel.getSelectedCourse().getName());
+        vBeginDate = CWComponentFactory.createLabel(detailModel.getSelectedCourse().getBeginDate() + "");
+        vEndDate = CWComponentFactory.createLabel(detailModel.getSelectedCourse().getEndDate() + "");
+        vPrice = CWComponentFactory.createLabel(detailModel.getSelectedCourse().getPrice() + "");
+    }
+    //**************************************************************************
+    
+    //**************************************************************************
+    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
+    //**************************************************************************
+    public JPanel buildPanel(){
+        initComponents();
+        initEventHandling();
+        JViewPanel panel = CWComponentFactory.createViewPanel();
+        
+        panel.getButtonPanel().add(cancelButton);
+        panel.getButtonPanel().add(printButton);
+        
+        FormLayout layout = new FormLayout("pref, 10dlu, pref", 
+                "pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 10dlu, pref");
+        panel.getTopPanel().setLayout(layout);
+        CellConstraints cc = new CellConstraints();
+        
+        panel.getTopPanel().add(courseName, cc.xy(1, 1));
+        panel.getTopPanel().add(beginDate, cc.xy(1, 3));
+        panel.getTopPanel().add(endDate, cc.xy(1, 5));
+        panel.getTopPanel().add(price, cc.xy(1, 7));
+        
+        panel.getTopPanel().add(vCourseName, cc.xy(3, 1));
+        panel.getTopPanel().add(vBeginDate, cc.xy(3, 3));
+        panel.getTopPanel().add(vEndDate, cc.xy(3, 5));
+        panel.getTopPanel().add(vPrice, cc.xy(3, 7));
+        
+        panel.getTopPanel().add(descLabel, cc.xy(1, 9));
+        
+        panel.getContentPanel().add(new JScrollPane(coursePartTable), BorderLayout.CENTER);
+        
+        return panel;
+    }
+    //********************************************
+}
