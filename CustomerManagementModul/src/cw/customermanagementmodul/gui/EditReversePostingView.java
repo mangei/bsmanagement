@@ -107,7 +107,7 @@ public class EditReversePostingView {
         builder.addLabel("Kategorie:",          cc.xy(2, 5));
         builder.add(lPostingCategory,           cc.xyw(4, 5, 3));
         builder.addLabel("Betrag:",             cc.xy(2, 7));
-        builder.add(lPostingAmount,             cc.xy(4, 7));
+        builder.add(lPostingAmount,             cc.xy(4, 7, CellConstraints.RIGHT, CellConstraints.CENTER));
         builder.addLabel("€",                   cc.xy(6, 7));
         builder.addLabel("Art:",                cc.xy(2, 9));
         builder.add(lPostingLiabilitiesAssets,  cc.xyw(4, 9, 3));
@@ -121,7 +121,7 @@ public class EditReversePostingView {
         builder.addLabel("Kategorie:",          cc.xy(2, 17));
         builder.add(cbReversePostingCategory,   cc.xyw(4, 17, 3));
         builder.addLabel("Betrag:",             cc.xy(2, 19));
-        builder.add(lReversePostingAmount,     cc.xy(4, 19));
+        builder.add(lReversePostingAmount,      cc.xy(4, 19, CellConstraints.RIGHT, CellConstraints.CENTER));
         builder.addLabel("€",                   cc.xy(6, 19));
         builder.addLabel("Art:",                cc.xy(2, 21));
         builder.add(lReversePostingLiabilitiesAssets, cc.xyw(4, 21, 3));

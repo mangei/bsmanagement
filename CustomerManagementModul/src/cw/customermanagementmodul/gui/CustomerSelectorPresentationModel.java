@@ -32,7 +32,7 @@ public class CustomerSelectorPresentationModel {
     private JPanel westPanel;
     private JPanel eastPanel;
 
-    private List<Customer> customers;
+    private ArrayList<Customer> customers;
     private boolean filtering;
 
     private static final String defaultCustomerTableStateName = "cw.customerboardingmanagement.CustomerSelectorView.customerTableState";
@@ -55,7 +55,7 @@ public class CustomerSelectorPresentationModel {
     }
 
     public CustomerSelectorPresentationModel(List<Customer> customers, boolean filtering, String customerTableStateName) {
-        this.customers = customers;
+        this.customers = new ArrayList(customers);
         this.filtering = filtering;
         this.customerTableStateName = customerTableStateName;
 
@@ -68,12 +68,13 @@ public class CustomerSelectorPresentationModel {
         filterChange = new ValueHolder(false);
 
         if(customers != null) {
-            customerSelection = new SelectionInList<Customer>(customers);
+            customerSelection = new SelectionInList<Customer>((ArrayList)customers.clone());
         } else {
+            customers = new ArrayList<Customer>();
             customerSelection = new SelectionInList<Customer>();
         }
 
-        customerTableModel = new CustomerTableModel(customerSelection);
+//        customerTableModel = new CustomerTableModel(customerSelection);
     }
 
     private void initEventHandling() {
@@ -89,7 +90,9 @@ public class CustomerSelectorPresentationModel {
                     if(evt.getNewValue() == Boolean.FALSE) { return; }
 
                     List<Customer> filteredCustomers = new ArrayList<Customer>();
-                    filteredCustomers.addAll(customers);
+                    filteredCustomers.addAll((ArrayList)customers.clone());
+
+                    System.out.println("customers: " + customers.size());
 
                     // Filter the elements
                     for (CustomerSelectorFilterExtention ex : extentions) {
@@ -100,6 +103,7 @@ public class CustomerSelectorPresentationModel {
                     int size = customerSelection.getList().size();
                     if(size > 0) {
                         customerSelection.getList().clear();
+                        customerSelection.fireIntervalRemoved(0, size-1);
                         customerTableModel.fireTableRowsDeleted(0, size-1);
                     }
 
@@ -107,6 +111,7 @@ public class CustomerSelectorPresentationModel {
                     customerSelection.getList().addAll(filteredCustomers);
                     size = customerSelection.getList().size();
                     if(size > 0) {
+                        customerSelection.fireIntervalAdded(0, size-1);
                         customerTableModel.fireTableRowsInserted(0, size-1);
                     }
 
@@ -158,7 +163,7 @@ public class CustomerSelectorPresentationModel {
     ////////////////////////////////////////////////////////////////////////////
 
     public TableModel createCustomerTableModel(ListModel listModel) {
-        return new CustomerTableModel(listModel);
+        return customerTableModel = new CustomerTableModel(listModel);
     }
 
     public void setCustomers(List<Customer> customers) {
@@ -167,6 +172,7 @@ public class CustomerSelectorPresentationModel {
         int size = customerSelection.getList().size();
         if(size > 0) {
             customerSelection.getList().clear();
+            customerSelection.fireIntervalRemoved(0, size-1);
             customerTableModel.fireTableRowsDeleted(0, size-1);
         }
 
@@ -175,11 +181,14 @@ public class CustomerSelectorPresentationModel {
             customerSelection.getList().addAll(customers);
             size = customerSelection.getList().size();
             if(size > 0) {
+                customerSelection.fireIntervalAdded(0, size-1);
                 customerTableModel.fireTableRowsInserted(0, size-1);
             }
+            this.customers = new ArrayList<Customer>(customers);
+        } else {
+            this.customers = new ArrayList<Customer>();
         }
 
-        this.customers = customers;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -187,7 +196,10 @@ public class CustomerSelectorPresentationModel {
     ////////////////////////////////////////////////////////////////////////////
     public void add(Customer c) {
         customerSelection.getList().add(c);
-//        customerTableModel.fireTableRowsInserted(idx, idx);
+
+        int idx = customerSelection.getList().indexOf(c);
+        customerSelection.fireIntervalAdded(idx, idx);
+        customerTableModel.fireTableRowsInserted(idx, idx);
 
         this.customers.add(c);
     }
@@ -195,7 +207,8 @@ public class CustomerSelectorPresentationModel {
     public void remove(Customer c) {
         int idx = customerSelection.getList().indexOf(c);
         customerSelection.getList().remove(c);
-//        customerTableModel.fireTableRowsDeleted(idx, idx);
+        customerSelection.fireIntervalRemoved(idx, idx);
+        customerTableModel.fireTableRowsDeleted(idx, idx);
 
         this.customers.remove(c);
     }

@@ -45,7 +45,7 @@ public class PostingManagementPresentationModel {
 
     private Action newAction;
     private Action editAction;
-    private Action cancelAction;
+    private Action reversePostingAction;
 //    private Action deleteAction;
     private Action managePostingCategoriesAction;
     private SelectionInList<Posting> postingSelection;
@@ -70,7 +70,7 @@ public class PostingManagementPresentationModel {
     public void initModels() {
         newAction = new NewAction("Neu", CWUtils.loadIcon("cw/customermanagementmodul/images/money_add.png"));
         editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/money_edit.png"));
-        cancelAction = new CancelAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
+        reversePostingAction = new ReversePostingAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
 //        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
         managePostingCategoriesAction = new ManagePostingCategoriesAction("Kategorien", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category.png"));
 
@@ -264,43 +264,41 @@ public class PostingManagementPresentationModel {
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
+            final Posting posting = new Posting(customer);
+            final EditPostingPresentationModel model = new EditPostingPresentationModel(posting);
+            final EditPostingView editView = new EditPostingView(model);
+            model.addButtonListener(new ButtonListener() {
 
-                public void run() {
+                boolean postingAlreadyCreated = false;
 
-                    final Posting a = new Posting(customer);
-                    final EditPostingPresentationModel model = new EditPostingPresentationModel(a);
-                    final EditPostingView editView = new EditPostingView(model);
-                    model.addButtonListener(new ButtonListener() {
+                public void buttonPressed(ButtonEvent evt) {
 
-                        boolean postingAlreadyCreated = false;
-
-                        public void buttonPressed(ButtonEvent evt) {
-
-                            if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                PostingManager.getInstance().save(a);
-                                if (postingAlreadyCreated) {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde aktualisiert.");
-                                } else {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde erstellt.");
-                                    postingAlreadyCreated = true;
-                                    postingSelection.getList().add(a);
-                                    int idx = postingSelection.getList().indexOf(a);
-                                    postingSelection.fireIntervalAdded(idx, idx);
-                                    updateEvents();
-                                }
-                            }
-                            if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                model.removeButtonListener(this);
-                                GUIManager.changeToLastView();
-                            }
+                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        PostingManager.getInstance().save(posting);
+                        if (postingAlreadyCreated) {
+                            GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde aktualisiert.");
+                        } else {
+                            GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde erstellt.");
+                            postingAlreadyCreated = true;
+                            postingSelection.getList().add(posting);
+                            int idx = postingSelection.getList().indexOf(posting);
+                            postingSelection.fireIntervalAdded(idx, idx);
+                            updateEvents();
                         }
-                    });
-                    GUIManager.changeView(editView.buildPanel(), true);
-                    GUIManager.setLoadingScreenVisible(false);
-
+                    }
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        model.removeButtonListener(this);
+                        GUIManager.changeToLastView();
+                    }
+                    if (evt.getType() == ButtonEvent.OWN_BUTTON && evt.getOwnButtonText().equals("reversePostingButton")) {
+                        model.removeButtonListener(this);
+                        GUIManager.changeToLastView();
+                        reversePosting(posting);
+                    }
                 }
-            }).start();
+            });
+            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.setLoadingScreenVisible(false);
         }
     }
 
@@ -312,80 +310,67 @@ public class PostingManagementPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            editSelectedItem(e);
+            editPosting(postingSelection.getSelection());
         }
     }
 
-    private class CancelAction
+    private class ReversePostingAction
             extends AbstractAction {
 
-        public CancelAction(String name, Icon icon) {
+        public ReversePostingAction(String name, Icon icon) {
             super(name, icon);
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.setLoadingScreenText("Buchung wird storniert...");
-            GUIManager.setLoadingScreenVisible(true);
-
-            new Thread(new Runnable() {
-
-                public void run() {
-
-                    final ReversePosting reversePosting = new ReversePosting();
-                    
-                    Posting posting = postingSelection.getSelection();
-                    Posting posting2 = new Posting(posting.getCustomer());
-
-                    posting2.setAmount(posting.getAmount());
-                    posting2.setLiabilitiesAssets(!posting.isLiabilitiesAssets());
-                    posting2.setPostingCategory(posting.getPostingCategory());
-
-                    reversePosting.setPosting(posting);
-                    reversePosting.setReversePosting(posting2);
-
-
-                    final EditReversePostingPresentationModel model = new EditReversePostingPresentationModel(reversePosting);
-                    final EditReversePostingView editView = new EditReversePostingView(model);
-                    model.addButtonListener(new ButtonListener() {
-
-                        boolean postingAlreadyCreated = false;
-
-                        public void buttonPressed(ButtonEvent evt) {
-
-                            if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                ReversePostingManager.getInstance().save(reversePosting);
-                                if (postingAlreadyCreated) {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Storno wurde aktualisiert.");
-                                } else {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Storno wurde erstellt.");
-                                    postingAlreadyCreated = true;
-                                    postingSelection.getList().add(reversePosting.getReversePosting());
-                                    int idx = postingSelection.getList().indexOf(reversePosting.getReversePosting());
-                                    postingSelection.fireIntervalAdded(idx, idx);
-                                    updateEvents();
-                                }
-                            }
-                            if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                model.removeButtonListener(this);
-                                GUIManager.changeToLastView();
-                            }
-                        }
-                    });
-                    GUIManager.changeView(editView.buildPanel(), true);
-                    GUIManager.setLoadingScreenVisible(false);
-                    
-
-
-//                    Posting a = postingSelection.getSelection();
-//
-//                    a = PostingManager.getInstance().cancelAnAccounting(a);
-//                    postingSelection.getList().add(a);
-//
-//                    GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde storniert...");
-//                    GUIManager.setLoadingScreenVisible(false);
-                }
-            }).start();
+            reversePosting(postingSelection.getSelection());
         }
+    }
+
+    private void reversePosting(Posting posting) {
+        GUIManager.setLoadingScreenText("Buchung wird storniert...");
+        GUIManager.setLoadingScreenVisible(true);
+
+        final ReversePosting reversePosting = new ReversePosting();
+
+        Posting posting2 = new Posting(posting.getCustomer());
+
+        posting2.setAmount(posting.getAmount());
+        posting2.setLiabilitiesAssets(!posting.isLiabilitiesAssets());
+        posting2.setPostingCategory(posting.getPostingCategory());
+
+        reversePosting.setPosting(posting);
+        reversePosting.setReversePosting(posting2);
+
+
+        final EditReversePostingPresentationModel model = new EditReversePostingPresentationModel(reversePosting);
+        final EditReversePostingView editView = new EditReversePostingView(model);
+        model.addButtonListener(new ButtonListener() {
+
+            boolean postingAlreadyCreated = false;
+
+            public void buttonPressed(ButtonEvent evt) {
+
+                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    ReversePostingManager.getInstance().save(reversePosting);
+                    if (postingAlreadyCreated) {
+                        GUIManager.getStatusbar().setTextAndFadeOut("Storno wurde aktualisiert.");
+                    } else {
+                        GUIManager.getStatusbar().setTextAndFadeOut("Storno wurde erstellt.");
+                        postingAlreadyCreated = true;
+                        postingSelection.getList().add(reversePosting.getReversePosting());
+                        int idx = postingSelection.getList().indexOf(reversePosting.getReversePosting());
+                        postingSelection.fireIntervalAdded(idx, idx);
+                        updateEvents();
+                    }
+                }
+                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    model.removeButtonListener(this);
+                    GUIManager.changeToLastView();
+                }
+            }
+        });
+        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.setLoadingScreenVisible(false);
     }
 
 //    private class DeleteAction
@@ -472,7 +457,7 @@ public class PostingManagementPresentationModel {
     }
 
     public Action getCancelAction() {
-        return cancelAction;
+        return reversePostingAction;
     }
     public Action getManagePostingCategoriesAction() {
         return managePostingCategoriesAction;
@@ -506,36 +491,35 @@ public class PostingManagementPresentationModel {
         return filterYearSelection;
     }
 
-    private void editSelectedItem(EventObject e) {
+    public void editPosting(final Posting posting) {
         GUIManager.setLoadingScreenText("Buchung wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
 
-        new Thread(new Runnable() {
+        final EditPostingPresentationModel model = new EditPostingPresentationModel(posting, true);
+        final EditPostingView editView = new EditPostingView(model);
+        model.addButtonListener(new ButtonListener() {
 
-            public void run() {
-                final Posting a = postingSelection.getSelection();
-                final EditPostingPresentationModel model = new EditPostingPresentationModel(a, true);
-                final EditPostingView editView = new EditPostingView(model);
-                model.addButtonListener(new ButtonListener() {
-
-                    public void buttonPressed(ButtonEvent evt) {
-                        if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                            PostingManager.getInstance().save(a);
-                            int idx = postingSelection.getList().indexOf(a);
-                            postingSelection.fireContentsChanged(idx, idx);
-                            GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde aktualisiert.");
-                            updateEvents();
-                        }
-                        if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                            model.removeButtonListener(this);
-                            GUIManager.changeToLastView();
-                        }
-                    }
-                });
-                GUIManager.changeView(editView.buildPanel(), true);
-                GUIManager.setLoadingScreenVisible(false);
+            public void buttonPressed(ButtonEvent evt) {
+                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    PostingManager.getInstance().save(posting);
+                    int idx = postingSelection.getList().indexOf(posting);
+                    postingSelection.fireContentsChanged(idx, idx);
+                    GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde aktualisiert.");
+                    updateEvents();
+                }
+                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    model.removeButtonListener(this);
+                    GUIManager.changeToLastView();
+                }
+                if (evt.getType() == ButtonEvent.OWN_BUTTON && evt.getOwnButtonText().equals("reversePostingButton")) {
+                    model.removeButtonListener(this);
+                    GUIManager.changeToLastView();
+                    reversePosting(posting);
+                }
             }
-        }).start();
+        });
+        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.setLoadingScreenVisible(false);
     }
 
     private class PostingTableModel extends AbstractTableAdapter<Posting> {
@@ -620,7 +604,7 @@ public class PostingManagementPresentationModel {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-                editSelectedItem(e);
+                editPosting(postingSelection.getSelection());
             }
         }
     }
@@ -628,7 +612,7 @@ public class PostingManagementPresentationModel {
     private void updateActionEnablement() {
         boolean hasSelection = postingSelection.hasSelection();
         editAction.setEnabled(hasSelection);
-        cancelAction.setEnabled(hasSelection);
+        reversePostingAction.setEnabled(hasSelection);
 //        deleteAction.setEnabled(hasSelection);
     }
 

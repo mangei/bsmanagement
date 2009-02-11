@@ -31,14 +31,15 @@ public class EditPostingPresentationModel
     private Posting posting;
     private SelectionInList<PostingCategory> postingCategorySelection;
     private ValueModel unsaved;
-    private boolean editMode;
+    private ValueModel editMode;
     
-    private Action resetButtonAction;
-    private Action saveButtonAction;
-    private Action cancelButtonAction;
-    private Action saveCancelButtonAction;
+    private Action resetAction;
+    private Action saveAction;
+    private Action cancelAction;
+    private Action saveCancelAction;
+    private Action reversePostingAction;
     
-    private ButtonListenerSupport support;
+    private ButtonListenerSupport buttonListenerSupport;
     
     public EditPostingPresentationModel(Posting posting) {
         this(posting, false);
@@ -47,21 +48,22 @@ public class EditPostingPresentationModel
     public EditPostingPresentationModel(Posting posting, boolean editMode) {
         super(posting);
         this.posting = posting;
-        this.editMode = editMode;
+        this.editMode = new ValueHolder(editMode);
 
-        support = new ButtonListenerSupport();
+        buttonListenerSupport = new ButtonListenerSupport();
         
         initModels();
         initEventHandling();
     }
     
     public void initModels() {
-        support = new ButtonListenerSupport();
+        buttonListenerSupport = new ButtonListenerSupport();
         
-        saveButtonAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/customermanagementmodul/images/disk_16.png"));
-        resetButtonAction = new ResetAction("Zurücksetzen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_rotate_anticlockwise.png"));
-        cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
-        saveCancelButtonAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
+        saveAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/customermanagementmodul/images/disk_16.png"));
+        resetAction = new ResetAction("Zurücksetzen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_rotate_anticlockwise.png"));
+        cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
+        saveCancelAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
+        reversePostingAction = new ReversePostingAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
 
         List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAll();
         postingCategories.add(0, null);
@@ -80,13 +82,13 @@ public class EditPostingPresentationModel
         unsaved.addValueChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
-                    saveButtonAction.setEnabled(true);
-                    resetButtonAction.setEnabled(true);
-                    saveCancelButtonAction.setEnabled(true);
+                    saveAction.setEnabled(true);
+                    resetAction.setEnabled(true);
+                    saveCancelAction.setEnabled(true);
                 } else {
-                    saveButtonAction.setEnabled(false);
-                    resetButtonAction.setEnabled(false);
-                    saveCancelButtonAction.setEnabled(false);
+                    saveAction.setEnabled(false);
+                    resetAction.setEnabled(false);
+                    saveCancelAction.setEnabled(false);
                 }
             }
         });
@@ -107,34 +109,42 @@ public class EditPostingPresentationModel
     }
 
     public void removeButtonListener(ButtonListener listener) {
-        support.removeButtonListener(listener);
+        buttonListenerSupport.removeButtonListener(listener);
     }
 
     public void addButtonListener(ButtonListener listener) {
-        support.addButtonListener(listener);
+        buttonListenerSupport.addButtonListener(listener);
     }
 
     public SelectionInList<PostingCategory> getPostingCategorySelection() {
         return postingCategorySelection;
     }
     
-    public Action getSaveButtonAction() {
-        return saveButtonAction;
+    public Action getSaveAction() {
+        return saveAction;
     }
 
-    public Action getResetButtonAction() {
-        return resetButtonAction;
+    public Action getResetAction() {
+        return resetAction;
     }
 
-    public Action getCancelButtonAction() {
-        return cancelButtonAction;
+    public Action getCancelAction() {
+        return cancelAction;
     }
 
-    public Action getSaveCancelButtonAction() {
-        return saveCancelButtonAction;
+    public Action getSaveCancelAction() {
+        return saveCancelAction;
     }
 
-    public boolean isEditMode() {
+    public Action getReversePostingAction() {
+        return reversePostingAction;
+    }
+
+    public ValueModel getUnsaved() {
+        return unsaved;
+    }
+
+    public ValueModel getEditMode() {
         return editMode;
     }
 
@@ -147,8 +157,7 @@ public class EditPostingPresentationModel
 
         public void actionPerformed(ActionEvent e) {
             save();
-            unsaved.setValue(false);
-            support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
+            buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
         }
     }
     
@@ -164,7 +173,7 @@ public class EditPostingPresentationModel
             if(i == JOptionPane.OK_OPTION) {
                 reset();
                 unsaved.setValue(false);
-                support.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
+                buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
             }
         }
     }
@@ -186,7 +195,7 @@ public class EditPostingPresentationModel
                 save();
             }
             if(i == 0 || i == 1) {
-                support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
+                buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
         }
     }
@@ -200,13 +209,27 @@ public class EditPostingPresentationModel
 
         public void actionPerformed(ActionEvent e) {
             save();
-            support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
+            buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
         }
     }
-    
+
+    private class ReversePostingAction
+            extends AbstractAction {
+
+        public ReversePostingAction(String name, Icon icon) {
+            super(name, icon);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.OWN_BUTTON, "reversePostingButton"));
+        }
+    }
+
     public void save() {
         getBufferedModel(Posting.PROPERTYNAME_POSTINGDATE).setValue(new Date());
         triggerCommit();
+        unsaved.setValue(false);
+        editMode.setValue(true);
     }
     
     public void reset() {

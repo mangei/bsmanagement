@@ -7,10 +7,12 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import java.beans.PropertyChangeEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import cw.customermanagementmodul.pojo.Posting;
+import java.beans.PropertyChangeListener;
 import javax.swing.JComboBox;
 
 /**
@@ -31,6 +33,7 @@ public class EditPostingView {
     private JButton bReset;
     private JButton bCancel;
     private JButton bSaveCancel;
+    private JButton bReversePosting;
     
 
     public EditPostingView(EditPostingPresentationModel model) {
@@ -52,17 +55,32 @@ public class EditPostingView {
                 (Boolean)(model.getModel(Posting.PROPERTYNAME_LIABILITIESASSETS).getValue())
         );
 
-        bSave       = CWComponentFactory.createButton(model.getSaveButtonAction());
-        bReset      = CWComponentFactory.createButton(model.getResetButtonAction());
-        bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
-        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
+        bSave       = CWComponentFactory.createButton(model.getSaveAction());
+        bReset      = CWComponentFactory.createButton(model.getResetAction());
+        bCancel     = CWComponentFactory.createButton(model.getCancelAction());
+        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelAction());
+        bReversePosting = CWComponentFactory.createButton(model.getReversePostingAction());
 
-        tfAmount.setEnabled(!model.isEditMode());
-        pLiabilitiesAssets.setEnabled(!model.isEditMode());
+        tfAmount.setEnabled(!((Boolean)model.getEditMode().getValue()));
+        pLiabilitiesAssets.setEnabled(!((Boolean)model.getEditMode().getValue()));
+        bReversePosting.setVisible(((Boolean)model.getEditMode().getValue()));
+        bReversePosting.setEnabled(!((Boolean)model.getUnsaved().getValue()));
     }
 
     private void initEventHandling() {
-        // Nothing to do
+        model.getEditMode().addValueChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                tfAmount.setEnabled(!(Boolean)evt.getNewValue());
+                pLiabilitiesAssets.setEnabled(!(Boolean)evt.getNewValue());
+
+                bReversePosting.setVisible((Boolean)evt.getNewValue());
+            }
+        });
+        model.getUnsaved().addValueChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                bReversePosting.setEnabled(!(Boolean)evt.getNewValue());
+            }
+        });
     }
     
     public JPanel buildPanel() {
@@ -75,6 +93,7 @@ public class EditPostingView {
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
+        buttonPanel.add(bReversePosting);
 
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, pref, 4dlu, left:200dlu",
