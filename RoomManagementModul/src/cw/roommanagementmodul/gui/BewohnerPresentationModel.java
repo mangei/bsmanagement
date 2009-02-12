@@ -5,7 +5,6 @@
 package cw.roommanagementmodul.gui;
 
 
-import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.binding.list.SelectionInList;
@@ -13,6 +12,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.customermanagementmodul.gui.CustomerManagementPresentationModel;
 import cw.customermanagementmodul.pojo.Customer;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -34,7 +34,6 @@ import javax.swing.table.TableModel;
 import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.BewohnerHistory;
 import cw.roommanagementmodul.pojo.GebuehrZuordnung;
-import cw.roommanagementmodul.pojo.Zimmer;
 import cw.roommanagementmodul.pojo.manager.BewohnerHistoryManager;
 import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
 import cw.roommanagementmodul.pojo.manager.BewohnerManager;
@@ -53,7 +52,6 @@ public class BewohnerPresentationModel  {
     private Action gebuehrZuordnungAction;
     private Action gebAction;
     private Action deleteAction;
-    private Action editBewohnerAction;
     private Action historyAction;
     private Action inaktiveAction;
     private Action detailAction;
@@ -85,11 +83,14 @@ public class BewohnerPresentationModel  {
         gebAction = new GebAction();
         deleteAction = new DeleteAction();
         setGebuehrZuordnungAction(new GebuehrZuordnungAction());
-        editBewohnerAction = new EditBewohnerAction();
         historyAction = new HistoryAction();
         inaktiveAction = new InaktiveAction();
         kautionAction = new KautionAction();
-        setDetailAction(new DetailAction());
+        detailAction = new AbstractAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")) {
+            public void actionPerformed(ActionEvent e) {
+                CustomerManagementPresentationModel.editCustomer(bewohnerSelection.getSelection().getCustomer());
+            }
+        };
         bewohnerSelection = new SelectionInList<Bewohner>(getBewohnerManager().getBewohner(true));
         updateActionEnablement();
     }
@@ -107,7 +108,6 @@ public class BewohnerPresentationModel  {
         getDeleteAction().setEnabled(hasSelection);
         gebAction.setEnabled(hasSelection);
         getGebuehrZuordnungAction().setEnabled(hasSelection);
-        editBewohnerAction.setEnabled(hasSelection);
         historyAction.setEnabled(hasSelection);
         detailAction.setEnabled(hasSelection);
     }
@@ -124,10 +124,6 @@ public class BewohnerPresentationModel  {
 
     public Action getGebAction() {
         return gebAction;
-    }
-
-    public Action getEditBewohnerAction() {
-        return editBewohnerAction;
     }
 
     public Action getDeleteAction() {
@@ -273,58 +269,7 @@ public class BewohnerPresentationModel  {
         }
     }
 
-    private class DetailAction
-            extends AbstractAction {
-
-        {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/zoom.png"));
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            detailSelectedItem(e);
-        }
-    }
-
-    private class EditBewohnerAction
-            extends AbstractAction {
-
-        {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange_edit.png"));
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            final Bewohner b = bewohnerSelection.getSelection();
-            final Zimmer zTemp = b.getZimmer();
-            Customer c = b.getCustomer();
-            final EditBewohnerZimmerPresentationModel model = new EditBewohnerZimmerPresentationModel(b, c.getSurname() + " " + c.getForename());
-            final EditBewohnerZimmerView editBewohnerView = new EditBewohnerZimmerView(model);
-            model.addButtonListener(new ButtonListener() {
-
-                public void buttonPressed(ButtonEvent evt) {
-                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                        getBewohnerManager().save(b);
-
-                        if (zTemp == null) {
-                            historyManager.saveBewohnerHistory(b);
-                        } else {
-                            if (!zTemp.equals(b.getZimmer())) {
-                                historyManager.saveBewohnerHistory(b);
-                            }
-                        }
-                        GUIManager.getStatusbar().setTextAndFadeOut("Bewohner wurde aktualisiert.");
-                    }
-                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-
-                        model.removeButtonListener(this);
-                        GUIManager.changeToLastView();
-                    }
-                }
-            });
-            GUIManager.changeView(editBewohnerView.buildPanel(), true);
-
-        }
-    }
-
+    
     private class InaktiveAction
             extends AbstractAction {
 
@@ -404,7 +349,8 @@ public class BewohnerPresentationModel  {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-                detailSelectedItem(e);
+                CustomerManagementPresentationModel.editCustomer(bewohnerSelection.getSelection().getCustomer());
+                //detailSelectedItem(e);
             }
         }
     }
@@ -454,16 +400,6 @@ public class BewohnerPresentationModel  {
         GUIManager.changeView(detailView.buildPanel(), true);
     }
 
-    private void detailSelectedItem(EventObject e) {
-        if (bewohnerSelection.getSelection() != null) {
-            Customer c = bewohnerSelection.getSelection().getCustomer();
-            final DetailBewohnerPresentationModel model = new DetailBewohnerPresentationModel(this.getBewohnerSelection().getSelection(), c.getSurname() + " " + c.getForename());
-            final DetailBewohnerView detailView = new DetailBewohnerView(model);
-
-            GUIManager.changeView(detailView.buildPanel(), true);
-        }
-
-    }
 
     private class BewohnerTableModel extends AbstractTableAdapter<Bewohner> {
 

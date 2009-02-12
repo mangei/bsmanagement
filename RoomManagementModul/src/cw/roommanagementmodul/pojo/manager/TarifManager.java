@@ -47,6 +47,11 @@ public class TarifManager extends AbstractPOJOManager<Tarif> {
         return HibernateUtil.getEntityManager().createQuery("FROM Tarif").getResultList();
     }
 
+   
+    public List<Tarif> getAllOrderd(Gebuehr g) {
+        return HibernateUtil.getEntityManager().createQuery("Select t FROM Tarif t where t.gebuehr.id="+g.getId()+" order by t.ab asc, t.bis asc").getResultList();
+    }
+
     @Override
     public int size() {
         return ((Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM Tarif").getResultList().iterator().next()).intValue();

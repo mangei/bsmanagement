@@ -46,14 +46,12 @@ public class BewohnerView {
         bDelete.setText("Austreten");
         bGebZuordnung = new JButton(model.getGebuehrZuordnungAction());
         bGebZuordnung.setText("Übersicht");
-        bEditBewohner= new JButton(model.getEditBewohnerAction());
-        bEditBewohner.setText("Bewohner ändern");
         bHistory= new JButton(model.getHistoryAction());
         bHistory.setText("History");
         bInaktive = new JButton(model.getInaktiveAction());
         bInaktive.setText("Inaktive");
         bDetail= new JButton(model.getDetailAction());
-        bDetail.setText("Detail");
+        bDetail.setText("Bearbeiten");
         bKaution = new JButton(model.getKautionAction());
         bKaution.setText("Kautionen");
         
@@ -87,7 +85,6 @@ public class BewohnerView {
         panel.getButtonPanel().add(bGeb);
         panel.getButtonPanel().add(bHistory);
         panel.getButtonPanel().add(bDelete);
-        panel.getButtonPanel().add(bEditBewohner);
         panel.getButtonPanel().add(bKaution);
         panel.getButtonPanel().add(bInaktive);
         

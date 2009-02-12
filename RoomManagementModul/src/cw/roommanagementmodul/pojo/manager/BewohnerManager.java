@@ -11,7 +11,7 @@ import cw.customermanagementmodul.pojo.Customer;
 import cw.roommanagementmodul.pojo.Bewohner;
 import java.util.List;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
+import javax.persistence.NoResultException;
 import org.apache.log4j.Logger;
 
 /**
@@ -35,8 +35,14 @@ public class BewohnerManager extends AbstractPOJOManager<Bewohner> {
 
     public Bewohner getBewohner(Customer customer) {
         EntityManager entityManager = HibernateUtil.getEntityManager();
-        Bewohner bewohner = (Bewohner)entityManager.createQuery("SELECT b FROM Bewohner b where b.customer.id = " + customer.getId()).getSingleResult();
+        Bewohner bewohner=null;
+        try {
+            bewohner = (Bewohner)entityManager.createQuery("SELECT b FROM Bewohner b where b.customer.id = " + customer.getId()).getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
         return bewohner;
+
     }
 
     public List<Bewohner> getBewohner(boolean activ) {
@@ -44,7 +50,6 @@ public class BewohnerManager extends AbstractPOJOManager<Bewohner> {
         List<Bewohner> list = entityManager.createQuery("SELECT b FROM Bewohner b where b.active = " + activ).getResultList();
         return list;
     }
-
 
     @Override
     public List<Bewohner> getAll() {

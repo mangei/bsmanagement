@@ -78,7 +78,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
         backAction = new BackAction();
 
 
-        setTarifSelection(new SelectionInList<Tarif>(tarifManager.getTarif(gebuehr)));
+        setTarifSelection(new SelectionInList<Tarif>(tarifManager.getAllOrderd(gebuehr)));
         updateActionEnablement();
     }
 
@@ -192,7 +192,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
             public void buttonPressed(ButtonEvent evt) {
                 if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     tarifManager.save(t);
-                    tarifSelection.getList().add(t);
+                    tarifSelection.setList(tarifManager.getAllOrderd(gebuehr));
                     GUIManager.getStatusbar().setTextAndFadeOut("Zuordnung wurde aktualisiert.");
                 }
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {

@@ -241,92 +241,6 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
 
     private boolean validateData() {
 
-        if (this.headerText.equals("Tarif erstellen")) {
-            return validateNewTarifData();
-        }
-        if (this.headerText.equals("Tarif bearbeiten")) {
-            return validateEditTarifData();
-        }
-        return false;
-
-
-    }
-
-    private boolean validateEditTarifData() {
-
-        if (checkFilledOut() == false) {
-            JOptionPane.showMessageDialog(null, "Es müssen alle Felder ausgefüllt werden.");
-            return false;
-        }
-
-        if (checkChrono() == false) {
-            JOptionPane.showMessageDialog(null, "Bis-Datum muss ich chronologisch nach dem Von-Datum befinden.");
-            return false;
-        }
-
-        if (checkMoreTarifErrorEdit() == false) {
-            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten könnten möglicherweise zur Überschneidung mehrere Tarife führen! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
-            if (answer == 1) {
-                return false;
-            }
-        }
-
-        if (checkNoTarifErrorEdit() == false) {
-            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten könnten möglicherweise zu einem lückenhaften Tarif Bestand führen! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
-            if (answer == 1) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private boolean checkNoTarifErrorEdit() {
-
-        if (this.dcVon.getDate().getTime() > this.oldVon.getTime()) {
-            List<Tarif> l = tarifManager.getAll();
-            for (int i = 0; i < l.size(); i++) {
-                if (l.get(i).getBis().getTime() < this.oldVon.getTime()) {
-                    return false;
-                }
-            }
-        }
-
-        if (this.dcBis.getDate().getTime() < this.oldBis.getTime()) {
-            List<Tarif> l = tarifManager.getAll();
-            for (int i = 0; i < l.size(); i++) {
-                if (l.get(i).getAb().getTime() > this.oldBis.getTime()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-
-
-    }
-
-    private boolean checkMoreTarifErrorEdit() {
-
-        if (this.dcVon.getDate().getTime() < this.oldVon.getTime()) {
-            List<Tarif> l = tarifManager.getAll();
-            for (int i = 0; i < l.size(); i++) {
-                if (l.get(i).getBis().getTime() < this.oldVon.getTime()) {
-                    return false;
-                }
-            }
-        }
-
-        if (this.dcBis.getDate().getTime() > this.oldBis.getTime()) {
-            List<Tarif> l = tarifManager.getAll();
-            for (int i = 0; i < l.size(); i++) {
-                if (l.get(i).getAb().getTime() > this.oldBis.getTime()) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private boolean validateNewTarifData() {
         if (checkFilledOut() == false) {
             JOptionPane.showMessageDialog(null, "Es müssen alle Felder ausgefüllt werden.");
             return false;
@@ -338,40 +252,40 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
         }
 
         if (checkMoreTarifError() == false) {
-            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten würden zur Überschneidung mehrere Tarife führen! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
+            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten führen zu einer Überschneidung mehrere Tarife! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
             if (answer == 1) {
                 return false;
             }
         }
 
-        if (checkNoTarifError() == false) {
-            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten würden zu einem lückenhaften Tarif Bestand führen! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
-            if (answer == 1) {
-                return false;
-            }
-        }
+//        if (checkNoTarifError() == false) {
+//            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten könnten möglicherweise zu einem lückenhaften Tarif Bestand führen! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
+//            if (answer == 1) {
+//                return false;
+//            }
+//        }
         return true;
+
 
     }
 
-    //Kontrolliert ob die Daten zu einem lückenhaften Tarifbestand führen würden
-    private boolean checkNoTarifError() {
-        if (this.recommendedDate != null) {
-            if (dcVon.getDate().getTime() > this.recommendedDate.getTime()) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    //Kontrolliert die Daten ob es zu einer Tarif Überschneidung kommt
     private boolean checkMoreTarifError() {
-        if (this.recommendedDate != null) {
-            if (dcVon.getDate().getTime() < this.recommendedDate.getTime()) {
+
+        List<Tarif> sortedTarif = tarifManager.getAllOrderd(tarif.getGebuehr());
+        long von = dcVon.getDate().getTime();
+        long bis = dcBis.getDate().getTime();
+
+        for (int i = 0; i < sortedTarif.size(); i++) {
+            if (von >= sortedTarif.get(i).getAb().getTime() && von <= sortedTarif.get(i).getBis().getTime()) {
                 return false;
             }
         }
 
+        for (int i = 0; i < sortedTarif.size(); i++) {
+            if (bis >= sortedTarif.get(i).getAb().getTime() && bis <= sortedTarif.get(i).getBis().getTime()) {
+                return false;
+            }
+        }
         return true;
     }
 
@@ -410,9 +324,7 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
             cd.add(Calendar.DATE, 1);
             recommendedDate = cd.getTime();
         }
-
         return recommendedDate;
-
     }
 
     private void saveTarif() {

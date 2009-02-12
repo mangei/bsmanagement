@@ -9,8 +9,6 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -55,35 +53,35 @@ public class BewohnerGUIExtentionView {
         
         cbBereich = new JComboBox(model.createBereichComboModel(model.getBereichList()));
         cbZimmer = new JComboBox(model.createZimmerComboModel(model.getZimmerList()));
-        cbKaution = new JComboBox(model.createKautionComboModel(model.getKautionList()));
-        cbKaution.addItemListener(new ItemListener(){
-
-            public void itemStateChanged(ItemEvent e) {
-                cbKautionStatus.setEnabled(true);
-            }
-            
-        });
-
-        cbKautionStatus = new JComboBox();
-        cbKautionStatus.addItem("Keine Kaution");
-        cbKautionStatus.addItem("Nicht eingezahlt");
-        cbKautionStatus.addItem("Eingezahlt");
-        cbKautionStatus.addItem("Zurück gezahlt");
-        if(model.getBewohner().getKaution()==null){
-            cbKautionStatus.setEnabled(false);
-        }else{
-            switch(model.getBewohner().getKautionStatus()){
-                case Bewohner.EINGEZAHLT: cbKautionStatus.setSelectedIndex(2);
-                break;
-                case Bewohner.KEINE_KAUTION: cbKautionStatus.setSelectedIndex(0);
-                break;
-                case Bewohner.NICHT_EINGEZAHLT: cbKautionStatus.setSelectedIndex(1);
-                break;
-                case Bewohner.ZURUECK_GEZAHLT: cbKautionStatus.setSelectedIndex(3);
-                break;
-            }
-        }
-        cbKautionStatus.addItemListener(model.getKautionListener());
+//        cbKaution = new JComboBox(model.createKautionComboModel(model.getKautionList()));
+//        cbKaution.addItemListener(new ItemListener(){
+//
+//            public void itemStateChanged(ItemEvent e) {
+//                cbKautionStatus.setEnabled(true);
+//            }
+//
+//        });
+//
+//        cbKautionStatus = new JComboBox();
+//        cbKautionStatus.addItem("Keine Kaution");
+//        cbKautionStatus.addItem("Nicht eingezahlt");
+//        cbKautionStatus.addItem("Eingezahlt");
+//        cbKautionStatus.addItem("Zurück gezahlt");
+//        if(model.getBewohner().getKaution()==null){
+//            //cbKautionStatus.setEnabled(false);
+//        }else{
+//            switch(model.getBewohner().getKautionStatus()){
+//                case Bewohner.EINGEZAHLT: cbKautionStatus.setSelectedIndex(2);
+//                break;
+//                case Bewohner.KEINE_KAUTION: cbKautionStatus.setSelectedIndex(0);
+//                break;
+//                case Bewohner.NICHT_EINGEZAHLT: cbKautionStatus.setSelectedIndex(1);
+//                break;
+//                case Bewohner.ZURUECK_GEZAHLT: cbKautionStatus.setSelectedIndex(3);
+//                break;
+//            }
+//        }
+//        cbKautionStatus.addItemListener(model.getKautionListener());
 
         dcEinzugsdatum = new JDateChooser();
         dcEinzugsdatum.getJCalendar().setDecorationBordersVisible(false);
@@ -109,23 +107,23 @@ public class BewohnerGUIExtentionView {
         FormLayout layout = new FormLayout("right:pref, 4dlu, 50dlu:grow, 4dlu, right:pref, 4dlu, 50dlu:grow",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
 
-        panel.setLayout(layout);
+        panel.getContentPanel().setLayout(layout);
 
         CellConstraints cc = new CellConstraints();
         //builder.addSeparator("Allgemein:", cc.xyw(1, 1, 7));
-        panel.add(lbBereich, cc.xy(1, 3));
-        panel.add(lbZimmer, cc.xy(1, 5));
-        panel.add(lbEinzDat, cc.xy(1, 7));
-        panel.add(lbAuszDat, cc.xy(1, 9));
-        panel.add(lbKaution, cc.xy(1, 13));
-        panel.add(lbKautionStatus, cc.xy(1, 15));
+        panel.getContentPanel().add(lbBereich, cc.xy(1, 3));
+        panel.getContentPanel().add(lbZimmer, cc.xy(1, 5));
+        panel.getContentPanel().add(lbEinzDat, cc.xy(1, 7));
+        panel.getContentPanel().add(lbAuszDat, cc.xy(1, 9));
+        //panel.add(lbKaution, cc.xy(1, 13));
+        //panel.add(lbKautionStatus, cc.xy(1, 15));
 
-        panel.add(cbBereich, cc.xy(3, 3));
-        panel.add(cbZimmer, cc.xy(3, 5));
-        panel.add(dcEinzugsdatum, cc.xy(3, 7));
-        panel.add(dcAuszugsdatum, cc.xy(3, 9));
-        panel.add(cbKaution, cc.xy(3, 13));
-        panel.add(cbKautionStatus, cc.xy(3, 15));
+        panel.getContentPanel().add(cbBereich, cc.xy(3, 3));
+        panel.getContentPanel().add(cbZimmer, cc.xy(3, 5));
+        panel.getContentPanel().add(dcEinzugsdatum, cc.xy(3, 7));
+        panel.getContentPanel().add(dcAuszugsdatum, cc.xy(3, 9));
+//        panel.add(cbKaution, cc.xy(3, 13));
+//        panel.add(cbKautionStatus, cc.xy(3, 15));
 
 
 

@@ -18,7 +18,7 @@ public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention
     private static BewohnerManager bewohnerManager;
     private static BewohnerHistoryManager historyManager;
     private static BewohnerGUIExtentionPresentationModel model;
-    private static Bewohner b = null;
+    private static Bewohner b;
     private static Customer c;
     private static Zimmer tempZimmer;
 
@@ -27,7 +27,12 @@ public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention
         historyManager = BewohnerHistoryManager.getInstance();
         c = customer;
         b = bewohnerManager.getBewohner(customer);
-        tempZimmer = b.getZimmer();
+        if(b==null){
+            b= new Bewohner();
+        }else{
+                    tempZimmer = b.getZimmer();
+        }
+
 
         model = new BewohnerGUIExtentionPresentationModel(bewohnerManager, b, unsaved);
     }
@@ -35,6 +40,7 @@ public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention
     public JComponent getView() {
         return new BewohnerGUIExtentionView(model).buildPanel();
     }
+
 
     public void save() {
         model.triggerCommit();
@@ -44,13 +50,13 @@ public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention
         b.setActive(true);
         bewohnerManager.save(b);
 
-        if (tempZimmer == null) {
-            historyManager.saveBewohnerHistory(b);
-        } else {
-            if (!tempZimmer.equals(b.getZimmer())) {
-                historyManager.saveBewohnerHistory(b);
-            }
-        }
+//        if (tempZimmer == null) {
+//            historyManager.saveBewohnerHistory(b);
+//        } else {
+//            if (!tempZimmer.equals(b.getZimmer())) {
+//                historyManager.saveBewohnerHistory(b);
+//            }
+//        }
     }
 
     public void reset() {
