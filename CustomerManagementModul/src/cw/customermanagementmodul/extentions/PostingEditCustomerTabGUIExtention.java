@@ -6,6 +6,7 @@ import cw.customermanagementmodul.gui.PostingManagementPresentationModel;
 import cw.customermanagementmodul.gui.PostingManagementView;
 import javax.swing.JComponent;
 import cw.customermanagementmodul.pojo.Customer;
+import java.util.List;
 
 /**
  *
@@ -30,5 +31,13 @@ public class PostingEditCustomerTabGUIExtention
 
     public void reset() {
         // Not necessary for this Extention
+    }
+
+    public boolean validate() {
+        return true;
+    }
+
+    public List<String> getErrorMessages() {
+        return null;
     }
 }

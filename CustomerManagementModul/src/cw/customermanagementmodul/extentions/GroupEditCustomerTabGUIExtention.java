@@ -4,8 +4,10 @@ import cw.customermanagementmodul.extentions.interfaces.EditCustomerGUITabExtent
 import com.jgoodies.binding.value.ValueModel;
 import cw.customermanagementmodul.gui.GroupEditCustomerTabGUIExtentionPresentationModel;
 import cw.customermanagementmodul.gui.GroupEditCustomerTabGUIExtentionView;
+import java.util.List;
 import javax.swing.JComponent;
 import cw.customermanagementmodul.pojo.Customer;
+import java.util.ArrayList;
 
 /**
  *
@@ -30,5 +32,13 @@ public class GroupEditCustomerTabGUIExtention
 
     public void reset() {
         // Not necessary for this Extention
+    }
+
+    public boolean validate() {
+        return true;
+    }
+
+    public List<String> getErrorMessages() {
+        return null;
     }
 }

@@ -4,6 +4,7 @@ import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.extentions.interfaces.GUIExtention;
 import javax.swing.JComponent;
 import cw.customermanagementmodul.pojo.Customer;
+import java.util.List;
 
 /**
  *
@@ -35,4 +36,16 @@ public interface EditCustomerGUITabExtention extends GUIExtention{
      * If the user presses the reset button
      */
     public void reset();
+
+    /**
+     * checks before the save-method if the content the user entered is validate
+     * @return validate
+     */
+    public boolean validate();
+
+    /**
+     * Returns the error messages, if the content is not validate
+     * @return error messages
+     */
+    public List<String> getErrorMessages();
 }

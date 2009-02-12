@@ -230,16 +230,10 @@ public class EditCustomerPresentationModel
 
         public void actionPerformed(ActionEvent e) {
 
-            triggerCommit();
+            save();
 
             support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
 
-            List<EditCustomerGUITabExtention> addons = getExtentions();
-            for (EditCustomerGUITabExtention addon : addons) {
-                addon.save();
-            }
-
-            unsaved.setValue(false);
         }
     }
 
@@ -253,7 +247,7 @@ public class EditCustomerPresentationModel
         public void actionPerformed(ActionEvent e) {
             int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
             if (i == JOptionPane.OK_OPTION) {
-                resetCustomer();
+                reset();
                 unsaved.setValue(false);
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
             }
@@ -274,7 +268,7 @@ public class EditCustomerPresentationModel
                 i = JOptionPane.showOptionDialog(null, "Daten wurden geändert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             }
             if (i == 0) {
-                saveCustomer();
+                save();
             }
             if (i == 0 || i == 1) {
 //                GUIManager.lastView();  // Zur Übersicht wechseln
@@ -292,15 +286,9 @@ public class EditCustomerPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-//            saveCustomer();
-            triggerCommit();
+            save();
 
             support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
-
-            List<EditCustomerGUITabExtention> addons = getExtentions();
-            for (EditCustomerGUITabExtention addon : addons) {
-                addon.save();
-            }
         }
     }
 
@@ -324,25 +312,71 @@ public class EditCustomerPresentationModel
     }
 
 
-    public void saveCustomer() {
+    public void save() {
+
+        if(!validate()) {
+
+            List<String> errorMessages = getErrorMessages();
+            StringBuffer buffer = new StringBuffer("<html>");
+
+            for(String message : errorMessages) {
+                buffer.append(message);
+                buffer.append("<br>");
+            }
+
+            buffer.append("</html>");
+
+            JOptionPane.showMessageDialog(null, buffer.toString(), "Fehler und Warnungen", JOptionPane.ERROR_MESSAGE);
+
+            return;
+        }
 
         triggerCommit();
 
-        List<EditCustomerGUITabExtention> addons = getExtentions();
-        for (EditCustomerGUITabExtention addon : addons) {
-            addon.save();
+        List<EditCustomerGUITabExtention> extentions = getExtentions();
+        for (EditCustomerGUITabExtention extention : extentions) {
+            extention.save();
         }
+
+        unsaved.setValue(false);
     }
 
-    public void resetCustomer() {
+    public void reset() {
+
+        List<EditCustomerGUITabExtention> extentions = getExtentions();
+        for (EditCustomerGUITabExtention extention : extentions) {
+            extention.reset();
+        }
 
         triggerFlush();
-
-        List<EditCustomerGUITabExtention> addons = getExtentions();
-        for (EditCustomerGUITabExtention addon : addons) {
-            addon.reset();
-        }
     }
+
+    public boolean validate() {
+        
+        List<EditCustomerGUITabExtention> extentions = getExtentions();
+        for (EditCustomerGUITabExtention extention : extentions) {
+            if(!extention.validate()) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public List<String> getErrorMessages() {
+
+        List<String> errorMessages = new ArrayList<String>();
+
+        List<EditCustomerGUITabExtention> extentions = getExtentions();
+        for (EditCustomerGUITabExtention extention : extentions) {
+            if(extention.getErrorMessages() != null) {
+                errorMessages.addAll(extention.getErrorMessages());
+            }
+        }
+
+        return errorMessages;
+    }
+
 
     public ValueModel getUnsaved() {
         return unsaved;
