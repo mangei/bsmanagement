@@ -94,7 +94,7 @@ public class CoursePresentationModel{
     //**************************************************************************
     private class NewAction extends AbstractAction{
           {
-            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/add.png") );
+            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/course_add.png") );
           }
          
          private NewAction(String name) {
@@ -141,7 +141,7 @@ public class CoursePresentationModel{
             extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/edit.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/course_edit.png"));
         }
 
         private EditAction(String name) {
@@ -162,7 +162,7 @@ public class CoursePresentationModel{
             extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/delete.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/course_delete.png"));
         }
 
         private DeleteAction(String name) {

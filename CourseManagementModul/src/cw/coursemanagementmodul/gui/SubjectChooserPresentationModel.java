@@ -94,7 +94,7 @@ public class SubjectChooserPresentationModel extends PresentationModel<Subject>{
     //**************************************************************************
     private class AddAction extends AbstractAction{
           {
-            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/add.png") );
+            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/subject_add.png") );
           }
 
          private AddAction(String name) {

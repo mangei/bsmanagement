@@ -168,7 +168,6 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
             habenVM.setValue(ValueManager.getTotalHaben(coursePart) + "");
             saldoVM.setValue(ValueManager.getTotalSaldo(coursePart) + "");
         }
-
     }
 
     //**************************************************************************
