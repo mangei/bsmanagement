@@ -89,6 +89,8 @@ public class BewohnerPresentationModel  {
         detailAction = new AbstractAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")) {
             public void actionPerformed(ActionEvent e) {
                 CustomerManagementPresentationModel.editCustomer(bewohnerSelection.getSelection().getCustomer());
+                bewohnerSelection.setList(bewohnerManager.getBewohner(true));
+                System.out.println("hh active Bewohner");
             }
         };
         bewohnerSelection = new SelectionInList<Bewohner>(getBewohnerManager().getBewohner(true));
@@ -196,27 +198,28 @@ public class BewohnerPresentationModel  {
 
     public void deleteBewohner() {
         Bewohner b = getBewohnerSelection().getSelection();
-        List<BewohnerHistory> list = historyManager.getBewohnerHistory(b);
-
-        long time, lastTime = 0;
-        int lastDateIdx = 0;
-        for (int i = 0; i < list.size(); i++) {
-            time = list.get(i).getLastDatestamp().getTime();
-            if (time > lastTime) {
-                lastTime = time;
-                lastDateIdx = i;
-            }
-        }
-
-        if (list.get(lastDateIdx).getBis() == null) {
-            list.get(lastDateIdx).setBis(new Date());
-            historyManager.save(list.get(lastDateIdx));
-        }
+//        List<BewohnerHistory> list = historyManager.getBewohnerHistory(b);
+//
+//        long time, lastTime = 0;
+//        int lastDateIdx = 0;
+//        for (int i = 0; i < list.size(); i++) {
+//            time = list.get(i).getLastDatestamp().getTime();
+//            if (time > lastTime) {
+//                lastTime = time;
+//                lastDateIdx = i;
+//            }
+//        }
+//
+//        if (list.get(lastDateIdx).getBis() == null) {
+//            list.get(lastDateIdx).setBis(new Date());
+//            historyManager.save(list.get(lastDateIdx));
+//        }
 
         b.setZimmer(null);
         b.setVon(null);
         b.setBis(null);
         b.setActive(false);
+        bewohnerManager.save(b);
 
         bewohnerSelection.setList(bewohnerManager.getBewohner(true));
     }

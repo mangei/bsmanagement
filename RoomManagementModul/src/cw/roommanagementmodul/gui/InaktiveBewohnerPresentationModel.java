@@ -205,11 +205,13 @@ public class InaktiveBewohnerPresentationModel {
                         historyManager.removeBewohnerHistory(b);
                         gebZuordnungManager.removeGebuehrZuordnung(b);
                         bewohnerManager.delete(b);
+                        bewohnerSelection.setList(bewohnerManager.getBewohner(false));
                     }
                 } else {
                     historyManager.removeBewohnerHistory(b);
                     gebZuordnungManager.removeGebuehrZuordnung(b);
                     bewohnerManager.delete(b);
+                    bewohnerSelection.setList(bewohnerManager.getBewohner(false));
                 }
 
             }

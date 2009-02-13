@@ -4,6 +4,7 @@ import com.jgoodies.binding.beans.Model;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -83,7 +84,7 @@ public class Gebuehr extends Model implements AnnotatedClass{
     /**
      * @return the tarifList
      */
-    @OneToMany(mappedBy = "gebuehr")
+    @OneToMany(mappedBy = "gebuehr", cascade=CascadeType.REMOVE)
     public List<Tarif> getTarifList() {
         return tarifList;
     }

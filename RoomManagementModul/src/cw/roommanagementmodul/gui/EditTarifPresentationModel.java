@@ -258,14 +258,54 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
             }
         }
 
-//        if (checkNoTarifError() == false) {
-//            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten könnten möglicherweise zu einem lückenhaften Tarif Bestand führen! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
-//            if (answer == 1) {
-//                return false;
-//            }
-//        }
+        if (checkNoTarifError() == false) {
+            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten führen zu einem lückenhaften Tarif Bestand führen! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
+            if (answer == 1) {
+                return false;
+            }
+        }
         return true;
 
+
+    }
+
+    private boolean checkNoTarifError() {
+
+        List<Tarif> sortedTarif = tarifManager.getAllOrderd(tarif.getGebuehr());
+        if (sortedTarif.size() >= 1) {
+            long von = dcVon.getDate().getTime();
+            long bis = dcBis.getDate().getTime();
+
+            //Von um einen Tag zurück rechnen
+            Calendar cd = Calendar.getInstance();
+            cd.setTimeInMillis(von);
+            cd.add(Calendar.DATE, -1);
+            von = cd.getTime().getTime();
+
+            //Bis um einen Tab nach vorn rechnen
+            cd.setTimeInMillis(bis);
+            cd.add(Calendar.DATE, 1);
+            bis = cd.getTime().getTime();
+
+            boolean check = false;
+            for (int i = 0; i < sortedTarif.size(); i++) {
+                if (tarif == null || tarif.getId() != sortedTarif.get(i).getId()) {
+                    if (von >= sortedTarif.get(i).getAb().getTime() && von <= sortedTarif.get(i).getBis().getTime()) {
+                        check = true;
+                    }
+                }
+            }
+
+            for (int i = 0; i < sortedTarif.size(); i++) {
+                if (tarif == null || tarif.getId() != sortedTarif.get(i).getId()) {
+                    if (bis >= sortedTarif.get(i).getAb().getTime() && bis <= sortedTarif.get(i).getBis().getTime()) {
+                        check = true;
+                    }
+                }
+            }
+            return check;
+        }
+        return true;
 
     }
 
@@ -275,18 +315,27 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
         long von = dcVon.getDate().getTime();
         long bis = dcBis.getDate().getTime();
 
+        boolean check = true;
         for (int i = 0; i < sortedTarif.size(); i++) {
-            if (von >= sortedTarif.get(i).getAb().getTime() && von <= sortedTarif.get(i).getBis().getTime()) {
-                return false;
+            if (tarif == null || tarif.getId() != sortedTarif.get(i).getId()) {
+                if (von >= sortedTarif.get(i).getAb().getTime() && von <= sortedTarif.get(i).getBis().getTime()) {
+                    check = false;
+                    break;
+                }
             }
+
         }
 
         for (int i = 0; i < sortedTarif.size(); i++) {
-            if (bis >= sortedTarif.get(i).getAb().getTime() && bis <= sortedTarif.get(i).getBis().getTime()) {
-                return false;
+            if (tarif == null || tarif.getId() != sortedTarif.get(i).getId()) {
+                if (bis >= sortedTarif.get(i).getAb().getTime() && bis <= sortedTarif.get(i).getBis().getTime()) {
+                    check = false;
+                    break;
+                }
             }
+
         }
-        return true;
+        return check;
     }
 
     //Kontrolliert ob Datumsfelder ausgefüllt sind

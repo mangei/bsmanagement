@@ -46,6 +46,7 @@ public class BewohnerHistoryManager extends AbstractPOJOManager<BewohnerHistory>
         BewohnerHistory bh = new BewohnerHistory(zimmerName, bereichsName, b.getVon(), b.getBis(), b, new Date());
          EntityManager entityManager = HibernateUtil.getEntityManager();
         EntityTransaction tran = entityManager.getTransaction();
+        tran.begin();
         entityManager.persist(bh);
         tran.commit();
 
@@ -56,6 +57,7 @@ public class BewohnerHistoryManager extends AbstractPOJOManager<BewohnerHistory>
         EntityManager entityManager = HibernateUtil.getEntityManager();
         List<BewohnerHistory> l = this.getBewohnerHistory(b);
         EntityTransaction tran = entityManager.getTransaction();
+        tran.begin();
         for (int i = 0; i < l.size(); i++) {
             entityManager.remove(l.get(i));
         }

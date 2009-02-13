@@ -7,6 +7,7 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import java.awt.event.ItemEvent;
@@ -24,6 +25,7 @@ import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.Kaution;
 import cw.roommanagementmodul.pojo.Zimmer;
 import cw.roommanagementmodul.pojo.manager.KautionManager;
+import java.awt.event.ItemEvent;
 
 /**
  *
@@ -41,24 +43,43 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
     private SelectionInList<Bereich> bereichList;
     private SelectionInList<Kaution> kautionList;
     private KautionStatusItemListener kautionListener;
+    private int checkBoxState;
+    private ValueModel checkBoxModel;
 
     BewohnerGUIExtentionPresentationModel(BewohnerManager bewohnerManager, Bewohner b, ValueModel unsaved) {
         super(b);
         this.bewohner = b;
+        checkBoxState=ItemEvent.DESELECTED;
         zimmerManager = ZimmerManager.getInstance();
         bereichManager = BereichManager.getInstance();
         kautionManager = KautionManager.getInstance();
         initModels();
         this.unsaved = unsaved;
+        
+        
 
     }
 
     private void initModels() {
-        kautionListener= new KautionStatusItemListener();
+        checkBoxModel=new ValueHolder();
+        checkBoxModel.addValueChangeListener(new PropertyChangeListener() {
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                if ((Boolean) evt.getNewValue() == true) {
+                    checkBoxState=ItemEvent.SELECTED;
+
+                } else {
+                    checkBoxState=ItemEvent.DESELECTED;
+                }
+            }
+        });
+        checkBoxModel.setValue(bewohner.isActive());
+
+        kautionListener = new KautionStatusItemListener();
         support = new ButtonListenerSupport();
         zimmerList = new SelectionInList(zimmerManager.getAll(), getModel(Bewohner.PROPERTYNAME_ZIMMER));
         zimmerList.addValueChangeListener(new ZimmerPropertyListener());
-        kautionList= new SelectionInList(kautionManager.getAll(),getModel(Bewohner.PROPERTYNAME_KAUTION));
+        kautionList = new SelectionInList(kautionManager.getAll(), getModel(Bewohner.PROPERTYNAME_KAUTION));
         bereichList = new SelectionInList(extractLeafBereich(bereichManager.getBereich()));
         bereichList.addValueChangeListener(new BereichPropertyListener());
         if (getBewohner().getZimmer() != null) {
@@ -102,11 +123,11 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
     public ComboBoxModel createBereichComboModel(SelectionInList bereichList) {
         return new ComboBoxAdapter(bereichList);
     }
-    
+
     public ComboBoxModel createZimmerComboModel(SelectionInList zimmerList) {
         return new ComboBoxAdapter(zimmerList);
     }
-    
+
     public ComboBoxModel createKautionComboModel(SelectionInList kautionList) {
         return new ComboBoxAdapter(kautionList);
     }
@@ -157,6 +178,35 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
         this.bewohner = bewohner;
     }
 
+
+    /**
+     * @return the checkBoxState
+     */
+    public int getCheckBoxState() {
+        return checkBoxState;
+    }
+
+    /**
+     * @param checkBoxState the checkBoxState to set
+     */
+    public void setCheckBoxState(int checkBoxState) {
+        this.checkBoxState = checkBoxState;
+    }
+
+    /**
+     * @return the checkBoxModel
+     */
+    public ValueModel getCheckBoxModel() {
+        return checkBoxModel;
+    }
+
+    /**
+     * @param checkBoxModel the checkBoxModel to set
+     */
+    public void setCheckBoxModel(ValueModel checkBoxModel) {
+        this.checkBoxModel = checkBoxModel;
+    }
+
     public class SaveListener implements PropertyChangeListener {
 
         public void propertyChange(PropertyChangeEvent evt) {
@@ -168,31 +218,31 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
         }
     }
 
-        public class KautionStatusItemListener implements ItemListener{
+
+    public class KautionStatusItemListener implements ItemListener {
 
         public void itemStateChanged(ItemEvent e) {
 
-            if(e.getItem().equals("Keine Kaution")){
+            if (e.getItem().equals("Keine Kaution")) {
                 getBewohner().setKautionStatus(Bewohner.KEINE_KAUTION);
-               unsaved.setValue(true);
+                unsaved.setValue(true);
 
             }
-            if(e.getItem().equals("Nicht eingezahlt")){
+            if (e.getItem().equals("Nicht eingezahlt")) {
                 getBewohner().setKautionStatus(Bewohner.NICHT_EINGEZAHLT);
                 unsaved.setValue(true);
             }
-            if(e.getItem().equals("Eingezahlt")){
+            if (e.getItem().equals("Eingezahlt")) {
                 getBewohner().setKautionStatus(Bewohner.EINGEZAHLT);
                 unsaved.setValue(true);
 
             }
-            if(e.getItem().equals("Zurück gezahlt")){
+            if (e.getItem().equals("Zurück gezahlt")) {
                 getBewohner().setKautionStatus(Bewohner.ZURUECK_GEZAHLT);
                 unsaved.setValue(true);
             }
         }
     }
-
 
     public class ZimmerPropertyListener implements PropertyChangeListener {
 
@@ -225,5 +275,4 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
             }
         }
     }
-   
 }

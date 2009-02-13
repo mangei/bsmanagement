@@ -8,6 +8,7 @@ import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
 import cw.roommanagementmodul.pojo.Bewohner;
+import cw.roommanagementmodul.pojo.Gebuehr;
 import cw.roommanagementmodul.pojo.GebuehrZuordnung;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
@@ -17,7 +18,7 @@ import org.apache.log4j.Logger;
  *
  * @author Dominik
  */
-public class GebuehrZuordnungManager  extends AbstractPOJOManager<GebuehrZuordnung> {
+public class GebuehrZuordnungManager extends AbstractPOJOManager<GebuehrZuordnung> {
 
     private static GebuehrZuordnungManager instance;
     private static Logger logger = Logger.getLogger(GebuehrZuordnungManager.class);
@@ -26,7 +27,7 @@ public class GebuehrZuordnungManager  extends AbstractPOJOManager<GebuehrZuordnu
     }
 
     public static GebuehrZuordnungManager getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new GebuehrZuordnungManager();
         }
         return instance;
@@ -36,10 +37,30 @@ public class GebuehrZuordnungManager  extends AbstractPOJOManager<GebuehrZuordnu
         EntityManager entityManager = HibernateUtil.getEntityManager();
         List<GebuehrZuordnung> l = this.getGebuehrZuordnung(b);
         EntityTransaction tran = entityManager.getTransaction();
-           for(int i=0;i<l.size();i++){
+        tran.begin();
+        for (int i = 0; i < l.size(); i++) {
             entityManager.remove(l.get(i));
         }
         tran.commit();
+    }
+
+    public void removeGebuehrZuordnung(Gebuehr g) {
+        EntityManager entityManager = HibernateUtil.getEntityManager();
+        List<GebuehrZuordnung> l = this.getGebuehrZuordnung(g);
+        EntityTransaction tran = entityManager.getTransaction();
+        tran.begin();
+        for (int i = 0; i < l.size(); i++) {
+
+            entityManager.remove(l.get(i));
+
+        }
+        tran.commit();
+    }
+
+    public List<GebuehrZuordnung> getGebuehrZuordnung(Gebuehr g) {
+        EntityManager entityManager = HibernateUtil.getEntityManager();
+        List<GebuehrZuordnung> list = entityManager.createQuery("Select g From GebuehrZuordnung g where g.gebuehr.id = " + g.getId()).getResultList();
+        return list;
     }
 
     public List getGebuehrZuordnung(Bewohner b) {
