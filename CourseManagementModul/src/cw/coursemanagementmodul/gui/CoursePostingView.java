@@ -6,6 +6,7 @@
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
+import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
@@ -79,6 +80,8 @@ public class CoursePostingView {
         
         test = CWComponentFactory.createRadioButton(model.getTestRadioButtonAction());
 
+        test.setSelected(true);
+
         accountingButton = CWComponentFactory.createButton(model.getPostingAction());
 
         accountingDate = CWComponentFactory.createDateChooser(model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_POSTINGDATE));
@@ -98,7 +101,7 @@ public class CoursePostingView {
         JViewPanel panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         JPanel coursePartPanel = CWComponentFactory.createPanel();
 
-        FormLayout layout = new FormLayout("pref, 2dlu, pref:grow, 2dlu, right:pref","pref, 10dlu, pref, 4dlu, fill:pref:grow, 2dlu, pref, 5dlu, pref");
+        FormLayout layout = new FormLayout("pref, 2dlu, pref, 2dlu, pref:grow","pref, 10dlu, pref, 4dlu, fill:pref:grow, 10dlu, pref, 10dlu, pref, 5dlu, pref");
         FormLayout panelLayout = new FormLayout("fill:pref:grow", "fill:pref:grow");
 
         panel.getButtonPanel().add(accountingButton);
@@ -110,20 +113,23 @@ public class CoursePostingView {
 
         coursePartPanel.add(new JScrollPane(coursePartTable), cc.xy(1, 1));
 
-        panel.getContentPanel().add(coursePartLabel, cc.xy(1, 3));
-        panel.getContentPanel().add(courseLabel, cc.xy(1, 1));
-        panel.getContentPanel().add(courseComboBox, cc.xy(3, 1));
-        panel.getContentPanel().add(coursePartPanel, cc.xyw(1, 5, 3));
+        PanelBuilder panelBuilder = new PanelBuilder(layout, panel.getContentPanel());
+
+        panelBuilder.addSeparator("Kursteilnehmer", cc.xyw(1, 3, 5));
+        panelBuilder.add(courseLabel, cc.xy(1, 1));
+        panelBuilder.add(courseComboBox, cc.xy(3, 1));
+        panelBuilder.add(coursePartPanel, cc.xyw(1, 5, 5));
 
         buttonGroup = CWComponentFactory.createButtonGroup(normal, test);
         
         //RadioButtons
-        panel.getContentPanel().add(normal, cc.xy(1, 7));
-        panel.getContentPanel().add(test, cc.xy(3, 7));
+        panelBuilder.addSeparator("Buchungsart", cc.xyw(1, 9, 5));
+        panelBuilder.add(normal, cc.xy(1, 11));
+        panelBuilder.add(test, cc.xy(3, 11));
 
         //Daten
-        panel.getContentPanel().add(accountingDateLabel, cc.xy(1, 9));
-        panel.getContentPanel().add(accountingDate, cc.xy(3, 9));
+        panelBuilder.add(accountingDateLabel, cc.xy(1, 7));
+        panelBuilder.add(accountingDate, cc.xy(3, 7));
 
         panel.setOpaque(false);
         coursePartPanel.setOpaque(false);

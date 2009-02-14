@@ -41,6 +41,9 @@ public class EditCoursePartView {
     private JButton activityButton;
     private JButton subjectButton;
     private JButton accountingButton;
+    private JButton deleteCourseButton;
+    private JButton deleteSubjectButton;
+    private JButton deleteActivityButton;
     
     private JLabel courseName;
     private JLabel beginDate;
@@ -119,7 +122,10 @@ public class EditCoursePartView {
         activityButton = CWComponentFactory.createButton(model.getActivityButtonAction());
         subjectButton = CWComponentFactory.createButton(model.getSubjectButtonAction());
         accountingButton = CWComponentFactory.createButton(model.getPostingButtonAction());
-        
+        deleteCourseButton = CWComponentFactory.createButton(model.getRemoveCourseButtonAction());
+        deleteSubjectButton = CWComponentFactory.createButton(model.getRemoveSubjectButtonAction());
+        deleteActivityButton = CWComponentFactory.createButton(model.getRemoveActivityButtonAction());
+
         courseName = CWComponentFactory.createLabel("Kursname:");
         beginDate = CWComponentFactory.createLabel("Beginn:");
         endDate = CWComponentFactory.createLabel("Ende:");
@@ -156,50 +162,33 @@ public class EditCoursePartView {
         initComponents();
         
         JViewPanel view = CWComponentFactory.createViewPanel(model.getHeaderInfo());
-
-        JPanel panel = new JPanel();
-        JViewPanel activityPanel = CWComponentFactory.createViewPanel(new HeaderInfo("Aktivitäten"));
-        JViewPanel subjectPanel = CWComponentFactory.createViewPanel(new HeaderInfo("Gegenstände"));
-        JViewPanel courseDetailPanel = CWComponentFactory.createViewPanel(new HeaderInfo("Kursdetails"));
+        JPanel subjectButtonPanel = CWComponentFactory.createPanel(new FormLayout("pref, 4dlu, pref", "pref"));
+        JPanel activityButtonPanel = CWComponentFactory.createPanel(new FormLayout("pref, 4dlu, pref", "pref"));
+        
         JPanel accountingPanel = CWComponentFactory.createPanel();
-        
-        activityPanel.getContentPanel().add(new JScrollPane(activityTable));
-        
-        subjectPanel.getContentPanel().add(new JScrollPane(subjectTable));
 
         JButtonPanel buttonPanel = view.getButtonPanel();
         
         buttonPanel.add(courseButton);
-        buttonPanel.add(activityButton);
-        buttonPanel.add(subjectButton);
+        buttonPanel.add(deleteCourseButton);
         buttonPanel.add(accountingButton);
         
         FormLayout layout = new FormLayout("pref:grow, 15dlu, fill:pref:grow",
                 "pref, 4dlu, fill:pref:grow, 20dlu, pref, 4dlu," +
-                "fill:pref:grow, 20dlu, pref, 4dlu, fill:pref:grow, 20dlu, pref, 10dlu, pref");
-        FormLayout detailLayout = new FormLayout("pref, 10dlu, pref:grow",
-                "pref, 5dlu, pref, 5dlu, pref, 5dlu, pref");
+                "pref, 4dlu, pref, 4dlu, pref, 4dlu, fill:pref:grow");
+
         FormLayout accountingLayout = new FormLayout("pref, 4dlu, pref", "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
         
         CellConstraints cc = new CellConstraints();
-        
-        panel.setLayout(layout);
-        courseDetailPanel.getContentPanel().setLayout(detailLayout);
-        
-        activityPanel.setOpaque(false);
-        subjectPanel.setOpaque(false);
-        courseDetailPanel.setOpaque(false);
-        accountingPanel.setOpaque(false);
 
-        courseDetailPanel.getContentPanel().add(courseName, cc.xy(1, 1));
-        courseDetailPanel.getContentPanel().add(beginDate, cc.xy(1, 3));
-        courseDetailPanel.getContentPanel().add(endDate, cc.xy(1, 5));
-        courseDetailPanel.getContentPanel().add(price, cc.xy(1, 7));
+        //ButtonPanels
+        subjectButtonPanel.add(subjectButton, cc.xy(1, 1));
+        subjectButtonPanel.add(deleteSubjectButton, cc.xy(3, 1));
+        activityButtonPanel.add(activityButton, cc.xy(1, 1));
+        activityButtonPanel.add(deleteActivityButton, cc.xy(3, 1));
+        //****************
         
-        courseDetailPanel.getContentPanel().add(vCourseName, cc.xy(3, 1));
-        courseDetailPanel.getContentPanel().add(vBeginDate, cc.xy(3, 3));
-        courseDetailPanel.getContentPanel().add(vEndDate, cc.xy(3, 5));
-        courseDetailPanel.getContentPanel().add(vPrice, cc.xy(3, 7));
+        accountingPanel.setOpaque(false);
 
         accountingPanel.setLayout(accountingLayout);
 
@@ -216,12 +205,13 @@ public class EditCoursePartView {
         panelBuilder.addSeparator("Ferienkurse", cc.xyw(1, 1, 3));
         panelBuilder.add(new JScrollPane(courseTable), cc.xyw(1, 3, 3));
         panelBuilder.addSeparator("Aktivitäten", cc.xy(1, 5));
-        panelBuilder.add(new JScrollPane(activityTable), cc.xy(1, 7));
-        panelBuilder.addSeparator("Gegenstände", cc.xy(1, 9));
-        panelBuilder.add(new JScrollPane(subjectTable), cc.xy(1, 11));
-        panelBuilder.add(courseDetailPanel, cc.xywh(3, 5, 1, 7));
-        panelBuilder.addSeparator("Konto des Kursteilnehmers", cc.xyw(1, 13, 3));
-        panelBuilder.add(accountingPanel, cc.xy(1, 15));
+        panelBuilder.add(new JScrollPane(activityTable), cc.xy(1, 9));
+        panelBuilder.addSeparator("Gegenstände", cc.xy(3, 5));
+        panelBuilder.add(subjectButtonPanel, cc.xy(3, 7));
+        panelBuilder.add(activityButtonPanel, cc.xy(1, 7));
+        panelBuilder.add(new JScrollPane(subjectTable), cc.xy(3, 9));
+        panelBuilder.addSeparator("Konto des Kursteilnehmers", cc.xyw(1, 11, 3));
+        panelBuilder.add(accountingPanel, cc.xy(1, 13));
         panelBuilder.setOpaque(false);
         
         return view;

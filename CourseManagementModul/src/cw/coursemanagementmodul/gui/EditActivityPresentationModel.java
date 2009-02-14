@@ -87,7 +87,7 @@ public class EditActivityPresentationModel  extends PresentationModel<Activity>{
         resetButtonAction = new ResetButtonAction("Zurücksetzen");
         saveButtonAction = new SaveButtonAction("Speichern");
         cancelButtonAction = new CancelButtonAction("Schließen");
-        saveAndCloseButtonAction = new SaveAndCloseButtonAction("Speichern & Schließen");
+        saveAndCloseButtonAction = new SaveAndCloseButtonAction("Speichern u. Schließen");
         
         support = new ButtonListenerSupport();
         

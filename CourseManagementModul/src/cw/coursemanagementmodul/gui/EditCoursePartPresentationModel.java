@@ -35,7 +35,6 @@ import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
 import cw.coursemanagementmodul.pojo.manager.CourseAdditionManager;
 import cw.coursemanagementmodul.pojo.manager.ValueManager;
 import cw.customermanagementmodul.pojo.Posting;
-import cw.customermanagementmodul.pojo.manager.PostingManager;
 import javax.swing.JOptionPane;
 
 /**
@@ -49,6 +48,9 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
     private Action activityButtonAction;
     private Action subjectButtonAction;
     private Action accountingButtonAction;
+    private Action removeCourseButtonAction;
+    private Action removeSubjectButtonAction;
+    private Action removeActivityButtonAction;
     //*******************************************
     //Instanz eines Kurses
     private CourseParticipant coursePart;
@@ -140,6 +142,10 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
                 setBufferedValue(CourseParticipant.PROPERTYNAME_COURSELIST, courseAdditionSelection.getList());
             }
         });
+
+        courseAdditionSelection.addPropertyChangeListener(
+                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
+                new SelectionEmptyHandler());
         
 //        PropertyConnector.connectAndUpdate(getBufferedModel(CourseParticipant.PROPERTYNAME_COURSELIST), courseSelection, "list");
 
@@ -151,7 +157,7 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
             vonVM.setValue(courseAdditionSelection.getSelection().getCourse().getBeginDate() + "");
             bisVM.setValue(courseAdditionSelection.getSelection().getCourse().getEndDate() + "");
             priceVM.setValue(courseAdditionSelection.getSelection().getCourse().getPrice() + "");
-
+            
             sollVM.setValue(ValueManager.getTotalSoll(coursePart) + "");
             habenVM.setValue(ValueManager.getTotalHaben(coursePart) + "");
             saldoVM.setValue(ValueManager.getTotalSaldo(coursePart) + "");
@@ -178,14 +184,16 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
         posting.setCustomer(coursePart.getCostumer());
 
         courseChooserButtonAction = new CourseChooserButtonAction("Kurs hinzufügen");
-        activityButtonAction = new ActivityButtonAction("Aktivität hinzufügen");
-        subjectButtonAction = new SubjectButtonAction("Gegenstand hinzufügen");
+        activityButtonAction = new ActivityButtonAction("<html>Aktivität<br/>hinzufügen</html>");
+        subjectButtonAction = new SubjectButtonAction("<html>Gegenstand<br/>hinzufügen<html>");
+        removeSubjectButtonAction = new RemoveSubjectButtonAction("<html>Gegenstand<br/>löschen<html>");
         accountingButtonAction = new PostingButtonAction("Buchung tätigen");
+        removeCourseButtonAction = new RemoveButtonAction("Kurs löschen");
+        removeActivityButtonAction = new RemoveActivityButtonAction("<html>Aktivität<br/>löschen</html>");
 
         courseChooserModel = new CourseChooserPresentationModel(new Course());
         activityChooserModel = new ActivityChooserPresentationModel(new Activity());
         subjectChooserModel = new SubjectChooserPresentationModel(new Subject());
-        postingModel = new EditCourseHabenPostingPresentationModel(posting);
 
         support = new ButtonListenerSupport();
 
@@ -203,8 +211,28 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
         sollVM = new ValueHolder();
         habenVM = new ValueHolder();
         saldoVM = new ValueHolder();
+
+        updateActionEnablement();
     }
     //**************************************************************************
+
+    private final class SelectionEmptyHandler implements PropertyChangeListener {
+
+        public void propertyChange(PropertyChangeEvent evt) {
+            updateActionEnablement();
+        }
+    }
+
+    private void updateActionEnablement() {
+        boolean hasSelection = courseAdditionSelection.hasSelection();
+        System.out.println("HAS SELECTION = " + hasSelection);
+        accountingButtonAction.setEnabled(hasSelection);
+        activityButtonAction.setEnabled(hasSelection);
+        subjectButtonAction.setEnabled(hasSelection);
+        removeActivityButtonAction.setEnabled(hasSelection);
+        removeSubjectButtonAction.setEnabled(hasSelection);
+        removeCourseButtonAction.setEnabled(hasSelection);
+    }
 
     //**************************************************************************
     //Getter- und Setter-Methoden der Aktionen
@@ -406,10 +434,84 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
         }
     }
 
-    private class PostingButtonAction extends AbstractAction {
+    private class RemoveButtonAction extends AbstractAction {
 
         {
             putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"));
+        }
+
+        public RemoveButtonAction(String name) {
+            super(name);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Kurs ("
+                    + courseAdditionSelection.getSelection().getCourse().getName() + ") "
+                    + " des Kursteilnehmers " + coursePart.getCostumer().getForename()
+                    + " " + coursePart.getCostumer().getSurname() + " wirklich löschen?");
+            if(check == JOptionPane.OK_OPTION){
+                CourseAddition cA = courseAdditionSelection.getSelection();
+                courseAdditionSelection.getList().remove(cA);
+                courseAdditionSelection.fireIntervalRemoved(courseAdditionSelection.getList().size(), courseAdditionSelection.getList().size()-1);
+                CourseAdditionManager.getInstance().delete(cA);
+            }
+        }
+    }
+
+    private class RemoveSubjectButtonAction extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"));
+        }
+
+        public RemoveSubjectButtonAction(String name) {
+            super(name);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Gegenstand ("
+                    + subjectSelection.getSelection().getName() + ") "
+                    + " für den Kurs " + courseAdditionSelection.getSelection().getCourse().getName()
+                    + " wirklich löschen?");
+            if(check == JOptionPane.OK_OPTION){
+                Subject subject = subjectSelection.getSelection();
+                subjectSelection.getList().remove(subject);
+                subjectSelection.fireIntervalRemoved(subjectSelection.getList().size(), subjectSelection.getList().size()-1);
+                courseAdditionSelection.getSelection().setSubjects(subjectSelection.getList());
+                CourseAdditionManager.getInstance().save(courseAdditionSelection.getSelection());
+            }
+        }
+    }
+
+    private class RemoveActivityButtonAction extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
+        }
+
+        public RemoveActivityButtonAction(String name) {
+            super(name);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diese Aktivität ("
+                    + activitySelection.getSelection().getName() + ") "
+                    + " für den Kurs " + courseAdditionSelection.getSelection().getCourse().getName()
+                    + " wirklich löschen?");
+            if(check == JOptionPane.OK_OPTION){
+                Activity activity = activitySelection.getSelection();
+                activitySelection.getList().remove(activity);
+                activitySelection.fireIntervalRemoved(activitySelection.getList().size(), activitySelection.getList().size()-1);
+                courseAdditionSelection.getSelection().setActivities(activitySelection.getList());
+                CourseAdditionManager.getInstance().save(courseAdditionSelection.getSelection());
+            }
+        }
+    }
+
+    private class PostingButtonAction extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/customermanagementmodul/images/money.png"));
         }
 
         public PostingButtonAction(String name) {
@@ -417,38 +519,18 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
         }
 
         public void actionPerformed(ActionEvent e) {
-            final EditCourseHabenPostingView view = new EditCourseHabenPostingView(postingModel);
-            postingModel.setCourseAddition(courseAdditionSelection.getSelection());
+            
 
-            //Setzen der Voreinstellungen
-            postingModel.setBufferedValue(Posting.PROPERTYNAME_DESCRIPTION, postingModel.getDescription());
-            postingModel.setBufferedValue(Posting.PROPERTYNAME_AMOUNT, postingModel.getCoursePrice());
-            //****************************
-            postingModel.addButtonListener(new ButtonListener() {
+            if(!isCourseAlreadyPosted(courseAdditionSelection.getSelection())){
+                postingModel = new EditCourseHabenPostingPresentationModel(coursePart,
+                courseAdditionSelection.getSelection());
+                final EditCourseHabenPostingView view = new EditCourseHabenPostingView(postingModel);
+                postingModel.setCourseAddition(courseAdditionSelection.getSelection());
+                GUIManager.changeView(view.buildPanel(), true);
+
+                postingModel.addButtonListener(new ButtonListener() {
 
                 public void buttonPressed(ButtonEvent evt) {
-                    //Neu setzten
-                    Posting postingToSave = new Posting();
-                    postingToSave.setAmount(posting.getAmount());
-                    postingToSave.setAssets(posting.isAssets());
-                    postingToSave.setCustomer(posting.getCustomer());
-                    postingToSave.setDescription(posting.getDescription());
-                    //postingToSave.setId(posting.getId());
-                    postingToSave.setLiabilities(posting.isLiabilities());
-                    postingToSave.setLiabilitiesAssets(posting.isLiabilitiesAssets());
-                    postingToSave.setPostingCategory(posting.getPostingCategory());
-                    postingToSave.setPostingDate(posting.getPostingDate());
-                    postingToSave.setPostingEntryDate(posting.getPostingEntryDate());
-                    //******************************
-
-                    PostingManager.getInstance().save(postingToSave);
-
-                    CoursePosting coursePosting = new CoursePosting();
-                    coursePosting.setPosting(posting);
-                    coursePosting.setCourseAddition(courseAdditionSelection.getSelection());
-
-                    CoursePostingManager.getInstance().save(coursePosting);
-                    
                     habenVM.setValue(ValueManager.getTotalHaben(coursePart) + "");
                     sollVM.setValue(ValueManager.getTotalSoll(coursePart) + "");
                     saldoVM.setValue(ValueManager.getTotalSaldo(coursePart) + "");
@@ -457,7 +539,11 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
                     postingModel.removeButtonListener(this);
                 }
             });
-            GUIManager.changeView(view.buildPanel(), true);
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "<html>Diese Buchung wurde bereits getätigt!<br/>" +
+                        "Sie haben die Möglichkeit in der allgemeinen Buchungsansicht eine Buchung zu tätigen!</html>");
+            }
         }
     }
 
@@ -528,7 +614,7 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
                 case 2:
                     return "Bis";
                 case 3:
-                    return "Status";
+                    return "Buchungsstatus";
                 default:
                     return "";
             }
@@ -549,7 +635,10 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
                 case 2:
                     return courseAddition.getCourse().getEndDate();
                 case 3:
-                    return "JA";
+                    if(isCourseAlreadyPosted(courseAddition)){
+                        return "Bezahlt";
+                    }
+                    return "Nicht Bezahlt";
                 default:
                     return "";
             }
@@ -716,5 +805,29 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
             }
         }
         return doSubjectExist;
+    }
+
+    public Action getRemoveCourseButtonAction() {
+        return removeCourseButtonAction;
+    }
+
+    public Action getRemoveSubjectButtonAction() {
+        return removeSubjectButtonAction;
+    }
+
+    public Action getRemoveActivityButtonAction() {
+        return removeActivityButtonAction;
+    }
+
+    private boolean isCourseAlreadyPosted(CourseAddition courseAddition) {
+        List<CoursePosting> list = CoursePostingManager.getInstance().getAll();
+
+        for(int i = 0; i < list.size(); i++){
+            if(list.get(i).getPosting().isAssets()
+                    && list.get(i).getCourseAddition() == courseAddition){
+                return true;
+            }
+        }
+        return false;
     }
 }

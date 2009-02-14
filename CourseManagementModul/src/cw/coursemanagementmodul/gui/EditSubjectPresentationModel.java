@@ -52,7 +52,7 @@ public class EditSubjectPresentationModel extends PresentationModel<Subject>{
         initEventHandling();
 
         headerInfo = new HeaderInfo(
-                "Aktivität bearbeiten",
+                "Kursgegenstand bearbeiten",
                 "Sie befinden sich im Kursgegenstandsbereich. Hier können Sie Kursgegenstandsdaten eigeben!",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"));
@@ -86,7 +86,7 @@ public class EditSubjectPresentationModel extends PresentationModel<Subject>{
         resetButtonAction = new ResetButtonAction("Zurücksetzen");
         saveButtonAction = new SaveButtonAction("Speichern");
         cancelButtonAction = new CancelButtonAction("Schließen");
-        saveAndCloseButtonAction = new SaveAndCloseButtonAction("Speichern & Schließen");
+        saveAndCloseButtonAction = new SaveAndCloseButtonAction("Speichern u. Schließen");
         
         support = new ButtonListenerSupport();
         

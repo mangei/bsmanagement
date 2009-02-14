@@ -29,14 +29,11 @@ public class EditCourseHabenPostingView {
     private EditCourseHabenPostingPresentationModel model;
     
     private JTextField tfDescription;
-    private JComboBox cbPostingCategory;
     private JTextField tfValue;
     private JDateChooser dcPostingEntryDate;
     
     private JButton bSave;
-    private JButton bReset;
     private JButton bCancel;
-    private JButton bSaveCancel;
 
     private JXTable activityTable;
     private JXTable subjectTable;
@@ -51,16 +48,17 @@ public class EditCourseHabenPostingView {
     }
 
     private void initComponents() {
-        tfDescription           = CWComponentFactory.createTextField(model.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION),false);
-        cbPostingCategory       = CWComponentFactory.createComboBox(model.getPostingCategorySelection());
-        tfValue                 = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Posting.PROPERTYNAME_AMOUNT));
-        dcPostingEntryDate      = CWComponentFactory.createDateChooser(model.getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE));
+        tfDescription           = CWComponentFactory.createTextField(model.getPostingModel().getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION),false);
+        tfValue                 = CWComponentFactory.createCurrencyTextField(model.getPostingModel().getBufferedModel(Posting.PROPERTYNAME_AMOUNT));
+        dcPostingEntryDate      = CWComponentFactory.createDateChooser(model.getPostingModel().getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE));
+
+        tfValue.setEditable(false);
 
         bSave       = CWComponentFactory.createButton(model.getSaveButtonAction());
-        bReset      = CWComponentFactory.createButton(model.getResetButtonAction());
         bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
-        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
 
+
+        // MANGEI: hallo
         activityTable = CWComponentFactory.createTable("");
         activityTable.setColumnControlVisible(true);
         activityTable.setAutoCreateRowSorter(true);
@@ -90,15 +88,15 @@ public class EditCourseHabenPostingView {
         courseLabel = CWComponentFactory.createLabel(model.getCourseAddition().getCourse().getName());
         courseLabel.setFont(new Font(null, Font.BOLD, 11));
 
-        customerNameLabel = CWComponentFactory.createLabel(model.getPosting().getCustomer().getForename()
-                + " " + model.getPosting().getCustomer().getSurname());
+        customerNameLabel = CWComponentFactory.createLabel(model.getCoursePart().getCostumer().getForename()
+                + " " + model.getCoursePart().getCostumer().getSurname());
         customerNameLabel.setFont(new Font(null, Font.BOLD, 11));
 
-        customerStreetLabel = CWComponentFactory.createLabel(model.getPosting().getCustomer().getStreet());
+        customerStreetLabel = CWComponentFactory.createLabel(model.getCoursePart().getCostumer().getStreet());
         customerStreetLabel.setFont(new Font(null, Font.BOLD, 11));
 
-        customerPLZLabel = CWComponentFactory.createLabel(model.getPosting().getCustomer().getPostOfficeNumber()
-                + " " + model.getPosting().getCustomer().getCity());
+        customerPLZLabel = CWComponentFactory.createLabel(model.getCoursePart().getCostumer().getPostOfficeNumber()
+                + " " + model.getCoursePart().getCostumer().getCity());
         customerPLZLabel.setFont(new Font(null, Font.BOLD, 11));
     }
 
@@ -113,13 +111,11 @@ public class EditCourseHabenPostingView {
         JButtonPanel buttonPanel = panel.getButtonPanel();
         
         buttonPanel.add(bSave);
-        buttonPanel.add(bSaveCancel);
-        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout(
                 "pref, 4dlu, pref, 4dlu, 300dlu",
-                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 20dlu," +
+                "pref, 4dlu, pref, 4dlu, pref, 20dlu," +
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, fill:pref:grow," +
                 "20dlu, pref, 4dlu, fill:pref:grow");
         
@@ -129,29 +125,27 @@ public class EditCourseHabenPostingView {
         CellConstraints cc = new CellConstraints();
         builder.addLabel("Bezeichnung:",        cc.xy(1, 1));
         builder.add(tfDescription,              cc.xyw(3, 1, 3));
-        builder.addLabel("Kategorie:",          cc.xy(1, 3));
-        builder.add(cbPostingCategory,          cc.xyw(3, 3, 3));
-        builder.addLabel("Betrag:",             cc.xy(1, 5));
-        builder.add(tfValue,                    cc.xy(3, 5));
-        builder.addLabel("€",                   cc.xy(5, 5));
-        builder.addLabel("Eingangsdatum:",      cc.xy(1, 7));
-        builder.add(dcPostingEntryDate,         cc.xy(3, 7));
+        builder.addLabel("Betrag:",             cc.xy(1, 3));
+        builder.add(tfValue,                    cc.xy(3, 3));
+        builder.addLabel("€",                   cc.xy(5, 3));
+        builder.addLabel("Eingangsdatum:",      cc.xy(1, 5));
+        builder.add(dcPostingEntryDate,         cc.xy(3, 5));
 
-        builder.addSeparator("Daten des Kurteilnehmers", cc.xyw(1, 9, 5));
-        builder.addLabel("Kursname:",        cc.xy(1, 11));
-        builder.add(courseLabel, cc.xy(3, 11));
-        builder.addLabel("Kundendaten:",        cc.xy(1, 13));
-        builder.add(customerNameLabel, cc.xy(3, 13));
-        builder.add(customerStreetLabel, cc.xy(3, 15));
-        builder.add(customerPLZLabel, cc.xy(3, 17));
+        builder.addSeparator("Daten des Kurteilnehmers", cc.xyw(1, 7, 5));
+        builder.addLabel("Kursname:",        cc.xy(1, 9));
+        builder.add(courseLabel, cc.xy(3, 9));
+        builder.addLabel("Kundendaten:",        cc.xy(1, 11));
+        builder.add(customerNameLabel, cc.xy(3, 11));
+        builder.add(customerStreetLabel, cc.xy(3, 13));
+        builder.add(customerPLZLabel, cc.xy(3, 15));
 
         builder.addSeparator("Aktivitäten zu "
-                + model.getCourseAddition().getCourse().getName(), cc.xyw(1, 19, 5));
-        builder.add(new JScrollPane(activityTable), cc.xyw(1, 21, 5));
+                + model.getCourseAddition().getCourse().getName(), cc.xyw(1, 17, 5));
+        builder.add(new JScrollPane(activityTable), cc.xyw(1, 19, 5));
 
          builder.addSeparator("Gegenstände zu "
-                + model.getCourseAddition().getCourse().getName(), cc.xyw(1, 23, 5));
-        builder.add(new JScrollPane(subjectTable), cc.xyw(1, 25, 5));
+                + model.getCourseAddition().getCourse().getName(), cc.xyw(1, 21, 5));
+        builder.add(new JScrollPane(subjectTable), cc.xyw(1, 23, 5));
 
         initEventHandling();
 

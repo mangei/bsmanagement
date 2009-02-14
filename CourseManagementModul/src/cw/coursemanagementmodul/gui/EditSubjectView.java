@@ -42,7 +42,7 @@ public class EditSubjectView {
     }
     
     public void initComponents(){
-        nameLabel = CWComponentFactory.createLabel("Aktivität-Name");
+        nameLabel = CWComponentFactory.createLabel("Gegenstand:");
         
         nameTextField = BasicComponentFactory.createTextField(model.getBufferedModel(Subject.PROPERTYNAME_NAME), false);
         
@@ -74,7 +74,7 @@ public class EditSubjectView {
         buttonPanel.add(rollbackButton);
         buttonPanel.add(cancelButton);
         
-        FormLayout layout = new FormLayout("pref, 4dlu, 200dlu:grow, 4dlu, min",
+        FormLayout layout = new FormLayout("pref, 4dlu, 200dlu, 4dlu, min",
                 "pref, 2dlu, pref"); // rows
         
         CellConstraints cc = new CellConstraints();

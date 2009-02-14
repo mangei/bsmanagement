@@ -60,7 +60,7 @@ public class EditCourseView {
         valueLabel = CWComponentFactory.createLabel("Betrag");
         
         nameTextField = CWComponentFactory.createTextField(model.getBufferedModel(Course.PROPERTYNAME_NAME), false);
-        valueTextField = CWComponentFactory.createFormattedTextField(model.getBufferedModel(Course.PROPERTYNAME_PRICE), NumberFormat.getCurrencyInstance());
+        valueTextField = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Course.PROPERTYNAME_PRICE));
         saveButton = CWComponentFactory.createButton(model.getSaveButtonAction());
         saveAndCloseButton = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         rollbackButton = CWComponentFactory.createButton(model.getResetButtonAction());
@@ -94,16 +94,14 @@ public class EditCourseView {
         buttonPanel.add(rollbackButton);
         buttonPanel.add(cancelButton);
         
-        FormLayout layout = new FormLayout("pref, 4dlu, 200dlu:grow, 4dlu, min",
-                "pref, 2dlu, pref, 2dlu, pref, 2dlu, pref"); // rows
-
-        layout.setRowGroups(new int[][]{{1, 3, 5}});
+        FormLayout layout = new FormLayout("pref, 4dlu, pref, 150dlu, pref",
+                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref"); // rows
         
         CellConstraints cc = new CellConstraints();
         view.getContentPanel().setLayout(layout);
         
         view.getContentPanel().add(nameLabel, cc.xy (1, 1));
-        view.getContentPanel().add(nameTextField, cc.xy(3, 1));
+        view.getContentPanel().add(nameTextField, cc.xyw(3, 1, 3));
         view.getContentPanel().add(beginLabel, cc.xy (1, 3));
         view.getContentPanel().add(beginDate, cc.xy (3, 3));
         view.getContentPanel().add(endLabel, cc.xy (1, 5));

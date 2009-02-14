@@ -123,7 +123,7 @@ public class CoursePostingPresentationModel extends PresentationModel<CoursePost
     private class PostingAction extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/accounting.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/start.png"));
         }
 
         public void actionPerformed(ActionEvent e) {

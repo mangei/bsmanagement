@@ -79,7 +79,7 @@ public class EditActivityView {
         buttonPanel.add(rollbackButton);
         buttonPanel.add(cancelButton);
         
-        FormLayout layout = new FormLayout("pref, 4dlu, 200dlu:grow, 4dlu, min",
+        FormLayout layout = new FormLayout("pref, 4dlu, 200dlu, 4dlu, min",
                 "pref, 2dlu, pref, 2dlu, pref, 2dlu, pref"); // rows
 
         layout.setRowGroups(new int[][]{{1, 3, 5}});

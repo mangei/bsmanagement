@@ -2,12 +2,14 @@ package cw.coursemanagementmodul.extentions;
 
 import com.jgoodies.binding.value.ValueModel;
 import cw.customermanagementmodul.pojo.Customer;
+import java.util.List;
 import javax.swing.JComponent;
 import cw.coursemanagementmodul.gui.EditCoursePartPresentationModel;
 import cw.coursemanagementmodul.gui.EditCoursePartView;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerGUITabExtention;
+import java.util.ArrayList;
 
 /**
  *
@@ -41,6 +43,14 @@ public class CourseCustomerGUIExtention implements EditCustomerGUITabExtention {
 
     public void reset() {
         model.reset();
+    }
+
+    public boolean validate() {
+        return true;
+    }
+
+    public List<String> getErrorMessages() {
+        return null;
     }
 
 }

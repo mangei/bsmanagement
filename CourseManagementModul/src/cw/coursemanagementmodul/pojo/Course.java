@@ -29,7 +29,7 @@ implements AnnotatedClass
     private String name;
     private Date beginDate;
     private Date endDate;
-    private float price;
+    private double price;
     private List<CourseAddition> courseAdditions;
     
     
@@ -116,12 +116,12 @@ implements AnnotatedClass
         return true;
     }
 
-    public float getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
-        float old = this.price;
+    public void setPrice(double price) {
+        double old = this.price;
         this.price = price;
         firePropertyChange(PROPERTYNAME_PRICE, old, price);
     }
