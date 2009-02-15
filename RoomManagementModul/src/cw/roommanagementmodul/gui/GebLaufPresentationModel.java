@@ -9,6 +9,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.app.CalendarUtil;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.manager.PostingManager;
@@ -33,6 +34,7 @@ import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.BuchungsLaufZuordnung;
 import cw.roommanagementmodul.pojo.GebLauf;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -55,7 +57,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
     private boolean betriebsart = true;
     private SelectionInList<GebLauf> gebLaufList;
     private GebLaufManager gebLaufManager;
-    private int stornoInt=1;
+    private int stornoInt = 1;
 
     public GebLaufPresentationModel(GebLaufSelection gebLauf, String header) {
         super(gebLauf);
@@ -238,7 +240,8 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
                 }
 
-                final StornoResultPresentationModel model = new StornoResultPresentationModel(newPostingList, "Storno-Lauf Ergebnis");
+           
+                final StornoResultPresentationModel model = new StornoResultPresentationModel(newPostingList, "Storno Lauf Ergebnis");
                 final StornoResultView laufResultView = new StornoResultView(model);
                 model.addButtonListener(new ButtonListener() {
 
@@ -285,7 +288,11 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
             }
 
             if (checkAccounting == true) {
-                final LaufResultPresentationModel model = new LaufResultPresentationModel(selection, "Lauf Ergebnis");
+                Calendar c = new GregorianCalendar();
+                c.setTimeInMillis(gebLauf.getAbrMonat());
+                String monthStr = CalendarUtil.getMonth(c.get(Calendar.MONTH));
+                int yearInt = c.get(Calendar.YEAR);
+                final LaufResultPresentationModel model = new LaufResultPresentationModel(selection, "Lauf Ergebnis - " + monthStr + " " + yearInt);
                 final LaufResultView laufResultView = new LaufResultView(model);
                 model.addButtonListener(new ButtonListener() {
 
@@ -315,30 +322,32 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                 for (int i = 0; i < bewList.size(); i++) {
                     List<GebTarifSelection> gebTarifSelection = selection.get(bewList.get(i));
 
+
                     PostingManager postingManager = PostingManager.getInstance();
                     BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
                     for (int j = 0; j < gebTarifSelection.size(); j++) {
 
-                        BuchungsLaufZuordnung blz = new BuchungsLaufZuordnung();
-                        Posting posting = new Posting();
+                        if (!gebTarifSelection.get(j).isWarning()) {
+                            BuchungsLaufZuordnung blz = new BuchungsLaufZuordnung();
+                            Posting posting = new Posting();
 
-                        posting.setCustomer(bewList.get(i).getCustomer());
-                        posting.setPostingDate(gebLauf.getCpuDate());
-                        posting.setPostingEntryDate(new Date(gebTarifSelection.get(j).getAbrMonat()));
-                        posting.setAmount(gebTarifSelection.get(j).getTarif().getTarif());
-                        posting.setLiabilities(false);
-                        posting.setDescription(gebTarifSelection.get(j).getGebuehr().getGebuehr().getName());
-                        //acc.setCategory(category);
-                        postingManager.save(posting);
-                        blz.setPosting(posting);
-                        blz.setGebLauf(gebLauf);
-                        blz.setGebuehr(gebTarifSelection.get(j).getGebuehr().getGebuehr());
-                        blzManager.save(blz);
-
+                            posting.setCustomer(bewList.get(i).getCustomer());
+                            posting.setPostingDate(gebLauf.getCpuDate());
+                            posting.setPostingEntryDate(new Date(gebTarifSelection.get(j).getAbrMonat()));
+                            posting.setAmount(gebTarifSelection.get(j).getTarif().getTarif());
+                            posting.setLiabilities(false);
+                            posting.setDescription(gebTarifSelection.get(j).getGebuehr().getGebuehr().getName());
+                            //acc.setCategory(category);
+                            postingManager.save(posting);
+                            blz.setPosting(posting);
+                            blz.setGebLauf(gebLauf);
+                            blz.setGebuehr(gebTarifSelection.get(j).getGebuehr().getGebuehr());
+                            blzManager.save(blz);
+                        }
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Schwerwiegender Fehler! Es wurde keine Buchung durchgeführt");
+                JOptionPane.showMessageDialog(null, "Schwerwiegender Fehler! \nEs wurde keine Buchung durchgeführt", "Fehler", JOptionPane.WARNING_MESSAGE);
             }
         } else {
             JOptionPane.showMessageDialog(null, "Mit diesem Datum wurde bereits ein Gebührenlauf durchgeführt!");
@@ -355,6 +364,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
             List<GebTarifSelection> gebTarifSelection = selection.get(bewList.get(i));
             for (int j = 0; j < gebTarifSelection.size(); j++) {
+
                 if (gebTarifSelection.get(j).isNoTarifError() == true || gebTarifSelection.get(j).isMoreTarifError() == true) {
                     return true;
                 }

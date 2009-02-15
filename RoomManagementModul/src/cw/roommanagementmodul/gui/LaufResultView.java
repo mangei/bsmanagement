@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import cw.roommanagementmodul.pojo.Bewohner;
 import java.awt.Dimension;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
 /**
@@ -43,6 +44,7 @@ public class LaufResultView {
     public JPanel buildPanel() {
         initComponents();
 
+        boolean warningNoGebuehr=false;
         JViewPanel panel = new JViewPanel();
         panel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
         panel.getButtonPanel().add(bBack);
@@ -69,13 +71,23 @@ public class LaufResultView {
         int j = 1;
         for (int i = 0; i < bewohnerList.size(); i++) {
             bewohnerPanel = createBewohnerPanel(bewohnerList.get(i), model.getTarifSelection().get(bewohnerList.get(i)));
-            builder.add(bewohnerPanel, cc.xy(1, j));
-            j = j + 2;
+            if (bewohnerPanel != null) {
+                builder.add(bewohnerPanel, cc.xy(1, j));
+                j = j + 2;
+            }else{
+                warningNoGebuehr=true;
+            }
+
         }
 
         JScrollPane scroll = new JScrollPane(contentPanel);
-        scroll.setPreferredSize(new Dimension(10,10));
+        scroll.setPreferredSize(new Dimension(10, 10));
         panel.getContentPanel().add(scroll);
+        
+        if(warningNoGebuehr){
+            JOptionPane.showMessageDialog(null, "Es sind Bewohner vorhanden die keine Gebühr zugewießen bekommen haben.","Warunung",JOptionPane.INFORMATION_MESSAGE);
+        }
+
 
         return panel;
     }
@@ -97,7 +109,7 @@ public class LaufResultView {
 
 
         JViewPanel panel = new JViewPanel();
-        panel.setHeaderInfo(new HeaderInfo("" + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + "  Zimmer: " + b.getZimmer().getName()));
+        panel.setHeaderInfo(new HeaderInfo("" + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + "     Zimmer: " + b.getZimmer().getName() + "     Bereich: " + b.getZimmer().getBereich()));
 
         StringBuffer row = new StringBuffer("pref, 3dlu, pref, 12dlu,pref, 3dlu, pref, 12dlu");
         for (int i = 1; i < tarifSelectionList.size(); i++) {
@@ -142,23 +154,29 @@ public class LaufResultView {
 
                 }
 
-                kategorie = new JLabel(tarifSelectionList.get(i).getGebuehr().getGebuehr().getGebKat().getName());
+
+                if (tarifSelectionList.get(i).getGebuehr().getGebuehr().getGebKat() != null) {
+                    kategorie = new JLabel(tarifSelectionList.get(i).getGebuehr().getGebuehr().getGebKat().getName());
+                }
                 anmerkung = new JLabel(tarifSelectionList.get(i).getGebuehr().getAnmerkung());
             }
 
 
             if (tarifSelectionList.get(i).isMoreTarifError()) {
-                error = new JLabel("FEHLER: mehrere Tarife selektiert!");
+                error = new JLabel("mehrere Tarife selektiert!");
+                tarif = new JLabel("FEHLER");
                 summeCheck = true;
             }
 
             if (tarifSelectionList.get(i).isNoTarifError()) {
-                error = new JLabel("FEHLER: kein Tarif selektiert!");
+                error = new JLabel("kein Tarif selektiert!");
+                tarif = new JLabel("FEHLER");
                 summeCheck = true;
             }
             if (tarifSelectionList.get(i).isWarning()) {
                 error = new JLabel("WARNUNG: keine Gebühr vorhanden");
                 summeCheck = true;
+                return null;
             }
 
             //if (tarifSelectionList.get(i).isWarning() == false) {
@@ -183,6 +201,9 @@ public class LaufResultView {
 
             if (error != null) {
                 error.setForeground(Color.RED);
+                if (tarif != null) {
+                    tarif.setForeground(Color.RED);
+                }
                 builder.add(error, cc.xyw(1, yPos + 2, 15));
             }
             yPos = yPos + 4;

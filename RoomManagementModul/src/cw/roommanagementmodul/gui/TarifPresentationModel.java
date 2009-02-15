@@ -261,7 +261,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
 
         @Override
         public int getColumnCount() {
-            return 4;
+            return 3;
         }
 
         @Override
@@ -273,8 +273,6 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
                     return "Bis";
                 case 2:
                     return "Tarif";
-                case 3:
-                    return "Zuletzt verbucht";
                 default:
                     return "";
             }
@@ -294,8 +292,6 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
                     return t.getBis();
                 case 2:
                     return t.getTarif();
-                case 3:
-                    return t.getLastAccounted();
                 default:
                     return "";
             }

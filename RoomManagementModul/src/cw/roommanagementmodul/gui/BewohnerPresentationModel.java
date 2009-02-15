@@ -34,6 +34,7 @@ import cw.roommanagementmodul.pojo.manager.BewohnerHistoryManager;
 import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
 import cw.roommanagementmodul.pojo.manager.BewohnerManager;
 import cw.roommanagementmodul.pojo.manager.KautionManager;
+import java.util.List;
 
 /**
  *
@@ -387,7 +388,7 @@ public class BewohnerPresentationModel {
 
         @Override
         public int getColumnCount() {
-            return 7;
+            return 8;
         }
 
         @Override
@@ -404,9 +405,11 @@ public class BewohnerPresentationModel {
                 case 4:
                     return "Bereich";
                 case 5:
-                    return "Kaution";
+                    return "Einzugsdatum";
                 case 6:
-                    return "Kaution Status";
+                    return "Auszugsdatum";
+                case 7:
+                    return "Gebühr Zuordnungen";
                 default:
                     return "";
             }
@@ -442,18 +445,14 @@ public class BewohnerPresentationModel {
                     }
 
                 case 5:
-                    return b.getKaution();
+                    return b.getVon();
                 case 6:
-                    switch (b.getKautionStatus()) {
-                        case Bewohner.EINGEZAHLT:
-                            return "Eingezahlt";
-                        case Bewohner.KEINE_KAUTION:
-                            return "Keine Kaution";
-                        case Bewohner.NICHT_EINGEZAHLT:
-                            return "Nicht Eingezahlt";
-                        case Bewohner.ZURUECK_GEZAHLT:
-                            return "Zurück gezahlt";
-                    }
+                    return b.getBis();
+
+                case 7:
+                    GebuehrZuordnungManager gebZuoManager=GebuehrZuordnungManager.getInstance();
+                    List<GebuehrZuordnung> l=gebZuoManager.getGebuehrZuordnung(b);
+                    return l.size();
 
                 default:
                     return "";

@@ -38,7 +38,7 @@ public class GebLaufSelection extends Model {
 
     public BewohnerTarifSelection startSelection(long abrMonat) {
 
-        this.abrMonat = abrMonat;
+        this.setAbrMonat(abrMonat);
         List<Bewohner> bewohnerList = selectBewohnerList();
         List<BewohnerGebSelection> bewGebSelection = selectGebBewohner(bewohnerList);
 
@@ -49,7 +49,7 @@ public class GebLaufSelection extends Model {
     }
 
     private List<Bewohner> selectBewohnerList() {
-        return selectBewohnerList(this.abrMonat);
+        return selectBewohnerList(this.getAbrMonat());
     }
 
     public List<Bewohner> selectBewohnerList(long abrMonat) {
@@ -80,16 +80,16 @@ public class GebLaufSelection extends Model {
 
             for (int j = 0; j < gebZuordnungList.size(); j++) {
 
-                if (gebZuordnungList.get(j).getVon().getTime() <= this.abrMonat) {
-                    if (gebZuordnungList.get(j).getBis() == null || abrMonat <= gebZuordnungList.get(j).getBis().getTime()) {
+                if (gebZuordnungList.get(j).getVon().getTime() <= this.getAbrMonat()) {
+                    if (gebZuordnungList.get(j).getBis() == null || getAbrMonat() <= gebZuordnungList.get(j).getBis().getTime()) {
                         selectedGebuehr.add(new GebuehrAnm(gebZuordnungList.get(j).getGebuehr(), gebZuordnungList.get(j).getAnmerkung()));
                     }
                 }
             }
             if (selectedGebuehr.size() != 0) {
-                bewohnerGebSelection.add(new BewohnerGebSelection(this.abrMonat, selectedBewohner.get(i), selectedGebuehr, false));
+                bewohnerGebSelection.add(new BewohnerGebSelection( this.getAbrMonat(),selectedBewohner.get(i), selectedGebuehr, false));
             } else {
-                bewohnerGebSelection.add(new BewohnerGebSelection(this.abrMonat, selectedBewohner.get(i), null, true));
+                bewohnerGebSelection.add(new BewohnerGebSelection( this.getAbrMonat(),selectedBewohner.get(i), null, true));
             }
         }
         return bewohnerGebSelection;
@@ -113,7 +113,7 @@ public class GebLaufSelection extends Model {
                     Tarif tarif = null;
                     GebuehrAnm gebuehrAnm = bewGeb.getGebList().get(j);
                     List<Tarif> tarifList = tarifManager.getTarif(gebuehrAnm.getGebuehr());
-                    List<Tarif> selectedTarif = getSelectedTarif(tarifList, abrMonat);
+                    List<Tarif> selectedTarif = getSelectedTarif(tarifList,getAbrMonat());
 
                     if (selectedTarif.size() == 0) {
                         noTarifError = true;
@@ -127,10 +127,10 @@ public class GebLaufSelection extends Model {
                         moreTarifError = false;
                     }
 
-                    gebTarifList.add(new GebTarifSelection(abrMonat, gebuehrAnm, tarif, bewGeb.isWarning(), noTarifError, moreTarifError));
+                    gebTarifList.add(new GebTarifSelection(getAbrMonat(),gebuehrAnm, tarif, bewGeb.isWarning(), noTarifError, moreTarifError));
                 }
             } else {
-                gebTarifList.add(new GebTarifSelection(abrMonat, null, null, bewGeb.isWarning(), false, false));
+                gebTarifList.add(new GebTarifSelection(getAbrMonat(), null, null, bewGeb.isWarning(), false, false));
             }
 
 
@@ -179,5 +179,19 @@ public class GebLaufSelection extends Model {
      */
     public void setMonat(int monat) {
         this.monat = monat;
+    }
+
+    /**
+     * @return the abrMonat
+     */
+    public long getAbrMonat() {
+        return abrMonat;
+    }
+
+    /**
+     * @param abrMonat the abrMonat to set
+     */
+    public void setAbrMonat(long abrMonat) {
+        this.abrMonat = abrMonat;
     }
 }

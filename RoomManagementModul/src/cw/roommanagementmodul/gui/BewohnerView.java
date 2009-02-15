@@ -9,6 +9,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.roommanagementmodul.component.DateTimeTableCellRenderer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JButton;
@@ -63,6 +64,9 @@ public class BewohnerView {
         tBewohner.setSelectionModel(
                 new SingleListSelectionAdapter(
                 model.getBewohnerSelection().getSelectionIndexHolder()));
+
+        tBewohner.getColumnModel().getColumn(5).setCellRenderer(new DateTimeTableCellRenderer(true));
+        tBewohner.getColumnModel().getColumn(6).setCellRenderer(new DateTimeTableCellRenderer(true));
         
 
     }

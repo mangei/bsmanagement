@@ -82,7 +82,7 @@ public class StornoResultView {
 
 
         JViewPanel panel = new JViewPanel();
-        panel.setHeaderInfo(new HeaderInfo("" + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + "  Zimmer: " + b.getZimmer().getName()));
+        panel.setHeaderInfo(new HeaderInfo("" + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + "     Zimmer: " + b.getZimmer().getName() + "     Bereich: " + b.getZimmer().getBereich()));
 
         StringBuffer row = new StringBuffer("pref, 3dlu, pref, 12dlu,pref, 3dlu, pref, 12dlu");
         for (int i = 1; i < postingList.size(); i++) {

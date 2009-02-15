@@ -66,9 +66,11 @@ public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention
             }
             //--------------------------------------------------------------------------------
 
-            b.setCustomer(c);
-            b.setActive(true);
-            bewohnerManager.save(b);
+            if (checkChrono() == true) {
+                b.setCustomer(c);
+                b.setActive(true);
+                bewohnerManager.save(b);
+            }
 
 //        if (tempZimmer == null) {
 //            historyManager.saveBewohnerHistory(b);
@@ -90,13 +92,23 @@ public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention
 
     }
 
+    //Kontroliert ob das Bis-Datum chronologisch nach dem Von-Datum ist
+    private boolean checkChrono() {
+        if (b.getBis() != null) {
+            if (b.getBis().getTime() <= b.getVon().getTime()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public void reset() {
         model.triggerFlush();
     }
 
     public boolean validate() {
         model.triggerCommit();
-        if (model.getCheckBoxState() == ItemEvent.SELECTED && (b.getZimmer() == null || b.getVon() == null)) {
+        if (model.getCheckBoxState() == ItemEvent.SELECTED && (b.getZimmer() == null || b.getVon() == null || checkChrono() == false)) {
             return false;
         } else {
             return true;
@@ -105,10 +117,13 @@ public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention
 
     public List<String> getErrorMessages() {
         ArrayList<String> l = new ArrayList<String>();
-        if (!validate()) {
+        if (model.getCheckBoxState() == ItemEvent.SELECTED && (b.getZimmer() == null || b.getVon() == null)) {
             l.add("In der Registerkarte Zimmer müssen die Attribute Einzugsdatum und Zimmer gesetzt sein!");
-            return l;
         }
+        if (model.getCheckBoxState() == ItemEvent.SELECTED && checkChrono() == false) {
+            l.add("In der Registerkarte Zimmer muss sich das Bis-Datum chronologisch nach dem Von-Datum befinden.");
+        }
+
         return l;
     }
 }
