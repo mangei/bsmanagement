@@ -34,8 +34,7 @@ public class GebBewohnerView {
     public JLabel lAnmerkung;
     public JComboBox cbGebuehr;
     public JTextField tfAnmerkung;
-    private JDateChooser dcVon;
-    private JDateChooser dcBis;
+
     public JButton bSave;
     public JButton bReset;
     public JButton bCancel;
@@ -65,17 +64,16 @@ public class GebBewohnerView {
         bReset = new JButton(model.getResetButtonAction());
         bReset.setText("Zurücksetzen");
 
-        dcVon = new JDateChooser();
-        dcVon.getJCalendar().setDecorationBordersVisible(false);
-        dcVon.getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
-        dcVon.getJCalendar().getDayChooser().setWeekOfYearVisible(false);
-        PropertyConnector.connectAndUpdate(model.getBufferedModel(GebuehrZuordnung.PROPERTYNAME_VON), dcVon, "date");
+        
+        model.getDcVon().getJCalendar().setDecorationBordersVisible(false);
+        model.getDcVon().getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
+        model.getDcVon().getJCalendar().getDayChooser().setWeekOfYearVisible(false);
+        PropertyConnector.connectAndUpdate(model.getBufferedModel(GebuehrZuordnung.PROPERTYNAME_VON), model.getDcVon(), "date");
 
-        dcBis = new JDateChooser();
-        dcBis.getJCalendar().setDecorationBordersVisible(false);
-        dcBis.getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
-        dcBis.getJCalendar().getDayChooser().setWeekOfYearVisible(false);
-        PropertyConnector.connectAndUpdate(model.getBufferedModel(Bewohner.PROPERTYNAME_BIS), dcBis, "date");
+        model.getDcBis().getJCalendar().setDecorationBordersVisible(false);
+        model.getDcBis().getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
+        model.getDcBis().getJCalendar().getDayChooser().setWeekOfYearVisible(false);
+        PropertyConnector.connectAndUpdate(model.getBufferedModel(Bewohner.PROPERTYNAME_BIS), model.getDcBis(), "date");
 
         cbGebuehr = new JComboBox(model.createGebuehrComboModel(model.getGebuehrList()));
     }
@@ -110,8 +108,8 @@ public class GebBewohnerView {
         contentPanel.add(lAnmerkung, cc.xy(1, 11));
 
         contentPanel.add(cbGebuehr, cc.xy(3, 5));
-        contentPanel.add(dcVon, cc.xy(3, 7));
-        contentPanel.add(dcBis, cc.xy(3, 9));
+        contentPanel.add(model.getDcVon(), cc.xy(3, 7));
+        contentPanel.add(model.getDcBis(), cc.xy(3, 9));
         contentPanel.add(tfAnmerkung, cc.xy(3, 11));
 
 

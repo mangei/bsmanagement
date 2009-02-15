@@ -17,7 +17,7 @@ import javax.persistence.OneToMany;
  * @author Jeitler Dominik
  */
 @Entity
-public class Bereich extends Model implements AnnotatedClass{
+public class Bereich extends Model implements AnnotatedClass {
 
     private Long id;
     private String name;
@@ -43,8 +43,6 @@ public class Bereich extends Model implements AnnotatedClass{
         this.parentBereich = parentBereich;
     }
 
-
-
     public Bereich() {
     }
 
@@ -66,19 +64,18 @@ public class Bereich extends Model implements AnnotatedClass{
         this.name = name;
     }
 
-    @ManyToOne(cascade={CascadeType.PERSIST,CascadeType.REFRESH})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
     public Bereich getParentBereich() {
         return parentBereich;
     }
 
     public void setParentBereich(Bereich bereich) {
-         Bereich oldBereich = getParentBereich();
+        Bereich oldBereich = getParentBereich();
         this.parentBereich = bereich;
         firePropertyChange(PROPERTYNAME_PARENTBEREICH, oldBereich, bereich);
     }
 
-    
-    @OneToMany(mappedBy = "parentBereich", cascade=CascadeType.REMOVE)
+    @OneToMany(mappedBy = "parentBereich", cascade = CascadeType.REMOVE)
     public List<Bereich> getChildBereichList() {
         return childBereichList;
     }
@@ -98,7 +95,22 @@ public class Bereich extends Model implements AnnotatedClass{
 
     @Override
     public String toString() {
-        return this.name;
+        Bereich parent = this;
+        StringBuffer str = new StringBuffer();
+
+        if(this.getParentBereich()==null){
+            return this.name;
+        }
+        while (parent.getParentBereich() != null) {
+
+            if(parent.getParentBereich().getParentBereich()==null){
+                str.insert(0, parent.getName());
+            }else{
+                str.insert(0, " / " + parent.getName());
+            }
+            parent = parent.getParentBereich();
+        }
+        return str.toString();
     }
 
     @Override

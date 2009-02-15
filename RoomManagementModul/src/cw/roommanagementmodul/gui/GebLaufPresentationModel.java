@@ -5,6 +5,7 @@
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
+import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
@@ -31,6 +32,7 @@ import cw.roommanagementmodul.pojo.manager.GebLaufManager;
 import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.BuchungsLaufZuordnung;
 import cw.roommanagementmodul.pojo.GebLauf;
+import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -51,6 +53,9 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
     private DefaultComboBoxModel monatCbModel;
     private boolean laufart = true;
     private boolean betriebsart = true;
+    private SelectionInList<GebLauf> gebLaufList;
+    private GebLaufManager gebLaufManager;
+    private int stornoInt=1;
 
     public GebLaufPresentationModel(GebLaufSelection gebLauf, String header) {
         super(gebLauf);
@@ -59,7 +64,6 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         initModels();
         this.initEventHandling();
     }
-
 
     private void initEventHandling() {
     }
@@ -72,6 +76,10 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         echtLauf = new EchtLaufAction();
         monatCbModel = new DefaultComboBoxModel();
         setYearDocument(new YearDocument());
+
+        gebLaufManager = GebLaufManager.getInstance();
+        gebLaufList = new SelectionInList<GebLauf>(gebLaufManager.getAllOrdered());
+
 
         getMonatCbModel().addElement("Jänner");
         getMonatCbModel().addElement("Februar");
@@ -123,6 +131,48 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         this.yearDocument = yearDocument;
     }
 
+    /**
+     * @return the gebLaufList
+     */
+    public SelectionInList<GebLauf> getGebLaufList() {
+        return gebLaufList;
+    }
+
+    /**
+     * @param gebLaufList the gebLaufList to set
+     */
+    public void setGebLaufList(SelectionInList<GebLauf> gebLaufList) {
+        this.gebLaufList = gebLaufList;
+    }
+
+    /**
+     * @return the laufart
+     */
+    public boolean isLaufart() {
+        return laufart;
+    }
+
+    /**
+     * @param laufart the laufart to set
+     */
+    public void setLaufart(boolean laufart) {
+        this.laufart = laufart;
+    }
+
+    /**
+     * @return the stornoInt
+     */
+    public int getStornoInt() {
+        return stornoInt;
+    }
+
+    /**
+     * @param stornoInt the stornoInt to set
+     */
+    public void setStornoInt(int stornoInt) {
+        this.stornoInt = stornoInt;
+    }
+
     private class StartAction
             extends AbstractAction {
 
@@ -131,6 +181,87 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         }
 
         public void actionPerformed(ActionEvent e) {
+
+            if (laufart == true) {
+                startGebLauf();
+            }
+            if (laufart == false) {
+                startStornoLauf();
+            }
+        }
+    }
+
+    private void startStornoLauf() {
+        GebLauf stornoGebLauf = gebLaufList.getSelection();
+
+        int checkGO = JOptionPane.YES_OPTION;
+        if (betriebsart == false) {
+            checkGO = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich im Echtlauf starten?", "ACHTUNG!", JOptionPane.YES_NO_OPTION);
+        }
+
+        if (checkGO == JOptionPane.YES_OPTION) {
+            if (stornoGebLauf != null) {
+
+                BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
+                List<BuchungsLaufZuordnung> blzList = blzManager.getBuchungsLaufZuordnung(stornoGebLauf);
+
+                List<Posting> newPostingList = new ArrayList<Posting>();
+
+                for (int i = 0; i < blzList.size(); i++) {
+
+                    Posting oldPosting = blzList.get(i).getPosting();
+                    Posting newPosting = new Posting();
+
+                    newPosting.setCustomer(oldPosting.getCustomer());
+                    newPosting.setDescription("Storno " + oldPosting.getDescription());
+                    newPosting.setAmount(oldPosting.getAmount());
+                    newPosting.setAssets(!oldPosting.isAssets());
+                    newPosting.setLiabilities(!oldPosting.isLiabilities());
+                    newPosting.setLiabilitiesAssets(!oldPosting.isLiabilitiesAssets());
+                    newPosting.setPostingCategory(oldPosting.getPostingCategory());
+                    newPosting.setPostingDate(new Date());
+                    newPosting.setPostingEntryDate(new Date());
+
+                    if (betriebsart == false) {
+                        PostingManager postingManager = PostingManager.getInstance();
+                        postingManager.save(newPosting);
+                    }
+
+
+                    newPostingList.add(newPosting);
+                }
+
+                if (betriebsart == false) {
+                    gebLaufManager.delete(stornoGebLauf);
+                    blzManager.delete(blzList);
+                    gebLaufList.setList(gebLaufManager.getAllOrdered());
+
+                }
+
+                final StornoResultPresentationModel model = new StornoResultPresentationModel(newPostingList, "Storno-Lauf Ergebnis");
+                final StornoResultView laufResultView = new StornoResultView(model);
+                model.addButtonListener(new ButtonListener() {
+
+                    public void buttonPressed(ButtonEvent evt) {
+                        GUIManager.changeToLastView();
+                    }
+                });
+                GUIManager.changeView(laufResultView.buildPanel(), true);
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Für den Storno-Lauf muss ein Gebührenlauf ausgewählt sein!");
+            }
+        }
+
+    }
+
+    private void startGebLauf() {
+        int checkGO = JOptionPane.YES_OPTION;
+        if (betriebsart == false) {
+            checkGO = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich im Echtlauf starten?", "ACHTUNG!", JOptionPane.YES_NO_OPTION);
+        }
+
+        if (checkGO == JOptionPane.YES_OPTION) {
 
             int month = findMonth();
             int year = 0;
@@ -146,52 +277,51 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
             GebLaufSelection gebLaufSelection = new GebLaufSelection();
             BewohnerTarifSelection selection = gebLaufSelection.startSelection(gebLauf.getAbrMonat());
 
+            boolean checkAccounting = true;
             if (betriebsart == false) {
-                System.out.println("huso");
-                startAccounting(selection, gebLauf);
+                checkAccounting = startAccounting(selection, gebLauf);
+                gebLaufList.setList(gebLaufManager.getAllOrdered());
             }
 
-            final LaufResultPresentationModel model = new LaufResultPresentationModel(selection, "Lauf Ergebnis");
-            final LaufResultView laufResultView = new LaufResultView(model);
+            if (checkAccounting == true) {
+                final LaufResultPresentationModel model = new LaufResultPresentationModel(selection, "Lauf Ergebnis");
+                final LaufResultView laufResultView = new LaufResultView(model);
+                model.addButtonListener(new ButtonListener() {
 
+                    public void buttonPressed(ButtonEvent evt) {
+                        GUIManager.changeToLastView();
+                    }
+                });
+                GUIManager.changeView(laufResultView.buildPanel(), true);
 
-
-            model.addButtonListener(new ButtonListener() {
-
-                public void buttonPressed(ButtonEvent evt) {
-                    GUIManager.changeToLastView();
-                }
-            });
-            GUIManager.changeView(laufResultView.buildPanel(), true);
-
-
+            }
         }
     }
 
-    private void startAccounting(BewohnerTarifSelection selection, GebLauf gebLauf) {
+    private boolean startAccounting(BewohnerTarifSelection selection, GebLauf gebLauf) {
 
-        GebLaufManager gebLaufManager= GebLaufManager.getInstance();
-        if(gebLaufManager.existGebLauf(gebLauf.getAbrMonat())==false){
+        gebLaufManager = GebLaufManager.getInstance();
+        if (gebLaufManager.existGebLauf(gebLauf.getAbrMonat()) == false) {
 
-            GebLaufSelection gebLaufSelection= new GebLaufSelection();
-            List<Bewohner> bewList=gebLaufSelection.selectBewohnerList(gebLauf.getAbrMonat());
+            GebLaufSelection gebLaufSelection = new GebLaufSelection();
+            List<Bewohner> bewList = gebLaufSelection.selectBewohnerList(gebLauf.getAbrMonat());
 
-            boolean error=checkError(selection, bewList);
+            boolean error = checkError(selection, bewList);
 
-            if(error=false){
+            if (error == false) {
                 gebLaufManager.save(gebLauf);
-                
-                for(int i=0;i<bewList.size();i++){
-                    List<GebTarifSelection> gebTarifSelection=selection.get(bewList.get(i));
+
+                for (int i = 0; i < bewList.size(); i++) {
+                    List<GebTarifSelection> gebTarifSelection = selection.get(bewList.get(i));
 
                     PostingManager postingManager = PostingManager.getInstance();
-                    BuchungsLaufZuordnungManager blzManager=BuchungsLaufZuordnungManager.getInstance();
-                    for(int j=0;j<gebTarifSelection.size();j++){
+                    BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
+                    for (int j = 0; j < gebTarifSelection.size(); j++) {
 
-                        BuchungsLaufZuordnung blz= new BuchungsLaufZuordnung();
-                        Posting posting= new Posting();
+                        BuchungsLaufZuordnung blz = new BuchungsLaufZuordnung();
+                        Posting posting = new Posting();
 
-                        posting.setCustomer(bewList.get(j).getCustomer());
+                        posting.setCustomer(bewList.get(i).getCustomer());
                         posting.setPostingDate(gebLauf.getCpuDate());
                         posting.setPostingEntryDate(new Date(gebTarifSelection.get(j).getAbrMonat()));
                         posting.setAmount(gebTarifSelection.get(j).getTarif().getTarif());
@@ -199,31 +329,32 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                         posting.setDescription(gebTarifSelection.get(j).getGebuehr().getGebuehr().getName());
                         //acc.setCategory(category);
                         postingManager.save(posting);
-                        blz.setAccount(posting);
+                        blz.setPosting(posting);
                         blz.setGebLauf(gebLauf);
                         blz.setGebuehr(gebTarifSelection.get(j).getGebuehr().getGebuehr());
                         blzManager.save(blz);
 
                     }
                 }
-            }else{
+            } else {
                 JOptionPane.showMessageDialog(null, "Schwerwiegender Fehler! Es wurde keine Buchung durchgeführt");
             }
-
-
+        } else {
+            JOptionPane.showMessageDialog(null, "Mit diesem Datum wurde bereits ein Gebührenlauf durchgeführt!");
+            return false;
         }
 
+        return true;
 
     }
 
-
     private boolean checkError(BewohnerTarifSelection selection, List<Bewohner> bewList) {
 
-        for(int i=0;i<bewList.size();i++){
+        for (int i = 0; i < bewList.size(); i++) {
 
-            List<GebTarifSelection> gebTarifSelection=selection.get(bewList.get(i));
-            for(int j=0;j<gebTarifSelection.size();j++){
-                if(gebTarifSelection.get(j).isNoTarifError()== true || gebTarifSelection.get(j).isMoreTarifError()==true){
+            List<GebTarifSelection> gebTarifSelection = selection.get(bewList.get(i));
+            for (int j = 0; j < gebTarifSelection.size(); j++) {
+                if (gebTarifSelection.get(j).isNoTarifError() == true || gebTarifSelection.get(j).isMoreTarifError() == true) {
                     return true;
                 }
             }
@@ -279,7 +410,8 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
             extends AbstractAction {
 
         public void actionPerformed(ActionEvent e) {
-            laufart = true;
+            stornoInt++;
+            setLaufart(true);
         }
     }
 
@@ -287,8 +419,8 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
             extends AbstractAction {
 
         public void actionPerformed(ActionEvent e) {
-            System.out.println("storno");
-            laufart = false;
+            stornoInt++;
+            setLaufart(false);
         }
     }
 

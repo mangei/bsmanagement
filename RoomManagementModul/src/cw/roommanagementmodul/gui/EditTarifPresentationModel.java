@@ -259,7 +259,7 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
         }
 
         if (checkNoTarifError() == false) {
-            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten führen zu einem lückenhaften Tarif Bestand führen! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
+            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten führen zu einem lückenhaften Tarif Bestand! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
             if (answer == 1) {
                 return false;
             }
@@ -272,7 +272,7 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
     private boolean checkNoTarifError() {
 
         List<Tarif> sortedTarif = tarifManager.getAllOrderd(tarif.getGebuehr());
-        if (sortedTarif.size() >= 1) {
+        if (sortedTarif.size() > 1) {
             long von = dcVon.getDate().getTime();
             long bis = dcBis.getDate().getTime();
 

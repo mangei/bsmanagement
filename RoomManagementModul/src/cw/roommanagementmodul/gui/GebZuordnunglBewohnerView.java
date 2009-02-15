@@ -9,6 +9,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.roommanagementmodul.component.DateTimeTableCellRenderer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JButton;
@@ -55,6 +56,9 @@ public class GebZuordnunglBewohnerView {
         tZuordnung.setSelectionModel(
                 new SingleListSelectionAdapter(
                 model.getGebuehrZuordnungSelection().getSelectionIndexHolder()));
+
+        tZuordnung.getColumnModel().getColumn(1).setCellRenderer(new DateTimeTableCellRenderer(true));
+        tZuordnung.getColumnModel().getColumn(2).setCellRenderer(new DateTimeTableCellRenderer(true));
     }
 
     private void initEventHandling() {

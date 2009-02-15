@@ -117,7 +117,11 @@ public class BereichView {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
             if (node.getUserObject() instanceof Zimmer) {
                 setIcon(CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"));
+                Zimmer z=(Zimmer)node.getUserObject();
+                setText(z.getName());
             } else {
+                Bereich b=(Bereich)node.getUserObject();
+                setText(b.getName());
                 if (isRoot(value)) {
                     setIcon(CWUtils.loadIcon("cw/boardingschoolmanagement/images/house.png"));
 

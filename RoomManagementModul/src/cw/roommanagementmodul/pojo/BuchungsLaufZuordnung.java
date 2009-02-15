@@ -7,14 +7,17 @@ package cw.roommanagementmodul.pojo;
 
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import cw.customermanagementmodul.pojo.Posting;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 /**
  *
  * @author Dominik
  */
+@Entity
 public class BuchungsLaufZuordnung implements AnnotatedClass{
 
     private Long id;
@@ -53,6 +56,7 @@ public class BuchungsLaufZuordnung implements AnnotatedClass{
     /**
      * @return the gebLauf
      */
+    @ManyToOne
     public GebLauf getGebLauf() {
         return gebLauf;
     }
@@ -67,6 +71,7 @@ public class BuchungsLaufZuordnung implements AnnotatedClass{
     /**
      * @return the account
      */
+    @ManyToOne
     public Posting getPosting() {
         return posting;
     }
@@ -74,13 +79,14 @@ public class BuchungsLaufZuordnung implements AnnotatedClass{
     /**
      * @param account the account to set
      */
-    public void setAccount(Posting posting) {
+    public void setPosting(Posting posting) {
         this.posting = posting;
     }
 
     /**
      * @return the gebuehr
      */
+    @ManyToOne
     public Gebuehr getGebuehr() {
         return gebuehr;
     }
@@ -90,6 +96,28 @@ public class BuchungsLaufZuordnung implements AnnotatedClass{
      */
     public void setGebuehr(Gebuehr gebuehr) {
         this.gebuehr = gebuehr;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final BuchungsLaufZuordnung other = (BuchungsLaufZuordnung) obj;
+        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 59 * hash + (this.id != null ? this.id.hashCode() : 0);
+        return hash;
     }
 
     

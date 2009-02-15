@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import cw.roommanagementmodul.pojo.Bereich;
+import cw.roommanagementmodul.pojo.manager.BereichManager;
 import javax.swing.JOptionPane;
 
 /**
@@ -47,6 +48,8 @@ public class EditBereichView {
         //parentComboBox= BasicComponentFactory.createComboBox(model.getBereichList());
 
         parentComboBox = new JComboBox(model.createParentBereichComboModel(model.getBereichList()));
+        BereichManager bManager= BereichManager.getInstance();
+        //bManager.refreshBereich(model.getVaterBereich());
         if (model.getVaterBereich() != null && model.getHeaderText().equals("Bereich erstellen")) {
             if (model.getVaterBereich().getZimmerList() == null || model.getVaterBereich().getZimmerList().size() == 0) {
                 parentComboBox.setSelectedItem(model.getVaterBereich());

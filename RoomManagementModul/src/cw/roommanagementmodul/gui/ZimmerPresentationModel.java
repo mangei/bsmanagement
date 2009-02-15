@@ -284,7 +284,7 @@ public class ZimmerPresentationModel {
                     return z.getName();
                 case 1:
                     if (z.getBereich() != null) {
-                        return z.getBereich().getName();
+                        return z.getBereich();
                     } else {
                         return "-";
                     }

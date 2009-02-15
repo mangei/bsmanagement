@@ -179,27 +179,30 @@ public class GebuehrenPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            Gebuehr g = gebuehrenSelection.getSelection();
-            final TarifPresentationModel model = new TarifPresentationModel(g, "Tarif Übersicht: " + g.getName());
-            final TarifView editView = new TarifView(model);
-            model.addButtonListener(new ButtonListener() {
+            showTarif();
+        }
+    }
 
-                public void buttonPressed(ButtonEvent evt) {
-                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                        //gebuehrenManager.saveGebuehr(g);
+    private void showTarif() {
+        Gebuehr g = gebuehrenSelection.getSelection();
+        final TarifPresentationModel model = new TarifPresentationModel(g, "Tarif Übersicht: " + g.getName());
+        final TarifView editView = new TarifView(model);
+        model.addButtonListener(new ButtonListener() {
+
+            public void buttonPressed(ButtonEvent evt) {
+                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    //gebuehrenManager.saveGebuehr(g);
                     }
-                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
 //                        model.removeButtonListener(this);
 //                        getGebuehrenSelection().setList(gebuehrenManager.getGebuehr());
 //                        GUIManager.changeToLastView();
 //                        GUIManager.getStatusbar().setTextAndFadeOut("Gebuehr wurde erstellt.");
                     }
-                }
-            });
-            GUIManager.changeView(editView.buildPanel(), true);
+            }
+        });
+        GUIManager.changeView(editView.buildPanel(), true);
 
-
-        }
     }
 
     private class EditAction
@@ -249,7 +252,7 @@ public class GebuehrenPresentationModel {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-                editSelectedItem(e);
+                showTarif();
             }
         }
     }

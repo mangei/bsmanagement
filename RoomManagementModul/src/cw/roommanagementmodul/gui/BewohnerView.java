@@ -43,7 +43,7 @@ public class BewohnerView {
         bGeb = new JButton(model.getGebAction());
         bGeb.setText("Neue Gebühr");
         bDelete = new JButton(model.getDeleteAction());
-        bDelete.setText("Austreten");
+        bDelete.setText("Löschen");
         bGebZuordnung = new JButton(model.getGebuehrZuordnungAction());
         bGebZuordnung.setText("Übersicht");
         bHistory= new JButton(model.getHistoryAction());
@@ -83,10 +83,10 @@ public class BewohnerView {
         panel.getButtonPanel().add(bDetail);
         panel.getButtonPanel().add(bGebZuordnung);
         panel.getButtonPanel().add(bGeb);
-        panel.getButtonPanel().add(bHistory);
+        //panel.getButtonPanel().add(bHistory);
         panel.getButtonPanel().add(bDelete);
         panel.getButtonPanel().add(bKaution);
-        panel.getButtonPanel().add(bInaktive);
+        //panel.getButtonPanel().add(bInaktive);
         
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");

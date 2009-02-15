@@ -70,11 +70,13 @@ public class GebuehrenView {
         JViewPanel panel = new JViewPanel();
         
         panel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+
+        panel.getButtonPanel().add(bTarif);
+        panel.getButtonPanel().add(bKategorie);
         panel.getButtonPanel().add(bNew);
         panel.getButtonPanel().add(bEdit);
         panel.getButtonPanel().add(bDelete);
-        panel.getButtonPanel().add(bTarif);
-        panel.getButtonPanel().add(bKategorie);
+        
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
         panel.getTopPanel().setLayout(layout);

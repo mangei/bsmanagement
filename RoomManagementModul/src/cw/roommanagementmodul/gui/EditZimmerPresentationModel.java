@@ -43,6 +43,7 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
     private SelectionInList<Bereich> bereichList;
     private ValueModel unsaved;
     private String headerText;
+    private Bereich selectedBereich;
 
     public EditZimmerPresentationModel(Zimmer zimmer) {
         super(zimmer);
@@ -60,6 +61,17 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
         initModels();
         initEventHandling();
     }
+
+        EditZimmerPresentationModel(Zimmer zimmer, String header,Bereich selectedBereich) {
+        super(zimmer);
+        this.selectedBereich=selectedBereich;
+        this.zimmer = zimmer;
+        bereichManager =BereichManager.getInstance();
+        this.headerText=header;
+        initModels();
+        initEventHandling();
+    }
+
 
     private void initEventHandling() {
         setUnsaved(new ValueHolder());
@@ -88,6 +100,10 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
         List<Bereich> l = getBereichManager().getBereichLeaf();
 
         bereichList = new SelectionInList(l, getModel(Zimmer.PROPERTYNAME_BEREICH));
+        if(selectedBereich!=null){
+           bereichList.setSelection(selectedBereich);
+        }
+        
         support = new ButtonListenerSupport();
         bereichList.addValueChangeListener(new SaveListener());
         getBufferedModel(Zimmer.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());

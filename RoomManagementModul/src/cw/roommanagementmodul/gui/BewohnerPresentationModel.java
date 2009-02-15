@@ -4,7 +4,6 @@
  */
 package cw.roommanagementmodul.gui;
 
-
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.binding.list.SelectionInList;
@@ -20,9 +19,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Date;
 import java.util.EventObject;
-import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ComboBoxModel;
@@ -32,7 +29,6 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 
 import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.BewohnerHistory;
 import cw.roommanagementmodul.pojo.GebuehrZuordnung;
 import cw.roommanagementmodul.pojo.manager.BewohnerHistoryManager;
 import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
@@ -43,7 +39,7 @@ import cw.roommanagementmodul.pojo.manager.KautionManager;
  *
  * @author Dominik
  */
-public class BewohnerPresentationModel  {
+public class BewohnerPresentationModel {
 
     private BewohnerManager bewohnerManager;
     private String headerText;
@@ -87,10 +83,11 @@ public class BewohnerPresentationModel  {
         inaktiveAction = new InaktiveAction();
         kautionAction = new KautionAction();
         detailAction = new AbstractAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")) {
+
             public void actionPerformed(ActionEvent e) {
                 CustomerManagementPresentationModel.editCustomer(bewohnerSelection.getSelection().getCustomer());
                 bewohnerSelection.setList(bewohnerManager.getBewohner(true));
-                System.out.println("hh active Bewohner");
+                System.out.println("#######################hh active Bewohner--------------");
             }
         };
         bewohnerSelection = new SelectionInList<Bewohner>(getBewohnerManager().getBewohner(true));
@@ -197,31 +194,6 @@ public class BewohnerPresentationModel  {
     }
 
     public void deleteBewohner() {
-        Bewohner b = getBewohnerSelection().getSelection();
-//        List<BewohnerHistory> list = historyManager.getBewohnerHistory(b);
-//
-//        long time, lastTime = 0;
-//        int lastDateIdx = 0;
-//        for (int i = 0; i < list.size(); i++) {
-//            time = list.get(i).getLastDatestamp().getTime();
-//            if (time > lastTime) {
-//                lastTime = time;
-//                lastDateIdx = i;
-//            }
-//        }
-//
-//        if (list.get(lastDateIdx).getBis() == null) {
-//            list.get(lastDateIdx).setBis(new Date());
-//            historyManager.save(list.get(lastDateIdx));
-//        }
-
-        b.setZimmer(null);
-        b.setVon(null);
-        b.setBis(null);
-        b.setActive(false);
-        bewohnerManager.save(b);
-
-        bewohnerSelection.setList(bewohnerManager.getBewohner(true));
     }
 
     private class DeleteAction
@@ -234,16 +206,13 @@ public class BewohnerPresentationModel  {
         public void actionPerformed(ActionEvent e) {
             Bewohner b = getBewohnerSelection().getSelection();
 
-            int k = JOptionPane.showConfirmDialog(null, "Bewohner: " + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + " in denn Inaktiv Bereich verschieben?", "Verschieben", JOptionPane.OK_CANCEL_OPTION);
+            int k = JOptionPane.showConfirmDialog(null, "Bewohner: " + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + " wirklich löschen?", "LÖSCHEN", JOptionPane.OK_CANCEL_OPTION);
             if (k == JOptionPane.OK_OPTION) {
-                if (b.getKautionStatus() == Bewohner.EINGEZAHLT) {
-                    int j = JOptionPane.showConfirmDialog(null, "Der Status der Kaution befindet sich auf EINGEZAHLT!  \n \n Trotzdem verschieben?", "Kaution", JOptionPane.OK_CANCEL_OPTION);
-                    if (j == JOptionPane.OK_OPTION) {
-                        deleteBewohner();
-                    }
-                } else {
-                    deleteBewohner();
-                }
+
+                gebZuordnungManager.removeGebuehrZuordnung(b);
+                bewohnerManager.delete(b);
+                bewohnerSelection.setList(bewohnerManager.getBewohner(true));
+
             }
         }
     }
@@ -272,7 +241,6 @@ public class BewohnerPresentationModel  {
         }
     }
 
-    
     private class InaktiveAction
             extends AbstractAction {
 
@@ -342,7 +310,7 @@ public class BewohnerPresentationModel  {
         }
     }
 
-    // Event Handling *********************************************************
+// Event Handling *********************************************************
     public MouseListener getDoubleClickHandler() {
         return new DoubleClickHandler();
     }
@@ -353,7 +321,7 @@ public class BewohnerPresentationModel  {
         public void mouseClicked(MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
                 CustomerManagementPresentationModel.editCustomer(bewohnerSelection.getSelection().getCustomer());
-                //detailSelectedItem(e);
+            //detailSelectedItem(e);
             }
         }
     }
@@ -373,10 +341,12 @@ public class BewohnerPresentationModel  {
                     gebZuordnungManager.save(gb);
                     GUIManager.getStatusbar().setTextAndFadeOut("Zuordnung wurde aktualisiert.");
                 }
+
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     model.removeButtonListener(this);
                     GUIManager.changeToLastView();
                 }
+
             }
         });
         GUIManager.changeView(gebView.buildPanel(), true);
@@ -394,17 +364,19 @@ public class BewohnerPresentationModel  {
                     //gebZuordnungManager.saveGebuehrZuordnung(gb);
                     GUIManager.getStatusbar().setTextAndFadeOut("Zuordnung wurde aktualisiert.");
                 }
+
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     model.removeButtonListener(this);
                     GUIManager.changeToLastView();
                 }
+
             }
         });
         GUIManager.changeView(detailView.buildPanel(), true);
     }
 
-
-    private class BewohnerTableModel extends AbstractTableAdapter<Bewohner> {
+    private class BewohnerTableModel
+            extends AbstractTableAdapter<Bewohner> {
 
         private ListModel listModel;
 

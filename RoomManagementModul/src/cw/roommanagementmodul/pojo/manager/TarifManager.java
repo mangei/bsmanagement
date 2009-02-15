@@ -9,7 +9,6 @@ package cw.roommanagementmodul.pojo.manager;
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
-import org.hibernate.Transaction;
 import cw.roommanagementmodul.pojo.Gebuehr;
 import cw.roommanagementmodul.pojo.Tarif;
 import javax.persistence.EntityManager;

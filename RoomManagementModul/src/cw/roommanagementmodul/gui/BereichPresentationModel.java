@@ -285,12 +285,13 @@ public class BereichPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             Bereich b = selectedBereich;
-
+            bereichManager.refreshBereich(b);
             if (b.getParentBereich() != null && checkZimmer(b) == false) {
                 DefaultMutableTreeNode node = searchTreeNode(treeModel, b);
                 treeModel.removeNodeFromParent(node);
 
                 bereichManager.delete(b);
+                selectedBereich=(Bereich)rootTree.getUserObject();
             } else {
                 if (b.getParentBereich() != null) {
                     JOptionPane.showMessageDialog(null, "Löschen nicht möglich! \nEs befinden sich Zimmer in dieser Bereichsstruktur.");
@@ -423,7 +424,6 @@ public class BereichPresentationModel {
     }
 
     public List<Bereich> initTree(DefaultMutableTreeNode rootTree) {
-        System.out.println("tree back");
         Bereich rootBereich = (Bereich) rootTree.getUserObject();
         bereichManager.refreshBereich(rootBereich);
         List<Bereich> childList = rootBereich.getChildBereichList();
@@ -511,20 +511,21 @@ public class BereichPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final Zimmer z = new Zimmer();
-            final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, "Zimmer erstellen");
+            final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, "Zimmer erstellen",selectedBereich);
             final EditZimmerView editView = new EditZimmerView(model);
             model.addButtonListener(new ButtonListener() {
 
                 public void buttonPressed(ButtonEvent evt) {
                     if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         zimmerManager.save(z);
+                        //TREE erweitern
+                        DefaultMutableTreeNode bereichNode = searchTreeNode(treeModel, z.getBereich());
+                        treeModel.insertNodeInto(new DefaultMutableTreeNode(z), bereichNode, bereichNode.getChildCount());
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         model.removeButtonListener(this);
 
-                        //TREE erweitern
-                        DefaultMutableTreeNode bereichNode = searchTreeNode(treeModel, z.getBereich());
-                        treeModel.insertNodeInto(new DefaultMutableTreeNode(z), bereichNode, bereichNode.getChildCount());
+                        
 
                         GUIManager.changeToLastView();
                         GUIManager.getStatusbar().setTextAndFadeOut("Zimmer wurde erstellt.");
@@ -590,7 +591,6 @@ public class BereichPresentationModel {
                     zimmerManager.save(z);
 
                     //Alten Node entfernen:
-
                     DefaultMutableTreeNode zimmerNode = searchZimmerTreeNode(treeModel, z);
                     if (zimmerNode != null) {
                         treeModel.removeNodeFromParent(zimmerNode);

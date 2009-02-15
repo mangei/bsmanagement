@@ -4,7 +4,6 @@
  */
 package cw.roommanagementmodul.gui;
 
-
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
@@ -29,6 +28,7 @@ import javax.swing.table.TableModel;
 import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
 import cw.roommanagementmodul.pojo.GebuehrZuordnung;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -57,7 +57,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
 
     GebZuordnungBewohnerPresentationModel(Bewohner bewohner, String header) {
         super(bewohner);
-        this.headerText=header;
+        this.headerText = header;
         this.bewohner = bewohner;
         this.gebuehrZuordnungManager = GebuehrZuordnungManager.getInstance();
         initModels();
@@ -156,9 +156,13 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
         }
 
         public void actionPerformed(ActionEvent e) {
-            final GebuehrZuordnung gb = gebuehrZuordnungSelection.getSelection();
-            gebuehrZuordnungManager.delete(gb);
 
+            int check = JOptionPane.showConfirmDialog(null, "Gebühren Zuordnung wirklich löschen?", "Löschen", JOptionPane.YES_NO_OPTION);
+            if (check == JOptionPane.YES_OPTION) {
+                final GebuehrZuordnung gb = gebuehrZuordnungSelection.getSelection();
+                gebuehrZuordnungManager.delete(gb);
+                gebuehrZuordnungSelection.setList(gebuehrZuordnungManager.getGebuehrZuordnung(bewohner));
+            }
         }
     }
 
