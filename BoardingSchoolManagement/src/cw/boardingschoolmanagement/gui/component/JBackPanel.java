@@ -1,6 +1,8 @@
 package cw.boardingschoolmanagement.gui.component;
 
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.HeaderInfoCallable;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -13,24 +15,33 @@ import cw.boardingschoolmanagement.manager.GUIManager;
  *
  * @author ManuelG
  */
-public class JBackPanel {
+public class JBackPanel
+    extends JPanel
+    implements HeaderInfoCallable
+{
 
     private String backText;
-    private JPanel mainPanel;
     private JPanel panel;
+    private HeaderInfo headerInfo;
 
     public JBackPanel(JPanel panel) {
         this(panel, "");
     }
 
     public JBackPanel(JPanel panel, String backText) {
-        if(panel == null) throw new NullPointerException("panel is null");
+        if(panel == null) {
+            throw new NullPointerException("panel is null");
+        }
 
-        mainPanel = new JPanel(new BorderLayout());
+        if(panel instanceof HeaderInfoCallable) {
+            headerInfo = ((HeaderInfoCallable)panel).getHeaderInfo();
+        }
+
+        this.setLayout(new BorderLayout());
         this.backText = backText;
         this.panel = panel;
 
-        mainPanel.add(panel, BorderLayout.CENTER);
+        this.add(panel, BorderLayout.CENTER);
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT,0,0));
         topPanel.add(new JButton(new AbstractAction(backText, CWUtils.loadIcon("cw/boardingschoolmanagement/images/arrow_left.png")) {
@@ -39,10 +50,14 @@ public class JBackPanel {
             }
         }));
 
-        mainPanel.add(topPanel, BorderLayout.NORTH);
+        this.add(topPanel, BorderLayout.NORTH);
     }
 
     public JPanel getPanel() {
-        return mainPanel;
+        return this;
+    }
+
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 }

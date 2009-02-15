@@ -9,6 +9,7 @@ import cw.boardingschoolmanagement.gui.component.JHeader;
 import cw.boardingschoolmanagement.gui.component.JMenuPanel;
 import cw.boardingschoolmanagement.gui.component.JPathPanel;
 import cw.boardingschoolmanagement.gui.component.StatusBar;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -364,6 +365,10 @@ public class GUIManager
         GUIManager gM = getInstance();
         if (!gM.lastComponents.isEmpty()) {
 
+            if(gM.shownComponent instanceof Disposable) {
+                ((Disposable)gM.shownComponent).doDispose();
+            }
+
             // Von der Ansicht entfernen
             gM.componentView.removeAll();
 
@@ -394,13 +399,24 @@ public class GUIManager
      * Removes the last component, when it was saved
      */
     public static void removeLastView() {
-        getInstance().lastComponents.pop();
+        JComponent comp = getInstance().lastComponents.pop();
+        if(comp instanceof Disposable) {
+            ((Disposable)comp).doDispose();
+        }
     }
 
     /**
      * Removes all components
      */
     public static void removeAllLastViews() {
+        LinkedList<JComponent> components = getInstance().lastComponents;
+
+        for(JComponent comp : components) {
+            if(comp instanceof Disposable) {
+                ((Disposable)comp).doDispose();
+            }
+        }
+
         getInstance().lastComponents.clear();
     }
 

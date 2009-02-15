@@ -5,6 +5,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.JideSwingUtilities;
+import cw.boardingschoolmanagement.interfaces.HeaderInfoCallable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -18,6 +19,7 @@ import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicPanelUI;
@@ -26,10 +28,14 @@ import javax.swing.plaf.basic.BasicPanelUI;
  *
  * @author Manuel Geier
  */
-public class JViewPanel extends JPanel {
+public class JViewPanel
+        extends JPanel
+        implements HeaderInfoCallable
+{
 
     private JButtonPanel buttonPanel;
     private JPanel topPanel;
+    private JScrollPane contentScrollPane;
     private JPanel contentPanel;
     private JPanel mainPanel;
     private HeaderInfoPanel headerInfoPanel;
@@ -80,7 +86,12 @@ public class JViewPanel extends JPanel {
         contentPanel.setLayout(new BorderLayout());
         contentPanel.setBorder(new EmptyBorder(0,0,0,0));
         contentPanel.setOpaque(false);
-        mainPanel.add(contentPanel, BorderLayout.CENTER);
+
+        contentScrollPane = new JScrollPane(contentPanel);
+        contentScrollPane.setBorder(new EmptyBorder(0,0,0,0));
+        contentScrollPane.getViewport().setOpaque(false);
+        contentScrollPane.setOpaque(false);
+        mainPanel.add(contentScrollPane, BorderLayout.CENTER);
 
         add(mainPanel, BorderLayout.CENTER);
 
@@ -116,6 +127,10 @@ public class JViewPanel extends JPanel {
      */
     public JPanel getContentPanel() {
         return contentPanel;
+    }
+
+    public JScrollPane getContentScrollPane() {
+        return contentScrollPane;
     }
 
     public HeaderInfo getHeaderInfo() {

@@ -148,6 +148,7 @@ public class CWComponentFactory {
     public static JScrollPane createScrollPane(JComponent view) {
         JScrollPane sp = new JScrollPane(view);
         sp.setBorder(null);
+        sp.setOpaque(false);
         return sp;
     }
 

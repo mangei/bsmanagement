@@ -1,5 +1,6 @@
 package cw.boardingschoolmanagement.gui.component;
 
+import cw.boardingschoolmanagement.interfaces.HeaderInfoCallable;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -62,13 +63,13 @@ public class JPathPanel extends JPanel {
     }
 
     private JLabel createLabel(JComponent comp) {
-        JViewPanel viewPanel;
+        HeaderInfoCallable headerInfoCallable;
         JLabel label = new JLabel();
-        if (comp instanceof JViewPanel) {
-            viewPanel = (JViewPanel) comp;
-            label.setText(viewPanel.getHeaderInfo().getHeaderText());
-            label.setToolTipText(viewPanel.getHeaderInfo().getDescription());
-            label.setIcon(viewPanel.getHeaderInfo().getSmallIcon());
+        if (comp instanceof HeaderInfoCallable) {
+            headerInfoCallable = (HeaderInfoCallable) comp;
+            label.setText(headerInfoCallable.getHeaderInfo().getHeaderText());
+            label.setToolTipText(headerInfoCallable.getHeaderInfo().getDescription());
+            label.setIcon(headerInfoCallable.getHeaderInfo().getSmallIcon());
         } else {
             label.setText(comp.getName());
         }

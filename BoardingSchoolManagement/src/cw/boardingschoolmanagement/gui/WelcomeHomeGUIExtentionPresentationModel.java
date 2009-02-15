@@ -12,8 +12,10 @@ import java.util.TimerTask;
  * @author ManuelG
  */
 public class WelcomeHomeGUIExtentionPresentationModel {
+    
     private ValueModel welcomeMessageValueModel;
     private ValueModel timeMessageValueModel;
+    private Timer timer;
 
     public WelcomeHomeGUIExtentionPresentationModel() {
         initModels();
@@ -24,7 +26,8 @@ public class WelcomeHomeGUIExtentionPresentationModel {
         welcomeMessageValueModel = new ValueHolder("Willkommen in der Internatsverwaltung.");
         timeMessageValueModel = new ValueHolder("");
 
-        new Timer().schedule(new TimerTask() {
+        timer = new Timer();
+        timer.schedule(new TimerTask() {
             @Override
             public void run() {
                 Calendar c = Calendar.getInstance();
@@ -50,8 +53,14 @@ public class WelcomeHomeGUIExtentionPresentationModel {
     }
 
     private void initEventHandling() {
-
+        
     }
+
+//    @Override
+//    protected void finalize() throws Throwable {
+//        timer.cancel();
+//        super.finalize();
+//    }
 
     public ValueModel getTimeMessageValueModel() {
         return timeMessageValueModel;
