@@ -10,13 +10,13 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CalendarUtil;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.EventObject;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -42,6 +42,7 @@ import javax.swing.table.TableColumnModel;
 public class PostingManagementPresentationModel {
 
     private Customer customer;
+    private HeaderInfo headerInfo;
 
     private Action newAction;
     private Action editAction;
@@ -75,6 +76,13 @@ public class PostingManagementPresentationModel {
         managePostingCategoriesAction = new ManagePostingCategoriesAction("Kategorien", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category.png"));
 
         postingSelection = new SelectionInList<Posting>(PostingManager.getInstance().getAll(customer));
+
+        headerInfo = new HeaderInfo(
+                "Buchungsübersicht",
+                "Hier sehen sie eine Übersicht über alle Buchungen für Ihren Kunden.",
+                CWUtils.loadIcon("cw/customermanagementmodul/images/money.png"),
+                CWUtils.loadIcon("cw/customermanagementmodul/images/money.png")
+        );
 
         saldoValue = new ValueHolder();
         liabilitiesValue = new ValueHolder();
@@ -489,6 +497,10 @@ public class PostingManagementPresentationModel {
 
     public SelectionInList<String> getFilterYearSelection() {
         return filterYearSelection;
+    }
+
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
     public void editPosting(final Posting posting) {

@@ -56,6 +56,10 @@ public class CustomerManager extends AbstractPOJOManager<Customer> {
         return HibernateUtil.getEntityManager().createQuery("FROM Customer WHERE active=true").getResultList();
     }
 
+    public List<Customer> getAllInactive() {
+        return HibernateUtil.getEntityManager().createQuery("FROM Customer WHERE active=false").getResultList();
+    }
+
     public List<String> getList(String attribute) {
         return HibernateUtil.getEntityManager().createQuery("SELECT str("+attribute+") FROM Customer WHERE "+attribute+" IS NOT NULL").getResultList();
     }

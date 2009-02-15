@@ -82,7 +82,7 @@ public class PostingManagementView
         initComponents();
         initEventHandling();
         
-        JViewPanel panel = new JViewPanel();
+        JViewPanel panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         panel.setName("Buchungen");
 
         panel.getButtonPanel().add(bNew);

@@ -69,9 +69,11 @@ public class PostingCategoryManagementPresentationModel {
     }
 
     private void initEventHandling() {
-        postingCategorySelection.addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+        postingCategorySelection.addValueChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                updateActionEnablement();
+            }
+        });
         updateActionEnablement();
     }
 
@@ -263,7 +265,7 @@ public class PostingCategoryManagementPresentationModel {
 
         @Override
         public int getColumnCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -273,6 +275,8 @@ public class PostingCategoryManagementPresentationModel {
                     return "Name";
                 case 1:
                     return "Key";
+                case 2:
+                    return "Geschützt";
                 default:
                     return "";
             }
@@ -290,7 +294,12 @@ public class PostingCategoryManagementPresentationModel {
                     return pc.getName();
                 case 1:
                     return pc.getKey();
-
+                case 2:
+                    if(pc.getKey() == null || pc.getKey().isEmpty()) {
+                        return "nein";
+                    } else {
+                        return "ja";
+                    }
                 default:
                     return "";
             }
@@ -318,14 +327,20 @@ public class PostingCategoryManagementPresentationModel {
 
     private void updateActionEnablement() {
         boolean hasSelection = postingCategorySelection.hasSelection();
-        editAction.setEnabled(hasSelection);
-        deleteAction.setEnabled(hasSelection);
-    }
 
-    private final class SelectionEmptyHandler implements PropertyChangeListener {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            updateActionEnablement();
+        if(hasSelection) {
+            PostingCategory selection = postingCategorySelection.getSelection();
+            if(!(selection.getKey() == null && !selection.getKey().isEmpty())) {
+                editAction.setEnabled(true);
+                deleteAction.setEnabled(true);
+            } else {
+                editAction.setEnabled(false);
+                deleteAction.setEnabled(false);
+            }
+        } else {
+            editAction.setEnabled(false);
+            deleteAction.setEnabled(false);
         }
     }
+
 }

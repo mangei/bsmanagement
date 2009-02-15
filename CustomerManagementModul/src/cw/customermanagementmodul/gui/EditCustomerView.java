@@ -5,6 +5,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.AutoCompletion;
+import com.jidesoft.swing.JideScrollPaneConstants;
 import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
@@ -227,6 +228,8 @@ public class EditCustomerView {
         initComponents();
         
         JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
+        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(JideScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(JideScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
         
@@ -235,13 +238,13 @@ public class EditCustomerView {
         buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
         
-        JViewPanel panel = new JViewPanel();
+        JViewPanel generalPanel = CWComponentFactory.createViewPanel(model.getGeneralHeaderInfo());
         
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref:grow",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
 
-        PanelBuilder builder = new PanelBuilder(layout,panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout,generalPanel.getContentPanel());
         
         CellConstraints cc = new CellConstraints();
         builder.addSeparator("Allgemein:",  cc.xyw(1, 1, 8));
@@ -286,7 +289,7 @@ public class EditCustomerView {
         builder.addSeparator("Bemerkung",   cc.xyw(1, 31, 8));
         builder.add(taComment,              cc.xyw(1, 33, 8));
 
-        tabs.addTab("Allgemein", panel);
+        tabs.addTab("Allgemein", generalPanel);
         
         // Load dynamic components in tabs
         List<JComponent> lComps = model.getExtentionComponents();

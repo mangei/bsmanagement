@@ -39,7 +39,8 @@ public class GroupEditCustomerTabGUIExtentionView {
     public JPanel buildPanel() {
         initComponents();
 
-        JViewPanel panel = new JViewPanel("Gruppen");
+        JViewPanel panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+        panel.setName("Gruppen");
 
         FormLayout layout = new FormLayout(
                 "200dlu, 4dlu, pref, 4dlu, 200dlu",

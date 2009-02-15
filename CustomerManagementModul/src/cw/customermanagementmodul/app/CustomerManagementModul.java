@@ -189,5 +189,12 @@ public class CustomerManagementModul
                 PostingManager.getInstance().delete(postings);
             }
         });
+
+        if(PostingCategoryManager.getInstance().get("test") == null) {
+            PostingCategory category = new PostingCategory();
+            category.setName("Test");
+            category.setKey("test");
+            PostingCategoryManager.getInstance().save(category);
+        }
     }
 }

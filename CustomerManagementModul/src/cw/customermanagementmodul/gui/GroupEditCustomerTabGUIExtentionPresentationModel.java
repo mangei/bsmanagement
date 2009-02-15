@@ -11,6 +11,7 @@ import cw.customermanagementmodul.pojo.Group;
 import cw.customermanagementmodul.pojo.manager.GroupManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import javax.swing.Icon;
@@ -24,6 +25,7 @@ public class GroupEditCustomerTabGUIExtentionPresentationModel {
 
     private Customer customer;
     private ValueModel unsaved;
+    private HeaderInfo headerInfo;
     
     private SelectionInList<Group> selectionCustomerGroups;
     private SelectionInList<Group> selectionGroups;
@@ -47,6 +49,13 @@ public class GroupEditCustomerTabGUIExtentionPresentationModel {
 
         addGroupAction = new AddGroupAction("Hinzufügen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_left.png"));
         removeGroupAction = new RemoveGroupAction("Entfernen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_right.png"));
+    
+        headerInfo = new HeaderInfo(
+                "Gruppenzugehörigkeit",
+                "Hier können Sie die Gruppenzugehörigkeiten für den Kunden einstellen.",
+                CWUtils.loadIcon("cw/customermanagementmodul/images/group.png"),
+                CWUtils.loadIcon("cw/customermanagementmodul/images/group.png")
+        );
     }
 
     private void initEventHandling() {
@@ -169,6 +178,10 @@ public class GroupEditCustomerTabGUIExtentionPresentationModel {
 
     public SelectionInList<Group> getSelectionGroups() {
         return selectionGroups;
+    }
+
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
 }

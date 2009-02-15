@@ -33,6 +33,7 @@ public class EditCustomerPresentationModel
     private Customer customer;
     private ValueModel unsaved;
     private HeaderInfo headerInfo;
+    private HeaderInfo generalHeaderInfo;
     private Action resetButtonAction;
     private Action saveButtonAction;
     private Action cancelButtonAction;
@@ -78,18 +79,13 @@ public class EditCustomerPresentationModel
 
         support = new ButtonListenerSupport();
 
-//        PropertyConnector.connectAndUpdate(
-//                    unsaved,
-//                    saveButtonAction,
-//                    ComponentValueModel.PROPERTYNAME_ENABLED);
-//        PropertyConnector.connectAndUpdate(
-//                    unsaved,
-//                    resetButtonAction,
-//                    ComponentValueModel.PROPERTYNAME_ENABLED);
-//        PropertyConnector.connectAndUpdate(
-//                    unsaved,
-//                    saveCancelButtonAction,
-//                    ComponentValueModel.PROPERTYNAME_ENABLED);
+        generalHeaderInfo = new HeaderInfo(
+                "Allgemeine Kundeninformationen",
+                "Hier können sie allgemeine Kundeninformationen eingeben.",
+                CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
+                CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
+        );
+
 
         titleList               = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_TITLE);
         postOfficeNumberList    = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_POSTOFFICENUMBER);
@@ -194,6 +190,10 @@ public class EditCustomerPresentationModel
 
     public HeaderInfo getHeaderInfo() {
         return headerInfo;
+    }
+
+    public HeaderInfo getGeneralHeaderInfo() {
+        return generalHeaderInfo;
     }
 
     public List<String> getTitleList() {

@@ -9,24 +9,20 @@ import javax.swing.JPanel;
 /**
  * @author CreativeWorkers.at
  */
-public class CustomerManagementView {
+public class CustomerInactiveView {
 
-    private CustomerManagementPresentationModel model;
-    private JButton bNew;
-    private JButton bEdit;
+    private CustomerInactivePresentationModel model;
+    private JButton bActivate;
     private JButton bDelete;
-    private JButton bInactive;
     private CustomerSelectorView customerSelectorView;
 
-    public CustomerManagementView(CustomerManagementPresentationModel m) {
+    public CustomerInactiveView(CustomerInactivePresentationModel m) {
         model = m;
     }
 
     private void initComponents() {
-        bNew        = CWComponentFactory.createButton(model.getNewAction());
-        bEdit       = CWComponentFactory.createButton(model.getEditAction());
+        bActivate   = CWComponentFactory.createButton(model.getActivateAction());
         bDelete     = CWComponentFactory.createButton(model.getDeleteAction());
-        bInactive   = CWComponentFactory.createButton(model.getInactiveAction());
 
         customerSelectorView = new CustomerSelectorView(model.getCustomerSelectorPresentationModel());
     }
@@ -41,10 +37,8 @@ public class CustomerManagementView {
 
         JViewPanel panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
 
-        panel.getButtonPanel().add(bNew);
-        panel.getButtonPanel().add(bEdit);
+        panel.getButtonPanel().add(bActivate);
         panel.getButtonPanel().add(bDelete);
-        panel.getButtonPanel().add(bInactive);
 
         panel.getContentPanel().setLayout(new BorderLayout());
         panel.getContentPanel().add(customerSelectorView.buildPanel(), BorderLayout.CENTER);

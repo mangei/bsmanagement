@@ -5,6 +5,7 @@ import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
 import org.apache.log4j.Logger;
 import cw.customermanagementmodul.pojo.PostingCategory;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -33,6 +34,14 @@ public class PostingCategoryManager extends AbstractPOJOManager<PostingCategory>
     @Override
     public List<PostingCategory> getAll() {
         return HibernateUtil.getEntityManager().createQuery("FROM PostingCategory").getResultList();
+    }
+
+    public PostingCategory get(String key) {
+        try {
+            return (PostingCategory) HibernateUtil.getEntityManager().createQuery("FROM PostingCategory WHERE key='"+key+"'").getSingleResult();
+        } catch(NoResultException ex) {
+            return null;
+        }
     }
 
 }
