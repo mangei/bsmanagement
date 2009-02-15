@@ -1,11 +1,15 @@
 package cw.roommanagementmodul.app;
 
-
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.app.CascadeEvent;
+import cw.boardingschoolmanagement.app.CascadeListener;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
 import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.pojo.Posting;
+import cw.customermanagementmodul.pojo.manager.CustomerManager;
+import cw.customermanagementmodul.pojo.manager.PostingManager;
 import cw.roommanagementmodul.gui.BereichPresentationModel;
 import cw.roommanagementmodul.gui.BereichView;
 import java.awt.event.ActionEvent;
@@ -22,7 +26,13 @@ import cw.roommanagementmodul.gui.GebLaufView;
 import cw.roommanagementmodul.gui.GebuehrenPresentationModel;
 import cw.roommanagementmodul.gui.GebuehrenView;
 import cw.roommanagementmodul.pojo.Bewohner;
+import cw.roommanagementmodul.pojo.BuchungsLaufZuordnung;
+import cw.roommanagementmodul.pojo.Gebuehr;
+import cw.roommanagementmodul.pojo.GebuehrenKategorie;
 import cw.roommanagementmodul.pojo.manager.BereichManager;
+import cw.roommanagementmodul.pojo.manager.BuchungsLaufZuordnungManager;
+import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
+import cw.roommanagementmodul.pojo.manager.GebuehrenKatManager;
 
 /**
  * @author Jeitler Dominik
@@ -86,7 +96,7 @@ public class ZimmerModul implements Modul {
                     public void run() {
                         bewohnerManager = BewohnerManager.getInstance();
 
-                        GUIManager.changeView(new BewohnerView(new BewohnerPresentationModel(bewohnerManager,"Bewohner verwalten")).buildPanel());
+                        GUIManager.changeView(new BewohnerView(new BewohnerPresentationModel(bewohnerManager, "Bewohner verwalten")).buildPanel());
                         GUIManager.setLoadingScreenVisible(false);
 
                     }
@@ -152,7 +162,7 @@ public class ZimmerModul implements Modul {
             }
         }), "bewohner");
 
-          MenuManager.getSideMenu().addItem(new JButton(new AbstractAction(
+        MenuManager.getSideMenu().addItem(new JButton(new AbstractAction(
                 "Lauf") {
 
             {
@@ -161,12 +171,11 @@ public class ZimmerModul implements Modul {
 //                    putValue( Action.LARGE_ICON_KEY, IconManager.getIcon("user", 32) );
             }
 
-
             public void actionPerformed(ActionEvent e) {
 
                 GUIManager.setLoadingScreenText("Lauf wird geladen...");
                 GUIManager.setLoadingScreenVisible(true);
-                final GebLaufSelection gebLauf= new GebLaufSelection();
+                final GebLaufSelection gebLauf = new GebLaufSelection();
 
                 new Thread(new Runnable() {
 
@@ -180,13 +189,75 @@ public class ZimmerModul implements Modul {
             }
         }), "bewohner");
 
+        CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
+
+            public void deleteAction(CascadeEvent evt) {
+                Customer c = (Customer) evt.getObject();
+                BewohnerManager bewManager = BewohnerManager.getInstance();
+                Bewohner b = bewManager.getBewohner(c);
+                b.setCustomer(null);
+                b.setEinzahler(null);
+                bewManager.delete(b);
+            }
+        });
+
+        PostingManager.getInstance().addCascadeListener(new CascadeListener() {
+
+            public void deleteAction(CascadeEvent evt) {
+                Posting p = (Posting) evt.getObject();
+                BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
+
+                BuchungsLaufZuordnung blz = blzManager.getBuchungsLaufZuordnung(p);
+                if (blz != null) {
+                    blzManager.delete(blz);
+                }
+
+            }
+        });
+
+        BewohnerManager.getInstance().addCascadeListener(new CascadeListener() {
+
+            public void deleteAction(CascadeEvent evt) {
+                Bewohner b = (Bewohner) evt.getObject();
+                GebuehrZuordnungManager gebZuordnungManager = GebuehrZuordnungManager.getInstance();
+                gebZuordnungManager.removeGebuehrZuordnung(b);
+            }
+        });
+
+        GebuehrenManager.getInstance().addCascadeListener(new CascadeListener() {
+
+            public void deleteAction(CascadeEvent evt) {
+                Gebuehr g = (Gebuehr) evt.getObject();
+                GebuehrZuordnungManager gebZuordnungManager = GebuehrZuordnungManager.getInstance();
+                gebZuordnungManager.removeGebuehrZuordnung(g);
+
+                BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
+                List<BuchungsLaufZuordnung> blzList = blzManager.getBuchungsLaufZuordnung(g);
+                for (int i = 0; i < blzList.size(); i++) {
+                    blzList.get(i).setGebuehr(null);
+                }
+            }
+        });
+
+        GebuehrenKatManager.getInstance().addCascadeListener(new CascadeListener() {
+
+            public void deleteAction(CascadeEvent evt) {
+
+                GebuehrenKategorie k = (GebuehrenKategorie) evt.getObject();
+                GebuehrenManager gebManager = GebuehrenManager.getInstance();
+                List<Gebuehr> gebList = gebManager.getGebuehr(k);
+
+                for (int i = 0; i < gebList.size(); i++) {
+                    gebList.get(i).setGebKat(null);
+                }
+            }
+        });
+
     }
 
     public Class getBaseClass() {
         return Customer.class;
     }
-
-
 
     public List<Class> getDependencies() {
         throw new UnsupportedOperationException("Not supported yet.");

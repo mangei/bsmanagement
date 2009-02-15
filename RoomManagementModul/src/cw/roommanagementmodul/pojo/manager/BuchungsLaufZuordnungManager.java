@@ -6,9 +6,11 @@ package cw.roommanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.customermanagementmodul.pojo.Posting;
+import cw.roommanagementmodul.pojo.BuchungsLaufZuordnung;
 import cw.roommanagementmodul.pojo.BuchungsLaufZuordnung;
 import cw.roommanagementmodul.pojo.GebLauf;
-import cw.roommanagementmodul.pojo.GebuehrZuordnung;
+import cw.roommanagementmodul.pojo.Gebuehr;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
@@ -38,7 +40,22 @@ public class BuchungsLaufZuordnungManager extends AbstractPOJOManager<BuchungsLa
         return list;
     }
 
- 
+    public List<BuchungsLaufZuordnung> getBuchungsLaufZuordnung(Gebuehr g) {
+        EntityManager entityManager = HibernateUtil.getEntityManager();
+        List<BuchungsLaufZuordnung> list = entityManager.createQuery("Select b From BuchungsLaufZuordnung b where b.gebuehr.id = " + g.getId()).getResultList();
+        return list;
+    }
+
+    public BuchungsLaufZuordnung getBuchungsLaufZuordnung(Posting p) {
+        EntityManager entityManager = HibernateUtil.getEntityManager();
+        BuchungsLaufZuordnung blz=null;
+        try {
+            blz = (BuchungsLaufZuordnung) entityManager.createQuery("Select b From BuchungsLaufZuordnung b where b.posting.id = " + p.getId()).getSingleResult();
+        }catch(javax.persistence.NoResultException ex){
+            return null;
+        }
+        return blz;
+    }
 
     @Override
     public List<BuchungsLaufZuordnung> getAll() {

@@ -210,7 +210,7 @@ public class BewohnerPresentationModel {
             int k = JOptionPane.showConfirmDialog(null, "Bewohner: " + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + " wirklich löschen?", "LÖSCHEN", JOptionPane.OK_CANCEL_OPTION);
             if (k == JOptionPane.OK_OPTION) {
 
-                gebZuordnungManager.removeGebuehrZuordnung(b);
+                
                 bewohnerManager.delete(b);
                 bewohnerSelection.setList(bewohnerManager.getBewohner(true));
 

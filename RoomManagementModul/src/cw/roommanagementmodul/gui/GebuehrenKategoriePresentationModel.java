@@ -4,8 +4,6 @@
  */
 package cw.roommanagementmodul.gui;
 
-
-import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
@@ -24,12 +22,13 @@ import javax.swing.Action;
 import javax.swing.SwingUtilities;
 import cw.roommanagementmodul.pojo.manager.GebuehrenKatManager;
 import cw.roommanagementmodul.pojo.GebuehrenKategorie;
+import javax.swing.JOptionPane;
 
 /**
  *
  * @author Dominik
  */
-public class GebuehrenKategoriePresentationModel  {
+public class GebuehrenKategoriePresentationModel {
 
     private GebuehrenKatManager gebKatManager;
     private Action newAction;
@@ -176,7 +175,13 @@ public class GebuehrenKategoriePresentationModel  {
 
         public void actionPerformed(ActionEvent e) {
             GebuehrenKategorie gk = gebuehrenKatSelection.getSelection();
-            gebKatManager.delete(gk);
+
+            int check = JOptionPane.showConfirmDialog(null, "Kategorie wirklich löschen?", "Löschen", JOptionPane.YES_NO_OPTION);
+            if (check == JOptionPane.YES_OPTION) {
+                gebKatManager.delete(gk);
+                gebuehrenKatSelection.setList(gebKatManager.getAll());
+            }
+
         }
     }
 
@@ -194,7 +199,6 @@ public class GebuehrenKategoriePresentationModel  {
 
         }
     }
-
 
     private void updateActionEnablement() {
         boolean hasSelection = gebuehrenKatSelection.hasSelection();

@@ -7,6 +7,7 @@ package cw.roommanagementmodul.pojo.manager;
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import cw.roommanagementmodul.pojo.Gebuehr;
+import cw.roommanagementmodul.pojo.GebuehrenKategorie;
 import java.util.List;
 import javax.persistence.EntityManager;
 import org.apache.log4j.Logger;
@@ -33,15 +34,12 @@ public class GebuehrenManager extends AbstractPOJOManager<Gebuehr> {
     @Override
     public void delete(Gebuehr obj) {
 
-        //cascadeListenerSupport.fireCascadeDelete(obj);
-
+        cascadeListenerSupport.fireCascadeDelete(obj);
 
 
         EntityManager em = HibernateUtil.getEntityManager();
         if (em.contains(obj)) {
-            System.out.println("gebuehr löschen");
-            GebuehrZuordnungManager gebZuordnungManager = GebuehrZuordnungManager.getInstance();
-            gebZuordnungManager.removeGebuehrZuordnung(obj);
+
             em.getTransaction().begin();
             em.remove(obj);
             em.getTransaction().commit();
@@ -52,6 +50,10 @@ public class GebuehrenManager extends AbstractPOJOManager<Gebuehr> {
     @Override
     public List<Gebuehr> getAll() {
         return HibernateUtil.getEntityManager().createQuery("FROM Gebuehr").getResultList();
+    }
+
+    public List<Gebuehr> getGebuehr(GebuehrenKategorie k) {
+        return HibernateUtil.getEntityManager().createQuery("Select g From Gebuehr g where g.gebKat.id = " + k.getId()).getResultList();
     }
 
     @Override

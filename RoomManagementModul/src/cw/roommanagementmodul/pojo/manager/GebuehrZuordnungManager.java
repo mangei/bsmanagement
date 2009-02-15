@@ -39,6 +39,8 @@ public class GebuehrZuordnungManager extends AbstractPOJOManager<GebuehrZuordnun
         EntityTransaction tran = entityManager.getTransaction();
         tran.begin();
         for (int i = 0; i < l.size(); i++) {
+            l.get(i).setBewohner(null);
+            l.get(i).setGebuehr(null);
             entityManager.remove(l.get(i));
         }
         tran.commit();
@@ -50,8 +52,9 @@ public class GebuehrZuordnungManager extends AbstractPOJOManager<GebuehrZuordnun
         EntityTransaction tran = entityManager.getTransaction();
         tran.begin();
         for (int i = 0; i < l.size(); i++) {
-
-            entityManager.remove(l.get(i));
+            l.get(i).setGebuehr(null);
+            l.get(i).setBewohner(null);
+            super.delete(l.get(i));
 
         }
         tran.commit();
