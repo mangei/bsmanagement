@@ -25,6 +25,9 @@ import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
 import cw.roommanagementmodul.pojo.manager.GebuehrenManager;
 import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.GebuehrZuordnung;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -179,6 +182,18 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         public void actionPerformed(ActionEvent e) {
 
 
+            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprüft werden kann
+            Calendar v = dcVon.getCalendar();
+            Calendar b = dcBis.getCalendar();
+
+            if (b != null) {
+                Calendar bisC = new GregorianCalendar(b.get(Calendar.YEAR), b.get(Calendar.MONTH), b.get(Calendar.DATE));
+                dcBis.setCalendar(bisC);
+            }
+            Calendar vonC = new GregorianCalendar(v.get(Calendar.YEAR), v.get(Calendar.MONTH), v.get(Calendar.DATE));
+            dcVon.setCalendar(vonC);
+
+
             if (checkFilledOut() == false) {
                 JOptionPane.showMessageDialog(null, "Die Attribute Gebühr und Von müssen ausgefüllt sein!");
             } else {
@@ -274,6 +289,16 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         }
 
         public void actionPerformed(ActionEvent e) {
+            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprüft werden kann
+            Calendar v = dcVon.getCalendar();
+            Calendar b = dcBis.getCalendar();
+            if (b != null) {
+                Calendar bisC = new GregorianCalendar(b.get(Calendar.YEAR), b.get(Calendar.MONTH), b.get(Calendar.DATE));
+                dcBis.setCalendar(bisC);
+            }
+            Calendar vonC = new GregorianCalendar(v.get(Calendar.YEAR), v.get(Calendar.MONTH), v.get(Calendar.DATE));
+            dcVon.setCalendar(vonC);
+
             if (checkFilledOut() == false) {
                 JOptionPane.showMessageDialog(null, "Die Attribute Gebühr und Von müssen mindestens ausgefüllt sein!");
             } else {

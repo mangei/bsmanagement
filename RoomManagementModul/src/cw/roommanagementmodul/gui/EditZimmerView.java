@@ -4,9 +4,9 @@
  */
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
@@ -50,8 +50,8 @@ public class EditZimmerView {
 
         //tfZimmerName = new JTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_NAME));
         //tfBettenAnzahl = new JTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN));
-        tfZimmerName = BasicComponentFactory.createTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_NAME), false);
-        tfBettenAnzahl = BasicComponentFactory.createTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN), false);
+        tfZimmerName = CWComponentFactory.createTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_NAME), false);
+        tfBettenAnzahl = CWComponentFactory.createTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN), false);
 
         bSave = new JButton(model.getSaveButtonAction());
         bSave.setText("Speichern");

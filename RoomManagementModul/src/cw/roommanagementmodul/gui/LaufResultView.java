@@ -12,12 +12,13 @@ import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.roommanagementmodul.geblauf.GebTarifSelection;
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import cw.roommanagementmodul.pojo.Bewohner;
+import java.awt.Dimension;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -49,7 +50,8 @@ public class LaufResultView {
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
         panel.getTopPanel().setLayout(layout);
 
-        JPanel contentPanel = panel.getContentPanel();
+        //JPanel contentPanel = panel.getContentPanel();
+        JPanel contentPanel = new JPanel();
 
         StringBuffer row = new StringBuffer("pref, 6dlu");
         for (int i = 1; i < model.getBewohnerAnzahl(); i++) {
@@ -71,6 +73,9 @@ public class LaufResultView {
             j = j + 2;
         }
 
+        JScrollPane scroll = new JScrollPane(contentPanel);
+        scroll.setPreferredSize(new Dimension(10,10));
+        panel.getContentPanel().add(scroll);
 
         return panel;
     }

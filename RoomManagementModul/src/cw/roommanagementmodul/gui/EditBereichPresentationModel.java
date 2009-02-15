@@ -54,10 +54,10 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
 
     }
 
-    EditBereichPresentationModel(Bereich bereich, String header,Bereich vaterBereich) {
+    EditBereichPresentationModel(Bereich bereich, String header, Bereich vaterBereich) {
         super(bereich);
         this.bereich = bereich;
-        this.vaterBereich=vaterBereich;
+        this.vaterBereich = vaterBereich;
         bereichManager = BereichManager.getInstance();
         this.headerText = header;
         initModels();
@@ -107,16 +107,16 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
     //getBufferedModel(Bereich.PROPERTYNAME_ZIMMERLIST).addValueChangeListener(new SaveListener());
     }
 
-    private void checkZimmerBereich(Bereich bereich){
+    private void checkZimmerBereich(Bereich bereich) {
 
         List<Bereich> removeList = new ArrayList<Bereich>();
-        for(int i=0;i<editBereichList.size();i++){
-            if(editBereichList.get(i).getZimmerList()!=null && editBereichList.get(i).getZimmerList().size()>0){
+        for (int i = 0; i < editBereichList.size(); i++) {
+            if (editBereichList.get(i).getZimmerList() != null && editBereichList.get(i).getZimmerList().size() > 0) {
                 removeList.add(editBereichList.get(i));
             }
         }
 
-        for(int i=0;i<removeList.size();i++){
+        for (int i = 0; i < removeList.size(); i++) {
             editBereichList.remove(removeList.get(i));
         }
 
@@ -131,8 +131,6 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
             }
         }
     }
-
-
 
     public ComboBoxModel createParentBereichComboModel(SelectionInList bereichList) {
         return new ComboBoxAdapter(bereichList);
@@ -173,7 +171,6 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
     public SelectionInList<Bereich> getBereichList() {
         return bereichList;
     }
-
 
     public String getHeaderText() {
         return headerText;
@@ -261,9 +258,15 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
         }
 
         public void actionPerformed(ActionEvent e) {
-            saveBereich();
-            getUnsaved().setValue(false);
-            support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
+
+            if (bereichList.getSelection() != null) {
+                saveBereich();
+                getUnsaved().setValue(false);
+                support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
+            } else {
+                JOptionPane.showMessageDialog(null, "Es muss ein Übergeordneter Bereich ausgewählt sein!");
+            }
+
         }
     }
 
@@ -325,10 +328,14 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
         }
 
         public void actionPerformed(ActionEvent e) {
-            saveBereich();
-//            GUIManager.lastView();  // Zur Übersicht wechseln
-//            GUIManager.removeView(); // Diese View nicht merken
-            support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
+
+            if (bereichList.getSelection() != null) {
+                saveBereich();
+                support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
+            } else {
+                JOptionPane.showMessageDialog(null, "Es muss ein Übergeordneter Bereich ausgewählt sein!");
+            }
+
         }
     }
 }

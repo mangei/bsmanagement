@@ -272,6 +272,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
             }
 
             GregorianCalendar gc = new GregorianCalendar(year, month - 1, 1);
+            System.out.println(gc.getTimeInMillis());
             GebLauf gebLauf = new GebLauf(gc.getTime().getTime(), new Date(), betriebsart);
 
             GebLaufSelection gebLaufSelection = new GebLaufSelection();

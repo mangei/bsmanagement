@@ -11,6 +11,9 @@ import cw.roommanagementmodul.pojo.Zimmer;
 import cw.roommanagementmodul.pojo.manager.BewohnerHistoryManager;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  *
@@ -49,6 +52,20 @@ public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention
 
         if (model.getCheckBoxState() == ItemEvent.SELECTED) {
 
+            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprüft werden kann
+            Calendar von = new GregorianCalendar();
+            von.setTimeInMillis(b.getVon().getTime());
+            Calendar vonC = new GregorianCalendar(von.get(Calendar.YEAR), von.get(Calendar.MONTH), von.get(Calendar.DATE));
+            b.setVon(new Date(vonC.getTimeInMillis()));
+
+            if (b.getBis() != null) {
+                Calendar bis = new GregorianCalendar();
+                bis.setTimeInMillis(b.getBis().getTime());
+                Calendar bisC = new GregorianCalendar(bis.get(Calendar.YEAR), bis.get(Calendar.MONTH), bis.get(Calendar.DATE));
+                b.setBis(new Date(bisC.getTimeInMillis()));
+            }
+            //--------------------------------------------------------------------------------
+
             b.setCustomer(c);
             b.setActive(true);
             bewohnerManager.save(b);
@@ -81,17 +98,16 @@ public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention
         model.triggerCommit();
         if (model.getCheckBoxState() == ItemEvent.SELECTED && (b.getZimmer() == null || b.getVon() == null)) {
             return false;
-        }
-        else{
+        } else {
             return true;
         }
     }
 
     public List<String> getErrorMessages() {
-        ArrayList<String> l= new ArrayList<String>();
-         if (!validate()) {
-             l.add("In der Registerkarte Zimmer müssen die Attribute Einzugsdatum und Zimmer gesetzt sein!");
-             return l;
+        ArrayList<String> l = new ArrayList<String>();
+        if (!validate()) {
+            l.add("In der Registerkarte Zimmer müssen die Attribute Einzugsdatum und Zimmer gesetzt sein!");
+            return l;
         }
         return l;
     }

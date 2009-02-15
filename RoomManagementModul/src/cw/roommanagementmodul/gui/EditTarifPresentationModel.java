@@ -22,6 +22,7 @@ import cw.roommanagementmodul.pojo.Tarif;
 import cw.roommanagementmodul.pojo.manager.TarifManager;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -230,6 +231,14 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
 
         public void actionPerformed(ActionEvent e) {
 
+            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprüft werden kann
+            Calendar v = dcVon.getCalendar();
+            Calendar b = dcBis.getCalendar();
+            Calendar bisC = new GregorianCalendar(b.get(Calendar.YEAR), b.get(Calendar.MONTH), b.get(Calendar.DATE));
+            Calendar vonC = new GregorianCalendar(v.get(Calendar.YEAR), v.get(Calendar.MONTH), v.get(Calendar.DATE));
+            dcVon.setCalendar(vonC);
+            dcBis.setCalendar(bisC);
+
             if (validateData() == true) {
                 saveTarif();
                 getUnsaved().setValue(false);
@@ -434,6 +443,14 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
         }
 
         public void actionPerformed(ActionEvent e) {
+
+            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprüft werden kann
+            Calendar v = dcVon.getCalendar();
+            Calendar b = dcBis.getCalendar();
+            Calendar bisC = new GregorianCalendar(b.get(Calendar.YEAR), b.get(Calendar.MONTH), b.get(Calendar.DATE));
+            Calendar vonC = new GregorianCalendar(v.get(Calendar.YEAR), v.get(Calendar.MONTH), v.get(Calendar.DATE));
+            dcVon.setCalendar(vonC);
+            dcBis.setCalendar(bisC);
 
             if (validateData() == true) {
                 saveTarif();

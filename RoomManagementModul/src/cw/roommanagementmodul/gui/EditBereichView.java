@@ -66,6 +66,11 @@ public class EditBereichView {
             parentComboBox.setSelectedItem(model.getBereichManager().getRoot());
             model.getUnsaved().setValue(false);
         }
+        if(model.getVaterBereich()==null && model.getHeaderText().equals("Bereich erstellen")&& model.getBereichList().getList().size() > 1){
+            parentComboBox.setSelectedItem(model.getBereichManager().getRoot());
+            model.getUnsaved().setValue(false);
+        }
+
 
         tfName = BasicComponentFactory.createTextField(model.getBufferedModel(Bereich.PROPERTYNAME_NAME), false);
 
