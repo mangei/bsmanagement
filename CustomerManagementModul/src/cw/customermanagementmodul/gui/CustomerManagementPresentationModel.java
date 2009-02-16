@@ -13,7 +13,6 @@ import javax.swing.Action;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.EventObject;
 import javax.swing.event.ListSelectionListener;
 import cw.customermanagementmodul.pojo.Customer;
 import javax.swing.Icon;
@@ -125,7 +124,8 @@ public class CustomerManagementPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            editSelectedItem(e);
+            Customer c = customerSelectorPresentationModel.getSelectedCustomer();
+            editCustomer(c);
         }
     }
 
@@ -211,12 +211,11 @@ public class CustomerManagementPresentationModel {
         return customerSelectorPresentationModel;
     }
 
-    public void editSelectedItem(EventObject e) {
+    public static void editCustomer(final Customer c) {
         GUIManager.getInstance().lockMenu();
         GUIManager.setLoadingScreenText("Kunde wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
 
-        final Customer c = customerSelectorPresentationModel.getSelectedCustomer();
         final EditCustomerPresentationModel model = new EditCustomerPresentationModel(
                 c,
                 new HeaderInfo(

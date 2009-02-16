@@ -162,7 +162,6 @@ public class CustomerManagementModul
 
 
         PostingCategoryManager.getInstance().addCascadeListener(new CascadeListener() {
-
             public void deleteAction(CascadeEvent evt) {
                 PostingCategory accountingCategory = (PostingCategory) evt.getObject();
                 List<Posting> accountings = PostingManager.getInstance().getAll(accountingCategory);

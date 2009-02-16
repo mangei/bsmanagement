@@ -230,9 +230,10 @@ public class EditCustomerPresentationModel
 
         public void actionPerformed(ActionEvent e) {
 
-            save();
-
-            support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
+            // Fire only when the save-method worked correct
+            if(save()) {
+                support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
+            }
 
         }
     }
@@ -268,11 +269,13 @@ public class EditCustomerPresentationModel
                 i = JOptionPane.showOptionDialog(null, "Daten wurden geändert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             }
             if (i == 0) {
-                save();
+
+                // If the save-method doesn't worked, because of an error, to nothing
+                if(!save()) {
+                    return;
+                }
             }
             if (i == 0 || i == 1) {
-//                GUIManager.lastView();  // Zur Übersicht wechseln
-//                GUIManager.removeView(); // Diese View nicht merken
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
         }
@@ -312,7 +315,7 @@ public class EditCustomerPresentationModel
     }
 
 
-    public void save() {
+    public boolean save() {
 
         if(!validate()) {
 
@@ -328,7 +331,7 @@ public class EditCustomerPresentationModel
 
             JOptionPane.showMessageDialog(null, buffer.toString(), "Fehler und Warnungen", JOptionPane.ERROR_MESSAGE);
 
-            return;
+            return false;
         }
 
         triggerCommit();
@@ -339,6 +342,8 @@ public class EditCustomerPresentationModel
         }
 
         unsaved.setValue(false);
+
+        return true;
     }
 
     public void reset() {

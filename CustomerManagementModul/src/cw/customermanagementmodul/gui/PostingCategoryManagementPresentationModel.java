@@ -330,7 +330,7 @@ public class PostingCategoryManagementPresentationModel {
 
         if(hasSelection) {
             PostingCategory selection = postingCategorySelection.getSelection();
-            if(!(selection.getKey() == null && !selection.getKey().isEmpty())) {
+            if(!(selection.getKey() != null && !selection.getKey().isEmpty())) {
                 editAction.setEnabled(true);
                 deleteAction.setEnabled(true);
             } else {
