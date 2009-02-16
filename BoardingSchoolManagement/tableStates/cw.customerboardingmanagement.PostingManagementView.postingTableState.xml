@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.6.0_12" class="java.beans.XMLDecoder"> 
+ <object class="cw.boardingschoolmanagement.app.XProperties$XTableState"> 
+  <array class="cw.boardingschoolmanagement.app.XProperties$ColumnState" length="7"> 
+   <void index="0"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>186</int> 
+     <int>75</int> 
+     <int>0</int> 
+     <boolean>true</boolean> 
+     <int>0</int> 
+    </object> 
+   </void> 
+   <void index="1"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>185</int> 
+     <int>75</int> 
+     <int>1</int> 
+     <boolean>true</boolean> 
+     <int>1</int> 
+    </object> 
+   </void> 
+   <void index="2"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>124</int> 
+     <int>75</int> 
+     <int>2</int> 
+     <boolean>false</boolean> 
+     <int>-1</int> 
+    </object> 
+   </void> 
+   <void index="3"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>185</int> 
+     <int>75</int> 
+     <int>3</int> 
+     <boolean>false</boolean> 
+     <int>-1</int> 
+    </object> 
+   </void> 
+   <void index="4"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>189</int> 
+     <int>78</int> 
+     <int>4</int> 
+     <boolean>true</boolean> 
+     <int>2</int> 
+    </object> 
+   </void> 
+   <void index="5"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>191</int> 
+     <int>81</int> 
+     <int>5</int> 
+     <boolean>true</boolean> 
+     <int>3</int> 
+    </object> 
+   </void> 
+   <void index="6"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>106</int> 
+     <int>75</int> 
+     <int>6</int> 
+     <boolean>false</boolean> 
+     <int>-1</int> 
+    </object> 
+   </void> 
+  </array> 
+  <null/> 
+  <boolean>false</boolean> 
+ </object> 
+</java> 

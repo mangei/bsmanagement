@@ -20,7 +20,7 @@ import javax.swing.JPanel;
  */
 public class JPathPanel extends JPanel {
 
-    private JLabel separator;
+    private String separator = ">";
     private JPanel pathPanel;
 
     public JPathPanel() {
@@ -34,8 +34,6 @@ public class JPathPanel extends JPanel {
         pathPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         add(pathPanel, BorderLayout.CENTER);
         
-        separator = new JLabel(">");
-
         add(new JButton(new AbstractAction("   X   ") {
             public void actionPerformed(ActionEvent e) {
                 JPathPanel.this.setVisible(false);
@@ -51,7 +49,7 @@ public class JPathPanel extends JPanel {
         
         for (int i = 0, l = lastComponents.size(); i < l; i++) {
             pathPanel.add(createLabel(lastComponents.get(i)));
-            pathPanel.add(separator);
+            pathPanel.add(new JLabel(separator));
         }
 
         JLabel l = createLabel(shownComponent);
