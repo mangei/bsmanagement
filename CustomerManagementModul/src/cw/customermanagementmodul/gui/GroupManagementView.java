@@ -52,7 +52,7 @@ public class GroupManagementView {
     public JPanel buildPanel() {
         initComponents();
 
-        JViewPanel panel = new JViewPanel(model.getHeaderText());
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
 
         JButtonPanel buttonPanel = panel.getButtonPanel();
         buttonPanel.add(bNewGroup);

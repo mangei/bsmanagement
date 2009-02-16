@@ -27,6 +27,7 @@ public class CustomerManagementPresentationModel {
     private Action editAction;
     private Action deleteAction;
     private Action inactiveAction;
+    private Action viewInactivesAction;
 
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
 
@@ -41,7 +42,8 @@ public class CustomerManagementPresentationModel {
         newAction = new NewAction("Neu", CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png"));
         editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"));
         deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
-        inactiveAction = new InactiveAction("Inaktive", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
+        inactiveAction = new InactivesAction("Inaktiv setzen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactive_go.png"));
+        viewInactivesAction = new ViewInactivesAction("Inaktive anzeigen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactives.png"));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
                 CustomerManager.getInstance().getAllActive(),
@@ -87,6 +89,19 @@ public class CustomerManagementPresentationModel {
                         CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png")
             ));
             final EditCustomerView editView = new EditCustomerView(model);
+
+            final PropertyChangeListener activeListener = new PropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent evt) {
+                    if((Boolean)evt.getNewValue() == true) {
+                        System.out.println("add");
+                        customerSelectorPresentationModel.add(c);
+                    } else {
+                        System.out.println("remove");
+                        customerSelectorPresentationModel.remove(c);
+                    }
+                }
+            };
+
             model.addButtonListener(new ButtonListener() {
 
                 boolean customerAlreadyCreated = false;
@@ -96,14 +111,21 @@ public class CustomerManagementPresentationModel {
                         CustomerManager.getInstance().save(c);
                         if (customerAlreadyCreated) {
                             GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde aktualisiert.");
+
+                            // Check if the customer is active or not
+                            c.addPropertyChangeListener(Customer.PROPERTYNAME_ACTIVE, activeListener);
+
                         } else {
                             GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde erstellt.");
                             customerAlreadyCreated = true;
-                            customerSelectorPresentationModel.add(c);
+                            if(c.isActive()) {
+                                customerSelectorPresentationModel.add(c);
+                            }
                         }
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         model.removeButtonListener(this);
+                        c.removePropertyChangeListener(activeListener);
                         GUIManager.changeToLastView();
                         GUIManager.getInstance().unlockMenu();
                     }
@@ -124,8 +146,31 @@ public class CustomerManagementPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            Customer c = customerSelectorPresentationModel.getSelectedCustomer();
-            editCustomer(c);
+            final Customer c = customerSelectorPresentationModel.getSelectedCustomer();
+            EditCustomerPresentationModel model = editCustomer(c);
+
+            final PropertyChangeListener activeListener = new PropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent evt) {
+
+                    if((Boolean)evt.getNewValue() == true) {
+                        System.out.println("ADD");
+                        customerSelectorPresentationModel.add(c);
+                    } else {
+                        System.out.println("REMOVE");
+                        customerSelectorPresentationModel.remove(c);
+                    }
+                }
+            };
+
+            model.addButtonListener(new ButtonListener() {
+                public void buttonPressed(ButtonEvent evt) {
+                    if(evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON || evt.getType() == ButtonEvent.EXIT_BUTTON) {
+                        c.removePropertyChangeListener(activeListener);
+                    }
+                }
+            });
+
+            c.addPropertyChangeListener(Customer.PROPERTYNAME_ACTIVE, activeListener);
         }
     }
 
@@ -143,8 +188,19 @@ public class CustomerManagementPresentationModel {
 
             Customer customer = customerSelectorPresentationModel.getSelectedCustomer();
 
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich den ausgewählten Kunden löschen?", "Kunden löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-            if (i == JOptionPane.OK_OPTION) {
+            String[] options = {"Inaktiv setzen", "Löschen", "Abbrechen"};
+
+            int i = JOptionPane.showOptionDialog(
+                    null, 
+                    "Wollen Sie wirklich den ausgewählten Kunden löschen oder nur deaktivieren?",
+                    "Kunden löschen",
+                    JOptionPane.OK_OPTION,
+                    JOptionPane.WARNING_MESSAGE,
+                    null,
+                    options,
+                    options[2]);
+
+            if (i == 1) {
 
                 String statusBarText;
                 String forename = customer.getForename();
@@ -155,16 +211,39 @@ public class CustomerManagementPresentationModel {
                 CustomerManager.getInstance().delete(customer);
 
                 GUIManager.getStatusbar().setTextAndFadeOut(statusBarText);
+            } else if (i == 0) {
+                customer.setActive(false);
+                customerSelectorPresentationModel.remove(customer);
+                CustomerManager.getInstance().save(customer);
             }
 
             GUIManager.setLoadingScreenVisible(false);
         }
     }
 
-    private class InactiveAction
+    private class InactivesAction
             extends AbstractAction {
 
-        private InactiveAction(String name, Icon icon) {
+        private InactivesAction(String name, Icon icon) {
+            super(name, icon);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+
+            Customer c = customerSelectorPresentationModel.getSelectedCustomer();
+            c.setActive(false);
+            customerSelectorPresentationModel.remove(c);
+            CustomerManager.getInstance().save(c);
+
+            GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde deaktiviert.");
+            
+        }
+    }
+
+    private class ViewInactivesAction
+            extends AbstractAction {
+
+        private ViewInactivesAction(String name, Icon icon) {
             super(name, icon);
         }
 
@@ -175,6 +254,12 @@ public class CustomerManagementPresentationModel {
 
             final CustomerInactivePresentationModel model = new CustomerInactivePresentationModel();
             final CustomerInactiveView view = new CustomerInactiveView(model);
+
+            model.addButtonListener(new ButtonListener() {
+                public void buttonPressed(ButtonEvent evt) {
+                    customerSelectorPresentationModel.setCustomers(CustomerManager.getInstance().getAllActive());
+                }
+            });
 
             GUIManager.changeView(CWComponentFactory.createBackPanel(view.buildPanel()).getPanel(), true);
 
@@ -203,6 +288,10 @@ public class CustomerManagementPresentationModel {
         return inactiveAction;
     }
 
+    public Action getViewInactivesAction() {
+        return viewInactivesAction;
+    }
+
     public HeaderInfo getHeaderInfo() {
         return headerInfo;
     }
@@ -211,7 +300,7 @@ public class CustomerManagementPresentationModel {
         return customerSelectorPresentationModel;
     }
 
-    public static void editCustomer(final Customer c) {
+    public static EditCustomerPresentationModel editCustomer(final Customer c) {
         GUIManager.getInstance().lockMenu();
         GUIManager.setLoadingScreenText("Kunde wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
@@ -225,6 +314,7 @@ public class CustomerManagementPresentationModel {
                     CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")
         ));
         final EditCustomerView editView = new EditCustomerView(model);
+
         model.addButtonListener(new ButtonListener() {
 
             public void buttonPressed(ButtonEvent evt) {
@@ -241,6 +331,8 @@ public class CustomerManagementPresentationModel {
         });
         GUIManager.changeView(editView.buildPanel(), true);
         GUIManager.setLoadingScreenVisible(false);
+
+        return model;
     }
 
 
@@ -252,6 +344,7 @@ public class CustomerManagementPresentationModel {
 
         editAction.setEnabled(hasSelection);
         deleteAction.setEnabled(hasSelection);
+        inactiveAction.setEnabled(hasSelection);
     }
 
     private class SelectionHandler implements PropertyChangeListener, ListSelectionListener {

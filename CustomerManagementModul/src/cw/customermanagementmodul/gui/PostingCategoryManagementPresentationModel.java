@@ -96,48 +96,42 @@ public class PostingCategoryManagementPresentationModel {
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
+            final PostingCategory pc = new PostingCategory();
+            final EditPostingCategoryPresentationModel model = new EditPostingCategoryPresentationModel(
+                    pc,
+                    new HeaderInfo(
+                        "Buchungskategorie erstellen",
+                        "Hier können Sie eine neue Buchungskategorie erstellen.",
+                        CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_add.png"),
+                        CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_add.png")
+                    ));
+            final EditPostingCategoryView editView = new EditPostingCategoryView(model);
+            model.addButtonListener(new ButtonListener() {
 
-                public void run() {
+                boolean postingCategoryAlreadyCreated = false;
 
-                    final PostingCategory pc = new PostingCategory();
-                    final EditPostingCategoryPresentationModel model = new EditPostingCategoryPresentationModel(
-                            pc,
-                            new HeaderInfo(
-                                "Buchungskategorie erstellen",
-                                "Hier können Sie eine neue Buchungskategorie erstellen.",
-                                CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_add.png"),
-                                CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_add.png")
-                            ));
-                    final EditPostingCategoryView editView = new EditPostingCategoryView(model);
-                    model.addButtonListener(new ButtonListener() {
+                public void buttonPressed(ButtonEvent evt) {
 
-                        boolean postingCategoryAlreadyCreated = false;
-
-                        public void buttonPressed(ButtonEvent evt) {
-
-                            if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                PostingCategoryManager.getInstance().save(pc);
-                                if (postingCategoryAlreadyCreated) {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Kategorie wurde aktualisiert.");
-                                } else {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Kategorie wurde erstellt.");
-                                    postingCategoryAlreadyCreated = true;
-                                    postingCategorySelection.getList().add(pc);
-                                }
-                            }
-                            if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                model.removeButtonListener(this);
-                                GUIManager.changeToLastView();
-                                GUIManager.getInstance().unlockMenu();
-                            }
+                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        PostingCategoryManager.getInstance().save(pc);
+                        if (postingCategoryAlreadyCreated) {
+                            GUIManager.getStatusbar().setTextAndFadeOut("Kategorie wurde aktualisiert.");
+                        } else {
+                            GUIManager.getStatusbar().setTextAndFadeOut("Kategorie wurde erstellt.");
+                            postingCategoryAlreadyCreated = true;
+                            postingCategorySelection.getList().add(pc);
                         }
-                    });
-                    GUIManager.changeView(editView.buildPanel(), true);
-                    GUIManager.setLoadingScreenVisible(false);
-
+                    }
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        model.removeButtonListener(this);
+                        GUIManager.changeToLastView();
+                        GUIManager.getInstance().unlockMenu();
+                    }
                 }
-            }).start();
+            });
+            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.setLoadingScreenVisible(false);
+
         }
     }
 
@@ -164,27 +158,22 @@ public class PostingCategoryManagementPresentationModel {
             GUIManager.setLoadingScreenText("Kategorie wird gelöscht...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
+            // Securityquestion
+            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die ausgewählte Kategorie löschen?", "Buchungskategorie löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (i == JOptionPane.OK_OPTION) {
 
-                public void run() {
-                    
-                    // Securityquestion
-                    int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die ausgewählte Kategorie löschen?", "Buchungskategorie löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if (i == JOptionPane.OK_OPTION) {
+                // Get the selected category
+                PostingCategory pc = postingCategorySelection.getSelection();
 
-                        // Get the selected category
-                        PostingCategory pc = postingCategorySelection.getSelection();
+                // Remove the category from the list
+                postingCategorySelection.getList().remove(pc);
 
-                        // Remove the category from the list
-                        postingCategorySelection.getList().remove(pc);
+                // Delete the category
+                PostingCategoryManager.getInstance().delete(pc);
+            }
 
-                        // Delete the category
-                        PostingCategoryManager.getInstance().delete(pc);
-                    }
-
-                    GUIManager.setLoadingScreenVisible(false);
-                }
-            }).start();
+            GUIManager.setLoadingScreenVisible(false);
+            
         }
     }
 
@@ -221,37 +210,33 @@ public class PostingCategoryManagementPresentationModel {
         GUIManager.setLoadingScreenText("Kategorie wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
 
-        new Thread(new Runnable() {
+        final PostingCategory pc = postingCategorySelection.getSelection();
+        final EditPostingCategoryPresentationModel model = new EditPostingCategoryPresentationModel(
+                pc,
+                new HeaderInfo(
+                    "Buchungskategorie bearbeiten",
+                    "Hier können Sie eine Buchungskategorie bearbeiten.",
+                    CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_edit.png"),
+                    CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_edit.png")
+                ));
+        final EditPostingCategoryView editView = new EditPostingCategoryView(model);
+        model.addButtonListener(new ButtonListener() {
 
-            public void run() {
-                final PostingCategory pc = postingCategorySelection.getSelection();
-                final EditPostingCategoryPresentationModel model = new EditPostingCategoryPresentationModel(
-                        pc,
-                        new HeaderInfo(
-                            "Buchungskategorie bearbeiten",
-                            "Hier können Sie eine Buchungskategorie bearbeiten.",
-                            CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_edit.png"),
-                            CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_edit.png")
-                        ));
-                final EditPostingCategoryView editView = new EditPostingCategoryView(model);
-                model.addButtonListener(new ButtonListener() {
-
-                    public void buttonPressed(ButtonEvent evt) {
-                        if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                            PostingCategoryManager.getInstance().save(pc);
-                            GUIManager.getStatusbar().setTextAndFadeOut("Kategorie wurde aktualisiert.");
-                        }
-                        if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                            model.removeButtonListener(this);
-                            GUIManager.changeToLastView();
-                            GUIManager.getInstance().unlockMenu();
-                        }
-                    }
-                });
-                GUIManager.changeView(editView.buildPanel(), true);
-                GUIManager.setLoadingScreenVisible(false);
+            public void buttonPressed(ButtonEvent evt) {
+                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    PostingCategoryManager.getInstance().save(pc);
+                    GUIManager.getStatusbar().setTextAndFadeOut("Kategorie wurde aktualisiert.");
+                }
+                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    model.removeButtonListener(this);
+                    GUIManager.changeToLastView();
+                    GUIManager.getInstance().unlockMenu();
+                }
             }
-        }).start();
+        });
+        
+        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.setLoadingScreenVisible(false);
     }
 
     private class PostingCategoryTableModel extends AbstractTableAdapter<Posting> {

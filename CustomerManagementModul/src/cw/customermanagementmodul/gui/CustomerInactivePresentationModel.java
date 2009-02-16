@@ -2,6 +2,7 @@ package cw.customermanagementmodul.gui;
 
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import javax.swing.event.ListSelectionEvent;
@@ -18,16 +19,19 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 
 /**
- * @author CreativeWorkers.at
+ * @author Manuel Geier (CreativeWorkers)
  */
 public class CustomerInactivePresentationModel {
 
     private Action activateAction;
     private Action deleteAction;
 
+    public static String BUTTON_OWN_ACTIVE = "activeButton";
+
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
 
     private HeaderInfo headerInfo;
+    private ButtonListenerSupport buttonListenerSupport;
 
     public CustomerInactivePresentationModel() {
         initModels();
@@ -35,7 +39,9 @@ public class CustomerInactivePresentationModel {
     }
 
     public void initModels() {
-        activateAction = new ActivateAction("Aktivieren", CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png"));
+        buttonListenerSupport = new ButtonListenerSupport();
+
+        activateAction = new ActivateAction("Aktivieren", CWUtils.loadIcon("cw/customermanagementmodul/images/user_active_go.png"));
         deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
@@ -46,8 +52,8 @@ public class CustomerInactivePresentationModel {
         headerInfo = new HeaderInfo(
                 "Inaktive Kunden",
                 "Hier sehen Sie alle inaktiven Kunden die sich noch im System befinden.",
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
+                CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactives.png"),
+                CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactives.png")
         );
     }
 
@@ -68,53 +74,15 @@ public class CustomerInactivePresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.getInstance().lockMenu();
-            GUIManager.setLoadingScreenText("Formular wird geladen...");
-            GUIManager.setLoadingScreenVisible(true);
+            
+            Customer c = customerSelectorPresentationModel.getSelectedCustomer();
+            c.setActive(true);
+            customerSelectorPresentationModel.remove(c);
+            CustomerManager.getInstance().save(c);
 
-            new Thread(new Runnable() {
+            GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde wieder aktiviert.");
 
-                public void run() {
-
-                    final Customer c = new Customer();
-                    final EditCustomerPresentationModel model = new EditCustomerPresentationModel(
-                            c,
-                            new HeaderInfo(
-                                "Kunden erstellen",
-                                "Bearbeiten sie hier alle Informationen über Ihren Kunden.",
-                                CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png"),
-                                CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png")
-                    ));
-                    final EditCustomerView editView = new EditCustomerView(model);
-                    model.addButtonListener(new ButtonListener() {
-
-                        boolean customerAlreadyCreated = false;
-
-                        public void buttonPressed(ButtonEvent evt) {
-                            if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                CustomerManager.getInstance().save(c);
-                                if (customerAlreadyCreated) {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde aktualisiert.");
-                                } else {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde erstellt.");
-                                    customerAlreadyCreated = true;
-                                    customerSelectorPresentationModel.add(c);
-                                }
-                            }
-                            if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                model.removeButtonListener(this);
-                                GUIManager.changeToLastView();
-                                GUIManager.getInstance().unlockMenu();
-                            }
-                        }
-                    });
-
-                    GUIManager.changeView(editView.buildPanel(), true);
-                    GUIManager.setLoadingScreenVisible(false);
-
-                }
-            }).start();
-
+            buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.OWN_BUTTON, BUTTON_OWN_ACTIVE));
         }
     }
 
@@ -130,31 +98,25 @@ public class CustomerInactivePresentationModel {
             GUIManager.setLoadingScreenText("Kunden löschen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
+            Customer customer = customerSelectorPresentationModel.getSelectedCustomer();
 
-                public void run() {
-                    Customer customer = customerSelectorPresentationModel.getSelectedCustomer();
+            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich den ausgewählten Kunden löschen?", "Kunden löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (i == JOptionPane.OK_OPTION) {
 
-                    int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich den ausgewählten Kunden löschen?", "Kunden löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if (i == JOptionPane.OK_OPTION) {
+                String statusBarText;
+                String forename = customer.getForename();
+                String surname = customer.getSurname();
+                statusBarText = "'" + forename + " " + surname +  "' wurde gelöscht.";
 
-                        String statusBarText;
-                        String forename = customer.getForename();
-                        String surname = customer.getSurname();
-                        statusBarText = "'" + forename + " " + surname +  "' wurde gelöscht.";
+                customerSelectorPresentationModel.remove(customer);
+                CustomerManager.getInstance().delete(customer);
 
-                        customerSelectorPresentationModel.remove(customer);
-                        CustomerManager.getInstance().delete(customer);
+                GUIManager.getStatusbar().setTextAndFadeOut(statusBarText);
+            }
 
-                        GUIManager.getStatusbar().setTextAndFadeOut(statusBarText);
-                    }
-
-                    GUIManager.setLoadingScreenVisible(false);
-                }
-            }).start();
+            GUIManager.setLoadingScreenVisible(false);
         }
     }
-
 
     ////////////////////////////////////////////////////////////////////////////
     // Getter methods for the model
@@ -176,7 +138,14 @@ public class CustomerInactivePresentationModel {
         return customerSelectorPresentationModel;
     }
 
-    
+    public void removeButtonListener(ButtonListener listener) {
+        buttonListenerSupport.removeButtonListener(listener);
+    }
+
+    public void addButtonListener(ButtonListener listener) {
+        buttonListenerSupport.addButtonListener(listener);
+    }
+
     // Event Handling *********************************************************
     private void updateActionEnablement() {
         boolean hasSelection = !customerSelectorPresentationModel.getCustomerSelection().isSelectionEmpty();

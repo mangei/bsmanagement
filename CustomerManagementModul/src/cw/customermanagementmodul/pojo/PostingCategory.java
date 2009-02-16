@@ -54,6 +54,11 @@ public class PostingCategory
         return true;
     }
 
+    @Override
+    public String toString() {
+        return getName();
+    }
+
     /**
      * Get the identical number of the posting-category
      * @return id

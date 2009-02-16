@@ -235,7 +235,7 @@ public class EditCustomerView {
         
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-        buttonPanel.add(bReset);
+//        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
         
         JViewPanel generalPanel = CWComponentFactory.createViewPanel(model.getGeneralHeaderInfo());

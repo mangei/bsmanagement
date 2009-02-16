@@ -8,6 +8,7 @@ import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -32,6 +33,7 @@ public class EditPostingPresentationModel
     private SelectionInList<PostingCategory> postingCategorySelection;
     private ValueModel unsaved;
     private ValueModel editMode;
+    private HeaderInfo headerInfo;
     
     private Action resetAction;
     private Action saveAction;
@@ -41,14 +43,15 @@ public class EditPostingPresentationModel
     
     private ButtonListenerSupport buttonListenerSupport;
     
-    public EditPostingPresentationModel(Posting posting) {
-        this(posting, false);
+    public EditPostingPresentationModel(Posting posting, HeaderInfo headerInfo) {
+        this(posting, false, headerInfo);
     }
 
-    public EditPostingPresentationModel(Posting posting, boolean editMode) {
+    public EditPostingPresentationModel(Posting posting, boolean editMode, HeaderInfo headerInfo) {
         super(posting);
         this.posting = posting;
         this.editMode = new ValueHolder(editMode);
+        this.headerInfo = headerInfo;
 
         buttonListenerSupport = new ButtonListenerSupport();
         
@@ -146,6 +149,10 @@ public class EditPostingPresentationModel
 
     public ValueModel getEditMode() {
         return editMode;
+    }
+
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
     private class SaveAction

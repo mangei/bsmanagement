@@ -63,8 +63,8 @@ public class PostingManagementView
                     new JXTableSelectionConverter(
                         model.getPostingSelection().getSelectionIndexHolder(),
                         tPostings)));
-        tPostings.getColumnExt(4).setCellRenderer(new DateTimeTableCellRenderer(true));
-        tPostings.getColumnExt(5).setCellRenderer(new DateTimeTableCellRenderer());
+        tPostings.getColumns(true).get(4).setCellRenderer(new DateTimeTableCellRenderer(true));
+        tPostings.getColumns(true).get(5).setCellRenderer(new DateTimeTableCellRenderer());
 
         lLiabilities = CWComponentFactory.createLabel(model.getLiabilitiesValue());
         lLiabilities.setFont(lLiabilities.getFont().deriveFont(Font.BOLD));

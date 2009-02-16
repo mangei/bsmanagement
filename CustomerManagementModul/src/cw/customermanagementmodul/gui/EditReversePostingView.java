@@ -88,7 +88,7 @@ public class EditReversePostingView {
         
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-        buttonPanel.add(bReset);
+//        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout(

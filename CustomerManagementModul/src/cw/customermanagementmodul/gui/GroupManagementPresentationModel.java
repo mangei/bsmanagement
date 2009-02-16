@@ -4,6 +4,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.list.SelectionInList;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -30,15 +31,9 @@ public class GroupManagementPresentationModel {
     private SelectionInList<Customer> customerSelection;
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
 
-    private String headerText;
+    private HeaderInfo headerInfo;
 
     public GroupManagementPresentationModel() {
-        this("");
-    }
-    
-    public GroupManagementPresentationModel(String headerText) {
-        this.headerText = headerText;
-
         initModels();
         initEventHandling();
     }
@@ -56,6 +51,13 @@ public class GroupManagementPresentationModel {
                 false,
                 "cw.customerboardingmanagement.GroupManangementView.customerTableState"
                 );
+
+        headerInfo = new HeaderInfo(
+                "Gruppen verwalten",
+                "Sie befinden sich Gruppenverwaltungsbereich. Hier haben Sie einen Überblick über alle Gruppen und den zugewiesenen Kunden.",
+                CWUtils.loadIcon("cw/customermanagementmodul/images/group.png"),
+                CWUtils.loadIcon("cw/customermanagementmodul/images/group.png")
+        );
     }
 
     private void initEventHandling() {
@@ -103,45 +105,39 @@ public class GroupManagementPresentationModel {
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
+            final Group group = new Group();
 
-                public void run() {
+            final EditGroupPresentationModel model = new EditGroupPresentationModel(group, "Gruppe erstellen");
+            final EditGroupView editView = new EditGroupView(model);
+            model.addButtonListener(new ButtonListener() {
 
-                    final Group group = new Group();
+                boolean customerAlreadyCreated = false;
 
-                    final EditGroupPresentationModel model = new EditGroupPresentationModel(group, "Gruppe erstellen");
-                    final EditGroupView editView = new EditGroupView(model);
-                    model.addButtonListener(new ButtonListener() {
-
-                        boolean customerAlreadyCreated = false;
-
-                        public void buttonPressed(ButtonEvent evt) {
-                            if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                GroupManager.getInstance().save(group);
-                                if (customerAlreadyCreated) {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Gruppe wurde aktualisiert.");
-                                } else {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Gruppe wurde erstellt.");
-                                    customerAlreadyCreated = true;
-                                    groupSelection.getList().add(group);
-                                    int idx = groupSelection.getList().indexOf(group);
-                                    groupSelection.fireIntervalAdded(idx, idx);
-                                }
-                            }
-                            if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                model.removeButtonListener(this);
-                                GUIManager.changeToLastView();
-                                GUIManager.getInstance().unlockMenu();
-                            }
+                public void buttonPressed(ButtonEvent evt) {
+                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        GroupManager.getInstance().save(group);
+                        if (customerAlreadyCreated) {
+                            GUIManager.getStatusbar().setTextAndFadeOut("Gruppe wurde aktualisiert.");
+                        } else {
+                            GUIManager.getStatusbar().setTextAndFadeOut("Gruppe wurde erstellt.");
+                            customerAlreadyCreated = true;
+                            groupSelection.getList().add(group);
+                            int idx = groupSelection.getList().indexOf(group);
+                            groupSelection.fireIntervalAdded(idx, idx);
                         }
-                        
-                    });
-
-                    GUIManager.changeView(editView.buildPanel(), true);
-                    GUIManager.setLoadingScreenVisible(false);
-
+                    }
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        model.removeButtonListener(this);
+                        GUIManager.changeToLastView();
+                        GUIManager.getInstance().unlockMenu();
+                    }
                 }
-            }).start();
+
+            });
+
+            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.setLoadingScreenVisible(false);
+
         }
     }
 
@@ -156,35 +152,29 @@ public class GroupManagementPresentationModel {
             GUIManager.setLoadingScreenText("Gruppe wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
+            final Group group = groupSelection.getSelection();
 
-                public void run() {
+            final EditGroupPresentationModel model = new EditGroupPresentationModel(group, "Gruppe bearbeiten");
+            final EditGroupView editView = new EditGroupView(model);
+            model.addButtonListener(new ButtonListener() {
 
-                    final Group group = groupSelection.getSelection();
-
-                    final EditGroupPresentationModel model = new EditGroupPresentationModel(group, "Gruppe bearbeiten");
-                    final EditGroupView editView = new EditGroupView(model);
-                    model.addButtonListener(new ButtonListener() {
-
-                        public void buttonPressed(ButtonEvent evt) {
-                            if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                GroupManager.getInstance().save(group);
-                                GUIManager.getStatusbar().setTextAndFadeOut("Gruppe wurde aktualisiert.");
-                            }
-                            if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                model.removeButtonListener(this);
-                                GUIManager.changeToLastView();
-                                GUIManager.getInstance().unlockMenu();
-                            }
-                        }
-                        
-                    });
-
-                    GUIManager.changeView(editView.buildPanel(), true);
-                    GUIManager.setLoadingScreenVisible(false);
-
+                public void buttonPressed(ButtonEvent evt) {
+                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        GroupManager.getInstance().save(group);
+                        GUIManager.getStatusbar().setTextAndFadeOut("Gruppe wurde aktualisiert.");
+                    }
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        model.removeButtonListener(this);
+                        GUIManager.changeToLastView();
+                        GUIManager.getInstance().unlockMenu();
+                    }
                 }
-            }).start();
+
+            });
+
+            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.setLoadingScreenVisible(false);
+
         }
     }
 
@@ -198,26 +188,21 @@ public class GroupManagementPresentationModel {
             GUIManager.setLoadingScreenText("Gruppe löschen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
-
-                public void run() {
-                    int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die ausgewählte Gruppe löschen?", "Gruppe löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if (i == JOptionPane.OK_OPTION) {
-                        Group group = groupSelection.getSelection();
+            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die ausgewählte Gruppe löschen?", "Gruppe löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (i == JOptionPane.OK_OPTION) {
+                Group group = groupSelection.getSelection();
 
 
-                        String name = group.getName();
+                String name = group.getName();
 
-                        groupSelection.getList().remove(group);
-                        GroupManager.getInstance().delete(group);
+                groupSelection.getList().remove(group);
+                GroupManager.getInstance().delete(group);
 
-                        
-                        GUIManager.getStatusbar().setTextAndFadeOut("Gruppe '" + name + "' wurde gelöscht.");
-                    }
-                    
-                    GUIManager.setLoadingScreenVisible(false);
-                }
-            }).start();
+
+                GUIManager.getStatusbar().setTextAndFadeOut("Gruppe '" + name + "' wurde gelöscht.");
+            }
+
+            GUIManager.setLoadingScreenVisible(false);
         }
     }
 
@@ -259,8 +244,8 @@ public class GroupManagementPresentationModel {
         return customerSelection;
     }
 
-    public String getHeaderText() {
-        return headerText;
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
     public CustomerSelectorPresentationModel getCustomerSelectorPresentationModel() {

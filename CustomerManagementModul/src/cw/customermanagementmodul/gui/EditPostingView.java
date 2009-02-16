@@ -86,12 +86,12 @@ public class EditPostingView {
     public JPanel buildPanel() {
         initComponents();
         
-        JViewPanel panel = new JViewPanel();
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = panel.getButtonPanel();
         
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-        buttonPanel.add(bReset);
+//        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
         buttonPanel.add(bReversePosting);
 

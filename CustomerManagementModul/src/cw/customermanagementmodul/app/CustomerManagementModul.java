@@ -58,23 +58,13 @@ public class CustomerManagementModul
                     GUIManager.setLoadingScreenText("Kunden werden geladen...");
                     GUIManager.setLoadingScreenVisible(true);
 
-                    new Thread(new Runnable() {
+                    model = new CustomerManagementPresentationModel();
+                    view = new CustomerManagementView(model);
+                    panel = view.buildPanel();
 
-                        public void run() {
-//                            if (model == null) {
-                                model = new CustomerManagementPresentationModel();
-//                            }
-//                            if (view == null) {
-                                view = new CustomerManagementView(model);
-//                            }
-//                            if (panel == null) {
-                                panel = view.buildPanel();
-//                            }
-
-                            GUIManager.changeView(panel);
-                            GUIManager.setLoadingScreenVisible(false);
-                        }
-                    }).start();
+                    GUIManager.changeView(panel);
+                    GUIManager.setLoadingScreenVisible(false);
+                    
                 } else {
                     GUIManager.changeView(panel);
                 }
@@ -97,23 +87,13 @@ public class CustomerManagementModul
                     GUIManager.setLoadingScreenText("Gruppen werden geladen...");
                     GUIManager.setLoadingScreenVisible(true);
 
-                    new Thread(new Runnable() {
+                    model = new GroupManagementPresentationModel();
+                    view = new GroupManagementView(model);
+                    panel = view.buildPanel();
 
-                        public void run() {
-//                            if (model == null) {
-                                model = new GroupManagementPresentationModel("Gruppen verwalten");
-//                            }
-//                            if (view == null) {
-                                view = new GroupManagementView(model);
-//                            }
-//                            if (panel == null) {
-                                panel = view.buildPanel();
-//                            }
+                    GUIManager.changeView(panel);
+                    GUIManager.setLoadingScreenVisible(false);
 
-                            GUIManager.changeView(panel);
-                            GUIManager.setLoadingScreenVisible(false);
-                        }
-                    }).start();
                 } else {
                     GUIManager.changeView(panel);
                 }
@@ -137,23 +117,13 @@ public class CustomerManagementModul
                     GUIManager.setLoadingScreenText("Kategorien werden geladen...");
                     GUIManager.setLoadingScreenVisible(true);
 
-                    new Thread(new Runnable() {
+                    model = new PostingCategoryManagementPresentationModel();
+                    view = new PostingCategoryManagementView(model);
+                    panel = view.buildPanel();
 
-                        public void run() {
-//                            if (model == null) {
-                                model = new PostingCategoryManagementPresentationModel();
-//                            }
-//                            if (view == null) {
-                                view = new PostingCategoryManagementView(model);
-//                            }
-//                            if (panel == null) {
-                                panel = view.buildPanel();
-//                            }
-
-                            GUIManager.changeView(panel);
-                            GUIManager.setLoadingScreenVisible(false);
-                        }
-                    }).start();
+                    GUIManager.changeView(panel);
+                    GUIManager.setLoadingScreenVisible(false);
+                    
                 } else {
                     GUIManager.changeView(panel);
                 }

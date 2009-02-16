@@ -16,6 +16,7 @@ public class CustomerManagementView {
     private JButton bEdit;
     private JButton bDelete;
     private JButton bInactive;
+    private JButton bViewInactives;
     private CustomerSelectorView customerSelectorView;
 
     public CustomerManagementView(CustomerManagementPresentationModel m) {
@@ -27,6 +28,7 @@ public class CustomerManagementView {
         bEdit       = CWComponentFactory.createButton(model.getEditAction());
         bDelete     = CWComponentFactory.createButton(model.getDeleteAction());
         bInactive   = CWComponentFactory.createButton(model.getInactiveAction());
+        bViewInactives   = CWComponentFactory.createButton(model.getViewInactivesAction());
 
         customerSelectorView = new CustomerSelectorView(model.getCustomerSelectorPresentationModel());
     }
@@ -45,6 +47,7 @@ public class CustomerManagementView {
         panel.getButtonPanel().add(bEdit);
         panel.getButtonPanel().add(bDelete);
         panel.getButtonPanel().add(bInactive);
+        panel.getButtonPanel().add(bViewInactives);
 
         panel.getContentPanel().setLayout(new BorderLayout());
         panel.getContentPanel().add(customerSelectorView.buildPanel(), BorderLayout.CENTER);

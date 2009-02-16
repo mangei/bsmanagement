@@ -89,33 +89,7 @@ public class CustomerSelectorPresentationModel {
                     // If there is really a change
                     if(evt.getNewValue() == Boolean.FALSE) { return; }
 
-                    List<Customer> filteredCustomers = new ArrayList<Customer>();
-                    filteredCustomers.addAll((ArrayList)customers.clone());
-
-                    System.out.println("customers: " + customers.size());
-
-                    // Filter the elements
-                    for (CustomerSelectorFilterExtention ex : extentions) {
-                        filteredCustomers = ex.filter(filteredCustomers);
-                    }
-
-                    // Delete
-                    int size = customerSelection.getList().size();
-                    if(size > 0) {
-                        customerSelection.getList().clear();
-                        customerSelection.fireIntervalRemoved(0, size-1);
-                        customerTableModel.fireTableRowsDeleted(0, size-1);
-                    }
-
-                    // Add
-                    customerSelection.getList().addAll(filteredCustomers);
-                    size = customerSelection.getList().size();
-                    if(size > 0) {
-                        customerSelection.fireIntervalAdded(0, size-1);
-                        customerTableModel.fireTableRowsInserted(0, size-1);
-                    }
-
-                    filterChange.setValue(false);
+                    updateFilter();
                 }
             });
 
@@ -154,6 +128,36 @@ public class CustomerSelectorPresentationModel {
         }
     }
 
+    public void updateFilter() {
+        if(filtering) {
+
+            List<Customer> filteredCustomers = new ArrayList<Customer>();
+            filteredCustomers.addAll((ArrayList)customers.clone());
+
+            // Filter the elements
+            for (CustomerSelectorFilterExtention ex : extentions) {
+                filteredCustomers = ex.filter(filteredCustomers);
+            }
+
+            // Delete
+            int size = customerSelection.getList().size();
+            if(size > 0) {
+                customerSelection.getList().clear();
+                customerSelection.fireIntervalRemoved(0, size-1);
+                customerTableModel.fireTableRowsDeleted(0, size-1);
+            }
+
+            // Add
+            customerSelection.getList().addAll(filteredCustomers);
+            size = customerSelection.getList().size();
+            if(size > 0) {
+                customerSelection.fireIntervalAdded(0, size-1);
+                customerTableModel.fireTableRowsInserted(0, size-1);
+            }
+
+            filterChange.setValue(false);
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     // Action classes
@@ -189,6 +193,7 @@ public class CustomerSelectorPresentationModel {
             this.customers = new ArrayList<Customer>();
         }
 
+        updateFilter();
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -202,6 +207,8 @@ public class CustomerSelectorPresentationModel {
         customerTableModel.fireTableRowsInserted(idx, idx);
 
         this.customers.add(c);
+
+        updateFilter();
     }
 
     public void remove(Customer c) {
@@ -211,6 +218,8 @@ public class CustomerSelectorPresentationModel {
         customerTableModel.fireTableRowsDeleted(idx, idx);
 
         this.customers.remove(c);
+
+        updateFilter();
     }
 
     public void remove(List<Customer> list) {
@@ -279,7 +288,7 @@ public class CustomerSelectorPresentationModel {
 
         @Override
         public int getColumnCount() {
-            return 15;
+            return 16;
         }
 
         @Override
@@ -288,32 +297,34 @@ public class CustomerSelectorPresentationModel {
                 case 0:
                     return "Anrede";
                 case 1:
-                    return "Vorname";
+                    return "Titel";
                 case 2:
-                    return "Vorname2";
+                    return "Vorname";
                 case 3:
-                    return "Nachname";
+                    return "Vorname2";
                 case 4:
-                    return "Geburtsdatum";
+                    return "Nachname";
                 case 5:
-                    return "Adresse";
+                    return "Geburtsdatum";
                 case 6:
-                    return "PLZ";
+                    return "Adresse";
                 case 7:
-                    return "Ort";
+                    return "PLZ";
                 case 8:
-                    return "Bundesland";
+                    return "Ort";
                 case 9:
-                    return "Staat";
+                    return "Bundesland";
                 case 10:
-                    return "Mobiltelefon";
+                    return "Staat";
                 case 11:
-                    return "Festnetztelefon";
+                    return "Mobiltelefon";
                 case 12:
-                    return "Fax";
+                    return "Festnetztelefon";
                 case 13:
-                    return "eMail";
+                    return "Fax";
                 case 14:
+                    return "eMail";
+                case 15:
                     return "Bemerkung";
                 default:
                     return "";
@@ -341,34 +352,40 @@ public class CustomerSelectorPresentationModel {
             Customer c = (Customer) listModel.getElementAt(rowIndex);
             switch (columnIndex) {
                 case 0:
-                    return c.getTitle();
+                    if(c.getGender()) {
+                        return "Herr";
+                    } else {
+                        return "Frau";
+                    }
                 case 1:
-                    return c.getForename();
+                    return c.getTitle();
                 case 2:
-                    return c.getForename2();
+                    return c.getForename();
                 case 3:
-                    return c.getSurname();
+                    return c.getForename2();
                 case 4:
-                    return c.getBirthday();
+                    return c.getSurname();
                 case 5:
-                    return c.getStreet();
+                    return c.getBirthday();
                 case 6:
-                    return c.getPostOfficeNumber();
+                    return c.getStreet();
                 case 7:
-                    return c.getCity();
+                    return c.getPostOfficeNumber();
                 case 8:
-                    return c.getProvince();
+                    return c.getCity();
                 case 9:
-                    return c.getCountry();
+                    return c.getProvince();
                 case 10:
-                    return c.getMobilephone();
+                    return c.getCountry();
                 case 11:
-                    return c.getLandlinephone();
+                    return c.getMobilephone();
                 case 12:
-                    return c.getFax();
+                    return c.getLandlinephone();
                 case 13:
-                    return c.getEmail();
+                    return c.getFax();
                 case 14:
+                    return c.getEmail();
+                case 15:
                     return c.getComment();
                 default:
                     return "";

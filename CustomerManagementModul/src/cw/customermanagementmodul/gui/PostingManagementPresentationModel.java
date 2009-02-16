@@ -273,7 +273,14 @@ public class PostingManagementPresentationModel {
             GUIManager.setLoadingScreenVisible(true);
 
             final Posting posting = new Posting(customer);
-            final EditPostingPresentationModel model = new EditPostingPresentationModel(posting);
+            final EditPostingPresentationModel model = new EditPostingPresentationModel(
+                    posting,
+                    new HeaderInfo(
+                        "Buchung hinzufügen",
+                        "Fügen Sie eine neue Buchung hinzu.",
+                        CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"),
+                        CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png")
+                    ));
             final EditPostingView editView = new EditPostingView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -392,9 +399,6 @@ public class PostingManagementPresentationModel {
 //            GUIManager.setLoadingScreenText("Buchung wird gelöscht...");
 //            GUIManager.setLoadingScreenVisible(true);
 //
-//            new Thread(new Runnable() {
-//
-//                public void run() {
 //                    Posting a = postingSelection.getSelection();
 //
 //                    int idx = postingSelection.getList().indexOf(a);
@@ -404,8 +408,6 @@ public class PostingManagementPresentationModel {
 //                    updateEvents();
 //
 //                    GUIManager.setLoadingScreenVisible(false);
-//                }
-//            }).start();
 //        }
 //    }
 
@@ -420,12 +422,8 @@ public class PostingManagementPresentationModel {
             GUIManager.setLoadingScreenText("Buchungskategorien verwalten...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
-
-                public void run() {
-                    
-                    final PostingCategoryManagementPresentationModel model = new PostingCategoryManagementPresentationModel();
-                    final PostingCategoryManagementView view = new PostingCategoryManagementView(model);
+            final PostingCategoryManagementPresentationModel model = new PostingCategoryManagementPresentationModel();
+            final PostingCategoryManagementView view = new PostingCategoryManagementView(model);
 
 //                    final JDialog d = new JDialog(GUIManager.getInstance(), "Kategorien verwalten",false);
 //                    d.getContentPane().add(view.buildPanel());
@@ -440,11 +438,9 @@ public class PostingManagementPresentationModel {
 //a
 //                    d.setVisible(true);
 
-
-                    GUIManager.changeView(CWComponentFactory.createBackPanel(view.buildPanel()).getPanel(), true);
-                    GUIManager.setLoadingScreenVisible(false);
-                }
-            }).start();
+            GUIManager.changeView(CWComponentFactory.createBackPanel(view.buildPanel()).getPanel(), true);
+            GUIManager.setLoadingScreenVisible(false);
+            
         }
     }
 
@@ -467,6 +463,7 @@ public class PostingManagementPresentationModel {
     public Action getCancelAction() {
         return reversePostingAction;
     }
+    
     public Action getManagePostingCategoriesAction() {
         return managePostingCategoriesAction;
     }
@@ -507,7 +504,15 @@ public class PostingManagementPresentationModel {
         GUIManager.setLoadingScreenText("Buchung wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
 
-        final EditPostingPresentationModel model = new EditPostingPresentationModel(posting, true);
+        final EditPostingPresentationModel model = new EditPostingPresentationModel(
+                posting,
+                true,
+                new HeaderInfo(
+                        "Buchung bearbeiten",
+                        "Hier können Sie die Buchung wieder bearbeiten",
+                        CWUtils.loadIcon("cw/customermanagementmodul/images/posting_edit.png"),
+                        CWUtils.loadIcon("cw/customermanagementmodul/images/posting_edit.png")
+                ));
         final EditPostingView editView = new EditPostingView(model);
         model.addButtonListener(new ButtonListener() {
 
