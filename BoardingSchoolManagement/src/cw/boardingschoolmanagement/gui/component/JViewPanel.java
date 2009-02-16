@@ -236,10 +236,6 @@ public class JViewPanel
             }
             lHeaderText.setForeground(new Color(56, 61, 65));
 
-            if(headerInfo.getDescription().isEmpty()) {
-                lHeaderText.setHorizontalAlignment(JLabel.CENTER);
-            }
-
             lDescription = new JLabel();
             lDescription.setForeground(Color.DARK_GRAY);
 
@@ -274,6 +270,12 @@ public class JViewPanel
             lHeaderText.setText(headerInfo.getHeaderText());
             lDescription.setText(headerInfo.getDescription());
             lImage.setIcon(headerInfo.getIcon());
+
+            if(headerInfo.getDescription().isEmpty()) {
+                lHeaderText.setHorizontalAlignment(JLabel.CENTER);
+            } else {
+                lHeaderText.setHorizontalAlignment(JLabel.LEFT);
+            }
         }
 
         public void propertyChange(PropertyChangeEvent evt) {

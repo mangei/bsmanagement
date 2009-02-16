@@ -30,7 +30,7 @@ public class ButtonListenerSupport {
 
     public void fireButtonPressed(ButtonEvent evt) {
         for(int i=0, l=listeners.size(); i<l; i++) {
-            ((ButtonListener)listeners.get(i)).buttonPressed(evt);
+            listeners.get(i).buttonPressed(evt);
         }
     }
 

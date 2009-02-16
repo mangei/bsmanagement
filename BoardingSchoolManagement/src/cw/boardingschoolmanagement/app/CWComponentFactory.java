@@ -6,6 +6,7 @@ import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueModel;
 import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JTextFieldDateEditor;
 import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.CWIntegerTextField;
 import cw.boardingschoolmanagement.gui.component.CWJTextArea;
@@ -20,6 +21,8 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.LayoutManager;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
@@ -69,8 +72,8 @@ public class CWComponentFactory {
     private CWComponentFactory() {
     }
 
-    public static JDateChooser createDateChooser(ValueModel dateProperty) {
-        JDateChooser dc = new JDateChooser();
+    public static JDateChooser createDateChooser(final ValueModel dateProperty) {
+        final JDateChooser dc = new JDateChooser();
 
         dc.getJCalendar().setDecorationBordersVisible(false);
         dc.getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
@@ -78,13 +81,18 @@ public class CWComponentFactory {
 
         PropertyConnector.connectAndUpdate(dateProperty, dc, "date");
 
+        ((JTextFieldDateEditor)dc.getDateEditor()).getUiComponent().addFocusListener(new FocusAdapter() {
+             @Override
+            public void focusLost(FocusEvent e) {
+                if(((JTextFieldDateEditor)dc.getDateEditor()).getText().isEmpty()) {
+                    dc.setDate(null);
+                    dateProperty.setValue(null);
+                }
+            }
+        });
+
         return dc;
     }
-
-//    There is no need for the method
-//    public static CWJXTable createTable() {
-//        return createTable("");
-//    }
 
     public static CWJXTable createTable(String emptyText) {
         return createTable(null, emptyText);
