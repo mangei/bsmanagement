@@ -49,7 +49,7 @@ public class CustomerManagementView {
                 "Setzen Sie einen vorhanden Kunden inaktiv.",
                 "cw/customermanagementmodul/images/user_inactive_go.png"));
         bViewInactives.setToolTipText(CWComponentFactory.createToolTip(
-                "Inactive anzeigen",
+                "Inaktive anzeigen",
                 "Zeigen Sie alle inaktiven Kunden ein.",
                 "cw/customermanagementmodul/images/user_inactives.png"));
     }

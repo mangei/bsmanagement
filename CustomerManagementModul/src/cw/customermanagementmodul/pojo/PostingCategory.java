@@ -37,6 +37,14 @@ public class PostingCategory
     /**
      * Create a new posting-category
      * @param name Name of the posting-category
+     */
+    public PostingCategory(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Create a new posting-category
+     * @param name Name of the posting-category
      * @param key The key of the category
      */
     public PostingCategory(String name, String key) {

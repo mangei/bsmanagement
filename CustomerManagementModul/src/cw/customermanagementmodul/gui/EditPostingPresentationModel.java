@@ -5,6 +5,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.PresentationModel;
+import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
@@ -68,20 +69,28 @@ public class EditPostingPresentationModel
         saveCancelAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
         reversePostingAction = new ReversePostingAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
 
-        List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAll();
-        postingCategories.add(0, null);
+        List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAllUnlocked();
+        if(getBean().getPostingCategory() != null && !postingCategories.contains(getBean().getPostingCategory())) {
+            postingCategories.add(getBean().getPostingCategory());
+        }
+        postingCategories.add(0, new PostingCategory("Keine"));
         postingCategorySelection = new SelectionInList<PostingCategory>(postingCategories);
         postingCategorySelection.setSelection(getBean().getPostingCategory());
 
-        getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(new SaveListener());
-        getBufferedModel(Posting.PROPERTYNAME_AMOUNT).addValueChangeListener(new SaveListener());
-        getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(new SaveListener());
-        getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).addValueChangeListener(new SaveListener());
-        getBufferedModel(Posting.PROPERTYNAME_CATEGORY).addValueChangeListener(new SaveListener());
     }
     
     public void initEventHandling() {
         unsaved = new ValueHolder();
+
+        SaveListener saveListener = new SaveListener();
+        getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(saveListener);
+        getBufferedModel(Posting.PROPERTYNAME_AMOUNT).addValueChangeListener(saveListener);
+        getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(saveListener);
+        getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).addValueChangeListener(saveListener);
+        getBufferedModel(Posting.PROPERTYNAME_CATEGORY).addValueChangeListener(saveListener);
+        
+        PropertyConnector.connectAndUpdate(getBufferedModel(Posting.PROPERTYNAME_CATEGORY), postingCategorySelection, "selection");
+        
         unsaved.addValueChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
@@ -234,6 +243,9 @@ public class EditPostingPresentationModel
 
     public void save() {
         getBufferedModel(Posting.PROPERTYNAME_POSTINGDATE).setValue(new Date());
+        if(postingCategorySelection.getSelectionIndex() == 0) {
+            getBufferedModel(Posting.PROPERTYNAME_CATEGORY).setValue(null);
+        }
         triggerCommit();
         unsaved.setValue(false);
         editMode.setValue(true);

@@ -5,6 +5,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
+import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import java.beans.PropertyChangeEvent;
@@ -12,8 +13,10 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import cw.customermanagementmodul.pojo.Posting;
+import cw.customermanagementmodul.pojo.PostingCategory;
 import java.beans.PropertyChangeListener;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 
 /**
  *
@@ -28,9 +31,10 @@ public class EditPostingView {
     private JTextField tfAmount;
     private JDateChooser dcPostingEntryDate;
     private JPanel pLiabilitiesAssets;
+    private JLabel lLocked;
     
     private JButton bSave;
-    private JButton bReset;
+//    private JButton bReset;
     private JButton bCancel;
     private JButton bSaveCancel;
     private JButton bReversePosting;
@@ -55,8 +59,16 @@ public class EditPostingView {
                 (Boolean)(model.getModel(Posting.PROPERTYNAME_LIABILITIESASSETS).getValue())
         );
 
+        lLocked = CWComponentFactory.createLabel("Gesperrt", CWUtils.loadIcon("cw/customermanagementmodul/images/lock.png"));
+        lLocked.setToolTipText(CWComponentFactory.createToolTip(
+                "Gesperrt",
+                "Diese Kategorie ist für Sie gesperrt<br>und kann nicht geändert werden.<br>Es handelt sich um eine automatische<br>Buchung.",
+                "cw/customermanagementmodul/images/lock.png"
+        ));
+        lLocked.setVisible(false);
+
         bSave       = CWComponentFactory.createButton(model.getSaveAction());
-        bReset      = CWComponentFactory.createButton(model.getResetAction());
+//        bReset      = CWComponentFactory.createButton(model.getResetAction());
         bCancel     = CWComponentFactory.createButton(model.getCancelAction());
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelAction());
         bReversePosting = CWComponentFactory.createButton(model.getReversePostingAction());
@@ -65,6 +77,15 @@ public class EditPostingView {
         pLiabilitiesAssets.setEnabled(!((Boolean)model.getEditMode().getValue()));
         bReversePosting.setVisible(((Boolean)model.getEditMode().getValue()));
         bReversePosting.setEnabled(!((Boolean)model.getUnsaved().getValue()));
+
+        // Check if the category is locked
+        PostingCategory postingCategory = model.getBean().getPostingCategory();
+        if(postingCategory != null) {
+            if(postingCategory.getKey() != null && !postingCategory.getKey().isEmpty()) {
+                cbPostingCategory.setEnabled(false);
+                lLocked.setVisible(true);
+            }
+        }
     }
 
     private void initEventHandling() {
@@ -96,7 +117,7 @@ public class EditPostingView {
         buttonPanel.add(bReversePosting);
 
         FormLayout layout = new FormLayout(
-                "right:pref, 4dlu, pref, 4dlu, left:200dlu",
+                "right:pref, 4dlu, pref, 4dlu, left:200dlu, 4dlu, pref",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
         
         PanelBuilder builder = new PanelBuilder(layout,panel.getContentPanel());
@@ -107,8 +128,9 @@ public class EditPostingView {
         builder.add(tfDescription,              cc.xyw(3, 1, 3));
         builder.addLabel("Kategorie:",          cc.xy(1, 3));
         builder.add(cbPostingCategory,          cc.xyw(3, 3, 3));
+        builder.add(lLocked,                    cc.xy(7, 3));
         builder.addLabel("Betrag:",             cc.xy(1, 5));
-        builder.add(tfAmount,                    cc.xy(3, 5));
+        builder.add(tfAmount,                   cc.xy(3, 5));
         builder.addLabel("€",                   cc.xy(5, 5));
         builder.addLabel("Art:",                cc.xy(1, 7));
         builder.add(pLiabilitiesAssets,         cc.xyw(3, 7, 3));

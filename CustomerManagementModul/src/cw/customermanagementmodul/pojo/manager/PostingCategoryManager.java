@@ -36,6 +36,10 @@ public class PostingCategoryManager extends AbstractPOJOManager<PostingCategory>
         return HibernateUtil.getEntityManager().createQuery("FROM PostingCategory").getResultList();
     }
 
+    public List<PostingCategory> getAllUnlocked() {
+        return HibernateUtil.getEntityManager().createQuery("FROM PostingCategory WHERE key=null OR key=''").getResultList();
+    }
+
     public PostingCategory get(String key) {
         try {
             return (PostingCategory) HibernateUtil.getEntityManager().createQuery("FROM PostingCategory WHERE key='"+key+"'").getSingleResult();

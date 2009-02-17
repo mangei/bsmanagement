@@ -69,10 +69,10 @@ public class PostingManagementPresentationModel {
     }
 
     public void initModels() {
-        newAction = new NewAction("Neu", CWUtils.loadIcon("cw/customermanagementmodul/images/money_add.png"));
-        editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/money_edit.png"));
-        reversePostingAction = new ReversePostingAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
-//        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/money_delete.png"));
+        newAction = new NewAction("Neu", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"));
+        editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_edit.png"));
+        reversePostingAction = new ReversePostingAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_delete.png"));
+//        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_delete.png"));
         managePostingCategoriesAction = new ManagePostingCategoriesAction("Kategorien", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category.png"));
 
         postingSelection = new SelectionInList<Posting>(PostingManager.getInstance().getAll(customer));
@@ -80,8 +80,8 @@ public class PostingManagementPresentationModel {
         headerInfo = new HeaderInfo(
                 "Buchungsübersicht",
                 "Hier sehen sie eine Übersicht über alle Buchungen für Ihren Kunden.",
-                CWUtils.loadIcon("cw/customermanagementmodul/images/money.png"),
-                CWUtils.loadIcon("cw/customermanagementmodul/images/money.png")
+                CWUtils.loadIcon("cw/customermanagementmodul/images/posting.png"),
+                CWUtils.loadIcon("cw/customermanagementmodul/images/posting.png")
         );
 
         saldoValue = new ValueHolder();
@@ -114,24 +114,6 @@ public class PostingManagementPresentationModel {
         postingSelection.addPropertyChangeListener(
                 SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
                 new SelectionEmptyHandler());
-//        postingSelection.addListDataListener(new ListDataListener() {
-//
-//            public void intervalAdded(ListDataEvent e) {
-//                change(e);
-//            }
-//
-//            public void intervalRemoved(ListDataEvent e) {
-//                change(e);
-//            }
-//
-//            public void contentsChanged(ListDataEvent e) {
-//                change(e);
-//            }
-//
-//            private void change(ListDataEvent e) {
-//                calculateValues();
-//            }
-//        });
 
         filterYearSelection.addValueChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
@@ -509,7 +491,7 @@ public class PostingManagementPresentationModel {
                 true,
                 new HeaderInfo(
                         "Buchung bearbeiten",
-                        "Hier können Sie die Buchung wieder bearbeiten",
+                        "Hier können Sie die Buchung bearbeiten.",
                         CWUtils.loadIcon("cw/customermanagementmodul/images/posting_edit.png"),
                         CWUtils.loadIcon("cw/customermanagementmodul/images/posting_edit.png")
                 ));
