@@ -261,7 +261,7 @@ public class PostingCategoryManagementPresentationModel {
                 case 1:
                     return "Key";
                 case 2:
-                    return "Geschützt";
+                    return "Gesperrt";
                 default:
                     return "";
             }
@@ -281,9 +281,9 @@ public class PostingCategoryManagementPresentationModel {
                     return pc.getKey();
                 case 2:
                     if(pc.getKey() == null || pc.getKey().isEmpty()) {
-                        return "nein";
+                        return false;
                     } else {
-                        return "ja";
+                        return true;
                     }
                 default:
                     return "";

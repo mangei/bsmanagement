@@ -288,7 +288,7 @@ public class CustomerSelectorPresentationModel {
 
         @Override
         public int getColumnCount() {
-            return 16;
+            return 17;
         }
 
         @Override
@@ -326,6 +326,8 @@ public class CustomerSelectorPresentationModel {
                     return "eMail";
                 case 15:
                     return "Bemerkung";
+                case 16:
+                    return "Status";
                 default:
                     return "";
             }
@@ -334,10 +336,14 @@ public class CustomerSelectorPresentationModel {
         @Override
         public Class<?> getColumnClass(int columnIndex) {
             switch (columnIndex) {
+                case 0:
+                    return Boolean.class;
                 case 4:
                     return Date.class;
                 case 6:
                     return Integer.class;
+                case 16:
+                    return Boolean.class;
                 default:
                     return String.class;
             }
@@ -352,11 +358,7 @@ public class CustomerSelectorPresentationModel {
             Customer c = (Customer) listModel.getElementAt(rowIndex);
             switch (columnIndex) {
                 case 0:
-                    if(c.getGender()) {
-                        return "Herr";
-                    } else {
-                        return "Frau";
-                    }
+                    return c.getGender();
                 case 1:
                     return c.getTitle();
                 case 2:
@@ -387,6 +389,8 @@ public class CustomerSelectorPresentationModel {
                     return c.getEmail();
                 case 15:
                     return c.getComment();
+                case 16:
+                    return c.isActive();
                 default:
                     return "";
             }

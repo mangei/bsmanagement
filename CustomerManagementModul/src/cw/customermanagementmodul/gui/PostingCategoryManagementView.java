@@ -8,6 +8,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWJXTable;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.customermanagementmodul.gui.renderer.LockTableCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -43,6 +44,7 @@ public class PostingCategoryManagementView
                         model.getPostingCategorySelection().getSelectionIndexHolder(),
                         tPostingsCategories)));
 
+        tPostingsCategories.getColumns(true).get(2).setCellRenderer(new LockTableCellRenderer());
     }
     
     private void initEventHandling() {

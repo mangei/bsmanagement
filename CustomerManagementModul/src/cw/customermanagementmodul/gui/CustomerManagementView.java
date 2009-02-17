@@ -31,6 +31,27 @@ public class CustomerManagementView {
         bViewInactives   = CWComponentFactory.createButton(model.getViewInactivesAction());
 
         customerSelectorView = new CustomerSelectorView(model.getCustomerSelectorPresentationModel());
+
+        bNew.setToolTipText(CWComponentFactory.createToolTip(
+                "Neu",
+                "Hier können Sie einen neuen Kunden hinzufügen.",
+                "cw/customermanagementmodul/images/user_add.png"));
+        bEdit.setToolTipText(CWComponentFactory.createToolTip(
+                "Bearbeiten",
+                "Bearbeiten Sie einen vorhanden Kunden.",
+                "cw/customermanagementmodul/images/user_edit.png"));
+        bDelete.setToolTipText(CWComponentFactory.createToolTip(
+                "Löschen",
+                "Löschen Sie einen vorhandenen Kunden.",
+                "cw/customermanagementmodul/images/user_delete.png"));
+        bInactive.setToolTipText(CWComponentFactory.createToolTip(
+                "Inaktiv setzen",
+                "Setzen Sie einen vorhanden Kunden inaktiv.",
+                "cw/customermanagementmodul/images/user_inactive_go.png"));
+        bViewInactives.setToolTipText(CWComponentFactory.createToolTip(
+                "Inactive anzeigen",
+                "Zeigen Sie alle inaktiven Kunden ein.",
+                "cw/customermanagementmodul/images/user_inactives.png"));
     }
 
     private void initEventHandling() {

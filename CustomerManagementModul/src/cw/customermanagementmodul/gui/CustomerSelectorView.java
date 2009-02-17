@@ -8,6 +8,8 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWJXTable;
 import cw.boardingschoolmanagement.gui.component.JNotNullLabel;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.customermanagementmodul.gui.renderer.ActiveCustomerTableCellRenderer;
+import cw.customermanagementmodul.gui.renderer.GenderTableCellRenderer;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.FlowLayout;
@@ -41,6 +43,9 @@ public class CustomerSelectorView {
                     new JXTableSelectionConverter(
                         model.getCustomerSelection().getSelectionIndexHolder(),
                         tCustomers)));
+
+        tCustomers.getColumns(true).get(0).setCellRenderer(new GenderTableCellRenderer());
+        tCustomers.getColumns(true).get(16).setCellRenderer(new ActiveCustomerTableCellRenderer());
     }
 
     private void initEventHandling() {
