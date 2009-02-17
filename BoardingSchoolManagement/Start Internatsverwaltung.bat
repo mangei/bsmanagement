@@ -1,2 +1,2 @@
 cd dist
-java -jar "Internatsverwaltung.jar"
+java -jar "BoardingSchoolManagement.jar"

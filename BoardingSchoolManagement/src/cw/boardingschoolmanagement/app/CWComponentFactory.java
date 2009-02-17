@@ -10,6 +10,7 @@ import com.toedter.calendar.JTextFieldDateEditor;
 import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.CWIntegerTextField;
 import cw.boardingschoolmanagement.gui.component.CWJButton;
+import cw.boardingschoolmanagement.gui.component.CWJLabel;
 import cw.boardingschoolmanagement.gui.component.CWJTextArea;
 import cw.boardingschoolmanagement.gui.component.CWJTextField;
 import cw.boardingschoolmanagement.gui.component.CWJXList;
@@ -36,6 +37,7 @@ import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
+import javax.swing.Icon;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
@@ -436,13 +438,27 @@ public class CWComponentFactory {
     }
 
     public static JLabel createLabel(ValueModel valueModel) {
+        return createLabel(valueModel, null);
+    }
+
+    public static JLabel createLabel(ValueModel valueModel, Icon icon) {
         JLabel label = BasicComponentFactory.createLabel(valueModel);
+        if(icon != null) {
+            label.setIcon(icon);
+        }
         label.setOpaque(false);
         return label;
     }
 
-    public static JLabel createLabel(String text) {
-        JLabel label = new JLabel(text);
+    public static CWJLabel createLabel(String text) {
+        return createLabel(text, null);
+    }
+
+    public static CWJLabel createLabel(String text, Icon icon) {
+        CWJLabel label = new CWJLabel(text);
+        if(icon != null) {
+            label.setIcon(icon);
+        }
         label.setOpaque(false);
         return label;
     }

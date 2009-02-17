@@ -95,6 +95,10 @@ public class CWUtils {
     }
 
     public static URL getURL(String path) {
+        if(path == null || path.isEmpty()) {
+            return null;
+        }
+
         URL url = null;
         try {
             url = Thread.currentThread().getContextClassLoader().getResource(path);
