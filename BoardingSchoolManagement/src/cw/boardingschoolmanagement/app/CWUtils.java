@@ -93,4 +93,12 @@ public class CWUtils {
         }
         return new ImageIcon(img);
     }
+
+    public static URL getURL(String path) {
+        URL url = null;
+        try {
+            url = Thread.currentThread().getContextClassLoader().getResource(path);
+        } catch (Exception e) {}
+        return url;
+    }
 }

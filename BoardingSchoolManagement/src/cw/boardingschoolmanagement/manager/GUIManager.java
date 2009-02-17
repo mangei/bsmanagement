@@ -27,6 +27,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.ToolTipManager;
 import javax.swing.border.EmptyBorder;
 import org.jdesktop.application.SingleFrameApplication;
 
@@ -155,6 +156,9 @@ public class GUIManager
                 }
             }
         });
+
+        // Set the dismissdelay for all tooltips very high
+        ToolTipManager.sharedInstance().setDismissDelay(1000000);
 
         // Center the window
         CWUtils.centerWindow(frame);

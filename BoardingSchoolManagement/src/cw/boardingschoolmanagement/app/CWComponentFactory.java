@@ -9,10 +9,12 @@ import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
 import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.CWIntegerTextField;
+import cw.boardingschoolmanagement.gui.component.CWJButton;
 import cw.boardingschoolmanagement.gui.component.CWJTextArea;
 import cw.boardingschoolmanagement.gui.component.CWJTextField;
 import cw.boardingschoolmanagement.gui.component.CWJXList;
 import cw.boardingschoolmanagement.gui.component.CWJXTable;
+import cw.boardingschoolmanagement.gui.component.CWJToolTip;
 import cw.boardingschoolmanagement.gui.component.JBackPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
@@ -34,7 +36,6 @@ import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
@@ -160,8 +161,8 @@ public class CWComponentFactory {
         return sp;
     }
 
-    public static JButton createButton(Action a) {
-        JButton button = new JButton(a);
+    public static CWJButton createButton(Action a) {
+        CWJButton button = new CWJButton(a);
         button.setOpaque(false);
         return button;
     }
@@ -488,5 +489,14 @@ public class CWComponentFactory {
             panel.getContentPanel().add(comp, BorderLayout.CENTER);
         }
         return panel;
+    }
+
+    public static String createToolTip(String header, String description) {
+        return createToolTip(header,description,null);
+    }
+
+    public static String createToolTip(String header, String description, String path) {
+        CWJToolTip tt = new CWJToolTip(header,description,CWUtils.getURL(path));
+        return tt.getToolTip();
     }
 }

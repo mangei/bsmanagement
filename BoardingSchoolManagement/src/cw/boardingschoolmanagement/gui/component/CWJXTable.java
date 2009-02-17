@@ -1,5 +1,6 @@
 package cw.boardingschoolmanagement.gui.component;
 
+import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.ObjectSaver;
 import cw.boardingschoolmanagement.app.XProperties;
 import cw.boardingschoolmanagement.app.XProperties.XTableState;
@@ -10,6 +11,7 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.ToolTipManager;
 import javax.swing.table.TableModel;
 import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.table.ColumnControlButton;
@@ -45,13 +47,19 @@ public class CWJXTable extends JXTable {
     private void init() {
 //        installColumnControl();
         
-        saveTableStateAction = new AbstractAction("Ansicht speichern") {
+        saveTableStateAction = new AbstractAction(
+                "Ansicht speichern",
+                CWUtils.loadIcon("cw/boardingschoolmanagement/images/table_save.png")
+                ) {
             public void actionPerformed(ActionEvent e) {
                 saveTableState();
             }
         };
 
-        loadTableStateAction = new AbstractAction("Ansicht zurücksetzen") {
+        loadTableStateAction = new AbstractAction(
+                "Ansicht zurücksetzen",
+                CWUtils.loadIcon("cw/boardingschoolmanagement/images/table_load.png")
+                ) {
             public void actionPerformed(ActionEvent e) {
                 loadTableState();
             }
