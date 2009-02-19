@@ -4,6 +4,7 @@ import com.jgoodies.binding.value.ValueModel;
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerGUITabExtention;
 import cw.studentmanagementmodul.gui.StudentCustomerGUIExtentionPresentationModel;
 import cw.studentmanagementmodul.gui.StudentCustomerGUIExtentionView;
+import java.util.List;
 import javax.swing.JComponent;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.studentmanagementmodul.pojo.Student;
@@ -45,6 +46,14 @@ implements EditCustomerGUITabExtention
 
     public void reset() {
         presentationModel.reset();
+    }
+
+    public boolean validate() {
+        return true;
+    }
+
+    public List<String> getErrorMessages() {
+        return null;
     }
 
 }

@@ -10,9 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import cw.customermanagementmodul.pojo.Customer;
 import javax.persistence.CascadeType;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 /**
  * 
