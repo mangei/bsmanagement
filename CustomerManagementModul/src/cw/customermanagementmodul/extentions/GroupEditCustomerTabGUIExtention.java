@@ -7,7 +7,6 @@ import cw.customermanagementmodul.gui.GroupEditCustomerTabGUIExtentionView;
 import java.util.List;
 import javax.swing.JComponent;
 import cw.customermanagementmodul.pojo.Customer;
-import java.util.ArrayList;
 
 /**
  *
@@ -16,13 +15,15 @@ import java.util.ArrayList;
 public class GroupEditCustomerTabGUIExtention
         implements EditCustomerGUITabExtention {
 
-    private static GroupEditCustomerTabGUIExtentionPresentationModel model;
+    private GroupEditCustomerTabGUIExtentionPresentationModel model;
     
     public void initPresentationModel(final Customer c, ValueModel unsaved) {
+        System.out.println("MODEL");
         model = new GroupEditCustomerTabGUIExtentionPresentationModel(c, unsaved);
     }
     
     public JComponent getView() {
+        System.out.println("VIEW");
         return new GroupEditCustomerTabGUIExtentionView(model).buildPanel();
     }
 

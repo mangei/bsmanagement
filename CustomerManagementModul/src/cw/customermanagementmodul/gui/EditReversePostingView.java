@@ -6,6 +6,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.app.CalendarUtil;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import javax.swing.JButton;
@@ -50,11 +51,10 @@ public class EditReversePostingView {
 
     private void initComponents() {
         lPostingDescription    = CWComponentFactory.createLabel(model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION));
-        lPostingCategory       = CWComponentFactory.createLabel(model.getPostingCategorySelection().getSelectionHolder() != null ? model.getPostingCategorySelection().getSelectionHolder().getValue().toString() : "");
+        lPostingCategory       = CWComponentFactory.createLabel(model.getPostingCategorySelection().getSelection() != null ? model.getPostingCategorySelection().getSelection().getName() : "");
         lPostingAmount         = CWComponentFactory.createLabel(Double.toString(model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_AMOUNT).doubleValue()));
         Date postingEntryDate = (Date)model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).getValue();
-        String postingEntryDateString = (postingEntryDate == null) ? "" : postingEntryDate.toString();
-        lPostingEntryDate      = CWComponentFactory.createLabel(postingEntryDateString);
+        lPostingEntryDate      = CWComponentFactory.createLabel(CalendarUtil.formatDate(postingEntryDate));
         lPostingLiabilitiesAssets = CWComponentFactory.createLabel(model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).booleanValue() == true ? "Soll" : "Haben");
         
         tfReversePostingDescription    = CWComponentFactory.createTextField(model.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION),false);

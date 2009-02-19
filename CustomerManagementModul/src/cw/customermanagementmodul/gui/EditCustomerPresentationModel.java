@@ -8,6 +8,7 @@ import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.manager.ModulManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -17,7 +18,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerGUITabExtention;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
@@ -46,6 +46,8 @@ public class EditCustomerPresentationModel
     private List<String> cityList;
     private List<String> provinceList;
     private List<String> countryList;
+    
+    private List<EditCustomerGUITabExtention> editCustomerGUITabExtentions;
 
     public EditCustomerPresentationModel(Customer customer) {
         this(customer, new HeaderInfo());
@@ -64,8 +66,8 @@ public class EditCustomerPresentationModel
         unsaved = new ValueHolder();
 
         // Addons initialisieren
-        List<EditCustomerGUITabExtention> extentions = getExtentions();
-        for (EditCustomerGUITabExtention extention : extentions) {
+        editCustomerGUITabExtentions = getExtentions();
+        for (EditCustomerGUITabExtention extention : editCustomerGUITabExtentions) {
             System.out.println("Extention: " + extention.toString());
             extention.initPresentationModel(customer, unsaved);
         }
@@ -144,20 +146,17 @@ public class EditCustomerPresentationModel
 
     public List<JComponent> getExtentionComponents() {
         List<JComponent> comps = new ArrayList<JComponent>();
-        List<EditCustomerGUITabExtention> aList = (List<EditCustomerGUITabExtention>) ModulManager.getExtentions(EditCustomerGUITabExtention.class);
-        for (EditCustomerGUITabExtention ex : aList) {
+        for (EditCustomerGUITabExtention ex : editCustomerGUITabExtentions) {
             comps.add((ex).getView());
         }
         return comps;
     }
 
     public List<EditCustomerGUITabExtention> getExtentions() {
-        List<EditCustomerGUITabExtention> addons = new ArrayList<EditCustomerGUITabExtention>();
-        List<EditCustomerGUITabExtention> aList = (List<EditCustomerGUITabExtention>) ModulManager.getExtentions(EditCustomerGUITabExtention.class);
-        for (EditCustomerGUITabExtention a : aList) {
-            addons.add(a);
+        if(editCustomerGUITabExtentions == null) {
+            editCustomerGUITabExtentions = (List<EditCustomerGUITabExtention>) ModulManager.getExtentions(EditCustomerGUITabExtention.class);
         }
-        return addons;
+        return editCustomerGUITabExtentions;
     }
 
     public void removeButtonListener(ButtonListener listener) {

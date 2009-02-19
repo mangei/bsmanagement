@@ -5,7 +5,6 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.AutoCompletion;
-import com.jidesoft.swing.JideScrollPaneConstants;
 import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
