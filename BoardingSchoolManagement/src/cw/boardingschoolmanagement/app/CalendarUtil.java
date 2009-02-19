@@ -1,6 +1,8 @@
 package cw.boardingschoolmanagement.app;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  *
@@ -49,6 +51,8 @@ public class CalendarUtil {
     public static String OCTOBER_SHORT = "Okt";
     public static String NOVEMBER_SHORT = "Nov";
     public static String DECEMBER_SHORT = "Dez";
+
+    public static String DATEFORMAT_STANDARD = "dd.MM.yyyy";
 
     public static String getDayOfWeek(int dayOfWeek) {
         switch(dayOfWeek) {
@@ -137,5 +141,16 @@ public class CalendarUtil {
         }
         str.append(second);
         return str.toString();
+    }
+
+    public static String formatDate(Date date) {
+        return formatDate(date,DATEFORMAT_STANDARD);
+    }
+
+    public static String formatDate(Date date, String dateFormat) {
+        if(date == null) {
+            return "";
+        }
+        return new SimpleDateFormat(dateFormat).format(date);
     }
 }

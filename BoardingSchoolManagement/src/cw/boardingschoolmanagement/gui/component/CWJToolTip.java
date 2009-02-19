@@ -46,7 +46,7 @@ public class CWJToolTip extends JToolTip {
             builder.append(imgURL);
             builder.append("\" />");
         }
-        builder.append("</td><td style=\"font-size:12pt;\" valign=\"top\">");
+        builder.append("</td><td style=\"font-size:11pt;\" valign=\"top\">");
         builder.append(description);
         builder.append("</td></tr></table></html>");
 
