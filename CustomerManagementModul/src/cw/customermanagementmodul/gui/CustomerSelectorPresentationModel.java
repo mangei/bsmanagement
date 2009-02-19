@@ -338,10 +338,8 @@ public class CustomerSelectorPresentationModel {
             switch (columnIndex) {
                 case 0:
                     return Boolean.class;
-                case 4:
+                case 5:
                     return Date.class;
-                case 6:
-                    return Integer.class;
                 case 16:
                     return Boolean.class;
                 default:

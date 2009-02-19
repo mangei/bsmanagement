@@ -5,12 +5,14 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
+import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import cw.customermanagementmodul.pojo.Posting;
+import cw.customermanagementmodul.pojo.PostingCategory;
 import java.util.Date;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -34,6 +36,7 @@ public class EditReversePostingView {
     private JLabel lReversePostingAmount;
     private JDateChooser dcReversePostingEntryDate;
     private JLabel lReversePostingLiabilitiesAssets;
+    private JLabel lLocked;
     
     private JButton bSave;
     private JButton bReset;
@@ -47,7 +50,7 @@ public class EditReversePostingView {
 
     private void initComponents() {
         lPostingDescription    = CWComponentFactory.createLabel(model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION));
-        lPostingCategory       = CWComponentFactory.createLabel(model.getPostingCategorySelection().getSelectionHolder());
+        lPostingCategory       = CWComponentFactory.createLabel(model.getPostingCategorySelection().getSelectionHolder() != null ? model.getPostingCategorySelection().getSelectionHolder().getValue().toString() : "");
         lPostingAmount         = CWComponentFactory.createLabel(Double.toString(model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_AMOUNT).doubleValue()));
         Date postingEntryDate = (Date)model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).getValue();
         String postingEntryDateString = (postingEntryDate == null) ? "" : postingEntryDate.toString();
@@ -60,6 +63,14 @@ public class EditReversePostingView {
         dcReversePostingEntryDate      = CWComponentFactory.createDateChooser(model.getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE));
 
         lReversePostingLiabilitiesAssets = CWComponentFactory.createLabel(model.getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).booleanValue() == true ? "Soll" : "Haben");
+
+        lLocked = CWComponentFactory.createLabel("Gesperrt", CWUtils.loadIcon("cw/customermanagementmodul/images/lock.png"));
+        lLocked.setToolTipText(CWComponentFactory.createToolTip(
+                "Gesperrt",
+                "Diese Kategorie ist für Sie gesperrt<br>und kann nicht geändert werden.<br>Grund: Es handelt sich um eine<br>automatische Buchung.",
+                "cw/customermanagementmodul/images/lock.png"
+        ));
+        lLocked.setVisible(false);
 
         bSave       = CWComponentFactory.createButton(model.getSaveButtonAction());
         bReset      = CWComponentFactory.createButton(model.getResetButtonAction());
@@ -74,6 +85,15 @@ public class EditReversePostingView {
 
 //        lReversePostingAmount.setEnabled(false);
 //        lReversePostingLiabilitiesAssets.setEnabled(false);
+
+        // Check if the category is locked
+        PostingCategory postingCategory = model.getBean().getPostingCategory();
+        if(postingCategory != null) {
+            if(postingCategory.getKey() != null && !postingCategory.getKey().isEmpty()) {
+                cbReversePostingCategory.setEnabled(false);
+                lLocked.setVisible(true);
+            }
+        }
     }
 
     private void initEventHandling() {
@@ -92,7 +112,7 @@ public class EditReversePostingView {
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout(
-                "10dlu, left:pref, 4dlu, pref, 4dlu, left:200dlu",
+                "10dlu, left:pref, 4dlu, pref, 4dlu, left:200dlu, 4dlu, pref",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
         
         PanelBuilder builder = new PanelBuilder(layout,panel.getContentPanel());
@@ -120,6 +140,7 @@ public class EditReversePostingView {
         builder.add(tfReversePostingDescription,cc.xyw(4, 15, 3));
         builder.addLabel("Kategorie:",          cc.xy(2, 17));
         builder.add(cbReversePostingCategory,   cc.xyw(4, 17, 3));
+        builder.add(lLocked,                    cc.xy(8, 17));
         builder.addLabel("Betrag:",             cc.xy(2, 19));
         builder.add(lReversePostingAmount,      cc.xy(4, 19, CellConstraints.RIGHT, CellConstraints.CENTER));
         builder.addLabel("€",                   cc.xy(6, 19));

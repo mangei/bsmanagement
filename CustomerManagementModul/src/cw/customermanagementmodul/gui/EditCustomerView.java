@@ -228,8 +228,8 @@ public class EditCustomerView {
         initComponents();
         
         JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
-        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(JideScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(JideScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+//        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(JideScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+//        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(JideScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
         
@@ -241,7 +241,7 @@ public class EditCustomerView {
         JViewPanel generalPanel = CWComponentFactory.createViewPanel(model.getGeneralHeaderInfo());
         
         FormLayout layout = new FormLayout(
-                "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref:grow",
+                "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
 
         PanelBuilder builder = new PanelBuilder(layout,generalPanel.getContentPanel());
@@ -289,7 +289,7 @@ public class EditCustomerView {
         builder.addSeparator("Bemerkung",   cc.xyw(1, 31, 8));
         builder.add(taComment,              cc.xyw(1, 33, 8));
 
-        tabs.addTab("Allgemein", generalPanel);
+        tabs.addTab("Allgemein", CWComponentFactory.createScrollPane(generalPanel));
         
         // Load dynamic components in tabs
         List<JComponent> lComps = model.getExtentionComponents();

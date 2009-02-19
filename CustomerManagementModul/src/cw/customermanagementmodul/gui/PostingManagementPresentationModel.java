@@ -326,6 +326,7 @@ public class PostingManagementPresentationModel {
     private void reversePosting(Posting posting) {
         GUIManager.setLoadingScreenText("Buchung wird storniert...");
         GUIManager.setLoadingScreenVisible(true);
+        GUIManager.getInstance().lockMenu();
 
         final ReversePosting reversePosting = new ReversePosting();
 
@@ -333,6 +334,7 @@ public class PostingManagementPresentationModel {
 
         posting2.setAmount(posting.getAmount());
         posting2.setLiabilitiesAssets(!posting.isLiabilitiesAssets());
+        posting2.setDescription(posting.getDescription() + " - Storno");
         posting2.setPostingCategory(posting.getPostingCategory());
 
         reversePosting.setPosting(posting);
@@ -362,6 +364,7 @@ public class PostingManagementPresentationModel {
                 }
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     model.removeButtonListener(this);
+                    GUIManager.getInstance().unlockMenu();
                     GUIManager.changeToLastView();
                 }
             }
@@ -485,6 +488,7 @@ public class PostingManagementPresentationModel {
     public void editPosting(final Posting posting) {
         GUIManager.setLoadingScreenText("Buchung wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
+        GUIManager.getInstance().lockMenu();
 
         final EditPostingPresentationModel model = new EditPostingPresentationModel(
                 posting,
@@ -508,10 +512,12 @@ public class PostingManagementPresentationModel {
                 }
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     model.removeButtonListener(this);
+                    GUIManager.getInstance().unlockMenu();
                     GUIManager.changeToLastView();
                 }
                 if (evt.getType() == ButtonEvent.OWN_BUTTON && evt.getOwnButtonText().equals("reversePostingButton")) {
                     model.removeButtonListener(this);
+                    GUIManager.getInstance().unlockMenu();
                     GUIManager.changeToLastView();
                     reversePosting(posting);
                 }

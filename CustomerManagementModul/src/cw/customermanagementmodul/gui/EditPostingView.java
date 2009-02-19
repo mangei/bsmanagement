@@ -62,7 +62,7 @@ public class EditPostingView {
         lLocked = CWComponentFactory.createLabel("Gesperrt", CWUtils.loadIcon("cw/customermanagementmodul/images/lock.png"));
         lLocked.setToolTipText(CWComponentFactory.createToolTip(
                 "Gesperrt",
-                "Diese Kategorie ist für Sie gesperrt<br>und kann nicht geändert werden.<br>Es handelt sich um eine automatische<br>Buchung.",
+                "Diese Kategorie ist für Sie gesperrt<br>und kann nicht geändert werden.<br>Grund: Es handelt sich um eine<br>automatische Buchung.",
                 "cw/customermanagementmodul/images/lock.png"
         ));
         lLocked.setVisible(false);

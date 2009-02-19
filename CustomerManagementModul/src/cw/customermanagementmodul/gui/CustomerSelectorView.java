@@ -8,6 +8,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWJXTable;
 import cw.boardingschoolmanagement.gui.component.JNotNullLabel;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
 import cw.customermanagementmodul.gui.renderer.ActiveCustomerTableCellRenderer;
 import cw.customermanagementmodul.gui.renderer.GenderTableCellRenderer;
 import java.awt.Color;
@@ -45,6 +46,7 @@ public class CustomerSelectorView {
                         tCustomers)));
 
         tCustomers.getColumns(true).get(0).setCellRenderer(new GenderTableCellRenderer());
+        tCustomers.getColumns(true).get(5).setCellRenderer(new DateTimeTableCellRenderer("dd.MM.yyyy"));
         tCustomers.getColumns(true).get(16).setCellRenderer(new ActiveCustomerTableCellRenderer());
     }
 

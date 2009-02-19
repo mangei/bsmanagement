@@ -61,7 +61,10 @@ public class EditReversePostingPresentationModel
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
         saveCancelButtonAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
 
-        List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAll();
+        List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAllUnlocked();
+        if(getBean().getPostingCategory() != null && !postingCategories.contains(getBean().getPostingCategory())) {
+            postingCategories.add(getBean().getPostingCategory());
+        }
         postingCategories.add(0, null);
         postingCategorySelection = new SelectionInList<PostingCategory>(postingCategories);
         postingCategorySelection.setSelection(getBean().getPostingCategory());
