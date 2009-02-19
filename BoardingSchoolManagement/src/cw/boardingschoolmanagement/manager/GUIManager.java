@@ -36,10 +36,12 @@ import org.jdesktop.application.SingleFrameApplication;
  *
  * @author Manuel Geier (CreativeWorkers)
  */
-public class GUIManager
-        extends SingleFrameApplication {
+public class GUIManager {
 
     private static GUIManager instance;
+
+    private static SingleFrameApplication application;
+
     /**
      * Eine Referenz auf die Haupt-Kompenente die angezeigt wird
      */
@@ -60,7 +62,14 @@ public class GUIManager
      */
     private GUIManager(String title) {
 
-        frame = this.getMainFrame();
+        application = new SingleFrameApplication() {
+            @Override
+            protected void startup() {
+                // Do nothing
+            }
+        };
+
+        frame = application.getMainFrame();
 
         frame.setTitle(title);
 
@@ -462,8 +471,8 @@ public class GUIManager
         }
     }
 
-    @Override
-    protected void startup() {
-        throw new UnsupportedOperationException("Not supported yet.");
+    public final JFrame getMainFrame() {
+        return application.getMainFrame();
     }
+
 }
