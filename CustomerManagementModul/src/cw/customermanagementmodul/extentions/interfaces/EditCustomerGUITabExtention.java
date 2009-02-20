@@ -1,7 +1,7 @@
 package cw.customermanagementmodul.extentions.interfaces;
 
-import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.extentions.interfaces.GUIExtention;
+import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import javax.swing.JComponent;
 import cw.customermanagementmodul.pojo.Customer;
 import java.util.List;
@@ -15,10 +15,9 @@ public interface EditCustomerGUITabExtention extends GUIExtention{
     /**
      * To initialize the PresentationModel
      * @param costumer The shown customer
-     * @param unsaved If you want to know if the costumer and the other extentions are unsaved.<br>
-     *                If you want to dis- or enable the top buttons, set this parameter
+     * @param editCustomerModel represents the main model with the extentions in it
      */
-    public void initPresentationModel(Customer costumer, ValueModel unsaved);
+    public void initPresentationModel(Customer costumer, EditCustomerPresentationModel editCustomerModel);
 
     /**
      * The component you want to add in an new tab. <br>

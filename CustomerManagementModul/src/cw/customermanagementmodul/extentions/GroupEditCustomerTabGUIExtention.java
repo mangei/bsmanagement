@@ -1,7 +1,7 @@
 package cw.customermanagementmodul.extentions;
 
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerGUITabExtention;
-import com.jgoodies.binding.value.ValueModel;
+import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.GroupEditCustomerTabGUIExtentionPresentationModel;
 import cw.customermanagementmodul.gui.GroupEditCustomerTabGUIExtentionView;
 import java.util.List;
@@ -16,14 +16,14 @@ public class GroupEditCustomerTabGUIExtention
         implements EditCustomerGUITabExtention {
 
     private GroupEditCustomerTabGUIExtentionPresentationModel model;
-    
-    public void initPresentationModel(final Customer c, ValueModel unsaved) {
-        System.out.println("MODEL");
-        model = new GroupEditCustomerTabGUIExtentionPresentationModel(c, unsaved);
+    private EditCustomerPresentationModel editCustomerModel;
+
+    public void initPresentationModel(final Customer c, EditCustomerPresentationModel editCustomerModel) {
+        this.editCustomerModel = editCustomerModel;
+        model = new GroupEditCustomerTabGUIExtentionPresentationModel(c, editCustomerModel.getUnsaved());
     }
     
     public JComponent getView() {
-        System.out.println("VIEW");
         return new GroupEditCustomerTabGUIExtentionView(model).buildPanel();
     }
 

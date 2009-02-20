@@ -69,7 +69,7 @@ public class EditCustomerPresentationModel
         editCustomerGUITabExtentions = getExtentions();
         for (EditCustomerGUITabExtention extention : editCustomerGUITabExtentions) {
             System.out.println("Extention: " + extention.toString());
-            extention.initPresentationModel(customer, unsaved);
+            extention.initPresentationModel(customer, this);
         }
 
         saveButtonAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/customermanagementmodul/images/disk_16.png"));
@@ -95,21 +95,22 @@ public class EditCustomerPresentationModel
         provinceList            = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_PROVINCE);
         countryList             = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_COUNTRY);
 
-        getBufferedModel(Customer.PROPERTYNAME_ACTIVE).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_GENDER).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_TITLE).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_FORENAME).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_FORENAME2).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_SURNAME).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_STREET).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_CITY).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_MOBILEPHONE).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_LANDLINEPHONE).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_FAX).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_EMAIL).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_COMMENT).addValueChangeListener(new SaveListener());
-        getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).addValueChangeListener(new SaveListener());
+        SaveListener saveListener = new SaveListener();
+        getBufferedModel(Customer.PROPERTYNAME_ACTIVE).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_GENDER).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_TITLE).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_FORENAME).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_FORENAME2).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_SURNAME).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_STREET).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_CITY).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_MOBILEPHONE).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_LANDLINEPHONE).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_FAX).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_EMAIL).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_COMMENT).addValueChangeListener(saveListener);
+        getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).addValueChangeListener(saveListener);
     }
 
     public void initEventHandling() {
@@ -157,6 +158,17 @@ public class EditCustomerPresentationModel
             editCustomerGUITabExtentions = (List<EditCustomerGUITabExtention>) ModulManager.getExtentions(EditCustomerGUITabExtention.class);
         }
         return editCustomerGUITabExtentions;
+    }
+
+    public EditCustomerGUITabExtention getExtention(EditCustomerGUITabExtention extention) {
+
+        for(EditCustomerGUITabExtention ex : editCustomerGUITabExtentions) {
+            if(extention.getClass().isInstance(ex)) {
+                return ex;
+            }
+        }
+
+        return null;
     }
 
     public void removeButtonListener(ButtonListener listener) {
@@ -288,7 +300,9 @@ public class EditCustomerPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            save();
+            if(!save()) {
+                return;
+            }
 
             support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
         }
@@ -315,10 +329,21 @@ public class EditCustomerPresentationModel
 
 
     public boolean save() {
+        boolean valid = true;
 
-        if(!validate()) {
+        List<EditCustomerGUITabExtention> extentions = getExtentions();
+        List<String> errorMessages = new ArrayList<String>();
+        for (EditCustomerGUITabExtention extention : extentions) {
+            if(!extention.validate()) {
+                valid = false;
+                if(extention.getErrorMessages() != null) {
+                    errorMessages.addAll(extention.getErrorMessages());
+                }
+            }
+        }
 
-            List<String> errorMessages = getErrorMessages();
+        if(!valid) {
+
             StringBuffer buffer = new StringBuffer("<html>");
 
             for(String message : errorMessages) {
@@ -335,7 +360,6 @@ public class EditCustomerPresentationModel
 
         triggerCommit();
 
-        List<EditCustomerGUITabExtention> extentions = getExtentions();
         for (EditCustomerGUITabExtention extention : extentions) {
             extention.save();
         }
@@ -343,6 +367,14 @@ public class EditCustomerPresentationModel
         unsaved.setValue(false);
 
         return true;
+    }
+
+    private boolean validate() {
+        return true;
+    }
+
+    private List<String> getErrorMessages() {
+        return null;
     }
 
     public void reset() {
@@ -354,33 +386,6 @@ public class EditCustomerPresentationModel
 
         triggerFlush();
     }
-
-    public boolean validate() {
-        
-        List<EditCustomerGUITabExtention> extentions = getExtentions();
-        for (EditCustomerGUITabExtention extention : extentions) {
-            if(!extention.validate()) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    public List<String> getErrorMessages() {
-
-        List<String> errorMessages = new ArrayList<String>();
-
-        List<EditCustomerGUITabExtention> extentions = getExtentions();
-        for (EditCustomerGUITabExtention extention : extentions) {
-            if(extention.getErrorMessages() != null) {
-                errorMessages.addAll(extention.getErrorMessages());
-            }
-        }
-
-        return errorMessages;
-    }
-
 
     public ValueModel getUnsaved() {
         return unsaved;

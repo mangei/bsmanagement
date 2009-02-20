@@ -17,6 +17,8 @@ import cw.customermanagementmodul.pojo.manager.PostingManager;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.customermanagementmodul.gui.PostingCategoryManagementPresentationModel;
 import cw.customermanagementmodul.gui.PostingCategoryManagementView;
+import cw.customermanagementmodul.gui.PostingOverviewPresentationModel;
+import cw.customermanagementmodul.gui.PostingOverviewView;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Group;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
@@ -102,6 +104,34 @@ public class CustomerManagementModul
 
         sideMenu.addCategory("Buchungen", "posting", 10);
         sideMenu.addItem(new JButton(new AbstractAction(
+                "Übersicht", CWUtils.loadIcon("cw/customermanagementmodul/images/posting.png")) {
+
+            {
+                putValue(Action.SHORT_DESCRIPTION, "Buchungsübersicht");
+            }
+            private PostingOverviewPresentationModel model;
+            private PostingOverviewView view;
+            private JPanel panel;
+
+            public void actionPerformed(ActionEvent e) {
+                if (panel == null) {
+
+                    GUIManager.setLoadingScreenText("Buchungen werden geladen...");
+                    GUIManager.setLoadingScreenVisible(true);
+
+                    model = new PostingOverviewPresentationModel();
+                    view = new PostingOverviewView(model);
+                    panel = view.buildPanel();
+
+                    GUIManager.changeView(panel);
+                    GUIManager.setLoadingScreenVisible(false);
+                    
+                } else {
+                    GUIManager.changeView(panel);
+                }
+            }
+        }), "posting");
+        sideMenu.addItem(new JButton(new AbstractAction(
                 "Kategorien", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category.png")) {
 
             {
@@ -123,7 +153,7 @@ public class CustomerManagementModul
 
                     GUIManager.changeView(panel);
                     GUIManager.setLoadingScreenVisible(false);
-                    
+
                 } else {
                     GUIManager.changeView(panel);
                 }
