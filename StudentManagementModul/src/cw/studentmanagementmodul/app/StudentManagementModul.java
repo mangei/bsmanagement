@@ -30,14 +30,14 @@ implements Modul
 {
 
     public void init() {
-//        ModulManager.addExtention(new StudentCustomerGUIExtention());
-//        ModulManager.addExtention(new StudentHomeGUIExtention());
+
+        MenuManager.getSideMenu().addCategory("Schule", "school");
         MenuManager.getSideMenu().addItem(new JButton(new AbstractAction("Klassen", CWUtils.loadIcon("cw/studentmanagementmodul/images/image.png")) {
 
             public void actionPerformed(ActionEvent e) {
                 GUIManager.changeView(new StudentClassManagementView(new StudentClassManagementPresentationModel("Klassenverwaltung")).buildPanel());
             }
-        }), "manage");
+        }), "school");
 
         CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {

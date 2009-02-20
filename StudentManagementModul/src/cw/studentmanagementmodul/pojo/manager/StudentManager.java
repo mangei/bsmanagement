@@ -36,9 +36,17 @@ public class StudentManager extends AbstractPOJOManager<Student> {
     public List<Student> getAll() {
         return HibernateUtil.getEntityManager().createQuery("FROM Student").getResultList();
     }
+
+    public List<Student> getAllActive() {
+        return HibernateUtil.getEntityManager().createQuery("FROM Student WHERE customer.active=true").getResultList();
+    }
     
     public List<Student> getAll(StudentClass studentClass) {
         return HibernateUtil.getEntityManager().createQuery("FROM Student WHERE studentClass.id=" + studentClass.getId()).getResultList();
+    }
+
+    public List<Student> getAllActive(StudentClass studentClass) {
+        return HibernateUtil.getEntityManager().createQuery("FROM Student WHERE studentClass.id=" + studentClass.getId() + " AND customer.active=true").getResultList();
     }
 
     public Student get(Customer customer) {

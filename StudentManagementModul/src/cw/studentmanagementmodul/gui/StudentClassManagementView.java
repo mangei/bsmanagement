@@ -36,6 +36,7 @@ public class StudentClassManagementView {
     private JButton bNewStudentClass;
     private JButton bEditStudentClass;
     private JButton bRemoveStudentClass;
+    private JButton bViewStudents;
     private JButton bMoveUpStudentClasses;
     private JPopupMenu popupStudentClassTreeRoot;
     private JPopupMenu popupStudentClassTreeOrganisationUnit;
@@ -54,6 +55,7 @@ public class StudentClassManagementView {
         bNewStudentClass        = CWComponentFactory.createButton(model.getNewStudentClassAction());
         bEditStudentClass       = CWComponentFactory.createButton(model.getEditStudentClassAction());
         bRemoveStudentClass     = CWComponentFactory.createButton(model.getRemoveStudentClassAction());
+        bViewStudents           = CWComponentFactory.createButton(model.getViewStudentsAction());
         bMoveUpStudentClasses   = CWComponentFactory.createButton(model.getMoveUpStudentClassAction());
         trStudentClass          = CWComponentFactory.createTree(model.getStudentClassTreeModel());
         trStudentClass.setSelectionModel(model.getStudentClassTreeSelectionModel());
@@ -74,6 +76,7 @@ public class StudentClassManagementView {
         popupStudentClassTreeStudentClass.add(new JMenuItem(model.getEditStudentClassAction()));
         popupStudentClassTreeStudentClass.add(new JMenuItem(model.getRemoveStudentClassAction()));
         popupStudentClassTreeStudentClass.add(new JSeparator());
+        popupStudentClassTreeStudentClass.add(new JMenuItem(model.getViewStudentsAction()));
         popupStudentClassTreeStudentClass.add(new JMenuItem(model.getMoveUpStudentClassAction()));
 
         trStudentClass.addMouseListener(new MouseAdapter() {
@@ -132,6 +135,7 @@ public class StudentClassManagementView {
         panel.getButtonPanel().add(bNewStudentClass);
         panel.getButtonPanel().add(bEditStudentClass);
         panel.getButtonPanel().add(bRemoveStudentClass);
+        panel.getButtonPanel().add(bViewStudents);
         panel.getButtonPanel().add(bMoveUpStudentClasses);
 
         FormLayout layout = new FormLayout(

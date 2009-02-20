@@ -45,6 +45,7 @@ public class StudentClassManagementPresentationModel {
     private Action newStudentClassAction;
     private Action editStudentClassAction;
     private Action removeStudentClassAction;
+    private Action viewStudentsAction;
     private Action moveUpStudentClassAction;
     private DefaultTreeModel studentClassTreeModel;
     private DefaultTreeSelectionModel studentClassTreeSelectionModel;
@@ -66,6 +67,7 @@ public class StudentClassManagementPresentationModel {
         newStudentClassAction = new NewStudentClassAction("Klasse erstellen", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_add.png"));
         editStudentClassAction = new EditStudentClassAction("Klasse bearbeiten", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_edit.png"));
         removeStudentClassAction = new RemoveStudentClassAction("Klasse löschen", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_remove.png"));
+        viewStudentsAction = new ViewStudentsActionAction("Schüler anzeigen", CWUtils.loadIcon("cw/studentmanagementmodul/images/student.png"));
         moveUpStudentClassAction = new MoveUpStudentClassAction("Schüler aufsteigen", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_up.png"));
 
         studentClassRootTreeNode = new DefaultMutableTreeNode("Welt", true);
@@ -165,66 +167,60 @@ public class StudentClassManagementPresentationModel {
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
+            final OrganisationUnit organisationUnit = new OrganisationUnit();
 
-                public void run() {
+            // Automaticly select the parent of the new OrganisationUnit
+            if (!studentClassTreeSelectionModel.isSelectionEmpty()) {
+                Object parent = ((DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent()).getUserObject();
+                if (parent instanceof OrganisationUnit) {
+                    organisationUnit.setParent((OrganisationUnit) parent);
+                }
+            }
 
-                    final OrganisationUnit organisationUnit = new OrganisationUnit();
+            final EditOrganisationUnitPresentationModel model = new EditOrganisationUnitPresentationModel(organisationUnit, "Bereich erstellen");
+            final EditOrganisationUnitView editView = new EditOrganisationUnitView(model);
 
-                    // Automaticly select the parent of the new OrganisationUnit
-                    if (!studentClassTreeSelectionModel.isSelectionEmpty()) {
-                        Object parent = ((DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent()).getUserObject();
-                        if (parent instanceof OrganisationUnit) {
-                            organisationUnit.setParent((OrganisationUnit) parent);
+            model.addButtonListener(new ButtonListener() {
+
+
+                // If the parent changes
+                PropertyChangeListener organisationUnitChanged;
+                boolean customerAlreadyCreated = false;
+
+                public void buttonPressed(ButtonEvent evt) {
+                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        OrganisationUnitManager.getInstance().save(organisationUnit);
+                        if (customerAlreadyCreated) {
+                            GUIManager.getStatusbar().setTextAndFadeOut("Bereich wurde aktualisiert.");
+                        } else {
+                            GUIManager.getStatusbar().setTextAndFadeOut("Bereich wurde erstellt.");
+                            studentClassTreeModel.insertNodeInto(createTreeNode(organisationUnit), getParentNode(organisationUnit), getParentNode(organisationUnit).getChildCount());
+                            customerAlreadyCreated = true;
+
+                            // It the parent changes after the save, then change it in the tree
+                            organisationUnit.addPropertyChangeListener(OrganisationUnit.PROPERTYNAME_PARENT, organisationUnitChanged = new PropertyChangeListener() {
+
+                                public void propertyChange(PropertyChangeEvent evt) {
+                                    MutableTreeNode node = getNode(organisationUnit);
+                                    studentClassTreeModel.removeNodeFromParent(node);
+                                    studentClassTreeModel.insertNodeInto(node, getParentNode(organisationUnit), getParentNode(organisationUnit).getChildCount());
+                                }
+                            });
                         }
                     }
-
-                    final EditOrganisationUnitPresentationModel model = new EditOrganisationUnitPresentationModel(organisationUnit, "Bereich erstellen");
-                    final EditOrganisationUnitView editView = new EditOrganisationUnitView(model);
-
-                    model.addButtonListener(new ButtonListener() {
-
-
-                        // If the parent changes
-                        PropertyChangeListener organisationUnitChanged;
-                        boolean customerAlreadyCreated = false;
-
-                        public void buttonPressed(ButtonEvent evt) {
-                            if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                OrganisationUnitManager.getInstance().save(organisationUnit);
-                                if (customerAlreadyCreated) {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Bereich wurde aktualisiert.");
-                                } else {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Bereich wurde erstellt.");
-                                    studentClassTreeModel.insertNodeInto(createTreeNode(organisationUnit), getParentNode(organisationUnit), getParentNode(organisationUnit).getChildCount());
-                                    customerAlreadyCreated = true;
-
-                                    // It the parent changes after the save, then change it in the tree
-                                    organisationUnit.addPropertyChangeListener(OrganisationUnit.PROPERTYNAME_PARENT, organisationUnitChanged = new PropertyChangeListener() {
-
-                                        public void propertyChange(PropertyChangeEvent evt) {
-                                            MutableTreeNode node = getNode(organisationUnit);
-                                            studentClassTreeModel.removeNodeFromParent(node);
-                                            studentClassTreeModel.insertNodeInto(node, getParentNode(organisationUnit), getParentNode(organisationUnit).getChildCount());
-                                        }
-                                    });
-                                }
-                            }
-                            if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                // Remove Listeners
-                                model.removeButtonListener(this);
-                                organisationUnit.removePropertyChangeListener(organisationUnitChanged);
-                                GUIManager.changeToLastView();
-                                GUIManager.getInstance().unlockMenu();
-                            }
-                        }
-                    });
-
-                    GUIManager.changeView(editView.buildPanel(), true);
-                    GUIManager.setLoadingScreenVisible(false);
-
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        // Remove Listeners
+                        model.removeButtonListener(this);
+                        organisationUnit.removePropertyChangeListener(organisationUnitChanged);
+                        GUIManager.changeToLastView();
+                        GUIManager.getInstance().unlockMenu();
+                    }
                 }
-            }).start();
+            });
+
+            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.setLoadingScreenVisible(false);
+
         }
     }
 
@@ -239,47 +235,40 @@ public class StudentClassManagementPresentationModel {
             GUIManager.setLoadingScreenText("Bereich wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
+            final DefaultMutableTreeNode node = (DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent();
+            final OrganisationUnit organisationUnit = (OrganisationUnit) node.getUserObject();
 
-                public void run() {
+            // Wenn sie die bereiche ändern, das element verschieben
+            final PropertyChangeListener organisationUnitChanged;
+            organisationUnit.addPropertyChangeListener(OrganisationUnit.PROPERTYNAME_PARENT, organisationUnitChanged = new PropertyChangeListener() {
 
-                    final DefaultMutableTreeNode node = (DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent();
-                    final OrganisationUnit organisationUnit = (OrganisationUnit) node.getUserObject();
-
-                    // Wenn sie die bereiche ändern, das element verschieben
-                    final PropertyChangeListener organisationUnitChanged;
-                    organisationUnit.addPropertyChangeListener(OrganisationUnit.PROPERTYNAME_PARENT, organisationUnitChanged = new PropertyChangeListener() {
-
-                        public void propertyChange(PropertyChangeEvent evt) {
-                            studentClassTreeModel.removeNodeFromParent(node);
-                            studentClassTreeModel.insertNodeInto(node, getParentNode(organisationUnit), getParentNode(organisationUnit).getChildCount());
-                        }
-                    });
-
-                    final EditOrganisationUnitPresentationModel model = new EditOrganisationUnitPresentationModel(organisationUnit, "Bereich erstellen");
-                    final EditOrganisationUnitView editView = new EditOrganisationUnitView(model);
-                    model.addButtonListener(new ButtonListener() {
-
-                        public void buttonPressed(ButtonEvent evt) {
-                            if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                OrganisationUnitManager.getInstance().save(organisationUnit);
-                                GUIManager.getStatusbar().setTextAndFadeOut("Bereich wurde aktualisiert.");
-                            }
-                            if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                // Remove Listeners
-                                model.removeButtonListener(this);
-                                organisationUnit.removePropertyChangeListener(organisationUnitChanged);
-                                GUIManager.changeToLastView();
-                                GUIManager.getInstance().unlockMenu();
-                            }
-                        }
-                    });
-
-                    GUIManager.changeView(editView.buildPanel(), true);
-                    GUIManager.setLoadingScreenVisible(false);
-
+                public void propertyChange(PropertyChangeEvent evt) {
+                    studentClassTreeModel.removeNodeFromParent(node);
+                    studentClassTreeModel.insertNodeInto(node, getParentNode(organisationUnit), getParentNode(organisationUnit).getChildCount());
                 }
-            }).start();
+            });
+
+            final EditOrganisationUnitPresentationModel model = new EditOrganisationUnitPresentationModel(organisationUnit, "Bereich erstellen");
+            final EditOrganisationUnitView editView = new EditOrganisationUnitView(model);
+            model.addButtonListener(new ButtonListener() {
+
+                public void buttonPressed(ButtonEvent evt) {
+                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        OrganisationUnitManager.getInstance().save(organisationUnit);
+                        GUIManager.getStatusbar().setTextAndFadeOut("Bereich wurde aktualisiert.");
+                    }
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        // Remove Listeners
+                        model.removeButtonListener(this);
+                        organisationUnit.removePropertyChangeListener(organisationUnitChanged);
+                        GUIManager.changeToLastView();
+                        GUIManager.getInstance().unlockMenu();
+                    }
+                }
+            });
+
+            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.setLoadingScreenVisible(false);
         }
     }
 
@@ -388,73 +377,67 @@ public class StudentClassManagementPresentationModel {
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
+            final StudentClass studentClass = new StudentClass();
 
-                public void run() {
+            // Automaticly choose the right OrganisationUnit
+            if (!studentClassTreeSelectionModel.isSelectionEmpty()) {
+                Object parent = ((DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent()).getUserObject();
+                if (parent instanceof OrganisationUnit) {
+                    studentClass.setOrganisationUnit((OrganisationUnit) parent);
+                } else {
 
-                    final StudentClass studentClass = new StudentClass();
-
-                    // Automaticly choose the right OrganisationUnit
-                    if (!studentClassTreeSelectionModel.isSelectionEmpty()) {
-                        Object parent = ((DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent()).getUserObject();
-                        if (parent instanceof OrganisationUnit) {
-                            studentClass.setOrganisationUnit((OrganisationUnit) parent);
-                        } else {
-
-                            // Automaticlly select the first OrganisationUnit if no OrganisationUnit is selected
-                            studentClass.setOrganisationUnit(OrganisationUnitManager.getInstance().getAll(0,1).get(0));
-                        }
-                    } else {
-
-                        // Automaticlly select the first OrganisationUnit if no OrganisationUnit is selected
-                        studentClass.setOrganisationUnit(OrganisationUnitManager.getInstance().getAll(0,1).get(0));
-                    }
-
-                    final EditStudentClassPresentationModel model = new EditStudentClassPresentationModel(studentClass, "Klasse erstellen");
-                    final EditStudentClassView editView = new EditStudentClassView(model);
-                    model.addButtonListener(new ButtonListener() {
-
-                        // If the parent changes
-                        PropertyChangeListener organisationUnitChanged;
-                        boolean customerAlreadyCreated = false;
-
-                        public void buttonPressed(ButtonEvent evt) {
-                            if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                StudentClassManager.getInstance().save(studentClass);
-                                if (customerAlreadyCreated) {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Klasse wurde aktualisiert.");
-                                } else {
-                                    GUIManager.getStatusbar().setTextAndFadeOut("Klasse wurde erstellt.");
-                                    studentClassTreeModel.insertNodeInto(createTreeNode(studentClass), getParentNode(studentClass), getParentNode(studentClass).getChildCount());
-                                    customerAlreadyCreated = true;
-
-                                    // It the parent changes after the save, then change it in the tree
-                                    studentClass.addPropertyChangeListener(StudentClass.PROPERTYNAME_ORGANISATIONUNIT, organisationUnitChanged = new PropertyChangeListener() {
-
-                                        public void propertyChange(PropertyChangeEvent evt) {
-                                            MutableTreeNode node = getNode(studentClass);
-                                            studentClassTreeModel.removeNodeFromParent(node);
-                                            studentClassTreeModel.insertNodeInto(node, getParentNode(studentClass), getParentNode(studentClass).getChildCount());
-                                        }
-                                    });
-                                }
-                            }
-                            if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-
-                                // Remove Listeners
-                                model.removeButtonListener(this);
-                                studentClass.removePropertyChangeListener(organisationUnitChanged);
-                                GUIManager.changeToLastView();
-                                GUIManager.getInstance().unlockMenu();
-                            }
-                        }
-                    });
-
-                    GUIManager.changeView(editView.buildPanel(), true);
-                    GUIManager.setLoadingScreenVisible(false);
-
+                    // Automaticlly select the first OrganisationUnit if no OrganisationUnit is selected
+                    studentClass.setOrganisationUnit(OrganisationUnitManager.getInstance().getAll(0,1).get(0));
                 }
-            }).start();
+            } else {
+
+                // Automaticlly select the first OrganisationUnit if no OrganisationUnit is selected
+                studentClass.setOrganisationUnit(OrganisationUnitManager.getInstance().getAll(0,1).get(0));
+            }
+
+            final EditStudentClassPresentationModel model = new EditStudentClassPresentationModel(studentClass, "Klasse erstellen");
+            final EditStudentClassView editView = new EditStudentClassView(model);
+            model.addButtonListener(new ButtonListener() {
+
+                // If the parent changes
+                PropertyChangeListener organisationUnitChanged;
+                boolean customerAlreadyCreated = false;
+
+                public void buttonPressed(ButtonEvent evt) {
+                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        StudentClassManager.getInstance().save(studentClass);
+                        if (customerAlreadyCreated) {
+                            GUIManager.getStatusbar().setTextAndFadeOut("Klasse wurde aktualisiert.");
+                        } else {
+                            GUIManager.getStatusbar().setTextAndFadeOut("Klasse wurde erstellt.");
+                            studentClassTreeModel.insertNodeInto(createTreeNode(studentClass), getParentNode(studentClass), getParentNode(studentClass).getChildCount());
+                            customerAlreadyCreated = true;
+
+                            // It the parent changes after the save, then change it in the tree
+                            studentClass.addPropertyChangeListener(StudentClass.PROPERTYNAME_ORGANISATIONUNIT, organisationUnitChanged = new PropertyChangeListener() {
+
+                                public void propertyChange(PropertyChangeEvent evt) {
+                                    MutableTreeNode node = getNode(studentClass);
+                                    studentClassTreeModel.removeNodeFromParent(node);
+                                    studentClassTreeModel.insertNodeInto(node, getParentNode(studentClass), getParentNode(studentClass).getChildCount());
+                                }
+                            });
+                        }
+                    }
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+
+                        // Remove Listeners
+                        model.removeButtonListener(this);
+                        studentClass.removePropertyChangeListener(organisationUnitChanged);
+                        GUIManager.changeToLastView();
+                        GUIManager.getInstance().unlockMenu();
+                    }
+                }
+            });
+
+            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.setLoadingScreenVisible(false);
+
         }
     }
 
@@ -469,55 +452,49 @@ public class StudentClassManagementPresentationModel {
             GUIManager.setLoadingScreenText("Klasse wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
+            final DefaultMutableTreeNode node = (DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent();
+            final StudentClass studentClass = (StudentClass) node.getUserObject();
 
-                public void run() {
-
-                    final DefaultMutableTreeNode node = (DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent();
-                    final StudentClass studentClass = (StudentClass) node.getUserObject();
-
-                    // Automaticly choose the right OrganisationUnit
-                    if (!studentClassTreeSelectionModel.isSelectionEmpty()) {
-                        Object parent = ((DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent()).getUserObject();
-                        if (parent instanceof OrganisationUnit) {
-                            studentClass.setOrganisationUnit((OrganisationUnit) parent);
-                        }
-                    }
-
-                    // Wenn sie die bereiche ändern, das element verschieben
-                    final PropertyChangeListener organisationUnitChanged;
-                    studentClass.addPropertyChangeListener(StudentClass.PROPERTYNAME_ORGANISATIONUNIT, organisationUnitChanged = new PropertyChangeListener() {
-
-                        public void propertyChange(PropertyChangeEvent evt) {
-                            studentClassTreeModel.removeNodeFromParent(node);
-                            studentClassTreeModel.insertNodeInto(node, getNode(studentClass.getOrganisationUnit()), getNode(studentClass.getOrganisationUnit()).getChildCount());
-                        }
-                    });
-
-                    final EditStudentClassPresentationModel model = new EditStudentClassPresentationModel(studentClass, "Klasse erstellen");
-                    final EditStudentClassView editView = new EditStudentClassView(model);
-                    model.addButtonListener(new ButtonListener() {
-
-                        public void buttonPressed(ButtonEvent evt) {
-                            if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                StudentClassManager.getInstance().save(studentClass);
-                                GUIManager.getStatusbar().setTextAndFadeOut("Klasse wurde aktualisiert.");
-                            }
-                            if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                                // Remove Listeners
-                                model.removeButtonListener(this);
-                                studentClass.removePropertyChangeListener(organisationUnitChanged);
-                                GUIManager.changeToLastView();
-                                GUIManager.getInstance().unlockMenu();
-                            }
-                        }
-                    });
-
-                    GUIManager.changeView(editView.buildPanel(), true);
-                    GUIManager.setLoadingScreenVisible(false);
-
+            // Automaticly choose the right OrganisationUnit
+            if (!studentClassTreeSelectionModel.isSelectionEmpty()) {
+                Object parent = ((DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent()).getUserObject();
+                if (parent instanceof OrganisationUnit) {
+                    studentClass.setOrganisationUnit((OrganisationUnit) parent);
                 }
-            }).start();
+            }
+
+            // Wenn sie die bereiche ändern, das element verschieben
+            final PropertyChangeListener organisationUnitChanged;
+            studentClass.addPropertyChangeListener(StudentClass.PROPERTYNAME_ORGANISATIONUNIT, organisationUnitChanged = new PropertyChangeListener() {
+
+                public void propertyChange(PropertyChangeEvent evt) {
+                    studentClassTreeModel.removeNodeFromParent(node);
+                    studentClassTreeModel.insertNodeInto(node, getNode(studentClass.getOrganisationUnit()), getNode(studentClass.getOrganisationUnit()).getChildCount());
+                }
+            });
+
+            final EditStudentClassPresentationModel model = new EditStudentClassPresentationModel(studentClass, "Klasse erstellen");
+            final EditStudentClassView editView = new EditStudentClassView(model);
+            model.addButtonListener(new ButtonListener() {
+
+                public void buttonPressed(ButtonEvent evt) {
+                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        StudentClassManager.getInstance().save(studentClass);
+                        GUIManager.getStatusbar().setTextAndFadeOut("Klasse wurde aktualisiert.");
+                    }
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        // Remove Listeners
+                        model.removeButtonListener(this);
+                        studentClass.removePropertyChangeListener(organisationUnitChanged);
+                        GUIManager.changeToLastView();
+                        GUIManager.getInstance().unlockMenu();
+                    }
+                }
+            });
+
+            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.setLoadingScreenVisible(false);
+
         }
     }
 
@@ -531,28 +508,51 @@ public class StudentClassManagementPresentationModel {
             GUIManager.setLoadingScreenText("Klasse löschen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
+            if (!studentClassTreeSelectionModel.isSelectionEmpty()) {
+                DefaultMutableTreeNode node = (DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent();
+                Object object = node.getUserObject();
+                if (object instanceof StudentClass) {
 
-                public void run() {
-                    if (!studentClassTreeSelectionModel.isSelectionEmpty()) {
-                        DefaultMutableTreeNode node = (DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent();
-                        Object object = node.getUserObject();
-                        if (object instanceof StudentClass) {
+                    int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die Klasse löschen, dabei verlassen alle Schüler die Klasse.", "Klasse löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    if (i == JOptionPane.OK_OPTION) {
+                        GUIManager.setLoadingScreenText("Klasse wird gelöscht...");
 
-                            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die Klasse löschen, dabei verlassen alle Schüler die Klasse.", "Klasse löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                            if (i == JOptionPane.OK_OPTION) {
-                                GUIManager.setLoadingScreenText("Klasse wird gelöscht...");
+                        studentClassTreeModel.removeNodeFromParent(node);
+                        StudentClassManager.getInstance().delete((StudentClass) object);
 
-                                studentClassTreeModel.removeNodeFromParent(node);
-                                StudentClassManager.getInstance().delete((StudentClass) object);
-
-                            }
-                        }
-                        GUIManager.setLoadingScreenVisible(false);
                     }
-
                 }
-            }).start();
+                GUIManager.setLoadingScreenVisible(false);
+            }
+        }
+    }
+
+    private class ViewStudentsActionAction extends AbstractAction {
+
+        public ViewStudentsActionAction(String name, Icon icon) {
+            super(name, icon);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            GUIManager.setLoadingScreenText("Schüler anzeigen...");
+            GUIManager.setLoadingScreenVisible(true);
+
+            DefaultMutableTreeNode node = (DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent();
+
+            final StudentClass studentClass = (StudentClass) node.getUserObject();;
+            final StudentsOverviewPresentationModel model = new StudentsOverviewPresentationModel(studentClass);
+            StudentsOverviewView view = new StudentsOverviewView(model);
+
+            JPanel panel = view.buildPanel();
+            final JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
+            d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+            d.setTitle(panel.getName());
+            d.add(panel);
+            d.pack();
+            CWUtils.centerWindow(d, GUIManager.getInstance().getMainFrame());
+            d.setVisible(true);
+
+            GUIManager.setLoadingScreenVisible(false);
         }
     }
 
@@ -566,32 +566,25 @@ public class StudentClassManagementPresentationModel {
             GUIManager.setLoadingScreenText("Schüler sollen in die nächste Klasse aufsteigen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            new Thread(new Runnable() {
+            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich alle Schüler aufsteigen lassen? Einige Schüler verlassen dabei die Klasse.", "Schüler aufsteigen lassen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            if (i == JOptionPane.OK_OPTION) {
+                GUIManager.setLoadingScreenText("Schüler steigen in die nächste Klasse auf...");
 
-                public void run() {
-
-                    int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich alle Schüler aufsteigen lassen? Einige Schüler verlassen dabei die Klasse.", "Schüler aufsteigen lassen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
-                    if (i == JOptionPane.OK_OPTION) {
-                        GUIManager.setLoadingScreenText("Schüler steigen in die nächste Klasse auf...");
-
-                        List<Student> list = StudentManager.getInstance().getAll();
-                        Student tmp;
-                        for (int j = 0, l = list.size(); j < l; j++) {
-                            tmp = list.get(j);
-                            if (tmp.getStudentClass() != null) {
-                                if (tmp.getStudentClass().getNextStudentClass() != null) {
-                                    tmp.setStudentClass(tmp.getStudentClass().getNextStudentClass());
-                                } else {
-                                    tmp.setStudentClass(null);
-                                }
-                            }
+                List<Student> list = StudentManager.getInstance().getAll();
+                Student tmp;
+                for (int j = 0, l = list.size(); j < l; j++) {
+                    tmp = list.get(j);
+                    if (tmp.getStudentClass() != null) {
+                        if (tmp.getStudentClass().getNextStudentClass() != null) {
+                            tmp.setStudentClass(tmp.getStudentClass().getNextStudentClass());
+                        } else {
+                            tmp.setStudentClass(null);
                         }
                     }
-
-                    GUIManager.setLoadingScreenVisible(false);
-
                 }
-            }).start();
+            }
+
+            GUIManager.setLoadingScreenVisible(false);
         }
     }
 
@@ -628,6 +621,7 @@ public class StudentClassManagementPresentationModel {
 
                 editStudentClassAction.setEnabled(false);
                 removeStudentClassAction.setEnabled(false);
+                viewStudentsAction.setEnabled(false);
             } else {
                 DefaultMutableTreeNode node = (DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent();
                 Object object = node.getUserObject();
@@ -638,18 +632,21 @@ public class StudentClassManagementPresentationModel {
 
                     editStudentClassAction.setEnabled(false);
                     removeStudentClassAction.setEnabled(false);
+                    viewStudentsAction.setEnabled(false);
                 } else if (object instanceof StudentClass) {
                     editOrganisationUnitAction.setEnabled(false);
                     removeOrganisationUnitAction.setEnabled(false);
 
                     editStudentClassAction.setEnabled(true);
                     removeStudentClassAction.setEnabled(true);
+                    viewStudentsAction.setEnabled(true);
                 } else {
                     editOrganisationUnitAction.setEnabled(false);
                     removeOrganisationUnitAction.setEnabled(false);
 
                     editStudentClassAction.setEnabled(false);
                     removeStudentClassAction.setEnabled(false);
+                    viewStudentsAction.setEnabled(false);
                 }
             }
 
@@ -703,4 +700,9 @@ public class StudentClassManagementPresentationModel {
     public TreeSelectionModel getStudentClassTreeSelectionModel() {
         return studentClassTreeSelectionModel;
     }
+
+    public Action getViewStudentsAction() {
+        return viewStudentsAction;
+    }
+
 }
