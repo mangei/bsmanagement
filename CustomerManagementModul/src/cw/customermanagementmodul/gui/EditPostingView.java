@@ -10,6 +10,7 @@ import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import cw.customermanagementmodul.pojo.Posting;
@@ -17,6 +18,7 @@ import cw.customermanagementmodul.pojo.PostingCategory;
 import java.beans.PropertyChangeListener;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
+import org.jdesktop.swingx.renderer.CellContext;
 
 /**
  *
@@ -38,6 +40,8 @@ public class EditPostingView {
     private JButton bCancel;
     private JButton bSaveCancel;
     private JButton bReversePosting;
+    private JPanel pPostingCategoryExtention;
+    private JPanel pMain;
     
 
     public EditPostingView(EditPostingPresentationModel model) {
@@ -78,14 +82,7 @@ public class EditPostingView {
         bReversePosting.setVisible(((Boolean)model.getEditMode().getValue()));
         bReversePosting.setEnabled(!((Boolean)model.getUnsaved().getValue()));
 
-        // Check if the category is locked
-        PostingCategory postingCategory = model.getBean().getPostingCategory();
-        if(postingCategory != null) {
-            if(postingCategory.getKey() != null && !postingCategory.getKey().isEmpty()) {
-                cbPostingCategory.setEnabled(false);
-                lLocked.setVisible(true);
-            }
-        }
+        pPostingCategoryExtention = CWComponentFactory.createPanel();
     }
 
     private void initEventHandling() {
@@ -102,6 +99,39 @@ public class EditPostingView {
                 bReversePosting.setEnabled(!(Boolean)evt.getNewValue());
             }
         });
+        model.getPostingCategorySelection().addValueChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                // Change the extention component
+                changePostingCategoryExtentionComponent();
+
+                // Check if the category is locked
+                PostingCategory postingCategory = model.getBean().getPostingCategory();
+                if(postingCategory != null) {
+                    if(postingCategory.getKey() != null && !postingCategory.getKey().isEmpty()) {
+                        cbPostingCategory.setEnabled(false);
+                        lLocked.setVisible(true);
+                    }
+                }
+            }
+        });
+
+        FormLayout pPostingCategoryExtentionLayout = new FormLayout(
+                "pref",
+                "4dlu, pref"
+        );
+        pPostingCategoryExtention.setLayout(pPostingCategoryExtentionLayout);
+    }
+
+    private void changePostingCategoryExtentionComponent() {
+        pPostingCategoryExtention.removeAll();
+        JComponent comp = model.getPostingCategoryExtentionComponent();
+        if(comp != null) {
+            CellConstraints cc = new CellConstraints();
+            pPostingCategoryExtention.add(comp, cc.xy(1, 2));
+        }
+        if(pMain != null) {
+            pMain.validate();
+        }
     }
     
     public JPanel buildPanel() {
@@ -109,16 +139,17 @@ public class EditPostingView {
         
         JViewPanel panel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = panel.getButtonPanel();
+
+        pMain = panel;
         
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-//        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
         buttonPanel.add(bReversePosting);
 
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, pref, 4dlu, left:200dlu, 4dlu, pref",
-                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
+                "pref, 4dlu, pref, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
         
         PanelBuilder builder = new PanelBuilder(layout,panel.getContentPanel());
         builder.setDefaultDialogBorder();
@@ -129,13 +160,14 @@ public class EditPostingView {
         builder.addLabel("Kategorie:",          cc.xy(1, 3));
         builder.add(cbPostingCategory,          cc.xyw(3, 3, 3));
         builder.add(lLocked,                    cc.xy(7, 3));
-        builder.addLabel("Betrag:",             cc.xy(1, 5));
-        builder.add(tfAmount,                   cc.xy(3, 5));
-        builder.addLabel("€",                   cc.xy(5, 5));
-        builder.addLabel("Art:",                cc.xy(1, 7));
-        builder.add(pLiabilitiesAssets,         cc.xyw(3, 7, 3));
-        builder.addLabel("Eingangsdatum:",      cc.xy(1, 9));
-        builder.add(dcPostingEntryDate,         cc.xy(3, 9));
+        builder.add(pPostingCategoryExtention,  cc.xy(3, 4));
+        builder.addLabel("Betrag:",             cc.xy(1, 6));
+        builder.add(tfAmount,                   cc.xy(3, 6));
+        builder.addLabel("€",                   cc.xy(5, 6));
+        builder.addLabel("Art:",                cc.xy(1, 8));
+        builder.add(pLiabilitiesAssets,         cc.xyw(3, 8, 3));
+        builder.addLabel("Eingangsdatum:",      cc.xy(1, 10));
+        builder.add(dcPostingEntryDate,         cc.xy(3, 10));
 
         initEventHandling();
 

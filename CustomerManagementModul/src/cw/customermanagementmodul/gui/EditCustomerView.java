@@ -53,7 +53,6 @@ public class EditCustomerView {
     private JButton bClearLocationData;
     private JTabbedPane tabs;
     private JButton bSave;
-    private JButton bReset;
     private JButton bCancel;
     private JButton bSaveCancel;
     
@@ -84,7 +83,6 @@ public class EditCustomerView {
         taComment           = CWComponentFactory.createTextArea(model.getBufferedModel(Customer.PROPERTYNAME_COMMENT), false);
 
         bSave               = CWComponentFactory.createButton(model.getSaveButtonAction());
-        bReset              = CWComponentFactory.createButton(model.getResetButtonAction());
         bCancel             = CWComponentFactory.createButton(model.getCancelButtonAction());
         bSaveCancel         = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         
@@ -234,7 +232,6 @@ public class EditCustomerView {
         
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-//        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
         
         JViewPanel generalPanel = CWComponentFactory.createViewPanel(model.getGeneralHeaderInfo());

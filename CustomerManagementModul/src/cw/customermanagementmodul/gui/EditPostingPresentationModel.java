@@ -10,6 +10,8 @@ import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.manager.ModulManager;
+import cw.customermanagementmodul.extentions.interfaces.EditPostingPostingCategoryExtention;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -22,6 +24,8 @@ import javax.swing.JOptionPane;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.PostingCategory;
 import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
+import java.util.HashMap;
+import javax.swing.JComponent;
 
 /**
  *
@@ -36,11 +40,13 @@ public class EditPostingPresentationModel
     private ValueModel editMode;
     private HeaderInfo headerInfo;
     
-    private Action resetAction;
     private Action saveAction;
     private Action cancelAction;
     private Action saveCancelAction;
     private Action reversePostingAction;
+
+    private List<EditPostingPostingCategoryExtention> editPostingPostingCategoryExtentions;
+    private HashMap<String,EditPostingPostingCategoryExtention> editPostingPostingCategoryExtentionsKeyMap;
     
     private ButtonListenerSupport buttonListenerSupport;
     
@@ -64,19 +70,23 @@ public class EditPostingPresentationModel
         buttonListenerSupport = new ButtonListenerSupport();
         
         saveAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/customermanagementmodul/images/disk_16.png"));
-        resetAction = new ResetAction("Zurücksetzen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_rotate_anticlockwise.png"));
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
         saveCancelAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
         reversePostingAction = new ReversePostingAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_delete.png"));
 
-        List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAllUnlocked();
-        if(getBean().getPostingCategory() != null && !postingCategories.contains(getBean().getPostingCategory())) {
-            postingCategories.add(getBean().getPostingCategory());
-        }
+        List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAll();
         postingCategories.add(0, new PostingCategory("Keine"));
         postingCategorySelection = new SelectionInList<PostingCategory>(postingCategories);
-        postingCategorySelection.setSelection(getBean().getPostingCategory());
+        postingCategorySelection.setSelectionIndex(0);
 
+        editPostingPostingCategoryExtentions = getExtentions();
+        editPostingPostingCategoryExtentionsKeyMap = new HashMap<String, EditPostingPostingCategoryExtention>();
+
+        // Initialize the extentions
+        for(EditPostingPostingCategoryExtention ex : editPostingPostingCategoryExtentions) {
+            ex.initPresentationModel(this);
+            editPostingPostingCategoryExtentionsKeyMap.put(ex.getKey(), ex);
+        }
     }
     
     public void initEventHandling() {
@@ -95,17 +105,24 @@ public class EditPostingPresentationModel
             public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
                     saveAction.setEnabled(true);
-                    resetAction.setEnabled(true);
                     saveCancelAction.setEnabled(true);
                 } else {
                     saveAction.setEnabled(false);
-                    resetAction.setEnabled(false);
                     saveCancelAction.setEnabled(false);
                 }
             }
         });
         unsaved.setValue(false);
     }
+
+    private List<EditPostingPostingCategoryExtention> getExtentions() {
+        if(editPostingPostingCategoryExtentions == null) {
+            editPostingPostingCategoryExtentions = (List<EditPostingPostingCategoryExtention>) ModulManager.getExtentions(EditPostingPostingCategoryExtention.class);
+        }
+        return editPostingPostingCategoryExtentions;
+    }
+
+
     /**
      * Wenn sich ein Document ändert, wird saved auf false gesetzt
      */
@@ -136,10 +153,6 @@ public class EditPostingPresentationModel
         return saveAction;
     }
 
-    public Action getResetAction() {
-        return resetAction;
-    }
-
     public Action getCancelAction() {
         return cancelAction;
     }
@@ -164,6 +177,15 @@ public class EditPostingPresentationModel
         return headerInfo;
     }
 
+    public JComponent getPostingCategoryExtentionComponent() {
+        PostingCategory selection = postingCategorySelection.getSelection();
+        if(postingCategorySelection.hasSelection()
+                && selection.getKey() != null && !selection.getKey().isEmpty()) {
+            return editPostingPostingCategoryExtentionsKeyMap.get(selection.getKey()).getView();
+        }
+        return null;
+    }
+
     private class SaveAction
             extends AbstractAction {
 
@@ -172,25 +194,8 @@ public class EditPostingPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            save();
+            if(!save()) return;
             buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
-        }
-    }
-    
-    private class ResetAction
-            extends AbstractAction {
-
-        public ResetAction(String name, Icon icon) {
-            super(name, icon);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
-            if(i == JOptionPane.OK_OPTION) {
-                reset();
-                unsaved.setValue(false);
-                buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
-            }
         }
     }
     
@@ -241,17 +246,21 @@ public class EditPostingPresentationModel
         }
     }
 
-    public void save() {
+    public boolean save() {
         getBufferedModel(Posting.PROPERTYNAME_POSTINGDATE).setValue(new Date());
         if(postingCategorySelection.getSelectionIndex() == 0) {
             getBufferedModel(Posting.PROPERTYNAME_CATEGORY).setValue(null);
         }
+
+//        for(EditPostingPostingCategoryExtention ex : getExtentions()) {
+//            ex.validate();
+//        }
+
         triggerCommit();
         unsaved.setValue(false);
         editMode.setValue(true);
+
+        return true;
     }
     
-    public void reset() {
-        triggerFlush();
-    }
 }

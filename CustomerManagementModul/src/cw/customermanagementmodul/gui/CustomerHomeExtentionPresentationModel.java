@@ -8,11 +8,11 @@ import cw.customermanagementmodul.pojo.manager.CustomerManager;
  *
  * @author ManuelG
  */
-public class CustomerHomeGUIExtentionPresentationModel {
+public class CustomerHomeExtentionPresentationModel {
 
     private ValueModel sizeCustomersValueModel;
 
-    public CustomerHomeGUIExtentionPresentationModel() {
+    public CustomerHomeExtentionPresentationModel() {
         initModels();
         initEventHandling();
     }

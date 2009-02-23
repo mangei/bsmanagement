@@ -1,6 +1,6 @@
 package cw.customermanagementmodul.extentions;
 
-import cw.customermanagementmodul.extentions.interfaces.EditCustomerGUITabExtention;
+import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.PostingManagementPresentationModel;
 import cw.customermanagementmodul.gui.PostingManagementView;
@@ -13,15 +13,15 @@ import java.util.List;
  *
  * @author Manuel Geier
  */
-public class PostingEditCustomerTabGUIExtention
-        implements EditCustomerGUITabExtention {
+public class PostingEditCustomerTabExtention
+        implements EditCustomerTabExtention {
 
     private PostingManagementPresentationModel model;
     private EditCustomerPresentationModel editCustomerModel;
     
-    public void initPresentationModel(final Customer c, EditCustomerPresentationModel editCustomerModel) {
+    public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
         this.editCustomerModel = editCustomerModel;
-        model = new PostingManagementPresentationModel(c);
+        model = new PostingManagementPresentationModel(editCustomerModel.getBean());
     }
     
     public JComponent getView() {
@@ -32,15 +32,7 @@ public class PostingEditCustomerTabGUIExtention
         // Not necessary for this Extention
     }
 
-    public void reset() {
-        // Not necessary for this Extention
-    }
-
-    public boolean validate() {
-        return true;
-    }
-
-    public List<String> getErrorMessages() {
+    public List<String> validate() {
         return null;
     }
 

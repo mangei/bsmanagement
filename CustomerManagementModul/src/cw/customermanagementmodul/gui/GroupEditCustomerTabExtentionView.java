@@ -13,15 +13,15 @@ import cw.boardingschoolmanagement.app.CWComponentFactory;
  *
  * @author ManuelG
  */
-public class GroupEditCustomerTabGUIExtentionView {
+public class GroupEditCustomerTabExtentionView {
 
-    private GroupEditCustomerTabGUIExtentionPresentationModel model;
+    private GroupEditCustomerTabExtentionPresentationModel model;
     private JXList liCustomerGroups;
     private JXList liGroups;
     private JButton bAdd;
     private JButton bRemove;
 
-    public GroupEditCustomerTabGUIExtentionView(GroupEditCustomerTabGUIExtentionPresentationModel model) {
+    public GroupEditCustomerTabExtentionView(GroupEditCustomerTabExtentionPresentationModel model) {
         this.model = model;
     }
 

@@ -18,7 +18,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-import cw.customermanagementmodul.extentions.interfaces.EditCustomerGUITabExtention;
+import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import javax.swing.Icon;
@@ -34,7 +34,6 @@ public class EditCustomerPresentationModel
     private ValueModel unsaved;
     private HeaderInfo headerInfo;
     private HeaderInfo generalHeaderInfo;
-    private Action resetButtonAction;
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
@@ -47,7 +46,7 @@ public class EditCustomerPresentationModel
     private List<String> provinceList;
     private List<String> countryList;
     
-    private List<EditCustomerGUITabExtention> editCustomerGUITabExtentions;
+    private List<EditCustomerTabExtention> editCustomerGUITabExtentions;
 
     public EditCustomerPresentationModel(Customer customer) {
         this(customer, new HeaderInfo());
@@ -67,13 +66,12 @@ public class EditCustomerPresentationModel
 
         // Addons initialisieren
         editCustomerGUITabExtentions = getExtentions();
-        for (EditCustomerGUITabExtention extention : editCustomerGUITabExtentions) {
+        for (EditCustomerTabExtention extention : editCustomerGUITabExtentions) {
             System.out.println("Extention: " + extention.toString());
-            extention.initPresentationModel(customer, this);
+            extention.initPresentationModel(this);
         }
 
         saveButtonAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/customermanagementmodul/images/disk_16.png"));
-        resetButtonAction = new ResetAction("Zurücksetzen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_rotate_anticlockwise.png"));
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
         saveCancelButtonAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
 
@@ -119,11 +117,9 @@ public class EditCustomerPresentationModel
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
                     saveButtonAction.setEnabled(true);
-                    resetButtonAction.setEnabled(true);
                     saveCancelButtonAction.setEnabled(true);
                 } else {
                     saveButtonAction.setEnabled(false);
-                    resetButtonAction.setEnabled(false);
                     saveCancelButtonAction.setEnabled(false);
                 }
             }
@@ -147,22 +143,22 @@ public class EditCustomerPresentationModel
 
     public List<JComponent> getExtentionComponents() {
         List<JComponent> comps = new ArrayList<JComponent>();
-        for (EditCustomerGUITabExtention ex : editCustomerGUITabExtentions) {
+        for (EditCustomerTabExtention ex : editCustomerGUITabExtentions) {
             comps.add((ex).getView());
         }
         return comps;
     }
 
-    public List<EditCustomerGUITabExtention> getExtentions() {
+    public List<EditCustomerTabExtention> getExtentions() {
         if(editCustomerGUITabExtentions == null) {
-            editCustomerGUITabExtentions = (List<EditCustomerGUITabExtention>) ModulManager.getExtentions(EditCustomerGUITabExtention.class);
+            editCustomerGUITabExtentions = (List<EditCustomerTabExtention>) ModulManager.getExtentions(EditCustomerTabExtention.class);
         }
         return editCustomerGUITabExtentions;
     }
 
-    public EditCustomerGUITabExtention getExtention(EditCustomerGUITabExtention extention) {
+    public EditCustomerTabExtention getExtention(EditCustomerTabExtention extention) {
 
-        for(EditCustomerGUITabExtention ex : editCustomerGUITabExtentions) {
+        for(EditCustomerTabExtention ex : editCustomerGUITabExtentions) {
             if(extention.getClass().isInstance(ex)) {
                 return ex;
             }
@@ -181,10 +177,6 @@ public class EditCustomerPresentationModel
 
     public Action getSaveButtonAction() {
         return saveButtonAction;
-    }
-
-    public Action getResetButtonAction() {
-        return resetButtonAction;
     }
 
     public Action getCancelButtonAction() {
@@ -246,23 +238,6 @@ public class EditCustomerPresentationModel
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
             }
 
-        }
-    }
-
-    private class ResetAction
-            extends AbstractAction {
-
-        private ResetAction(String name, Icon icon) {
-            super(name, icon);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
-            if (i == JOptionPane.OK_OPTION) {
-                reset();
-                unsaved.setValue(false);
-                support.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
-            }
         }
     }
 
@@ -331,13 +306,14 @@ public class EditCustomerPresentationModel
     public boolean save() {
         boolean valid = true;
 
-        List<EditCustomerGUITabExtention> extentions = getExtentions();
+        List<EditCustomerTabExtention> extentions = getExtentions();
         List<String> errorMessages = new ArrayList<String>();
-        for (EditCustomerGUITabExtention extention : extentions) {
-            if(!extention.validate()) {
-                valid = false;
-                if(extention.getErrorMessages() != null) {
-                    errorMessages.addAll(extention.getErrorMessages());
+        for (EditCustomerTabExtention extention : extentions) {
+            List<String> errorList = extention.validate();
+            if(errorList != null) {
+                if(errorList.size() > 0) {
+                    valid = false;
+                    errorMessages.addAll(errorList);
                 }
             }
         }
@@ -360,31 +336,13 @@ public class EditCustomerPresentationModel
 
         triggerCommit();
 
-        for (EditCustomerGUITabExtention extention : extentions) {
+        for (EditCustomerTabExtention extention : extentions) {
             extention.save();
         }
 
         unsaved.setValue(false);
 
         return true;
-    }
-
-    private boolean validate() {
-        return true;
-    }
-
-    private List<String> getErrorMessages() {
-        return null;
-    }
-
-    public void reset() {
-
-        List<EditCustomerGUITabExtention> extentions = getExtentions();
-        for (EditCustomerGUITabExtention extention : extentions) {
-            extention.reset();
-        }
-
-        triggerFlush();
     }
 
     public ValueModel getUnsaved() {
