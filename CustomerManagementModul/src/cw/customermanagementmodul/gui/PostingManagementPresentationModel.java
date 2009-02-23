@@ -445,7 +445,7 @@ public class PostingManagementPresentationModel {
         return editAction;
     }
 
-    public Action getCancelAction() {
+    public Action getReversePostingAction() {
         return reversePostingAction;
     }
     
