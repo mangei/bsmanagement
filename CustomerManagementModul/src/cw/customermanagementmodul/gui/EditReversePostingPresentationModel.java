@@ -8,6 +8,8 @@ import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.manager.ModulManager;
+import cw.customermanagementmodul.extentions.interfaces.EditPostingPostingCategoryExtention;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -19,8 +21,9 @@ import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.PostingCategory;
-import cw.customermanagementmodul.pojo.ReversePosting;
 import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
+import java.util.HashMap;
+import javax.swing.JComponent;
 
 /**
  *
@@ -32,20 +35,23 @@ public class EditReversePostingPresentationModel
     private PresentationModel<Posting> postingPresentationModel;
 //    private PresentationModel<Posting> reversePostingPresentationModel;
 
-    private ReversePosting reversePosting;
+    private Posting reversePosting;
+    private Posting oldPosting;
     private SelectionInList<PostingCategory> postingCategorySelection;
     private ValueModel unsaved;
     
-    private Action resetButtonAction;
-    private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
-    
+
+    private List<EditPostingPostingCategoryExtention> editPostingPostingCategoryExtentions;
+    private HashMap<String,EditPostingPostingCategoryExtention> editPostingPostingCategoryExtentionsKeyMap;
+
     private ButtonListenerSupport support;
     
-    public EditReversePostingPresentationModel(ReversePosting reversePosting) {
-        super(reversePosting.getReversePosting());
+    public EditReversePostingPresentationModel(Posting oldPosting, Posting reversePosting) {
+        super(reversePosting);
         this.reversePosting = reversePosting;
+        this.oldPosting = oldPosting;
 
         support = new ButtonListenerSupport();
         
@@ -56,20 +62,19 @@ public class EditReversePostingPresentationModel
     public void initModels() {
         support = new ButtonListenerSupport();
         
-        saveButtonAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/customermanagementmodul/images/disk_16.png"));
-        resetButtonAction = new ResetAction("Zurücksetzen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_rotate_anticlockwise.png"));
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
         saveCancelButtonAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
 
-        List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAllUnlocked();
-        if(getBean().getPostingCategory() != null && !postingCategories.contains(getBean().getPostingCategory())) {
-            postingCategories.add(getBean().getPostingCategory());
-        }
+        List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAll();
         postingCategories.add(0, null);
         postingCategorySelection = new SelectionInList<PostingCategory>(postingCategories);
-        postingCategorySelection.setSelection(getBean().getPostingCategory());
+        if(getBean().getPostingCategory() != null) {
+            postingCategorySelection.setSelection(getBean().getPostingCategory());
+        } else {
+            postingCategorySelection.setSelectionIndex(0);
+        }
 
-        postingPresentationModel = new PresentationModel<Posting>(reversePosting.getPosting());
+        postingPresentationModel = new PresentationModel<Posting>(oldPosting);
 //        reversePostingPresentationModel = new PresentationModel<Posting>((Posting)getBufferedModel(ReversePosting.PROPERTYNAME_REVERSEPOSTING).getValue());
 
         getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(new SaveListener());
@@ -77,6 +82,16 @@ public class EditReversePostingPresentationModel
         getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(new SaveListener());
         getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).addValueChangeListener(new SaveListener());
         getBufferedModel(Posting.PROPERTYNAME_CATEGORY).addValueChangeListener(new SaveListener());
+
+        
+        editPostingPostingCategoryExtentions = getExtentions();
+        editPostingPostingCategoryExtentionsKeyMap = new HashMap<String, EditPostingPostingCategoryExtention>();
+
+        // Initialize the extentions
+        for(EditPostingPostingCategoryExtention ex : editPostingPostingCategoryExtentions) {
+            ex.initPresentationModel(this);
+            editPostingPostingCategoryExtentionsKeyMap.put(ex.getKey(), ex);
+        }
     }
     
     public void initEventHandling() {
@@ -84,18 +99,22 @@ public class EditReversePostingPresentationModel
         unsaved.addValueChangeListener(new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
-                    saveButtonAction.setEnabled(true);
-                    resetButtonAction.setEnabled(true);
                     saveCancelButtonAction.setEnabled(true);
                 } else {
-                    saveButtonAction.setEnabled(false);
-                    resetButtonAction.setEnabled(false);
                     saveCancelButtonAction.setEnabled(false);
                 }
             }
         });
         unsaved.setValue(false);
     }
+
+    private List<EditPostingPostingCategoryExtention> getExtentions() {
+        if(editPostingPostingCategoryExtentions == null) {
+            editPostingPostingCategoryExtentions = (List<EditPostingPostingCategoryExtention>) ModulManager.getExtentions(EditPostingPostingCategoryExtention.class);
+        }
+        return editPostingPostingCategoryExtentions;
+    }
+
     /**
      * Wenn sich ein Document ändert, wird saved auf false gesetzt
      */
@@ -122,14 +141,6 @@ public class EditReversePostingPresentationModel
         return postingCategorySelection;
     }
     
-    public Action getSaveButtonAction() {
-        return saveButtonAction;
-    }
-
-    public Action getResetButtonAction() {
-        return resetButtonAction;
-    }
-
     public Action getCancelButtonAction() {
         return cancelButtonAction;
     }
@@ -142,39 +153,18 @@ public class EditReversePostingPresentationModel
         return postingPresentationModel;
     }
 
-//    public PresentationModel<Posting> getReversePostingPresentationModel() {
-//        return reversePostingPresentationModel;
-//    }
 
-    private class SaveAction
-            extends AbstractAction {
-
-        public SaveAction(String name, Icon icon) {
-            super(name, icon);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            save();
-            unsaved.setValue(false);
-            support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
-        }
-    }
-    
-    private class ResetAction
-            extends AbstractAction {
-
-        public ResetAction(String name, Icon icon) {
-            super(name, icon);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
-            if(i == JOptionPane.OK_OPTION) {
-                reset();
-                unsaved.setValue(false);
-                support.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
+    public JComponent getPostingCategoryExtentionComponent() {
+        PostingCategory selection = postingCategorySelection.getSelection();
+        if(postingCategorySelection.hasSelection()
+                && selection.getKey() != null
+                && !selection.getKey().isEmpty()) {
+            EditPostingPostingCategoryExtention get = editPostingPostingCategoryExtentionsKeyMap.get(selection.getKey());
+            if(get != null) {
+                return get.getView();
             }
         }
+        return null;
     }
     
     private class CancelAction
@@ -185,15 +175,11 @@ public class EditReversePostingPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            int i = 1;
+            int i = JOptionPane.OK_OPTION;
             if((Boolean)unsaved.getValue() == true) {
-                Object[] options = { "Speichern", "Nicht Speichern", "Abbrechen" };
-               i = JOptionPane.showOptionDialog(null, "Daten wurden geändert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,null,  options, options[0] );
+               i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirlich abbrechen?", "Abbrechen", JOptionPane.OK_CANCEL_OPTION);
             }
-            if(i == 0) {
-                save();
-            }
-            if(i == 0 || i == 1) {
+            if(i == JOptionPane.OK_OPTION) {
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
         }

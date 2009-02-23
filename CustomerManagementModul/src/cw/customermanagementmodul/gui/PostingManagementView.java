@@ -23,7 +23,6 @@ import javax.swing.JComboBox;
 public class PostingManagementView
 {
     private JButton bNew;
-    private JButton bEdit;
     private JButton bReversePosting;
 //    private JButton bDelete;
     private JButton bManagePostingCategories;
@@ -45,7 +44,6 @@ public class PostingManagementView
     
     private void initComponents() {
         bNew    = CWComponentFactory.createButton(model.getNewAction());
-//        bEdit   = CWComponentFactory.createButton(model.getEditAction());
         bReversePosting = CWComponentFactory.createButton(model.getReversePostingAction());
 //        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
         bManagePostingCategories = CWComponentFactory.createButton(model.getManagePostingCategoriesAction());
@@ -86,7 +84,6 @@ public class PostingManagementView
         panel.setName("Buchungen");
 
         panel.getButtonPanel().add(bNew);
-        panel.getButtonPanel().add(bEdit);
         panel.getButtonPanel().add(bReversePosting);
 //        panel.getButtonPanel().add(bDelete);
         panel.getButtonPanel().add(bManagePostingCategories);

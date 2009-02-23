@@ -57,6 +57,11 @@ public class EditPostingView {
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelAction());
 
         pPostingCategoryExtention = CWComponentFactory.createPanel();
+        FormLayout pPostingCategoryExtentionLayout = new FormLayout(
+                "pref",
+                "4dlu, pref"
+        );
+        pPostingCategoryExtention.setLayout(pPostingCategoryExtentionLayout);
     }
 
     private void initEventHandling() {
@@ -66,12 +71,6 @@ public class EditPostingView {
                 changePostingCategoryExtentionComponent();
             }
         });
-
-        FormLayout pPostingCategoryExtentionLayout = new FormLayout(
-                "pref",
-                "4dlu, pref"
-        );
-        pPostingCategoryExtention.setLayout(pPostingCategoryExtentionLayout);
     }
 
     private void changePostingCategoryExtentionComponent() {

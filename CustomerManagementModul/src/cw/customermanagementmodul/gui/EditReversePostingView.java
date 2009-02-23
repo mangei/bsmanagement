@@ -13,9 +13,11 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import cw.customermanagementmodul.pojo.Posting;
-import cw.customermanagementmodul.pojo.PostingCategory;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Date;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 /**
@@ -38,9 +40,9 @@ public class EditReversePostingView {
     private JDateChooser dcReversePostingEntryDate;
     private JLabel lReversePostingLiabilitiesAssets;
     private JLabel lLocked;
+    private JPanel pPostingCategoryExtention;
+    private JPanel pMain;
     
-    private JButton bSave;
-    private JButton bReset;
     private JButton bCancel;
     private JButton bSaveCancel;
     
@@ -72,8 +74,6 @@ public class EditReversePostingView {
         ));
         lLocked.setVisible(false);
 
-        bSave       = CWComponentFactory.createButton(model.getSaveButtonAction());
-        bReset      = CWComponentFactory.createButton(model.getResetButtonAction());
         bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
 
@@ -86,18 +86,33 @@ public class EditReversePostingView {
 //        lReversePostingAmount.setEnabled(false);
 //        lReversePostingLiabilitiesAssets.setEnabled(false);
 
-        // Check if the category is locked
-        PostingCategory postingCategory = model.getBean().getPostingCategory();
-        if(postingCategory != null) {
-            if(postingCategory.getKey() != null && !postingCategory.getKey().isEmpty()) {
-                cbReversePostingCategory.setEnabled(false);
-                lLocked.setVisible(true);
-            }
-        }
+        pPostingCategoryExtention = CWComponentFactory.createPanel();
+        FormLayout pPostingCategoryExtentionLayout = new FormLayout(
+                "pref",
+                "4dlu, pref"
+        );
+        pPostingCategoryExtention.setLayout(pPostingCategoryExtentionLayout);
     }
 
     private void initEventHandling() {
-        // Nothing to do
+        model.getPostingCategorySelection().addValueChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                // Change the extention component
+                changePostingCategoryExtentionComponent();
+            }
+        });
+    }
+
+    private void changePostingCategoryExtentionComponent() {
+        pPostingCategoryExtention.removeAll();
+        JComponent comp = model.getPostingCategoryExtentionComponent();
+        if(comp != null) {
+            CellConstraints cc = new CellConstraints();
+            pPostingCategoryExtention.add(comp, cc.xy(1, 2));
+        }
+        if(pMain != null) {
+            pMain.validate();
+        }
     }
     
     public JPanel buildPanel() {
@@ -106,9 +121,7 @@ public class EditReversePostingView {
         JViewPanel panel = new JViewPanel();
         JButtonPanel buttonPanel = panel.getButtonPanel();
         
-        buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-//        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout(

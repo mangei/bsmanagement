@@ -169,21 +169,6 @@ public class EditPostingPresentationModel
         }
         return null;
     }
-
-    private class SaveAction
-            extends AbstractAction {
-
-        public SaveAction(String name, Icon icon) {
-            super(name, icon);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            if(!save()) {
-                return;
-            }
-            buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
-        }
-    }
     
     private class CancelAction
             extends AbstractAction {
@@ -193,7 +178,7 @@ public class EditPostingPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            int i = JOptionPane.CANCEL_OPTION;
+            int i = JOptionPane.OK_OPTION;
             if((Boolean)unsaved.getValue() == true) {
                i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirlich abbrechen?", "Abbrechen", JOptionPane.OK_CANCEL_OPTION);
             }

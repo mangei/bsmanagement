@@ -26,8 +26,6 @@ import javax.swing.table.TableModel;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.ReversePosting;
-import cw.customermanagementmodul.pojo.manager.ReversePostingManager;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -328,20 +326,14 @@ public class PostingManagementPresentationModel {
         GUIManager.setLoadingScreenVisible(true);
         GUIManager.getInstance().lockMenu();
 
-        final ReversePosting reversePosting = new ReversePosting();
+        final Posting reversePosting = new Posting(posting.getCustomer());
 
-        Posting posting2 = new Posting(posting.getCustomer());
+        reversePosting.setAmount(posting.getAmount());
+        reversePosting.setLiabilitiesAssets(!posting.isLiabilitiesAssets());
+        reversePosting.setDescription(posting.getDescription() + " - Storno");
+        reversePosting.setPostingCategory(posting.getPostingCategory());
 
-        posting2.setAmount(posting.getAmount());
-        posting2.setLiabilitiesAssets(!posting.isLiabilitiesAssets());
-        posting2.setDescription(posting.getDescription() + " - Storno");
-        posting2.setPostingCategory(posting.getPostingCategory());
-
-        reversePosting.setPosting(posting);
-        reversePosting.setReversePosting(posting2);
-
-
-        final EditReversePostingPresentationModel model = new EditReversePostingPresentationModel(reversePosting);
+        final EditReversePostingPresentationModel model = new EditReversePostingPresentationModel(posting, reversePosting);
         final EditReversePostingView editView = new EditReversePostingView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -350,17 +342,13 @@ public class PostingManagementPresentationModel {
             public void buttonPressed(ButtonEvent evt) {
 
                 if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                    ReversePostingManager.getInstance().save(reversePosting);
-                    if (postingAlreadyCreated) {
-                        GUIManager.getStatusbar().setTextAndFadeOut("Storno wurde aktualisiert.");
-                    } else {
-                        GUIManager.getStatusbar().setTextAndFadeOut("Storno wurde erstellt.");
-                        postingAlreadyCreated = true;
-                        postingSelection.getList().add(reversePosting.getReversePosting());
-                        int idx = postingSelection.getList().indexOf(reversePosting.getReversePosting());
-                        postingSelection.fireIntervalAdded(idx, idx);
-                        updateEvents();
-                    }
+                    PostingManager.getInstance().save(reversePosting);
+                    GUIManager.getStatusbar().setTextAndFadeOut("Stornobuchung wurde erstellt.");
+                    postingAlreadyCreated = true;
+                    postingSelection.getList().add(reversePosting);
+                    int idx = postingSelection.getList().indexOf(reversePosting);
+                    postingSelection.fireIntervalAdded(idx, idx);
+                    updateEvents();
                 }
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     model.removeButtonListener(this);
