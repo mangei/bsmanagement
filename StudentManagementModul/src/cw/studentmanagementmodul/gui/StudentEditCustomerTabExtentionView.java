@@ -15,15 +15,15 @@ import cw.studentmanagementmodul.pojo.Student;
  *
  * @author Manuel Geier
  */
-public class StudentCustomerGUIExtentionView
+public class StudentEditCustomerTabExtentionView
 {
     private JCheckBox cIsStudent;
     private JButton bStudentClassChooser;
     private JLabel lStudentClassName;
     
-    private StudentCustomerGUIExtentionPresentationModel model;
+    private StudentEditCustomerTabExtentionPresentationModel model;
     
-    public StudentCustomerGUIExtentionView(StudentCustomerGUIExtentionPresentationModel model) {
+    public StudentEditCustomerTabExtentionView(StudentEditCustomerTabExtentionPresentationModel model) {
         this.model = model;
     }
 

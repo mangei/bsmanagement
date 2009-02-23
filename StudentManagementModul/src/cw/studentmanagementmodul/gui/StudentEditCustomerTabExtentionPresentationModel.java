@@ -20,7 +20,7 @@ import javax.swing.Icon;
  *
  * @author Manuel Geier
  */
-public class StudentCustomerGUIExtentionPresentationModel
+public class StudentEditCustomerTabExtentionPresentationModel
         extends PresentationModel<Student>
 {
     
@@ -29,7 +29,7 @@ public class StudentCustomerGUIExtentionPresentationModel
     
     private ValueModel unsaved;
     
-    public StudentCustomerGUIExtentionPresentationModel(Student student, final ValueModel unsaved) {
+    public StudentEditCustomerTabExtentionPresentationModel(Student student, final ValueModel unsaved) {
         super(student);
         this.unsaved = unsaved;
 

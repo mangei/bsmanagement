@@ -12,13 +12,13 @@ import javax.swing.JPanel;
  *
  * @author ManuelG
  */
-public class StudentHomeGUIExtentionView {
+public class StudentHomeExtentionView {
 
-    private StudentHomeGUIExtentionPresentationModel model;
+    private StudentHomeExtentionPresentationModel model;
 
     private JLabel lSizeStudents;
 
-    public StudentHomeGUIExtentionView(StudentHomeGUIExtentionPresentationModel model) {
+    public StudentHomeExtentionView(StudentHomeExtentionPresentationModel model) {
         this.model = model;
     }
     

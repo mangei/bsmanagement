@@ -8,11 +8,11 @@ import cw.studentmanagementmodul.pojo.manager.StudentManager;
  *
  * @author ManuelG
  */
-public class StudentHomeGUIExtentionPresentationModel {
+public class StudentHomeExtentionPresentationModel {
 
     private ValueModel sizeStudentsValueModel;
 
-    public StudentHomeGUIExtentionPresentationModel() {
+    public StudentHomeExtentionPresentationModel() {
         initModels();
         initEventHandling();
     }
