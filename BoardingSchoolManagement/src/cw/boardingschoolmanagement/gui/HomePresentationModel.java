@@ -1,6 +1,6 @@
 package cw.boardingschoolmanagement.gui;
 
-import cw.boardingschoolmanagement.extentions.interfaces.HomeGUIExtention;
+import cw.boardingschoolmanagement.extentions.interfaces.HomeExtention;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -26,8 +26,8 @@ public class HomePresentationModel {
     public List<JPanel> getExtentionPanels() {
         List<JPanel> panels = new ArrayList<JPanel>();
 
-        List<HomeGUIExtention> aList = (List<HomeGUIExtention>) ModulManager.getExtentions(HomeGUIExtention.class);
-        for (HomeGUIExtention ex : aList) {
+        List<HomeExtention> aList = (List<HomeExtention>) ModulManager.getExtentions(HomeExtention.class);
+        for (HomeExtention ex : aList) {
             panels.add(ex.getPanel());
         }
 

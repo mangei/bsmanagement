@@ -6,7 +6,7 @@ import javax.swing.JPanel;
  *
  * @author Manuel Geier (CreativeWorkers)
  */
-public interface HomeGUIExtention extends GUIExtention{
+public interface HomeExtention extends Extention{
 
     /**
      * The panel you want to add on the home view <br>
