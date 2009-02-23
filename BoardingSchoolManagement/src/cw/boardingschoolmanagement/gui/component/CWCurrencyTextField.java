@@ -13,7 +13,7 @@ import javax.swing.text.PlainDocument;
 public class CWCurrencyTextField extends JTextField {
 
     private int decimalPlaces = 2;
-    private double maxValue=9999999.99;
+    private double maxValue = 9999999.99;
 
     public CWCurrencyTextField() {
     }
@@ -25,28 +25,38 @@ public class CWCurrencyTextField extends JTextField {
             @Override
             public void insertString(int offs, String str, AttributeSet a) throws BadLocationException {
 
-                StringBuffer newString = new StringBuffer(getDocument().getText(0, getDocument().getLength()));
-                newString.insert(offs, str);
-                String dStr = newString.toString();
+                char[] cArray = str.toCharArray();
 
-                // Check if the input is a number
-                try {
-                    Double d = Double.parseDouble(dStr);
-                    System.out.println(dStr);
-                    //check the count of decimal fraction
-                    int decCounter = countFraction(dStr);
-                    System.out.println(decCounter);
-                    if (decCounter <= decimalPlaces && d<=maxValue) {
-                        super.insertString(offs, str, a);
+                boolean isDigit = true;
+                for (int i = 0; i < cArray.length; i++) {
+                    if (!Character.isDigit(cArray[i])&&cArray[i]!='.') {
+                        isDigit = false;
                     }
+                }
 
-                } catch (NumberFormatException numberFormatException) {
-                    
+                if (isDigit) {
+                    StringBuffer newString = new StringBuffer(getDocument().getText(0, getDocument().getLength()));
+                    newString.insert(offs, str);
+                    String dStr = newString.toString();
+
+                    // Check if the input is a number
+                    try {
+                        Double d = Double.parseDouble(dStr);
+                        System.out.println(dStr);
+                        //check the count of decimal fraction
+                        int decCounter = countFraction(dStr);
+                        System.out.println(decCounter);
+                        if (decCounter <= decimalPlaces && d <= maxValue) {
+                            super.insertString(offs, str, a);
+                        }
+
+                    } catch (NumberFormatException numberFormatException) {
+                    }
                 }
             }
         };
     }
-    
+
 
     //check the count of decimal fraction
     private int countFraction(String str) {
@@ -55,7 +65,7 @@ public class CWCurrencyTextField extends JTextField {
         } catch (NumberFormatException numberFormatException) {
             return -1;
         }
-        
+
 
         int decCounter = 0;
         boolean decStart = false;
