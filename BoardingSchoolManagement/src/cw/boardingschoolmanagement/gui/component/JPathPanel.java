@@ -47,7 +47,7 @@ public class JPathPanel extends JPanel {
 
         pathPanel.add(new JLabel("Sie sind hier: "));
         
-        for (int i = 0, l = lastComponents.size(); i < l; i++) {
+        for (int i = lastComponents.size()-1; i >= 0; i--) {
             pathPanel.add(createLabel(lastComponents.get(i)));
             pathPanel.add(new JLabel(separator));
         }
