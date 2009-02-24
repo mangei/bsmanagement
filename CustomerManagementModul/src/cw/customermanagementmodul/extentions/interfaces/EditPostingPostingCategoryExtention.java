@@ -1,5 +1,6 @@
 package cw.customermanagementmodul.extentions.interfaces;
 
+import cw.boardingschoolmanagement.extentions.interfaces.Extention;
 import cw.customermanagementmodul.gui.EditPostingPresentationModel;
 import javax.swing.JComponent;
 import java.util.List;
@@ -8,7 +9,7 @@ import java.util.List;
  *
  * @author Manuel Geier
  */
-public interface EditPostingPostingCategoryExtention extends EditReversePostingPostingCategoryExtention {
+public interface EditPostingPostingCategoryExtention extends Extention {
 
     public void initPresentationModel(EditPostingPresentationModel editPostingModel);
 

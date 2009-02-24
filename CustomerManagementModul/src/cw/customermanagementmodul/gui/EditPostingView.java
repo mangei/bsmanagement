@@ -59,7 +59,7 @@ public class EditPostingView {
         pPostingCategoryExtention = CWComponentFactory.createPanel();
         FormLayout pPostingCategoryExtentionLayout = new FormLayout(
                 "pref",
-                "4dlu, pref"
+                "4dlu, fill:pref"
         );
         pPostingCategoryExtention.setLayout(pPostingCategoryExtentionLayout);
     }

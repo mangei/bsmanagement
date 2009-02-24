@@ -87,11 +87,11 @@ public class EditCustomerPresentationModel
         );
 
 
-        titleList               = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_TITLE);
-        postOfficeNumberList    = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_POSTOFFICENUMBER);
-        cityList                = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_CITY);
-        provinceList            = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_PROVINCE);
-        countryList             = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_COUNTRY);
+//        titleList               = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_TITLE);
+//        postOfficeNumberList    = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_POSTOFFICENUMBER);
+//        cityList                = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_CITY);
+//        provinceList            = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_PROVINCE);
+//        countryList             = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_COUNTRY);
 
         SaveListener saveListener = new SaveListener();
         getBufferedModel(Customer.PROPERTYNAME_ACTIVE).addValueChangeListener(saveListener);

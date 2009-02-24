@@ -109,22 +109,22 @@ public class EditCustomerView {
             setTabsEnabled(false);
         }
 
-        new AutoCompletion(tfTitle,             model.getTitleList())           .setStrict(false);
-        new AutoCompletion(tfPostOfficeNumber,  model.getPostOfficeNumberList()).setStrict(false);
-        new AutoCompletion(tfCity,              model.getCityList())            .setStrict(false);
-        new AutoCompletion(tfProvince,          model.getProvinceList())        .setStrict(false);
-        new AutoCompletion(tfCountry,           model.getCountryList())         .setStrict(false);
+//        new AutoCompletion(tfTitle,             model.getTitleList())           .setStrict(false);
+//        new AutoCompletion(tfPostOfficeNumber,  model.getPostOfficeNumberList()).setStrict(false);
+//        new AutoCompletion(tfCity,              model.getCityList())            .setStrict(false);
+//        new AutoCompletion(tfProvince,          model.getProvinceList())        .setStrict(false);
+//        new AutoCompletion(tfCountry,           model.getCountryList())         .setStrict(false);
 
-        PostOfficeNumberAutoCompleteFire ponacf = new PostOfficeNumberAutoCompleteFire();
-        CityAutoCompleteFire cacf               = new CityAutoCompleteFire();
-        ProvinceAutoCompleteFire pacf           = new ProvinceAutoCompleteFire();
+//        PostOfficeNumberAutoCompleteFire ponacf = new PostOfficeNumberAutoCompleteFire();
+//        CityAutoCompleteFire cacf               = new CityAutoCompleteFire();
+//        ProvinceAutoCompleteFire pacf           = new ProvinceAutoCompleteFire();
 
-        tfPostOfficeNumber.addFocusListener(ponacf);
-        tfPostOfficeNumber.getDocument().addDocumentListener(ponacf);
-        tfCity.addFocusListener(cacf);
-        tfCity.getDocument().addDocumentListener(cacf);
-        tfProvince.addFocusListener(pacf);
-        tfProvince.getDocument().addDocumentListener(pacf);
+//        tfPostOfficeNumber.addFocusListener(ponacf);
+//        tfPostOfficeNumber.getDocument().addDocumentListener(ponacf);
+//        tfCity.addFocusListener(cacf);
+//        tfCity.getDocument().addDocumentListener(cacf);
+//        tfProvince.addFocusListener(pacf);
+//        tfProvince.getDocument().addDocumentListener(pacf);
 
     }
 

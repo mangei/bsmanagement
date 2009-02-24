@@ -59,12 +59,12 @@ public class EditReversePostingView {
         lPostingEntryDate      = CWComponentFactory.createLabel(CalendarUtil.formatDate(postingEntryDate));
         lPostingLiabilitiesAssets = CWComponentFactory.createLabel(model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).booleanValue() == true ? "Soll" : "Haben");
         
-        tfReversePostingDescription    = CWComponentFactory.createTextField(model.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION),false);
+        tfReversePostingDescription    = CWComponentFactory.createTextField(model.getReversePostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION),false);
         cbReversePostingCategory       = CWComponentFactory.createComboBox(model.getPostingCategorySelection());
-        lReversePostingAmount          = CWComponentFactory.createLabel(Double.toString(model.getBufferedModel(Posting.PROPERTYNAME_AMOUNT).doubleValue()));
-        dcReversePostingEntryDate      = CWComponentFactory.createDateChooser(model.getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE));
+        lReversePostingAmount          = CWComponentFactory.createLabel(Double.toString(model.getReversePostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_AMOUNT).doubleValue()));
+        dcReversePostingEntryDate      = CWComponentFactory.createDateChooser(model.getReversePostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE));
 
-        lReversePostingLiabilitiesAssets = CWComponentFactory.createLabel(model.getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).booleanValue() == true ? "Soll" : "Haben");
+        lReversePostingLiabilitiesAssets = CWComponentFactory.createLabel(model.getReversePostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).booleanValue() == true ? "Soll" : "Haben");
 
         lLocked = CWComponentFactory.createLabel("Gesperrt", CWUtils.loadIcon("cw/customermanagementmodul/images/lock.png"));
         lLocked.setToolTipText(CWComponentFactory.createToolTip(
@@ -85,11 +85,12 @@ public class EditReversePostingView {
 
 //        lReversePostingAmount.setEnabled(false);
 //        lReversePostingLiabilitiesAssets.setEnabled(false);
+        cbReversePostingCategory.setEnabled(false);
 
         pPostingCategoryExtention = CWComponentFactory.createPanel();
         FormLayout pPostingCategoryExtentionLayout = new FormLayout(
                 "pref",
-                "4dlu, pref"
+                "4dlu, fill:pref"
         );
         pPostingCategoryExtention.setLayout(pPostingCategoryExtentionLayout);
     }
@@ -101,6 +102,7 @@ public class EditReversePostingView {
                 changePostingCategoryExtentionComponent();
             }
         });
+        changePostingCategoryExtentionComponent();
     }
 
     private void changePostingCategoryExtentionComponent() {
@@ -118,15 +120,17 @@ public class EditReversePostingView {
     public JPanel buildPanel() {
         initComponents();
         
-        JViewPanel panel = new JViewPanel();
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = panel.getButtonPanel();
+
+        pMain = panel;
         
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout(
                 "10dlu, left:pref, 4dlu, pref, 4dlu, left:200dlu, 4dlu, pref",
-                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
+                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref, 4dlu, pref, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
         
         PanelBuilder builder = new PanelBuilder(layout,panel.getContentPanel());
         builder.setDefaultDialogBorder();
@@ -154,13 +158,14 @@ public class EditReversePostingView {
         builder.addLabel("Kategorie:",          cc.xy(2, 17));
         builder.add(cbReversePostingCategory,   cc.xyw(4, 17, 3));
         builder.add(lLocked,                    cc.xy(8, 17));
-        builder.addLabel("Betrag:",             cc.xy(2, 19));
-        builder.add(lReversePostingAmount,      cc.xy(4, 19, CellConstraints.RIGHT, CellConstraints.CENTER));
-        builder.addLabel("€",                   cc.xy(6, 19));
-        builder.addLabel("Art:",                cc.xy(2, 21));
-        builder.add(lReversePostingLiabilitiesAssets, cc.xyw(4, 21, 3));
-        builder.addLabel("Eingangsdatum:",      cc.xy(2, 23));
-        builder.add(dcReversePostingEntryDate,  cc.xy(4, 23));
+        builder.add(pPostingCategoryExtention,  cc.xy(4, 18));
+        builder.addLabel("Betrag:",             cc.xy(2, 20));
+        builder.add(lReversePostingAmount,      cc.xy(4, 20, CellConstraints.RIGHT, CellConstraints.CENTER));
+        builder.addLabel("€",                   cc.xy(6, 20));
+        builder.addLabel("Art:",                cc.xy(2, 22));
+        builder.add(lReversePostingLiabilitiesAssets, cc.xyw(4, 22, 3));
+        builder.addLabel("Eingangsdatum:",      cc.xy(2, 24));
+        builder.add(dcReversePostingEntryDate,  cc.xy(4, 24));
 
         initEventHandling();
 

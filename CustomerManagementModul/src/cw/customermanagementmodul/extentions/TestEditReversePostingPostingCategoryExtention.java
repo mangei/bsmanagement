@@ -1,7 +1,7 @@
 package cw.customermanagementmodul.extentions;
 
-import cw.customermanagementmodul.extentions.interfaces.EditPostingPostingCategoryExtention;
-import cw.customermanagementmodul.gui.EditPostingPresentationModel;
+import cw.customermanagementmodul.extentions.interfaces.EditReversePostingPostingCategoryExtention;
+import cw.customermanagementmodul.gui.EditReversePostingPresentationModel;
 import java.util.List;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -11,9 +11,9 @@ import javax.swing.JPanel;
  *
  * @author ManuelG
  */
-public class TestEditPostingPostingCategoryExtention implements EditPostingPostingCategoryExtention {
+public class TestEditReversePostingPostingCategoryExtention implements EditReversePostingPostingCategoryExtention {
 
-    public void initPresentationModel(EditPostingPresentationModel editPostingModel) {
+    public void initPresentationModel(EditReversePostingPresentationModel editPostingModel) {
         
     }
 

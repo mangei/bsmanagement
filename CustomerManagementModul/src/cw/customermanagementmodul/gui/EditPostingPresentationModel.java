@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.PostingCategory;
 import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
+import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JComponent;
 
@@ -56,8 +57,6 @@ public class EditPostingPresentationModel
         this.posting = posting;
         this.headerInfo = headerInfo;
 
-        buttonListenerSupport = new ButtonListenerSupport();
-        
         initModels();
         initEventHandling();
     }
@@ -66,7 +65,7 @@ public class EditPostingPresentationModel
         buttonListenerSupport = new ButtonListenerSupport();
         
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
-        saveCancelAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
+        saveCancelAction = new SaveCancelAction("Buchen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_go.png"));
 
         List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAll();
         postingCategories.add(0, new PostingCategory("Keine"));
@@ -196,7 +195,9 @@ public class EditPostingPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            save();
+            if(!save()) {
+                return;
+            }
             buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
         }
     }
@@ -207,9 +208,32 @@ public class EditPostingPresentationModel
             getBufferedModel(Posting.PROPERTYNAME_CATEGORY).setValue(null);
         }
 
-//        for(EditPostingPostingCategoryExtention ex : getExtentions()) {
-//            ex.validate();
-//        }
+        boolean valid = true;
+        List<String> errorMessages = new ArrayList<String>();
+
+        for(EditPostingPostingCategoryExtention ex : getExtentions()) {
+            List<String> validate = ex.validate();
+            if(validate != null && validate.size() > 0) {
+                valid = false;
+                errorMessages.addAll(validate);
+            }
+        }
+
+        if(!valid) {
+
+            StringBuffer buffer = new StringBuffer("<html>");
+
+            for(String message : errorMessages) {
+                buffer.append(message);
+                buffer.append("<br>");
+            }
+
+            buffer.append("</html>");
+
+            JOptionPane.showMessageDialog(null, buffer.toString(), "Fehler und Warnungen", JOptionPane.ERROR_MESSAGE);
+
+            return false;
+        }
 
         triggerCommit();
         unsaved.setValue(false);

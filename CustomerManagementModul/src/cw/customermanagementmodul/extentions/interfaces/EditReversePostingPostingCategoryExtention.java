@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Manuel Geier
  */
-public interface EditReversePostingPostingCategoryExtention extends Extention{
+public interface EditReversePostingPostingCategoryExtention extends Extention {
 
     public void initPresentationModel(EditReversePostingPresentationModel editReversePostingModel);
 

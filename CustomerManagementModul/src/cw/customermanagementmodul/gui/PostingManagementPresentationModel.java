@@ -257,38 +257,26 @@ public class PostingManagementPresentationModel {
                     posting,
                     new HeaderInfo(
                         "Buchung hinzufügen",
-                        "Fügen Sie eine neue Buchung hinzu.",
+                        "<html>Fügen Sie eine neue Buchung für '<b>" + customer.getForename() + " " + customer.getSurname() + "</b>' hinzu.</html>",
                         CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"),
                         CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png")
                     ));
             final EditPostingView editView = new EditPostingView(model);
             model.addButtonListener(new ButtonListener() {
 
-                boolean postingAlreadyCreated = false;
-
                 public void buttonPressed(ButtonEvent evt) {
 
                     if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         PostingManager.getInstance().save(posting);
-                        if (postingAlreadyCreated) {
-                            GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde aktualisiert.");
-                        } else {
-                            GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde erstellt.");
-                            postingAlreadyCreated = true;
-                            postingSelection.getList().add(posting);
-                            int idx = postingSelection.getList().indexOf(posting);
-                            postingSelection.fireIntervalAdded(idx, idx);
-                            updateEvents();
-                        }
+                        GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde erstellt.");
+                        postingSelection.getList().add(posting);
+                        int idx = postingSelection.getList().indexOf(posting);
+                        postingSelection.fireIntervalAdded(idx, idx);
+                        updateEvents();
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         model.removeButtonListener(this);
                         GUIManager.changeToLastView();
-                    }
-                    if (evt.getType() == ButtonEvent.OWN_BUTTON && evt.getOwnButtonText().equals("reversePostingButton")) {
-                        model.removeButtonListener(this);
-                        GUIManager.changeToLastView();
-                        reversePosting(posting);
                     }
                 }
             });
