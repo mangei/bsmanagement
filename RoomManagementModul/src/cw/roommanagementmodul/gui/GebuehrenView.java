@@ -7,8 +7,9 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JButton;
@@ -48,15 +49,12 @@ public class GebuehrenView {
         bTarif.setText("Tarif");
 
 
-        tGebuehr = new JXTable();
-        tGebuehr.setColumnControlVisible(true);
-        tGebuehr.setAutoCreateRowSorter(true);
-        tGebuehr.setPreferredScrollableViewportSize(new Dimension(10, 10));
+         String gebuehrenTableStateName = "cw.roommanagementmodul.GebuehrenView.gebuehrenTableState";
+        tGebuehr = CWComponentFactory.createTable(model.createGebuehrenTableModel(model.getGebuehrenSelection()), "keine Gebühren vorhanden",gebuehrenTableStateName);
 
-        tGebuehr.setModel(model.createGebuehrenTableModel(model.getGebuehrenSelection()));
-        tGebuehr.setSelectionModel(
-                new SingleListSelectionAdapter(
-                model.getGebuehrenSelection().getSelectionIndexHolder()));
+        tGebuehr.setSelectionModel(new SingleListSelectionAdapter(new JXTableSelectionConverter(
+                model.getGebuehrenSelection().getSelectionIndexHolder(),
+                tGebuehr)));
     }
 
     private void initEventHandling() {
@@ -67,9 +65,8 @@ public class GebuehrenView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel();
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
         
-        panel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
 
         panel.getButtonPanel().add(bTarif);
         panel.getButtonPanel().add(bKategorie);

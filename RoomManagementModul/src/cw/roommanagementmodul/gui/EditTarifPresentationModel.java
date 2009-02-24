@@ -11,7 +11,9 @@ import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -33,7 +35,6 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
 
     private Tarif tarif;
     private ButtonListenerSupport support;
-    private Action resetButtonAction;
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
@@ -44,6 +45,7 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
     private JDateChooser dcBis;
     private Date recommendedDate;
     private Date oldVon,  oldBis,  newVon,  newBis;
+    private HeaderInfo headerInfo;
 
     public EditTarifPresentationModel(Tarif tarif) {
         super(tarif);
@@ -53,11 +55,12 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
         initEventHandling();
     }
 
-    EditTarifPresentationModel(Tarif tarif, String header) {
+    EditTarifPresentationModel(Tarif tarif, HeaderInfo header) {
         super(tarif);
         this.tarif = tarif;
         tarifManager = TarifManager.getInstance();
-        this.headerText = header;
+        this.headerText = header.getHeaderText();
+        this.headerInfo = header;
         initModels();
         initEventHandling();
     }
@@ -69,11 +72,9 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
                     getSaveButtonAction().setEnabled(true);
-                    getResetButtonAction().setEnabled(true);
                     getSaveCancelButtonAction().setEnabled(true);
                 } else {
                     getSaveButtonAction().setEnabled(false);
-                    getResetButtonAction().setEnabled(false);
                     getSaveCancelButtonAction().setEnabled(false);
                 }
             }
@@ -83,22 +84,23 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
 
     private void initModels() {
         saveButtonAction = new SaveAction();
-        resetButtonAction = new ResetAction();
         cancelButtonAction = new CancelAction();
         saveCancelButtonAction = new SaveCancelAction();
 
 
         dcVon = new JDateChooser();
         dcBis = new JDateChooser();
+
+        dcVon = CWComponentFactory.createDateChooser(getBufferedModel(Tarif.PROPERTYNAME_AB));
+        dcBis = CWComponentFactory.createDateChooser(getBufferedModel(Tarif.PROPERTYNAME_BIS));
+
+
         support = new ButtonListenerSupport();
         getBufferedModel(Tarif.PROPERTYNAME_AB).addValueChangeListener(new SaveListener());
         getBufferedModel(Tarif.PROPERTYNAME_BIS).addValueChangeListener(new SaveListener());
         getBufferedModel(Tarif.PROPERTYNAME_TARIF).addValueChangeListener(new SaveListener());
     }
 
-    public Action getResetButtonAction() {
-        return resetButtonAction;
-    }
 
     public Action getSaveButtonAction() {
         return saveButtonAction;
@@ -222,6 +224,20 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
         this.newBis = newBis;
     }
 
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
+    }
+
     private class SaveAction
             extends AbstractAction {
 
@@ -234,10 +250,17 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
             //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprüft werden kann
             Calendar v = dcVon.getCalendar();
             Calendar b = dcBis.getCalendar();
-            Calendar bisC = new GregorianCalendar(b.get(Calendar.YEAR), b.get(Calendar.MONTH), b.get(Calendar.DATE));
-            Calendar vonC = new GregorianCalendar(v.get(Calendar.YEAR), v.get(Calendar.MONTH), v.get(Calendar.DATE));
-            dcVon.setCalendar(vonC);
-            dcBis.setCalendar(bisC);
+            if (b != null) {
+                Calendar bisC = new GregorianCalendar(b.get(Calendar.YEAR), b.get(Calendar.MONTH), b.get(Calendar.DATE));
+                dcBis.setCalendar(bisC);
+            }
+
+            if (v != null) {
+                Calendar vonC = new GregorianCalendar(v.get(Calendar.YEAR), v.get(Calendar.MONTH), v.get(Calendar.DATE));
+                dcVon.setCalendar(vonC);
+            }
+
+
 
             if (validateData() == true) {
                 saveTarif();
@@ -256,7 +279,7 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
         }
 
         if (checkChrono() == false) {
-            JOptionPane.showMessageDialog(null, "Bis-Datum muss ich chronologisch nach dem Von-Datum befinden.");
+            JOptionPane.showMessageDialog(null, "Bis-Datum muss sich chronologisch nach dem Von-Datum befinden.");
             return false;
         }
 
@@ -447,10 +470,16 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
             //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprüft werden kann
             Calendar v = dcVon.getCalendar();
             Calendar b = dcBis.getCalendar();
-            Calendar bisC = new GregorianCalendar(b.get(Calendar.YEAR), b.get(Calendar.MONTH), b.get(Calendar.DATE));
-            Calendar vonC = new GregorianCalendar(v.get(Calendar.YEAR), v.get(Calendar.MONTH), v.get(Calendar.DATE));
-            dcVon.setCalendar(vonC);
-            dcBis.setCalendar(bisC);
+
+            if (b != null) {
+                Calendar bisC = new GregorianCalendar(b.get(Calendar.YEAR), b.get(Calendar.MONTH), b.get(Calendar.DATE));
+                dcBis.setCalendar(bisC);
+            }
+
+            if (v != null) {
+                Calendar vonC = new GregorianCalendar(v.get(Calendar.YEAR), v.get(Calendar.MONTH), v.get(Calendar.DATE));
+                dcVon.setCalendar(vonC);
+            }
 
             if (validateData() == true) {
                 saveTarif();

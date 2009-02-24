@@ -42,7 +42,6 @@ public class EditBewohnerZimmerPresentationModel extends PresentationModel<Bewoh
     private Bewohner bewohner;
     private ButtonListenerSupport support;
     private ValueModel unsaved;
-    private Action resetButtonAction;
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
@@ -80,7 +79,6 @@ public class EditBewohnerZimmerPresentationModel extends PresentationModel<Bewoh
     private void initModels() {
         kautionListener= new KautionStatusItemListener();
         saveButtonAction = new SaveAction();
-        resetButtonAction = new ResetAction();
         cancelButtonAction = new CancelAction();
         saveCancelButtonAction = new SaveCancelAction();
         support = new ButtonListenerSupport();
@@ -125,11 +123,9 @@ public class EditBewohnerZimmerPresentationModel extends PresentationModel<Bewoh
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
                     getSaveButtonAction().setEnabled(true);
-                    getResetButtonAction().setEnabled(true);
                     getSaveCancelButtonAction().setEnabled(true);
                 } else {
                     getSaveButtonAction().setEnabled(false);
-                    getResetButtonAction().setEnabled(false);
                     getSaveCancelButtonAction().setEnabled(false);
                 }
             }
@@ -168,10 +164,6 @@ public class EditBewohnerZimmerPresentationModel extends PresentationModel<Bewoh
 
     public SelectionInList<Bereich> getBereichList() {
         return bereichList;
-    }
-
-    public Action getResetButtonAction() {
-        return resetButtonAction;
     }
 
     public Action getSaveButtonAction() {
@@ -240,27 +232,6 @@ public class EditBewohnerZimmerPresentationModel extends PresentationModel<Bewoh
         triggerCommit();
     }
 
-    private class ResetAction
-            extends AbstractAction {
-
-        {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/boardingschoolmanagement/images/arrow_rotate_anticlockwise.png"));
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
-            if (i == JOptionPane.OK_OPTION) {
-                // TODO Wartedialog
-                resetBewohner();
-                unsaved.setValue(false);
-                support.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
-            }
-        }
-    }
-
-    private void resetBewohner() {
-        this.triggerFlush();
-    }
 
     private class CancelAction
             extends AbstractAction {

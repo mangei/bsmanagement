@@ -4,7 +4,6 @@
  */
 package cw.roommanagementmodul.gui;
 
-
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.binding.list.SelectionInList;
@@ -14,6 +13,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -26,6 +26,11 @@ import javax.swing.JOptionPane;
 import cw.roommanagementmodul.pojo.manager.BereichManager;
 import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.Zimmer;
+import java.util.Collections;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
 
 /**
  *
@@ -36,7 +41,6 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
     private Zimmer zimmer;
     private ButtonListenerSupport support;
     private BereichManager bereichManager;
-    private Action resetButtonAction;
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
@@ -44,6 +48,8 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
     private ValueModel unsaved;
     private String headerText;
     private Bereich selectedBereich;
+    private HeaderInfo headerInfo;
+    private Document digitDocument;
 
     public EditZimmerPresentationModel(Zimmer zimmer) {
         super(zimmer);
@@ -53,25 +59,28 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
         initEventHandling();
     }
 
-    EditZimmerPresentationModel(Zimmer zimmer, String header) {
+    EditZimmerPresentationModel(Zimmer zimmer, HeaderInfo header) {
         super(zimmer);
         this.zimmer = zimmer;
-        bereichManager =BereichManager.getInstance();
-        this.headerText=header;
+        bereichManager = BereichManager.getInstance();
+        this.headerText = header.getHeaderText();
+        this.digitDocument=new DigitDocument();
+        this.headerInfo = header;
         initModels();
         initEventHandling();
     }
 
-        EditZimmerPresentationModel(Zimmer zimmer, String header,Bereich selectedBereich) {
+    EditZimmerPresentationModel(Zimmer zimmer, HeaderInfo header, Bereich selectedBereich) {
         super(zimmer);
-        this.selectedBereich=selectedBereich;
+        this.selectedBereich = selectedBereich;
         this.zimmer = zimmer;
-        bereichManager =BereichManager.getInstance();
-        this.headerText=header;
+        bereichManager = BereichManager.getInstance();
+        this.headerText = header.getHeaderText();
+        this.headerInfo = header;
+        this.digitDocument=new DigitDocument();
         initModels();
         initEventHandling();
     }
-
 
     private void initEventHandling() {
         setUnsaved(new ValueHolder());
@@ -80,11 +89,9 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
                     saveButtonAction.setEnabled(true);
-                    resetButtonAction.setEnabled(true);
                     saveCancelButtonAction.setEnabled(true);
                 } else {
                     saveButtonAction.setEnabled(false);
-                    resetButtonAction.setEnabled(false);
                     saveCancelButtonAction.setEnabled(false);
                 }
             }
@@ -94,23 +101,21 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
 
     private void initModels() {
         saveButtonAction = new SaveAction();
-        resetButtonAction = new ResetAction();
         cancelButtonAction = new CancelAction();
         saveCancelButtonAction = new SaveCancelAction();
         List<Bereich> l = getBereichManager().getBereichLeaf();
 
         bereichList = new SelectionInList(l, getModel(Zimmer.PROPERTYNAME_BEREICH));
-        if(selectedBereich!=null){
-           bereichList.setSelection(selectedBereich);
+        if (selectedBereich != null) {
+            bereichList.setSelection(selectedBereich);
         }
-        
+
         support = new ButtonListenerSupport();
         bereichList.addValueChangeListener(new SaveListener());
         getBufferedModel(Zimmer.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());
         getBufferedModel(Zimmer.PROPERTYNAME_NAME).addValueChangeListener(new PropertyChangeListener() {
 
             public void propertyChange(PropertyChangeEvent evt) {
-                System.out.println("NAMECHANGE");
             }
         });
         getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN).addValueChangeListener(new SaveListener());
@@ -128,12 +133,9 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
     }
 
     public SelectionInList<Bereich> getBereichList() {
-        List<Bereich> l=bereichManager.getBereichLeaf();
-        for(int i=0;i<l.size();i++){
-            System.out.println(l.get(i).getName());
-        }
+        List<Bereich> l = bereichManager.getBereichLeaf();
 
-        SelectionInList selList= new SelectionInList(l,getModel(Zimmer.PROPERTYNAME_BEREICH));
+        SelectionInList selList = new SelectionInList(l, getModel(Zimmer.PROPERTYNAME_BEREICH));
         selList.addValueChangeListener(new SaveListener());
         return selList;
     }
@@ -144,10 +146,6 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
 
     public void setBereichList(SelectionInList<Bereich> bereichList) {
         this.bereichList = bereichList;
-    }
-
-    public Action getResetButtonAction() {
-        return resetButtonAction;
     }
 
     public Action getSaveButtonAction() {
@@ -214,6 +212,34 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
      */
     public void setBereichManager(BereichManager bereichManager) {
         this.bereichManager = bereichManager;
+    }
+
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
+    }
+
+    /**
+     * @return the digitDocument
+     */
+    public Document getDigitDocument() {
+        return digitDocument;
+    }
+
+    /**
+     * @param digitDocument the digitDocument to set
+     */
+    public void setDigitDocument(Document digitDocument) {
+        this.digitDocument = digitDocument;
     }
 
     private class SaveAction
@@ -305,4 +331,27 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
             getUnsaved().setValue(true);
         }
     }
+
+    private class DigitDocument extends PlainDocument {
+
+        @Override
+        public void insertString(int offs, String str, AttributeSet a)
+                throws BadLocationException {
+
+            char[] cArray=str.toCharArray();
+
+            boolean isChar=true;
+            for(int i=0;i<cArray.length;i++){
+                if(!Character.isDigit(cArray[i])){
+                    isChar=false;
+                }
+            }
+
+            if(isChar){
+                super.insertString(offs, str, a);
+            }
+        }
+    }
 }
+
+

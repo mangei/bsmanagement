@@ -7,11 +7,11 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import cw.roommanagementmodul.component.DateTimeTableCellRenderer;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -47,15 +47,13 @@ public class GebZuordnunglBewohnerView {
         bBack.setText("Zurück");
 
 
-        tZuordnung = new JXTable();
-        tZuordnung.setColumnControlVisible(true);
-        tZuordnung.setAutoCreateRowSorter(true);
-        tZuordnung.setPreferredScrollableViewportSize(new Dimension(10, 10));
+        String zuordnungenTableStateName = "cw.roommanagementmodul.GebZuordnunglBewohnerView.zuordnungTableState";
+        tZuordnung = CWComponentFactory.createTable(model.createZuordnungTableModel(model.getGebuehrZuordnungSelection()), "keine Gebühr Zuordnungen vorhanden",zuordnungenTableStateName);
 
-        tZuordnung.setModel(model.createZuordnungTableModel(model.getGebuehrZuordnungSelection()));
-        tZuordnung.setSelectionModel(
-                new SingleListSelectionAdapter(
-                model.getGebuehrZuordnungSelection().getSelectionIndexHolder()));
+
+        tZuordnung.setSelectionModel(new SingleListSelectionAdapter(new JXTableSelectionConverter(
+                model.getGebuehrZuordnungSelection().getSelectionIndexHolder(),
+                tZuordnung)));
 
         tZuordnung.getColumnModel().getColumn(1).setCellRenderer(new DateTimeTableCellRenderer(true));
         tZuordnung.getColumnModel().getColumn(2).setCellRenderer(new DateTimeTableCellRenderer(true));
@@ -69,8 +67,7 @@ public class GebZuordnunglBewohnerView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel();
-        panel.setHeaderInfo(new HeaderInfo("Gebühren Übersicht: " + model.getHeaderText()));
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
 
         panel.getButtonPanel().add(bNew);
         panel.getButtonPanel().add(bEdit);

@@ -11,7 +11,6 @@ import cw.customermanagementmodul.pojo.Customer;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Basic;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,8 +21,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 
 
 /**
@@ -37,7 +34,7 @@ public class Bewohner extends Model implements AnnotatedClass{
     
     private Long id;
     private Customer customer;
-    private Customer einzahler;
+//    private Customer einzahler;
     private Zimmer zimmer;
     private Kaution kaution;
     private int kautionStatus;
@@ -60,16 +57,6 @@ public class Bewohner extends Model implements AnnotatedClass{
     public final static String PROPERTYNAME_KAUTION = "kaution";
     public final static String PROPERTYNAME_KAUTIONSTATUS = "kautionStatus";
     
-
-    public Bewohner(Long id, Customer kunde, Customer einzahler, Zimmer zimmer, Date von, Date bis, boolean active) {
-        this.id = id;
-        this.customer = kunde;
-        this.einzahler = einzahler;
-        this.zimmer = zimmer;
-        this.von = von;
-        this.bis = bis;
-        this.active = active;
-    }
     
     public Bewohner(){
         
@@ -84,15 +71,14 @@ public class Bewohner extends Model implements AnnotatedClass{
         this.bis = bis;
     }
 
-    @OneToOne
-    @Cascade(CascadeType.SAVE_UPDATE )
-    public Customer getEinzahler() {
-        return einzahler;
-    }
-
-    public void setEinzahler(Customer einzahler) {
-        this.einzahler = einzahler;
-    }
+//    @OneToOne
+//    public Customer getEinzahler() {
+//        return einzahler;
+//    }
+//
+//    public void setEinzahler(Customer einzahler) {
+//        this.einzahler = einzahler;
+//    }
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -112,9 +98,7 @@ public class Bewohner extends Model implements AnnotatedClass{
         this.active = active;
     }
 
-    @Basic(optional=false)
-    @OneToOne
-    @Cascade(CascadeType.SAVE_UPDATE )
+    @OneToOne(cascade=javax.persistence.CascadeType.ALL)
     public Customer getCustomer() {
         return customer;
     }
@@ -135,7 +119,6 @@ public class Bewohner extends Model implements AnnotatedClass{
     }
 
     @ManyToOne
-    @Cascade(CascadeType.SAVE_UPDATE )
     public Zimmer getZimmer() {
         return zimmer;
     }

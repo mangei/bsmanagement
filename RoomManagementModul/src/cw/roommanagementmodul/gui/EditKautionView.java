@@ -30,7 +30,6 @@ public class EditKautionView {
 
     private EditKautionPresentationModel model;
     public JButton bSave;
-    public JButton bReset;
     public JButton bCancel;
     public JButton bSaveCancel;
     public JLabel lName;
@@ -58,10 +57,6 @@ public class EditKautionView {
         bSaveCancel = new JButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern&Schließen");
 
-        bReset = new JButton(model.getResetButtonAction());
-        bReset.setText("Zurücksetzen");
-
-
     }
 
     public JComponent buildPanel() {
@@ -73,7 +68,6 @@ public class EditKautionView {
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
 
         JViewPanel panel = new JViewPanel();

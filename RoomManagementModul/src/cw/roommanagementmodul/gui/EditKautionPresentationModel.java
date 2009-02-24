@@ -30,7 +30,6 @@ public class EditKautionPresentationModel  extends PresentationModel<Kaution> {
 
      private Kaution kaution;
     private ButtonListenerSupport support;
-    private Action resetButtonAction;
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
@@ -53,11 +52,9 @@ public class EditKautionPresentationModel  extends PresentationModel<Kaution> {
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
                     getSaveButtonAction().setEnabled(true);
-                    getResetButtonAction().setEnabled(true);
                     getSaveCancelButtonAction().setEnabled(true);
                 } else {
                     getSaveButtonAction().setEnabled(false);
-                    getResetButtonAction().setEnabled(false);
                     getSaveCancelButtonAction().setEnabled(false);
                 }
             }
@@ -67,7 +64,6 @@ public class EditKautionPresentationModel  extends PresentationModel<Kaution> {
 
     private void initModels() {
         saveButtonAction = new SaveAction();
-        resetButtonAction = new ResetAction();
         cancelButtonAction = new CancelAction();
         saveCancelButtonAction = new SaveCancelAction();
 
@@ -84,13 +80,7 @@ public class EditKautionPresentationModel  extends PresentationModel<Kaution> {
         support.addButtonListener(listener);
     }
 
-    /**
-     * @return the resetButtonAction
-     */
-    public Action getResetButtonAction() {
-        return resetButtonAction;
-    }
-
+   
     /**
      * @return the saveButtonAction
      */
@@ -145,27 +135,6 @@ public class EditKautionPresentationModel  extends PresentationModel<Kaution> {
         triggerCommit();
     }
 
-    private class ResetAction
-            extends AbstractAction {
-
-        {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/boardingschoolmanagement/images/arrow_rotate_anticlockwise.png"));
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
-            if (i == JOptionPane.OK_OPTION) {
-                // TODO Wartedialog
-                resetGebuehrenKat();
-                unsaved.setValue(false);
-                support.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
-            }
-        }
-    }
-
-    private void resetGebuehrenKat() {
-        this.triggerFlush();
-    }
 
     private class CancelAction
             extends AbstractAction {

@@ -26,7 +26,6 @@ public class EditGebuehrenKategorieView {
 
     private EditGebuehrenKategoriePresentationModel model;
     public JButton bSave;
-    public JButton bReset;
     public JButton bCancel;
     public JButton bSaveCancel;
     public JLabel lKatName;
@@ -48,10 +47,8 @@ public class EditGebuehrenKategorieView {
         bCancel.setText("Abbrechen");
 
         bSaveCancel = new JButton(model.getSaveCancelButtonAction());
-        bSaveCancel.setText("Speichern&Schließen");
+        bSaveCancel.setText("Speichern u. Schließen");
 
-        bReset = new JButton(model.getResetButtonAction());
-        bReset.setText("Zurücksetzen");
 
 
     }
@@ -59,13 +56,11 @@ public class EditGebuehrenKategorieView {
     public JComponent buildPanel() {
         initComponents();
 
-        JViewPanel mainPanel = new JViewPanel();
-        mainPanel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
 
         JViewPanel panel = new JViewPanel();

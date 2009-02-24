@@ -45,8 +45,7 @@ public class LaufResultView {
         initComponents();
 
         boolean warningNoGebuehr=false;
-        JViewPanel panel = new JViewPanel();
-        panel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
         panel.getButtonPanel().add(bBack);
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
@@ -85,7 +84,7 @@ public class LaufResultView {
         panel.getContentPanel().add(scroll);
         
         if(warningNoGebuehr){
-            JOptionPane.showMessageDialog(null, "Es sind Bewohner vorhanden die keine Gebühr zugewießen bekommen haben.","Warunung",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Es sind Bewohner vorhanden die keine Gebühr für dieses Datum zugewießen bekommen haben.","Warunung",JOptionPane.INFORMATION_MESSAGE);
         }
 
 
@@ -93,19 +92,6 @@ public class LaufResultView {
     }
 
     public JViewPanel createBewohnerPanel(Bewohner b, List<GebTarifSelection> tarifSelectionList) {
-
-//        System.out.println("Bewohner: --------------------------");
-//        System.out.println(b.getCostumer().getSurname());
-//        for(int i=0;i<tarifSelectionList.size();i++){
-//            System.out.println("TarifSelection:--------------------------");
-//            System.out.println(tarifSelectionList.get(i).getTarif());
-//            System.out.println(tarifSelectionList.get(i).getGebuehr().getGebuehr());
-//            System.out.println(tarifSelectionList.get(i).isWarning());
-//            System.out.println(tarifSelectionList.get(i).isNoTarifError());
-//            System.out.println(tarifSelectionList.get(i).isMoreTarifError());
-//            System.out.println("Ende Selection--------------------------");
-//        }
-//        System.out.println("Ende Bewohner");
 
 
         JViewPanel panel = new JViewPanel();
@@ -179,8 +165,6 @@ public class LaufResultView {
                 return null;
             }
 
-            //if (tarifSelectionList.get(i).isWarning() == false) {
-            //builder.addSeparator("Laufart:", cc.xyw(1, 1, 8));
 
             if (tarif != null) {
                 builder.add(tarif, cc.xy(3, yPos));

@@ -7,8 +7,9 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import cw.roommanagementmodul.component.DateTimeTableCellRenderer;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
@@ -47,27 +48,26 @@ public class BewohnerView {
         bDelete.setText("Löschen");
         bGebZuordnung = new JButton(model.getGebuehrZuordnungAction());
         bGebZuordnung.setText("Übersicht");
-        bHistory= new JButton(model.getHistoryAction());
+        bHistory = new JButton(model.getHistoryAction());
         bHistory.setText("History");
         bInaktive = new JButton(model.getInaktiveAction());
         bInaktive.setText("Inaktive");
-        bDetail= new JButton(model.getDetailAction());
+        bDetail = new JButton(model.getDetailAction());
         bDetail.setText("Bearbeiten");
         bKaution = new JButton(model.getKautionAction());
         bKaution.setText("Kautionen");
-        
-        tBewohner = new JXTable();
-        tBewohner.setColumnControlVisible(true);
-        tBewohner.setAutoCreateRowSorter(true);
-        tBewohner.setPreferredScrollableViewportSize(new Dimension(10, 10));
-        tBewohner.setModel(model.createBewohnerTableModel(model.getBewohnerSelection()));
-        tBewohner.setSelectionModel(
-                new SingleListSelectionAdapter(
-                model.getBewohnerSelection().getSelectionIndexHolder()));
 
-        tBewohner.getColumnModel().getColumn(5).setCellRenderer(new DateTimeTableCellRenderer(true));
-        tBewohner.getColumnModel().getColumn(6).setCellRenderer(new DateTimeTableCellRenderer(true));
+        String bewohnerTableStateName = "cw.roommanagementmodul.BewohnerView.bewohnerTableState";
+        tBewohner = CWComponentFactory.createTable(model.createBewohnerTableModel(model.getBewohnerSelection()), "keine Bewohner vorhanden",bewohnerTableStateName);
+
+        tBewohner.setSelectionModel(new SingleListSelectionAdapter(new JXTableSelectionConverter(
+                model.getBewohnerSelection().getSelectionIndexHolder(),
+                tBewohner)));
         
+
+        tBewohner.getColumnModel().getColumn(4).setCellRenderer(new DateTimeTableCellRenderer(true));
+        tBewohner.getColumnModel().getColumn(5).setCellRenderer(new DateTimeTableCellRenderer(true));
+
 
     }
 
@@ -79,9 +79,7 @@ public class BewohnerView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel();
-        
-        panel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
 
 
         panel.getButtonPanel().add(bDetail);
@@ -89,9 +87,9 @@ public class BewohnerView {
         panel.getButtonPanel().add(bGeb);
         //panel.getButtonPanel().add(bHistory);
         panel.getButtonPanel().add(bDelete);
-        panel.getButtonPanel().add(bKaution);
+        //panel.getButtonPanel().add(bKaution);
         //panel.getButtonPanel().add(bInaktive);
-        
+
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
         panel.getTopPanel().setLayout(layout);

@@ -34,6 +34,7 @@ public class DateTimeTableCellRenderer extends DefaultTableCellRenderer {
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 
+        cell = (JLabel) super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
         if (value instanceof Date) {
             GregorianCalendar gc = new GregorianCalendar();
             gc.setTime((Date) value);

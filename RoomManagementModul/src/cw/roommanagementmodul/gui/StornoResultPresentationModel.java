@@ -7,6 +7,7 @@ package cw.roommanagementmodul.gui;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Posting;
@@ -34,10 +35,12 @@ public class StornoResultPresentationModel {
     private List<Posting> postingList;
     private Map<Customer, List<Posting>> customerPostingMap;
     private Map<Bewohner, List<Posting>> bewohnerPostingMap;
+    private Map<Customer, List<Posting>> customerNoBewohnerMap;
+    private HeaderInfo headerInfo;
 
-    public StornoResultPresentationModel(List<Posting> postingList, String header) {
+    public StornoResultPresentationModel(List<Posting> postingList, HeaderInfo header) {
         this.postingList = postingList;
-        this.headerText = header;
+        this.headerInfo = header;
         initModels();
     }
 
@@ -46,6 +49,7 @@ public class StornoResultPresentationModel {
         backAction = new BackAction();
 
         customerPostingMap = new HashMap<Customer, List<Posting>>();
+        customerNoBewohnerMap = new HashMap<Customer, List<Posting>>();
         setBewohnerPostingMap(new HashMap<Bewohner, List<Posting>>());
 
         List<Customer> cList = new ArrayList<Customer>();
@@ -68,24 +72,37 @@ public class StornoResultPresentationModel {
             }
             customerPostingMap.put(c, pList);
             Bewohner b = bewManager.getBewohner(c);
-            getBewohnerPostingMap().put(b, pList);
+            if (b == null) {
+                customerNoBewohnerMap.put(c, pList);
+            } else {
+                getBewohnerPostingMap().put(b, pList);
+            }
+
         }
     }
 
     public List<Bewohner> getBewohner() {
 
         List<Bewohner> bewohnerList = new ArrayList<Bewohner>();
-
         Set keySet = bewohnerPostingMap.keySet();
-
         Iterator iterator = keySet.iterator();
 
         while (iterator.hasNext()) {
             bewohnerList.add((Bewohner) iterator.next());
         }
-
         return bewohnerList;
+    }
 
+    public List<Customer> getCustomerNoBewohner() {
+
+        List<Customer> customerList = new ArrayList<Customer>();
+        Set keySet = customerNoBewohnerMap.keySet();
+        Iterator iterator = keySet.iterator();
+
+        while (iterator.hasNext()) {
+            customerList.add((Customer) iterator.next());
+        }
+        return customerList;
     }
 
     /**
@@ -150,6 +167,34 @@ public class StornoResultPresentationModel {
      */
     public void setBewohnerPostingMap(Map<Bewohner, List<Posting>> bewohnerPostingMap) {
         this.bewohnerPostingMap = bewohnerPostingMap;
+    }
+
+    /**
+     * @return the customerNoBewohnerMap
+     */
+    public Map<Customer, List<Posting>> getCustomerNoBewohnerMap() {
+        return customerNoBewohnerMap;
+    }
+
+    /**
+     * @param customerNoBewohnerMap the customerNoBewohnerMap to set
+     */
+    public void setCustomerNoBewohnerMap(Map<Customer, List<Posting>> customerNoBewohnerMap) {
+        this.customerNoBewohnerMap = customerNoBewohnerMap;
+    }
+
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
     }
 
     private class BackAction

@@ -5,13 +5,13 @@
 package cw.roommanagementmodul.gui;
 
 
-import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Customer;
 import java.awt.event.ActionEvent;
@@ -332,7 +332,7 @@ public class InaktiveBewohnerPresentationModel {
 
     private void gebZuordnungSelectedItem(EventObject e) {
         Customer c = getBewohnerSelection().getSelection().getCustomer();
-        final GebZuordnungBewohnerPresentationModel model = new GebZuordnungBewohnerPresentationModel(this.getBewohnerSelection().getSelection(), c.getSurname() + " " + c.getForename());
+        final GebZuordnungBewohnerPresentationModel model = new GebZuordnungBewohnerPresentationModel(this.getBewohnerSelection().getSelection(), new HeaderInfo("Gebühren Übersicht von: "+c.getSurname() + " " + c.getForename(),"Übersicht aller Gebühren die diesen einem Bewohner zugeordnet sind."));
         final GebZuordnunglBewohnerView detailView = new GebZuordnunglBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -397,11 +397,12 @@ public class InaktiveBewohnerPresentationModel {
                 case 1:
                     return b.getCustomer().getForename();
                 case 2:
-                    if (b.getEinzahler() != null) {
-                        return b.getEinzahler().getSurname() + " " + b.getEinzahler().getForename();
-                    } else {
-                        return b.getCustomer().getSurname() + " " + b.getCustomer().getForename();
-                    }
+                    return "";
+//                    if (b.getEinzahler() != null) {
+//                        return b.getEinzahler().getSurname() + " " + b.getEinzahler().getForename();
+//                    } else {
+//                        return b.getCustomer().getSurname() + " " + b.getCustomer().getForename();
+//                    }
                 case 3:
                     return b.getKaution();
                 case 4:

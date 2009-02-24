@@ -10,7 +10,8 @@ import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import java.awt.event.ItemEvent;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -45,31 +46,32 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
     private KautionStatusItemListener kautionListener;
     private int checkBoxState;
     private ValueModel checkBoxModel;
+    private HeaderInfo headerInfo;
 
     BewohnerGUIExtentionPresentationModel(BewohnerManager bewohnerManager, Bewohner b, ValueModel unsaved) {
         super(b);
         this.bewohner = b;
-        checkBoxState=ItemEvent.DESELECTED;
+        checkBoxState = ItemEvent.DESELECTED;
         zimmerManager = ZimmerManager.getInstance();
         bereichManager = BereichManager.getInstance();
         kautionManager = KautionManager.getInstance();
         initModels();
         this.unsaved = unsaved;
-        
-        
+
+        headerInfo = new HeaderInfo("Zimmer Zuweisung", "Hier können Sie einem Kunden ein Zimmer zuweisen und machen ihn damit zu einem Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"));
 
     }
 
     private void initModels() {
-        checkBoxModel=new ValueHolder();
+        checkBoxModel = new ValueHolder();
         checkBoxModel.addValueChangeListener(new PropertyChangeListener() {
 
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
-                    checkBoxState=ItemEvent.SELECTED;
+                    checkBoxState = ItemEvent.SELECTED;
 
                 } else {
-                    checkBoxState=ItemEvent.DESELECTED;
+                    checkBoxState = ItemEvent.DESELECTED;
                 }
             }
         });
@@ -77,20 +79,28 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
 
         kautionListener = new KautionStatusItemListener();
         support = new ButtonListenerSupport();
-        zimmerList = new SelectionInList(zimmerManager.getAll(), getModel(Bewohner.PROPERTYNAME_ZIMMER));
-        zimmerList.addValueChangeListener(new ZimmerPropertyListener());
-        kautionList = new SelectionInList(kautionManager.getAll(), getModel(Bewohner.PROPERTYNAME_KAUTION));
         bereichList = new SelectionInList(extractLeafBereich(bereichManager.getBereich()));
         bereichList.addValueChangeListener(new BereichPropertyListener());
+ 
+        zimmerList = new SelectionInList(zimmerManager.getAll(), getModel(Bewohner.PROPERTYNAME_ZIMMER));
+        
+        //kautionList = new SelectionInList(kautionManager.getAll(), getModel(Bewohner.PROPERTYNAME_KAUTION));
+
+
         if (getBewohner().getZimmer() != null) {
             bereichList.setSelection(getBewohner().getZimmer().getBereich());
             Bereich b = getBewohner().getZimmer().getBereich();
+            bereichManager.refreshBereich(b);
             if (b != null) {
                 zimmerList.setList(b.getZimmerList());
             } else {
                 zimmerList.setList(zimmerManager.getAll());
             }
+        }else{
+            zimmerList.setList(zimmerManager.getAll());
         }
+        zimmerList.addValueChangeListener(new ZimmerPropertyListener());
+
 
         getBufferedModel(Bewohner.PROPERTYNAME_ZIMMER).addValueChangeListener(new SaveListener());
         getBufferedModel(Bewohner.PROPERTYNAME_VON).addValueChangeListener(new SaveListener());
@@ -98,7 +108,8 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
         getBufferedModel(Bewohner.PROPERTYNAME_KAUTION).addValueChangeListener(new SaveListener());
         getBufferedModel(Bewohner.PROPERTYNAME_KAUTIONSTATUS).addValueChangeListener(new SaveListener());
         zimmerList.addValueChangeListener(new SaveListener());
-        kautionList.addValueChangeListener(new SaveListener());
+//        kautionList.addValueChangeListener(new SaveListener());
+        checkBoxModel.addValueChangeListener(new SaveListener());
 
         updateActionEnablement();
     }
@@ -178,7 +189,6 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
         this.bewohner = bewohner;
     }
 
-
     /**
      * @return the checkBoxState
      */
@@ -207,6 +217,20 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
         this.checkBoxModel = checkBoxModel;
     }
 
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
+    }
+
     public class SaveListener implements PropertyChangeListener {
 
         public void propertyChange(PropertyChangeEvent evt) {
@@ -217,7 +241,6 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
             getUnsaved().setValue(true);
         }
     }
-
 
     public class KautionStatusItemListener implements ItemListener {
 
@@ -252,6 +275,7 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
             List<Bereich> l = bereichList.getList();
             List<Zimmer> zList;
             for (int i = 0; i < l.size(); i++) {
+                bereichManager.refreshBereich(l.get(i));
                 zList = l.get(i).getZimmerList();
                 for (int j = 0; j < zList.size(); j++) {
                     if (zList.get(j).equals(z)) {
@@ -269,6 +293,7 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
             Bereich b = (Bereich) evt.getNewValue();
 
             if (b != null) {
+                bereichManager.refreshBereich(b);
                 zimmerList.setList(b.getZimmerList());
             } else {
                 zimmerList.setList(zimmerManager.getAll());

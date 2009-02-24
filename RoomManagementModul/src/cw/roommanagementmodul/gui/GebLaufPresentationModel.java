@@ -10,8 +10,11 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CalendarUtil;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Posting;
+import cw.customermanagementmodul.pojo.PostingCategory;
+import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
 import cw.customermanagementmodul.pojo.manager.PostingManager;
 import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
 import java.awt.event.ActionEvent;
@@ -58,11 +61,13 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
     private SelectionInList<GebLauf> gebLaufList;
     private GebLaufManager gebLaufManager;
     private int stornoInt = 1;
+    private HeaderInfo headerInfo;
 
-    public GebLaufPresentationModel(GebLaufSelection gebLauf, String header) {
+    public GebLaufPresentationModel(GebLaufSelection gebLauf, HeaderInfo header) {
         super(gebLauf);
         this.gebLauf = gebLauf;
-        this.headerText = header;
+        this.headerText = header.getHeaderText();
+        this.headerInfo = header;
         initModels();
         this.initEventHandling();
     }
@@ -175,6 +180,20 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         this.stornoInt = stornoInt;
     }
 
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
+    }
+
     private class StartAction
             extends AbstractAction {
 
@@ -222,14 +241,12 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                     newPosting.setLiabilitiesAssets(!oldPosting.isLiabilitiesAssets());
                     newPosting.setPostingCategory(oldPosting.getPostingCategory());
                     newPosting.setPostingDate(new Date());
-                    newPosting.setPostingEntryDate(new Date());
+                    newPosting.setPostingEntryDate(new Date(stornoGebLauf.getAbrMonat()));
 
                     if (betriebsart == false) {
                         PostingManager postingManager = PostingManager.getInstance();
                         postingManager.save(newPosting);
                     }
-
-
                     newPostingList.add(newPosting);
                 }
 
@@ -239,9 +256,20 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                     gebLaufList.setList(gebLaufManager.getAllOrdered());
 
                 }
+                Calendar c = new GregorianCalendar();
+                c.setTimeInMillis(stornoGebLauf.getAbrMonat());
+                String monthStr = CalendarUtil.getMonth(c.get(Calendar.MONTH));
+                int yearInt = c.get(Calendar.YEAR);
 
-           
-                final StornoResultPresentationModel model = new StornoResultPresentationModel(newPostingList, "Storno Lauf Ergebnis");
+                String laufString;
+                if (betriebsart == false) {
+                    laufString = new String("Storno Lauf Ergebnis - " + monthStr + " " + yearInt);
+                } else {
+                    laufString = new String("Storno Test Lauf - " + monthStr + " " + yearInt);
+                }
+
+
+                final StornoResultPresentationModel model = new StornoResultPresentationModel(newPostingList, new HeaderInfo(laufString,"Ergebnis des Storno Lauf"));
                 final StornoResultView laufResultView = new StornoResultView(model);
                 model.addButtonListener(new ButtonListener() {
 
@@ -292,7 +320,15 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                 c.setTimeInMillis(gebLauf.getAbrMonat());
                 String monthStr = CalendarUtil.getMonth(c.get(Calendar.MONTH));
                 int yearInt = c.get(Calendar.YEAR);
-                final LaufResultPresentationModel model = new LaufResultPresentationModel(selection, "Lauf Ergebnis - " + monthStr + " " + yearInt);
+
+                String laufString;
+                if (betriebsart == false) {
+                    laufString = new String("Lauf Ergebnis - " + monthStr + " " + yearInt);
+                } else {
+                    laufString = new String("Test Lauf - " + monthStr + " " + yearInt);
+                }
+
+                final LaufResultPresentationModel model = new LaufResultPresentationModel(selection, new HeaderInfo(laufString,"Ergebnis des Gebühren Lauf"));
                 final LaufResultView laufResultView = new LaufResultView(model);
                 model.addButtonListener(new ButtonListener() {
 
@@ -330,14 +366,16 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                         if (!gebTarifSelection.get(j).isWarning()) {
                             BuchungsLaufZuordnung blz = new BuchungsLaufZuordnung();
                             Posting posting = new Posting();
+                            PostingCategory category = PostingCategoryManager.getInstance().get("zimmer");
 
                             posting.setCustomer(bewList.get(i).getCustomer());
                             posting.setPostingDate(gebLauf.getCpuDate());
-                            posting.setPostingEntryDate(new Date(gebTarifSelection.get(j).getAbrMonat()));
+                            posting.setPostingEntryDate(new Date(gebLauf.getAbrMonat()));
                             posting.setAmount(gebTarifSelection.get(j).getTarif().getTarif());
-                            posting.setLiabilities(false);
+                            posting.setLiabilities(true);
                             posting.setDescription(gebTarifSelection.get(j).getGebuehr().getGebuehr().getName());
-                            //acc.setCategory(category);
+                            posting.setPostingCategory(category);
+
                             postingManager.save(posting);
                             blz.setPosting(posting);
                             blz.setGebLauf(gebLauf);

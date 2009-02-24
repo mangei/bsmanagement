@@ -35,7 +35,6 @@ public class EditZimmerView {
     public JTextField tfBettenAnzahl;
     public JComboBox cbBereich;
     public JButton bSave;
-    public JButton bReset;
     public JButton bCancel;
     public JButton bSaveCancel;
 
@@ -52,6 +51,7 @@ public class EditZimmerView {
         //tfBettenAnzahl = new JTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN));
         tfZimmerName = CWComponentFactory.createTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_NAME), false);
         tfBettenAnzahl = CWComponentFactory.createTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN), false);
+        tfBettenAnzahl.setDocument(model.getDigitDocument());
 
         bSave = new JButton(model.getSaveButtonAction());
         bSave.setText("Speichern");
@@ -60,12 +60,11 @@ public class EditZimmerView {
         bCancel.setText("Abbrechen");
 
         bSaveCancel = new JButton(model.getSaveCancelButtonAction());
-        bSaveCancel.setText("Speichern&Schließen");
+        bSaveCancel.setText("Speichern u. Schließen");
 
-        bReset = new JButton(model.getResetButtonAction());
-        bReset.setText("Zurücksetzen");
 
-        cbBereich = new JComboBox(model.createParentBereichComboModel(model.getBereichList()));
+        cbBereich = CWComponentFactory.createComboBox(model.getBereichList());
+        //cbBereich = new JComboBox(model.createParentBereichComboModel(model.getBereichList()));
 
         if (model.getZimmer().getBereich() == null) {
             List<Bereich> leafList=model.getBereichManager().getBereichLeaf();
@@ -79,13 +78,11 @@ public class EditZimmerView {
     public JComponent buildPanel() {
         initComponents();
 
-        JViewPanel mainPanel = new JViewPanel();
-        mainPanel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
 
         JViewPanel panel = new JViewPanel();

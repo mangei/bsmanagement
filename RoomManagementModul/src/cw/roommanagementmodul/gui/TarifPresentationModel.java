@@ -12,6 +12,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -45,6 +46,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
     private ButtonListenerSupport support;
     private SelectionInList<Tarif> tarifSelection;
     private String headerText;
+    private HeaderInfo headerInfo;
 
     public TarifPresentationModel(Gebuehr gebuehr) {
         super(gebuehr);
@@ -55,11 +57,12 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
 
     }
 
-    public TarifPresentationModel(Gebuehr gebuehr, String header) {
+    public TarifPresentationModel(Gebuehr gebuehr, HeaderInfo header) {
         super(gebuehr);
         this.gebuehr = gebuehr;
         this.tarifManager = TarifManager.getInstance();
-        this.headerText=header;
+        this.headerText=header.getHeaderText();
+        this.headerInfo=header;
         initModels();
         this.initEventHandling();
     }
@@ -124,6 +127,20 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
         return headerText;
     }
 
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
+    }
+
     private class NewAction
             extends AbstractAction {
 
@@ -156,7 +173,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
         }
 
         public void actionPerformed(ActionEvent e) {
-             int i = JOptionPane.showConfirmDialog(null, "Tarif wikrlich löschen?","Löschen",JOptionPane.OK_CANCEL_OPTION);
+             int i = JOptionPane.showConfirmDialog(null, "Tarif wirklich löschen?","Löschen",JOptionPane.OK_CANCEL_OPTION);
             if (i == JOptionPane.OK_OPTION) {
                 Gebuehr g=tarifSelection.getSelection().getGebuehr();
                 tarifManager.delete(tarifSelection.getSelection());
@@ -185,7 +202,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
     private void newSelectedItem(EventObject e) {
         final Tarif t = new Tarif();
         t.setGebuehr(gebuehr);
-        final EditTarifPresentationModel model = new EditTarifPresentationModel(t,"Tarif erstellen");
+        final EditTarifPresentationModel model = new EditTarifPresentationModel(t,new HeaderInfo("Tarif erstellen","Hier können Sie einen neuen Tarif erstellen"));
         final EditTarifView gebView = new EditTarifView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -206,7 +223,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
 
     private void editSelectedItem(EventObject e) {
         final Tarif t= tarifSelection.getSelection();
-        final EditTarifPresentationModel model = new EditTarifPresentationModel(t,"Tarif bearbeiten");
+        final EditTarifPresentationModel model = new EditTarifPresentationModel(t,new HeaderInfo("Tarif bearbeiten","Hier können Sie einen bestehenden Tarif bearbeiten"));
         final EditTarifView editView = new EditTarifView(model);
         model.addButtonListener(new ButtonListener() {
             public void buttonPressed(ButtonEvent evt) {

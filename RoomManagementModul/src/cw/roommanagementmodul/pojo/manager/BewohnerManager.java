@@ -5,7 +5,6 @@
 package cw.roommanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.roommanagementmodul.pojo.Bewohner;
@@ -42,12 +41,11 @@ public class BewohnerManager extends AbstractPOJOManager<Bewohner> {
             return null;
         }
         return bewohner;
-
     }
 
     public List<Bewohner> getBewohner(boolean activ) {
         EntityManager entityManager = HibernateUtil.getEntityManager();
-        List<Bewohner> list = entityManager.createQuery("SELECT b FROM Bewohner b where b.active = " + activ).getResultList();
+        List<Bewohner> list = entityManager.createQuery("SELECT b FROM Bewohner b where b.active = " + activ + " and b.customer.active ="+true+" order by b.customer.surname asc, b.customer.forename asc").getResultList();
         return list;
     }
 

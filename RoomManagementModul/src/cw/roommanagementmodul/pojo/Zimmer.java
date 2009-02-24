@@ -21,14 +21,14 @@ public class Zimmer extends Model implements AnnotatedClass{
     private Long id;
     private String name;
     private Bereich bereich;
-    private String anzBetten;
+    private String anzbetten;
     private boolean activ;
     private List<Bewohner> bewohnerList = new ArrayList<Bewohner>();
     
     public final static String PROPERTYNAME_ID = "id";
     public final static String PROPERTYNAME_NAME = "name";
     public final static String PROPERTYNAME_BEREICH = "bereich";
-    public final static String PROPERTYNAME_ANZBETTEN = "anzBetten";
+    public final static String PROPERTYNAME_ANZBETTEN = "anzbetten";
     public final static String PROPERTYNAME_ACTIV = "activ";
     public final static String PROPERTYNAME_BEWOHNERLIST = "bewohnerList";
 
@@ -36,7 +36,7 @@ public class Zimmer extends Model implements AnnotatedClass{
         this.id = id;
         this.name = name;
         this.bereich = bereich;
-        this.anzBetten = anzBetten;
+        this.anzbetten = anzBetten;
         this.activ = activ;
     }
 
@@ -49,20 +49,16 @@ public class Zimmer extends Model implements AnnotatedClass{
     }
 
     public void setActiv(boolean activ) {
-        boolean old = this.activ;
         this.activ = activ;
-        firePropertyChange(PROPERTYNAME_ACTIV, old, activ);
     }
 
     @Column(nullable = true)
-    public String getAnzBetten() {
-        return anzBetten;
+    public String getAnzbetten() {
+        return anzbetten;
     }
 
-    public void setAnzBetten(String anzBetten) {
-        String old = this.anzBetten;
-        this.anzBetten = anzBetten;
-        firePropertyChange(PROPERTYNAME_ANZBETTEN, old, anzBetten);
+    public void setAnzbetten(String anzBetten) {
+        this.anzbetten = anzBetten;
     }
 
     //@Column(nullable=true)
@@ -72,9 +68,7 @@ public class Zimmer extends Model implements AnnotatedClass{
     }
 
     public void setBereich(Bereich bereich) {
-        Bereich old = this.bereich;
         this.bereich = bereich;
-        firePropertyChange(PROPERTYNAME_BEREICH, old, bereich);
     }
 
     @Id
@@ -84,9 +78,7 @@ public class Zimmer extends Model implements AnnotatedClass{
     }
 
     public void setId(Long id) {
-        Long old = this.id;
         this.id = id;
-        firePropertyChange(PROPERTYNAME_ID, old, id);
     }
 
     public String getName() {
@@ -94,9 +86,7 @@ public class Zimmer extends Model implements AnnotatedClass{
     }
 
     public void setName(String name) {
-        String old = this.name;
         this.name = name;
-        firePropertyChange(PROPERTYNAME_NAME, old, name);
     }
 
     @Override

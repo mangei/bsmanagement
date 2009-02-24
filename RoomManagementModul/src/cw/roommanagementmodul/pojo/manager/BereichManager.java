@@ -64,14 +64,14 @@ public class BereichManager extends AbstractPOJOManager<Bereich> {
 
     public List<Bereich> getBereich() {
         EntityManager entityManager = HibernateUtil.getEntityManager();
-        List list = entityManager.createQuery("SELECT b FROM Bereich b").getResultList();
+        List list = entityManager.createQuery("FROM Bereich b order by b.name asc").getResultList();
         return list;
     }
 
     public List<Bereich> getBereichLeaf() {
 
         EntityManager entityManager = HibernateUtil.getEntityManager();
-        List<Bereich> list = entityManager.createQuery("SELECT b FROM Bereich b").getResultList();
+        List<Bereich> list = this.getAll();
         List<Bereich> leafList= new ArrayList<Bereich>();
         for(int i=0;i<list.size();i++){
             if(list.get(i).getChildBereichList()==null || list.get(i).getChildBereichList().size()==0){
@@ -93,7 +93,7 @@ public class BereichManager extends AbstractPOJOManager<Bereich> {
 
     @Override
     public List<Bereich> getAll() {
-        return HibernateUtil.getEntityManager().createQuery("FROM Bereich").getResultList();
+        return HibernateUtil.getEntityManager().createQuery("FROM Bereich b order by b.name asc").getResultList();
     }
 
     @Override

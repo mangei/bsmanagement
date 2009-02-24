@@ -10,6 +10,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.manager.ZimmerManager;
@@ -45,6 +46,7 @@ public class ZimmerPresentationModel {
     private ButtonListenerSupport support;
     private SelectionInList<Zimmer> zimmerSelection;
     private BereichPresentationModel bereichModel;
+    private HeaderInfo headerInfo;
 
     public ZimmerPresentationModel(ZimmerManager zimmerManager) {
 
@@ -54,10 +56,11 @@ public class ZimmerPresentationModel {
 
     }
 
-    public ZimmerPresentationModel(ZimmerManager zimmerManager, String header, BereichPresentationModel bereichModel) {
+    public ZimmerPresentationModel(ZimmerManager zimmerManager, HeaderInfo header, BereichPresentationModel bereichModel) {
         this.bereichModel = bereichModel;
         this.zimmerManager = zimmerManager;
-        this.headerText = header;
+        this.headerText = header.getHeaderText();
+        this.headerInfo=header;
         initModels();
         this.initEventHandling();
     }
@@ -131,6 +134,20 @@ public class ZimmerPresentationModel {
         this.backAction = backAction;
     }
 
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
+    }
+
     private class NewAction
             extends AbstractAction {
 
@@ -140,7 +157,7 @@ public class ZimmerPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final Zimmer z = new Zimmer();
-            final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, "Zimmer erstellen");
+            final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new HeaderInfo("Zimmer erstellen","Hier können Sie ein neus Zimmer erstellen"));
             final EditZimmerView editView = new EditZimmerView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -289,7 +306,7 @@ public class ZimmerPresentationModel {
                         return "-";
                     }
                 case 2:
-                    return z.getAnzBetten();
+                    return z.getAnzbetten();
                 default:
                     return "";
             }
@@ -299,7 +316,7 @@ public class ZimmerPresentationModel {
 
     private void editSelectedItem(EventObject e) {
         final Zimmer z = zimmerSelection.getSelection();
-        final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, "Zimmer bearbeiten");
+        final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new HeaderInfo("Zimmer bearbeiten","Hier können Sie ein bestehendes Zimmer bearbeiten"));
         final EditZimmerView editView = new EditZimmerView(model);
         model.addButtonListener(new ButtonListener() {
 

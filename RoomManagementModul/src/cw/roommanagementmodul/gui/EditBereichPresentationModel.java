@@ -13,6 +13,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -32,7 +33,6 @@ import java.util.List;
 public class EditBereichPresentationModel extends PresentationModel<Bereich> {
 
     private BereichManager bereichManager;
-    private Action resetButtonAction;
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
@@ -44,6 +44,7 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
     private String headerText;
     private List<Bereich> editBereichList;
     private Bereich vaterBereich;
+    private HeaderInfo headerInfo;
 
     public EditBereichPresentationModel(Bereich bereich) {
         super(bereich);
@@ -54,12 +55,14 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
 
     }
 
-    EditBereichPresentationModel(Bereich bereich, String header, Bereich vaterBereich) {
+    EditBereichPresentationModel(Bereich bereich, HeaderInfo header, Bereich vaterBereich) {
         super(bereich);
         this.bereich = bereich;
         this.vaterBereich = vaterBereich;
         bereichManager = BereichManager.getInstance();
-        this.headerText = header;
+        this.headerText = header.getHeaderText();
+        this.headerInfo=header;
+
         initModels();
         initEventHandling();
     }
@@ -71,11 +74,9 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
                     saveButtonAction.setEnabled(true);
-                    resetButtonAction.setEnabled(true);
                     saveCancelButtonAction.setEnabled(true);
                 } else {
                     saveButtonAction.setEnabled(false);
-                    resetButtonAction.setEnabled(false);
                     saveCancelButtonAction.setEnabled(false);
                 }
             }
@@ -86,7 +87,6 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
     private void initModels() {
 
         saveButtonAction = new SaveAction();
-        resetButtonAction = new ResetAction();
         cancelButtonAction = new CancelAction();
         saveCancelButtonAction = new SaveCancelAction();
         editBereichList = getBereichManager().getBereich();
@@ -134,10 +134,6 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
 
     public ComboBoxModel createParentBereichComboModel(SelectionInList bereichList) {
         return new ComboBoxAdapter(bereichList);
-    }
-
-    public Action getResetButtonAction() {
-        return resetButtonAction;
     }
 
     public Action getSaveButtonAction() {
@@ -239,6 +235,20 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
         this.bereichManager = bereichManager;
     }
 
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
+    }
+
     public class SaveListener implements PropertyChangeListener {
 
         public void propertyChange(PropertyChangeEvent evt) {
@@ -274,27 +284,6 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
         triggerCommit();
     }
 
-    private class ResetAction
-            extends AbstractAction {
-
-        {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/boardingschoolmanagement/images/arrow_rotate_anticlockwise.png"));
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
-            if (i == JOptionPane.OK_OPTION) {
-                // TODO Wartedialog
-                resetBereich();
-                getUnsaved().setValue(false);
-                support.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
-            }
-        }
-    }
-
-    private void resetBereich() {
-        this.triggerFlush();
-    }
 
     private class CancelAction
             extends AbstractAction {

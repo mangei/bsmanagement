@@ -9,6 +9,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -38,6 +39,7 @@ public class GebuehrenKategoriePresentationModel {
     private ButtonListenerSupport support;
     private SelectionInList<GebuehrenKategorie> gebuehrenKatSelection;
     private String headerText;
+    private HeaderInfo headerInfo;
 
     public GebuehrenKategoriePresentationModel(GebuehrenKatManager gebKatManager) {
         this.gebKatManager = gebKatManager;
@@ -45,9 +47,10 @@ public class GebuehrenKategoriePresentationModel {
         this.initEventHandling();
     }
 
-    GebuehrenKategoriePresentationModel(GebuehrenKatManager gebKatManager, String header) {
+    GebuehrenKategoriePresentationModel(GebuehrenKatManager gebKatManager, HeaderInfo header) {
         this.gebKatManager = gebKatManager;
-        this.headerText = header;
+        this.headerText = header.getHeaderText();
+        this.headerInfo=header;
         initModels();
         this.initEventHandling();
     }
@@ -125,6 +128,20 @@ public class GebuehrenKategoriePresentationModel {
         return headerText;
     }
 
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
+    }
+
     private class NewAction
             extends AbstractAction {
 
@@ -134,7 +151,7 @@ public class GebuehrenKategoriePresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final GebuehrenKategorie gk = new GebuehrenKategorie();
-            final EditGebuehrenKategoriePresentationModel model = new EditGebuehrenKategoriePresentationModel(gk, "Kategorie erstellen");
+            final EditGebuehrenKategoriePresentationModel model = new EditGebuehrenKategoriePresentationModel(gk, new HeaderInfo("Kategorie erstellen","Hier können Sie eine neue Gebühren Kategorie erstellen"));
             final EditGebuehrenKategorieView editView = new EditGebuehrenKategorieView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -231,7 +248,7 @@ public class GebuehrenKategoriePresentationModel {
 
     private void editSelectedItem(EventObject e) {
         final GebuehrenKategorie gk = this.getGebuehrenKatSelection().getSelection();
-        final EditGebuehrenKategoriePresentationModel model = new EditGebuehrenKategoriePresentationModel(gk, "Kategorie bearbeiten");
+        final EditGebuehrenKategoriePresentationModel model = new EditGebuehrenKategoriePresentationModel(gk, new HeaderInfo("Kategorie bearbeiten","Hier können Sie eine bestehende Gebühren Kategorie bearbeiten"));
         final EditGebuehrenKategorieView editView = new EditGebuehrenKategorieView(model);
         model.addButtonListener(new ButtonListener() {
 

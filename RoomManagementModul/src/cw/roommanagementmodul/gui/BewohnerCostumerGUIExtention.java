@@ -1,7 +1,7 @@
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.value.ValueModel;
-import cw.customermanagementmodul.extentions.interfaces.EditCustomerGUITabExtention;
+import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
+import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.pojo.Customer;
 import java.util.List;
 import javax.swing.JComponent;
@@ -19,29 +19,14 @@ import java.util.GregorianCalendar;
  *
  * @author Dominik
  */
-public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention {
+public class BewohnerCostumerGUIExtention implements EditCustomerTabExtention {
 
-    private static BewohnerManager bewohnerManager;
-    private static BewohnerHistoryManager historyManager;
-    private static BewohnerGUIExtentionPresentationModel model;
-    private static Bewohner b;
-    private static Customer c;
-    private static Zimmer tempZimmer;
-
-    public void initPresentationModel(Customer customer, ValueModel unsaved) {
-        bewohnerManager = BewohnerManager.getInstance();
-        historyManager = BewohnerHistoryManager.getInstance();
-        c = customer;
-        b = bewohnerManager.getBewohner(customer);
-        if (b == null) {
-            b = new Bewohner();
-        } else {
-            tempZimmer = b.getZimmer();
-        }
-
-
-        model = new BewohnerGUIExtentionPresentationModel(bewohnerManager, b, unsaved);
-    }
+    private BewohnerManager bewohnerManager;
+    private BewohnerHistoryManager historyManager;
+    private BewohnerGUIExtentionPresentationModel model;
+    private Bewohner b;
+    private Customer c;
+    private Zimmer tempZimmer;
 
     public JComponent getView() {
         return new BewohnerGUIExtentionView(model).buildPanel();
@@ -82,12 +67,7 @@ public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention
 
         }
         if (model.getCheckBoxState() == ItemEvent.DESELECTED) {
-            b.setCustomer(c);
-            b.setBis(null);
-            b.setVon(null);
-            b.setZimmer(null);
-            b.setActive(false);
-            bewohnerManager.save(b);
+            bewohnerManager.delete(b);
         }
 
     }
@@ -95,9 +75,15 @@ public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention
     //Kontroliert ob das Bis-Datum chronologisch nach dem Von-Datum ist
     private boolean checkChrono() {
         if (b.getBis() != null) {
-            if (b.getBis().getTime() <= b.getVon().getTime()) {
-                return false;
+            Date bis = (Date) model.getBufferedModel(Bewohner.PROPERTYNAME_BIS).getValue();
+            Date von = (Date) model.getBufferedModel(Bewohner.PROPERTYNAME_VON).getValue();
+
+            if (bis != null) {
+                if (bis.getTime() <= von.getTime()) {
+                    return false;
+                }
             }
+
         }
         return true;
     }
@@ -106,18 +92,9 @@ public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention
         model.triggerFlush();
     }
 
-    public boolean validate() {
-        model.triggerCommit();
-        if (model.getCheckBoxState() == ItemEvent.SELECTED && (b.getZimmer() == null || b.getVon() == null || checkChrono() == false)) {
-            return false;
-        } else {
-            return true;
-        }
-    }
-
-    public List<String> getErrorMessages() {
+    public List<String> validate() {
         ArrayList<String> l = new ArrayList<String>();
-        if (model.getCheckBoxState() == ItemEvent.SELECTED && (b.getZimmer() == null || b.getVon() == null)) {
+        if (model.getCheckBoxState() == ItemEvent.SELECTED && (model.getBufferedModel(Bewohner.PROPERTYNAME_ZIMMER).getValue() == null || model.getBufferedModel(Bewohner.PROPERTYNAME_VON).getValue() == null)) {
             l.add("In der Registerkarte Zimmer müssen die Attribute Einzugsdatum und Zimmer gesetzt sein!");
         }
         if (model.getCheckBoxState() == ItemEvent.SELECTED && checkChrono() == false) {
@@ -126,4 +103,20 @@ public class BewohnerCostumerGUIExtention implements EditCustomerGUITabExtention
 
         return l;
     }
+
+    public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
+        bewohnerManager = BewohnerManager.getInstance();
+        historyManager = BewohnerHistoryManager.getInstance();
+        c = editCustomerModel.getBean();
+        b = bewohnerManager.getBewohner(editCustomerModel.getBean());
+        if (b == null) {
+            b = new Bewohner();
+        } else {
+            tempZimmer = b.getZimmer();
+        }
+
+
+        model = new BewohnerGUIExtentionPresentationModel(bewohnerManager, b, editCustomerModel.getUnsaved());
+    }
+
 }

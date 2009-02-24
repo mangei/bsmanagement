@@ -61,6 +61,7 @@ public class BereichView {
 
         model.initTree(model.getRootTree());
         bereichTree = new JTree(model.getTreeModel());
+        bereichTree.setRootVisible(true);
 
         bereichTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         bereichTree.addTreeSelectionListener(model.getBereichListener());
@@ -71,14 +72,14 @@ public class BereichView {
         renderer.setLeafIcon(CWUtils.loadIcon("cw/roommanagementmodul/images/box.png"));
         bereichTree.setCellRenderer(renderer);
 
+
     }
 
     private void initEventHandling() {
     }
 
     public JPanel buildPanel() {
-        JViewPanel panel = new JViewPanel();
-        panel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
         this.initComponents();
 
         panel.getButtonPanel().add(bNew);
@@ -129,8 +130,6 @@ public class BereichView {
                     setIcon(CWUtils.loadIcon("cw/roommanagementmodul/images/box.png"));
                 }
             }
-
-
             return this;
         }
 

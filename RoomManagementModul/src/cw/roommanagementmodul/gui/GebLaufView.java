@@ -10,11 +10,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.beans.PropertyChangeEvent;
 import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -111,8 +109,8 @@ public class GebLaufView implements ItemListener {
     public JComponent buildPanel() {
         initComponents();
 
-        JViewPanel mainPanel = new JViewPanel();
-        mainPanel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
+
 
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
 

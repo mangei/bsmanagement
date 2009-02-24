@@ -9,6 +9,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -41,6 +42,7 @@ public class GebuehrenPresentationModel {
     private Action tarifAction;
     private String headerText;
     private SelectionInList<Gebuehr> gebuehrenSelection;
+    private HeaderInfo headerInfo;
 
     public GebuehrenPresentationModel(GebuehrenManager gebuehrenManager) {
         this.gebuehrenManager = gebuehrenManager;
@@ -49,9 +51,10 @@ public class GebuehrenPresentationModel {
 
     }
 
-    public GebuehrenPresentationModel(GebuehrenManager gebuehrenManager, String header) {
+    public GebuehrenPresentationModel(GebuehrenManager gebuehrenManager, HeaderInfo header) {
         this.gebuehrenManager = gebuehrenManager;
-        this.headerText = header;
+        this.headerText = header.getHeaderText();
+        this.headerInfo=header;
         initModels();
         this.initEventHandling();
     }
@@ -109,6 +112,20 @@ public class GebuehrenPresentationModel {
         return headerText;
     }
 
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
+    }
+
     private class NewAction
             extends AbstractAction {
 
@@ -118,7 +135,7 @@ public class GebuehrenPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final Gebuehr g = new Gebuehr();
-            final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, "Gebühr erstellen");
+            final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new HeaderInfo("Gebühr erstellen","Hier können Sie eine neue Gebühr erstellen"));
             final EditGebuehrenView editView = new EditGebuehrenView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -149,7 +166,7 @@ public class GebuehrenPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final GebuehrenKatManager gebKatManager = GebuehrenKatManager.getInstance();
-            final GebuehrenKategoriePresentationModel model = new GebuehrenKategoriePresentationModel(gebKatManager, "Kategorien verwalten");
+            final GebuehrenKategoriePresentationModel model = new GebuehrenKategoriePresentationModel(gebKatManager, new HeaderInfo("Kategorien verwalten","Übersicht aller Gebühren Kategorien"));
             final GebuehrenKategorieView editView = new GebuehrenKategorieView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -185,7 +202,7 @@ public class GebuehrenPresentationModel {
 
     private void showTarif() {
         Gebuehr g = gebuehrenSelection.getSelection();
-        final TarifPresentationModel model = new TarifPresentationModel(g, "Tarif Übersicht: " + g.getName());
+        final TarifPresentationModel model = new TarifPresentationModel(g, new HeaderInfo("Tarif Übersicht: " + g.getName(),"Übersicht aller Tarife für eine bestimmte Gebühr."));
         final TarifView editView = new TarifView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -259,7 +276,7 @@ public class GebuehrenPresentationModel {
 
     private void editSelectedItem(EventObject e) {
         final Gebuehr g = getGebuehrenSelection().getSelection();
-        final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, "Gebühr bearbeiten");
+        final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new HeaderInfo("Gebühr bearbeiten","Hier können Sie eine vorhandene Gebühr bearbeiten"));
         final EditGebuehrenView editView = new EditGebuehrenView(model);
         model.addButtonListener(new ButtonListener() {
 

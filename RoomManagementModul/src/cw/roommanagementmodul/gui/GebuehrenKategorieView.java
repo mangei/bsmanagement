@@ -7,8 +7,8 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -43,11 +43,8 @@ public class GebuehrenKategorieView {
         bBack= new JButton(model.getBackAction());
         bBack.setText("Zurück");
         
-        lGebuehrenKat= new JList();
-        lGebuehrenKat.setModel(model.getGebuehrenKatSelection());
-        lGebuehrenKat.setSelectionModel(
-                new SingleListSelectionAdapter(
-                model.getGebuehrenKatSelection().getSelectionIndexHolder()));
+        lGebuehrenKat= CWComponentFactory.createList(model.getGebuehrenKatSelection());
+
     }
      private void initEventHandling() {
         lGebuehrenKat.addMouseListener(model.getDoubleClickHandler());
@@ -58,8 +55,7 @@ public class GebuehrenKategorieView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel();
-        panel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
         panel.getButtonPanel().add(bNew);
         panel.getButtonPanel().add(bEdit);
         panel.getButtonPanel().add(bDelete);

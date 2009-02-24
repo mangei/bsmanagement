@@ -54,10 +54,12 @@ public class BewohnerGUIExtentionView {
         lbKautionStatus = new JLabel("Kaution Status: ");
         lbBewohner = new JLabel("Bewohner");
 
-        //cbBereich = new JComboBox(model.createParentBereichComboModel(model.getBereichList()));
 
-        cbBereich = new JComboBox(model.createBereichComboModel(model.getBereichList()));
-        cbZimmer = new JComboBox(model.createZimmerComboModel(model.getZimmerList()));
+        //cbBereich = new JComboBox(model.createBereichComboModel(model.getBereichList()));
+        cbBereich = CWComponentFactory.createComboBox(model.getBereichList());
+        //cbZimmer = new JComboBox(model.createZimmerComboModel(model.getZimmerList()));
+        cbZimmer = CWComponentFactory.createComboBox(model.getZimmerList());
+
         boxBewohner = CWComponentFactory.createCheckBox(model.getCheckBoxModel(), "Bewohner");
         boxBewohner.addItemListener(new BewohnerItemListener());
 
@@ -91,17 +93,8 @@ public class BewohnerGUIExtentionView {
 //        }
 //        cbKautionStatus.addItemListener(model.getKautionListener());
 
-        dcEinzugsdatum = new JDateChooser();
-        dcEinzugsdatum.getJCalendar().setDecorationBordersVisible(false);
-        dcEinzugsdatum.getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
-        dcEinzugsdatum.getJCalendar().getDayChooser().setWeekOfYearVisible(false);
-        PropertyConnector.connectAndUpdate(model.getBufferedModel(Bewohner.PROPERTYNAME_VON), dcEinzugsdatum, "date");
-
-        dcAuszugsdatum = new JDateChooser();
-        dcAuszugsdatum.getJCalendar().setDecorationBordersVisible(false);
-        dcAuszugsdatum.getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
-        dcAuszugsdatum.getJCalendar().getDayChooser().setWeekOfYearVisible(false);
-        PropertyConnector.connectAndUpdate(model.getBufferedModel(Bewohner.PROPERTYNAME_BIS), dcAuszugsdatum, "date");
+        dcEinzugsdatum = CWComponentFactory.createDateChooser(model.getBufferedModel(Bewohner.PROPERTYNAME_VON));
+        dcAuszugsdatum = CWComponentFactory.createDateChooser(model.getBufferedModel(Bewohner.PROPERTYNAME_BIS));
 
 
         if (model.getCheckBoxState() != ItemEvent.SELECTED) {
@@ -148,7 +141,7 @@ public class BewohnerGUIExtentionView {
 //        panel.add(cbKautionStatus, cc.xy(3, 15));
 
 
-
+        panel.setHeaderInfo(model.getHeaderInfo());
         return panel;
 
     }

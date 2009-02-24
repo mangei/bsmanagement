@@ -34,7 +34,7 @@ public class GebuehrenKatManager extends AbstractPOJOManager<GebuehrenKategorie>
 
     @Override
     public List<GebuehrenKategorie> getAll() {
-        return HibernateUtil.getEntityManager().createQuery("FROM GebuehrenKategorie").getResultList();
+        return HibernateUtil.getEntityManager().createQuery("FROM GebuehrenKategorie gk order by gk.name asc").getResultList();
     }
 
     @Override

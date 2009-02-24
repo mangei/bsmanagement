@@ -10,8 +10,10 @@ import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.gui.CustomerManagementPresentationModel;
+import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.pojo.Customer;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -54,6 +56,7 @@ public class BewohnerPresentationModel {
     private Action detailAction;
     private Action kautionAction;
     private SelectionInList<Bewohner> bewohnerSelection;
+    private HeaderInfo headerInfo;
 
     public BewohnerPresentationModel(BewohnerManager bewohnerManager) {
         //super(bewohnerManager);
@@ -65,10 +68,12 @@ public class BewohnerPresentationModel {
 
     }
 
-    public BewohnerPresentationModel(BewohnerManager bewohnerManager, String header) {
+    public BewohnerPresentationModel(BewohnerManager bewohnerManager, HeaderInfo header) {
         //super(bewohnerManager);
         this.bewohnerManager = bewohnerManager;
-        this.headerText = header;
+
+        this.headerInfo = header;
+        this.headerText = header.getHeaderText();
         historyManager = BewohnerHistoryManager.getInstance();
         gebZuordnungManager = GebuehrZuordnungManager.getInstance();
         initModels();
@@ -86,9 +91,18 @@ public class BewohnerPresentationModel {
         detailAction = new AbstractAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")) {
 
             public void actionPerformed(ActionEvent e) {
-                CustomerManagementPresentationModel.editCustomer(bewohnerSelection.getSelection().getCustomer());
-                bewohnerSelection.setList(bewohnerManager.getBewohner(true));
-                System.out.println("#######################hh active Bewohner--------------");
+                EditCustomerPresentationModel model;
+                model = CustomerManagementPresentationModel.editCustomer(bewohnerSelection.getSelection().getCustomer());
+                model.addButtonListener(new ButtonListener() {
+
+                    public void buttonPressed(ButtonEvent evt) {
+
+                        if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+
+                            bewohnerSelection.setList(bewohnerManager.getBewohner(true));
+                        }
+                    }
+                });
             }
         };
         bewohnerSelection = new SelectionInList<Bewohner>(getBewohnerManager().getBewohner(true));
@@ -197,6 +211,20 @@ public class BewohnerPresentationModel {
     public void deleteBewohner() {
     }
 
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
+    }
+
     private class DeleteAction
             extends AbstractAction {
 
@@ -210,7 +238,8 @@ public class BewohnerPresentationModel {
             int k = JOptionPane.showConfirmDialog(null, "Bewohner: " + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + " wirklich löschen?", "LÖSCHEN", JOptionPane.OK_CANCEL_OPTION);
             if (k == JOptionPane.OK_OPTION) {
 
-                
+                System.out.println("Bewohner Delete------------------------------------------");
+                b.setCustomer(null);
                 bewohnerManager.delete(b);
                 bewohnerSelection.setList(bewohnerManager.getBewohner(true));
 
@@ -331,13 +360,13 @@ public class BewohnerPresentationModel {
         //final Bewohner b = getBewohnerSelection().getSelection();
         final GebuehrZuordnung gb = new GebuehrZuordnung();
         Customer c = bewohnerSelection.getSelection().getCustomer();
-        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, c.getSurname() + " " + c.getForename());
+        gb.setBewohner(bewohnerSelection.getSelection());
+        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new HeaderInfo("Bewohner: " + c.getSurname() + " " + c.getForename(), "Hier können Sie alle Gebühren verwalten, die zu einem Bewohner zugeordnet sind."));
         final GebBewohnerView gebView = new GebBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 
             public void buttonPressed(ButtonEvent evt) {
                 if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                    gb.setBewohner(bewohnerSelection.getSelection());
 
                     gebZuordnungManager.save(gb);
                     GUIManager.getStatusbar().setTextAndFadeOut("Zuordnung wurde aktualisiert.");
@@ -355,7 +384,7 @@ public class BewohnerPresentationModel {
 
     private void gebZuordnungSelectedItem(EventObject e) {
         Customer c = bewohnerSelection.getSelection().getCustomer();
-        final GebZuordnungBewohnerPresentationModel model = new GebZuordnungBewohnerPresentationModel(this.getBewohnerSelection().getSelection(), c.getSurname() + " " + c.getForename());
+        final GebZuordnungBewohnerPresentationModel model = new GebZuordnungBewohnerPresentationModel(this.getBewohnerSelection().getSelection(), new HeaderInfo("Gebühren Übersicht: " + c.getSurname() + " " + c.getForename(), "Übersicht aller Gebühren die diesem Bewohner zugeordnet sind."));
         final GebZuordnunglBewohnerView detailView = new GebZuordnunglBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -388,7 +417,7 @@ public class BewohnerPresentationModel {
 
         @Override
         public int getColumnCount() {
-            return 8;
+            return 7;
         }
 
         @Override
@@ -399,16 +428,14 @@ public class BewohnerPresentationModel {
                 case 1:
                     return "Vorname";
                 case 2:
-                    return "Einzahler";
-                case 3:
                     return "Zimmer";
-                case 4:
+                case 3:
                     return "Bereich";
-                case 5:
+                case 4:
                     return "Einzugsdatum";
-                case 6:
+                case 5:
                     return "Auszugsdatum";
-                case 7:
+                case 6:
                     return "Gebühr Zuordnungen";
                 default:
                     return "";
@@ -428,30 +455,25 @@ public class BewohnerPresentationModel {
                     return b.getCustomer().getSurname();
                 case 1:
                     return b.getCustomer().getForename();
+
                 case 2:
-                    if (b.getEinzahler() != null) {
-                        return b.getEinzahler().getSurname() + " " + b.getEinzahler().getForename();
-                    } else {
-                        return b.getCustomer().getSurname() + " " + b.getCustomer().getForename();
-                    }
-                case 3:
                     return b.getZimmer();
 
-                case 4:
+                case 3:
                     if (b.getZimmer() != null) {
                         return b.getZimmer().getBereich();
                     } else {
                         return "-";
                     }
 
-                case 5:
+                case 4:
                     return b.getVon();
-                case 6:
+                case 5:
                     return b.getBis();
 
-                case 7:
-                    GebuehrZuordnungManager gebZuoManager=GebuehrZuordnungManager.getInstance();
-                    List<GebuehrZuordnung> l=gebZuoManager.getGebuehrZuordnung(b);
+                case 6:
+                    GebuehrZuordnungManager gebZuoManager = GebuehrZuordnungManager.getInstance();
+                    List<GebuehrZuordnung> l = gebZuoManager.getGebuehrZuordnung(b);
                     return l.size();
 
                 default:

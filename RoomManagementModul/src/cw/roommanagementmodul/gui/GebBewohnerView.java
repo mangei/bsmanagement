@@ -4,21 +4,17 @@
  */
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.adapter.BasicComponentFactory;
-import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.toedter.calendar.JDateChooser;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.GebuehrZuordnung;
 
 /**
@@ -36,7 +32,6 @@ public class GebBewohnerView {
     public JTextField tfAnmerkung;
 
     public JButton bSave;
-    public JButton bReset;
     public JButton bCancel;
     public JButton bSaveCancel;
 
@@ -50,7 +45,7 @@ public class GebBewohnerView {
         lBis = new JLabel("Bis: ");
         lAnmerkung = new JLabel("Anmerkung: ");
 
-        tfAnmerkung = BasicComponentFactory.createTextField(model.getBufferedModel(GebuehrZuordnung.PROPERTYNAME_ANMERKUNG), false);
+        tfAnmerkung = CWComponentFactory.createTextField(model.getBufferedModel(GebuehrZuordnung.PROPERTYNAME_ANMERKUNG), false);
 
         bSave = new JButton(model.getSaveButtonAction());
         bSave.setText("Speichern");
@@ -59,21 +54,8 @@ public class GebBewohnerView {
         bCancel.setText("Abbrechen");
 
         bSaveCancel = new JButton(model.getSaveCancelButtonAction());
-        bSaveCancel.setText("Speichern&Schließen");
+        bSaveCancel.setText("Speichern u. Schließen");
 
-        bReset = new JButton(model.getResetButtonAction());
-        bReset.setText("Zurücksetzen");
-
-        
-        model.getDcVon().getJCalendar().setDecorationBordersVisible(false);
-        model.getDcVon().getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
-        model.getDcVon().getJCalendar().getDayChooser().setWeekOfYearVisible(false);
-        PropertyConnector.connectAndUpdate(model.getBufferedModel(GebuehrZuordnung.PROPERTYNAME_VON), model.getDcVon(), "date");
-
-        model.getDcBis().getJCalendar().setDecorationBordersVisible(false);
-        model.getDcBis().getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
-        model.getDcBis().getJCalendar().getDayChooser().setWeekOfYearVisible(false);
-        PropertyConnector.connectAndUpdate(model.getBufferedModel(Bewohner.PROPERTYNAME_BIS), model.getDcBis(), "date");
 
         cbGebuehr = new JComboBox(model.createGebuehrComboModel(model.getGebuehrList()));
     }
@@ -82,15 +64,13 @@ public class GebBewohnerView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel();
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
         //panel.setName("Zimmer");
-        panel.setHeaderInfo(new HeaderInfo("Bewohner: "+model.getHeaderText()));
         
         JButtonPanel buttonPanel = panel.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
         JPanel contentPanel = panel.getContentPanel();
 

@@ -30,7 +30,6 @@ public class EditTarifView {
 
     private EditTarifPresentationModel model;
     public JButton bSave;
-    public JButton bReset;
     public JButton bCancel;
     public JButton bSaveCancel;
     public JLabel lAb;
@@ -51,10 +50,7 @@ public class EditTarifView {
         bCancel.setText("Abbrechen");
 
         bSaveCancel = new JButton(model.getSaveCancelButtonAction());
-        bSaveCancel.setText("Speichern&Schließen");
-
-        bReset = new JButton(model.getResetButtonAction());
-        bReset.setText("Zurücksetzten");
+        bSaveCancel.setText("Speichern u. Schließen");
 
 
         lAb = new JLabel("Von: ");
@@ -63,17 +59,6 @@ public class EditTarifView {
 
         //tfTarif = BasicComponentFactory.createFormattedTextField(model.getBufferedModel(Tarif.PROPERTYNAME_TARIF), NumberFormat.getCurrencyInstance());
         tfTarif = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Tarif.PROPERTYNAME_TARIF));
-
-
-        model.getDcVon().getJCalendar().setDecorationBordersVisible(false);
-        model.getDcVon().getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
-        model.getDcVon().getJCalendar().getDayChooser().setWeekOfYearVisible(false);
-        PropertyConnector.connectAndUpdate(model.getBufferedModel(Tarif.PROPERTYNAME_AB), model.getDcVon(), "date");
-
-        model.getDcBis().getJCalendar().setDecorationBordersVisible(false);
-        model.getDcBis().getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
-        model.getDcBis().getJCalendar().getDayChooser().setWeekOfYearVisible(false);
-        PropertyConnector.connectAndUpdate(model.getBufferedModel(Tarif.PROPERTYNAME_BIS), model.getDcBis(), "date");
 
         if (model.getHeaderText().equals("Tarif erstellen")) {
             Date vonDate = model.getVonDate();
@@ -95,13 +80,11 @@ public class EditTarifView {
     public JComponent buildPanel() {
         initComponents();
 
-        JViewPanel mainPanel = new JViewPanel();
-        mainPanel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
 
         JViewPanel panel = new JViewPanel();

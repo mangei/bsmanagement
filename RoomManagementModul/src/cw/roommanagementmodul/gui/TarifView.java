@@ -7,11 +7,11 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import cw.roommanagementmodul.component.DateTimeTableCellRenderer;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -29,8 +29,7 @@ public class TarifView {
     private JButton bEdit;
     private JButton bBack;
     private JXTable tTarif;
-    
-    
+
     public TarifView(TarifPresentationModel m) {
         this.model = m;
     }
@@ -48,15 +47,13 @@ public class TarifView {
         bBack.setText("Zurück");
 
 
-        tTarif = new JXTable();
-        tTarif.setColumnControlVisible(true);
-        tTarif.setAutoCreateRowSorter(true);
-        tTarif.setPreferredScrollableViewportSize(new Dimension(10, 10));
+        String tarifTableStateName = "cw.roommanagementmodul.TarifView.tarifTableState";
+        tTarif = CWComponentFactory.createTable(model.createZuordnungTableModel(model.getTarifSelection()), "kein Tarif vorhanden",tarifTableStateName);
 
-        tTarif.setModel(model.createZuordnungTableModel(model.getTarifSelection()));
-        tTarif.setSelectionModel(
-                new SingleListSelectionAdapter(
-                model.getTarifSelection().getSelectionIndexHolder()));
+        tTarif.setSelectionModel(new SingleListSelectionAdapter(new JXTableSelectionConverter(
+                model.getTarifSelection().getSelectionIndexHolder(),
+                tTarif)));
+
         tTarif.getColumnModel().getColumn(0).setCellRenderer(new DateTimeTableCellRenderer(true));
         tTarif.getColumnModel().getColumn(1).setCellRenderer(new DateTimeTableCellRenderer(true));
     }
@@ -69,8 +66,7 @@ public class TarifView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel();
-        panel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
 
         panel.getButtonPanel().add(bNew);
         panel.getButtonPanel().add(bEdit);

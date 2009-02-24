@@ -8,6 +8,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -57,6 +58,7 @@ public class BereichPresentationModel {
     private Action deleteZimmerAction;
     private Action viewTabelleAction;
     private BereichPresentationModel bereichModel;
+    private HeaderInfo headerInfo;
 
     public BereichPresentationModel(BereichManager bereichManager) {
         selectedBereich = null;
@@ -66,11 +68,12 @@ public class BereichPresentationModel {
 
     }
 
-    public BereichPresentationModel(BereichManager bereichManager, String header) {
+    public BereichPresentationModel(BereichManager bereichManager, HeaderInfo header) {
         selectedBereich = null;
         this.bereichManager = bereichManager;
         this.zimmerManager = ZimmerManager.getInstance();
-        this.headerText = header;
+        this.headerText = header.getHeaderText();
+        this.headerInfo=header;
         bereichModel=this;
         initModels();
         this.initEventHandling();
@@ -226,6 +229,20 @@ public class BereichPresentationModel {
         this.viewTabelleAction = viewTabelleAction;
     }
 
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
+    }
+
     private class NewAction
             extends AbstractAction {
 
@@ -235,7 +252,7 @@ public class BereichPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final Bereich b = new Bereich();
-            final EditBereichPresentationModel model = new EditBereichPresentationModel(b, "Bereich erstellen", selectedBereich);
+            final EditBereichPresentationModel model = new EditBereichPresentationModel(b, new HeaderInfo("Bereich erstellen","Hier können Sie einen neuen Bereich erstellen"), selectedBereich);
             final EditBereichView editView = new EditBereichView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -348,7 +365,7 @@ public class BereichPresentationModel {
 
     private void editSelectedItem(EventObject e) {
         final Bereich b = selectedBereich;
-        final EditBereichPresentationModel model = new EditBereichPresentationModel(b, "Bereich bearbeiten", null);
+        final EditBereichPresentationModel model = new EditBereichPresentationModel(b, new HeaderInfo("Bereich bearbeiten","Hier können Sie einen bestehenden Bereich bearbeiten"), null);
         final EditBereichView editView = new EditBereichView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -511,7 +528,7 @@ public class BereichPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final Zimmer z = new Zimmer();
-            final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, "Zimmer erstellen",selectedBereich);
+            final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new HeaderInfo("Zimmer erstellen","Hier können Sie ein neues Zimmer erstellen"),selectedBereich);
             final EditZimmerView editView = new EditZimmerView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -582,7 +599,7 @@ public class BereichPresentationModel {
 
     private void editZimmerSelectedItem(EventObject e) {
         final Zimmer z = selectedZimmer;
-        final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, "Zimmer bearbeiten");
+        final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new HeaderInfo("Zimmer bearbeiten","Hier können Sie ein bestehndes Zimmer bearbeiten"));
         final EditZimmerView editView = new EditZimmerView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -622,7 +639,7 @@ public class BereichPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            final ZimmerPresentationModel model = new ZimmerPresentationModel(ZimmerManager.getInstance(), "Zimmer verwalten",bereichModel);
+            final ZimmerPresentationModel model = new ZimmerPresentationModel(ZimmerManager.getInstance(), new HeaderInfo("Zimmer Verwaltung","Übersicht aller Zimmer"),bereichModel);
             final ZimmerView zimmerView = new ZimmerView(model);
             model.addButtonListener(new ButtonListener() {
 

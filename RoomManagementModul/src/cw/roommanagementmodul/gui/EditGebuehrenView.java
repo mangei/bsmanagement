@@ -31,7 +31,6 @@ public class EditGebuehrenView {
     public JTextField tfGebuehrenName;
     public JComboBox cbKategorie;
     public JButton bSave;
-    public JButton bReset;
     public JButton bCancel;
     public JButton bSaveCancel;
 
@@ -52,10 +51,7 @@ public class EditGebuehrenView {
         bCancel.setText("Abbrechen");
 
         bSaveCancel = new JButton(model.getSaveCancelButtonAction());
-        bSaveCancel.setText("Speichern&Schließen");
-
-        bReset = new JButton(model.getResetButtonAction());
-        bReset.setText("Zurücksetzen");
+        bSaveCancel.setText("Speichern u. Schließen");
 
         cbKategorie = new JComboBox(model.createKategorieComboModel(model.getGebKatList()));
     }
@@ -63,13 +59,11 @@ public class EditGebuehrenView {
      public JComponent buildPanel() {
         initComponents();
 
-        JViewPanel mainPanel = new JViewPanel();
-        mainPanel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
 
         JViewPanel panel = new JViewPanel();

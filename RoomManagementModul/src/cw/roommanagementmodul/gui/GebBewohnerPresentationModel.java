@@ -13,7 +13,9 @@ import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -40,7 +42,6 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
     private GebuehrZuordnungManager gebZuordnungManager;
     private GebuehrenManager gebuehrManager;
     private String headerText;
-    private Action resetButtonAction;
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
@@ -48,6 +49,7 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
     private ValueModel unsaved;
     private JDateChooser dcVon;
     private JDateChooser dcBis;
+    private HeaderInfo headerInfo;
 
     public GebBewohnerPresentationModel(GebuehrZuordnung gebuehrZuordnung) {
         super(gebuehrZuordnung);
@@ -59,9 +61,10 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         initEventHandling();
     }
 
-    GebBewohnerPresentationModel(GebuehrZuordnung gb, String header) {
+    GebBewohnerPresentationModel(GebuehrZuordnung gb, HeaderInfo header) {
         super(gb);
-        this.headerText = header;
+        this.headerText = header.getHeaderText();
+        this.headerInfo = header;
         this.gebuehrZuordnung = gb;
         gebZuordnungManager = GebuehrZuordnungManager.getInstance();
         gebuehrManager = GebuehrenManager.getInstance();
@@ -76,11 +79,9 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
                     saveButtonAction.setEnabled(true);
-                    resetButtonAction.setEnabled(true);
                     saveCancelButtonAction.setEnabled(true);
                 } else {
                     saveButtonAction.setEnabled(false);
-                    resetButtonAction.setEnabled(false);
                     saveCancelButtonAction.setEnabled(false);
                 }
             }
@@ -90,12 +91,14 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
 
     private void initModels() {
         saveButtonAction = new SaveAction();
-        resetButtonAction = new ResetAction();
         cancelButtonAction = new CancelAction();
         saveCancelButtonAction = new SaveCancelAction();
 
         dcVon = new JDateChooser();
+        dcVon = CWComponentFactory.createDateChooser(getBufferedModel(GebuehrZuordnung.PROPERTYNAME_VON));
+
         dcBis = new JDateChooser();
+        dcBis = CWComponentFactory.createDateChooser(getBufferedModel(GebuehrZuordnung.PROPERTYNAME_BIS));
         setGebuehrList((SelectionInList<Bereich>) new SelectionInList(gebuehrManager.getAll(), getModel(GebuehrZuordnung.PROPERTYNAME_GEBUEHR)));
         support = new ButtonListenerSupport();
         getGebuehrList().addValueChangeListener(new SaveListener());
@@ -106,10 +109,6 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
 
     public ComboBoxModel createGebuehrComboModel(SelectionInList gebuehrList) {
         return new ComboBoxAdapter(gebuehrList);
-    }
-
-    public Action getResetButtonAction() {
-        return resetButtonAction;
     }
 
     public Action getSaveButtonAction() {
@@ -172,6 +171,20 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         this.dcBis = dcBis;
     }
 
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
+    }
+
     private class SaveAction
             extends AbstractAction {
 
@@ -190,22 +203,30 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
                 Calendar bisC = new GregorianCalendar(b.get(Calendar.YEAR), b.get(Calendar.MONTH), b.get(Calendar.DATE));
                 dcBis.setCalendar(bisC);
             }
-            Calendar vonC = new GregorianCalendar(v.get(Calendar.YEAR), v.get(Calendar.MONTH), v.get(Calendar.DATE));
-            dcVon.setCalendar(vonC);
+            if (v != null) {
+                Calendar vonC = new GregorianCalendar(v.get(Calendar.YEAR), v.get(Calendar.MONTH), v.get(Calendar.DATE));
+                dcVon.setCalendar(vonC);
+            }
+
 
 
             if (checkFilledOut() == false) {
-                JOptionPane.showMessageDialog(null, "Die Attribute Gebühr und Von müssen ausgefüllt sein!");
+                JOptionPane.showMessageDialog(null, "Die Attribute Gebühr und Von müssen mindestens ausgefüllt sein!");
             } else {
                 if (checkChrono() == false) {
                     JOptionPane.showMessageDialog(null, "Bis-Datum muss ich chronologisch nach dem Von-Datum befinden.");
                 } else {
-                    saveGebuehrZuordnung();
-                    unsaved.setValue(false);
-                    support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
+                    if (checkEinzugAuszug() == false) {
+                        JOptionPane.showMessageDialog(null, "Von- oder Bis Datum stimmen nicht mit den Einzugs- oder Auszugs Daten des Bewohners überein.");
+                    } else {
+                        saveGebuehrZuordnung();
+                        unsaved.setValue(false);
+                        support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
+                    }
                 }
 
             }
+
 
 
         }
@@ -233,28 +254,6 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
 
     private void saveGebuehrZuordnung() {
         triggerCommit();
-    }
-
-    private class ResetAction
-            extends AbstractAction {
-
-        {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/boardingschoolmanagement/images/arrow_rotate_anticlockwise.png"));
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
-            if (i == JOptionPane.OK_OPTION) {
-                // TODO Wartedialog
-                resetGebuehrZuordnung();
-                unsaved.setValue(false);
-                support.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
-            }
-        }
-    }
-
-    private void resetGebuehrZuordnung() {
-        this.triggerFlush();
     }
 
     private class CancelAction
@@ -296,8 +295,11 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
                 Calendar bisC = new GregorianCalendar(b.get(Calendar.YEAR), b.get(Calendar.MONTH), b.get(Calendar.DATE));
                 dcBis.setCalendar(bisC);
             }
-            Calendar vonC = new GregorianCalendar(v.get(Calendar.YEAR), v.get(Calendar.MONTH), v.get(Calendar.DATE));
-            dcVon.setCalendar(vonC);
+            if (v != null) {
+                Calendar vonC = new GregorianCalendar(v.get(Calendar.YEAR), v.get(Calendar.MONTH), v.get(Calendar.DATE));
+                dcVon.setCalendar(vonC);
+            }
+
 
             if (checkFilledOut() == false) {
                 JOptionPane.showMessageDialog(null, "Die Attribute Gebühr und Von müssen mindestens ausgefüllt sein!");
@@ -305,13 +307,49 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
                 if (checkChrono() == false) {
                     JOptionPane.showMessageDialog(null, "Bis-Datum muss ich chronologisch nach dem Von-Datum befinden.");
                 } else {
-                    saveGebuehrZuordnung();
-                    support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
+                    if (checkEinzugAuszug() == false) {
+                        JOptionPane.showMessageDialog(null, "Von- oder Bis Datum stimmen nicht mit dem Einzugs- oder Auszugs Datum des Bewohners überein.");
+                    } else {
+                        saveGebuehrZuordnung();
+                        support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
+                    }
                 }
 
             }
 
         }
+    }
+
+    public boolean checkEinzugAuszug() {
+
+        this.gebuehrZuordnung.getGebuehr().getName();
+        gebuehrZuordnung.getBewohner();
+        gebuehrZuordnung.getBewohner().getVon();
+        gebuehrZuordnung.getBewohner().getVon().getTime();
+
+        long einzug = this.gebuehrZuordnung.getBewohner().getVon().getTime();
+        long von = dcVon.getDate().getTime();
+
+        if (von < einzug) {
+            return false;
+        }
+
+        Date auszugD = this.gebuehrZuordnung.getBewohner().getBis();
+        Date bis = dcBis.getDate();
+
+        if (auszugD == null) {
+            return true;
+        } else {
+            if (bis == null) {
+                return true;
+            } else {
+                if (bis.getTime() > auszugD.getTime()) {
+                    return false;
+                }
+            }
+        }
+        return true;
+
     }
 
     public class SaveListener implements PropertyChangeListener {

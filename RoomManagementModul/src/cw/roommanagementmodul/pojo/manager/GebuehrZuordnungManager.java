@@ -34,16 +34,9 @@ public class GebuehrZuordnungManager extends AbstractPOJOManager<GebuehrZuordnun
     }
 
     public void removeGebuehrZuordnung(Bewohner b) {
-        EntityManager entityManager = HibernateUtil.getEntityManager();
         List<GebuehrZuordnung> l = this.getGebuehrZuordnung(b);
-        EntityTransaction tran = entityManager.getTransaction();
-        tran.begin();
-        for (int i = 0; i < l.size(); i++) {
-            l.get(i).setBewohner(null);
-            l.get(i).setGebuehr(null);
-            entityManager.remove(l.get(i));
-        }
-        tran.commit();
+        super.delete(l);
+
     }
 
     public void removeGebuehrZuordnung(Gebuehr g) {

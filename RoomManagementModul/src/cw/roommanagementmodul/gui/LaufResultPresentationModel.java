@@ -9,6 +9,7 @@ import com.jgoodies.binding.PresentationModel;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
 import java.awt.event.ActionEvent;
@@ -31,11 +32,12 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
     private String headerText;
     private Action backAction;
     private ButtonListenerSupport support;
+    private HeaderInfo headerInfo;
 
-    public LaufResultPresentationModel(BewohnerTarifSelection tarifSelection, String header) {
+    public LaufResultPresentationModel(BewohnerTarifSelection tarifSelection, HeaderInfo header) {
         super(tarifSelection);
         this.tarifSelection = tarifSelection;
-        this.headerText = header;
+        this.headerInfo = header;
         initModels();
     }
 
@@ -117,6 +119,20 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
 
     public void addButtonListener(ButtonListener listener) {
         support.addButtonListener(listener);
+    }
+
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
     }
 
     private class BackAction

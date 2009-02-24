@@ -32,7 +32,7 @@ public class ZimmerManager extends AbstractPOJOManager<Zimmer> {
 
     @Override
     public List<Zimmer> getAll() {
-        return HibernateUtil.getEntityManager().createQuery("FROM Zimmer").getResultList();
+        return HibernateUtil.getEntityManager().createQuery("FROM Zimmer z order by z.name asc").getResultList();
     }
 
     @Override

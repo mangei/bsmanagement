@@ -3,12 +3,16 @@ package cw.roommanagementmodul.app;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CascadeEvent;
 import cw.boardingschoolmanagement.app.CascadeListener;
+import cw.boardingschoolmanagement.app.HibernateUtil;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Posting;
+import cw.customermanagementmodul.pojo.PostingCategory;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
+import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
 import cw.customermanagementmodul.pojo.manager.PostingManager;
 import cw.roommanagementmodul.gui.BereichPresentationModel;
 import cw.roommanagementmodul.gui.BereichView;
@@ -91,22 +95,18 @@ public class ZimmerModul implements Modul {
                 GUIManager.setLoadingScreenText("Bewohner werden geladen...");
                 GUIManager.setLoadingScreenVisible(true);
 
-                new Thread(new Runnable() {
 
-                    public void run() {
-                        bewohnerManager = BewohnerManager.getInstance();
+                bewohnerManager = BewohnerManager.getInstance();
 
-                        GUIManager.changeView(new BewohnerView(new BewohnerPresentationModel(bewohnerManager, "Bewohner verwalten")).buildPanel());
-                        GUIManager.setLoadingScreenVisible(false);
+                GUIManager.changeView(new BewohnerView(new BewohnerPresentationModel(bewohnerManager, new HeaderInfo("Bewohner Verwaltung", "Übersicht aller Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png")))).buildPanel());
+                GUIManager.setLoadingScreenVisible(false);
 
-                    }
-                }).start();
             }
         }), "bewohner");
 
 
         MenuManager.getSideMenu().addItem(new JButton(new AbstractAction(
-                "Zimmer") {
+                "Bereiche") {
 
             {
                 putValue(Action.SHORT_DESCRIPTION, "Zimmer verwalten");
@@ -120,16 +120,14 @@ public class ZimmerModul implements Modul {
                 GUIManager.setLoadingScreenText("Zimmer werden geladen...");
                 GUIManager.setLoadingScreenVisible(true);
 
-                new Thread(new Runnable() {
 
-                    public void run() {
-                        bereichManager = BereichManager.getInstance();
 
-                        GUIManager.changeView(new BereichView(new BereichPresentationModel(bereichManager, "Bereich und Zimmer verwalten")).buildPanel());
-                        GUIManager.setLoadingScreenVisible(false);
+                bereichManager = BereichManager.getInstance();
 
-                    }
-                }).start();
+                GUIManager.changeView(new BereichView(new BereichPresentationModel(bereichManager, new HeaderInfo("Bereich Verwaltung", "Hier können Sie anhand des Baumes die Zimmer und Bereiche bearbeiten", CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/door.png")))).buildPanel());
+                GUIManager.setLoadingScreenVisible(false);
+
+
             }
         }), "bewohner");
 
@@ -149,16 +147,13 @@ public class ZimmerModul implements Modul {
                 GUIManager.setLoadingScreenText("Gebühren werden geladen...");
                 GUIManager.setLoadingScreenVisible(true);
 
-                new Thread(new Runnable() {
 
-                    public void run() {
-                        gebuehrenManager = GebuehrenManager.getInstance();
+                gebuehrenManager = GebuehrenManager.getInstance();
 
-                        GUIManager.changeView(new GebuehrenView(new GebuehrenPresentationModel(gebuehrenManager, "Gebühren verwalten")).buildPanel());
-                        GUIManager.setLoadingScreenVisible(false);
+                GUIManager.changeView(new GebuehrenView(new GebuehrenPresentationModel(gebuehrenManager, new HeaderInfo("Gebühren Verwaltung", "Hier können Sie die Gebühren, Kategorien und Tarife verwalten", CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/money.png")))).buildPanel());
+                GUIManager.setLoadingScreenVisible(false);
 
-                    }
-                }).start();
+
             }
         }), "bewohner");
 
@@ -177,15 +172,11 @@ public class ZimmerModul implements Modul {
                 GUIManager.setLoadingScreenVisible(true);
                 final GebLaufSelection gebLauf = new GebLaufSelection();
 
-                new Thread(new Runnable() {
 
-                    public void run() {
 
-                        GUIManager.changeView(new GebLaufView(new GebLaufPresentationModel(gebLauf, "Gebühren Lauf")).buildPanel());
-                        GUIManager.setLoadingScreenVisible(false);
+                GUIManager.changeView(new GebLaufView(new GebLaufPresentationModel(gebLauf, new HeaderInfo("Gebühren Lauf", "Hier können Sie denn Gebühren oder Storno Lauf durchführen", CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png")))).buildPanel());
+                GUIManager.setLoadingScreenVisible(false);
 
-                    }
-                }).start();
             }
         }), "bewohner");
 
@@ -194,10 +185,13 @@ public class ZimmerModul implements Modul {
             public void deleteAction(CascadeEvent evt) {
                 Customer c = (Customer) evt.getObject();
                 BewohnerManager bewManager = BewohnerManager.getInstance();
+
                 Bewohner b = bewManager.getBewohner(c);
-                b.setCustomer(null);
-                b.setEinzahler(null);
-                bewManager.delete(b);
+
+                if (b != null) {
+                    bewManager.delete(b);
+                }
+
             }
         });
 
@@ -207,11 +201,12 @@ public class ZimmerModul implements Modul {
                 Posting p = (Posting) evt.getObject();
                 BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
 
+
                 BuchungsLaufZuordnung blz = blzManager.getBuchungsLaufZuordnung(p);
+
                 if (blz != null) {
                     blzManager.delete(blz);
                 }
-
             }
         });
 
@@ -220,6 +215,7 @@ public class ZimmerModul implements Modul {
             public void deleteAction(CascadeEvent evt) {
                 Bewohner b = (Bewohner) evt.getObject();
                 GebuehrZuordnungManager gebZuordnungManager = GebuehrZuordnungManager.getInstance();
+                //TODO überlegen
                 gebZuordnungManager.removeGebuehrZuordnung(b);
             }
         });
@@ -253,6 +249,12 @@ public class ZimmerModul implements Modul {
             }
         });
 
+        if (PostingCategoryManager.getInstance().get("zimmer") == null) {
+            PostingCategory category = new PostingCategory();
+            category.setName("Zimmer");
+            category.setKey("zimmer");
+            PostingCategoryManager.getInstance().save(category);
+        }
     }
 
     public Class getBaseClass() {

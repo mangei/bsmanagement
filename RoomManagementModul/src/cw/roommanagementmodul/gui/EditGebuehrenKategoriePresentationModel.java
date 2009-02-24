@@ -12,6 +12,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -28,12 +29,12 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
 
     private GebuehrenKategorie gebKat;
     private ButtonListenerSupport support;
-    private Action resetButtonAction;
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
     private ValueModel unsaved;
     private String headerText;
+    private HeaderInfo headerInfo;
 
     public EditGebuehrenKategoriePresentationModel(GebuehrenKategorie gebKat) {
         super(gebKat);
@@ -42,10 +43,11 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
         initEventHandling();
     }
 
-    EditGebuehrenKategoriePresentationModel(GebuehrenKategorie gebKat, String header) {
+    EditGebuehrenKategoriePresentationModel(GebuehrenKategorie gebKat, HeaderInfo header) {
         super(gebKat);
         this.gebKat = gebKat;
-        this.headerText=header;
+        this.headerText=header.getHeaderText();
+        this.headerInfo=header;
         initModels();
         initEventHandling();
     }
@@ -58,11 +60,9 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
                 if ((Boolean) evt.getNewValue() == true) {
                     System.out.println("kategorie changed");
                     saveButtonAction.setEnabled(true);
-                    resetButtonAction.setEnabled(true);
                     saveCancelButtonAction.setEnabled(true);
                 } else {
                     saveButtonAction.setEnabled(false);
-                    resetButtonAction.setEnabled(false);
                     saveCancelButtonAction.setEnabled(false);
                 }
             }
@@ -72,7 +72,6 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
 
     private void initModels() {
         saveButtonAction = new SaveAction();
-        resetButtonAction = new ResetAction();
         cancelButtonAction = new CancelAction();
         saveCancelButtonAction = new SaveCancelAction();
 
@@ -86,10 +85,6 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
 
     public void addButtonListener(ButtonListener listener) {
         support.addButtonListener(listener);
-    }
-
-    public Action getResetButtonAction() {
-        return resetButtonAction;
     }
 
     public Action getSaveButtonAction() {
@@ -106,6 +101,20 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
 
     public String getHeaderText() {
         return headerText;
+    }
+
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
     }
 
     private class SaveAction
@@ -126,27 +135,7 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
         triggerCommit();
     }
 
-    private class ResetAction
-            extends AbstractAction {
-
-        {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/boardingschoolmanagement/images/arrow_rotate_anticlockwise.png"));
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
-            if (i == JOptionPane.OK_OPTION) {
-                // TODO Wartedialog
-                resetGebuehrenKat();
-                unsaved.setValue(false);
-                support.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
-            }
-        }
-    }
-
-    private void resetGebuehrenKat() {
-        this.triggerFlush();
-    }
+ 
 
     private class CancelAction
             extends AbstractAction {

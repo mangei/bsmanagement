@@ -35,7 +35,6 @@ public class EditBewohnerZimmerView {
     private JLabel lbKaution;
     private JLabel lbKautionStatus;
     public JButton bSave;
-    public JButton bReset;
     public JButton bCancel;
     public JButton bSaveCancel;
     private JComboBox cbBereich;
@@ -58,10 +57,7 @@ public class EditBewohnerZimmerView {
         bCancel.setText("Abbrechen");
 
         bSaveCancel = new JButton(model.getSaveCancelButtonAction());
-        bSaveCancel.setText("Speichern&Schließen");
-
-        bReset = new JButton(model.getResetButtonAction());
-        bReset.setText("Zurücksetzten");
+        bSaveCancel.setText("Speichern u. Schließen");
 
         lbBereich = new JLabel("Bereich: ");
         lbZimmer = new JLabel("Zimmer");
@@ -127,7 +123,6 @@ public class EditBewohnerZimmerView {
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
 
         JViewPanel panel = new JViewPanel();

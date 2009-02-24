@@ -7,8 +7,9 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import javax.swing.JButton;
@@ -46,15 +47,15 @@ public class ZimmerView {
         bBack = new JButton(model.getBackAction());
         bBack.setText("Zurück");
 
-        tZimmer = new JXTable();
-        tZimmer.setColumnControlVisible(true);
-        tZimmer.setAutoCreateRowSorter(true);
-        tZimmer.setPreferredScrollableViewportSize(new Dimension(10, 10));
 
-        tZimmer.setModel(model.createZimmerTableModel(model.getZimmerSelection()));
-        tZimmer.setSelectionModel(
-                new SingleListSelectionAdapter(
-                model.getZimmerSelection().getSelectionIndexHolder()));
+         String zimmerTableStateName = "cw.roommanagementmodul.ZimmerView.zimmerTableState";
+        tZimmer = CWComponentFactory.createTable(model.createZimmerTableModel(model.getZimmerSelection()), "keine Zimmer vorhanden",zimmerTableStateName);
+
+
+        tZimmer.setSelectionModel(new SingleListSelectionAdapter(new JXTableSelectionConverter(
+                model.getZimmerSelection().getSelectionIndexHolder(),
+                tZimmer)));
+
     }
 
     private void initEventHandling() {
@@ -65,8 +66,7 @@ public class ZimmerView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel();
-        panel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
         panel.getButtonPanel().add(bNew);
         panel.getButtonPanel().add(bEdit);
         panel.getButtonPanel().add(bDelete);
