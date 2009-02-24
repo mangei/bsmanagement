@@ -16,7 +16,9 @@ import java.beans.PropertyChangeListener;
 import javax.swing.event.ListSelectionListener;
 import cw.customermanagementmodul.pojo.Customer;
 import javax.swing.Icon;
+import javax.swing.JDialog;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 
 /**
  * @author CreativeWorkers.at
@@ -131,6 +133,16 @@ public class CustomerManagementPresentationModel {
                     }
                 }
             });
+
+//            JPanel panel = editView.buildPanel();
+//            final JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
+//            d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//            d.setTitle(panel.getName());
+//            d.add(panel);
+//            d.pack();
+//            CWUtils.centerWindow(d, GUIManager.getInstance().getMainFrame());
+//            d.setVisible(true);
+//            d.dispose();
 
             GUIManager.changeView(editView.buildPanel(), true);
             GUIManager.setLoadingScreenVisible(false);

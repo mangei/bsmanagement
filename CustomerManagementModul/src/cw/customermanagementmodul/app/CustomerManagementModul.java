@@ -28,6 +28,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 /**
@@ -66,10 +67,24 @@ public class CustomerManagementModul
 
                     GUIManager.changeView(panel);
                     GUIManager.setLoadingScreenVisible(false);
-                    
+
                 } else {
                     GUIManager.changeView(panel);
                 }
+
+//                model = new CustomerManagementPresentationModel();
+//                view = new CustomerManagementView(model);
+//                panel = view.buildPanel();
+//
+//                final JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
+//                d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+//                d.setTitle(panel.getName());
+//                d.add(panel);
+//                d.pack();
+//                CWUtils.centerWindow(d, GUIManager.getInstance().getMainFrame());
+//                d.setVisible(true);
+//                d.dispose();
+
             }
         }), "manage");
 
