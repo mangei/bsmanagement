@@ -11,8 +11,15 @@ import javax.swing.JPanel;
  */
 public class WelcomeHomeGUIExtention implements HomeExtention {
 
+    private WelcomeHomeGUIExtentionView view;
+
     public JPanel getPanel() {
-        return new WelcomeHomeGUIExtentionView(new WelcomeHomeGUIExtentionPresentationModel()).buildPanel();
+        view = new WelcomeHomeGUIExtentionView(new WelcomeHomeGUIExtentionPresentationModel());
+        return view.buildPanel();
+    }
+
+    public void dispose() {
+        view.dispose();
     }
 
 }

@@ -179,16 +179,10 @@ public class BoardingSchoolManagement {
             }
             
             public void actionPerformed(ActionEvent e) {
-                GUIManager.setLoadingScreenText("Startseite werden geladen...");
-                GUIManager.setLoadingScreenVisible(true);
-
-                new Thread(new Runnable() {
-
-                    public void run() {
-                        GUIManager.changeView(new HomeView(new HomePresentationModel()).buildPanel());
-                        GUIManager.setLoadingScreenVisible(false);
-                    }
-                }).start();
+//                GUIManager.setLoadingScreenText("Startseite werden geladen...");
+//                GUIManager.setLoadingScreenVisible(true);
+                GUIManager.changeView(new HomeView(new HomePresentationModel()).buildPanel());
+//                GUIManager.setLoadingScreenVisible(false);
             }
         }), "home", true);
 

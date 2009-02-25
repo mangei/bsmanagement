@@ -6,6 +6,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -13,7 +14,9 @@ import javax.swing.JPanel;
  *
  * @author ManuelG
  */
-public class WelcomeHomeGUIExtentionView {
+public class WelcomeHomeGUIExtentionView
+    implements Disposable
+{
 
     private WelcomeHomeGUIExtentionPresentationModel model;
 
@@ -55,4 +58,7 @@ public class WelcomeHomeGUIExtentionView {
         return panel;
     }
 
+    public void dispose() {
+        model.dispose();
+    }
 }

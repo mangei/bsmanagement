@@ -22,6 +22,10 @@ public class WelcomeHomeGUIExtentionPresentationModel {
         initEventHandling();
     }
 
+    public void dispose() {
+        timer.cancel();
+    }
+
     private void initModels() {
         welcomeMessageValueModel = new ValueHolder("Willkommen in der Internatsverwaltung.");
         timeMessageValueModel = new ValueHolder("");
@@ -55,12 +59,6 @@ public class WelcomeHomeGUIExtentionPresentationModel {
     private void initEventHandling() {
         
     }
-
-//    @Override
-//    protected void finalize() throws Throwable {
-//        timer.cancel();
-//        super.finalize();
-//    }
 
     public ValueModel getTimeMessageValueModel() {
         return timeMessageValueModel;
