@@ -8,6 +8,7 @@ import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -28,7 +29,8 @@ import javax.swing.Icon;
  * @author CreativeWorkers.at
  */
 public class EditCustomerPresentationModel
-        extends PresentationModel<Customer> {
+        extends PresentationModel<Customer>
+        implements Disposable {
 
     private Customer customer;
     private ValueModel unsaved;
@@ -47,6 +49,9 @@ public class EditCustomerPresentationModel
     private List<String> countryList;
     
     private List<EditCustomerTabExtention> editCustomerGUITabExtentions;
+
+    private PropertyChangeListener actionButtonListener;
+    private SaveListener saveListener;
 
     public EditCustomerPresentationModel(Customer customer) {
         this(customer, new HeaderInfo());
@@ -93,7 +98,7 @@ public class EditCustomerPresentationModel
 //        provinceList            = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_PROVINCE);
 //        countryList             = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_COUNTRY);
 
-        SaveListener saveListener = new SaveListener();
+        saveListener = new SaveListener();
         getBufferedModel(Customer.PROPERTYNAME_ACTIVE).addValueChangeListener(saveListener);
         getBufferedModel(Customer.PROPERTYNAME_GENDER).addValueChangeListener(saveListener);
         getBufferedModel(Customer.PROPERTYNAME_TITLE).addValueChangeListener(saveListener);
@@ -112,7 +117,7 @@ public class EditCustomerPresentationModel
     }
 
     public void initEventHandling() {
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
+        unsaved.addValueChangeListener(actionButtonListener = new PropertyChangeListener() {
 
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
@@ -125,6 +130,40 @@ public class EditCustomerPresentationModel
             }
         });
         unsaved.setValue(false);
+    }
+
+    public void dispose() {
+        if(actionButtonListener != null) {
+            System.out.println("DIS...");
+            unsaved.removeValueChangeListener(actionButtonListener);
+            actionButtonListener = null;
+        }
+        if(saveListener != null) {
+            getBufferedModel(Customer.PROPERTYNAME_ACTIVE).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_GENDER).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_TITLE).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_FORENAME).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_FORENAME2).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_SURNAME).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_STREET).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_CITY).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_MOBILEPHONE).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_LANDLINEPHONE).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_FAX).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_EMAIL).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_COMMENT).removeValueChangeListener(saveListener);
+            getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).removeValueChangeListener(saveListener);
+            saveListener = null;
+        }
+
+        saveButtonAction = null;
+        cancelButtonAction = null;
+        saveCancelButtonAction = null;
+        clearLocationDataAction = null;
+
+        unsaved = null;
+        release();
     }
 
     /**

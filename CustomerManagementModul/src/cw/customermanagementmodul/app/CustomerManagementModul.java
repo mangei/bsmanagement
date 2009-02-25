@@ -28,7 +28,6 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 /**
@@ -51,26 +50,18 @@ public class CustomerManagementModul
             {
                 putValue(Action.SHORT_DESCRIPTION, "Kunden verwalten");
             }
-            private CustomerManagementPresentationModel model;
-            private CustomerManagementView view;
-            private JPanel panel;
 
             public void actionPerformed(ActionEvent e) {
-                if (panel == null) {
+                
+                GUIManager.setLoadingScreenText("Kunden werden geladen...");
+                GUIManager.setLoadingScreenVisible(true);
 
-                    GUIManager.setLoadingScreenText("Kunden werden geladen...");
-                    GUIManager.setLoadingScreenVisible(true);
+                CustomerManagementPresentationModel model = new CustomerManagementPresentationModel();
+                CustomerManagementView view = new CustomerManagementView(model);
+                JPanel panel = view.buildPanel();
 
-                    model = new CustomerManagementPresentationModel();
-                    view = new CustomerManagementView(model);
-                    panel = view.buildPanel();
-
-                    GUIManager.changeView(panel);
-                    GUIManager.setLoadingScreenVisible(false);
-
-                } else {
-                    GUIManager.changeView(panel);
-                }
+                GUIManager.changeView(panel);
+                GUIManager.setLoadingScreenVisible(false);
 
 //                model = new CustomerManagementPresentationModel();
 //                view = new CustomerManagementView(model);
@@ -94,26 +85,17 @@ public class CustomerManagementModul
             {
                 putValue(Action.SHORT_DESCRIPTION, "Gruppen verwalten");
             }
-            private GroupManagementPresentationModel model;
-            private GroupManagementView view;
-            private JPanel panel;
 
             public void actionPerformed(ActionEvent e) {
-                if (panel == null) {
+                GUIManager.setLoadingScreenText("Gruppen werden geladen...");
+                GUIManager.setLoadingScreenVisible(true);
 
-                    GUIManager.setLoadingScreenText("Gruppen werden geladen...");
-                    GUIManager.setLoadingScreenVisible(true);
+                GroupManagementPresentationModel model = new GroupManagementPresentationModel();
+                GroupManagementView view = new GroupManagementView(model);
+                JPanel panel = view.buildPanel();
 
-                    model = new GroupManagementPresentationModel();
-                    view = new GroupManagementView(model);
-                    panel = view.buildPanel();
-
-                    GUIManager.changeView(panel);
-                    GUIManager.setLoadingScreenVisible(false);
-
-                } else {
-                    GUIManager.changeView(panel);
-                }
+                GUIManager.changeView(panel);
+                GUIManager.setLoadingScreenVisible(false);
             }
         }), "manage");
 

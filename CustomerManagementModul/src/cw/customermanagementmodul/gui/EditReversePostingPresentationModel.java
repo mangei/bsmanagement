@@ -245,6 +245,10 @@ public class EditReversePostingPresentationModel {
         
         reversePostingPresentationModel.triggerCommit();
 
+        for(EditReversePostingPostingCategoryExtention ex : getExtentions()) {
+            ex.save();
+        }
+
         return true;
     }
     

@@ -238,6 +238,10 @@ public class EditPostingPresentationModel
         triggerCommit();
         unsaved.setValue(false);
 
+        for(EditPostingPostingCategoryExtention ex : getExtentions()) {
+            ex.save();
+        }
+
         return true;
     }
     

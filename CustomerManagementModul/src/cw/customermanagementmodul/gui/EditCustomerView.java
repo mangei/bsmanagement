@@ -4,15 +4,13 @@ import cw.boardingschoolmanagement.app.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.jidesoft.swing.AutoCompletion;
 import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
 import java.awt.event.FocusEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -22,6 +20,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import cw.customermanagementmodul.pojo.Customer;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -29,7 +29,8 @@ import javax.swing.event.DocumentListener;
  *
  * @author CreativeWorkers.at
  */
-public class EditCustomerView {
+public class EditCustomerView
+    implements Disposable {
 
     private EditCustomerPresentationModel model;
 
@@ -55,7 +56,9 @@ public class EditCustomerView {
     private JButton bSave;
     private JButton bCancel;
     private JButton bSaveCancel;
-    
+
+    private PropertyChangeListener enableTabsListener;
+
     public EditCustomerView(EditCustomerPresentationModel model) {
         this.model = model;
     }
@@ -101,7 +104,7 @@ public class EditCustomerView {
         // because the id is null
         // If the customer is saved, then enable the tabs
         if(model.getBean().getId() == null) {
-            model.getBufferedModel(Customer.PROPERTYNAME_ID).addPropertyChangeListener(new PropertyChangeListener() {
+            model.getBufferedModel(Customer.PROPERTYNAME_ID).addPropertyChangeListener(enableTabsListener = new PropertyChangeListener() {
                 public void propertyChange(PropertyChangeEvent evt) {
                     setTabsEnabled(true);
                 }
@@ -296,7 +299,24 @@ public class EditCustomerView {
         mainPanel.getContentPanel().add(tabs, BorderLayout.CENTER);
         
         initEvents();
-        
+
+        mainPanel.addDisposableListener(this);
+
         return mainPanel;
+    }
+
+    public void dispose() {
+        System.out.println("DISPOOOOOOOSE");
+        if(enableTabsListener != null) {
+            model.getBufferedModel(Customer.PROPERTYNAME_ID).removePropertyChangeListener(enableTabsListener);
+        }
+
+        bCancel.setAction(null);
+        bClearLocationData.setAction(null);
+        bSave.setAction(null);
+        bSaveCancel.setAction(null);
+
+        model.dispose();
+        model = null;
     }
 }
