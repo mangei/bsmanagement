@@ -68,7 +68,6 @@ public class StatusBar
 //        System.out.println("aft font-name: " + statusText2.getFont().getFontName());
 //        System.out.println("aft font-size: " + statusText2.getFont().getSize());
 
-
         statusText = new JLabel();
         add(statusText, BorderLayout.CENTER);
 
@@ -76,8 +75,26 @@ public class StatusBar
         statusBar.setOpaque(false);
         add(statusBar, BorderLayout.EAST);
 
+        final JLabel lGc = new JLabel("0/0");
+        statusBar.add(lGc);
 
-        statusBar.add(new JLabel("Test"));
+         new Timer().schedule(new TimerTask() {
+            @Override
+            public void run() {
+                lGc.setText( "availableProcessor:"
+                        + Runtime.getRuntime().availableProcessors()
+                        + " / maxMemory: "
+                        + Runtime.getRuntime().maxMemory() / 1024
+                        + "kb / freeMemory: "
+                        + Runtime.getRuntime().freeMemory() / 1024
+                        + "kb / totalMemory: "
+                        + Runtime.getRuntime().totalMemory() / 1024
+                        + "kb");
+//                Runtime.getRuntime().gc();
+//                Runtime.getRuntime().runFinalization();
+            }
+        }, 1000, 1000);
+
         statusBar.add(new JLabel("Test"));
 
         setTextAndFadeOut("Willkommen");

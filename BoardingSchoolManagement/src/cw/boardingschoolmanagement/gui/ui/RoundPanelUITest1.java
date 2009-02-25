@@ -18,12 +18,12 @@ import javax.swing.plaf.basic.BasicPanelUI;
  */
 public class RoundPanelUITest1 extends BasicPanelUI {
 
-    private Color backgroundColor1 = new Color(235, 247, 223);
-    private Color backgroundColor2 = new Color(214, 219, 191);
-    private Color borderColor = new Color(86, 88, 72);
-    private Color borderColorAlpha1 = new Color(86, 88, 72, 100);
-    private Color borderColorAlpha2 = new Color(86, 88, 72, 50);
-    private Color borderHighlight = new Color(225, 224, 224);
+    private static final Color backgroundColor1 = new Color(235, 247, 223);
+    private static final Color backgroundColor2 = new Color(214, 219, 191);
+    private static final Color borderColor = new Color(86, 88, 72);
+    private static final Color borderColorAlpha1 = new Color(86, 88, 72, 100);
+    private static final Color borderColorAlpha2 = new Color(86, 88, 72, 50);
+    private static final Color borderHighlight = new Color(225, 224, 224);
 
     @Override
     protected void installDefaults(JPanel p) {

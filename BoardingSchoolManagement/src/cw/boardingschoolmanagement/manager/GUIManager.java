@@ -378,8 +378,12 @@ public class GUIManager {
         GUIManager gM = getInstance();
         if (!gM.lastComponents.isEmpty()) {
 
+            System.out.println("comp: " + gM.shownComponent);
             if(gM.shownComponent instanceof Disposable) {
-                ((Disposable)gM.shownComponent).doDispose();
+                System.out.println("   disposable");
+                ((Disposable)gM.shownComponent).dispose();
+            } else {
+                System.out.println("   NOT disposable");
             }
 
             // Von der Ansicht entfernen
@@ -413,8 +417,9 @@ public class GUIManager {
      */
     public static void removeLastView() {
         JComponent comp = getInstance().lastComponents.pop();
+        System.out.println("comp: " + comp);
         if(comp instanceof Disposable) {
-            ((Disposable)comp).doDispose();
+            ((Disposable)comp).dispose();
         }
     }
 
@@ -426,7 +431,7 @@ public class GUIManager {
 
         for(JComponent comp : components) {
             if(comp instanceof Disposable) {
-                ((Disposable)comp).doDispose();
+                ((Disposable)comp).dispose();
             }
         }
 

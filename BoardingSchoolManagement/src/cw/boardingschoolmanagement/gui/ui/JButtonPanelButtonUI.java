@@ -36,8 +36,8 @@ public class JButtonPanelButtonUI
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
-    private static Color BORDER = new Color(200,200,200);
-    private static Color FILL = new Color(235,235,235);
+    private static final Color BORDER = new Color(200,200,200);
+    private static final Color FILL = new Color(235,235,235);
 
     public void paint(Graphics g, JComponent c) {
 

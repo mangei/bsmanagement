@@ -70,6 +70,8 @@ public class CWComponentFactory {
     public static final int MAX_TEXTFIELD_LENGTH = 255;
     public static final int MAX_TEXTAREA_LENGTH = 1023;
 
+    public static final Color BORDER_COLOR = new Color(215, 220, 228);
+
     BasicComponentFactory bcf;
 
     private CWComponentFactory() {
@@ -130,7 +132,7 @@ public class CWComponentFactory {
     public static CWJXList createList(ListModel listModel) {
         CWJXList list = new CWJXList(listModel);
 
-        list.setBorder(BorderFactory.createLineBorder(new Color(215, 220, 228)));
+        list.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
 
         return list;
     }
@@ -143,7 +145,7 @@ public class CWComponentFactory {
         CWJXList list = new CWJXList();
         list.setEmptyText(emptyText);
 
-        list.setBorder(BorderFactory.createLineBorder(new Color(215, 220, 228)));
+        list.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
 //        list.setRolloverEnabled(true);
 //        list.setHighlighters(HighlighterFactory.createSimpleStriping(HighlighterFactory.LINE_PRINTER));
 //        list.addHighlighter(HighlighterFactory.createSimpleStriping(Color.BLUE));
@@ -384,7 +386,7 @@ public class CWComponentFactory {
     public static JXTree createTree(TreeModel treeModel) {
         JXTree tree = new JXTree(treeModel);
         tree.setHighlighters(HighlighterFactory.createSimpleStriping());
-        tree.setBorder(BorderFactory.createLineBorder(new Color(215, 220, 228)));
+        tree.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
         return tree;
     }
 

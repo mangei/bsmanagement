@@ -19,12 +19,14 @@ import javax.swing.plaf.basic.BasicPanelUI;
  */
 public class RoundPanelUITest extends BasicPanelUI {
 
-    private Color backgroundColor1 = new Color(240, 240, 240);
-    private Color backgroundColor2 = new Color(214, 219, 191);
-    private Color borderColor = new Color(86, 88, 72);
-    private Color borderColorAlpha1 = new Color(86, 88, 72, 100);
-    private Color borderColorAlpha2 = new Color(86, 88, 72, 50);
-    private Color borderHighlight = new Color(225, 224, 224);
+    private static final Color backgroundColor1 = new Color(240, 240, 240);
+    private static final Color backgroundColor2 = new Color(214, 219, 191);
+    private static final Color borderColor = new Color(86, 88, 72);
+    private static final Color borderColorAlpha1 = new Color(86, 88, 72, 100);
+    private static final Color borderColorAlpha2 = new Color(86, 88, 72, 50);
+    private static final Color borderHighlight = new Color(225, 224, 224);
+    private static final Color COLOR1 = new Color(234, 237, 241);
+    private static final Color COLOR2 = new Color(215, 220, 228);
 
     @Override
     protected void installDefaults(JPanel p) {
@@ -54,14 +56,14 @@ public class RoundPanelUITest extends BasicPanelUI {
 
         // Background
         g2d.setClip(area);
-        GradientPaint vPaint = new GradientPaint(x, y, Color.WHITE, x, y + h, new Color(234, 237, 241));
+        GradientPaint vPaint = new GradientPaint(x, y, Color.WHITE, x, y + h, COLOR1);
         g2d.setColor(backgroundColor1);
         g2d.setPaint(vPaint);
         g2d.fillRect(x, y, w, h);
         g2d.setClip(vOldClip);
 
         // Border
-        g2d.setColor(new Color(215, 220, 228));
+        g2d.setColor(COLOR2);
         g2d.draw(area);
 
 //        GradientPaint vPaint = new GradientPaint(x, y, borderColor, x, y + h, borderHighlight);

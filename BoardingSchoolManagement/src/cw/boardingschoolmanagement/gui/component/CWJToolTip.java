@@ -58,7 +58,7 @@ public class CWJToolTip extends JToolTip {
         return header;
     }
 
-    private final Color lightGrayColor = new Color(234, 237, 241);
+    private static final Color lightGrayColor = new Color(234, 237, 241);
 
     public class CWToolTipUI extends BasicToolTipUI
     {

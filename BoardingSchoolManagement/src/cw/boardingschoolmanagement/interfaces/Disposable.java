@@ -6,6 +6,6 @@ package cw.boardingschoolmanagement.interfaces;
  */
 public interface Disposable {
 
-    public void doDispose();
+    public void dispose();
 
 }

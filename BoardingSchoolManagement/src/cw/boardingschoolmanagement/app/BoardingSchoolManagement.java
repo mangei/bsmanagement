@@ -5,6 +5,7 @@ import cw.boardingschoolmanagement.gui.HomeView;
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
 import cw.boardingschoolmanagement.gui.component.JMenuPanel;
 import java.awt.event.ActionEvent;
+import java.util.logging.Level;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -18,6 +19,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import org.jvnet.substance.SubstanceLookAndFeel;
 import org.jvnet.substance.button.StandardButtonShaper;
 import org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel;
@@ -66,6 +68,20 @@ public class BoardingSchoolManagement {
         ss.start();
         ss.setText("Initialisieren...");
 
+
+//        new Thread(new Runnable() {
+//            public void run() {
+//                while(true) {
+//                    try {
+//                        Runtime.getRuntime().gc();
+//                        Thread.sleep(1000);
+//                    } catch (InterruptedException ex) {
+//                        java.util.logging.Logger.getLogger(BoardingSchoolManagement.class.getName()).log(Level.SEVERE, null, ex);
+//                    }
+//                }
+//            }
+//        }).start();
+
         try {
         ////////////////////////////////////////////////////////////////////
         // Look'n'Feel
@@ -95,6 +111,12 @@ public class BoardingSchoolManagement {
             JDialog.setDefaultLookAndFeelDecorated(true);
             System.setProperty("sun.awt.noerasebackground", "true");
 
+            
+        ////////////////////////////////////////////////////////////////////
+        // Load logging settings
+        ////////////////////////////////////////////////////////////////////
+            ss.setText("Logging wird gestartet...");
+            PropertyConfigurator.configureAndWatch( "log4j.properties", 60*1000 );
 
         ////////////////////////////////////////////////////////////////////
         // Load configuration settings

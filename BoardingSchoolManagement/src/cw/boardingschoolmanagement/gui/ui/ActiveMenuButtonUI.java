@@ -20,10 +20,10 @@ import javax.swing.plaf.basic.BasicLabelUI;
  */
 public class ActiveMenuButtonUI extends BasicLabelUI {
 
-    private final Color COLOR1 = new Color(126, 154, 192);
-    private final Color COLOR2 = new Color(73, 106, 156);
-    private final Color COLOR3 = new Color(69, 101, 152);
-    private final Color COLOR4 = new Color(201, 208, 218);
+    private static final Color COLOR1 = new Color(126, 154, 192);
+    private static final Color COLOR2 = new Color(73, 106, 156);
+    private static final Color COLOR3 = new Color(69, 101, 152);
+    private static final Color COLOR4 = new Color(201, 208, 218);
 
     @Override
     protected void installDefaults(JLabel c) {

@@ -233,6 +233,7 @@ public class JMenuPanel
 
 
     private static final Color LIGHT_VIOLET_COLOR = new Color(201,208,218);
+    private static final Color BLACK_LOW_OPACITY_COLOR =new Color(0, 0, 0, 20);
 
     @Override
     protected void paintComponent(Graphics g) {
@@ -255,7 +256,7 @@ public class JMenuPanel
         super.paintComponent(g);
 
         if(!isEnabled()) {
-            g.setColor(new Color(0, 0, 0, 20));
+            g.setColor(BLACK_LOW_OPACITY_COLOR);
             g.fillRect(0, 0, getWidth(), getHeight());
 
             int abs = 5;
