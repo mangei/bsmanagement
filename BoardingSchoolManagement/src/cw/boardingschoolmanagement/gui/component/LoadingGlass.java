@@ -1,6 +1,5 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import cw.boardingschoolmanagement.gui.*;
 import cw.boardingschoolmanagement.app.*;
 import java.awt.Color;
 import java.awt.Component;
@@ -33,7 +32,11 @@ public class LoadingGlass extends JComponent {
     boolean drawLoadingIcon;
 
     public LoadingGlass(Container contentPane, boolean drawLoadingIcon) {
-        iconImage = CWUtils.loadIcon("cw/boardingschoolmanagement/images/loadingicon.gif");
+
+        if(drawLoadingIcon) {
+            iconImage = CWUtils.loadIcon("cw/boardingschoolmanagement/images/loadingicon.gif");
+        }
+
         text = "";
         setOpaque(false);
 

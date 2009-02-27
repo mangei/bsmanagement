@@ -4,6 +4,7 @@ import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
@@ -31,6 +32,7 @@ import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.Format;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.AbstractButton;
@@ -448,6 +450,48 @@ public class CWComponentFactory {
         if(icon != null) {
             label.setIcon(icon);
         }
+        label.setOpaque(false);
+        return label;
+    }
+
+    public static JLabel createLabelBoolean(final ValueModel valueModel, final String trueString, final String falseString) {
+
+        final ValueModel bufferedValueModel = new ValueHolder();
+
+        if(((Boolean)valueModel.getValue()) == true) {
+            bufferedValueModel.setValue(trueString);
+        } else {
+            bufferedValueModel.setValue(falseString);
+        }
+
+        valueModel.addValueChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(((Boolean)valueModel.getValue()) == true) {
+                    bufferedValueModel.setValue(trueString);
+                } else {
+                    bufferedValueModel.setValue(falseString);
+                }
+            }
+        });
+
+        JLabel label = BasicComponentFactory.createLabel(bufferedValueModel);
+        label.setOpaque(false);
+        return label;
+    }
+
+    public static JLabel createLabelDate(final ValueModel valueModel) {
+
+        final ValueModel bufferedValueModel = new ValueHolder();
+
+        bufferedValueModel.setValue(CalendarUtil.formatDate((Date)valueModel.getValue()));
+
+        valueModel.addValueChangeListener(new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                bufferedValueModel.setValue(CalendarUtil.formatDate((Date)valueModel.getValue()));
+            }
+        });
+
+        JLabel label = BasicComponentFactory.createLabel(bufferedValueModel);
         label.setOpaque(false);
         return label;
     }
