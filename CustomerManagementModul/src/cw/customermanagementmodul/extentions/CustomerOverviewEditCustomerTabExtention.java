@@ -40,4 +40,8 @@ public class CustomerOverviewEditCustomerTabExtention
         view.dispose();
     }
 
+    public int priority() {
+        return -100;
+    }
+
 }

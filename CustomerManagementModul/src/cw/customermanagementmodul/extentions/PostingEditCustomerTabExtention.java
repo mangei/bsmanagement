@@ -45,4 +45,8 @@ public class PostingEditCustomerTabExtention
     public void dispose() {
         view.dispose();
     }
+
+    public int priority() {
+        return 0;
+    }
 }

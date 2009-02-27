@@ -1,9 +1,9 @@
 package cw.customermanagementmodul.extentions;
 
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
+import cw.customermanagementmodul.gui.EditCustomerEditCustomerTabExtentionPresentationModel;
+import cw.customermanagementmodul.gui.EditCustomerEditCustomerTabExtentionView;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
-import cw.customermanagementmodul.gui.GroupEditCustomerTabExtentionPresentationModel;
-import cw.customermanagementmodul.gui.GroupEditCustomerTabExtentionView;
 import java.util.List;
 import javax.swing.JComponent;
 
@@ -11,25 +11,25 @@ import javax.swing.JComponent;
  *
  * @author Manuel Geier
  */
-public class GroupEditCustomerTabExtention
+public class EditCustomerEditCustomerTabExtention
         implements EditCustomerTabExtention {
 
-    private GroupEditCustomerTabExtentionPresentationModel model;
-    private GroupEditCustomerTabExtentionView view;
+    private EditCustomerEditCustomerTabExtentionPresentationModel model;
+    private EditCustomerEditCustomerTabExtentionView view;
     private EditCustomerPresentationModel editCustomerModel;
 
     public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
         this.editCustomerModel = editCustomerModel;
-        model = new GroupEditCustomerTabExtentionPresentationModel(editCustomerModel.getBean(), editCustomerModel.getUnsaved());
+        model = new EditCustomerEditCustomerTabExtentionPresentationModel(editCustomerModel);
     }
     
     public JComponent getView() {
-         view = new GroupEditCustomerTabExtentionView(model);
+         view = new EditCustomerEditCustomerTabExtentionView(model);
          return view.buildPanel();
     }
 
     public void save() {
-        // Not necessary for this Extention
+        model.save();
     }
 
     public List<String> validate() {
@@ -41,7 +41,7 @@ public class GroupEditCustomerTabExtention
     }
 
     public int priority() {
-        return 0;
+        return -90;
     }
 
 }

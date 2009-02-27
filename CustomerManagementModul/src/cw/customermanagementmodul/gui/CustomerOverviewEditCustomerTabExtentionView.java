@@ -44,8 +44,8 @@ public class CustomerOverviewEditCustomerTabExtentionView
 
     private void initComponents() {
 
-        lActive            = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_ACTIVE));
-        lGender            = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_GENDER));
+        lActive            = CWComponentFactory.createLabelBoolean(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_ACTIVE), "Aktiv", "Inaktiv");
+        lGender            = CWComponentFactory.createLabelBoolean(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_GENDER), "Herr", "Frau");
         lTitle             = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_TITLE));
         lForename          = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_FORENAME));
         lForename2         = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_FORENAME2));
@@ -72,31 +72,31 @@ public class CustomerOverviewEditCustomerTabExtentionView
     public JPanel buildPanel() {
         initComponents();
         
-        JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
-//        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(JideScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-//        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(JideScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        JViewPanel mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+        mainPanel.setName("Übersicht");
         
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
 
-        PanelBuilder builder = new PanelBuilder(layout,mainPanel);
+        PanelBuilder builder = new PanelBuilder(layout,mainPanel.getContentPanel());
         
         CellConstraints cc = new CellConstraints();
         builder.addSeparator("Allgemein:",  cc.xyw(1, 1, 8));
         builder.addLabel("Geschlecht:",     cc.xy(1, 3));
         builder.add(lGender,                cc.xy(3, 3));
+        builder.addLabel("Status",          cc.xy(5, 3));
         builder.add(lActive,                cc.xy(7, 3));
         builder.addLabel("Titel:",          cc.xy(1, 5));
-        builder.add(lTitle,                cc.xy(3, 5));
+        builder.add(lTitle,                 cc.xy(3, 5));
         builder.addLabel("Vorname:",        cc.xy(1, 7));
-        builder.add(lForename,             cc.xy(3, 7));
+        builder.add(lForename,              cc.xy(3, 7));
         builder.addLabel("2. Vorname:",     cc.xy(5, 7));
-        builder.add(lForename2,            cc.xy(7, 7));
+        builder.add(lForename2,             cc.xy(7, 7));
         builder.addLabel("Nachname",        cc.xy(1, 9));
-        builder.add(lSurname,              cc.xyw(3, 9, 5));
+        builder.add(lSurname,               cc.xyw(3, 9, 5));
         builder.addLabel("Geburtsdatum:",   cc.xy(1, 11));
-        builder.add(lBirthday,             cc.xy(3, 11));
+        builder.add(lBirthday,              cc.xy(3, 11));
 
         builder.addSeparator("Adresse:",    cc.xyw(1, 13, 8));
         builder.addLabel("Straße:",         cc.xy(1, 15));

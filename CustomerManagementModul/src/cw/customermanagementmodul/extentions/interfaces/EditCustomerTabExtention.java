@@ -1,6 +1,7 @@
 package cw.customermanagementmodul.extentions.interfaces;
 
 import cw.boardingschoolmanagement.extentions.interfaces.Extention;
+import cw.boardingschoolmanagement.interfaces.Priority;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import javax.swing.JComponent;
 import java.util.List;
@@ -9,7 +10,8 @@ import java.util.List;
  *
  * @author Manuel Geier
  */
-public interface EditCustomerTabExtention extends Extention{
+public interface EditCustomerTabExtention
+        extends Extention, Priority{
 
     /**
      * To initialize the PresentationModel
@@ -39,4 +41,5 @@ public interface EditCustomerTabExtention extends Extention{
 
     public void dispose();
 
+    public int priority();
 }
