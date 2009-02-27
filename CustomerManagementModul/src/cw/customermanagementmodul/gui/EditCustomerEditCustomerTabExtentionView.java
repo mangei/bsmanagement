@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.pojo.Guardian;
 import java.awt.event.FocusListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -33,6 +34,8 @@ public class EditCustomerEditCustomerTabExtentionView
     private JTextField tfForename;
     private JTextField tfForename2;
     private JTextField tfSurname;
+    private JTextField tfGuardianForename;
+    private JTextField tfGuardianSurname;
     private JDateChooser dcBirthday;
     private JTextField tfStreet;
     private JTextField tfPostOfficeNumber;
@@ -60,6 +63,9 @@ public class EditCustomerEditCustomerTabExtentionView
         tfSurname           = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_SURNAME), false);
 
         dcBirthday          = CWComponentFactory.createDateChooser(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY));
+
+        tfGuardianForename  = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_FORENAME), false);
+        tfGuardianSurname   = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_SURNAME), false);
         
         tfStreet            = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_STREET), false);
         tfPostOfficeNumber  = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER), false);
@@ -194,7 +200,7 @@ public class EditCustomerEditCustomerTabExtentionView
         
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref",
-                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
+                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
 
         PanelBuilder builder = new PanelBuilder(layout,mainPanel.getContentPanel());
         
@@ -214,32 +220,38 @@ public class EditCustomerEditCustomerTabExtentionView
         builder.addLabel("Geburtsdatum:",   cc.xy(1, 11));
         builder.add(dcBirthday,             cc.xy(3, 11));
 
-        builder.addSeparator("Adresse:",    cc.xyw(1, 13, 8));
-        builder.addLabel("Straße:",         cc.xy(1, 15));
-        builder.add(tfStreet,               cc.xyw(3, 15, 5));
-        builder.addLabel("PLZ:",            cc.xy(1, 17));
-        builder.add(tfPostOfficeNumber,     cc.xy(3, 17));
-        builder.addLabel("Ort:",            cc.xy(5, 17));
-        builder.add(tfCity,                 cc.xy(7, 17));
-        builder.addLabel("Bundesland:",     cc.xy(1, 19));
-        builder.add(tfProvince,             cc.xy(3, 19));
-        builder.addLabel("Staat:",          cc.xy(5, 19));
-        builder.add(tfCountry,              cc.xy(7, 19));
-
-        builder.add(bClearLocationData,     cc.xywh(8, 17, 1, 3, CellConstraints.LEFT, CellConstraints.CENTER));
+        builder.addSeparator("Erziehungsberechtigter:",    cc.xyw(1, 13, 8));
+        builder.addLabel("Vorname:",        cc.xy(1, 15));
+        builder.add(tfGuardianForename,     cc.xy(3, 15));
+        builder.addLabel("Nachname:",       cc.xy(5, 15));
+        builder.add(tfGuardianSurname,      cc.xy(7, 15));
         
-        builder.addSeparator("Kontakt:",    cc.xyw(1, 21, 8));
-        builder.addLabel("Mobiltelefon:",   cc.xy(1, 23));
-        builder.add(tfMobilphone,           cc.xyw(3, 23, 3));
-        builder.addLabel("Festnetztelefon", cc.xy(1, 25));
-        builder.add(tfLandlinephone,        cc.xyw(3, 25, 3));
-        builder.addLabel("Fax:",            cc.xy(1, 27));
-        builder.add(tfFax,                  cc.xyw(3, 27, 3));
-        builder.addLabel("eMail:",          cc.xy(1, 29));
-        builder.add(tfEmail,                cc.xyw(3, 29, 3));
+        builder.addSeparator("Adresse:",    cc.xyw(1, 17, 8));
+        builder.addLabel("Straße:",         cc.xy(1, 19));
+        builder.add(tfStreet,               cc.xyw(3, 19, 5));
+        builder.addLabel("PLZ:",            cc.xy(1, 21));
+        builder.add(tfPostOfficeNumber,     cc.xy(3, 21));
+        builder.addLabel("Ort:",            cc.xy(5, 21));
+        builder.add(tfCity,                 cc.xy(7, 21));
+        builder.addLabel("Bundesland:",     cc.xy(1, 23));
+        builder.add(tfProvince,             cc.xy(3, 23));
+        builder.addLabel("Staat:",          cc.xy(5, 23));
+        builder.add(tfCountry,              cc.xy(7, 23));
 
-        builder.addSeparator("Bemerkung",   cc.xyw(1, 31, 8));
-        builder.add(taComment,              cc.xyw(1, 33, 8));
+        builder.add(bClearLocationData,     cc.xywh(8, 21, 1, 3, CellConstraints.LEFT, CellConstraints.CENTER));
+        
+        builder.addSeparator("Kontakt:",    cc.xyw(1, 25, 8));
+        builder.addLabel("Mobiltelefon:",   cc.xy(1, 27));
+        builder.add(tfMobilphone,           cc.xyw(3, 27, 3));
+        builder.addLabel("Festnetztelefon", cc.xy(1, 29));
+        builder.add(tfLandlinephone,        cc.xyw(3, 29, 3));
+        builder.addLabel("Fax:",            cc.xy(1, 31));
+        builder.add(tfFax,                  cc.xyw(3, 31, 3));
+        builder.addLabel("eMail:",          cc.xy(1, 33));
+        builder.add(tfEmail,                cc.xyw(3, 33, 3));
+
+        builder.addSeparator("Bemerkung",   cc.xyw(1, 35, 8));
+        builder.add(taComment,              cc.xyw(1, 37, 8));
 
         initEvents();
 

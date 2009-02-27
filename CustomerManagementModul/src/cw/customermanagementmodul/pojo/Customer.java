@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import org.hibernate.annotations.Type;
 
@@ -46,6 +47,7 @@ public class Customer
     private String email                = "";
     private Date creationdate;
     private String comment              = "";
+    private Guardian guardian;
     
     private List<Group> groups          = new ArrayList<Group>();
 
@@ -73,6 +75,7 @@ public class Customer
     public final static String PROPERTYNAME_ACTIVE = "active";
     public final static String PROPERTYNAME_GROUPS = "groups";
     public final static String PROPERTYNAME_ACCOUNTINGS = "accountings";
+    public final static String PROPERTYNAME_GUARDIAN = "guardian";
     
     
     public Customer() {
@@ -141,6 +144,8 @@ public class Customer
         buf.append(birthday);
         buf.append(", ");
         buf.append(creationdate);
+        buf.append(", ");
+        buf.append(guardian);
 
         return buf.toString();
     }
@@ -370,6 +375,17 @@ public class Customer
         List<Posting> old = this.accountings;
         this.accountings = accountings;
         firePropertyChange(PROPERTYNAME_ACCOUNTINGS, old, accountings);
+    }
+
+    @OneToOne
+    public Guardian getGuardian() {
+        return guardian;
+    }
+
+    public void setGuardian(Guardian guardian) {
+        Guardian old = this.guardian;
+        this.guardian = guardian;
+        firePropertyChange(PROPERTYNAME_GUARDIAN, old, guardian);
     }
 
 }

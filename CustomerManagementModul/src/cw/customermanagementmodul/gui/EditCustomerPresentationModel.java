@@ -22,7 +22,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.manager.CustomerManager;
+import cw.customermanagementmodul.pojo.Guardian;
 import java.util.Collections;
 import javax.swing.Icon;
 
@@ -41,6 +41,8 @@ public class EditCustomerPresentationModel
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
     private ButtonListenerSupport support;
+
+    private PresentationModel<Guardian> guardianPresentationModel;
 
     private List<EditCustomerTabExtention> editCustomerGUITabExtentions;
 
@@ -62,6 +64,8 @@ public class EditCustomerPresentationModel
 
     public void initModels() {
         unsaved = new ValueHolder();
+
+        guardianPresentationModel = new PresentationModel<Guardian>(getBean().getGuardian());
 
         // Addons initialisieren
         editCustomerGUITabExtentions = getExtentions();
@@ -92,6 +96,9 @@ public class EditCustomerPresentationModel
         getBufferedModel(Customer.PROPERTYNAME_EMAIL).addValueChangeListener(saveListener);
         getBufferedModel(Customer.PROPERTYNAME_COMMENT).addValueChangeListener(saveListener);
         getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).addValueChangeListener(saveListener);
+
+        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_FORENAME).addValueChangeListener(saveListener);
+        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_SURNAME).addValueChangeListener(saveListener);
     }
 
     public void initEventHandling() {
@@ -132,6 +139,10 @@ public class EditCustomerPresentationModel
             getBufferedModel(Customer.PROPERTYNAME_EMAIL).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_COMMENT).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).removeValueChangeListener(saveListener);
+            
+            guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_FORENAME).removeValueChangeListener(saveListener);
+            guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_SURNAME).removeValueChangeListener(saveListener);
+
             saveListener = null;
         }
 
@@ -210,6 +221,10 @@ public class EditCustomerPresentationModel
 
     public HeaderInfo getHeaderInfo() {
         return headerInfo;
+    }
+
+    public PresentationModel<Guardian> getGuardianPresentationModel() {
+        return guardianPresentationModel;
     }
 
     ////////////////////////////////////////////////////////////////////////////

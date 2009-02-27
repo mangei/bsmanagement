@@ -1,16 +1,17 @@
 package cw.customermanagementmodul.gui;
 
+import com.jgoodies.binding.PresentationModel;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.pojo.Guardian;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
 
 /**
@@ -32,7 +33,6 @@ public class EditCustomerEditCustomerTabExtentionPresentationModel
     private List<String> countryList;
     
     private PropertyChangeListener actionButtonListener;
-    private SaveListener saveListener;
 
     public EditCustomerEditCustomerTabExtentionPresentationModel(EditCustomerPresentationModel editCustomerPresentationModel) {
         this.editCustomerPresentationModel = editCustomerPresentationModel;
@@ -42,10 +42,11 @@ public class EditCustomerEditCustomerTabExtentionPresentationModel
     }
 
     public void initModels() {
+
         clearLocationDataAction = new ClearLocationDataAction("");
 
         headerInfo = new HeaderInfo(
-                "Allgemeine Kundeninformationen",
+                "Allgemein",
                 "Hier können sie allgemeine Kundeninformationen eingeben.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
@@ -58,22 +59,6 @@ public class EditCustomerEditCustomerTabExtentionPresentationModel
 //        provinceList            = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_PROVINCE);
 //        countryList             = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_COUNTRY);
 
-        saveListener = new SaveListener();
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_ACTIVE).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_GENDER).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_TITLE).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_FORENAME).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_FORENAME2).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_SURNAME).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_STREET).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_CITY).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_MOBILEPHONE).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_LANDLINEPHONE).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_FAX).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_EMAIL).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_COMMENT).addValueChangeListener(saveListener);
-        editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).addValueChangeListener(saveListener);
     }
 
     public void initEventHandling() {
@@ -84,24 +69,6 @@ public class EditCustomerEditCustomerTabExtentionPresentationModel
             System.out.println("DIS...");
             unsaved.removeValueChangeListener(actionButtonListener);
             actionButtonListener = null;
-        }
-        if(saveListener != null) {
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_ACTIVE).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_GENDER).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_TITLE).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_FORENAME).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_FORENAME2).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_SURNAME).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_STREET).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_CITY).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_MOBILEPHONE).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_LANDLINEPHONE).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_FAX).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_EMAIL).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_COMMENT).removeValueChangeListener(saveListener);
-            editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).removeValueChangeListener(saveListener);
-            saveListener = null;
         }
 
         clearLocationDataAction = null;
@@ -115,20 +82,6 @@ public class EditCustomerEditCustomerTabExtentionPresentationModel
         editCustomerPresentationModel = null;
 
         unsaved = null;
-    }
-
-    /**
-     * Wenn sich ein Document ändert, wird saved auf false gesetzt
-     */
-    public class SaveListener implements PropertyChangeListener {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            updateState();
-        }
-
-        public void updateState() {
-            unsaved.setValue(true);
-        }
     }
 
     public Action getClearLocationDataAction() {
@@ -184,10 +137,6 @@ public class EditCustomerEditCustomerTabExtentionPresentationModel
 
     public boolean save() {
         return true;
-    }
-
-    public ValueModel getUnsaved() {
-        return unsaved;
     }
 
     public void firePostOfficeNumberLostFocus() {

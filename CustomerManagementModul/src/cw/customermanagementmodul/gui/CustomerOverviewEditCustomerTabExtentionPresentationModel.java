@@ -44,8 +44,8 @@ public class CustomerOverviewEditCustomerTabExtentionPresentationModel
 //        }
 
         headerInfo = new HeaderInfo(
-                "Allgemeine Kundeninformationen",
-                "Hier können sie allgemeine Kundeninformationen eingeben.",
+                "Kundenübersicht",
+                "Hier haben Sie alle Informationen für den Kunden im Überblick.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
         );
