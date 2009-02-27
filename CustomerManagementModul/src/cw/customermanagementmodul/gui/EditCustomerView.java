@@ -9,6 +9,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 import java.awt.BorderLayout;
 import java.awt.event.FocusEvent;
 import java.util.List;
@@ -315,6 +316,11 @@ public class EditCustomerView
         bClearLocationData.setAction(null);
         bSave.setAction(null);
         bSaveCancel.setAction(null);
+
+        List<EditCustomerTabExtention> extentions = model.getExtentions();
+        for(EditCustomerTabExtention ex : extentions) {
+            ex.dispose();
+        }
 
         model.dispose();
         model = null;

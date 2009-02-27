@@ -21,7 +21,7 @@ import javax.swing.event.ListDataListener;
  *
  * @author ManuelG
  */
-public class GroupEditCustomerTabExtentionPresentationModel {
+public class EditCustomerGroupTabExtentionPresentationModel {
 
     private Customer customer;
     private ValueModel unsaved;
@@ -32,7 +32,11 @@ public class GroupEditCustomerTabExtentionPresentationModel {
     private Action addGroupAction;
     private Action removeGroupAction;
 
-    public GroupEditCustomerTabExtentionPresentationModel(Customer customer, ValueModel unsaved) {
+    private SaveListener saveListener;
+    private PropertyChangeListener addGroupActionListener;
+    private PropertyChangeListener removeGroupActionListener;
+
+    public EditCustomerGroupTabExtentionPresentationModel(Customer customer, ValueModel unsaved) {
         this.customer = customer;
         this.unsaved = unsaved;
 
@@ -59,25 +63,34 @@ public class GroupEditCustomerTabExtentionPresentationModel {
     }
 
     private void initEventHandling() {
-        selectionCustomerGroups.addValueChangeListener(new PropertyChangeListener() {
+        selectionCustomerGroups.addValueChangeListener(removeGroupActionListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 removeGroupAction.setEnabled(selectionCustomerGroups.hasSelection());
             }
         });
         removeGroupAction.setEnabled(selectionCustomerGroups.hasSelection());
         
-        selectionGroups.addValueChangeListener(new PropertyChangeListener() {
+        selectionGroups.addValueChangeListener(addGroupActionListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 addGroupAction.setEnabled(selectionGroups.hasSelection());
             }
         });
         addGroupAction.setEnabled(selectionGroups.hasSelection());
 
-        SaveListener saveListener = new SaveListener();
+        saveListener = new SaveListener();
         selectionCustomerGroups.addListDataListener(saveListener);
         selectionGroups.addListDataListener(saveListener);
     }
-    
+
+    public void dispose() {
+        if(saveListener != null) {
+            selectionCustomerGroups.removeListDataListener(saveListener);
+            selectionGroups.removeListDataListener(saveListener);
+            saveListener = null;
+        }
+        addGroupActionListener = null;
+        removeGroupActionListener = null;
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     // Action classes

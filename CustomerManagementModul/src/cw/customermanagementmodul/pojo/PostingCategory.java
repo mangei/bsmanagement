@@ -56,7 +56,10 @@ public class PostingCategory
     public boolean equals(Object obj){
         if(obj == null) return false;
         if(!(obj instanceof PostingCategory)) return false;
-        if(this.getId()!=((PostingCategory)obj).getId()){
+        if(this.id == null || ((PostingCategory)obj).id == null) {
+            return false;
+        }
+        if(this.id!=((PostingCategory)obj).id){
             return false;
         }
         return true;

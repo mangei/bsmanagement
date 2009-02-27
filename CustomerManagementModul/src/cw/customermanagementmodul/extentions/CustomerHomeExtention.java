@@ -15,4 +15,8 @@ public class CustomerHomeExtention implements HomeExtention {
         return new CustomerHomeExtentionView(new CustomerHomeExtentionPresentationModel()).buildPanel();
     }
 
+    public void dispose() {
+        
+    }
+
 }

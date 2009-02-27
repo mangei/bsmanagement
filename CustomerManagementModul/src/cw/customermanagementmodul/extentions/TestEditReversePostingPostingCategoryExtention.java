@@ -36,4 +36,8 @@ public class TestEditReversePostingPostingCategoryExtention implements EditRever
         return "test";
     }
 
+    public void dispose() {
+
+    }
+
 }

@@ -86,8 +86,10 @@ public class Customer
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Customer other = (Customer) obj;
-        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
+        if(this.id == null || ((Customer)obj).id == null) {
+            return false;
+        }
+        if(this.id!=((Customer)obj).id){
             return false;
         }
         return true;

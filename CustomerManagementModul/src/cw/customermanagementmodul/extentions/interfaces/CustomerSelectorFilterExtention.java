@@ -16,4 +16,5 @@ public interface CustomerSelectorFilterExtention extends Extention {
     public List<Customer> filter(List<Customer> costumers);
     public String getPosition();
     public JPanel getPanel();
+    public void dispose();
 }

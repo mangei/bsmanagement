@@ -9,6 +9,7 @@ import cw.boardingschoolmanagement.gui.component.CWJXTable;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,6 +22,7 @@ import javax.swing.JComboBox;
  * @author Manuel Geier
  */
 public class PostingManagementView
+        implements Disposable
 {
     private JButton bNew;
     private JButton bReversePosting;
@@ -29,6 +31,7 @@ public class PostingManagementView
 
     private JComboBox cbFilterYear;
     private JComboBox cbFilterMonth;
+    private JComboBox cbFilterPostingCategory;
 
     private CWJXTable tPostings;
 
@@ -50,6 +53,7 @@ public class PostingManagementView
 
         cbFilterYear    = CWComponentFactory.createComboBox(model.getFilterYearSelection());
         cbFilterMonth   = CWComponentFactory.createComboBox(model.getFilterMonthSelection());
+        cbFilterPostingCategory   = CWComponentFactory.createComboBox(model.getFilterPostingCategorySelection());
 
         tPostings = CWComponentFactory.createTable(
                 model.createPostingTableModel(model.getPostingSelection()),
@@ -92,7 +96,7 @@ public class PostingManagementView
         pFilter.setOpaque(false);
 
         FormLayout layout = new FormLayout(
-                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref",
+                "pref, 30, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 30dlu, pref, 4dlu, pref",
                 "pref"
         );
         PanelBuilder builder = new PanelBuilder(layout, pFilter);
@@ -103,6 +107,8 @@ public class PostingManagementView
         builder.add(cbFilterYear, cc.xy(5, 1));
         builder.addLabel("Monat:", cc.xy(7, 1));
         builder.add(cbFilterMonth, cc.xy(9, 1));
+        builder.addLabel("Kategorie:", cc.xy(11, 1));
+        builder.add(cbFilterPostingCategory, cc.xy(13, 1));
 
 
         layout = new FormLayout(
@@ -121,7 +127,17 @@ public class PostingManagementView
         builder.addLabel("Saldo:", cc.xy(10, 5));
         builder.add(lSaldo, cc.xy(12, 5));
 
+        panel.addDisposableListener(this);
+
         return panel;
+    }
+
+    public void dispose() {
+        bNew.setAction(null);
+        bManagePostingCategories.setAction(null);
+        bReversePosting.setAction(null);
+
+        model.dispose();
     }
 
 }

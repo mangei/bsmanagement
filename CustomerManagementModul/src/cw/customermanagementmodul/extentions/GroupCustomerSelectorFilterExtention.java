@@ -24,6 +24,8 @@ public class GroupCustomerSelectorFilterExtention implements CustomerSelectorFil
     private GroupCustomerSelectorFilterExtentionView view;
     private ValueModel change;
 
+    private ListSelectionListener changeListener;
+
     public void init(final ValueModel change) {
         this.change = change;
 
@@ -32,7 +34,7 @@ public class GroupCustomerSelectorFilterExtention implements CustomerSelectorFil
     }
 
     public void initEventHandling() {
-        model.getGroupSelectionModel().addListSelectionListener(new ListSelectionListener() {
+        model.getGroupSelectionModel().addListSelectionListener(changeListener = new ListSelectionListener() {
             public void valueChanged(ListSelectionEvent e) {
                 if(e.getValueIsAdjusting() == false) {
                     change.setValue(true);
@@ -140,4 +142,7 @@ public class GroupCustomerSelectorFilterExtention implements CustomerSelectorFil
         return view.buildPanel();
     }
 
+    public void dispose() {
+        changeListener = null;
+    }
 }

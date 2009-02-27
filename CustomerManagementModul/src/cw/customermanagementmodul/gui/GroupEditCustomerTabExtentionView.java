@@ -8,20 +8,23 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import org.jdesktop.swingx.JXList;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 
 /**
  *
  * @author ManuelG
  */
-public class GroupEditCustomerTabExtentionView {
+public class EditCustomerGroupTabExtentionView
+    implements Disposable
+{
 
-    private GroupEditCustomerTabExtentionPresentationModel model;
+    private EditCustomerGroupTabExtentionPresentationModel model;
     private JXList liCustomerGroups;
     private JXList liGroups;
     private JButton bAdd;
     private JButton bRemove;
 
-    public GroupEditCustomerTabExtentionView(GroupEditCustomerTabExtentionPresentationModel model) {
+    public EditCustomerGroupTabExtentionView(EditCustomerGroupTabExtentionPresentationModel model) {
         this.model = model;
     }
 
@@ -58,6 +61,10 @@ public class GroupEditCustomerTabExtentionView {
         initEventHandling();
 
         return panel;
+    }
+
+    public void dispose() {
+        model.dispose();
     }
 
 }

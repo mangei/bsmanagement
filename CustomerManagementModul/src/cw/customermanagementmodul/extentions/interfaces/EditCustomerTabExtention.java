@@ -37,4 +37,6 @@ public interface EditCustomerTabExtention extends Extention{
      */
     public List<String> validate();
 
+    public void dispose();
+
 }

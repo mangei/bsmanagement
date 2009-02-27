@@ -27,4 +27,6 @@ public interface EditPostingPostingCategoryExtention extends Extention {
 
     public String getKey();
 
+    public void dispose();
+
 }

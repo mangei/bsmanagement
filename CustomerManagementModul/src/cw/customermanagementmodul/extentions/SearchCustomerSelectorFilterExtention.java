@@ -23,6 +23,8 @@ public class SearchCustomerSelectorFilterExtention implements CustomerSelectorFi
     private SearchCustomerSelectorFilterExtentionView view;
     private ValueModel change;
 
+    private PropertyChangeListener changeListener;
+
     public void init(final ValueModel change) {
         this.change = change;
 
@@ -31,7 +33,7 @@ public class SearchCustomerSelectorFilterExtention implements CustomerSelectorFi
     }
 
     public void initEventHandling() {
-        model.getSearchModel().addValueChangeListener(new PropertyChangeListener() {
+        model.getSearchModel().addValueChangeListener(changeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 change.setValue(true);
             }
@@ -139,5 +141,9 @@ public class SearchCustomerSelectorFilterExtention implements CustomerSelectorFi
 
     public JPanel getPanel() {
         return view.buildPanel();
+    }
+
+    public void dispose() {
+        changeListener = null;
     }
 }

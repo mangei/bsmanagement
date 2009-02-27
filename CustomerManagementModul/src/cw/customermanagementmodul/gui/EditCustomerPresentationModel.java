@@ -162,6 +162,16 @@ public class EditCustomerPresentationModel
         saveCancelButtonAction = null;
         clearLocationDataAction = null;
 
+        titleList = null;
+        postOfficeNumberList = null;
+        cityList = null;
+        provinceList = null;
+        countryList = null;
+
+        support = null;
+        editCustomerGUITabExtentions = null;
+        customer = null;
+
         unsaved = null;
         release();
     }

@@ -36,4 +36,8 @@ public class TestEditPostingPostingCategoryExtention implements EditPostingPosti
         return "test";
     }
 
+    public void dispose() {
+        
+    }
+
 }

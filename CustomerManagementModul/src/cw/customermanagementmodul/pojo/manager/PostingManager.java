@@ -70,4 +70,8 @@ public class PostingManager extends AbstractPOJOManager<Posting>
         return HibernateUtil.getEntityManager().createQuery("SELECT DISTINCT str(YEAR(p.postingEntryDate)) FROM Posting p WHERE p.postingEntryDate IS NOT NULL").getResultList();
     }
     
+    public List<String> getYears(Customer customer) {
+        return HibernateUtil.getEntityManager().createQuery("SELECT DISTINCT str(YEAR(p.postingEntryDate)) FROM Posting p WHERE p.customer.id="+customer.getId()+" AND p.postingEntryDate IS NOT NULL").getResultList();
+    }
+
 }

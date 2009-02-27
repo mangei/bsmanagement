@@ -27,4 +27,6 @@ public interface EditReversePostingPostingCategoryExtention extends Extention {
 
     public String getKey();
 
+    public void dispose();
+
 }

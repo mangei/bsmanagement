@@ -26,6 +26,8 @@ import javax.swing.table.TableModel;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.pojo.PostingCategory;
+import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -54,6 +56,12 @@ public class PostingManagementPresentationModel {
     
     private SelectionInList<String> filterYearSelection;
     private SelectionInList<String> filterMonthSelection;
+    private SelectionInList<PostingCategory> filterPostingCategorySelection;
+
+    private SelectionEmptyHandler selectionEmptyListener;
+    private PropertyChangeListener filterYearSelectionListener;
+    private PropertyChangeListener filterMonthSelectionListener;
+    private PropertyChangeListener filterPostingCategorySelectionListener;
 
     public PostingManagementPresentationModel() {
         this(null);
@@ -86,40 +94,36 @@ public class PostingManagementPresentationModel {
         liabilitiesValue = new ValueHolder();
         assetsValue = new ValueHolder();
 
-        List<String> months = new ArrayList<String>();
-        months.add("-");
-        months.add(CalendarUtil.getMonth(Calendar.JANUARY));
-        months.add(CalendarUtil.getMonth(Calendar.FEBRUARY));
-        months.add(CalendarUtil.getMonth(Calendar.MARCH));
-        months.add(CalendarUtil.getMonth(Calendar.APRIL));
-        months.add(CalendarUtil.getMonth(Calendar.MAY));
-        months.add(CalendarUtil.getMonth(Calendar.JUNE));
-        months.add(CalendarUtil.getMonth(Calendar.JULY));
-        months.add(CalendarUtil.getMonth(Calendar.AUGUST));
-        months.add(CalendarUtil.getMonth(Calendar.SEPTEMBER));
-        months.add(CalendarUtil.getMonth(Calendar.OCTOBER));
-        months.add(CalendarUtil.getMonth(Calendar.NOVEMBER));
-        months.add(CalendarUtil.getMonth(Calendar.DECEMBER));
-
-        filterYearSelection = new SelectionInList<String>();
-        filterMonthSelection = new SelectionInList<String>(months);
+        filterMonthSelection = new SelectionInList<String>();
+        loadFilterMonths();
         filterMonthSelection.setSelectionIndex(0);
+        filterYearSelection = new SelectionInList<String>();
         loadFilterYears();
         filterYearSelection.setSelectionIndex(0);
+        filterPostingCategorySelection = new SelectionInList<PostingCategory>();
+        loadFilterPostingCategory();
+        filterPostingCategorySelection.setSelectionIndex(0);
+
     }
 
     private void initEventHandling() {
         postingSelection.addPropertyChangeListener(
                 SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+                selectionEmptyListener = new SelectionEmptyHandler());
 
-        filterYearSelection.addValueChangeListener(new PropertyChangeListener() {
+        filterYearSelection.addValueChangeListener(filterYearSelectionListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 updateFilters();
             }
         });
 
-        filterMonthSelection.addValueChangeListener(new PropertyChangeListener() {
+        filterMonthSelection.addValueChangeListener(filterMonthSelectionListener = new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                updateFilters();
+            }
+        });
+
+        filterPostingCategorySelection.addValueChangeListener(filterPostingCategorySelectionListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 updateFilters();
             }
@@ -128,6 +132,13 @@ public class PostingManagementPresentationModel {
         updateActionEnablement();
         
         updateEvents();
+    }
+
+    void dispose() {
+        selectionEmptyListener = null;
+        filterYearSelectionListener = null;
+        filterMonthSelectionListener = null;
+        filterPostingCategorySelectionListener = null;
     }
 
     public void updateEvents() {
@@ -163,7 +174,7 @@ public class PostingManagementPresentationModel {
             filterYearSelection.fireIntervalRemoved(0, size-1);
         }
 
-        List<String> years = PostingManager.getInstance().getYears();
+        List<String> years = PostingManager.getInstance().getYears(customer);
         years.add(0, "-");
         
         filterYearSelection.getList().addAll(years);
@@ -174,6 +185,35 @@ public class PostingManagementPresentationModel {
         }
 
         filterYearSelection.setSelection(oldSelection);
+    }
+
+    private void loadFilterMonths() {
+        List<String> months = new ArrayList<String>();
+        months.add("-");
+        months.add(CalendarUtil.getMonth(Calendar.JANUARY));
+        months.add(CalendarUtil.getMonth(Calendar.FEBRUARY));
+        months.add(CalendarUtil.getMonth(Calendar.MARCH));
+        months.add(CalendarUtil.getMonth(Calendar.APRIL));
+        months.add(CalendarUtil.getMonth(Calendar.MAY));
+        months.add(CalendarUtil.getMonth(Calendar.JUNE));
+        months.add(CalendarUtil.getMonth(Calendar.JULY));
+        months.add(CalendarUtil.getMonth(Calendar.AUGUST));
+        months.add(CalendarUtil.getMonth(Calendar.SEPTEMBER));
+        months.add(CalendarUtil.getMonth(Calendar.OCTOBER));
+        months.add(CalendarUtil.getMonth(Calendar.NOVEMBER));
+        months.add(CalendarUtil.getMonth(Calendar.DECEMBER));
+
+        filterMonthSelection.setList(months);
+    }
+
+    private void loadFilterPostingCategory() {
+        filterPostingCategorySelection.setList(PostingCategoryManager.getInstance().getAll());
+        PostingCategory c = new PostingCategory("-");
+        c.setId(-1l);
+        filterPostingCategorySelection.getList().add(0, c);
+        c = new PostingCategory("Ohne Kategorie");
+        c.setId(-2l);
+        filterPostingCategorySelection.getList().add(1, c);
     }
 
     public void updateFilters() {
@@ -189,7 +229,9 @@ public class PostingManagementPresentationModel {
         GregorianCalendar calendar = new GregorianCalendar();
         List<Posting> all = PostingManager.getInstance().getAll(customer);
 
-        if((filterYearSelection.getSelectionIndex() == 0 && filterMonthSelection.getSelectionIndex() == 0)) {
+        if((filterYearSelection.getSelectionIndex() == 0 
+                && filterMonthSelection.getSelectionIndex() == 0
+                && filterPostingCategorySelection.getSelectionIndex() == 0)) {
             postingSelection.getList().addAll(all);
         } else {
 
@@ -198,29 +240,52 @@ public class PostingManagementPresentationModel {
                 filterPassed = true;
                 p = all.get(i);
 
-                if(p.getPostingEntryDate() != null) {
-
-                    calendar.setTimeInMillis(p.getPostingEntryDate().getTime());
-
-
-                    if(filterYearSelection.getSelectionIndex() > 0) {
-
-                        String yearStr = filterYearSelection.getSelection();
-                        year = Integer.parseInt(yearStr);
-
-                        if(calendar.get(Calendar.YEAR) != year) {
+                // Check PostingCategory
+                
+                if(filterPostingCategorySelection.getSelectionIndex() != 0) {
+                    System.out.println("XXX: " + filterPostingCategorySelection.getSelectionIndex());
+                    if(filterPostingCategorySelection.getSelectionIndex() == 1) {
+                        System.out.println("ZZZ: " + p.getPostingCategory());
+                        if(p.getPostingCategory() != null) {
+                            filterPassed = false;
+                        }
+                    } else {
+                        if(p.getPostingCategory() == null || !p.getPostingCategory().equals(filterPostingCategorySelection.getSelection())) {
                             filterPassed = false;
                         }
                     }
-                    if(filterPassed && filterMonthSelection.getSelectionIndex() > 0) {
-                        int monthIdx = filterMonthSelection.getSelectionIndex() - 1;
+                }
 
-                        if(calendar.get(Calendar.MONTH) != monthIdx) {
-                            filterPassed = false;
+                System.out.println("passed: " + filterPassed);
+
+                // Check Date
+                if(filterPassed
+                        && ( filterYearSelection.getSelectionIndex() != 0
+                        ||  filterMonthSelection.getSelectionIndex() != 0 ) ) {
+
+                    if(p.getPostingEntryDate() != null) {
+
+                        calendar.setTimeInMillis(p.getPostingEntryDate().getTime());
+
+                        if(filterYearSelection.getSelectionIndex() > 0) {
+
+                            String yearStr = filterYearSelection.getSelection();
+                            year = Integer.parseInt(yearStr);
+
+                            if(calendar.get(Calendar.YEAR) != year) {
+                                filterPassed = false;
+                            }
                         }
+                        if(filterPassed && filterMonthSelection.getSelectionIndex() > 0) {
+                            int monthIdx = filterMonthSelection.getSelectionIndex() - 1;
+
+                            if(calendar.get(Calendar.MONTH) != monthIdx) {
+                                filterPassed = false;
+                            }
+                        }
+                    } else {
+                        filterPassed = false;
                     }
-                } else {
-                    filterPassed = false;
                 }
 
                 if(filterPassed) {
@@ -455,6 +520,10 @@ public class PostingManagementPresentationModel {
 
     public SelectionInList<String> getFilterYearSelection() {
         return filterYearSelection;
+    }
+
+    public SelectionInList<PostingCategory> getFilterPostingCategorySelection() {
+        return filterPostingCategorySelection;
     }
 
     public HeaderInfo getHeaderInfo() {
