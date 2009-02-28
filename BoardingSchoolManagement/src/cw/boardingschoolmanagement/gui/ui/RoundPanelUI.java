@@ -17,7 +17,7 @@ import javax.swing.plaf.basic.BasicPanelUI;
  *
  * @author ManuelG
  */
-public class RoundPanelUITest extends BasicPanelUI {
+public class RoundPanelUI extends BasicPanelUI {
 
     private static final Color backgroundColor1 = new Color(240, 240, 240);
     private static final Color backgroundColor2 = new Color(214, 219, 191);
