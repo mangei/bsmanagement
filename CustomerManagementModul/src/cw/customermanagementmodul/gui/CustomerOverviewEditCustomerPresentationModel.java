@@ -6,27 +6,27 @@ import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.ModulManager;
+import cw.customermanagementmodul.extentions.interfaces.CustomerOverviewEditCustomerExtention;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JComponent;
-import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 
 /**
  *
  * @author CreativeWorkers.at
  */
-public class CustomerOverviewEditCustomerTabExtentionPresentationModel
+public class CustomerOverviewEditCustomerPresentationModel
         implements Disposable {
 
     private EditCustomerPresentationModel editCustomerPresentationModel;
     private ValueModel unsaved;
     private HeaderInfo headerInfo;
 
-    private List<EditCustomerTabExtention> customerOverviewEditCustomerGUITabExtentions;
+    private List<CustomerOverviewEditCustomerExtention> customerOverviewEditCustomerExtentions;
 
-    public CustomerOverviewEditCustomerTabExtentionPresentationModel(EditCustomerPresentationModel editCustomerPresentationModel) {
+    public CustomerOverviewEditCustomerPresentationModel(EditCustomerPresentationModel editCustomerPresentationModel) {
         this.editCustomerPresentationModel = editCustomerPresentationModel;
 
         initModels();
@@ -37,11 +37,10 @@ public class CustomerOverviewEditCustomerTabExtentionPresentationModel
         unsaved = new ValueHolder();
 
         // Addons initialisieren
-        customerOverviewEditCustomerGUITabExtentions = getExtentions();
-//        for (EditCustomerTabExtention extention : editCustomerGUITabExtentions) {
-//            System.out.println("Extention: " + extention.toString());
-//            extention.initPresentationModel(this);
-//        }
+        customerOverviewEditCustomerExtentions = getExtentions();
+        for (CustomerOverviewEditCustomerExtention extention : customerOverviewEditCustomerExtentions) {
+            extention.initPresentationModel(this);
+        }
 
         headerInfo = new HeaderInfo(
                 "Kundenübersicht",
@@ -56,7 +55,7 @@ public class CustomerOverviewEditCustomerTabExtentionPresentationModel
     }
 
     public void dispose() {
-        customerOverviewEditCustomerGUITabExtentions = null;
+        customerOverviewEditCustomerExtentions = null;
         unsaved = null;
     }
 
@@ -76,30 +75,18 @@ public class CustomerOverviewEditCustomerTabExtentionPresentationModel
 
     public List<JComponent> getExtentionComponents() {
         List<JComponent> comps = new ArrayList<JComponent>();
-        for (EditCustomerTabExtention ex : customerOverviewEditCustomerGUITabExtentions) {
+        for (CustomerOverviewEditCustomerExtention ex : customerOverviewEditCustomerExtentions) {
             comps.add((ex).getView());
         }
         return comps;
     }
 
-    public List<EditCustomerTabExtention> getExtentions() {
-        if(customerOverviewEditCustomerGUITabExtentions == null) {
-            customerOverviewEditCustomerGUITabExtentions = (List<EditCustomerTabExtention>) ModulManager.getExtentions(EditCustomerTabExtention.class);
+    public List<CustomerOverviewEditCustomerExtention> getExtentions() {
+        if(customerOverviewEditCustomerExtentions == null) {
+            customerOverviewEditCustomerExtentions = (List<CustomerOverviewEditCustomerExtention>) ModulManager.getExtentions(CustomerOverviewEditCustomerExtention.class);
         }
-        return customerOverviewEditCustomerGUITabExtentions;
+        return customerOverviewEditCustomerExtentions;
     }
-
-    public EditCustomerTabExtention getExtention(EditCustomerTabExtention extention) {
-
-        for(EditCustomerTabExtention ex : customerOverviewEditCustomerGUITabExtentions) {
-            if(extention.getClass().isInstance(ex)) {
-                return ex;
-            }
-        }
-
-        return null;
-    }
-
 
     public EditCustomerPresentationModel getEditCustomerPresentationModel() {
         return editCustomerPresentationModel;

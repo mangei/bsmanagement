@@ -18,7 +18,7 @@ import cw.customermanagementmodul.pojo.manager.CustomerManager;
  *
  * @author CreativeWorkers.at
  */
-public class EditCustomerEditCustomerTabExtentionPresentationModel
+public class EditCustomerEditCustomerPresentationModel
         implements Disposable {
 
     private EditCustomerPresentationModel editCustomerPresentationModel;
@@ -34,7 +34,7 @@ public class EditCustomerEditCustomerTabExtentionPresentationModel
     
     private PropertyChangeListener actionButtonListener;
 
-    public EditCustomerEditCustomerTabExtentionPresentationModel(EditCustomerPresentationModel editCustomerPresentationModel) {
+    public EditCustomerEditCustomerPresentationModel(EditCustomerPresentationModel editCustomerPresentationModel) {
         this.editCustomerPresentationModel = editCustomerPresentationModel;
 
         initModels();

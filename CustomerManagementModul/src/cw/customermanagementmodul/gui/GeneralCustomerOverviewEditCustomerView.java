@@ -4,8 +4,7 @@ import cw.boardingschoolmanagement.app.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.ui.RoundPanelUI;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JPanel;
 import cw.customermanagementmodul.pojo.Customer;
@@ -16,10 +15,10 @@ import javax.swing.JLabel;
  *
  * @author CreativeWorkers.at
  */
-public class CustomerOverviewEditCustomerTabExtentionView
+public class GeneralCustomerOverviewEditCustomerView
     implements Disposable {
 
-    private CustomerOverviewEditCustomerTabExtentionPresentationModel model;
+    private GeneralCustomerOverviewEditCustomerPresentationModel model;
 
     private JLabel lActive;
     private JLabel lGender;
@@ -41,7 +40,7 @@ public class CustomerOverviewEditCustomerTabExtentionView
     private JLabel lEmail;
     private JLabel lComment;
 
-    public CustomerOverviewEditCustomerTabExtentionView(CustomerOverviewEditCustomerTabExtentionPresentationModel model) {
+    public GeneralCustomerOverviewEditCustomerView(GeneralCustomerOverviewEditCustomerPresentationModel model) {
         this.model = model;
     }
 
@@ -78,14 +77,14 @@ public class CustomerOverviewEditCustomerTabExtentionView
     public JPanel buildPanel() {
         initComponents();
         
-        JViewPanel mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
-        mainPanel.setName("Übersicht");
+        JPanel mainPanel = CWComponentFactory.createPanel();
+//        mainPanel.setUI(new RoundPanelUI());
         
         FormLayout layout = new FormLayout(
-                "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref",
+                "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref:grow",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
 
-        PanelBuilder builder = new PanelBuilder(layout,mainPanel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout,mainPanel);
 
         CellConstraints cc = new CellConstraints();
         builder.addSeparator("Allgemein:",  cc.xyw(1, 1, 8));
@@ -137,7 +136,7 @@ public class CustomerOverviewEditCustomerTabExtentionView
 
         initEvents();
 
-        mainPanel.addDisposableListener(this);
+//        mainPanel.addDisposableListener(this);
 
         return mainPanel;
     }

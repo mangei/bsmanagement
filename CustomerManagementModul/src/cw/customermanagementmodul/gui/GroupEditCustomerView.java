@@ -14,17 +14,17 @@ import cw.boardingschoolmanagement.interfaces.Disposable;
  *
  * @author ManuelG
  */
-public class GroupEditCustomerTabExtentionView
+public class GroupEditCustomerView
     implements Disposable
 {
 
-    private GroupEditCustomerTabExtentionPresentationModel model;
+    private GroupEditCustomerPresentationModel model;
     private JXList liCustomerGroups;
     private JXList liGroups;
     private JButton bAdd;
     private JButton bRemove;
 
-    public GroupEditCustomerTabExtentionView(GroupEditCustomerTabExtentionPresentationModel model) {
+    public GroupEditCustomerView(GroupEditCustomerPresentationModel model) {
         this.model = model;
     }
 

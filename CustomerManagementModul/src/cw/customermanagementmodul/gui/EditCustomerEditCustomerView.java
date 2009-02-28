@@ -23,10 +23,10 @@ import javax.swing.event.DocumentListener;
  *
  * @author CreativeWorkers.at
  */
-public class EditCustomerEditCustomerTabExtentionView
+public class EditCustomerEditCustomerView
     implements Disposable {
 
-    private EditCustomerEditCustomerTabExtentionPresentationModel model;
+    private EditCustomerEditCustomerPresentationModel model;
 
     private JPanel pActive;
     private JPanel pGender;
@@ -49,7 +49,7 @@ public class EditCustomerEditCustomerTabExtentionView
     private JTextArea taComment;
     private JButton bClearLocationData;
 
-    public EditCustomerEditCustomerTabExtentionView(EditCustomerEditCustomerTabExtentionPresentationModel model) {
+    public EditCustomerEditCustomerView(EditCustomerEditCustomerPresentationModel model) {
         this.model = model;
     }
 

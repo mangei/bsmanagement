@@ -21,7 +21,7 @@ import javax.swing.event.ListDataListener;
  *
  * @author ManuelG
  */
-public class GroupEditCustomerTabExtentionPresentationModel {
+public class GroupEditCustomerPresentationModel {
 
     private Customer customer;
     private ValueModel unsaved;
@@ -36,7 +36,7 @@ public class GroupEditCustomerTabExtentionPresentationModel {
     private PropertyChangeListener addGroupActionListener;
     private PropertyChangeListener removeGroupActionListener;
 
-    public GroupEditCustomerTabExtentionPresentationModel(Customer customer, ValueModel unsaved) {
+    public GroupEditCustomerPresentationModel(Customer customer, ValueModel unsaved) {
         this.customer = customer;
         this.unsaved = unsaved;
 

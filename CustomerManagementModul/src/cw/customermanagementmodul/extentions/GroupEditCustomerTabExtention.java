@@ -2,8 +2,8 @@ package cw.customermanagementmodul.extentions;
 
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
-import cw.customermanagementmodul.gui.GroupEditCustomerTabExtentionPresentationModel;
-import cw.customermanagementmodul.gui.GroupEditCustomerTabExtentionView;
+import cw.customermanagementmodul.gui.GroupEditCustomerPresentationModel;
+import cw.customermanagementmodul.gui.GroupEditCustomerView;
 import java.util.List;
 import javax.swing.JComponent;
 
@@ -14,17 +14,17 @@ import javax.swing.JComponent;
 public class GroupEditCustomerTabExtention
         implements EditCustomerTabExtention {
 
-    private GroupEditCustomerTabExtentionPresentationModel model;
-    private GroupEditCustomerTabExtentionView view;
+    private GroupEditCustomerPresentationModel model;
+    private GroupEditCustomerView view;
     private EditCustomerPresentationModel editCustomerModel;
 
     public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
         this.editCustomerModel = editCustomerModel;
-        model = new GroupEditCustomerTabExtentionPresentationModel(editCustomerModel.getBean(), editCustomerModel.getUnsaved());
+        model = new GroupEditCustomerPresentationModel(editCustomerModel.getBean(), editCustomerModel.getUnsaved());
     }
     
     public JComponent getView() {
-         view = new GroupEditCustomerTabExtentionView(model);
+         view = new GroupEditCustomerView(model);
          return view.buildPanel();
     }
 
