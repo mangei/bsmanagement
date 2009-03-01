@@ -9,7 +9,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.roommanagementmodul.pojo.Bereich;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author Dominik
  */
-public class EditZimmerView {
+public class EditZimmerView implements Disposable{
 
     private EditZimmerPresentationModel model;
     public JLabel lZimmerName;
@@ -111,6 +111,11 @@ public class EditZimmerView {
 
         mainPanel.getContentPanel().add(panel, BorderLayout.CENTER);
 
+        mainPanel.addDisposableListener(this);
         return mainPanel;
+    }
+
+    public void dispose(){
+        model.release();
     }
 }

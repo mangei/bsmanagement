@@ -42,6 +42,7 @@ public class ZimmerPresentationModel {
     private Action editAction;
     private Action deleteAction;
     private Action backAction;
+    private Action printAction;
     private String headerText;
     private ButtonListenerSupport support;
     private SelectionInList<Zimmer> zimmerSelection;
@@ -70,6 +71,7 @@ public class ZimmerPresentationModel {
         newAction = new NewAction();
         editAction = new EditAction();
         deleteAction = new DeleteAction();
+        setPrintAction(new PrintAction());
         setBackAction(new BackAction());
 
         zimmerSelection = new SelectionInList<Zimmer>(zimmerManager.getAll());
@@ -148,6 +150,20 @@ public class ZimmerPresentationModel {
         this.headerInfo = headerInfo;
     }
 
+    /**
+     * @return the printAction
+     */
+    public Action getPrintAction() {
+        return printAction;
+    }
+
+    /**
+     * @param printAction the printAction to set
+     */
+    public void setPrintAction(Action printAction) {
+        this.printAction = printAction;
+    }
+
     private class NewAction
             extends AbstractAction {
 
@@ -178,6 +194,7 @@ public class ZimmerPresentationModel {
 
         }
     }
+
 
     private class EditAction
             extends AbstractAction {
@@ -232,8 +249,35 @@ public class ZimmerPresentationModel {
             bereichModel.getTreeModel().setRoot(bereichModel.getRootTree());
             bereichModel.initTree(bereichModel.getRootTree());
             bereichModel.getTreeModel().reload();
-            System.out.println("back");
             GUIManager.changeToLastView();  // Zur Übersicht wechseln
+
+
+        }
+    }
+
+        private class PrintAction
+            extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/printer.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+
+            final PrintZimmerPresentationModel model = new PrintZimmerPresentationModel(zimmerSelection.getList(), new HeaderInfo("Zimmer Liste drucken","Hier können Sie die aktuelle Zimmer Liste ausdrucken oder speichern."));
+            final PrintZimmerView printView = new PrintZimmerView(model);
+            model.addButtonListener(new ButtonListener() {
+
+                public void buttonPressed(ButtonEvent evt) {
+                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    }
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        model.removeButtonListener(this);
+                        GUIManager.changeToLastView();
+                    }
+                }
+            });
+            GUIManager.changeView(printView.buildPanel(), true);
 
 
         }

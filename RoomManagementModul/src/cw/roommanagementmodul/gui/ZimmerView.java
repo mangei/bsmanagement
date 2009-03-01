@@ -28,6 +28,7 @@ public class ZimmerView {
     private JButton bEdit;
     private JButton bDelete;
     private JButton bBack;
+    private JButton bPrint;
     private JXTable tZimmer;
 
     public ZimmerView(ZimmerPresentationModel m) {
@@ -46,6 +47,8 @@ public class ZimmerView {
 
         bBack = new JButton(model.getBackAction());
         bBack.setText("Zurück");
+        bPrint= new JButton(model.getPrintAction());
+        bPrint.setText("Drucken");
 
 
          String zimmerTableStateName = "cw.roommanagementmodul.ZimmerView.zimmerTableState";
@@ -70,6 +73,7 @@ public class ZimmerView {
         panel.getButtonPanel().add(bNew);
         panel.getButtonPanel().add(bEdit);
         panel.getButtonPanel().add(bDelete);
+        panel.getButtonPanel().add(bPrint);
         panel.getButtonPanel().add(bBack);
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
