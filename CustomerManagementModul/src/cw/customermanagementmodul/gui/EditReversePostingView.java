@@ -6,16 +6,15 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.app.CalendarUtil;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import cw.customermanagementmodul.pojo.Posting;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.Date;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
@@ -24,10 +23,14 @@ import javax.swing.JLabel;
  *
  * @author CreativeWorkers.at
  */
-public class EditReversePostingView {
+public class EditReversePostingView
+    implements Disposable
+{
 
     private EditReversePostingPresentationModel model;
-    
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JLabel lPostingDescription;
     private JLabel lPostingCategory;
     private JLabel lPostingAmount;
@@ -40,12 +43,13 @@ public class EditReversePostingView {
     private JDateChooser dcReversePostingEntryDate;
     private JLabel lReversePostingLiabilitiesAssets;
     private JLabel lLocked;
+    
     private JPanel pPostingCategoryExtention;
-    private JPanel pMain;
     
     private JButton bCancel;
     private JButton bSaveCancel;
-    
+
+    private PropertyChangeListener postingCategoryChangeListener;
 
     public EditReversePostingView(EditReversePostingPresentationModel model) {
         this.model = model;
@@ -55,9 +59,8 @@ public class EditReversePostingView {
         lPostingDescription    = CWComponentFactory.createLabel(model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION));
         lPostingCategory       = CWComponentFactory.createLabel(model.getPostingCategorySelection().getSelection() != null ? model.getPostingCategorySelection().getSelection().getName() : "");
         lPostingAmount         = CWComponentFactory.createLabel(Double.toString(model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_AMOUNT).doubleValue()));
-        Date postingEntryDate = (Date)model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).getValue();
-        lPostingEntryDate      = CWComponentFactory.createLabel(CalendarUtil.formatDate(postingEntryDate));
-        lPostingLiabilitiesAssets = CWComponentFactory.createLabel(model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).booleanValue() == true ? "Soll" : "Haben");
+        lPostingEntryDate      = CWComponentFactory.createLabelDate(model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE));
+        lPostingLiabilitiesAssets = CWComponentFactory.createLabelBoolean(model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS), "Soll", "Haben");
         
         tfReversePostingDescription    = CWComponentFactory.createTextField(model.getReversePostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION),false);
         cbReversePostingCategory       = CWComponentFactory.createComboBox(model.getPostingCategorySelection());
@@ -77,15 +80,22 @@ public class EditReversePostingView {
         bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
 
-//        lPostingDescription.setEnabled(false);
-//        lPostingCategory.setEnabled(false);
-//        lPostingAmount.setEnabled(false);
-//        lPostingEntryDate.setEnabled(false);
-//        lPostingLiabilitiesAssets.setEnabled(false);
-
-//        lReversePostingAmount.setEnabled(false);
-//        lReversePostingLiabilitiesAssets.setEnabled(false);
         cbReversePostingCategory.setEnabled(false);
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(lPostingDescription)
+                .addComponent(lPostingCategory)
+                .addComponent(lPostingAmount)
+                .addComponent(lPostingEntryDate)
+                .addComponent(lPostingLiabilitiesAssets)
+                .addComponent(tfReversePostingDescription)
+                .addComponent(cbReversePostingCategory)
+                .addComponent(lReversePostingAmount)
+                .addComponent(dcReversePostingEntryDate)
+                .addComponent(lReversePostingLiabilitiesAssets)
+                .addComponent(lLocked)
+                .addComponent(bSaveCancel)
+                .addComponent(bCancel);
 
         pPostingCategoryExtention = CWComponentFactory.createPanel();
         FormLayout pPostingCategoryExtentionLayout = new FormLayout(
@@ -96,7 +106,7 @@ public class EditReversePostingView {
     }
 
     private void initEventHandling() {
-        model.getPostingCategorySelection().addValueChangeListener(new PropertyChangeListener() {
+        model.getPostingCategorySelection().addValueChangeListener(postingCategoryChangeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 // Change the extention component
                 changePostingCategoryExtentionComponent();
@@ -112,19 +122,17 @@ public class EditReversePostingView {
             CellConstraints cc = new CellConstraints();
             pPostingCategoryExtention.add(comp, cc.xy(1, 2));
         }
-        if(pMain != null) {
-            pMain.validate();
+        if(panel != null) {
+            panel.validate();
         }
     }
     
     public JPanel buildPanel() {
         initComponents();
         
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
+        panel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = panel.getButtonPanel();
 
-        pMain = panel;
-        
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
@@ -167,8 +175,20 @@ public class EditReversePostingView {
         builder.addLabel("Eingangsdatum:",      cc.xy(2, 24));
         builder.add(dcReversePostingEntryDate,  cc.xy(4, 24));
 
+        panel.addDisposableListener(this);
+
         initEventHandling();
 
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        model.getPostingCategorySelection().removeValueChangeListener(postingCategoryChangeListener);
+
+        componentContainer.dispose();
+
+        model.dispose();
     }
 }

@@ -4,7 +4,6 @@ import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.interfaces.Disposable;
-import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 import java.awt.BorderLayout;
 import java.util.List;
 import javax.swing.JButton;
@@ -24,10 +23,13 @@ public class EditCustomerView
 
     private EditCustomerPresentationModel model;
 
+    private CWComponentFactory.CWComponentContainer componentContainer;
     private JTabbedPane tabs;
     private JButton bSave;
     private JButton bCancel;
     private JButton bSaveCancel;
+
+    private PropertyChangeListener tabsEnableListener;
 
     public EditCustomerView(EditCustomerPresentationModel model) {
         this.model = model;
@@ -37,6 +39,11 @@ public class EditCustomerView
         bSave               = CWComponentFactory.createButton(model.getSaveButtonAction());
         bCancel             = CWComponentFactory.createButton(model.getCancelButtonAction());
         bSaveCancel         = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(bSave)
+                .addComponent(bCancel)
+                .addComponent(bSaveCancel);
         
         tabs = new JTabbedPane();
     }
@@ -46,10 +53,9 @@ public class EditCustomerView
         // because the id is null
         // If the customer is saved, then enable the tabs
         if(model.getBean().getId() == null) {
-            model.getBufferedModel(Customer.PROPERTYNAME_ID).addPropertyChangeListener(new PropertyChangeListener() {
+            model.getBufferedModel(Customer.PROPERTYNAME_ID).addPropertyChangeListener(tabsEnableListener = new PropertyChangeListener() {
                 public void propertyChange(PropertyChangeEvent evt) {
                     setTabsEnabled(true);
-                    model.getBufferedModel(Customer.PROPERTYNAME_ID).removePropertyChangeListener(this);
                 }
             });
             setTabsEnabled(false);
@@ -87,20 +93,15 @@ public class EditCustomerView
 
         mainPanel.addDisposableListener(this);
 
+//        componentContainer.addComponent(mainPanel);
         return mainPanel;
     }
 
     public void dispose() {
-        bCancel.setAction(null);
-        bSave.setAction(null);
-        bSaveCancel.setAction(null);
+        model.getBufferedModel(Customer.PROPERTYNAME_ID).removePropertyChangeListener(tabsEnableListener);
 
-        List<EditCustomerTabExtention> extentions = model.getExtentions();
-        for(EditCustomerTabExtention ex : extentions) {
-            ex.dispose();
-        }
+        componentContainer.dispose();
 
         model.dispose();
-        model = null;
     }
 }

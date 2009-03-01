@@ -19,6 +19,9 @@ public class GroupEditCustomerView
 {
 
     private GroupEditCustomerPresentationModel model;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JXList liCustomerGroups;
     private JXList liGroups;
     private JButton bAdd;
@@ -33,16 +36,22 @@ public class GroupEditCustomerView
         liGroups            = CWComponentFactory.createList(model.getSelectionGroups(), "Keine Gruppen vorhanden");
         bAdd                = CWComponentFactory.createButton(model.getAddGroupAction());
         bRemove             = CWComponentFactory.createButton(model.getRemoveGroupAction());
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(bAdd)
+                .addComponent(bRemove)
+                .addComponent(liCustomerGroups)
+                .addComponent(liGroups);
     }
 
     private void initEventHandling() {
-        
+        // Nothing to do
     }
 
     public JPanel buildPanel() {
         initComponents();
 
-        JViewPanel panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         panel.setName("Gruppen");
 
         FormLayout layout = new FormLayout(
@@ -58,12 +67,18 @@ public class GroupEditCustomerView
         builder.add(bRemove,            cc.xy(3, 4));
         builder.add(CWComponentFactory.createViewPanel("Andere Gruppen", liGroups), cc.xywh(5, 1, 1, 5));
 
+        panel.addDisposableListener(this);
+
         initEventHandling();
 
         return panel;
     }
 
     public void dispose() {
+        panel.removeDisposableListener(this);
+
+        componentContainer.dispose();
+
         model.dispose();
     }
 

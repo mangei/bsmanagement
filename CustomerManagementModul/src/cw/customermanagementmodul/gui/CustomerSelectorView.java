@@ -5,10 +5,12 @@ import cw.boardingschoolmanagement.app.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.gui.component.CWJPanel;
 import cw.boardingschoolmanagement.gui.component.CWJXTable;
 import cw.boardingschoolmanagement.gui.component.JNotNullLabel;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.customermanagementmodul.gui.renderer.ActiveCustomerTableCellRenderer;
 import cw.customermanagementmodul.gui.renderer.GenderTableCellRenderer;
 import java.awt.Color;
@@ -24,9 +26,12 @@ import java.awt.BorderLayout;
 /**
  * @author CreativeWorkers.at
  */
-public class CustomerSelectorView {
+public class CustomerSelectorView
+    implements Disposable
+{
 
     private CustomerSelectorPresentationModel model;
+    private CWJPanel panel;
     private CWJXTable tCustomers;
 
     public CustomerSelectorView(CustomerSelectorPresentationModel model) {
@@ -57,7 +62,7 @@ public class CustomerSelectorView {
         initComponents();
         initEventHandling();
 
-        JPanel panel = new JPanel(new BorderLayout());
+        panel = CWComponentFactory.createPanel(new BorderLayout());
         panel.setOpaque(false);
         JPanel pCenter = new JPanel();
         pCenter.setOpaque(false);
@@ -85,7 +90,14 @@ public class CustomerSelectorView {
         builder.addLabel("Kunden:", cc.xy(1, 1));
         builder.add(CWComponentFactory.createScrollPane(tCustomers), cc.xy(1, 3));
 
+        panel.addDisposableListener(this);
+
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+        model.dispose();
     }
 
     private class CustomerTableCellRenderer extends JPanel implements TableCellRenderer {

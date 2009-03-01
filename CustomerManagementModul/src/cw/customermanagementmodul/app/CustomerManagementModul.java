@@ -106,26 +106,17 @@ public class CustomerManagementModul
             {
                 putValue(Action.SHORT_DESCRIPTION, "Buchungsübersicht");
             }
-            private PostingOverviewPresentationModel model;
-            private PostingOverviewView view;
-            private JPanel panel;
 
             public void actionPerformed(ActionEvent e) {
-                if (panel == null) {
+                GUIManager.setLoadingScreenText("Buchungen werden geladen...");
+                GUIManager.setLoadingScreenVisible(true);
 
-                    GUIManager.setLoadingScreenText("Buchungen werden geladen...");
-                    GUIManager.setLoadingScreenVisible(true);
+                PostingOverviewPresentationModel model = new PostingOverviewPresentationModel();
+                PostingOverviewView view = new PostingOverviewView(model);
+                JPanel panel = view.buildPanel();
 
-                    model = new PostingOverviewPresentationModel();
-                    view = new PostingOverviewView(model);
-                    panel = view.buildPanel();
-
-                    GUIManager.changeView(panel);
-                    GUIManager.setLoadingScreenVisible(false);
-                    
-                } else {
-                    GUIManager.changeView(panel);
-                }
+                GUIManager.changeView(panel);
+                GUIManager.setLoadingScreenVisible(false);
             }
         }), "posting");
         sideMenu.addItem(new JButton(new AbstractAction(
@@ -134,26 +125,17 @@ public class CustomerManagementModul
             {
                 putValue(Action.SHORT_DESCRIPTION, "Buchungskategorien verwalten");
             }
-            private PostingCategoryManagementPresentationModel model;
-            private PostingCategoryManagementView view;
-            private JPanel panel;
 
             public void actionPerformed(ActionEvent e) {
-                if (panel == null) {
+                GUIManager.setLoadingScreenText("Kategorien werden geladen...");
+                GUIManager.setLoadingScreenVisible(true);
 
-                    GUIManager.setLoadingScreenText("Kategorien werden geladen...");
-                    GUIManager.setLoadingScreenVisible(true);
+                PostingCategoryManagementPresentationModel model = new PostingCategoryManagementPresentationModel();
+                PostingCategoryManagementView view = new PostingCategoryManagementView(model);
+                JPanel panel = view.buildPanel();
 
-                    model = new PostingCategoryManagementPresentationModel();
-                    view = new PostingCategoryManagementView(model);
-                    panel = view.buildPanel();
-
-                    GUIManager.changeView(panel);
-                    GUIManager.setLoadingScreenVisible(false);
-
-                } else {
-                    GUIManager.changeView(panel);
-                }
+                GUIManager.changeView(panel);
+                GUIManager.setLoadingScreenVisible(false);
             }
         }), "posting");
 

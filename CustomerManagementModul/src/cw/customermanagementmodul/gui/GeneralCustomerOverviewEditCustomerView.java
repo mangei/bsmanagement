@@ -4,7 +4,7 @@ import cw.boardingschoolmanagement.app.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.ui.RoundPanelUI;
+import cw.boardingschoolmanagement.gui.component.CWJPanel;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JPanel;
 import cw.customermanagementmodul.pojo.Customer;
@@ -20,6 +20,8 @@ public class GeneralCustomerOverviewEditCustomerView
 
     private GeneralCustomerOverviewEditCustomerPresentationModel model;
 
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private CWJPanel mainPanel;
     private JLabel lActive;
     private JLabel lGender;
     private JLabel lTitle;
@@ -69,15 +71,35 @@ public class GeneralCustomerOverviewEditCustomerView
         lEmail             = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_EMAIL));
         lComment           = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_COMMENT));
 
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(lActive)
+                .addComponent(lGender)
+                .addComponent(lTitle)
+                .addComponent(lForename)
+                .addComponent(lForename2)
+                .addComponent(lSurname)
+                .addComponent(lBirthday)
+                .addComponent(lGuardianForename)
+                .addComponent(lGuardianSurname)
+                .addComponent(lStreet)
+                .addComponent(lPostOfficeNumber)
+                .addComponent(lCity)
+                .addComponent(lCountry)
+                .addComponent(lProvince)
+                .addComponent(lMobilphone)
+                .addComponent(lLandlinephone)
+                .addComponent(lFax)
+                .addComponent(lEmail)
+                .addComponent(lComment);
     }
 
-    private void initEvents() {
+    private void initEventHandling() {
     }
 
     public JPanel buildPanel() {
         initComponents();
         
-        JPanel mainPanel = CWComponentFactory.createPanel();
+        mainPanel = CWComponentFactory.createPanel();
 //        mainPanel.setUI(new RoundPanelUI());
         
         FormLayout layout = new FormLayout(
@@ -134,14 +156,18 @@ public class GeneralCustomerOverviewEditCustomerView
         builder.addSeparator("Bemerkung",   cc.xyw(1, 35, 8));
         builder.add(lComment,              cc.xyw(1, 37, 8));
 
-        initEvents();
+        initEventHandling();
 
-//        mainPanel.addDisposableListener(this);
+        mainPanel.addDisposableListener(this);
 
+//        componentContainer.addComponent(mainPanel);
         return mainPanel;
     }
 
     public void dispose() {
+        mainPanel.removeDisposableListener(this);
+
+        componentContainer.dispose();
 
         model.dispose();
         model = null;

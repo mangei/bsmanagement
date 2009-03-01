@@ -10,6 +10,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.customermanagementmodul.extentions.interfaces.EditPostingPostingCategoryExtention;
 import java.awt.event.ActionEvent;
@@ -33,7 +34,9 @@ import javax.swing.JComponent;
  * @author CreativeWorkers.at
  */
 public class EditPostingPresentationModel
-        extends PresentationModel<Posting> {
+        extends PresentationModel<Posting>
+        implements Disposable
+{
 
     private Posting posting;
     private SelectionInList<PostingCategory> postingCategorySelection;
@@ -47,6 +50,10 @@ public class EditPostingPresentationModel
     private HashMap<String,EditPostingPostingCategoryExtention> editPostingPostingCategoryExtentionsKeyMap;
     
     private ButtonListenerSupport buttonListenerSupport;
+
+    private SaveListener saveListener;
+    private PropertyChangeListener unsavedListener;
+    private PropertyConnector postingCategoryConnector;
     
     public EditPostingPresentationModel(Posting posting, HeaderInfo headerInfo) {
         this(posting, false, headerInfo);
@@ -85,16 +92,17 @@ public class EditPostingPresentationModel
     public void initEventHandling() {
         unsaved = new ValueHolder();
 
-        SaveListener saveListener = new SaveListener();
+        saveListener = new SaveListener();
         getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(saveListener);
         getBufferedModel(Posting.PROPERTYNAME_AMOUNT).addValueChangeListener(saveListener);
         getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(saveListener);
         getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).addValueChangeListener(saveListener);
         getBufferedModel(Posting.PROPERTYNAME_CATEGORY).addValueChangeListener(saveListener);
         
-        PropertyConnector.connectAndUpdate(getBufferedModel(Posting.PROPERTYNAME_CATEGORY), postingCategorySelection, "selection");
+        postingCategoryConnector = PropertyConnector.connect(getBufferedModel(Posting.PROPERTYNAME_CATEGORY), "value", postingCategorySelection, "selection");
+        postingCategoryConnector.updateProperty2();
         
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
+        unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
                     saveCancelAction.setEnabled(true);
@@ -104,6 +112,18 @@ public class EditPostingPresentationModel
             }
         });
         unsaved.setValue(false);
+    }
+
+    public void dispose() {
+        getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).removeValueChangeListener(saveListener);
+        getBufferedModel(Posting.PROPERTYNAME_AMOUNT).removeValueChangeListener(saveListener);
+        getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).removeValueChangeListener(saveListener);
+        getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).removeValueChangeListener(saveListener);
+        getBufferedModel(Posting.PROPERTYNAME_CATEGORY).removeValueChangeListener(saveListener);
+
+        unsaved.removeValueChangeListener(unsavedListener);
+
+        postingCategoryConnector.release();
     }
 
     private List<EditPostingPostingCategoryExtention> getExtentions() {

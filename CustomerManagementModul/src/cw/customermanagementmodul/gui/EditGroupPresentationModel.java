@@ -7,6 +7,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -21,7 +22,9 @@ import javax.swing.Icon;
  * @author ManuelG
  */
 public class EditGroupPresentationModel
-    extends PresentationModel<Group> {
+    extends PresentationModel<Group>
+    implements Disposable
+{
 
     private Action resetButtonAction;
     private Action saveButtonAction;
@@ -31,6 +34,9 @@ public class EditGroupPresentationModel
     private String headerText;
     private ValueModel unsaved;
     private ButtonListenerSupport support;
+
+    private SaveListener saveListener;
+    private PropertyChangeListener unsavedListener;
 
     public EditGroupPresentationModel(Group group) {
         this(group, "");
@@ -56,9 +62,10 @@ public class EditGroupPresentationModel
 
     private void initEventHandling() {
 
-        getBufferedModel(Group.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());
+        saveListener = new SaveListener();
+        getBufferedModel(Group.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
 
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
+        unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
                     saveButtonAction.setEnabled(true);
@@ -72,6 +79,12 @@ public class EditGroupPresentationModel
             }
         });
         unsaved.setValue(false);
+    }
+
+    public void dispose() {
+        getBufferedModel(Group.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
+        
+        unsaved.removeValueChangeListener(unsavedListener);
     }
 
 

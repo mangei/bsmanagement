@@ -1,11 +1,6 @@
 package cw.customermanagementmodul.gui;
 
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Disposable;
-import java.util.List;
-import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 
 /**
  *

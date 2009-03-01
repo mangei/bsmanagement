@@ -14,6 +14,7 @@ import cw.boardingschoolmanagement.manager.ModulManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.VetoableChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -118,8 +119,12 @@ public class EditCustomerPresentationModel
     }
 
     public void dispose() {
+
+        for (EditCustomerTabExtention extention : editCustomerGUITabExtentions) {
+            extention.dispose();
+        }
+
         if(actionButtonListener != null) {
-            System.out.println("DIS...");
             unsaved.removeValueChangeListener(actionButtonListener);
             actionButtonListener = null;
         }
@@ -139,18 +144,56 @@ public class EditCustomerPresentationModel
             getBufferedModel(Customer.PROPERTYNAME_EMAIL).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_COMMENT).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).removeValueChangeListener(saveListener);
-            
+
             guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_FORENAME).removeValueChangeListener(saveListener);
             guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_SURNAME).removeValueChangeListener(saveListener);
 
             saveListener = null;
         }
 
+        getBufferedModel(Customer.PROPERTYNAME_ACTIVE).release();
+        getBufferedModel(Customer.PROPERTYNAME_GENDER).release();
+        getBufferedModel(Customer.PROPERTYNAME_TITLE).release();
+        getBufferedModel(Customer.PROPERTYNAME_FORENAME).release();
+        getBufferedModel(Customer.PROPERTYNAME_FORENAME2).release();
+        getBufferedModel(Customer.PROPERTYNAME_SURNAME).release();
+        getBufferedModel(Customer.PROPERTYNAME_STREET).release();
+        getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).release();
+        getBufferedModel(Customer.PROPERTYNAME_CITY).release();
+        getBufferedModel(Customer.PROPERTYNAME_MOBILEPHONE).release();
+        getBufferedModel(Customer.PROPERTYNAME_LANDLINEPHONE).release();
+        getBufferedModel(Customer.PROPERTYNAME_FAX).release();
+        getBufferedModel(Customer.PROPERTYNAME_EMAIL).release();
+        getBufferedModel(Customer.PROPERTYNAME_COMMENT).release();
+        getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).release();
+        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_FORENAME).release();
+        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_SURNAME).release();
+
+        PropertyChangeListener[] beanPropertyChangeListeners = super.getBeanPropertyChangeListeners();
+        System.out.println("anz1: " + beanPropertyChangeListeners.length);
+        for (PropertyChangeListener l : beanPropertyChangeListeners) {
+            removeBeanPropertyChangeListener(l);
+        }
+        PropertyChangeListener[] propertyChangeListeners = super.getPropertyChangeListeners();
+        System.out.println("anz2: " + propertyChangeListeners.length);
+        for (PropertyChangeListener l : propertyChangeListeners) {
+            removePropertyChangeListener(l);
+        }
+        VetoableChangeListener[] vetoableChangeListeners = super.getVetoableChangeListeners();
+        System.out.println("anz3: " + vetoableChangeListeners.length);
+        for (VetoableChangeListener l : vetoableChangeListeners) {
+            removeVetoableChangeListener(l);
+        }
+
+        System.out.println("anz4: " + getBean().getVetoableChangeListeners().length);
+        System.out.println("anz5: " + getBean().getPropertyChangeListeners().length);
+
         saveButtonAction = null;
         cancelButtonAction = null;
         saveCancelButtonAction = null;
 
         support = null;
+        editCustomerGUITabExtentions.clear();
         editCustomerGUITabExtentions = null;
         customer = null;
 
@@ -168,6 +211,7 @@ public class EditCustomerPresentationModel
         }
 
         public void updateState() {
+//            setChanged(true);
             unsaved.setValue(true);
         }
     }

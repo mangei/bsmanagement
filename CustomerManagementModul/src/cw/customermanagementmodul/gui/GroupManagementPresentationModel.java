@@ -5,6 +5,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -22,7 +23,9 @@ import javax.swing.JOptionPane;
  *
  * @author ManuelG
  */
-public class GroupManagementPresentationModel {
+public class GroupManagementPresentationModel
+    implements Disposable
+{
 
     private Action newGroupAction;
     private Action editGroupAction;
@@ -32,6 +35,9 @@ public class GroupManagementPresentationModel {
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
 
     private HeaderInfo headerInfo;
+
+    private SelectionEmptyHandler selectionEmptyHandler;
+    private PropertyChangeListener groupChangeListener;
 
     public GroupManagementPresentationModel() {
         initModels();
@@ -63,9 +69,9 @@ public class GroupManagementPresentationModel {
     private void initEventHandling() {
         groupSelection.addPropertyChangeListener(
                 SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+                selectionEmptyHandler = new SelectionEmptyHandler());
 
-        groupSelection.addValueChangeListener(new PropertyChangeListener() {
+        groupSelection.addValueChangeListener(groupChangeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 
 //                int size = customerSelection.getSize();
@@ -88,6 +94,11 @@ public class GroupManagementPresentationModel {
             }
         });
         updateActionEnablement();
+    }
+
+    public void dispose() {
+        groupSelection.removePropertyChangeListener(selectionEmptyHandler);
+        groupSelection.removeValueChangeListener(groupChangeListener);
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -188,11 +199,11 @@ public class GroupManagementPresentationModel {
             GUIManager.setLoadingScreenText("Gruppe löschen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die ausgewählte Gruppe löschen?", "Gruppe löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            Group group = groupSelection.getSelection();
+
+            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die Gruppe '" + group.getName() + "' löschen?", "Gruppe löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (i == JOptionPane.OK_OPTION) {
-                Group group = groupSelection.getSelection();
-
-
+                
                 String name = group.getName();
 
                 groupSelection.getList().remove(group);

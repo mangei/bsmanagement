@@ -2,6 +2,7 @@ package cw.customermanagementmodul.gui;
 
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -9,7 +10,9 @@ import javax.swing.Action;
 /**
  * @author CreativeWorkers.at
  */
-public class SearchCustomerSelectorFilterExtentionPresentationModel {
+public class SearchCustomerSelectorFilterExtentionPresentationModel
+    implements Disposable
+{
 
     private ValueModel searchModel;
     private Action clearAction;
@@ -26,6 +29,10 @@ public class SearchCustomerSelectorFilterExtentionPresentationModel {
 
     private void initEventHandling() {
         // Nothing do to
+    }
+
+    public void dispose() {
+        // Nothing to do
     }
 
 

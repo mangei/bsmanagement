@@ -5,6 +5,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.event.ListSelectionEvent;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import java.awt.event.ActionEvent;
@@ -21,7 +22,9 @@ import javax.swing.JOptionPane;
 /**
  * @author Manuel Geier (CreativeWorkers)
  */
-public class CustomerInactivePresentationModel {
+public class CustomerInactivePresentationModel
+    implements Disposable
+{
 
     private Action activateAction;
     private Action deleteAction;
@@ -32,6 +35,8 @@ public class CustomerInactivePresentationModel {
 
     private HeaderInfo headerInfo;
     private ButtonListenerSupport buttonListenerSupport;
+
+    private SelectionHandler selectionHandler;
 
     public CustomerInactivePresentationModel() {
         initModels();
@@ -58,10 +63,13 @@ public class CustomerInactivePresentationModel {
     }
 
     private void initEventHandling() {
-        customerSelectorPresentationModel.getCustomerSelection().addValueChangeListener(new SelectionHandler());
+        customerSelectorPresentationModel.getCustomerSelection().addValueChangeListener(selectionHandler = new SelectionHandler());
         updateActionEnablement();
     }
 
+    public void dispose() {
+        customerSelectorPresentationModel.getCustomerSelection().removeValueChangeListener(selectionHandler);
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     // Action classes

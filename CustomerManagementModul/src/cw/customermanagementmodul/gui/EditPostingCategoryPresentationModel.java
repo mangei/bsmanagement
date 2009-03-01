@@ -8,6 +8,7 @@ import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -22,7 +23,9 @@ import cw.customermanagementmodul.pojo.PostingCategory;
  * @author CreativeWorkers.at
  */
 public class EditPostingCategoryPresentationModel
-        extends PresentationModel<PostingCategory> {
+        extends PresentationModel<PostingCategory>
+        implements Disposable
+{
 
     private PostingCategory postingCategory;
     private ValueModel unsaved;
@@ -34,6 +37,9 @@ public class EditPostingCategoryPresentationModel
 
     private HeaderInfo headerInfo;
     private ButtonListenerSupport support;
+
+    private SaveListener saveListener;
+    private PropertyChangeListener unsavedListener;
     
     public EditPostingCategoryPresentationModel(PostingCategory postingCategory, HeaderInfo headerInfo) {
         super(postingCategory);
@@ -53,13 +59,14 @@ public class EditPostingCategoryPresentationModel
         resetButtonAction = new ResetAction("Zurücksetzen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_rotate_anticlockwise.png"));
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
         saveCancelButtonAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
-
-        getBufferedModel(PostingCategory.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());
     }
     
     public void initEventHandling() {
+        saveListener = new SaveListener();
+        getBufferedModel(PostingCategory.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
+
         unsaved = new ValueHolder();
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
+        unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
                     saveButtonAction.setEnabled(true);
@@ -74,6 +81,12 @@ public class EditPostingCategoryPresentationModel
         });
         unsaved.setValue(false);
     }
+
+    public void dispose() {
+        getBufferedModel(PostingCategory.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
+        unsaved.removeValueChangeListener(unsavedListener);
+    }
+
     /**
      * Wenn sich ein Document ändert, wird saved auf false gesetzt
      */

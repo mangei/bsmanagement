@@ -19,6 +19,8 @@ public class CustomerOverviewEditCustomerView
 
     private CustomerOverviewEditCustomerPresentationModel model;
 
+    private JViewPanel mainPanel;
+
     public CustomerOverviewEditCustomerView(CustomerOverviewEditCustomerPresentationModel model) {
         this.model = model;
     }
@@ -33,7 +35,7 @@ public class CustomerOverviewEditCustomerView
     public JPanel buildPanel() {
         initComponents();
         
-        JViewPanel mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+        mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         
         List<JComponent> extentionComponents = model.getExtentionComponents();
 
@@ -64,8 +66,8 @@ public class CustomerOverviewEditCustomerView
     }
 
     public void dispose() {
+        mainPanel.removeDisposableListener(this);
 
         model.dispose();
-        model = null;
     }
 }

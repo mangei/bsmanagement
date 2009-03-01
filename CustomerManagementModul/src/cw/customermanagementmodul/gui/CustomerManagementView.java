@@ -2,6 +2,7 @@ package cw.customermanagementmodul.gui;
 
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -9,14 +10,19 @@ import javax.swing.JPanel;
 /**
  * @author CreativeWorkers.at
  */
-public class CustomerManagementView {
+public class CustomerManagementView
+    implements Disposable
+{
 
     private CustomerManagementPresentationModel model;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
     private JButton bNew;
     private JButton bEdit;
     private JButton bDelete;
     private JButton bInactive;
     private JButton bViewInactives;
+    private JViewPanel panel;
     private CustomerSelectorView customerSelectorView;
 
     public CustomerManagementView(CustomerManagementPresentationModel m) {
@@ -29,6 +35,13 @@ public class CustomerManagementView {
         bDelete     = CWComponentFactory.createButton(model.getDeleteAction());
         bInactive   = CWComponentFactory.createButton(model.getInactiveAction());
         bViewInactives   = CWComponentFactory.createButton(model.getViewInactivesAction());
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(bNew)
+                .addComponent(bEdit)
+                .addComponent(bDelete)
+                .addComponent(bInactive)
+                .addComponent(bViewInactives);
 
         customerSelectorView = new CustomerSelectorView(model.getCustomerSelectorPresentationModel());
 
@@ -62,7 +75,7 @@ public class CustomerManagementView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
 
         panel.getButtonPanel().add(bNew);
         panel.getButtonPanel().add(bEdit);
@@ -73,7 +86,19 @@ public class CustomerManagementView {
         panel.getContentPanel().setLayout(new BorderLayout());
         panel.getContentPanel().add(customerSelectorView.buildPanel(), BorderLayout.CENTER);
 
+        panel.addDisposableListener(this);
+
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        customerSelectorView.dispose();
+        
+        componentContainer.dispose();
+
+        model.dispose();
     }
 
 }

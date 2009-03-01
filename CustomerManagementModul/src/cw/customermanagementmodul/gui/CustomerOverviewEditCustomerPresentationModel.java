@@ -55,8 +55,10 @@ public class CustomerOverviewEditCustomerPresentationModel
     }
 
     public void dispose() {
-        customerOverviewEditCustomerExtentions = null;
-        unsaved = null;
+        customerOverviewEditCustomerExtentions = getExtentions();
+        for (CustomerOverviewEditCustomerExtention extention : customerOverviewEditCustomerExtentions) {
+            extention.dispose();
+        }
     }
 
     /**

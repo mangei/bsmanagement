@@ -9,7 +9,9 @@ import javax.swing.JPanel;
 /**
  * @author CreativeWorkers.at
  */
-public class PostingOverviewView {
+public class PostingOverviewView
+    
+{
 
     private PostingOverviewPresentationModel model;
     private JButton bNew;

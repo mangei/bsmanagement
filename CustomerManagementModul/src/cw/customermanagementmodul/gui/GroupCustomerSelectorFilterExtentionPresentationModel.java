@@ -1,5 +1,6 @@
 package cw.customermanagementmodul.gui;
 
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
@@ -13,10 +14,14 @@ import javax.swing.event.ListSelectionListener;
 /**
  * @author CreativeWorkers.at
  */
-public class GroupCustomerSelectorFilterExtentionPresentationModel {
+public class GroupCustomerSelectorFilterExtentionPresentationModel
+    implements Disposable
+{
 
     private DefaultListModel groupSelection;
     private DefaultListSelectionModel groupSelectionModel;
+
+    private ListSelectionListener groupSelectionListener;
 
     public GroupCustomerSelectorFilterExtentionPresentationModel() {
         initModels();
@@ -39,7 +44,7 @@ public class GroupCustomerSelectorFilterExtentionPresentationModel {
 
     private void initEventHandling() {
 
-        groupSelectionModel.addListSelectionListener(new ListSelectionListener() {
+        groupSelectionModel.addListSelectionListener(groupSelectionListener = new ListSelectionListener() {
 
             public void valueChanged(ListSelectionEvent e) {
 
@@ -105,6 +110,9 @@ public class GroupCustomerSelectorFilterExtentionPresentationModel {
  
     }
 
+    public void dispose() {
+        groupSelectionModel.removeListSelectionListener(groupSelectionListener);
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     // Action classes

@@ -6,6 +6,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -32,7 +33,9 @@ import javax.swing.table.TableColumnModel;
  *
  * @author Manuel Geier
  */
-public class PostingCategoryManagementPresentationModel {
+public class PostingCategoryManagementPresentationModel
+    implements Disposable
+{
 
     private Customer customer;
 
@@ -41,6 +44,8 @@ public class PostingCategoryManagementPresentationModel {
     private Action deleteAction;
     private SelectionInList<PostingCategory> postingCategorySelection;
     private HeaderInfo headerInfo;
+
+    private PropertyChangeListener postingCategoryListener;
 
     public PostingCategoryManagementPresentationModel() {
         this(null);
@@ -69,7 +74,7 @@ public class PostingCategoryManagementPresentationModel {
     }
 
     private void initEventHandling() {
-        postingCategorySelection.addValueChangeListener(new PropertyChangeListener() {
+        postingCategorySelection.addValueChangeListener(postingCategoryListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 updateActionEnablement();
             }
@@ -77,6 +82,9 @@ public class PostingCategoryManagementPresentationModel {
         updateActionEnablement();
     }
 
+    public void dispose() {
+        postingCategorySelection.removeValueChangeListener(postingCategoryListener);
+    }
 
     public void save() {
     }

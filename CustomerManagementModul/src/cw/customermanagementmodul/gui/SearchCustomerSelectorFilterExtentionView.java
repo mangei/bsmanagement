@@ -5,6 +5,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWJPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -13,10 +15,14 @@ import javax.swing.JTextField;
 /**
  * @author CreativeWorkers.at
  */
-public class SearchCustomerSelectorFilterExtentionView {
+public class SearchCustomerSelectorFilterExtentionView
+    implements Disposable
+{
 
     private SearchCustomerSelectorFilterExtentionPresentationModel model;
 
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private CWJPanel panel;
     private JTextField tfSearch;
     private JButton bClear;
 
@@ -32,6 +38,10 @@ public class SearchCustomerSelectorFilterExtentionView {
         bClear.setContentAreaFilled(false);
         bClear.setFocusPainted(false);
         bClear.setBorderPainted(false);
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(tfSearch)
+                .addComponent(bClear);
     }
 
     private void initEventHandling() {
@@ -41,7 +51,7 @@ public class SearchCustomerSelectorFilterExtentionView {
     public JPanel buildPanel() {
         initComponents();
 
-        JPanel panel = CWComponentFactory.createPanel();
+        panel = CWComponentFactory.createPanel();
         panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
 
         FormLayout layout = new FormLayout(
@@ -55,9 +65,18 @@ public class SearchCustomerSelectorFilterExtentionView {
         builder.add(tfSearch, cc.xy(3, 1));
         builder.add(bClear, cc.xy(5, 1));
 
+        panel.addDisposableListener(this);
+
         initEventHandling();
         
         return panel;
     }
 
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        componentContainer.dispose();
+
+        model.dispose();
+    }
 }

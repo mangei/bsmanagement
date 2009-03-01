@@ -12,6 +12,7 @@ import cw.customermanagementmodul.pojo.manager.GroupManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import javax.swing.Icon;
@@ -21,7 +22,9 @@ import javax.swing.event.ListDataListener;
  *
  * @author ManuelG
  */
-public class GroupEditCustomerPresentationModel {
+public class GroupEditCustomerPresentationModel
+    implements Disposable
+{
 
     private Customer customer;
     private ValueModel unsaved;
@@ -83,13 +86,10 @@ public class GroupEditCustomerPresentationModel {
     }
 
     public void dispose() {
-        if(saveListener != null) {
-            selectionCustomerGroups.removeListDataListener(saveListener);
-            selectionGroups.removeListDataListener(saveListener);
-            saveListener = null;
-        }
-        addGroupActionListener = null;
-        removeGroupActionListener = null;
+        selectionCustomerGroups.removeListDataListener(saveListener);
+        selectionGroups.removeListDataListener(saveListener);
+        selectionCustomerGroups.removeValueChangeListener(removeGroupActionListener);
+        selectionGroups.removeValueChangeListener(addGroupActionListener);
     }
 
     ////////////////////////////////////////////////////////////////////////////

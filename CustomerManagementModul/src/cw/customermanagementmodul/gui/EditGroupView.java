@@ -6,6 +6,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -15,14 +16,17 @@ import cw.customermanagementmodul.pojo.Group;
  *
  * @author ManuelG
  */
-public class EditGroupView {
+public class EditGroupView
+    implements Disposable
+{
 
     private EditGroupPresentationModel model;
 
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JTextField tfName;
 
     private JButton bSave;
-    private JButton bReset;
     private JButton bCancel;
     private JButton bSaveCancel;
 
@@ -34,9 +38,14 @@ public class EditGroupView {
         tfName = CWComponentFactory.createTextField(model.getBufferedModel(Group.PROPERTYNAME_NAME), false);
 
         bSave       = new JButton(model.getSaveButtonAction());
-        bReset      = new JButton(model.getResetButtonAction());
         bCancel     = new JButton(model.getCancelButtonAction());
         bSaveCancel = new JButton(model.getSaveCancelButtonAction());
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(tfName)
+                .addComponent(bSave)
+                .addComponent(bCancel)
+                .addComponent(bSaveCancel);
     }
 
     private void initEventHandling() {
@@ -46,12 +55,11 @@ public class EditGroupView {
     public JPanel buildPanel() {
         initComponents();
 
-        JViewPanel panel = new JViewPanel(model.getHeaderText());
+        panel = new JViewPanel(model.getHeaderText());
 
         JButtonPanel buttonPanel = panel.getButtonPanel();
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-//        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout(
@@ -66,6 +74,16 @@ public class EditGroupView {
 
         initEventHandling();
 
+        panel.addDisposableListener(this);
+
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        componentContainer.dispose();
+
+        model.dispose();
     }
 }

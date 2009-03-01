@@ -24,9 +24,12 @@ import javax.swing.JComboBox;
 public class PostingManagementView
         implements Disposable
 {
+    private PostingManagementPresentationModel model;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JButton bNew;
     private JButton bReversePosting;
-//    private JButton bDelete;
     private JButton bManagePostingCategories;
 
     private JComboBox cbFilterYear;
@@ -38,8 +41,6 @@ public class PostingManagementView
     private JLabel lLiabilities;
     private JLabel lAssets;
     private JLabel lSaldo;
-    
-    private PostingManagementPresentationModel model;
 
     public PostingManagementView(PostingManagementPresentationModel model) {
         this.model = model;
@@ -74,6 +75,17 @@ public class PostingManagementView
         lAssets.setFont(lAssets.getFont().deriveFont(Font.BOLD));
         lSaldo = CWComponentFactory.createLabel(model.getSaldoValue());
         lSaldo.setFont(lSaldo.getFont().deriveFont(Font.BOLD));
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(bNew)
+                .addComponent(bReversePosting)
+                .addComponent(bManagePostingCategories)
+                .addComponent(cbFilterYear)
+                .addComponent(cbFilterMonth)
+                .addComponent(cbFilterPostingCategory)
+                .addComponent(lLiabilities)
+                .addComponent(lAssets)
+                .addComponent(lSaldo);
     }
     
     private void initEventHandling() {
@@ -84,7 +96,7 @@ public class PostingManagementView
         initComponents();
         initEventHandling();
         
-        JViewPanel panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         panel.setName("Buchungen");
 
         panel.getButtonPanel().add(bNew);
@@ -133,9 +145,9 @@ public class PostingManagementView
     }
 
     public void dispose() {
-        bNew.setAction(null);
-        bManagePostingCategories.setAction(null);
-        bReversePosting.setAction(null);
+        panel.removeDisposableListener(this);
+
+        componentContainer.dispose();
 
         model.dispose();
     }

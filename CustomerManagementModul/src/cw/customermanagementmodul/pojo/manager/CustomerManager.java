@@ -28,11 +28,11 @@ public class CustomerManager extends AbstractPOJOManager<Customer> {
     }
 
     public List<Customer> getAll(Group group) {
-        if(group != null) {
-            throw new NullPointerException();
+        if(group == null) {
+            throw new NullPointerException("group is null");
         }
 
-        return HibernateUtil.getEntityManager().createQuery("FROM Customer WHERE group.id=" + group.getId()).getResultList();
+        return HibernateUtil.getEntityManager().createQuery("FROM Customer WHERE " + group.getId() + " in elements(groups)").getResultList();
     }
 
     public List<Customer> getAllActive(Group group) {

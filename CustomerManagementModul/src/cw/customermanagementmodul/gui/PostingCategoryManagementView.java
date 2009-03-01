@@ -9,6 +9,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWJXTable;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.customermanagementmodul.gui.renderer.LockTableCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -20,7 +21,12 @@ import javax.swing.JScrollPane;
  * @author Manuel Geier
  */
 public class PostingCategoryManagementView
+    implements Disposable
 {
+    private PostingCategoryManagementPresentationModel model;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JButton bNew;
     private JButton bEdit;
     private JButton bDelete;
@@ -28,7 +34,6 @@ public class PostingCategoryManagementView
 
     private CWJXTable tPostingsCategories;
 
-    private PostingCategoryManagementPresentationModel model;
     
     public PostingCategoryManagementView(PostingCategoryManagementPresentationModel model) {
         this.model = model;
@@ -51,6 +56,11 @@ public class PostingCategoryManagementView
 
         lLocked = CWComponentFactory.createLabel("Geperrt: Dies sind systeminterne Kategorien.", CWUtils.loadIcon("cw/customermanagementmodul/images/lock.png"));
 
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(bNew)
+                .addComponent(bEdit)
+                .addComponent(bDelete)
+                .addComponent(lLocked);
     }
     
     private void initEventHandling() {
@@ -61,7 +71,7 @@ public class PostingCategoryManagementView
         initComponents();
         initEventHandling();
         
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
+        panel = new JViewPanel(model.getHeaderInfo());
 
         panel.getButtonPanel().add(bNew);
         panel.getButtonPanel().add(bEdit);
@@ -80,8 +90,17 @@ public class PostingCategoryManagementView
         // Buttons am Anfang deaktivieren
         bEdit.setEnabled(false);
         bDelete.setEnabled(false);
-        
+
+        panel.addDisposableListener(this);
+
         return panel;
     }
 
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        componentContainer.dispose();
+
+        model.dispose();
+    }
 }

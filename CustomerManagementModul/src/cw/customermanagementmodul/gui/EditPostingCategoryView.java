@@ -6,6 +6,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.customermanagementmodul.pojo.PostingCategory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -15,14 +16,16 @@ import javax.swing.JTextField;
  *
  * @author CreativeWorkers.at
  */
-public class EditPostingCategoryView {
+public class EditPostingCategoryView
+    implements Disposable
+{
 
     private EditPostingCategoryPresentationModel model;
-    
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JTextField tfName;
     
     private JButton bSave;
-    private JButton bReset;
     private JButton bSaveCancel;
     private JButton bCancel;
     
@@ -35,9 +38,14 @@ public class EditPostingCategoryView {
         tfName           = CWComponentFactory.createTextField(model.getBufferedModel(PostingCategory.PROPERTYNAME_NAME),false);
 
         bSave       = CWComponentFactory.createButton(model.getSaveButtonAction());
-        bReset      = CWComponentFactory.createButton(model.getResetButtonAction());
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(tfName)
+                .addComponent(bSave)
+                .addComponent(bSaveCancel)
+                .addComponent(bCancel);
     }
 
     private void initEventHandling() {
@@ -47,7 +55,7 @@ public class EditPostingCategoryView {
     public JPanel buildPanel() {
         initComponents();
         
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
+        panel = new JViewPanel(model.getHeaderInfo());
         
         JButtonPanel buttonPanel = panel.getButtonPanel();
         buttonPanel.add(bSave);
@@ -66,8 +74,18 @@ public class EditPostingCategoryView {
         builder.addLabel("Name:",        cc.xy(1, 1));
         builder.add(tfName,              cc.xy(3, 1));
 
+        panel.addDisposableListener(this);
+
         initEventHandling();
 
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        componentContainer.dispose();
+
+        model.dispose();
     }
 }

@@ -7,6 +7,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -20,10 +21,14 @@ import javax.swing.JComboBox;
  *
  * @author CreativeWorkers.at
  */
-public class EditPostingView {
+public class EditPostingView
+    implements Disposable
+{
 
     private EditPostingPresentationModel model;
-    
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JTextField tfDescription;
     private JComboBox cbPostingCategory;
     private JTextField tfAmount;
@@ -33,7 +38,6 @@ public class EditPostingView {
     private JButton bCancel;
     private JButton bSaveCancel;
     private JPanel pPostingCategoryExtention;
-    private JPanel pMain;
     
 
     public EditPostingView(EditPostingPresentationModel model) {
@@ -55,6 +59,15 @@ public class EditPostingView {
 
         bCancel     = CWComponentFactory.createButton(model.getCancelAction());
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelAction());
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(tfDescription)
+                .addComponent(cbPostingCategory)
+                .addComponent(tfAmount)
+                .addComponent(dcPostingEntryDate)
+                .addComponent(pLiabilitiesAssets)
+                .addComponent(bCancel)
+                .addComponent(bSaveCancel);
 
         pPostingCategoryExtention = CWComponentFactory.createPanel();
         FormLayout pPostingCategoryExtentionLayout = new FormLayout(
@@ -80,19 +93,17 @@ public class EditPostingView {
             CellConstraints cc = new CellConstraints();
             pPostingCategoryExtention.add(comp, cc.xy(1, 2));
         }
-        if(pMain != null) {
-            pMain.validate();
+        if(panel != null) {
+            panel.validate();
         }
     }
     
     public JPanel buildPanel() {
         initComponents();
         
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
+        panel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = panel.getButtonPanel();
 
-        pMain = panel;
-        
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
@@ -117,8 +128,18 @@ public class EditPostingView {
         builder.addLabel("Eingangsdatum:",      cc.xy(1, 10));
         builder.add(dcPostingEntryDate,         cc.xy(3, 10));
 
+        panel.addDisposableListener(this);
+
         initEventHandling();
 
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        componentContainer.dispose();
+
+        model.dispose();
     }
 }

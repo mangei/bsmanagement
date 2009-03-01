@@ -4,6 +4,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -15,7 +16,9 @@ import cw.customermanagementmodul.pojo.Customer;
  *
  * @author ManuelG
  */
-public class CustomerChooserPresentationModel {
+public class CustomerChooserPresentationModel
+    implements Disposable
+{
 
     private List<Customer> customerList;
     private String headerText;
@@ -57,6 +60,11 @@ public class CustomerChooserPresentationModel {
     }
 
     private void initEventHandling() {
+        // Nothing to do
+    }
+
+    public void dispose() {
+        // Nothing to do
     }
 
     ////////////////////////////////////////////////////////////////////////////

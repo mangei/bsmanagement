@@ -9,6 +9,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.customermanagementmodul.extentions.interfaces.EditReversePostingPostingCategoryExtention;
 import java.awt.event.ActionEvent;
@@ -31,7 +32,9 @@ import javax.swing.JComponent;
  *
  * @author CreativeWorkers.at
  */
-public class EditReversePostingPresentationModel {
+public class EditReversePostingPresentationModel
+    implements Disposable
+{
 
     private PresentationModel<Posting> postingPresentationModel;
     private PresentationModel<Posting> reversePostingPresentationModel;
@@ -49,6 +52,8 @@ public class EditReversePostingPresentationModel {
     private HashMap<String,EditReversePostingPostingCategoryExtention> editPostingPostingCategoryExtentionsKeyMap;
 
     private ButtonListenerSupport support;
+
+    private PropertyChangeListener unsavedListener;
     
     public EditReversePostingPresentationModel(Posting oldPosting, Posting reversePosting) {
         this.reversePosting = reversePosting;
@@ -101,7 +106,7 @@ public class EditReversePostingPresentationModel {
     
     public void initEventHandling() {
         unsaved = new ValueHolder();
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
+        unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
                     saveCancelButtonAction.setEnabled(true);
@@ -111,6 +116,15 @@ public class EditReversePostingPresentationModel {
             }
         });
         unsaved.setValue(false);
+    }
+
+    public void dispose() {
+        for(EditReversePostingPostingCategoryExtention ex : editReversePostingPostingCategoryExtentions) {
+            ex.initPresentationModel(this);
+            editPostingPostingCategoryExtentionsKeyMap.put(ex.getKey(), ex);
+        }
+
+        unsaved.removeValueChangeListener(unsavedListener);
     }
 
     private List<EditReversePostingPostingCategoryExtention> getExtentions() {

@@ -28,6 +28,8 @@ public class EditCustomerEditCustomerView
 
     private EditCustomerEditCustomerPresentationModel model;
 
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
     private JPanel pActive;
     private JPanel pGender;
     private JTextField tfTitle;
@@ -66,7 +68,7 @@ public class EditCustomerEditCustomerView
 
         tfGuardianForename  = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_FORENAME), false);
         tfGuardianSurname   = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_SURNAME), false);
-        
+
         tfStreet            = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_STREET), false);
         tfPostOfficeNumber  = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER), false);
         tfCity              = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_CITY), false);
@@ -84,6 +86,28 @@ public class EditCustomerEditCustomerView
         bClearLocationData.setContentAreaFilled(false);
         bClearLocationData.setFocusPainted(false);
         bClearLocationData.setBorderPainted(false);
+
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(pActive)
+                .addComponent(pGender)
+                .addComponent(tfTitle)
+                .addComponent(tfForename)
+                .addComponent(tfForename2)
+                .addComponent(tfSurname)
+                .addComponent(dcBirthday)
+                .addComponent(tfGuardianForename)
+                .addComponent(tfStreet)
+                .addComponent(tfPostOfficeNumber)
+                .addComponent(tfCity)
+                .addComponent(tfCountry)
+                .addComponent(tfProvince)
+                .addComponent(tfMobilphone)
+                .addComponent(tfLandlinephone)
+                .addComponent(tfFax)
+                .addComponent(tfEmail)
+                .addComponent(taComment)
+                .addComponent(bClearLocationData);
     }
 
     private void initEvents() {
@@ -196,7 +220,7 @@ public class EditCustomerEditCustomerView
     public JPanel buildPanel() {
         initComponents();
         
-        JViewPanel mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+        mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref",
@@ -257,14 +281,16 @@ public class EditCustomerEditCustomerView
 
         mainPanel.addDisposableListener(this);
 
+//        componentContainer.addComponent(mainPanel);
         return mainPanel;
     }
 
     public void dispose() {
 
-        bClearLocationData.setAction(null);
+        mainPanel.removeDisposableListener(this);
+
+        componentContainer.dispose();
 
         model.dispose();
-        model = null;
     }
 }

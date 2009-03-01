@@ -1,17 +1,13 @@
 package cw.customermanagementmodul.gui;
 
-import com.jgoodies.binding.PresentationModel;
 import cw.boardingschoolmanagement.app.CWUtils;
-import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeListener;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Guardian;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
 
 /**
@@ -22,7 +18,6 @@ public class EditCustomerEditCustomerPresentationModel
         implements Disposable {
 
     private EditCustomerPresentationModel editCustomerPresentationModel;
-    private ValueModel unsaved;
     private HeaderInfo headerInfo;
     private Action clearLocationDataAction;
 
@@ -32,8 +27,6 @@ public class EditCustomerEditCustomerPresentationModel
     private List<String> provinceList;
     private List<String> countryList;
     
-    private PropertyChangeListener actionButtonListener;
-
     public EditCustomerEditCustomerPresentationModel(EditCustomerPresentationModel editCustomerPresentationModel) {
         this.editCustomerPresentationModel = editCustomerPresentationModel;
 
@@ -52,7 +45,6 @@ public class EditCustomerEditCustomerPresentationModel
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
         );
 
-
 //        titleList               = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_TITLE);
 //        postOfficeNumberList    = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_POSTOFFICENUMBER);
 //        cityList                = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_CITY);
@@ -65,23 +57,15 @@ public class EditCustomerEditCustomerPresentationModel
     }
 
     public void dispose() {
-        if(actionButtonListener != null) {
-            System.out.println("DIS...");
-            unsaved.removeValueChangeListener(actionButtonListener);
-            actionButtonListener = null;
-        }
-
-        clearLocationDataAction = null;
-
-        titleList = null;
-        postOfficeNumberList = null;
-        cityList = null;
-        provinceList = null;
-        countryList = null;
-
-        editCustomerPresentationModel = null;
-
-        unsaved = null;
+//        clearLocationDataAction = null;
+//
+//        titleList = null;
+//        postOfficeNumberList = null;
+//        cityList = null;
+//        provinceList = null;
+//        countryList = null;
+//
+//        editCustomerPresentationModel = null;
     }
 
     public Action getClearLocationDataAction() {

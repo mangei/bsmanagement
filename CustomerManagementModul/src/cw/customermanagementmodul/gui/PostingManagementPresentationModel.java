@@ -135,10 +135,11 @@ public class PostingManagementPresentationModel {
     }
 
     void dispose() {
-        selectionEmptyListener = null;
-        filterYearSelectionListener = null;
-        filterMonthSelectionListener = null;
-        filterPostingCategorySelectionListener = null;
+        postingSelection.removePropertyChangeListener(selectionEmptyListener);
+
+        filterYearSelection.removeValueChangeListener(filterYearSelectionListener);
+        filterMonthSelection.removeValueChangeListener(filterMonthSelectionListener);
+        filterPostingCategorySelection.removeValueChangeListener(filterPostingCategorySelectionListener);
     }
 
     public void updateEvents() {

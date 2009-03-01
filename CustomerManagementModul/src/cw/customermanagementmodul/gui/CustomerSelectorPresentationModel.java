@@ -3,6 +3,7 @@ package cw.customermanagementmodul.gui;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.customermanagementmodul.extentions.interfaces.CustomerSelectorFilterExtention;
 import java.beans.PropertyChangeEvent;
@@ -21,7 +22,9 @@ import javax.swing.table.TableModel;
 /**
  * @author CreativeWorkers.at
  */
-public class CustomerSelectorPresentationModel {
+public class CustomerSelectorPresentationModel
+    implements Disposable
+{
 
     private CustomerTableModel customerTableModel;
     private SelectionInList<Customer> customerSelection;
@@ -34,6 +37,8 @@ public class CustomerSelectorPresentationModel {
 
     private ArrayList<Customer> customers;
     private boolean filtering;
+
+    private PropertyChangeListener filterChangeListener;
 
     private static final String defaultCustomerTableStateName = "cw.customerboardingmanagement.CustomerSelectorView.customerTableState";
     private String customerTableStateName = "cw.customerboardingmanagement.CustomerSelectorView.customerTableState";
@@ -82,7 +87,7 @@ public class CustomerSelectorPresentationModel {
         if(filtering == true) {
         
             // If a filter has changed, reload the table
-            filterChange.addValueChangeListener(new PropertyChangeListener() {
+            filterChange.addValueChangeListener(filterChangeListener = new PropertyChangeListener() {
 
                 public void propertyChange(PropertyChangeEvent evt) {
 
@@ -126,6 +131,10 @@ public class CustomerSelectorPresentationModel {
             }
             
         }
+    }
+
+    public void dispose() {
+        filterChange.removeValueChangeListener(filterChangeListener);
     }
 
     public void updateFilter() {
