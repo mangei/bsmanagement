@@ -20,6 +20,8 @@ public class WelcomeHomeGUIExtentionView
 
     private WelcomeHomeGUIExtentionPresentationModel model;
 
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JLabel lWelcomeMessage;
     private JLabel lTimeMessage;
 
@@ -30,6 +32,10 @@ public class WelcomeHomeGUIExtentionView
     private void initComponents() {
         lWelcomeMessage = CWComponentFactory.createLabel(model.getWelcomeMessageValueModel());
         lTimeMessage = CWComponentFactory.createLabel(model.getTimeMessageValueModel());
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(lWelcomeMessage)
+                .addComponent(lTimeMessage);
     }
 
     private void initEventHandling() {
@@ -39,7 +45,7 @@ public class WelcomeHomeGUIExtentionView
     public JPanel buildPanel() {
         initComponents();
 
-        JViewPanel panel  = CWComponentFactory.createViewPanel(new HeaderInfo(
+        panel  = CWComponentFactory.createViewPanel(new HeaderInfo(
                 "Willkommen"
         ));
 
@@ -53,12 +59,18 @@ public class WelcomeHomeGUIExtentionView
         builder.add(lWelcomeMessage, cc.xy(1, 1));
         builder.add(lTimeMessage, cc.xy(1, 3));
 
+        panel.addDisposableListener(this);
+
         initEventHandling();
 
         return panel;
     }
 
     public void dispose() {
+        panel.removeDisposableListener(this);
+
+        componentContainer.dispose();
+
         model.dispose();
     }
 }

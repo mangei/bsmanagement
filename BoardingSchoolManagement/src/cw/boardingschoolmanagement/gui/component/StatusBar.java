@@ -17,10 +17,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 import org.jdesktop.swingx.JXStatusBar;
 
 public class StatusBar
-        extends JXStatusBar
+        extends JPanel
 {
 
     public static final int NORMAL = 0;

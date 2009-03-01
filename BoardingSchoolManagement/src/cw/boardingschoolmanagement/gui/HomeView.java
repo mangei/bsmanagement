@@ -5,6 +5,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.util.List;
 import javax.swing.JPanel;
 
@@ -13,8 +14,11 @@ import javax.swing.JPanel;
  * @author Manuel Geier (CreativeWorkers)
  */
 public class HomeView
+    implements Disposable
 {
     private HomePresentationModel model;
+
+    private JViewPanel panel;
 
     public HomeView(HomePresentationModel model) {
         this.model = model;
@@ -31,7 +35,7 @@ public class HomeView
     public JPanel buildPanel() {
         initComponents();
 
-        JViewPanel panel = new JViewPanel(new HeaderInfo(
+        panel = new JViewPanel(new HeaderInfo(
                 "Startseite",
                 "<html>Sie befinden sich auf der Startseite.</html>",
                 CWUtils.loadIcon("cw/boardingschoolmanagement/images/home_32.png"),
@@ -59,9 +63,16 @@ public class HomeView
             builder.nextRow();
         }
 
+        panel.addDisposableListener(this);
+
         initEventHandling();
 
         return panel;
     }
-    
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        model.dispose();
+    }
 }

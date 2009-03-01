@@ -15,8 +15,6 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -32,8 +30,8 @@ import javax.swing.plaf.basic.BasicPanelUI;
  * @author Manuel Geier
  */
 public class JViewPanel
-        extends JPanel
-        implements HeaderInfoCallable, Disposable
+        extends CWJPanel
+        implements HeaderInfoCallable
 {
 
     private JButtonPanel buttonPanel;
@@ -48,8 +46,6 @@ public class JViewPanel
     public static final int LEFT = JLabel.LEFT;
     public static final int CENTER = JLabel.CENTER;
     public static final int RIGHT = JLabel.RIGHT;
-
-    private List<Disposable> disposableListenerList;
 
     public JViewPanel() {
         this(new HeaderInfo());
@@ -102,8 +98,15 @@ public class JViewPanel
 
         // Borderline
         setBorder(BorderFactory.createLineBorder(BORDERCOLOR));
+    }
 
-        disposableListenerList = new ArrayList<Disposable>();
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        headerInfo.dispose();
+
+        this.removeAll();
     }
 
     private static Color BORDERCOLOR = new Color(215, 220, 228);
@@ -152,22 +155,10 @@ public class JViewPanel
         mainPanel.setBorder(border);
     }
 
-    public void addDisposableListener(Disposable listener) {
-        disposableListenerList.add(listener);
-    }
-
-    public void removeDisposableListener(Disposable listener) {
-        disposableListenerList.remove(listener);
-    }
-
-    public void dispose() {
-        for(int i=0, l=disposableListenerList.size(); i<l; i++) {
-            disposableListenerList.get(i).dispose();
-        }
-        disposableListenerList.clear();
-    }
-
-    public static class HeaderInfo extends Model {
+    public static class HeaderInfo
+            extends Model
+            implements Disposable
+    {
 
         private String headerText;
         private String description;
@@ -191,6 +182,10 @@ public class JViewPanel
             this.description = description;
             this.icon = icon;
             this.smallIcon = smallIcon;
+        }
+
+        public void dispose() {
+            System.out.println("_____ANZ LISTENERS: :" + getPropertyChangeListeners());
         }
 
         public String getDescription() {
@@ -232,7 +227,9 @@ public class JViewPanel
 
     }
 
-    private static class HeaderInfoPanel extends JPanel implements PropertyChangeListener {
+    private static class HeaderInfoPanel 
+            extends CWJPanel 
+            implements PropertyChangeListener {
 
         private JLabel lHeaderText;
         private JLabel lDescription;
@@ -275,6 +272,12 @@ public class JViewPanel
             builder.add(lImage, cc.xywh(2, 2, 1, 2));
 
             updateHeaderInfo();
+        }
+
+        @Override
+        public void dispose() {
+            super.dispose();
+            headerInfo.removePropertyChangeListener(this);
         }
 
         public HeaderInfo getHeaderInfo() {
