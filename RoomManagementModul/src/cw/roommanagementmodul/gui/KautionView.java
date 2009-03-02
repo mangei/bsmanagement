@@ -8,8 +8,10 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -19,14 +21,17 @@ import javax.swing.JPanel;
  *
  * @author Dominik
  */
-public class KautionView {
+public class KautionView implements Disposable{
 
-      private KautionPresentationModel model;
+    private KautionPresentationModel model;
     private JButton bNew;
     private JButton bEdit;
     private JButton bDelete;
     private JButton bBack;
     private JList lKautionen;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
 
     public KautionView(KautionPresentationModel m) {
         this.model = m;
@@ -35,20 +40,25 @@ public class KautionView {
      private void initComponents() {
 
 
-        bNew = new JButton(model.getNewAction());
+        bNew = CWComponentFactory.createButton(model.getNewAction());
         bNew.setText("Neu");
-        bEdit = new JButton(model.getEditAction());
+        bEdit = CWComponentFactory.createButton(model.getEditAction());
         bEdit.setText("Bearbeiten");
-        bDelete = new JButton(model.getDeleteAction());
+        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
         bDelete.setText("Löschen");
-        bBack= new JButton(model.getBackAction());
+        bBack= CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
 
-        lKautionen= new JList();
-        lKautionen.setModel(model.getKautionSelection());
+        lKautionen= CWComponentFactory.createList(model.getKautionSelection());
         lKautionen.setSelectionModel(
                 new SingleListSelectionAdapter(
                 model.getKautionSelection().getSelectionIndexHolder()));
+        componentContainer=CWComponentFactory.createCWComponentContainer()
+                .addComponent(bNew)
+                .addComponent(bEdit)
+                .addComponent(bDelete)
+                .addComponent(bBack)
+                .addComponent(lKautionen);
     }
      private void initEventHandling() {
         lKautionen.addMouseListener(model.getDoubleClickHandler());
@@ -59,20 +69,27 @@ public class KautionView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel();
-        panel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
-        panel.getButtonPanel().add(bNew);
-        panel.getButtonPanel().add(bEdit);
-        panel.getButtonPanel().add(bDelete);
-        panel.getButtonPanel().add(bBack);
+        mainPanel = new JViewPanel();
+        mainPanel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        mainPanel.getButtonPanel().add(bNew);
+        mainPanel.getButtonPanel().add(bEdit);
+        mainPanel.getButtonPanel().add(bDelete);
+        mainPanel.getButtonPanel().add(bBack);
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
-        panel.getTopPanel().setLayout(layout);
+        mainPanel.getTopPanel().setLayout(layout);
         CellConstraints cc = new CellConstraints();
 
-        panel.getContentPanel().add(lKautionen, BorderLayout.CENTER);
+        mainPanel.getContentPanel().add(lKautionen, BorderLayout.CENTER);
+        mainPanel.addDisposableListener(this);
+        return mainPanel;
+    }
 
-        return panel;
+    public void dispose() {
+        lKautionen.removeMouseListener(model.getDoubleClickHandler());
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 
 }

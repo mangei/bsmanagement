@@ -10,6 +10,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -32,7 +33,7 @@ import javax.swing.JOptionPane;
  *
  * @author Dominik
  */
-public class GebuehrenPresentationModel {
+public class GebuehrenPresentationModel implements Disposable{
 
     private GebuehrenManager gebuehrenManager;
     private Action newAction;
@@ -43,9 +44,12 @@ public class GebuehrenPresentationModel {
     private String headerText;
     private SelectionInList<Gebuehr> gebuehrenSelection;
     private HeaderInfo headerInfo;
+    private SelectionEmptyHandler selectionEmptyHandler;
+    private DoubleClickHandler doubleClickHandler;
 
     public GebuehrenPresentationModel(GebuehrenManager gebuehrenManager) {
         this.gebuehrenManager = gebuehrenManager;
+        doubleClickHandler = new DoubleClickHandler();
         initModels();
         this.initEventHandling();
 
@@ -54,15 +58,17 @@ public class GebuehrenPresentationModel {
     public GebuehrenPresentationModel(GebuehrenManager gebuehrenManager, HeaderInfo header) {
         this.gebuehrenManager = gebuehrenManager;
         this.headerText = header.getHeaderText();
+        doubleClickHandler = new DoubleClickHandler();
         this.headerInfo=header;
         initModels();
         this.initEventHandling();
     }
 
     private void initEventHandling() {
+        selectionEmptyHandler=new SelectionEmptyHandler();
         gebuehrenSelection.addPropertyChangeListener(
                 SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+                selectionEmptyHandler);
     }
 
     private void initModels() {
@@ -71,7 +77,6 @@ public class GebuehrenPresentationModel {
         deleteAction = new DeleteAction();
         kategorieAction = new KategorieAction();
         tarifAction = new TarifAction();
-
 
         gebuehrenSelection = new SelectionInList<Gebuehr>(gebuehrenManager.getAll());
         updateActionEnablement();
@@ -126,6 +131,10 @@ public class GebuehrenPresentationModel {
         this.headerInfo = headerInfo;
     }
 
+    public void dispose() {
+        gebuehrenSelection.removeValueChangeListener(selectionEmptyHandler);
+    }
+
     private class NewAction
             extends AbstractAction {
 
@@ -175,7 +184,7 @@ public class GebuehrenPresentationModel {
                         //gebuehrenManager.saveGebuehr(g);
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-//                        model.removeButtonListener(this);
+                        model.removeButtonListener(this);
 //                        getGebuehrenSelection().setList(gebuehrenManager.getGebuehr());
 //                        GUIManager.changeToLastView();
 //                        GUIManager.getStatusbar().setTextAndFadeOut("Gebuehr wurde erstellt.");
@@ -211,7 +220,7 @@ public class GebuehrenPresentationModel {
                     //gebuehrenManager.saveGebuehr(g);
                     }
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-//                        model.removeButtonListener(this);
+                        model.removeButtonListener(this);
 //                        getGebuehrenSelection().setList(gebuehrenManager.getGebuehr());
 //                        GUIManager.changeToLastView();
 //                        GUIManager.getStatusbar().setTextAndFadeOut("Gebuehr wurde erstellt.");
@@ -261,7 +270,7 @@ public class GebuehrenPresentationModel {
 
     // Event Handling *********************************************************
     public MouseListener getDoubleClickHandler() {
-        return new DoubleClickHandler();
+        return doubleClickHandler;
     }
 
     private final class DoubleClickHandler extends MouseAdapter {

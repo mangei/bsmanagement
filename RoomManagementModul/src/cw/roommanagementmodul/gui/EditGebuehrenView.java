@@ -7,9 +7,10 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -23,43 +24,57 @@ import cw.roommanagementmodul.pojo.Gebuehr;
  *
  * @author Dominik
  */
-public class EditGebuehrenView {
+public class EditGebuehrenView implements Disposable{
 
     private EditGebuehrenPresentationModel model;
-    public JLabel lGebuehrenName;
-    public JLabel lKategorie;
-    public JTextField tfGebuehrenName;
-    public JComboBox cbKategorie;
-    public JButton bSave;
-    public JButton bCancel;
-    public JButton bSaveCancel;
+    private JLabel lGebuehrenName;
+    private JLabel lKategorie;
+    private JTextField tfGebuehrenName;
+    private JComboBox cbKategorie;
+    private JButton bSave;
+    private JButton bCancel;
+    private JButton bSaveCancel;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
 
     public EditGebuehrenView(EditGebuehrenPresentationModel model) {
         this.model = model;
     }
 
     private void initComponents() {
-        lGebuehrenName = new JLabel("Gebuehren Name: ");
-        lKategorie = new JLabel("Kategorie: ");
+        lGebuehrenName = CWComponentFactory.createLabel("Gebuehren Name: ");
+        lKategorie = CWComponentFactory.createLabel("Kategorie: ");
 
-        tfGebuehrenName = BasicComponentFactory.createTextField(model.getBufferedModel(Gebuehr.PROPERTYNAME_NAME),false);
+        tfGebuehrenName = CWComponentFactory.createTextField(model.getBufferedModel(Gebuehr.PROPERTYNAME_NAME),false);
 
-        bSave = new JButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = new JButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = new JButton(model.getSaveCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schließen");
 
-        cbKategorie = new JComboBox(model.createKategorieComboModel(model.getGebKatList()));
+        cbKategorie = CWComponentFactory.createComboBox(model.getGebKatList());
+
+        componentContainer= CWComponentFactory.createCWComponentContainer()
+                .addComponent(bSave)
+                .addComponent(bCancel)
+                .addComponent(bSaveCancel)
+                .addComponent(cbKategorie)
+                .addComponent(lGebuehrenName)
+                .addComponent(lKategorie)
+                .addComponent(tfGebuehrenName);
+
+
     }
     
      public JComponent buildPanel() {
         initComponents();
 
-        JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
+        mainPanel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
         buttonPanel.add(bSave);
@@ -87,7 +102,13 @@ public class EditGebuehrenView {
 
 
         mainPanel.getContentPanel().add(panel, BorderLayout.CENTER);
-
+        mainPanel.addDisposableListener(this);
         return mainPanel;
+    }
+
+    public void dispose() {
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 }

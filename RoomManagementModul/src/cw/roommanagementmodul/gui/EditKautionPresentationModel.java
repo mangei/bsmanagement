@@ -13,6 +13,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -25,7 +26,8 @@ import cw.roommanagementmodul.pojo.Kaution;
  *
  * @author Dominik
  */
-public class EditKautionPresentationModel  extends PresentationModel<Kaution> {
+public class EditKautionPresentationModel  extends PresentationModel<Kaution>
+            implements Disposable{
 
 
      private Kaution kaution;
@@ -100,6 +102,10 @@ public class EditKautionPresentationModel  extends PresentationModel<Kaution> {
      */
     public Action getSaveCancelButtonAction() {
         return saveCancelButtonAction;
+    }
+
+    public void dispose() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public class SaveListener implements PropertyChangeListener {

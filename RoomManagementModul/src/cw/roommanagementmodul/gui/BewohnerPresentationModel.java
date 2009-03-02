@@ -11,6 +11,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.gui.CustomerManagementPresentationModel;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
@@ -42,7 +43,7 @@ import java.util.List;
  *
  * @author Dominik
  */
-public class BewohnerPresentationModel {
+public class BewohnerPresentationModel implements Disposable {
 
     private BewohnerManager bewohnerManager;
     private String headerText;
@@ -57,6 +58,9 @@ public class BewohnerPresentationModel {
     private Action kautionAction;
     private SelectionInList<Bewohner> bewohnerSelection;
     private HeaderInfo headerInfo;
+    private SelectionEmptyHandler selectionEmptyHandler;
+    private EditCustomerPresentationModel editCustomerModel;
+    private DoubleClickHandler doubleClickHandler;
 
     public BewohnerPresentationModel(BewohnerManager bewohnerManager) {
         //super(bewohnerManager);
@@ -81,7 +85,7 @@ public class BewohnerPresentationModel {
     }
 
     private void initModels() {
-
+        doubleClickHandler = new DoubleClickHandler();
         gebAction = new GebAction();
         deleteAction = new DeleteAction();
         setGebuehrZuordnungAction(new GebuehrZuordnungAction());
@@ -91,15 +95,16 @@ public class BewohnerPresentationModel {
         detailAction = new AbstractAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")) {
 
             public void actionPerformed(ActionEvent e) {
-                EditCustomerPresentationModel model;
-                model = CustomerManagementPresentationModel.editCustomer(bewohnerSelection.getSelection().getCustomer());
-                model.addButtonListener(new ButtonListener() {
+                editCustomerModel = CustomerManagementPresentationModel.editCustomer(bewohnerSelection.getSelection().getCustomer());
+                editCustomerModel.addButtonListener(new ButtonListener() {
 
                     public void buttonPressed(ButtonEvent evt) {
 
                         if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-
                             bewohnerSelection.setList(bewohnerManager.getBewohner(true));
+                        }
+                        if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                            editCustomerModel.removeButtonListener(this);
                         }
                     }
                 });
@@ -127,9 +132,10 @@ public class BewohnerPresentationModel {
     }
 
     private void initEventHandling() {
+        selectionEmptyHandler = new SelectionEmptyHandler();
         getBewohnerSelection().addPropertyChangeListener(
                 SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+                selectionEmptyHandler);
     }
 
     public SelectionInList<Bewohner> getBewohnerSelection() {
@@ -208,9 +214,6 @@ public class BewohnerPresentationModel {
         return kautionAction;
     }
 
-    public void deleteBewohner() {
-    }
-
     /**
      * @return the headerInfo
      */
@@ -223,6 +226,10 @@ public class BewohnerPresentationModel {
      */
     public void setHeaderInfo(HeaderInfo headerInfo) {
         this.headerInfo = headerInfo;
+    }
+
+    public void dispose() {
+        getBewohnerSelection().removeValueChangeListener(this.selectionEmptyHandler);
     }
 
     private class DeleteAction
@@ -238,7 +245,6 @@ public class BewohnerPresentationModel {
             int k = JOptionPane.showConfirmDialog(null, "Bewohner: " + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + " wirklich löschen?", "LÖSCHEN", JOptionPane.OK_CANCEL_OPTION);
             if (k == JOptionPane.OK_OPTION) {
 
-                System.out.println("Bewohner Delete------------------------------------------");
                 b.setCustomer(null);
                 bewohnerManager.delete(b);
                 bewohnerSelection.setList(bewohnerManager.getBewohner(true));
@@ -342,7 +348,7 @@ public class BewohnerPresentationModel {
 
 // Event Handling *********************************************************
     public MouseListener getDoubleClickHandler() {
-        return new DoubleClickHandler();
+        return doubleClickHandler;
     }
 
     private final class DoubleClickHandler extends MouseAdapter {

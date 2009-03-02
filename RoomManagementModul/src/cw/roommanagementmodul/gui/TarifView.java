@@ -10,6 +10,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.roommanagementmodul.component.DateTimeTableCellRenderer;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -21,7 +22,7 @@ import org.jdesktop.swingx.JXTable;
  *
  * @author Dominik
  */
-public class TarifView {
+public class TarifView implements Disposable{
 
     private TarifPresentationModel model;
     private JButton bNew;
@@ -30,6 +31,9 @@ public class TarifView {
     private JButton bBack;
     private JXTable tTarif;
 
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
+
     public TarifView(TarifPresentationModel m) {
         this.model = m;
     }
@@ -37,13 +41,13 @@ public class TarifView {
     private void initComponents() {
 
 
-        bNew = new JButton(model.getNewAction());
+        bNew = CWComponentFactory.createButton(model.getNewAction());
         bNew.setText("Neu");
-        bDelete = new JButton(model.getDeleteAction());
+        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
         bDelete.setText("Löschen");
-        bEdit = new JButton(model.getEditAction());
+        bEdit = CWComponentFactory.createButton(model.getEditAction());
         bEdit.setText("Bearbeiten");
-        bBack = new JButton(model.getBackAction());
+        bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
 
 
@@ -56,6 +60,13 @@ public class TarifView {
 
         tTarif.getColumnModel().getColumn(0).setCellRenderer(new DateTimeTableCellRenderer(true));
         tTarif.getColumnModel().getColumn(1).setCellRenderer(new DateTimeTableCellRenderer(true));
+
+        componentContainer=CWComponentFactory.createCWComponentContainer()
+                .addComponent(bNew)
+                .addComponent(bDelete)
+                .addComponent(bEdit)
+                .addComponent(bBack)
+                .addComponent(tTarif);
     }
 
     private void initEventHandling() {
@@ -66,25 +77,27 @@ public class TarifView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
+        mainPanel = new JViewPanel(model.getHeaderInfo());
 
-        panel.getButtonPanel().add(bNew);
-        panel.getButtonPanel().add(bEdit);
-        panel.getButtonPanel().add(bDelete);
-        panel.getButtonPanel().add(bBack);
+        mainPanel.getButtonPanel().add(bNew);
+        mainPanel.getButtonPanel().add(bEdit);
+        mainPanel.getButtonPanel().add(bDelete);
+        mainPanel.getButtonPanel().add(bBack);
 
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
-        panel.getTopPanel().setLayout(layout);
+        mainPanel.getTopPanel().setLayout(layout);
         CellConstraints cc = new CellConstraints();
-//
-//        ArrayListModel list = new ArrayListModel();
-//        Object sel = new Object();
-//        list.add(sel);
-//
-//        panel.getTopPanel().add(new JObjectChooser(list, null), cc.xy(1, 1));
-        panel.getContentPanel().add(new JScrollPane(tTarif), BorderLayout.CENTER);
 
-        return panel;
+        mainPanel.getContentPanel().add(new JScrollPane(tTarif), BorderLayout.CENTER);
+        mainPanel.addDisposableListener(this);
+        return mainPanel;
+    }
+
+    public void dispose() {
+        tTarif.removeMouseListener(model.getDoubleClickHandler());
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 }

@@ -6,12 +6,12 @@
 package cw.roommanagementmodul.gui;
 
 
-import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -30,9 +30,9 @@ import cw.roommanagementmodul.pojo.manager.KautionManager;
  *
  * @author Dominik
  */
-public class KautionPresentationModel{
+public class KautionPresentationModel implements Disposable{
 
-     private KautionManager kautionManager;
+    private KautionManager kautionManager;
     private Action newAction;
     private Action editAction;
     private Action deleteAction;
@@ -40,12 +40,14 @@ public class KautionPresentationModel{
     private ButtonListenerSupport support;
     private SelectionInList<Kaution> kautionSelection;
     private String headerText;
-
-
+    private SelectionEmptyHandler selectionEmptyHandler;
+    private DoubleClickHandler doubleClickHandler;
 
     KautionPresentationModel(KautionManager kautionManager, String header) {
         this.kautionManager = kautionManager;
+        selectionEmptyHandler= new SelectionEmptyHandler();
         this.headerText = header;
+        doubleClickHandler = new DoubleClickHandler();
         initModels();
         this.initEventHandling();
     }
@@ -53,7 +55,7 @@ public class KautionPresentationModel{
      private void initEventHandling() {
         getKautionSelection().addPropertyChangeListener(
                 SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+                selectionEmptyHandler);
     }
 
     private void initModels() {
@@ -152,6 +154,10 @@ public class KautionPresentationModel{
         this.backAction = backAction;
     }
 
+    public void dispose() {
+        getKautionSelection().removeValueChangeListener(selectionEmptyHandler);
+    }
+
      private class NewAction
             extends AbstractAction {
 
@@ -237,7 +243,7 @@ public class KautionPresentationModel{
 
 // Event Handling *********************************************************
     public MouseListener getDoubleClickHandler() {
-        return new DoubleClickHandler();
+        return doubleClickHandler;
     }
 
     private final class DoubleClickHandler extends MouseAdapter {

@@ -5,12 +5,13 @@
 
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
 import java.text.NumberFormat;
 import javax.swing.JButton;
@@ -25,44 +26,55 @@ import cw.roommanagementmodul.pojo.Kaution;
  *
  * @author Dominik
  */
-public class EditKautionView {
+public class EditKautionView implements Disposable{
 
 
     private EditKautionPresentationModel model;
-    public JButton bSave;
-    public JButton bCancel;
-    public JButton bSaveCancel;
-    public JLabel lName;
-    public JLabel lBetrag;
-    public JTextField tfName;
-    public JFormattedTextField tfBetrag;
+    private JButton bSave;
+    private JButton bCancel;
+    private JButton bSaveCancel;
+    private JLabel lName;
+    private JLabel lBetrag;
+    private JTextField tfName;
+    private JFormattedTextField tfBetrag;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
 
     public EditKautionView(EditKautionPresentationModel model) {
         this.model = model;
     }
 
      private void initComponents() {
-        lName = new JLabel("Name: ");
-        lBetrag = new JLabel("Betrag");
+        lName = CWComponentFactory.createLabel("Name: ");
+        lBetrag = CWComponentFactory.createLabel("Betrag");
 
-        tfName = BasicComponentFactory.createTextField(model.getBufferedModel(Kaution.PROPERTYNAME_NAME),false);
-        tfBetrag = BasicComponentFactory.createFormattedTextField(model.getBufferedModel(Kaution.PROPERTYNAME_BETRAG), NumberFormat.getCurrencyInstance());
+        tfName = CWComponentFactory.createTextField(model.getBufferedModel(Kaution.PROPERTYNAME_NAME),false);
+        tfBetrag = CWComponentFactory.createFormattedTextField(model.getBufferedModel(Kaution.PROPERTYNAME_BETRAG), NumberFormat.getCurrencyInstance());
 
-        bSave = new JButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = new JButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = new JButton(model.getSaveCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern&Schließen");
 
+        componentContainer=CWComponentFactory.createCWComponentContainer()
+                .addComponent(lName)
+                .addComponent(lBetrag)
+                .addComponent(tfName)
+                .addComponent(tfBetrag)
+                .addComponent(bSave)
+                .addComponent(bCancel)
+                .addComponent(bSaveCancel);
     }
 
     public JComponent buildPanel() {
         initComponents();
 
-        JViewPanel mainPanel = new JViewPanel();
+        mainPanel = new JViewPanel();
         mainPanel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
@@ -89,8 +101,16 @@ public class EditKautionView {
 
 
         mainPanel.getContentPanel().add(panel, BorderLayout.CENTER);
-
+        mainPanel.addDisposableListener(this);
         return mainPanel;
+    }
+
+
+
+    public void dispose() {
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 
 }

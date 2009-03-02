@@ -14,6 +14,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -26,7 +27,6 @@ import javax.swing.JOptionPane;
 import cw.roommanagementmodul.pojo.manager.BereichManager;
 import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.Zimmer;
-import java.util.Collections;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -36,7 +36,7 @@ import javax.swing.text.PlainDocument;
  *
  * @author Dominik
  */
-public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
+public class EditZimmerPresentationModel extends PresentationModel<Zimmer> implements Disposable{
 
     private Zimmer zimmer;
     private ButtonListenerSupport support;
@@ -50,17 +50,11 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
     private Bereich selectedBereich;
     private HeaderInfo headerInfo;
     private Document digitDocument;
-
-    public EditZimmerPresentationModel(Zimmer zimmer) {
-        super(zimmer);
-        this.zimmer = zimmer;
-        bereichManager = BereichManager.getInstance();
-        initModels();
-        initEventHandling();
-    }
+    private ButtonEnable buttonEnable;
 
     EditZimmerPresentationModel(Zimmer zimmer, HeaderInfo header) {
         super(zimmer);
+        buttonEnable= new ButtonEnable();
         this.zimmer = zimmer;
         bereichManager = BereichManager.getInstance();
         this.headerText = header.getHeaderText();
@@ -72,6 +66,7 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
 
     EditZimmerPresentationModel(Zimmer zimmer, HeaderInfo header, Bereich selectedBereich) {
         super(zimmer);
+        buttonEnable= new ButtonEnable();
         this.selectedBereich = selectedBereich;
         this.zimmer = zimmer;
         bereichManager = BereichManager.getInstance();
@@ -84,18 +79,7 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
 
     private void initEventHandling() {
         setUnsaved(new ValueHolder());
-        getUnsaved().addValueChangeListener(new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                if ((Boolean) evt.getNewValue() == true) {
-                    saveButtonAction.setEnabled(true);
-                    saveCancelButtonAction.setEnabled(true);
-                } else {
-                    saveButtonAction.setEnabled(false);
-                    saveCancelButtonAction.setEnabled(false);
-                }
-            }
-        });
+        getUnsaved().addValueChangeListener(buttonEnable);
         getUnsaved().setValue(false);
     }
 
@@ -242,6 +226,11 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
         this.digitDocument = digitDocument;
     }
 
+    public void dispose() {
+        getUnsaved().removeValueChangeListener(buttonEnable);
+        release();
+    }
+
     private class SaveAction
             extends AbstractAction {
 
@@ -352,6 +341,19 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> {
             }
         }
     }
+
+    private class ButtonEnable implements PropertyChangeListener{
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                if ((Boolean) evt.getNewValue() == true) {
+                    saveButtonAction.setEnabled(true);
+                    saveCancelButtonAction.setEnabled(true);
+                } else {
+                    saveButtonAction.setEnabled(false);
+                    saveCancelButtonAction.setEnabled(false);
+                }
+            }
+        }
 }
 
 

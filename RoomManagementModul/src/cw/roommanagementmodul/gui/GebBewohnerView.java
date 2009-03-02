@@ -9,6 +9,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -21,58 +22,71 @@ import cw.roommanagementmodul.pojo.GebuehrZuordnung;
  *
  * @author Dominik
  */
-public class GebBewohnerView {
+public class GebBewohnerView implements Disposable{
 
     private GebBewohnerPresentationModel model;
-    public JLabel lGebuehr;
-    public JLabel lVon;
-    public JLabel lBis;
-    public JLabel lAnmerkung;
-    public JComboBox cbGebuehr;
-    public JTextField tfAnmerkung;
+    private JLabel lGebuehr;
+    private JLabel lVon;
+    private JLabel lBis;
+    private JLabel lAnmerkung;
+    private JComboBox cbGebuehr;
+    private JTextField tfAnmerkung;
 
-    public JButton bSave;
-    public JButton bCancel;
-    public JButton bSaveCancel;
+    private JButton bSave;
+    private JButton bCancel;
+    private JButton bSaveCancel;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
 
     public GebBewohnerView(GebBewohnerPresentationModel model) {
         this.model = model;
     }
 
     private void initComponents() {
-        lGebuehr = new JLabel("Gebühr: ");
-        lVon = new JLabel("Von: ");
-        lBis = new JLabel("Bis: ");
-        lAnmerkung = new JLabel("Anmerkung: ");
+        lGebuehr = CWComponentFactory.createLabel("Gebühr: ");
+        lVon = CWComponentFactory.createLabel("Von: ");
+        lBis = CWComponentFactory.createLabel("Bis: ");
+        lAnmerkung = CWComponentFactory.createLabel("Anmerkung: ");
 
         tfAnmerkung = CWComponentFactory.createTextField(model.getBufferedModel(GebuehrZuordnung.PROPERTYNAME_ANMERKUNG), false);
 
-        bSave = new JButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = new JButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = new JButton(model.getSaveCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schließen");
 
 
-        cbGebuehr = new JComboBox(model.createGebuehrComboModel(model.getGebuehrList()));
+        cbGebuehr = CWComponentFactory.createComboBox(model.getGebuehrList());
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(lGebuehr)
+                .addComponent(lVon)
+                .addComponent(lBis)
+                .addComponent(lAnmerkung)
+                .addComponent(tfAnmerkung)
+                .addComponent(bSave)
+                .addComponent(bCancel)
+                .addComponent(bSaveCancel)
+                .addComponent(cbGebuehr);
     }
 
     public JComponent buildPanel() {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
+        mainPanel = new JViewPanel(model.getHeaderInfo());
         //panel.setName("Zimmer");
         
-        JButtonPanel buttonPanel = panel.getButtonPanel();
+        JButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
-        JPanel contentPanel = panel.getContentPanel();
+        JPanel contentPanel = mainPanel.getContentPanel();
 
 
         FormLayout layout = new FormLayout("right:pref, 4dlu, 50dlu:grow, 4dlu, right:pref, 4dlu, 50dlu:grow",
@@ -92,11 +106,16 @@ public class GebBewohnerView {
         contentPanel.add(model.getDcBis(), cc.xy(3, 9));
         contentPanel.add(tfAnmerkung, cc.xy(3, 11));
 
-
-        return panel;
-
+        mainPanel.addDisposableListener(this);
+        return mainPanel;
     }
 
     private void initEventHandling() {
+    }
+
+    public void dispose() {
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 }

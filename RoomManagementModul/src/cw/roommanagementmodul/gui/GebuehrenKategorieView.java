@@ -4,11 +4,11 @@
  */
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -18,7 +18,7 @@ import javax.swing.JPanel;
  *
  * @author Dominik
  */
-public class GebuehrenKategorieView {
+public class GebuehrenKategorieView implements Disposable{
 
     private GebuehrenKategoriePresentationModel model;
     private JButton bNew;
@@ -26,6 +26,9 @@ public class GebuehrenKategorieView {
     private JButton bDelete;
     private JButton bBack;
     private JList lGebuehrenKat;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
     
     public GebuehrenKategorieView(GebuehrenKategoriePresentationModel m) {
         this.model = m;
@@ -34,16 +37,23 @@ public class GebuehrenKategorieView {
     private void initComponents() {
 
         
-        bNew = new JButton(model.getNewAction());
+        bNew = CWComponentFactory.createButton(model.getNewAction());
         bNew.setText("Neu");
-        bEdit = new JButton(model.getEditAction());
+        bEdit = CWComponentFactory.createButton(model.getEditAction());
         bEdit.setText("Bearbeiten");
-        bDelete = new JButton(model.getDeleteAction());
+        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
         bDelete.setText("Löschen");
-        bBack= new JButton(model.getBackAction());
+        bBack= CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
         
         lGebuehrenKat= CWComponentFactory.createList(model.getGebuehrenKatSelection());
+
+        componentContainer=CWComponentFactory.createCWComponentContainer()
+                .addComponent(bNew)
+                .addComponent(bEdit)
+                .addComponent(bDelete)
+                .addComponent(bBack)
+                .addComponent(lGebuehrenKat);
 
     }
      private void initEventHandling() {
@@ -55,25 +65,27 @@ public class GebuehrenKategorieView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
-        panel.getButtonPanel().add(bNew);
-        panel.getButtonPanel().add(bEdit);
-        panel.getButtonPanel().add(bDelete);
-        panel.getButtonPanel().add(bBack);
+        mainPanel = new JViewPanel(model.getHeaderInfo());
+        mainPanel.getButtonPanel().add(bNew);
+        mainPanel.getButtonPanel().add(bEdit);
+        mainPanel.getButtonPanel().add(bDelete);
+        mainPanel.getButtonPanel().add(bBack);
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
-        panel.getTopPanel().setLayout(layout);
+        mainPanel.getTopPanel().setLayout(layout);
         CellConstraints cc = new CellConstraints();
 
-//        ArrayListModel list = new ArrayListModel();
-//        Object sel = new Object();
-//        list.add(sel);
-//
-//        panel.getTopPanel().add(new JObjectChooser(list, null), cc.xy(1, 1));
 
-        panel.getContentPanel().add(lGebuehrenKat, BorderLayout.CENTER);
+        mainPanel.getContentPanel().add(lGebuehrenKat, BorderLayout.CENTER);
+        mainPanel.addDisposableListener(this);
+        return mainPanel;
+    }
 
-        return panel;
+    public void dispose() {
+        lGebuehrenKat.removeMouseListener(model.getDoubleClickHandler());
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 
 }

@@ -9,20 +9,15 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Enumeration;
 import java.util.EventObject;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JTree;
-import javax.swing.SwingUtilities;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -38,7 +33,7 @@ import javax.swing.JOptionPane;
  *
  * @author Dominik
  */
-public class BereichPresentationModel {
+public class BereichPresentationModel implements Disposable{
 
     private Bereich selectedBereich;
     private Zimmer selectedZimmer;
@@ -243,6 +238,9 @@ public class BereichPresentationModel {
         this.headerInfo = headerInfo;
     }
 
+    public void dispose() {
+    }
+
     private class NewAction
             extends AbstractAction {
 
@@ -341,27 +339,6 @@ public class BereichPresentationModel {
     }
 
 
-
-    private final class SelectionEmptyHandler implements PropertyChangeListener {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-        }
-    }
-
-    // Event Handling *********************************************************
-    public MouseListener getDoubleClickHandler() {
-        return new DoubleClickHandler();
-    }
-
-    private final class DoubleClickHandler extends MouseAdapter {
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-                editSelectedItem(e);
-            }
-        }
-    }
 
     private void editSelectedItem(EventObject e) {
         final Bereich b = selectedBereich;

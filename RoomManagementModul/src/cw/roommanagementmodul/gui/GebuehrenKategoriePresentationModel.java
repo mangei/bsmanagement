@@ -10,6 +10,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -29,7 +30,7 @@ import javax.swing.JOptionPane;
  *
  * @author Dominik
  */
-public class GebuehrenKategoriePresentationModel {
+public class GebuehrenKategoriePresentationModel implements Disposable{
 
     private GebuehrenKatManager gebKatManager;
     private Action newAction;
@@ -40,15 +41,20 @@ public class GebuehrenKategoriePresentationModel {
     private SelectionInList<GebuehrenKategorie> gebuehrenKatSelection;
     private String headerText;
     private HeaderInfo headerInfo;
+    private SelectionEmptyHandler selectionEmptyHandler;
+    private DoubleClickHandler doubleClickHandler;
 
     public GebuehrenKategoriePresentationModel(GebuehrenKatManager gebKatManager) {
+        selectionEmptyHandler=new SelectionEmptyHandler();
         this.gebKatManager = gebKatManager;
+        doubleClickHandler=new DoubleClickHandler();
         initModels();
         this.initEventHandling();
     }
 
     GebuehrenKategoriePresentationModel(GebuehrenKatManager gebKatManager, HeaderInfo header) {
         this.gebKatManager = gebKatManager;
+        doubleClickHandler=new DoubleClickHandler();
         this.headerText = header.getHeaderText();
         this.headerInfo=header;
         initModels();
@@ -58,7 +64,7 @@ public class GebuehrenKategoriePresentationModel {
     private void initEventHandling() {
         getGebuehrenKatSelection().addPropertyChangeListener(
                 SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+                selectionEmptyHandler);
     }
 
     private void initModels() {
@@ -142,6 +148,10 @@ public class GebuehrenKategoriePresentationModel {
         this.headerInfo = headerInfo;
     }
 
+    public void dispose() {
+        getGebuehrenKatSelection().removeValueChangeListener(selectionEmptyHandler);
+    }
+
     private class NewAction
             extends AbstractAction {
 
@@ -219,7 +229,6 @@ public class GebuehrenKategoriePresentationModel {
 
     private void updateActionEnablement() {
         boolean hasSelection = gebuehrenKatSelection.hasSelection();
-        System.out.println(hasSelection);
         getEditAction().setEnabled(hasSelection);
         getDeleteAction().setEnabled(hasSelection);
     }
@@ -233,7 +242,7 @@ public class GebuehrenKategoriePresentationModel {
 
 // Event Handling *********************************************************
     public MouseListener getDoubleClickHandler() {
-        return new DoubleClickHandler();
+        return doubleClickHandler;
     }
 
     private final class DoubleClickHandler extends MouseAdapter {

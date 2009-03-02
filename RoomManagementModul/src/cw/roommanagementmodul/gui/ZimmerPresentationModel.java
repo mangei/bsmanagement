@@ -11,6 +11,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.manager.ZimmerManager;
@@ -35,7 +36,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  *
  * @author Dominik
  */
-public class ZimmerPresentationModel {
+public class ZimmerPresentationModel implements Disposable{
 
     private ZimmerManager zimmerManager;
     private Action newAction;
@@ -48,16 +49,12 @@ public class ZimmerPresentationModel {
     private SelectionInList<Zimmer> zimmerSelection;
     private BereichPresentationModel bereichModel;
     private HeaderInfo headerInfo;
-
-    public ZimmerPresentationModel(ZimmerManager zimmerManager) {
-
-        this.zimmerManager = zimmerManager;
-        initModels();
-        this.initEventHandling();
-
-    }
+    private SelectionEmptyHandler selectionEmptyHandler;
+    private DoubleClickHandler doubleClickHandler;
 
     public ZimmerPresentationModel(ZimmerManager zimmerManager, HeaderInfo header, BereichPresentationModel bereichModel) {
+        doubleClickHandler=new DoubleClickHandler();
+        selectionEmptyHandler =new SelectionEmptyHandler();
         this.bereichModel = bereichModel;
         this.zimmerManager = zimmerManager;
         this.headerText = header.getHeaderText();
@@ -91,7 +88,7 @@ public class ZimmerPresentationModel {
     private void initEventHandling() {
         getZimmerSelection().addPropertyChangeListener(
                 SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+                selectionEmptyHandler);
     }
 
     public Action getNewAction() {
@@ -164,6 +161,10 @@ public class ZimmerPresentationModel {
         this.printAction = printAction;
     }
 
+    public void dispose() {
+        getZimmerSelection().removeValueChangeListener(selectionEmptyHandler);
+    }
+
     private class NewAction
             extends AbstractAction {
 
@@ -190,8 +191,6 @@ public class ZimmerPresentationModel {
                 }
             });
             GUIManager.changeView(editView.buildPanel(), true);
-
-
         }
     }
 
@@ -292,7 +291,7 @@ public class ZimmerPresentationModel {
 
 // Event Handling *********************************************************
     public MouseListener getDoubleClickHandler() {
-        return new DoubleClickHandler();
+        return doubleClickHandler;
     }
 
     private final class DoubleClickHandler extends MouseAdapter {

@@ -14,6 +14,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -30,7 +31,7 @@ import java.util.List;
  *
  * @author Dominik
  */
-public class EditBereichPresentationModel extends PresentationModel<Bereich> {
+public class EditBereichPresentationModel extends PresentationModel<Bereich> implements Disposable{
 
     private BereichManager bereichManager;
     private Action saveButtonAction;
@@ -45,6 +46,7 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
     private List<Bereich> editBereichList;
     private Bereich vaterBereich;
     private HeaderInfo headerInfo;
+    private ButtonEnable buttonEnable;
 
     public EditBereichPresentationModel(Bereich bereich) {
         super(bereich);
@@ -69,18 +71,8 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
 
     private void initEventHandling() {
         setUnsaved(new ValueHolder());
-        getUnsaved().addValueChangeListener(new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                if ((Boolean) evt.getNewValue() == true) {
-                    saveButtonAction.setEnabled(true);
-                    saveCancelButtonAction.setEnabled(true);
-                } else {
-                    saveButtonAction.setEnabled(false);
-                    saveCancelButtonAction.setEnabled(false);
-                }
-            }
-        });
+        buttonEnable=new ButtonEnable();
+        getUnsaved().addValueChangeListener(buttonEnable);
         getUnsaved().setValue(false);
     }
 
@@ -249,6 +241,11 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
         this.headerInfo = headerInfo;
     }
 
+    public void dispose() {
+        getUnsaved().removeValueChangeListener(buttonEnable);
+        release();
+    }
+
     public class SaveListener implements PropertyChangeListener {
 
         public void propertyChange(PropertyChangeEvent evt) {
@@ -327,4 +324,17 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> {
 
         }
     }
+
+    private class ButtonEnable implements PropertyChangeListener{
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                if ((Boolean) evt.getNewValue() == true) {
+                    saveButtonAction.setEnabled(true);
+                    saveCancelButtonAction.setEnabled(true);
+                } else {
+                    saveButtonAction.setEnabled(false);
+                    saveCancelButtonAction.setEnabled(false);
+                }
+            }
+      }
 }

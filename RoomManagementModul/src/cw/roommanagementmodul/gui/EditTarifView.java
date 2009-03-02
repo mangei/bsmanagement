@@ -4,14 +4,13 @@
  */
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -26,16 +25,19 @@ import java.util.Date;
  *
  * @author Dominik
  */
-public class EditTarifView {
+public class EditTarifView implements Disposable{
 
     private EditTarifPresentationModel model;
-    public JButton bSave;
-    public JButton bCancel;
-    public JButton bSaveCancel;
-    public JLabel lAb;
-    public JLabel lBis;
-    public JLabel lTarif;
-    public CWCurrencyTextField tfTarif;
+    private JButton bSave;
+    private JButton bCancel;
+    private JButton bSaveCancel;
+    private JLabel lAb;
+    private JLabel lBis;
+    private JLabel lTarif;
+    private CWCurrencyTextField tfTarif;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
 
     public EditTarifView(EditTarifPresentationModel model) {
         this.model = model;
@@ -43,21 +45,20 @@ public class EditTarifView {
 
     public void initComponents() {
 
-        bSave = new JButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = new JButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = new JButton(model.getSaveCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schließen");
 
 
-        lAb = new JLabel("Von: ");
-        lBis = new JLabel("Bis: ");
-        lTarif = new JLabel("Tarif: ");
+        lAb = CWComponentFactory.createLabel("Von: ");
+        lBis = CWComponentFactory.createLabel("Bis: ");
+        lTarif = CWComponentFactory.createLabel("Tarif: ");
 
-        //tfTarif = BasicComponentFactory.createFormattedTextField(model.getBufferedModel(Tarif.PROPERTYNAME_TARIF), NumberFormat.getCurrencyInstance());
         tfTarif = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Tarif.PROPERTYNAME_TARIF));
 
         if (model.getHeaderText().equals("Tarif erstellen")) {
@@ -72,7 +73,14 @@ public class EditTarifView {
             model.setOldBis(model.getDcBis().getDate());
 
         }
-
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(lAb)
+                .addComponent(lBis)
+                .addComponent(lTarif)
+                .addComponent(bSave)
+                .addComponent(bCancel)
+                .addComponent(bSaveCancel)
+                .addComponent(tfTarif);
 
 
     }
@@ -80,7 +88,7 @@ public class EditTarifView {
     public JComponent buildPanel() {
         initComponents();
 
-        JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
+        mainPanel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
         buttonPanel.add(bSave);
@@ -107,16 +115,20 @@ public class EditTarifView {
         contentPanel.add(model.getDcBis(), cc.xy(3, 5));
         contentPanel.add(tfTarif, cc.xy(3, 7));
 
-
-
         mainPanel.getContentPanel().add(panel, BorderLayout.CENTER);
-
+        mainPanel.addDisposableListener(this);
         return mainPanel;
 
     }
 
     private void initEventHandling() {
         // throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    public void dispose() {
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 
     public class UpdateDocument implements DocumentListener {

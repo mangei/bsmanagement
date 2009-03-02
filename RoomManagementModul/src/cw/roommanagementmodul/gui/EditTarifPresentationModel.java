@@ -14,6 +14,7 @@ import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -31,7 +32,8 @@ import java.util.List;
  *
  * @author Dominik
  */
-public class EditTarifPresentationModel extends PresentationModel<Tarif> {
+public class EditTarifPresentationModel extends PresentationModel<Tarif>
+                                implements Disposable{
 
     private Tarif tarif;
     private ButtonListenerSupport support;
@@ -46,9 +48,13 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
     private Date recommendedDate;
     private Date oldVon,  oldBis,  newVon,  newBis;
     private HeaderInfo headerInfo;
+    private SaveListener saveListener;
+    private ButtonEnable buttonEnable;
 
     public EditTarifPresentationModel(Tarif tarif) {
         super(tarif);
+        buttonEnable=new ButtonEnable();
+        saveListener= new SaveListener();
         this.tarif = tarif;
         tarifManager = TarifManager.getInstance();
         initModels();
@@ -58,6 +64,8 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
     EditTarifPresentationModel(Tarif tarif, HeaderInfo header) {
         super(tarif);
         this.tarif = tarif;
+        buttonEnable=new ButtonEnable();
+        saveListener= new SaveListener();
         tarifManager = TarifManager.getInstance();
         this.headerText = header.getHeaderText();
         this.headerInfo = header;
@@ -67,18 +75,7 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
 
     private void initEventHandling() {
         setUnsaved(new ValueHolder());
-        getUnsaved().addValueChangeListener(new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                if ((Boolean) evt.getNewValue() == true) {
-                    getSaveButtonAction().setEnabled(true);
-                    getSaveCancelButtonAction().setEnabled(true);
-                } else {
-                    getSaveButtonAction().setEnabled(false);
-                    getSaveCancelButtonAction().setEnabled(false);
-                }
-            }
-        });
+        getUnsaved().addValueChangeListener(buttonEnable);
         getUnsaved().setValue(false);
     }
 
@@ -96,9 +93,9 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
 
 
         support = new ButtonListenerSupport();
-        getBufferedModel(Tarif.PROPERTYNAME_AB).addValueChangeListener(new SaveListener());
-        getBufferedModel(Tarif.PROPERTYNAME_BIS).addValueChangeListener(new SaveListener());
-        getBufferedModel(Tarif.PROPERTYNAME_TARIF).addValueChangeListener(new SaveListener());
+        getBufferedModel(Tarif.PROPERTYNAME_AB).addValueChangeListener(saveListener);
+        getBufferedModel(Tarif.PROPERTYNAME_BIS).addValueChangeListener(saveListener);
+        getBufferedModel(Tarif.PROPERTYNAME_TARIF).addValueChangeListener(saveListener);
     }
 
 
@@ -238,6 +235,14 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
         this.headerInfo = headerInfo;
     }
 
+    public void dispose() {
+        getUnsaved().removeValueChangeListener(buttonEnable);
+        getBufferedModel(Tarif.PROPERTYNAME_AB).removeValueChangeListener(saveListener);
+        getBufferedModel(Tarif.PROPERTYNAME_BIS).removeValueChangeListener(saveListener);
+        getBufferedModel(Tarif.PROPERTYNAME_TARIF).removeValueChangeListener(saveListener);
+        release();
+    }
+
     private class SaveAction
             extends AbstractAction {
 
@@ -259,8 +264,6 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
                 Calendar vonC = new GregorianCalendar(v.get(Calendar.YEAR), v.get(Calendar.MONTH), v.get(Calendar.DATE));
                 dcVon.setCalendar(vonC);
             }
-
-
 
             if (validateData() == true) {
                 saveTarif();
@@ -487,6 +490,19 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif> {
             }
         }
     }
+    private class ButtonEnable implements PropertyChangeListener{
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                if ((Boolean) evt.getNewValue() == true) {
+                    getSaveButtonAction().setEnabled(true);
+                    getSaveCancelButtonAction().setEnabled(true);
+                } else {
+                    getSaveButtonAction().setEnabled(false);
+                    getSaveCancelButtonAction().setEnabled(false);
+                }
+            }
+        }
+
 
     public class SaveListener implements PropertyChangeListener {
 

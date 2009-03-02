@@ -10,8 +10,8 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,7 +21,7 @@ import org.jdesktop.swingx.JXTable;
  *
  * @author Dominik
  */
-public class ZimmerView {
+public class ZimmerView implements Disposable {
 
     private ZimmerPresentationModel model;
     private JButton bNew;
@@ -30,6 +30,8 @@ public class ZimmerView {
     private JButton bBack;
     private JButton bPrint;
     private JXTable tZimmer;
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
 
     public ZimmerView(ZimmerPresentationModel m) {
         this.model = m;
@@ -38,27 +40,34 @@ public class ZimmerView {
     private void initComponents() {
 
 
-        bNew = new JButton(model.getNewAction());
+        bNew = CWComponentFactory.createButton(model.getNewAction());
         bNew.setText("Neu");
-        bEdit = new JButton(model.getEditAction());
+        bEdit = CWComponentFactory.createButton(model.getEditAction());
         bEdit.setText("Bearbeiten");
-        bDelete = new JButton(model.getDeleteAction());
+        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
         bDelete.setText("Löschen");
 
-        bBack = new JButton(model.getBackAction());
+        bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
-        bPrint= new JButton(model.getPrintAction());
+        bPrint = CWComponentFactory.createButton(model.getPrintAction());
         bPrint.setText("Drucken");
 
 
-         String zimmerTableStateName = "cw.roommanagementmodul.ZimmerView.zimmerTableState";
-        tZimmer = CWComponentFactory.createTable(model.createZimmerTableModel(model.getZimmerSelection()), "keine Zimmer vorhanden",zimmerTableStateName);
+        String zimmerTableStateName = "cw.roommanagementmodul.ZimmerView.zimmerTableState";
+        tZimmer = CWComponentFactory.createTable(model.createZimmerTableModel(model.getZimmerSelection()), "keine Zimmer vorhanden", zimmerTableStateName);
 
 
         tZimmer.setSelectionModel(new SingleListSelectionAdapter(new JXTableSelectionConverter(
                 model.getZimmerSelection().getSelectionIndexHolder(),
                 tZimmer)));
 
+        componentContainer= CWComponentFactory.createCWComponentContainer();
+        componentContainer.addComponent(bNew)
+                .addComponent(bEdit)
+                .addComponent(bDelete)
+                .addComponent(bBack)
+                .addComponent(bPrint)
+                .addComponent(tZimmer);
     }
 
     private void initEventHandling() {
@@ -69,34 +78,27 @@ public class ZimmerView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
-        panel.getButtonPanel().add(bNew);
-        panel.getButtonPanel().add(bEdit);
-        panel.getButtonPanel().add(bDelete);
-        panel.getButtonPanel().add(bPrint);
-        panel.getButtonPanel().add(bBack);
+        mainPanel = new JViewPanel(model.getHeaderInfo());
+        mainPanel.getButtonPanel().add(bNew);
+        mainPanel.getButtonPanel().add(bEdit);
+        mainPanel.getButtonPanel().add(bDelete);
+        mainPanel.getButtonPanel().add(bPrint);
+        mainPanel.getButtonPanel().add(bBack);
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
-        panel.getTopPanel().setLayout(layout);
-        CellConstraints cc = new CellConstraints();
-//        panel.getTopPanel().add(lSuche, cc.xy(1,1));
-//        panel.getTopPanel().add(new org.jdesktop.swingx.JXDatePicker(), cc.xy(1,1));
+        mainPanel.getTopPanel().setLayout(layout);
+        
 
-//        ArrayListModel list = new ArrayListModel();
-//        Object sel = new Object();
-//        list.add(sel);
-//        list.add(new Object());
-//        list.add(new Object());
-//        list.add(new Object());
-//        list.add(new Object());
-//
-//        panel.getTopPanel().add(new JObjectChooser(list, null), cc.xy(1, 1));
-////        topActions.add(new JButton(new ImageIcon("images" + System.getProperty("file.separator") + "link_go.png")), cc.xy(1,1));
-//        panel.getTopPanel().add(tfSuche, cc.xy(3,1));
-//        panel.getTopPanel().add(bSuche, cc.xy(5,1));
+        mainPanel.getContentPanel().add(new JScrollPane(tZimmer), BorderLayout.CENTER);
 
-        panel.getContentPanel().add(new JScrollPane(tZimmer), BorderLayout.CENTER);
+        mainPanel.addDisposableListener(this);
+        return mainPanel;
+    }
 
-        return panel;
+    public void dispose() {
+        tZimmer.removeMouseListener(model.getDoubleClickHandler());
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 }

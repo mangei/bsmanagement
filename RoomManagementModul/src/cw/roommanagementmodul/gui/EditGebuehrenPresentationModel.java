@@ -15,6 +15,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -30,7 +31,8 @@ import cw.roommanagementmodul.pojo.GebuehrenKategorie;
  *
  * @author Dominik
  */
-public class EditGebuehrenPresentationModel extends PresentationModel<Gebuehr> {
+public class EditGebuehrenPresentationModel extends PresentationModel<Gebuehr>
+                            implements Disposable{
 
     private Gebuehr gebuehr;
     private ButtonListenerSupport support;
@@ -42,9 +44,12 @@ public class EditGebuehrenPresentationModel extends PresentationModel<Gebuehr> {
     private SelectionInList<GebuehrenKategorie> gebKatList;
     private String headerText;
     private HeaderInfo headerInfo;
+    private SaveListener saveListener;
+    private ButtonEnable buttonEnable;
 
     public EditGebuehrenPresentationModel(Gebuehr gebuehr) {
         super(gebuehr);
+        saveListener= new SaveListener();
         this.gebuehr = gebuehr;
         gebKatManager= GebuehrenKatManager.getInstance();
         initModels();
@@ -53,6 +58,7 @@ public class EditGebuehrenPresentationModel extends PresentationModel<Gebuehr> {
 
     EditGebuehrenPresentationModel(Gebuehr gebuehr, HeaderInfo header) {
         super(gebuehr);
+        saveListener=new SaveListener();
         this.gebuehr = gebuehr;
         gebKatManager= GebuehrenKatManager.getInstance();
         this.headerText=header.getHeaderText();
@@ -63,18 +69,8 @@ public class EditGebuehrenPresentationModel extends PresentationModel<Gebuehr> {
 
     private void initEventHandling() {
         unsaved = new ValueHolder();
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                if ((Boolean) evt.getNewValue() == true) {
-                    getSaveButtonAction().setEnabled(true);
-                    getSaveCancelButtonAction().setEnabled(true);
-                } else {
-                    getSaveButtonAction().setEnabled(false);
-                    getSaveCancelButtonAction().setEnabled(false);
-                }
-            }
-        });
+        buttonEnable = new ButtonEnable();
+        unsaved.addValueChangeListener(buttonEnable);
         unsaved.setValue(false);
     }
 
@@ -85,8 +81,8 @@ public class EditGebuehrenPresentationModel extends PresentationModel<Gebuehr> {
 
         support = new ButtonListenerSupport();
         gebKatList = new SelectionInList(gebKatManager.getAll(), getModel(Gebuehr.PROPERTYNAME_GEBKAT));
-        getGebKatList().addValueChangeListener(new SaveListener());
-        getBufferedModel(Gebuehr.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());
+        getGebKatList().addValueChangeListener(saveListener);
+        getBufferedModel(Gebuehr.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
     }
 
     public Action getSaveButtonAction() {
@@ -133,6 +129,13 @@ public class EditGebuehrenPresentationModel extends PresentationModel<Gebuehr> {
      */
     public void setHeaderInfo(HeaderInfo headerInfo) {
         this.headerInfo = headerInfo;
+    }
+
+    public void dispose() {
+
+        getGebKatList().removeValueChangeListener(saveListener);
+        getBufferedModel(Gebuehr.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
+        release();
     }
 
     private class SaveAction
@@ -203,4 +206,17 @@ public class EditGebuehrenPresentationModel extends PresentationModel<Gebuehr> {
             unsaved.setValue(true);
         }
     }
+
+   private class ButtonEnable implements PropertyChangeListener{
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                if ((Boolean) evt.getNewValue() == true) {
+                    getSaveButtonAction().setEnabled(true);
+                    getSaveCancelButtonAction().setEnabled(true);
+                } else {
+                    getSaveButtonAction().setEnabled(false);
+                    getSaveCancelButtonAction().setEnabled(false);
+                }
+            }
+        }
 }

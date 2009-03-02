@@ -13,6 +13,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -35,7 +36,7 @@ import cw.roommanagementmodul.pojo.manager.TarifManager;
  *
  * @author Dominik
  */
-public class TarifPresentationModel extends PresentationModel<Gebuehr> {
+public class TarifPresentationModel extends PresentationModel<Gebuehr> implements Disposable{
 
     private TarifManager tarifManager;
     private Action newAction;
@@ -47,10 +48,14 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
     private SelectionInList<Tarif> tarifSelection;
     private String headerText;
     private HeaderInfo headerInfo;
+    private SelectionEmptyHandler selectionEmptyHandler;
+    private DoubleClickHandler doubleClickHandler;
 
     public TarifPresentationModel(Gebuehr gebuehr) {
         super(gebuehr);
         this.gebuehr = gebuehr;
+        doubleClickHandler=new DoubleClickHandler();
+        selectionEmptyHandler=new SelectionEmptyHandler();
         this.tarifManager = TarifManager.getInstance();
         initModels();
         this.initEventHandling();
@@ -61,6 +66,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
         super(gebuehr);
         this.gebuehr = gebuehr;
         this.tarifManager = TarifManager.getInstance();
+        selectionEmptyHandler=new SelectionEmptyHandler();
         this.headerText=header.getHeaderText();
         this.headerInfo=header;
         initModels();
@@ -70,7 +76,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
     private void initEventHandling() {
         getTarifSelection().addPropertyChangeListener(
                 SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+                selectionEmptyHandler);
     }
 
     private void initModels() {
@@ -139,6 +145,11 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
      */
     public void setHeaderInfo(HeaderInfo headerInfo) {
         this.headerInfo = headerInfo;
+    }
+
+    public void dispose() {
+        getTarifSelection().removeValueChangeListener(selectionEmptyHandler);
+        release();
     }
 
     private class NewAction
@@ -254,7 +265,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> {
 
     // Event Handling *********************************************************
     public MouseListener getDoubleClickHandler() {
-        return new DoubleClickHandler();
+        return doubleClickHandler;
     }
 
     private final class DoubleClickHandler extends MouseAdapter {

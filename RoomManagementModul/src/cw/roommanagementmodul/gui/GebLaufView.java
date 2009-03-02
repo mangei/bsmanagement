@@ -10,6 +10,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -29,7 +30,7 @@ import javax.swing.JTextField;
  *
  * @author Dominik
  */
-public class GebLaufView implements ItemListener {
+public class GebLaufView implements ItemListener, Disposable {
 
     private GebLaufPresentationModel model;
     private JLabel lLaufart;
@@ -49,13 +50,16 @@ public class GebLaufView implements ItemListener {
     private ButtonGroup laufartGroup;
     private ButtonGroup betriebsartGroup;
 
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
+
     public GebLaufView(GebLaufPresentationModel model) {
         this.model = model;
     }
 
     public void initComponents() {
 
-        startButton = new JButton(model.getStart());
+        startButton = CWComponentFactory.createButton(model.getStart());
         startButton.setText("Start");
 
         rNormal = CWComponentFactory.createRadioButton(model.getNormalLauf());
@@ -65,11 +69,11 @@ public class GebLaufView implements ItemListener {
         rStorno.setText("Storno");
         laufartGroup = new ButtonGroup();
 
-        lLaufart = new JLabel("Laufart:");
-        lBetiebsart = new JLabel("Betriebsart:");
-        lAbrMonat = new JLabel("Abr-Monat: ");
-        lMonat = new JLabel("Monat: ");
-        lGebLauf = new JLabel("Gebühren Lauf: ");
+        lLaufart = CWComponentFactory.createLabel("Laufart:");
+        lBetiebsart = CWComponentFactory.createLabel("Betriebsart:");
+        lAbrMonat = CWComponentFactory.createLabel("Abr-Monat: ");
+        lMonat = CWComponentFactory.createLabel("Monat: ");
+        lGebLauf = CWComponentFactory.createLabel("Gebühren Lauf: ");
 
         laufartGroup.add(rNormal);
         laufartGroup.add(rStorno);
@@ -178,5 +182,9 @@ public class GebLaufView implements ItemListener {
 
         }
 
+    }
+
+    public void dispose() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 }

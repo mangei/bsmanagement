@@ -10,8 +10,11 @@ import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Customer;
 import java.awt.event.ActionEvent;
@@ -35,7 +38,8 @@ import javax.swing.JOptionPane;
  *
  * @author Dominik
  */
-public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bewohner> {
+public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bewohner>
+                                implements Disposable{
 
     private GebuehrZuordnungManager gebuehrZuordnungManager;
     private Action newAction;
@@ -47,9 +51,14 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
     private ButtonListenerSupport support;
     private SelectionInList<GebuehrZuordnung> gebuehrZuordnungSelection;
     private HeaderInfo headerInfo;
+    private SelectionEmptyHandler selectionEmptyHandler;
+    private DoubleClickHandler doubleClickHandler;
+
 
     public GebZuordnungBewohnerPresentationModel(Bewohner bewohner) {
         super(bewohner);
+        doubleClickHandler= new DoubleClickHandler();
+        selectionEmptyHandler = new SelectionEmptyHandler();
         this.bewohner = bewohner;
         this.gebuehrZuordnungManager = GebuehrZuordnungManager.getInstance();
         initModels();
@@ -59,6 +68,8 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
 
     GebZuordnungBewohnerPresentationModel(Bewohner bewohner, HeaderInfo header) {
         super(bewohner);
+        doubleClickHandler= new DoubleClickHandler();
+        selectionEmptyHandler = new SelectionEmptyHandler();
         this.headerText = header.getHeaderText();
         this.headerInfo=header;
         this.bewohner = bewohner;
@@ -70,7 +81,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
     private void initEventHandling() {
         getGebuehrZuordnungSelection().addPropertyChangeListener(
                 SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+                selectionEmptyHandler);
     }
 
     private void initModels() {
@@ -83,6 +94,9 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
         //nur vom bestimmten Bewohner!!!
         gebuehrZuordnungSelection = new SelectionInList<GebuehrZuordnung>(gebuehrZuordnungManager.getGebuehrZuordnung(getBewohner()));
         updateActionEnablement();
+
+
+
     }
 
     private void updateActionEnablement() {
@@ -139,6 +153,11 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
      */
     public void setHeaderInfo(HeaderInfo headerInfo) {
         this.headerInfo = headerInfo;
+    }
+
+    public void dispose() {
+        getGebuehrZuordnungSelection().removeValueChangeListener(selectionEmptyHandler);
+        release();
     }
 
     private class NewAction
@@ -255,7 +274,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
 
     // Event Handling *********************************************************
     public MouseListener getDoubleClickHandler() {
-        return new DoubleClickHandler();
+        return doubleClickHandler;
     }
 
     private final class DoubleClickHandler extends MouseAdapter {

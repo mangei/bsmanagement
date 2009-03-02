@@ -4,9 +4,10 @@
  */
 package cw.roommanagementmodul.gui;
 
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.Zimmer;
 import java.awt.BorderLayout;
@@ -23,7 +24,7 @@ import javax.swing.tree.TreeSelectionModel;
  *
  * @author Dominik
  */
-public class BereichView {
+public class BereichView implements Disposable {
 
     BereichPresentationModel model;
     private JButton bNew;
@@ -33,7 +34,9 @@ public class BereichView {
     private JButton bZimmerEdit;
     private JButton bZimmerDelete;
     private JTree bereichTree;
-    private JButton viewTimmerTabelle;
+    private JButton viewZimmerTabelle;
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
 
     public BereichView(BereichPresentationModel m) {
         this.model = m;
@@ -41,23 +44,23 @@ public class BereichView {
 
     private void initComponents() {
 
-        bNew = new JButton(model.getNewAction());
+        bNew = CWComponentFactory.createButton(model.getNewAction());
         bNew.setText("Neuer Bereich");
-        bEdit = new JButton(model.getEditAction());
+        bEdit = CWComponentFactory.createButton(model.getEditAction());
         bEdit.setText("Bearbeiten");
-        bDelete = new JButton(model.getDeleteAction());
+        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
         bDelete.setText("Löschen");
 
 
-        bZimmerNew = new JButton(model.getNewZimmerAction());
+        bZimmerNew = CWComponentFactory.createButton(model.getNewZimmerAction());
         bZimmerNew.setText("Neues Zimmer");
-        bZimmerEdit = new JButton(model.getEditZimmerAction());
+        bZimmerEdit = CWComponentFactory.createButton(model.getEditZimmerAction());
         bZimmerEdit.setText("Bearbeiten");
-        bZimmerDelete = new JButton(model.getDeleteZimmerAction());
+        bZimmerDelete = CWComponentFactory.createButton(model.getDeleteZimmerAction());
         bZimmerDelete.setText("Löschen");
 
-        viewTimmerTabelle= new JButton(model.getViewTabelleAction());
-        viewTimmerTabelle.setText("Zimmer Tabelle");
+        viewZimmerTabelle = CWComponentFactory.createButton(model.getViewTabelleAction());
+        viewZimmerTabelle.setText("Zimmer Tabelle");
 
         model.initTree(model.getRootTree());
         bereichTree = new JTree(model.getTreeModel());
@@ -65,6 +68,7 @@ public class BereichView {
 
         bereichTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
         bereichTree.addTreeSelectionListener(model.getBereichListener());
+        bereichTree.setShowsRootHandles(true);
 
         MyRenderer renderer = new MyRenderer();
         renderer.setOpenIcon(CWUtils.loadIcon("cw/roommanagementmodul/images/box.png"));
@@ -72,14 +76,13 @@ public class BereichView {
         renderer.setLeafIcon(CWUtils.loadIcon("cw/roommanagementmodul/images/box.png"));
         bereichTree.setCellRenderer(renderer);
 
+        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bNew).addComponent(bEdit).addComponent(bDelete).addComponent(bZimmerNew).addComponent(bZimmerEdit).addComponent(bZimmerDelete).addComponent(viewZimmerTabelle).addComponent(bereichTree);
 
-    }
 
-    private void initEventHandling() {
     }
 
     public JPanel buildPanel() {
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
+        panel = new JViewPanel(model.getHeaderInfo());
         this.initComponents();
 
         panel.getButtonPanel().add(bNew);
@@ -88,11 +91,18 @@ public class BereichView {
         panel.getButtonPanel().add(bZimmerNew);
         panel.getButtonPanel().add(bZimmerEdit);
         panel.getButtonPanel().add(bZimmerDelete);
-        panel.getButtonPanel().add(viewTimmerTabelle);
+        panel.getButtonPanel().add(viewZimmerTabelle);
         panel.getContentPanel().add(new JScrollPane(bereichTree), BorderLayout.CENTER);
 
 
         return panel;
+    }
+
+    public void dispose() {
+        bereichTree.removeTreeSelectionListener(model.getBereichListener());
+        panel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 
     class MyRenderer extends DefaultTreeCellRenderer {
@@ -118,10 +128,10 @@ public class BereichView {
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
             if (node.getUserObject() instanceof Zimmer) {
                 setIcon(CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"));
-                Zimmer z=(Zimmer)node.getUserObject();
+                Zimmer z = (Zimmer) node.getUserObject();
                 setText(z.getName());
             } else {
-                Bereich b=(Bereich)node.getUserObject();
+                Bereich b = (Bereich) node.getUserObject();
                 setText(b.getName());
                 if (isRoot(value)) {
                     setIcon(CWUtils.loadIcon("cw/boardingschoolmanagement/images/house.png"));
@@ -145,6 +155,4 @@ public class BereichView {
             return false;
         }
     }
-
-
 }

@@ -37,15 +37,17 @@ public class EditZimmerView implements Disposable{
     public JButton bSave;
     public JButton bCancel;
     public JButton bSaveCancel;
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
 
     public EditZimmerView(EditZimmerPresentationModel model) {
         this.model = model;
     }
 
     private void initComponents() {
-        lZimmerName = new JLabel("Zimmer Name: ");
-        lBettenAnzahl = new JLabel("Betten Anzahl: ");
-        lBereich = new JLabel("Bereich: ");
+        lZimmerName = CWComponentFactory.createLabel("Zimmer Name: ");
+        lBettenAnzahl = CWComponentFactory.createLabel("Betten Anzahl: ");
+        lBereich = CWComponentFactory.createLabel("Bereich: ");
 
         //tfZimmerName = new JTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_NAME));
         //tfBettenAnzahl = new JTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN));
@@ -53,13 +55,13 @@ public class EditZimmerView implements Disposable{
         tfBettenAnzahl = CWComponentFactory.createTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN), false);
         tfBettenAnzahl.setDocument(model.getDigitDocument());
 
-        bSave = new JButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = new JButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = new JButton(model.getSaveCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schließen");
 
 
@@ -72,13 +74,20 @@ public class EditZimmerView implements Disposable{
             model.getUnsaved().setValue(false);
         }
 
-
+        componentContainer= CWComponentFactory.createCWComponentContainer()
+                .addComponent(bSave)
+                .addComponent(bCancel)
+                .addComponent(bSaveCancel)
+                .addComponent(cbBereich)
+                .addComponent(lZimmerName)
+                .addComponent(lBettenAnzahl)
+                .addComponent(lBereich);
     }
 
     public JComponent buildPanel() {
         initComponents();
 
-        JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
+        mainPanel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
         buttonPanel.add(bSave);
@@ -116,6 +125,8 @@ public class EditZimmerView implements Disposable{
     }
 
     public void dispose(){
-        model.release();
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 }

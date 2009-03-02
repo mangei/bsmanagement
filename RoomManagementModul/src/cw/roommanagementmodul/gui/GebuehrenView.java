@@ -10,8 +10,8 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -21,7 +21,7 @@ import org.jdesktop.swingx.JXTable;
  *
  * @author Dominik
  */
-public class GebuehrenView {
+public class GebuehrenView implements Disposable{
 
     private GebuehrenPresentationModel model;
     private JButton bNew;
@@ -30,6 +30,9 @@ public class GebuehrenView {
     private JButton bKategorie;
     private JButton bTarif;
     private JXTable tGebuehr;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
 
     public GebuehrenView(GebuehrenPresentationModel m) {
         this.model = m;
@@ -55,6 +58,14 @@ public class GebuehrenView {
         tGebuehr.setSelectionModel(new SingleListSelectionAdapter(new JXTableSelectionConverter(
                 model.getGebuehrenSelection().getSelectionIndexHolder(),
                 tGebuehr)));
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(bNew)
+                .addComponent(bEdit)
+                .addComponent(bDelete)
+                .addComponent(bKategorie)
+                .addComponent(bTarif)
+                .addComponent(tGebuehr);
     }
 
     private void initEventHandling() {
@@ -65,18 +76,18 @@ public class GebuehrenView {
         initComponents();
         initEventHandling();
 
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
+        mainPanel = new JViewPanel(model.getHeaderInfo());
         
 
-        panel.getButtonPanel().add(bTarif);
-        panel.getButtonPanel().add(bKategorie);
-        panel.getButtonPanel().add(bNew);
-        panel.getButtonPanel().add(bEdit);
-        panel.getButtonPanel().add(bDelete);
+        mainPanel.getButtonPanel().add(bTarif);
+        mainPanel.getButtonPanel().add(bKategorie);
+        mainPanel.getButtonPanel().add(bNew);
+        mainPanel.getButtonPanel().add(bEdit);
+        mainPanel.getButtonPanel().add(bDelete);
         
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
-        panel.getTopPanel().setLayout(layout);
+        mainPanel.getTopPanel().setLayout(layout);
         CellConstraints cc = new CellConstraints();
 
 //        ArrayListModel list = new ArrayListModel();
@@ -84,8 +95,14 @@ public class GebuehrenView {
 //        list.add(sel);
 //
 //        panel.getTopPanel().add(new JObjectChooser(list, null), cc.xy(1, 1));
-        panel.getContentPanel().add(new JScrollPane(tGebuehr), BorderLayout.CENTER);
+        mainPanel.getContentPanel().add(new JScrollPane(tGebuehr), BorderLayout.CENTER);
+        mainPanel.addDisposableListener(this);
+        return mainPanel;
+    }
 
-        return panel;
+    public void dispose() {
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 }

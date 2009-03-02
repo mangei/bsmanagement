@@ -16,6 +16,7 @@ import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -35,7 +36,8 @@ import java.util.GregorianCalendar;
  *
  * @author Dominik
  */
-public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuordnung> {
+public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuordnung>
+                implements Disposable{
 
     private GebuehrZuordnung gebuehrZuordnung;
     private ButtonListenerSupport support;
@@ -50,9 +52,12 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
     private JDateChooser dcVon;
     private JDateChooser dcBis;
     private HeaderInfo headerInfo;
+    private SaveListener saveListener;
+    private ButtonEnable buttonEnable;
 
     public GebBewohnerPresentationModel(GebuehrZuordnung gebuehrZuordnung) {
         super(gebuehrZuordnung);
+        saveListener= new  SaveListener();
         this.gebuehrZuordnung = gebuehrZuordnung;
         headerText = "-";
         gebZuordnungManager = GebuehrZuordnungManager.getInstance();
@@ -63,6 +68,7 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
 
     GebBewohnerPresentationModel(GebuehrZuordnung gb, HeaderInfo header) {
         super(gb);
+        saveListener= new  SaveListener();
         this.headerText = header.getHeaderText();
         this.headerInfo = header;
         this.gebuehrZuordnung = gb;
@@ -73,19 +79,9 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
     }
 
     private void initEventHandling() {
+        buttonEnable= new ButtonEnable();
         unsaved = new ValueHolder();
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                if ((Boolean) evt.getNewValue() == true) {
-                    saveButtonAction.setEnabled(true);
-                    saveCancelButtonAction.setEnabled(true);
-                } else {
-                    saveButtonAction.setEnabled(false);
-                    saveCancelButtonAction.setEnabled(false);
-                }
-            }
-        });
+        unsaved.addValueChangeListener(buttonEnable);
         unsaved.setValue(false);
     }
 
@@ -94,17 +90,15 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         cancelButtonAction = new CancelAction();
         saveCancelButtonAction = new SaveCancelAction();
 
-        dcVon = new JDateChooser();
         dcVon = CWComponentFactory.createDateChooser(getBufferedModel(GebuehrZuordnung.PROPERTYNAME_VON));
 
-        dcBis = new JDateChooser();
         dcBis = CWComponentFactory.createDateChooser(getBufferedModel(GebuehrZuordnung.PROPERTYNAME_BIS));
         setGebuehrList((SelectionInList<Bereich>) new SelectionInList(gebuehrManager.getAll(), getModel(GebuehrZuordnung.PROPERTYNAME_GEBUEHR)));
         support = new ButtonListenerSupport();
-        getGebuehrList().addValueChangeListener(new SaveListener());
-        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_VON).addValueChangeListener(new SaveListener());
-        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_BIS).addValueChangeListener(new SaveListener());
-        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_ANMERKUNG).addValueChangeListener(new SaveListener());
+        getGebuehrList().addValueChangeListener(saveListener);
+        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_VON).addValueChangeListener(saveListener);
+        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_BIS).addValueChangeListener(saveListener);
+        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_ANMERKUNG).addValueChangeListener(saveListener);
     }
 
     public ComboBoxModel createGebuehrComboModel(SelectionInList gebuehrList) {
@@ -183,6 +177,15 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
      */
     public void setHeaderInfo(HeaderInfo headerInfo) {
         this.headerInfo = headerInfo;
+    }
+
+    public void dispose() {
+        getGebuehrList().removeValueChangeListener(saveListener);
+        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_VON).removeValueChangeListener(saveListener);
+        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_BIS).removeValueChangeListener(saveListener);
+        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_ANMERKUNG).removeValueChangeListener(saveListener);
+        unsaved.removeValueChangeListener(buttonEnable);
+        release();
     }
 
     private class SaveAction
@@ -362,4 +365,17 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
             unsaved.setValue(true);
         }
     }
+
+    private class ButtonEnable implements PropertyChangeListener{
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                if ((Boolean) evt.getNewValue() == true) {
+                    saveButtonAction.setEnabled(true);
+                    saveCancelButtonAction.setEnabled(true);
+                } else {
+                    saveButtonAction.setEnabled(false);
+                    saveCancelButtonAction.setEnabled(false);
+                }
+            }
+        }
 }

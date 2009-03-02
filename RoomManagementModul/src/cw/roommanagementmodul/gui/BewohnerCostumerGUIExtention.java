@@ -22,6 +22,7 @@ import java.util.GregorianCalendar;
 public class BewohnerCostumerGUIExtention implements EditCustomerTabExtention {
 
     private BewohnerManager bewohnerManager;
+    private BewohnerGUIExtentionView view;
     private BewohnerHistoryManager historyManager;
     private BewohnerGUIExtentionPresentationModel model;
     private Bewohner b;
@@ -29,7 +30,8 @@ public class BewohnerCostumerGUIExtention implements EditCustomerTabExtention {
     private Zimmer tempZimmer;
 
     public JComponent getView() {
-        return new BewohnerGUIExtentionView(model).buildPanel();
+        view=new BewohnerGUIExtentionView(model);
+        return view.buildPanel();
     }
 
     public void save() {
@@ -117,6 +119,14 @@ public class BewohnerCostumerGUIExtention implements EditCustomerTabExtention {
 
 
         model = new BewohnerGUIExtentionPresentationModel(bewohnerManager, b, editCustomerModel.getUnsaved());
+    }
+
+      public void dispose() {
+        view.dispose();
+    }
+
+    public int priority() {
+        return 0;
     }
 
 }

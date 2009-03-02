@@ -7,9 +7,10 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -25,29 +26,31 @@ import javax.swing.JOptionPane;
  *
  * @author Dominik
  */
-public class EditBereichView {
+public class EditBereichView implements Disposable{
 
     private EditBereichPresentationModel model;
-    public JButton bSave;
-    public JButton bReset;
-    public JButton bCancel;
-    public JButton bSaveCancel;
-    public JLabel lName;
-    public JTextField tfName;
-    public JLabel lParentBereich;
-    public JComboBox parentComboBox;
+    private JButton bSave;
+    private JButton bReset;
+    private JButton bCancel;
+    private JButton bSaveCancel;
+    private JLabel lName;
+    private JTextField tfName;
+    private JLabel lParentBereich;
+    private JComboBox parentComboBox;
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
 
     public EditBereichView(EditBereichPresentationModel model) {
         this.model = model;
     }
 
     private void initComponents() {
-        lName = new JLabel("Name: ");
-        lParentBereich = new JLabel("Übergeordneter Bereich: ");
+        lName = CWComponentFactory.createLabel("Name: ");
+        lParentBereich = CWComponentFactory.createLabel("Übergeordneter Bereich: ");
 
-        //parentComboBox= BasicComponentFactory.createComboBox(model.getBereichList());
+        //ComboBox
+        parentComboBox = CWComponentFactory.createComboBox(model.getBereichList());
 
-        parentComboBox = new JComboBox(model.createParentBereichComboModel(model.getBereichList()));
         BereichManager bManager= BereichManager.getInstance();
         //bManager.refreshBereich(model.getVaterBereich());
         if (model.getVaterBereich() != null && model.getHeaderText().equals("Bereich erstellen")) {
@@ -72,23 +75,31 @@ public class EditBereichView {
         }
 
 
-        tfName = BasicComponentFactory.createTextField(model.getBufferedModel(Bereich.PROPERTYNAME_NAME), false);
+        tfName = CWComponentFactory.createTextField(model.getBufferedModel(Bereich.PROPERTYNAME_NAME), false);
 
-        bSave = new JButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = new JButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = new JButton(model.getSaveCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schließen");
 
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(lName)
+                .addComponent(lParentBereich)
+                .addComponent(parentComboBox)
+                .addComponent(tfName)
+                .addComponent(bSave)
+                .addComponent(bCancel)
+                .addComponent(bSaveCancel);
     }
 
     public JComponent buildPanel() {
         initComponents();
 
-        JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
+        mainPanel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
         buttonPanel.add(bSave);
@@ -119,6 +130,13 @@ public class EditBereichView {
 
         mainPanel.getContentPanel().add(panel, BorderLayout.CENTER);
 
+        mainPanel.addDisposableListener(this);
         return mainPanel;
+    }
+
+    public void dispose() {
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 }
