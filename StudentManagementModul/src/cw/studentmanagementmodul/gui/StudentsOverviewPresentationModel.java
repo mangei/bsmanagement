@@ -3,6 +3,7 @@ package cw.studentmanagementmodul.gui;
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.event.ListSelectionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -17,7 +18,9 @@ import javax.swing.table.TableModel;
 /**
  * @author CreativeWorkers.at
  */
-public class StudentsOverviewPresentationModel {
+public class StudentsOverviewPresentationModel
+    implements Disposable
+{
 
     private SelectionInList<Student> studentSelection;
 
@@ -44,9 +47,12 @@ public class StudentsOverviewPresentationModel {
     }
 
     private void initEventHandling() {
-        updateActionEnablement();
+        // Nothing to do
     }
 
+    public void dispose() {
+        // Nothing to do
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     // Action classes
@@ -66,22 +72,6 @@ public class StudentsOverviewPresentationModel {
 
     public TableModel createStudentTableModel(ListModel listModel) {
         return new StudentTableModel(listModel);
-    }
-
-    // Event Handling *********************************************************
-    private void updateActionEnablement() {
-        boolean hasSelection = !studentSelection.isSelectionEmpty();
-    }
-
-    private class SelectionHandler implements PropertyChangeListener, ListSelectionListener {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            updateActionEnablement();
-        }
-
-        public void valueChanged(ListSelectionEvent e) {
-            updateActionEnablement();
-        }
     }
 
     public static class StudentTableModel extends AbstractTableModel {

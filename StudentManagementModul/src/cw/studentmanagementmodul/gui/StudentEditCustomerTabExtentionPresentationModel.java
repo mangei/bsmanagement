@@ -6,6 +6,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -22,12 +23,16 @@ import javax.swing.Icon;
  */
 public class StudentEditCustomerTabExtentionPresentationModel
         extends PresentationModel<Student>
+        implements Disposable
 {
     
     private Action studentClassChooserAction;
     private ValueModel studentClassName;
     
     private ValueModel unsaved;
+
+    private PropertyChangeListener classChangeListener;
+    private PropertyChangeListener activeChangeListener;
     
     public StudentEditCustomerTabExtentionPresentationModel(Student student, final ValueModel unsaved) {
         super(student);
@@ -43,7 +48,7 @@ public class StudentEditCustomerTabExtentionPresentationModel
     }
 
     private void initEventHandling() {
-        getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS).addValueChangeListener(new PropertyChangeListener() {
+        getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS).addValueChangeListener(classChangeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 updateStudentClassName();
                 unsaved.setValue(true);
@@ -51,13 +56,18 @@ public class StudentEditCustomerTabExtentionPresentationModel
         });
         updateStudentClassName();
 
-        getBufferedModel(Student.PROPERTYNAME_ACTIVE).addValueChangeListener(new PropertyChangeListener() {
+        getBufferedModel(Student.PROPERTYNAME_ACTIVE).addValueChangeListener(activeChangeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 unsaved.setValue(true);
                 updateComponentsEnabled();
             }
         });
         updateComponentsEnabled();
+    }
+
+    public void dispose() {
+        getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS).removePropertyChangeListener(classChangeListener);
+        getBufferedModel(Student.PROPERTYNAME_ACTIVE).removePropertyChangeListener(activeChangeListener);
     }
 
     ////////////////////////////////////////////////////////////////////////////

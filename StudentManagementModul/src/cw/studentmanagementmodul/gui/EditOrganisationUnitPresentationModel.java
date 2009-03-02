@@ -9,6 +9,7 @@ import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -24,7 +25,10 @@ import javax.swing.Icon;
  *
  * @author ManuelG
  */
-public class EditOrganisationUnitPresentationModel extends PresentationModel<OrganisationUnit>{
+public class EditOrganisationUnitPresentationModel 
+        extends PresentationModel<OrganisationUnit>
+        implements Disposable
+{
 
     private ButtonListenerSupport buttonListenerSupport;
     private ValueModel unsaved;
@@ -36,6 +40,10 @@ public class EditOrganisationUnitPresentationModel extends PresentationModel<Org
     private Action saveCancelButtonAction;
     
     private SelectionInList<OrganisationUnit> selectionOrganisationUnit;
+
+    private PropertyChangeListener unsavedListener;
+    private SaveListener saveListener;
+    private PropertyConnector organisationUnitPropertyConnector;
     
     public EditOrganisationUnitPresentationModel(OrganisationUnit organisationUnit) {
         this(organisationUnit, "");
@@ -72,12 +80,18 @@ public class EditOrganisationUnitPresentationModel extends PresentationModel<Org
     }
 
     public void initEventHandling() {
-        PropertyConnector.connectAndUpdate(getBufferedModel(OrganisationUnit.PROPERTYNAME_PARENT), selectionOrganisationUnit, "selection");
 
-        getBufferedModel(OrganisationUnit.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());
-        getBufferedModel(OrganisationUnit.PROPERTYNAME_PARENT).addValueChangeListener(new SaveListener());
+        organisationUnitPropertyConnector = PropertyConnector.connect(getBufferedModel(OrganisationUnit.PROPERTYNAME_PARENT), "value",  selectionOrganisationUnit, "selection");
+//        organisationUnitPropertyConnector.updateProperty2();
 
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
+        // Already done above
+//        PropertyConnector.connectAndUpdate(getBufferedModel(OrganisationUnit.PROPERTYNAME_PARENT), selectionOrganisationUnit, "selection");
+
+        saveListener = new SaveListener();
+        getBufferedModel(OrganisationUnit.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
+        getBufferedModel(OrganisationUnit.PROPERTYNAME_PARENT).addValueChangeListener(saveListener);
+
+        unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
                     saveButtonAction.setEnabled(true);
@@ -91,6 +105,17 @@ public class EditOrganisationUnitPresentationModel extends PresentationModel<Org
             }
         });
         unsaved.setValue(false);
+    }
+
+    public void dispose() {
+        organisationUnitPropertyConnector.release();
+
+        getBufferedModel(OrganisationUnit.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
+        getBufferedModel(OrganisationUnit.PROPERTYNAME_PARENT).removeValueChangeListener(saveListener);
+
+        unsaved.removeValueChangeListener(unsavedListener);
+
+        release();
     }
 
     ////////////////////////////////////////////////////////////////////////////

@@ -6,6 +6,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.studentmanagementmodul.gui.renderer.StudentClassTreeCellRenderer;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -17,9 +18,14 @@ import org.jdesktop.swingx.JXTree;
  *
  * @author ManuelG
  */
-public class StudentClassChooserView {
+public class StudentClassChooserView
+    implements Disposable
+{
 
     private StudentClassChooserPresentationModel model;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JXTree trStudentClass;
     private JButton bOk;
     private JButton bCancel;
@@ -48,6 +54,12 @@ public class StudentClassChooserView {
                 trStudentClass.collapseAll();
             }
         });
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(bOk)
+                .addComponent(bCancel)
+                .addComponent(bTreeCollapse)
+                .addComponent(bTreeExpand);
     }
 
     public void initEventHandling() {
@@ -57,7 +69,7 @@ public class StudentClassChooserView {
     public JPanel buildPanel() {
         initModels();
 
-        JViewPanel panel = new JViewPanel(model.getHeaderText());
+        panel = new JViewPanel(model.getHeaderText());
 
         panel.getButtonPanel().add(bOk);
         panel.getButtonPanel().add(bCancel);
@@ -74,9 +86,18 @@ public class StudentClassChooserView {
         builder.add(bTreeExpand, cc.xy(3, 1));
         builder.add(bTreeCollapse, cc.xy(3, 3));
 
+        panel.addDisposableListener(this);
+
         initEventHandling();
 
         return panel;
     }
 
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        componentContainer.dispose();
+
+        model.dispose();
+    }
 }

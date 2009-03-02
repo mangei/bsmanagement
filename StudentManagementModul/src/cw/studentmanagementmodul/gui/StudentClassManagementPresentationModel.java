@@ -3,6 +3,7 @@ package cw.studentmanagementmodul.gui;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -36,7 +37,9 @@ import javax.swing.event.TreeModelListener;
  *
  * @author ManuelG
  */
-public class StudentClassManagementPresentationModel {
+public class StudentClassManagementPresentationModel
+    implements Disposable
+{
 
     private String headerText;
     private Action newOrganisationUnitAction;
@@ -51,6 +54,8 @@ public class StudentClassManagementPresentationModel {
     private DefaultTreeSelectionModel studentClassTreeSelectionModel;
     private DefaultMutableTreeNode studentClassRootTreeNode;
     private HashMap<Object, MutableTreeNode> studentClassTreeNodeMap;
+
+    private ActionTreeChangeListener actionTreeChangeListener;
 
     public StudentClassManagementPresentationModel(String headerText) {
         this.headerText = headerText;
@@ -78,10 +83,15 @@ public class StudentClassManagementPresentationModel {
     }
 
     public void initEventHandling() {
-        ActionTreeChangeListener actionTreeChangeListener = new ActionTreeChangeListener();
+        actionTreeChangeListener = new ActionTreeChangeListener();
         actionTreeChangeListener.updateActions();
         studentClassTreeSelectionModel.addTreeSelectionListener(actionTreeChangeListener);
         studentClassTreeModel.addTreeModelListener(actionTreeChangeListener);
+    }
+
+    public void dispose() {
+        studentClassTreeSelectionModel.removeTreeSelectionListener(actionTreeChangeListener);
+        studentClassTreeModel.removeTreeModelListener(actionTreeChangeListener);
     }
 
     //////////////////////////////////////////////////////////////////////////

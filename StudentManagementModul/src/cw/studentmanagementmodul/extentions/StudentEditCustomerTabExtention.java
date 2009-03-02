@@ -17,7 +17,7 @@ public class StudentEditCustomerTabExtention
 implements EditCustomerTabExtention
 {
     private static StudentEditCustomerTabExtentionView view;
-    private static StudentEditCustomerTabExtentionPresentationModel presentationModel;
+    private static StudentEditCustomerTabExtentionPresentationModel model;
     private static Student student;
     
         public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
@@ -29,26 +29,38 @@ implements EditCustomerTabExtention
             // TODO TEST  'v'
 //            StudentManager.getInstance().save(student);
         }
-        presentationModel = new StudentEditCustomerTabExtentionPresentationModel(student, editCustomerModel.getUnsaved());
+        model = new StudentEditCustomerTabExtentionPresentationModel(student, editCustomerModel.getUnsaved());
 
     }
 
     public JComponent getView() {
-        view = new StudentEditCustomerTabExtentionView(presentationModel);
+        view = new StudentEditCustomerTabExtentionView(model);
         return view.buildPanel();
     }
 
     public void save() {
-        presentationModel.save();
+        model.save();
         StudentManager.getInstance().save(student);
     }
 
     public void reset() {
-        presentationModel.reset();
+        model.reset();
     }
 
     public List<String> validate() {
         return null;
+    }
+
+    public Object getModel() {
+        return model;
+    }
+
+    public void dispose() {
+        view.dispose();
+    }
+
+    public int priority() {
+        return 0;
     }
 
 }

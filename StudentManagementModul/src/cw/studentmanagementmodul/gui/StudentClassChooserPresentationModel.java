@@ -4,6 +4,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +28,9 @@ import javax.swing.Icon;
  *
  * @author ManuelG
  */
-public class StudentClassChooserPresentationModel {
+public class StudentClassChooserPresentationModel
+    implements Disposable
+{
 
     private String headerText;
     private StudentClass selectedStudentClass;
@@ -39,7 +42,9 @@ public class StudentClassChooserPresentationModel {
     private DefaultMutableTreeNode studentClassRootTreeNode;
     private HashMap<Object, DefaultMutableTreeNode> studentClassTreeNodeMap;
     private ButtonListenerSupport buttonListenerSupport;
-    
+
+    private TreeSelectionListener treeSelectionListener;
+
     public StudentClassChooserPresentationModel(String headerText) {
         this(null, headerText);
     }
@@ -67,7 +72,7 @@ public class StudentClassChooserPresentationModel {
     }
 
     public void initEventHandling() {
-        studentClassTreeSelectionModel.addTreeSelectionListener(new TreeSelectionListener() {
+        studentClassTreeSelectionModel.addTreeSelectionListener(treeSelectionListener = new TreeSelectionListener() {
 
             public void valueChanged(TreeSelectionEvent e) {
                 if (!studentClassTreeSelectionModel.isSelectionEmpty()) {
@@ -87,6 +92,10 @@ public class StudentClassChooserPresentationModel {
 
         TreePath selectedPath = new TreePath(studentClassTreeNodeMap.get(selectedStudentClass).getPath());
         studentClassTreeSelectionModel.setSelectionPath(selectedPath);
+    }
+
+    public void dispose() {
+        studentClassTreeSelectionModel.removeTreeSelectionListener(treeSelectionListener);
     }
 
     ////////////////////////////////////////////////////////////////////////////

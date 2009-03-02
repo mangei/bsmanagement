@@ -5,6 +5,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.list.SelectionInList;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -17,7 +18,9 @@ import cw.studentmanagementmodul.pojo.manager.OrganisationUnitManager;
  *
  * @author ManuelG
  */
-public class DeleteOrganisationUnitPresentationModel {
+public class DeleteOrganisationUnitPresentationModel
+    implements Disposable
+{
 
     public static final int DELETE_ALL = 0;
     public static final int MOVE_ALL = 1;
@@ -62,6 +65,9 @@ public class DeleteOrganisationUnitPresentationModel {
         // Nothing to do
     }
 
+    public void dispose() {
+        // Nothing to do
+    }
     
     ////////////////////////////////////////////////////////////////////////////
     // Useful methods

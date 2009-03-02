@@ -6,6 +6,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -16,15 +17,18 @@ import cw.studentmanagementmodul.pojo.OrganisationUnit;
  *
  * @author ManuelG
  */
-public class EditOrganisationUnitView {
+public class EditOrganisationUnitView
+    implements Disposable
+{
 
     private EditOrganisationUnitPresentationModel model;
-    
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JTextField tfName;
     private JComboBox cbOrganisationUnitParent;
 
     private JButton bSave;
-    private JButton bReset;
     private JButton bCancel;
     private JButton bSaveCancel;
 
@@ -34,12 +38,18 @@ public class EditOrganisationUnitView {
 
     public void initModels() {
         bSave       = CWComponentFactory.createButton(model.getSaveButtonAction());
-        bReset      = CWComponentFactory.createButton(model.getResetButtonAction());
         bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
 
         tfName                      = CWComponentFactory.createTextField(model.getBufferedModel(OrganisationUnit.PROPERTYNAME_NAME), false);
         cbOrganisationUnitParent    = CWComponentFactory.createComboBox(model.getSelectionOrganisationUnit());
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(bCancel)
+                .addComponent(bSave)
+                .addComponent(bSaveCancel)
+                .addComponent(tfName)
+                .addComponent(cbOrganisationUnitParent);
     }
 
     public void initEventHandling() {
@@ -49,12 +59,11 @@ public class EditOrganisationUnitView {
     public JPanel buildPanel() {
         initModels();
         
-        JViewPanel panel = new JViewPanel(model.getHeaderText());
+        panel = new JViewPanel(model.getHeaderText());
 
         JButtonPanel buttonPanel = panel.getButtonPanel();
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout("right:pref, 4dlu, pref:grow", "pref, 4dlu, pref");
@@ -66,9 +75,18 @@ public class EditOrganisationUnitView {
         builder.addLabel("Überbereich:", cc.xy(1, 3));
         builder.add(cbOrganisationUnitParent, cc.xy(3, 3));
 
+        panel.addDisposableListener(this);
+
         initEventHandling();
         
         return panel;
     }
-    
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        componentContainer.dispose();
+
+        model.dispose();
+    }
 }

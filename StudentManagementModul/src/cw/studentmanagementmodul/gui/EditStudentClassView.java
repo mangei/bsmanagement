@@ -6,6 +6,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JPanel;
@@ -16,10 +17,14 @@ import cw.studentmanagementmodul.pojo.StudentClass;
  *
  * @author ManuelG
  */
-public class EditStudentClassView {
+public class EditStudentClassView
+    implements Disposable
+{
 
     private EditStudentClassPresentationModel model;
 
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JTextField tfName;
     private JComboBox cbOrganisationUnit;
     private JComboBox cbNextStudentClass;
@@ -42,6 +47,15 @@ public class EditStudentClassView {
         tfName              = CWComponentFactory.createTextField(model.getBufferedModel(StudentClass.PROPERTYNAME_NAME), false);
         cbOrganisationUnit  = CWComponentFactory.createComboBox(model.getSelectionOrganisationUnit());
         cbNextStudentClass  = CWComponentFactory.createComboBox(model.getSelectionStudentClass());
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(bCancel)
+                .addComponent(bReset)
+                .addComponent(bSave)
+                .addComponent(bSaveCancel)
+                .addComponent(tfName)
+                .addComponent(cbNextStudentClass)
+                .addComponent(cbOrganisationUnit);
     }
 
     public void initEventHandling() {
@@ -51,7 +65,7 @@ public class EditStudentClassView {
     public JPanel buildPanel() {
         initModels();
         
-        JViewPanel panel = new JViewPanel(model.getHeaderText());
+        panel = new JViewPanel(model.getHeaderText());
 
         JButtonPanel buttonPanel = panel.getButtonPanel();
         buttonPanel.add(bSave);
@@ -70,8 +84,18 @@ public class EditStudentClassView {
         builder.addLabel("Nächste Klasse:", cc.xy(1, 5));
         builder.add(cbNextStudentClass, cc.xy(3, 5));
 
+        panel.addDisposableListener(this);
+
         initEventHandling();
         
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        componentContainer.dispose();
+
+        model.dispose();
     }
 }

@@ -5,6 +5,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -16,12 +17,15 @@ import cw.studentmanagementmodul.pojo.Student;
  * @author Manuel Geier
  */
 public class StudentEditCustomerTabExtentionView
+        implements Disposable
 {
+    private StudentEditCustomerTabExtentionPresentationModel model;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JCheckBox cIsStudent;
     private JButton bStudentClassChooser;
     private JLabel lStudentClassName;
-    
-    private StudentEditCustomerTabExtentionPresentationModel model;
     
     public StudentEditCustomerTabExtentionView(StudentEditCustomerTabExtentionPresentationModel model) {
         this.model = model;
@@ -31,6 +35,11 @@ public class StudentEditCustomerTabExtentionView
         cIsStudent              = CWComponentFactory.createCheckBox(model.getBufferedModel(Student.PROPERTYNAME_ACTIVE), "Kunde ist ein Schüler?");
         bStudentClassChooser    = CWComponentFactory.createButton(model.getStudentClassChooserAction());
         lStudentClassName       = CWComponentFactory.createLabel(model.getStudentClassName());
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(cIsStudent)
+                .addComponent(bStudentClassChooser)
+                .addComponent(lStudentClassName);
     }
     
     private void initEventHandling() {
@@ -40,7 +49,7 @@ public class StudentEditCustomerTabExtentionView
     public JPanel buildPanel() {
         initComponents();
         
-        JViewPanel panel = new JViewPanel();
+        panel = new JViewPanel();
         panel.setName("Schüler");
         
         FormLayout layout = new FormLayout(
@@ -56,10 +65,19 @@ public class StudentEditCustomerTabExtentionView
         builder.add(lStudentClassName, cc.xy(3, 3));
         builder.add(bStudentClassChooser, cc.xy(5, 3));
         
+        panel.addDisposableListener(this);
 
         initEventHandling();
         
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        componentContainer.dispose();
+
+        model.dispose();
     }
 
 }

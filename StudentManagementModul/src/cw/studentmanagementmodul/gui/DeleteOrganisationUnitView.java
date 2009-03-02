@@ -6,6 +6,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.ButtonGroup;
@@ -18,10 +19,14 @@ import javax.swing.JRadioButton;
  *
  * @author ManuelG
  */
-public class DeleteOrganisationUnitView {
+public class DeleteOrganisationUnitView
+    implements Disposable
+{
 
     private DeleteOrganisationUnitPresentationModel model;
 
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JButton bOk;
     private JButton bCancel;
     private JRadioButton rbDeleteAll;
@@ -29,6 +34,7 @@ public class DeleteOrganisationUnitView {
     private ButtonGroup bg;
     private JComboBox cbOrganisationUnits;
 
+    private ItemListener itemListener;
 
     public DeleteOrganisationUnitView(DeleteOrganisationUnitPresentationModel model) {
         this.model = model;
@@ -42,14 +48,19 @@ public class DeleteOrganisationUnitView {
         rbMoveAll               = CWComponentFactory.createRadioButton(model.getMoveAllAction());
         cbOrganisationUnits     = CWComponentFactory.createComboBox(model.getOrganisationUnitSelection());
 
-        bg = new ButtonGroup();
-        bg.add(rbDeleteAll);
-        bg.add(rbMoveAll);
+        bg = CWComponentFactory.createButtonGroup(rbDeleteAll, rbMoveAll);
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(bOk)
+                .addComponent(bCancel)
+                .addComponent(rbDeleteAll)
+                .addComponent(rbMoveAll)
+                .addComponent(cbOrganisationUnits);
     }
 
     private void initEventHandling() {
         rbDeleteAll.setSelected(true);
-        rbMoveAll.addItemListener(new ItemListener() {
+        rbMoveAll.addItemListener(itemListener = new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
                 cbOrganisationUnits.setEnabled(rbMoveAll.isSelected());
             }
@@ -60,8 +71,7 @@ public class DeleteOrganisationUnitView {
     public JPanel buildPanel() {
         initComponents();
 
-
-        JViewPanel panel = new JViewPanel("Bereich löschen");
+        panel = new JViewPanel("Bereich löschen");
 
         JButtonPanel buttonPanel = panel.getButtonPanel();
         buttonPanel.add(bOk);
@@ -80,8 +90,20 @@ public class DeleteOrganisationUnitView {
         builder.addLabel("Unterbereiche/Klassen in anderen Bereich verschieben:", cc.xy(4, 3));
         builder.add(cbOrganisationUnits, cc.xy(4, 5));
 
+        panel.addDisposableListener(this);
+
         initEventHandling();
 
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        rbMoveAll.removeItemListener(itemListener);
+
+        componentContainer.dispose();
+
+        model.dispose();
     }
 }

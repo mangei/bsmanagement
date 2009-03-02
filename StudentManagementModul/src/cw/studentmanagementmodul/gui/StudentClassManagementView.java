@@ -6,6 +6,7 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.studentmanagementmodul.gui.renderer.StudentClassTreeCellRenderer;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -26,9 +27,14 @@ import cw.studentmanagementmodul.pojo.StudentClass;
  *
  * @author ManuelG
  */
-public class StudentClassManagementView {
+public class StudentClassManagementView
+    implements Disposable
+{
 
     private StudentClassManagementPresentationModel model;
+
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel panel;
     private JXTree trStudentClass;
     private JButton bNewOrganisationUnt;
     private JButton bEditOrganisationUnt;
@@ -43,6 +49,8 @@ public class StudentClassManagementView {
     private JPopupMenu popupStudentClassTreeStudentClass;
     private JButton bTreeExpand;
     private JButton bTreeCollapse;
+
+    private MouseAdapter reMouseListener;
 
     public StudentClassManagementView(StudentClassManagementPresentationModel model) {
         this.model = model;
@@ -79,7 +87,7 @@ public class StudentClassManagementView {
         popupStudentClassTreeStudentClass.add(new JMenuItem(model.getViewStudentsAction()));
         popupStudentClassTreeStudentClass.add(new JMenuItem(model.getMoveUpStudentClassAction()));
 
-        trStudentClass.addMouseListener(new MouseAdapter() {
+        trStudentClass.addMouseListener(reMouseListener = new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
 //                int rowheight = trStudentClass.getRowHeight();
@@ -118,6 +126,18 @@ public class StudentClassManagementView {
                 trStudentClass.collapseAll();
             }
         });
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(bEditOrganisationUnt)
+                .addComponent(bEditStudentClass)
+                .addComponent(bMoveUpStudentClasses)
+                .addComponent(bNewOrganisationUnt)
+                .addComponent(bNewStudentClass)
+                .addComponent(bRemoveOrganisationUnt)
+                .addComponent(bRemoveStudentClass)
+                .addComponent(bTreeCollapse)
+                .addComponent(bTreeExpand)
+                .addComponent(bViewStudents);
     }
 
     public void initEventHandling() {
@@ -127,7 +147,7 @@ public class StudentClassManagementView {
     public JPanel buildPanel() {
         initModels();
         
-        JViewPanel panel = new JViewPanel(model.getHeaderText());
+        panel = new JViewPanel(model.getHeaderText());
 
         panel.getButtonPanel().add(bNewOrganisationUnt);
         panel.getButtonPanel().add(bEditOrganisationUnt);
@@ -150,9 +170,21 @@ public class StudentClassManagementView {
         builder.add(bTreeExpand, cc.xy(3, 1));
         builder.add(bTreeCollapse, cc.xy(3, 3));
 
+        panel.addDisposableListener(this);
+
         initEventHandling();
         
         return panel;
     }
 
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+
+        trStudentClass.removeMouseListener(reMouseListener);
+
+        componentContainer.dispose();
+
+        model.dispose();
+    }
 }

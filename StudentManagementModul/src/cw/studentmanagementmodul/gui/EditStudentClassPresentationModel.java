@@ -9,6 +9,7 @@ import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -26,7 +27,10 @@ import javax.swing.Icon;
  *
  * @author ManuelG
  */
-public class EditStudentClassPresentationModel extends PresentationModel<StudentClass>{
+public class EditStudentClassPresentationModel 
+        extends PresentationModel<StudentClass>
+        implements Disposable
+{
 
     private ButtonListenerSupport buttonListenerSupport;
     private ValueModel unsaved;
@@ -39,6 +43,11 @@ public class EditStudentClassPresentationModel extends PresentationModel<Student
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
+
+    private PropertyChangeListener unsavedListener;
+    private SaveListener saveListener;
+    private PropertyConnector organisationUnitPropertyConnector;
+    private PropertyConnector nextStudentClassPropertyConnector;
     
     public EditStudentClassPresentationModel(StudentClass studentClass) {
         this(studentClass, "");
@@ -73,14 +82,21 @@ public class EditStudentClassPresentationModel extends PresentationModel<Student
     }
 
     public void initEventHandling() {
-        PropertyConnector.connectAndUpdate(getBufferedModel(StudentClass.PROPERTYNAME_ORGANISATIONUNIT), selectionOrganisationUnit, "selection");
-        PropertyConnector.connectAndUpdate(getBufferedModel(StudentClass.PROPERTYNAME_NEXTSTUDENTCLASS), selectionStudentClass, "selection");
-    
-        getBufferedModel(StudentClass.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());
-        getBufferedModel(StudentClass.PROPERTYNAME_ORGANISATIONUNIT).addValueChangeListener(new SaveListener());
-        getBufferedModel(StudentClass.PROPERTYNAME_NEXTSTUDENTCLASS).addValueChangeListener(new SaveListener());
+        organisationUnitPropertyConnector = PropertyConnector.connect(getBufferedModel(StudentClass.PROPERTYNAME_ORGANISATIONUNIT), "value",  selectionOrganisationUnit, "selection");
+//        organisationUnitPropertyConnector.updateProperty2();
+        nextStudentClassPropertyConnector = PropertyConnector.connect(getBufferedModel(StudentClass.PROPERTYNAME_NEXTSTUDENTCLASS), "value",  selectionStudentClass, "selection");
+//        organisationUnitPropertyConnector.updateProperty2();
 
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
+        // Already done above
+//        PropertyConnector.connectAndUpdate(getBufferedModel(StudentClass.PROPERTYNAME_ORGANISATIONUNIT), selectionOrganisationUnit, "selection");
+//        PropertyConnector.connectAndUpdate(getBufferedModel(StudentClass.PROPERTYNAME_NEXTSTUDENTCLASS), selectionStudentClass, "selection");
+
+        saveListener = new SaveListener();
+        getBufferedModel(StudentClass.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
+        getBufferedModel(StudentClass.PROPERTYNAME_ORGANISATIONUNIT).addValueChangeListener(saveListener);
+        getBufferedModel(StudentClass.PROPERTYNAME_NEXTSTUDENTCLASS).addValueChangeListener(saveListener);
+
+        unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
                     saveButtonAction.setEnabled(true);
@@ -96,6 +112,16 @@ public class EditStudentClassPresentationModel extends PresentationModel<Student
         unsaved.setValue(false);
     }
 
+    public void dispose() {
+        organisationUnitPropertyConnector.release();
+        nextStudentClassPropertyConnector.release();
+
+        getBufferedModel(StudentClass.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
+        getBufferedModel(StudentClass.PROPERTYNAME_ORGANISATIONUNIT).removeValueChangeListener(saveListener);
+        getBufferedModel(StudentClass.PROPERTYNAME_NEXTSTUDENTCLASS).removeValueChangeListener(saveListener);
+
+        unsaved.removeValueChangeListener(unsavedListener);
+    }
     
     ////////////////////////////////////////////////////////////////////////////
     // Useful classes
