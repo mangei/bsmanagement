@@ -15,7 +15,7 @@ public class PriorityComparator implements Comparator {
         if(p1.priority() < p2.priority()) {
             return 1;
         }
-        return 0;
+        return -1;
     }
 
 }

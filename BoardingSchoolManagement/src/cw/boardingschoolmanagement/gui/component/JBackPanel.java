@@ -4,6 +4,7 @@ import com.jidesoft.swing.JideSwingUtilities;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.gui.ui.JButtonPanelButtonUI;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.interfaces.HeaderInfoCallable;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -25,7 +26,8 @@ import javax.swing.plaf.basic.BasicPanelUI;
  */
 public class JBackPanel
         extends JPanel
-        implements HeaderInfoCallable {
+        implements HeaderInfoCallable, Disposable
+{
 
     private String backText;
     private JPanel panel;
@@ -90,6 +92,12 @@ public class JBackPanel
 
             Rectangle rect = new Rectangle(0, 0, c.getWidth(), c.getHeight());
             JideSwingUtilities.fillGradient((Graphics2D) g, rect, lightGrayColor, Color.WHITE, true);
+        }
+    }
+
+    public void dispose() {
+        if(panel instanceof Disposable) {
+            ((Disposable)panel).dispose();
         }
     }
 }
