@@ -30,6 +30,7 @@ public class PostingManagementView
     private JViewPanel panel;
     private JButton bNew;
     private JButton bReversePosting;
+    private JButton bBalancePosting;
     private JButton bManagePostingCategories;
 
     private JComboBox cbFilterYear;
@@ -49,6 +50,7 @@ public class PostingManagementView
     private void initComponents() {
         bNew    = CWComponentFactory.createButton(model.getNewAction());
         bReversePosting = CWComponentFactory.createButton(model.getReversePostingAction());
+        bBalancePosting = CWComponentFactory.createButton(model.getBalancePostingAction());
 //        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
         bManagePostingCategories = CWComponentFactory.createButton(model.getManagePostingCategoriesAction());
 
@@ -79,6 +81,7 @@ public class PostingManagementView
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(bNew)
                 .addComponent(bReversePosting)
+                .addComponent(bBalancePosting)
                 .addComponent(bManagePostingCategories)
                 .addComponent(cbFilterYear)
                 .addComponent(cbFilterMonth)
@@ -100,6 +103,7 @@ public class PostingManagementView
         panel.setName("Buchungen");
 
         panel.getButtonPanel().add(bNew);
+        panel.getButtonPanel().add(bBalancePosting);
         panel.getButtonPanel().add(bReversePosting);
 //        panel.getButtonPanel().add(bDelete);
         panel.getButtonPanel().add(bManagePostingCategories);

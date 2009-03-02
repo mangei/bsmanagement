@@ -55,9 +55,10 @@ public class EditReversePostingPresentationModel
 
     private PropertyChangeListener unsavedListener;
     
-    public EditReversePostingPresentationModel(Posting oldPosting, Posting reversePosting) {
+    public EditReversePostingPresentationModel(Posting oldPosting, Posting reversePosting, HeaderInfo headerInfo) {
         this.reversePosting = reversePosting;
         this.oldPosting = oldPosting;
+        this.headerInfo = headerInfo;
         
         initModels();
         initEventHandling();
@@ -67,7 +68,7 @@ public class EditReversePostingPresentationModel
         support = new ButtonListenerSupport();
         
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
-        saveCancelButtonAction = new SaveCancelAction("Buchen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_go.png"));
+        saveCancelButtonAction = new SaveCancelAction("Buchen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_lightning.png"));
 
         List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAll();
         postingCategories.add(0, null);
@@ -86,13 +87,6 @@ public class EditReversePostingPresentationModel
         reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(new SaveListener());
         reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).addValueChangeListener(new SaveListener());
         reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_CATEGORY).addValueChangeListener(new SaveListener());
-
-        headerInfo = new HeaderInfo(
-            "Buchung stornieren",
-            "<html>Stornieren Sie eine Buchung von '<b>" + oldPosting.getCustomer().getForename() + " " + oldPosting.getCustomer().getSurname() + "</b>'.</html>",
-            CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"),
-            CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png")
-        );
 
         editReversePostingPostingCategoryExtentions = getExtentions();
         editPostingPostingCategoryExtentionsKeyMap = new HashMap<String, EditReversePostingPostingCategoryExtention>();

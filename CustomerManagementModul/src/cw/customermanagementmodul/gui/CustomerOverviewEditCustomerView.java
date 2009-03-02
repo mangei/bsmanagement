@@ -29,7 +29,7 @@ public class CustomerOverviewEditCustomerView
 
     }
 
-    private void initEvents() {
+    private void initEventHandling() {
     }
 
     public JPanel buildPanel() {
@@ -55,12 +55,12 @@ public class CustomerOverviewEditCustomerView
         CellConstraints cc = new CellConstraints();
 
         for(int i=0, l=extentionComponents.size(); i<l; i++) {
-            builder.add(extentionComponents.get(i), cc.xy(l, i*2+1));
+            builder.add(extentionComponents.get(i), cc.xy(1, i*2+1));
         }
 
-        initEvents();
-
         mainPanel.addDisposableListener(this);
+
+        initEventHandling();
 
         return mainPanel;
     }

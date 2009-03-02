@@ -42,11 +42,8 @@ public class EditCustomerPresentationModel
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
     private ButtonListenerSupport support;
-
     private PresentationModel<Guardian> guardianPresentationModel;
-
     private List<EditCustomerTabExtention> editCustomerGUITabExtentions;
-
     private PropertyChangeListener actionButtonListener;
     private SaveListener saveListener;
 
@@ -125,7 +122,7 @@ public class EditCustomerPresentationModel
 
         unsaved.removeValueChangeListener(actionButtonListener);
 
-        if(saveListener != null) {
+        if (saveListener != null) {
             getBufferedModel(Customer.PROPERTYNAME_ACTIVE).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_GENDER).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_TITLE).removeValueChangeListener(saveListener);
@@ -178,7 +175,7 @@ public class EditCustomerPresentationModel
         }
 
         editCustomerGUITabExtentions.clear();
-        
+
         release();
     }
 
@@ -206,17 +203,47 @@ public class EditCustomerPresentationModel
     }
 
     public List<EditCustomerTabExtention> getExtentions() {
-        if(editCustomerGUITabExtentions == null) {
+        if (editCustomerGUITabExtentions == null) {
             editCustomerGUITabExtentions = (List<EditCustomerTabExtention>) ModulManager.getExtentions(EditCustomerTabExtention.class);
+
             Collections.sort(editCustomerGUITabExtentions, new PriorityComparator());
+
+//            for(EditCustomerTabExtention ex: editCustomerGUITabExtentions) {
+//                System.out.println(ex);
+//            }
+//
+//            System.out.println("----BEFORE-----");
+//
+//            // Order the extentions
+//            for(int i=0, l=editCustomerGUITabExtentions.size(); i<l; i++) {
+//                for(int j=i+1, k=editCustomerGUITabExtentions.size(); j<k; j++) {
+//                    System.out.println("CHECK " + "(" + i + " " + j + ") -> " + editCustomerGUITabExtentions.get(i).priority() + " < " + editCustomerGUITabExtentions.get(j).priority());
+//                    System.out.println("  ex1: " + editCustomerGUITabExtentions.get(i) + " -> " + editCustomerGUITabExtentions.get(i).priority());
+//                    System.out.println("  ex2: " + editCustomerGUITabExtentions.get(j) + " -> " + editCustomerGUITabExtentions.get(j).priority());
+//                    if(editCustomerGUITabExtentions.get(i).priority() > editCustomerGUITabExtentions.get(j).priority()) {
+//                        System.out.println(" SWAP " + "(" + i + " " + j + ") -> " + editCustomerGUITabExtentions.get(i).priority() + " < " + editCustomerGUITabExtentions.get(j).priority());
+//                        System.out.println("   ex1: " + editCustomerGUITabExtentions.get(i));
+//                        System.out.println("   ex2: " + editCustomerGUITabExtentions.get(j));
+//                        Collections.swap(editCustomerGUITabExtentions, i, j);
+//                        break;
+//                    }
+//                }
+//            }
+//
+//            System.out.println("-----AFTER-----");
+//
+//            for(EditCustomerTabExtention ex: editCustomerGUITabExtentions) {
+//                System.out.println(ex);
+//            }
+
         }
         return editCustomerGUITabExtentions;
     }
 
-    public EditCustomerTabExtention getExtention(EditCustomerTabExtention extention) {
+    public EditCustomerTabExtention getExtention(Class extentionClass) {
 
-        for(EditCustomerTabExtention ex : editCustomerGUITabExtentions) {
-            if(extention.getClass().isInstance(ex)) {
+        for (EditCustomerTabExtention ex : editCustomerGUITabExtentions) {
+            if (extentionClass.isInstance(ex)) {
                 return ex;
             }
         }
@@ -255,7 +282,6 @@ public class EditCustomerPresentationModel
     ////////////////////////////////////////////////////////////////////////////
     // Action classes
     ////////////////////////////////////////////////////////////////////////////
-
     private class SaveAction
             extends AbstractAction {
 
@@ -266,7 +292,7 @@ public class EditCustomerPresentationModel
         public void actionPerformed(ActionEvent e) {
 
             // Fire only when the save-method worked correct
-            if(save()) {
+            if (save()) {
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
             }
 
@@ -289,7 +315,7 @@ public class EditCustomerPresentationModel
             if (i == 0) {
 
                 // If the save-method doesn't worked, because of an error, to nothing
-                if(!save()) {
+                if (!save()) {
                     return;
                 }
             }
@@ -307,7 +333,7 @@ public class EditCustomerPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            if(!save()) {
+            if (!save()) {
                 return;
             }
 
@@ -322,19 +348,19 @@ public class EditCustomerPresentationModel
         List<String> errorMessages = new ArrayList<String>();
         for (EditCustomerTabExtention extention : extentions) {
             List<String> errorList = extention.validate();
-            if(errorList != null) {
-                if(errorList.size() > 0) {
+            if (errorList != null) {
+                if (errorList.size() > 0) {
                     valid = false;
                     errorMessages.addAll(errorList);
                 }
             }
         }
 
-        if(!valid) {
+        if (!valid) {
 
             StringBuffer buffer = new StringBuffer("<html>");
 
-            for(String message : errorMessages) {
+            for (String message : errorMessages) {
                 buffer.append(message);
                 buffer.append("<br>");
             }
@@ -360,5 +386,4 @@ public class EditCustomerPresentationModel
     public ValueModel getUnsaved() {
         return unsaved;
     }
-
 }

@@ -56,11 +56,11 @@ public class CustomerSelectorView
     }
 
     private void initEventHandling() {
+        // Nothing to do
     }
 
     public JPanel buildPanel() {
         initComponents();
-        initEventHandling();
 
         panel = CWComponentFactory.createPanel(new BorderLayout());
         panel.setOpaque(false);
@@ -91,6 +91,8 @@ public class CustomerSelectorView
         builder.add(CWComponentFactory.createScrollPane(tCustomers), cc.xy(1, 3));
 
         panel.addDisposableListener(this);
+
+        initEventHandling();
 
         return panel;
     }

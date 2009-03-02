@@ -72,7 +72,7 @@ public class EditPostingPresentationModel
         buttonListenerSupport = new ButtonListenerSupport();
         
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
-        saveCancelAction = new SaveCancelAction("Buchen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_go.png"));
+        saveCancelAction = new SaveCancelAction("Buchen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_lightning.png"));
 
         List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAll();
         postingCategories.add(0, new PostingCategory("Keine"));

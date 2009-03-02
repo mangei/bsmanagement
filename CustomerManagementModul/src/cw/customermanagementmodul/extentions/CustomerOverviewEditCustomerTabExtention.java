@@ -28,6 +28,10 @@ public class CustomerOverviewEditCustomerTabExtention
          return view.buildPanel();
     }
 
+    public Object getModel() {
+        return model;
+    }
+
     public void save() {
         // Not necessary for this Extention
     }
@@ -41,7 +45,7 @@ public class CustomerOverviewEditCustomerTabExtention
     }
 
     public int priority() {
-        return -100;
+        return 100;
     }
 
 }

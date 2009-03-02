@@ -37,9 +37,9 @@ public class EditGroupView
     private void initComponents() {
         tfName = CWComponentFactory.createTextField(model.getBufferedModel(Group.PROPERTYNAME_NAME), false);
 
-        bSave       = new JButton(model.getSaveButtonAction());
-        bCancel     = new JButton(model.getCancelButtonAction());
-        bSaveCancel = new JButton(model.getSaveCancelButtonAction());
+        bSave       = CWComponentFactory.createButton(model.getSaveButtonAction());
+        bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
 
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(tfName)
@@ -72,9 +72,9 @@ public class EditGroupView
         builder.addLabel("Name:", cc.xy(1, 1));
         builder.add(tfName, cc.xy(3, 1));
 
-        initEventHandling();
-
         panel.addDisposableListener(this);
+
+        initEventHandling();
 
         return panel;
     }

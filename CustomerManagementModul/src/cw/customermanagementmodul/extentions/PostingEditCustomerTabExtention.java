@@ -30,6 +30,10 @@ public class PostingEditCustomerTabExtention
         return view.buildPanel();
     }
 
+    public Object getModel() {
+        return model;
+    }
+
     public void save() {
         // Not necessary for this Extention
     }

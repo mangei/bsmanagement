@@ -73,7 +73,6 @@ public class CustomerManagementView
 
     public JPanel buildPanel() {
         initComponents();
-        initEventHandling();
 
         panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
 
@@ -87,6 +86,8 @@ public class CustomerManagementView
         panel.getContentPanel().add(customerSelectorView.buildPanel(), BorderLayout.CENTER);
 
         panel.addDisposableListener(this);
+
+        initEventHandling();
 
         return panel;
     }

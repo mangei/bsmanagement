@@ -2,7 +2,6 @@ package cw.customermanagementmodul.extentions;
 
 import cw.customermanagementmodul.extentions.interfaces.CustomerOverviewEditCustomerExtention;
 import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationModel;
-import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerView;
 import cw.customermanagementmodul.gui.GeneralCustomerOverviewEditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.GeneralCustomerOverviewEditCustomerView;
 import javax.swing.JComponent;

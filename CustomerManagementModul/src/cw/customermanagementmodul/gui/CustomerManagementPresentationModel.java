@@ -354,8 +354,6 @@ public class CustomerManagementPresentationModel
     }
 
 
-
-
     // Event Handling *********************************************************
     private void updateActionEnablement() {
         boolean hasSelection = !customerSelectorPresentationModel.getCustomerSelection().isSelectionEmpty();

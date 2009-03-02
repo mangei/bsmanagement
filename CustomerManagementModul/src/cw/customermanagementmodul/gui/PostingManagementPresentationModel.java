@@ -47,18 +47,22 @@ public class PostingManagementPresentationModel {
     private Action newAction;
     private Action editAction;
     private Action reversePostingAction;
+    private Action balancePostingAction;
 //    private Action deleteAction;
     private Action managePostingCategoriesAction;
     private SelectionInList<Posting> postingSelection;
     private ValueModel saldoValue;
     private ValueModel liabilitiesValue;
     private ValueModel assetsValue;
+    private ValueModel saldoTotalValue;
+    private ValueModel liabilitiesTotalValue;
+    private ValueModel assetsTotalValue;
     
     private SelectionInList<String> filterYearSelection;
     private SelectionInList<String> filterMonthSelection;
     private SelectionInList<PostingCategory> filterPostingCategorySelection;
 
-    private SelectionEmptyHandler selectionEmptyListener;
+    private SelectionHandler selectionHandler;
     private PropertyChangeListener filterYearSelectionListener;
     private PropertyChangeListener filterMonthSelectionListener;
     private PropertyChangeListener filterPostingCategorySelectionListener;
@@ -78,6 +82,7 @@ public class PostingManagementPresentationModel {
         newAction = new NewAction("Neu", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"));
         editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_edit.png"));
         reversePostingAction = new ReversePostingAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_delete.png"));
+        balancePostingAction = new BalancePostingAction("Ausgleichen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_go.png"));
 //        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_delete.png"));
         managePostingCategoriesAction = new ManagePostingCategoriesAction("Kategorien", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category.png"));
 
@@ -93,6 +98,9 @@ public class PostingManagementPresentationModel {
         saldoValue = new ValueHolder();
         liabilitiesValue = new ValueHolder();
         assetsValue = new ValueHolder();
+        saldoTotalValue = new ValueHolder();
+        liabilitiesTotalValue = new ValueHolder();
+        assetsTotalValue = new ValueHolder();
 
         filterMonthSelection = new SelectionInList<String>();
         loadFilterMonths();
@@ -107,35 +115,36 @@ public class PostingManagementPresentationModel {
     }
 
     private void initEventHandling() {
-        postingSelection.addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                selectionEmptyListener = new SelectionEmptyHandler());
+        postingSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
+        updateActionEnablement();
 
         filterYearSelection.addValueChangeListener(filterYearSelectionListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 updateFilters();
+                calculateValues();
             }
         });
 
         filterMonthSelection.addValueChangeListener(filterMonthSelectionListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 updateFilters();
+                calculateValues();
             }
         });
 
         filterPostingCategorySelection.addValueChangeListener(filterPostingCategorySelectionListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 updateFilters();
+                calculateValues();
             }
         });
         
         updateActionEnablement();
-        
         updateEvents();
     }
 
     void dispose() {
-        postingSelection.removePropertyChangeListener(selectionEmptyListener);
+        postingSelection.removeValueChangeListener(selectionHandler);
 
         filterYearSelection.removeValueChangeListener(filterYearSelectionListener);
         filterMonthSelection.removeValueChangeListener(filterMonthSelectionListener);
@@ -146,6 +155,7 @@ public class PostingManagementPresentationModel {
         loadFilterYears();
         updateFilters();
         calculateValues();
+        calculateTotalValues();
     }
 
     private void calculateValues() {
@@ -164,6 +174,24 @@ public class PostingManagementPresentationModel {
         liabilitiesValue.setValue(Double.toString(liabilities));
         assetsValue.setValue(Double.toString(assets));
         saldoValue.setValue(Double.toString(saldo));
+    }
+
+    private void calculateTotalValues() {
+        List<Posting> list = PostingManager.getInstance().getAll(customer);
+        double liabilities=0, assets=0, saldo=0;
+        for(int i=0,l=list.size(); i<l; i++) {
+            Posting p = list.get(i);
+            if(p.isAssets()) {
+                assets = assets + p.getAmount();
+                saldo = saldo + p.getAmount();
+            } else {
+                liabilities = liabilities + p.getAmount();
+                saldo = saldo - p.getAmount();
+            }
+        }
+        liabilitiesTotalValue.setValue(Double.toString(liabilities));
+        assetsTotalValue.setValue(Double.toString(assets));
+        saldoTotalValue.setValue(Double.toString(saldo));
     }
 
     private void loadFilterYears() {
@@ -375,6 +403,18 @@ public class PostingManagementPresentationModel {
         }
     }
 
+    private class BalancePostingAction
+            extends AbstractAction {
+
+        public BalancePostingAction(String name, Icon icon) {
+            super(name, icon);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            balancePosting(postingSelection.getSelection());
+        }
+    }
+
     private void reversePosting(Posting posting) {
         GUIManager.setLoadingScreenText("Buchung wird storniert...");
         GUIManager.setLoadingScreenVisible(true);
@@ -382,12 +422,19 @@ public class PostingManagementPresentationModel {
 
         final Posting reversePosting = new Posting(posting.getCustomer());
 
-        reversePosting.setAmount(posting.getAmount());
-        reversePosting.setLiabilitiesAssets(!posting.isLiabilitiesAssets());
+        reversePosting.setAmount(posting.getAmount() * -1);
+        reversePosting.setLiabilitiesAssets(posting.isLiabilitiesAssets());
         reversePosting.setDescription(posting.getDescription() + " - Storno");
         reversePosting.setPostingCategory(posting.getPostingCategory());
 
-        final EditReversePostingPresentationModel model = new EditReversePostingPresentationModel(posting, reversePosting);
+        HeaderInfo reversePostingHeaderInfo = new HeaderInfo(
+            "Buchung stornieren",
+            "<html>Stornieren Sie eine Buchung von '<b>" + posting.getCustomer().getForename() + " " + posting.getCustomer().getSurname() + "</b>'.</html>",
+            CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"),
+            CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png")
+        );
+
+        final EditReversePostingPresentationModel model = new EditReversePostingPresentationModel(posting, reversePosting, reversePostingHeaderInfo);
         final EditReversePostingView editView = new EditReversePostingView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -398,6 +445,53 @@ public class PostingManagementPresentationModel {
                 if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     PostingManager.getInstance().save(reversePosting);
                     GUIManager.getStatusbar().setTextAndFadeOut("Stornobuchung wurde erstellt.");
+                    postingAlreadyCreated = true;
+                    postingSelection.getList().add(reversePosting);
+                    int idx = postingSelection.getList().indexOf(reversePosting);
+                    postingSelection.fireIntervalAdded(idx, idx);
+                    updateEvents();
+                }
+                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    model.removeButtonListener(this);
+                    GUIManager.getInstance().unlockMenu();
+                    GUIManager.changeToLastView();
+                }
+            }
+        });
+        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.setLoadingScreenVisible(false);
+    }
+
+    private void balancePosting(Posting posting) {
+        GUIManager.setLoadingScreenText("Buchung wird ausgeglichen...");
+        GUIManager.setLoadingScreenVisible(true);
+        GUIManager.getInstance().lockMenu();
+
+        final Posting reversePosting = new Posting(posting.getCustomer());
+
+        reversePosting.setAmount(posting.getAmount());
+        reversePosting.setLiabilitiesAssets(!posting.isLiabilitiesAssets());
+        reversePosting.setDescription(posting.getDescription() + " - Ausgleich");
+        reversePosting.setPostingCategory(posting.getPostingCategory());
+
+        HeaderInfo reversePostingHeaderInfo = new HeaderInfo(
+                "Buchung ausgleichen",
+                "<html>Gleichen Sie die Buchung von '<b>" + posting.getCustomer().getForename() + " " + posting.getCustomer().getSurname() + "</b>' aus.</html>",
+                CWUtils.loadIcon("cw/customermanagementmodul/images/posting_go.png"),
+                CWUtils.loadIcon("cw/customermanagementmodul/images/posting_go.png")
+        );
+
+        final EditReversePostingPresentationModel model = new EditReversePostingPresentationModel(posting, reversePosting, reversePostingHeaderInfo);
+        final EditReversePostingView editView = new EditReversePostingView(model);
+        model.addButtonListener(new ButtonListener() {
+
+            boolean postingAlreadyCreated = false;
+
+            public void buttonPressed(ButtonEvent evt) {
+
+                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    PostingManager.getInstance().save(reversePosting);
+                    GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde ausgeglichen.");
                     postingAlreadyCreated = true;
                     postingSelection.getList().add(reversePosting);
                     int idx = postingSelection.getList().indexOf(reversePosting);
@@ -507,12 +601,28 @@ public class PostingManagementPresentationModel {
         return saldoValue;
     }
 
+    public ValueModel getAssetsTotalValue() {
+        return assetsTotalValue;
+    }
+
+    public ValueModel getLiabilitiesTotalValue() {
+        return liabilitiesTotalValue;
+    }
+
+    public ValueModel getSaldoTotalValue() {
+        return saldoTotalValue;
+    }
+
     public SelectionInList<Posting> getPostingSelection() {
         return postingSelection;
     }
 
     public Action getNewAction() {
         return newAction;
+    }
+
+    public Action getBalancePostingAction() {
+        return balancePostingAction;
     }
 
     public SelectionInList<String> getFilterMonthSelection() {
@@ -663,11 +773,12 @@ public class PostingManagementPresentationModel {
     private void updateActionEnablement() {
         boolean hasSelection = postingSelection.hasSelection();
         editAction.setEnabled(hasSelection);
+        balancePostingAction.setEnabled(hasSelection);
         reversePostingAction.setEnabled(hasSelection);
 //        deleteAction.setEnabled(hasSelection);
     }
 
-    private final class SelectionEmptyHandler implements PropertyChangeListener {
+    private final class SelectionHandler implements PropertyChangeListener {
 
         public void propertyChange(PropertyChangeEvent evt) {
             updateActionEnablement();

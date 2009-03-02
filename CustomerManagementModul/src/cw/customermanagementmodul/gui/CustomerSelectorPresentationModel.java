@@ -135,6 +135,10 @@ public class CustomerSelectorPresentationModel
 
     public void dispose() {
         filterChange.removeValueChangeListener(filterChangeListener);
+
+        for (CustomerSelectorFilterExtention ex : extentions) {
+            ex.dispose();
+        }
     }
 
     public void updateFilter() {

@@ -28,6 +28,10 @@ public class EditCustomerEditCustomerTabExtention
          return view.buildPanel();
     }
 
+    public Object getModel() {
+        return model;
+    }
+
     public void save() {
         model.save();
     }
@@ -43,4 +47,5 @@ public class EditCustomerEditCustomerTabExtention
     public int priority() {
         return 90;
     }
+
 }

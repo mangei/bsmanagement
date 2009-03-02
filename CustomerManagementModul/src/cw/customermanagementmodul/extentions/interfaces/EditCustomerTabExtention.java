@@ -25,6 +25,8 @@ public interface EditCustomerTabExtention
      * @return JComponent
      */
     public JComponent getView();
+
+    public Object getModel();
     
     /**
      * If the user presses the save button
