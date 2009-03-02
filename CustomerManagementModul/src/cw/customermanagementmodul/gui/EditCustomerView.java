@@ -63,7 +63,7 @@ public class EditCustomerView
     }
 
     private void setTabsEnabled(boolean enabled) {
-        for(int i=1, l=tabs.getComponentCount(); i<l; i++) {
+        for(int i=2, l=tabs.getComponentCount(); i<l; i++) {
             tabs.setEnabledAt(i, enabled);
         }
     }

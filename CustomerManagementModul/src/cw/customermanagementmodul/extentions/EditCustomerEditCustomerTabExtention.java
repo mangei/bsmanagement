@@ -41,6 +41,6 @@ public class EditCustomerEditCustomerTabExtention
     }
 
     public int priority() {
-        return -90;
+        return 90;
     }
 }

@@ -68,10 +68,9 @@ public class EditCustomerPresentationModel
 
         guardianPresentationModel = new PresentationModel<Guardian>(getBean().getGuardian());
 
-        // Addons initialisieren
+        // Init Extentions
         editCustomerGUITabExtentions = getExtentions();
         for (EditCustomerTabExtention extention : editCustomerGUITabExtentions) {
-            System.out.println("Extention: " + extention.toString());
             extention.initPresentationModel(this);
         }
 
@@ -124,10 +123,8 @@ public class EditCustomerPresentationModel
             extention.dispose();
         }
 
-        if(actionButtonListener != null) {
-            unsaved.removeValueChangeListener(actionButtonListener);
-            actionButtonListener = null;
-        }
+        unsaved.removeValueChangeListener(actionButtonListener);
+
         if(saveListener != null) {
             getBufferedModel(Customer.PROPERTYNAME_ACTIVE).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_GENDER).removeValueChangeListener(saveListener);
@@ -147,8 +144,6 @@ public class EditCustomerPresentationModel
 
             guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_FORENAME).removeValueChangeListener(saveListener);
             guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_SURNAME).removeValueChangeListener(saveListener);
-
-            saveListener = null;
         }
 
         getBufferedModel(Customer.PROPERTYNAME_ACTIVE).release();
@@ -170,34 +165,20 @@ public class EditCustomerPresentationModel
         guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_SURNAME).release();
 
         PropertyChangeListener[] beanPropertyChangeListeners = super.getBeanPropertyChangeListeners();
-        System.out.println("anz1: " + beanPropertyChangeListeners.length);
         for (PropertyChangeListener l : beanPropertyChangeListeners) {
             removeBeanPropertyChangeListener(l);
         }
         PropertyChangeListener[] propertyChangeListeners = super.getPropertyChangeListeners();
-        System.out.println("anz2: " + propertyChangeListeners.length);
         for (PropertyChangeListener l : propertyChangeListeners) {
             removePropertyChangeListener(l);
         }
         VetoableChangeListener[] vetoableChangeListeners = super.getVetoableChangeListeners();
-        System.out.println("anz3: " + vetoableChangeListeners.length);
         for (VetoableChangeListener l : vetoableChangeListeners) {
             removeVetoableChangeListener(l);
         }
 
-        System.out.println("anz4: " + getBean().getVetoableChangeListeners().length);
-        System.out.println("anz5: " + getBean().getPropertyChangeListeners().length);
-
-        saveButtonAction = null;
-        cancelButtonAction = null;
-        saveCancelButtonAction = null;
-
-        support = null;
         editCustomerGUITabExtentions.clear();
-        editCustomerGUITabExtentions = null;
-        customer = null;
-
-        unsaved = null;
+        
         release();
     }
 

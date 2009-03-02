@@ -33,7 +33,7 @@ public class GeneralCustomerOverviewEditCustomerExtention
     }
 
     public int priority() {
-        return -100;
+        return 100;
     }
 
 }
