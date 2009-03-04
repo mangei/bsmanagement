@@ -1,10 +1,10 @@
 package cw.boardingschoolmanagement.app;
 
-import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.binding.adapter.Bindings;
 import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.binding.adapter.TextComponentConnector;
+import com.jgoodies.binding.adapter.ToggleButtonAdapter;
 import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
@@ -52,7 +52,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFormattedTextField;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -91,8 +93,6 @@ public class CWComponentFactory {
     private static String VALUE_MODEL_KEY = "valueModelKey";
     private static String VALUE_MODEL_CHANGE_LISTENER_KEY = "valueModelPropertyChangeListenerKey";
 
-    BasicComponentFactory bcf;
-
     private CWComponentFactory() {
     }
 
@@ -111,6 +111,11 @@ public class CWComponentFactory {
         public CWComponentContainer addComponent(JComponent comp) {
             components.add(comp);
             return this;
+        }
+
+        public JComponent addComponentAndReturn(JComponent comp) {
+            components.add(comp);
+            return comp;
         }
 
         public void dispose() {
@@ -138,6 +143,10 @@ public class CWComponentFactory {
 
                 if(comp instanceof JButton) {
                     ((JButton)comp).setAction(null);
+                }
+
+                if(comp instanceof JMenuItem) {
+                    ((JMenuItem)comp).setAction(null);
                 }
 
                 if(comp instanceof JDateChooser) {
@@ -295,6 +304,16 @@ public class CWComponentFactory {
         CWJButton button = new CWJButton(a);
         button.setOpaque(false);
         return button;
+    }
+
+    public static JMenuItem createMenuItem(Action a) {
+        JMenuItem item = new JMenuItem(a);
+        return item;
+    }
+
+    public static JPopupMenu createPopupMenu() {
+        JPopupMenu popupMenu = new JPopupMenu();
+        return popupMenu;
     }
 
     public static JRadioButton createRadioButton(Action a) {
@@ -514,15 +533,21 @@ public class CWComponentFactory {
     }
 
     public static JCheckBox createCheckBox(ValueModel valueModel, String text) {
-        JCheckBox cb = BasicComponentFactory.createCheckBox(valueModel, text);
-        cb.setOpaque(false);
-        return cb;
+        JCheckBox checkBox = new JCheckBox(text);
+
+        boolean enabled = checkBox.getModel().isEnabled();
+        checkBox.setModel(new ToggleButtonAdapter(valueModel));
+        checkBox.setEnabled(enabled);
+
+        checkBox.setOpaque(false);
+        return checkBox;
     }
     
     public static JXTree createTree(TreeModel treeModel) {
         JXTree tree = new JXTree(treeModel);
         tree.setHighlighters(HighlighterFactory.createSimpleStriping());
         tree.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
+        tree.setShowsRootHandles(true);
         return tree;
     }
 

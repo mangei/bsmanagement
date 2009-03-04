@@ -23,6 +23,10 @@ public class HomePresentationModel
     }
 
     public void initModels() {
+        List<HomeExtention> aList = getExtentions();
+        for (HomeExtention ex : aList) {
+            ex.initPresentationModel(this);
+        }
     }
 
     public void initEventHandling() {
