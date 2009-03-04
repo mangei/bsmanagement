@@ -60,7 +60,7 @@ public class StudentsOverviewView
 
     public void dispose() {
         panel.removeDisposableListener(this);
-
+        
         model.dispose();
     }
 

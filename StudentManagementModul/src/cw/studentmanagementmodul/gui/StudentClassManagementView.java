@@ -13,7 +13,6 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
@@ -22,6 +21,7 @@ import javax.swing.tree.TreePath;
 import org.jdesktop.swingx.JXTree;
 import cw.studentmanagementmodul.pojo.OrganisationUnit;
 import cw.studentmanagementmodul.pojo.StudentClass;
+import javax.swing.JMenuItem;
 
 /**
  *
@@ -57,6 +57,8 @@ public class StudentClassManagementView
     }
 
     public void initModels() {
+        componentContainer = CWComponentFactory.createCWComponentContainer();
+
         bNewOrganisationUnt     = CWComponentFactory.createButton(model.getNewOrganisationUnitAction());
         bEditOrganisationUnt    = CWComponentFactory.createButton(model.getEditOrganisationUnitAction());
         bRemoveOrganisationUnt  = CWComponentFactory.createButton(model.getRemoveOrganisationUnitAction());
@@ -68,24 +70,23 @@ public class StudentClassManagementView
         trStudentClass          = CWComponentFactory.createTree(model.getStudentClassTreeModel());
         trStudentClass.setSelectionModel(model.getStudentClassTreeSelectionModel());
         trStudentClass.setCellRenderer(new StudentClassTreeCellRenderer());
-        trStudentClass.setShowsRootHandles(true);
 
-        popupStudentClassTreeRoot = new JPopupMenu();
-        popupStudentClassTreeRoot.add(new JMenuItem(model.getNewOrganisationUnitAction()));
+        popupStudentClassTreeRoot = CWComponentFactory.createPopupMenu();
+        popupStudentClassTreeRoot.add((JMenuItem)componentContainer.addComponentAndReturn(CWComponentFactory.createMenuItem(model.getNewOrganisationUnitAction())));
 
-        popupStudentClassTreeOrganisationUnit = new JPopupMenu();
-        popupStudentClassTreeOrganisationUnit.add(new JMenuItem(model.getNewOrganisationUnitAction()));
-        popupStudentClassTreeOrganisationUnit.add(new JMenuItem(model.getEditOrganisationUnitAction()));
-        popupStudentClassTreeOrganisationUnit.add(new JMenuItem(model.getRemoveOrganisationUnitAction()));
+        popupStudentClassTreeOrganisationUnit = CWComponentFactory.createPopupMenu();
+        popupStudentClassTreeOrganisationUnit.add((JMenuItem)componentContainer.addComponentAndReturn(CWComponentFactory.createMenuItem(model.getNewOrganisationUnitAction())));
+        popupStudentClassTreeOrganisationUnit.add((JMenuItem)componentContainer.addComponentAndReturn(CWComponentFactory.createMenuItem(model.getEditOrganisationUnitAction())));
+        popupStudentClassTreeOrganisationUnit.add((JMenuItem)componentContainer.addComponentAndReturn(CWComponentFactory.createMenuItem(model.getRemoveOrganisationUnitAction())));
         popupStudentClassTreeOrganisationUnit.add(new JSeparator());
-        popupStudentClassTreeOrganisationUnit.add(new JMenuItem(model.getNewStudentClassAction()));
+        popupStudentClassTreeOrganisationUnit.add((JMenuItem)componentContainer.addComponentAndReturn(CWComponentFactory.createMenuItem(model.getNewStudentClassAction())));
 
-        popupStudentClassTreeStudentClass = new JPopupMenu();
-        popupStudentClassTreeStudentClass.add(new JMenuItem(model.getEditStudentClassAction()));
-        popupStudentClassTreeStudentClass.add(new JMenuItem(model.getRemoveStudentClassAction()));
+        popupStudentClassTreeStudentClass = CWComponentFactory.createPopupMenu();
+        popupStudentClassTreeStudentClass.add((JMenuItem)componentContainer.addComponentAndReturn(CWComponentFactory.createMenuItem(model.getEditStudentClassAction())));
+        popupStudentClassTreeStudentClass.add((JMenuItem)componentContainer.addComponentAndReturn(CWComponentFactory.createMenuItem(model.getRemoveStudentClassAction())));
         popupStudentClassTreeStudentClass.add(new JSeparator());
-        popupStudentClassTreeStudentClass.add(new JMenuItem(model.getViewStudentsAction()));
-        popupStudentClassTreeStudentClass.add(new JMenuItem(model.getMoveUpStudentClassAction()));
+        popupStudentClassTreeStudentClass.add((JMenuItem)componentContainer.addComponentAndReturn(CWComponentFactory.createMenuItem(model.getViewStudentsAction())));
+        popupStudentClassTreeStudentClass.add((JMenuItem)componentContainer.addComponentAndReturn(CWComponentFactory.createMenuItem(model.getMoveUpStudentClassAction())));
 
         trStudentClass.addMouseListener(reMouseListener = new MouseAdapter() {
             @Override
@@ -127,7 +128,7 @@ public class StudentClassManagementView
             }
         });
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer
                 .addComponent(bEditOrganisationUnt)
                 .addComponent(bEditStudentClass)
                 .addComponent(bMoveUpStudentClasses)

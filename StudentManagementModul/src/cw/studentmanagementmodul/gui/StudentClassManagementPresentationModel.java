@@ -6,6 +6,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
@@ -30,6 +31,8 @@ import cw.studentmanagementmodul.pojo.StudentClass;
 import cw.studentmanagementmodul.pojo.manager.OrganisationUnitManager;
 import cw.studentmanagementmodul.pojo.manager.StudentClassManager;
 import cw.studentmanagementmodul.pojo.manager.StudentManager;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowListener;
 import javax.swing.Icon;
 import javax.swing.event.TreeModelListener;
 
@@ -260,6 +263,7 @@ public class StudentClassManagementPresentationModel
 
             final EditOrganisationUnitPresentationModel model = new EditOrganisationUnitPresentationModel(organisationUnit, "Bereich erstellen");
             final EditOrganisationUnitView editView = new EditOrganisationUnitView(model);
+
             model.addButtonListener(new ButtonListener() {
 
                 public void buttonPressed(ButtonEvent evt) {
@@ -295,7 +299,7 @@ public class StudentClassManagementPresentationModel
                 if (object instanceof OrganisationUnit) {
                     final OrganisationUnit organisationUnit = (OrganisationUnit) object;
                     final DeleteOrganisationUnitPresentationModel model = new DeleteOrganisationUnitPresentationModel(organisationUnit);
-                    DeleteOrganisationUnitView view = new DeleteOrganisationUnitView(model);
+                    final DeleteOrganisationUnitView view = new DeleteOrganisationUnitView(model);
 
                     JPanel panel = view.buildPanel();
                     final JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
@@ -305,6 +309,16 @@ public class StudentClassManagementPresentationModel
                     d.pack();
                     d.setResizable(false);
                     CWUtils.centerWindow(d, GUIManager.getInstance().getMainFrame());
+
+                    final WindowListener windowListener;
+                    d.addWindowListener(windowListener = new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent e) {
+                            d.removeWindowListener(this);
+                            view.dispose();
+                            d.dispose();
+                        }
+                    });
 
                     // Add the Listener
                     model.addButtonListener(new ButtonListener() {
@@ -360,11 +374,12 @@ public class StudentClassManagementPresentationModel
                                     OrganisationUnitManager.getInstance().delete(organisationUnit);
                                 }
 
-
-
                                 d.setVisible(false);
-                                d.dispose();
                             }
+
+                            d.removeWindowListener(windowListener);
+                            view.dispose();
+                            d.dispose();
                         }
                     });
 
@@ -549,18 +564,23 @@ public class StudentClassManagementPresentationModel
 
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent();
 
-            final StudentClass studentClass = (StudentClass) node.getUserObject();;
+            final StudentClass studentClass = (StudentClass) node.getUserObject();
             final StudentsOverviewPresentationModel model = new StudentsOverviewPresentationModel(studentClass);
             StudentsOverviewView view = new StudentsOverviewView(model);
 
             JPanel panel = view.buildPanel();
-            final JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
+            JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
             d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
             d.setTitle(panel.getName());
             d.add(panel);
             d.pack();
             CWUtils.centerWindow(d, GUIManager.getInstance().getMainFrame());
             d.setVisible(true);
+
+            d.dispose();
+            d = null;
+
+            view.dispose();
 
             GUIManager.setLoadingScreenVisible(false);
         }
