@@ -610,21 +610,53 @@ public class CWComponentFactory {
     }
 
     public static CWJLabel createLabel(String text) {
-        return createLabel(text, null);
+        return createLabel(text, null, null);
+    }
+
+    public static CWJLabel createLabel(String text, Format format) {
+        return createLabel(text, null, format);
     }
 
     public static CWJLabel createLabel(ValueModel valueModel) {
-        return createLabel(valueModel, null);
+        return createLabel(valueModel, null, null);
+    }
+
+    public static CWJLabel createLabel(ValueModel valueModel, Format format) {
+        return createLabel(valueModel, null, format);
     }
 
     public static CWJLabel createLabel(String text, Icon icon) {
-        return createLabel(new ValueHolder(text), icon);
+        return createLabel(new ValueHolder(text), icon, null);
     }
 
     public static CWJLabel createLabel(ValueModel valueModel, Icon icon) {
+        return createLabel(valueModel, icon, null);
+    }
+
+    public static CWJLabel createLabel(String text, Icon icon, Format format) {
+        return createLabel(new ValueHolder(text), icon, format);
+    }
+
+    public static CWJLabel createLabel(final ValueModel valueModel, Icon icon, final Format format) {
         CWJLabel label = new CWJLabel();
 
-        PropertyConnector connector = PropertyConnector.connect(valueModel, "value", label, "text");
+        final ValueModel bufferedValueModel = new ValueHolder();
+        ValueModel newValueModel = valueModel;
+
+        if(format != null) {
+            PropertyChangeListener propertyChangeListener;
+            valueModel.addValueChangeListener(propertyChangeListener = new PropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent evt) {
+                    bufferedValueModel.setValue(format.format(valueModel.getValue()));
+                }
+            });
+            label.putClientProperty(VALUE_MODEL_KEY, valueModel);
+            label.putClientProperty(VALUE_MODEL_CHANGE_LISTENER_KEY, propertyChangeListener);
+
+            newValueModel = bufferedValueModel;
+        }
+
+        PropertyConnector connector = PropertyConnector.connect(newValueModel, "value", label, "text");
         connector.updateProperty2();
         label.putClientProperty(PROPERTY_CONNECTOR_KEY, connector);
 
