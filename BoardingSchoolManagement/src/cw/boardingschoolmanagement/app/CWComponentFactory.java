@@ -610,11 +610,7 @@ public class CWComponentFactory {
     }
 
     public static CWJLabel createLabel(String text) {
-        return createLabel(text, null, null);
-    }
-
-    public static CWJLabel createLabel(String text, Format format) {
-        return createLabel(text, null, format);
+        return createLabel(text, null);
     }
 
     public static CWJLabel createLabel(ValueModel valueModel) {
@@ -633,10 +629,6 @@ public class CWComponentFactory {
         return createLabel(valueModel, icon, null);
     }
 
-    public static CWJLabel createLabel(String text, Icon icon, Format format) {
-        return createLabel(new ValueHolder(text), icon, format);
-    }
-
     public static CWJLabel createLabel(final ValueModel valueModel, Icon icon, final Format format) {
         CWJLabel label = new CWJLabel();
 
@@ -652,6 +644,8 @@ public class CWComponentFactory {
             });
             label.putClientProperty(VALUE_MODEL_KEY, valueModel);
             label.putClientProperty(VALUE_MODEL_CHANGE_LISTENER_KEY, propertyChangeListener);
+
+            bufferedValueModel.setValue(format.format(valueModel.getValue()));
 
             newValueModel = bufferedValueModel;
         }
