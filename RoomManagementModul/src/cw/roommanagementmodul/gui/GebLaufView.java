@@ -49,7 +49,6 @@ public class GebLaufView implements ItemListener, Disposable {
     private JComboBox gebLaufComboBox;
     private ButtonGroup laufartGroup;
     private ButtonGroup betriebsartGroup;
-
     private CWComponentFactory.CWComponentContainer componentContainer;
     private JViewPanel mainPanel;
 
@@ -108,12 +107,13 @@ public class GebLaufView implements ItemListener, Disposable {
         lGebLauf.setEnabled(false);
         gebLaufComboBox.setEnabled(false);
 
+        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(lLaufart).addComponent(lBetiebsart).addComponent(lAbrMonat).addComponent(lGebLauf).addComponent(lMonat).addComponent(lJahr).addComponent(rNormal).addComponent(rStorno).addComponent(startButton).addComponent(rTestlauf).addComponent(rEchtlauf).addComponent(jahrField).addComponent(gebLaufComboBox).addComponent(monatComboBox);
     }
 
     public JComponent buildPanel() {
         initComponents();
 
-        JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
+        mainPanel = new JViewPanel(model.getHeaderInfo());
 
 
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
@@ -154,6 +154,7 @@ public class GebLaufView implements ItemListener, Disposable {
         builder.add(lGebLauf, cc.xy(2, 15));
         builder.add(gebLaufComboBox, cc.xy(4, 15));
 
+        mainPanel.addDisposableListener(this);
         return mainPanel;
     }
 
@@ -161,7 +162,7 @@ public class GebLaufView implements ItemListener, Disposable {
 
         if (e.getStateChange() == ItemEvent.SELECTED) {
 
-            if ((model.getStornoInt() + 1 )% 2 == 0) {
+            if ((model.getStornoInt() + 1) % 2 == 0) {
                 lMonat.setEnabled(false);
                 monatComboBox.setEnabled(false);
                 lJahr.setEnabled(false);
@@ -185,6 +186,10 @@ public class GebLaufView implements ItemListener, Disposable {
     }
 
     public void dispose() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        rNormal.removeItemListener(this);
+        rStorno.removeItemListener(this);
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 }

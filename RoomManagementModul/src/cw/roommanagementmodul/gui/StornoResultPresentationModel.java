@@ -8,6 +8,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Posting;
@@ -27,7 +28,7 @@ import javax.swing.Action;
  *
  * @author Dominik
  */
-public class StornoResultPresentationModel {
+public class StornoResultPresentationModel implements Disposable{
 
     private String headerText;
     private Action backAction;
@@ -195,6 +196,10 @@ public class StornoResultPresentationModel {
      */
     public void setHeaderInfo(HeaderInfo headerInfo) {
         this.headerInfo = headerInfo;
+    }
+
+    public void dispose() {
+
     }
 
     private class BackAction

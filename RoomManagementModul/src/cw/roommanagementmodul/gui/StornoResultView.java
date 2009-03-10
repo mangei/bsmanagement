@@ -7,8 +7,10 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.roommanagementmodul.pojo.Bewohner;
@@ -25,17 +27,19 @@ import javax.swing.JScrollPane;
  *
  * @author Dominik
  */
-public class StornoResultView {
+public class StornoResultView implements Disposable {
 
     private StornoResultPresentationModel model;
     private JButton bBack;
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
 
     public StornoResultView(StornoResultPresentationModel m) {
         this.model = m;
     }
 
     private void initComponents() {
-        bBack = new JButton(model.getBackAction());
+        bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
     }
 
@@ -43,11 +47,11 @@ public class StornoResultView {
 
         initComponents();
 
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
-        panel.getButtonPanel().add(bBack);
+        mainPanel = new JViewPanel(model.getHeaderInfo());
+        mainPanel.getButtonPanel().add(bBack);
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
-        panel.getTopPanel().setLayout(layout);
+        mainPanel.getTopPanel().setLayout(layout);
 
         JPanel contentPanel = new JPanel();
 
@@ -81,9 +85,12 @@ public class StornoResultView {
 
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setPreferredSize(new Dimension(10, 10));
-        panel.getContentPanel().add(scroll);
+        mainPanel.getContentPanel().add(scroll);
 
-        return panel;
+        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bBack);
+
+        mainPanel.addDisposableListener(this);
+        return mainPanel;
     }
 
     public JViewPanel createBewohnerPanel(Bewohner b, List<Posting> postingList) {
@@ -156,7 +163,7 @@ public class StornoResultView {
         builder.add(sumText, cc.xy(1, yPos + 2));
         builder.add(summeLabel, cc.xy(3, yPos + 2));
 
-
+        componentContainer.addComponent(panel);
         return panel;
     }
 
@@ -230,7 +237,13 @@ public class StornoResultView {
         builder.add(sumText, cc.xy(1, yPos + 2));
         builder.add(summeLabel, cc.xy(3, yPos + 2));
 
-
+        componentContainer.addComponent(panel);
         return panel;
+    }
+
+    public void dispose() {
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 }

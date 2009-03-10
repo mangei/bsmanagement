@@ -4,12 +4,13 @@
  */
 package cw.roommanagementmodul.gui;
 
-
 import com.jgoodies.binding.PresentationModel;
+import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
 import java.awt.event.ActionEvent;
@@ -26,11 +27,13 @@ import cw.roommanagementmodul.pojo.Bewohner;
  *
  * @author Dominik
  */
-public class LaufResultPresentationModel extends PresentationModel<BewohnerTarifSelection> {
+public class LaufResultPresentationModel extends PresentationModel<BewohnerTarifSelection>
+        implements Disposable {
 
     private BewohnerTarifSelection tarifSelection;
     private String headerText;
     private Action backAction;
+    private Action printAction;
     private ButtonListenerSupport support;
     private HeaderInfo headerInfo;
 
@@ -44,27 +47,28 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
     private void initModels() {
         support = new ButtonListenerSupport();
         backAction = new BackAction();
-        
+        printAction = new PrintAction();
+
     }
 
-    public int getBewohnerAnzahl(){
+    public int getBewohnerAnzahl() {
 
-        Map map=tarifSelection.getMap();
-        Set keySet =map.keySet();
+        Map map = tarifSelection.getMap();
+        Set keySet = map.keySet();
         return keySet.size();
 
     }
 
-    public List<Bewohner> getBewohner(){
+    public List<Bewohner> getBewohner() {
 
         List<Bewohner> bewohnerList = new ArrayList<Bewohner>();
-        Map map=tarifSelection.getMap();
-        Set keySet =map.keySet();
+        Map map = tarifSelection.getMap();
+        Set keySet = map.keySet();
 
-        Iterator iterator=keySet.iterator();
+        Iterator iterator = keySet.iterator();
 
-        while(iterator.hasNext()){
-            bewohnerList.add((Bewohner)iterator.next());
+        while (iterator.hasNext()) {
+            bewohnerList.add((Bewohner) iterator.next());
         }
 
         return bewohnerList;
@@ -133,6 +137,49 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
      */
     public void setHeaderInfo(HeaderInfo headerInfo) {
         this.headerInfo = headerInfo;
+    }
+
+    /**
+     * @return the printAction
+     */
+    public Action getPrintAction() {
+        return printAction;
+    }
+
+    /**
+     * @param printAction the printAction to set
+     */
+    public void setPrintAction(Action printAction) {
+        this.printAction = printAction;
+    }
+
+    public void dispose() {
+        release();
+    }
+
+    private class PrintAction extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/printer.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            final PrintGebLaufPresentationModel model = new PrintGebLaufPresentationModel(tarifSelection, new HeaderInfo("Gebühren Lauf", "Gebühren Lauf zum Ausdrucken."));
+            final PrintGebLaufView printView = new PrintGebLaufView(model);
+            model.addButtonListener(new ButtonListener() {
+
+                public void buttonPressed(ButtonEvent evt) {
+                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    }
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        model.removeButtonListener(this);
+                        GUIManager.changeToLastView();
+                    }
+                }
+            });
+            GUIManager.changeView(printView.buildPanel(), true);
+
+        }
     }
 
     private class BackAction

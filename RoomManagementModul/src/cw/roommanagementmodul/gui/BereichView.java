@@ -63,7 +63,7 @@ public class BereichView implements Disposable {
         viewZimmerTabelle.setText("Zimmer Tabelle");
 
         model.initTree(model.getRootTree());
-        bereichTree = new JTree(model.getTreeModel());
+        bereichTree = CWComponentFactory.createTree(model.getTreeModel());
         bereichTree.setRootVisible(true);
 
         bereichTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);

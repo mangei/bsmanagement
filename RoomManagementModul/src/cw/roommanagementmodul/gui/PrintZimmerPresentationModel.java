@@ -8,6 +8,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.roommanagementmodul.pojo.Zimmer;
 import java.awt.event.ActionEvent;
@@ -31,7 +32,7 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  *
  * @author Dominik
  */
-public class PrintZimmerPresentationModel {
+public class PrintZimmerPresentationModel implements Disposable{
 
     private List<Zimmer> zimmerList;
     private HeaderInfo headerInfo;
@@ -60,9 +61,7 @@ public class PrintZimmerPresentationModel {
         setBackAction(new BackAction());
 
         reportSource="./src/cw/boardingschoolmanagement/jasper/templates/zimmer.jrxml";
-        System.out.println("----");
-        System.out.println(Thread.currentThread().getContextClassLoader().getResource("cw/roommanagementmodul/jasper/templates/zimmer.jrxml"));
-        System.out.println("-----");
+
         try {
             jasperReport = JasperCompileManager.compileReport(reportSource);
             ds = new JRBeanCollectionDataSource(zimmerList);
@@ -122,6 +121,10 @@ public class PrintZimmerPresentationModel {
      */
     public void setJasperPrint(JasperPrint jasperPrint) {
         this.jasperPrint = jasperPrint;
+    }
+
+    public void dispose() {
+        
     }
 
     private class BackAction

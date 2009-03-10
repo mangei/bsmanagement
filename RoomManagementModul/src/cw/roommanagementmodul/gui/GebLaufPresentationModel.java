@@ -11,6 +11,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CalendarUtil;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.PostingCategory;
@@ -45,7 +46,8 @@ import javax.swing.JOptionPane;
  *
  * @author Dominik
  */
-public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection> {
+public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection>
+                    implements Disposable{
 
     private String headerText;
     private GebLaufSelection gebLauf;
@@ -192,6 +194,10 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
      */
     public void setHeaderInfo(HeaderInfo headerInfo) {
         this.headerInfo = headerInfo;
+    }
+
+    public void dispose() {
+        release();
     }
 
     private class StartAction

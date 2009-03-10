@@ -2,6 +2,7 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
+
 package cw.roommanagementmodul.gui;
 
 import cw.boardingschoolmanagement.app.CWComponentFactory;
@@ -15,15 +16,15 @@ import net.sf.jasperreports.swing.JRViewer;
  *
  * @author Dominik
  */
-public class PrintZimmerView implements Disposable {
+public class PrintGebLaufView implements Disposable {
 
-    private PrintZimmerPresentationModel model;
+    private PrintGebLaufPresentationModel model;
     private JButton bBack;
     private JRViewer viewer;
     private CWComponentFactory.CWComponentContainer componentContainer;
     private JViewPanel mainPanel;
 
-    public PrintZimmerView(PrintZimmerPresentationModel m) {
+    public PrintGebLaufView(PrintGebLaufPresentationModel m) {
         this.model = m;
     }
 
@@ -52,4 +53,5 @@ public class PrintZimmerView implements Disposable {
         componentContainer.dispose();
         model.dispose();
     }
+
 }

@@ -7,8 +7,10 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.roommanagementmodul.geblauf.GebTarifSelection;
 import java.awt.Color;
 import java.awt.Font;
@@ -25,10 +27,13 @@ import javax.swing.JScrollPane;
  *
  * @author Dominik
  */
-public class LaufResultView {
+public class LaufResultView implements Disposable {
 
     private LaufResultPresentationModel model;
     private JButton bBack;
+    private JButton bPrint;
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
 
     public LaufResultView(LaufResultPresentationModel m) {
         this.model = m;
@@ -36,20 +41,25 @@ public class LaufResultView {
 
     private void initComponents() {
 
-
-        bBack = new JButton(model.getBackAction());
+        bPrint = CWComponentFactory.createButton(model.getPrintAction());
+        bPrint.setText("Drucken");
+        bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
+
+        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bPrint).addComponent(bBack);
+
     }
 
     public JPanel buildPanel() {
         initComponents();
 
-        boolean warningNoGebuehr=false;
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
-        panel.getButtonPanel().add(bBack);
+        boolean warningNoGebuehr = false;
+        mainPanel = new JViewPanel(model.getHeaderInfo());
+        mainPanel.getButtonPanel().add(bPrint);
+        mainPanel.getButtonPanel().add(bBack);
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
-        panel.getTopPanel().setLayout(layout);
+        mainPanel.getTopPanel().setLayout(layout);
 
         //JPanel contentPanel = panel.getContentPanel();
         JPanel contentPanel = new JPanel();
@@ -73,22 +83,22 @@ public class LaufResultView {
             if (bewohnerPanel != null) {
                 builder.add(bewohnerPanel, cc.xy(1, j));
                 j = j + 2;
-            }else{
-                warningNoGebuehr=true;
+            } else {
+                warningNoGebuehr = true;
             }
 
         }
 
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setPreferredSize(new Dimension(10, 10));
-        panel.getContentPanel().add(scroll);
-        
-        if(warningNoGebuehr){
-            JOptionPane.showMessageDialog(null, "Es sind Bewohner vorhanden die keine Gebühr für dieses Datum zugewießen bekommen haben.","Warunung",JOptionPane.INFORMATION_MESSAGE);
+        mainPanel.getContentPanel().add(scroll);
+
+        if (warningNoGebuehr) {
+            JOptionPane.showMessageDialog(null, "Es sind Bewohner vorhanden die keine Gebühr für dieses Datum zugewießen bekommen haben.", "Warunung", JOptionPane.INFORMATION_MESSAGE);
         }
 
-
-        return panel;
+        mainPanel.addDisposableListener(this);
+        return mainPanel;
     }
 
     public JViewPanel createBewohnerPanel(Bewohner b, List<GebTarifSelection> tarifSelectionList) {
@@ -209,7 +219,13 @@ public class LaufResultView {
         builder.add(sumText, cc.xy(1, yPos + 2));
         builder.add(summeLabel, cc.xy(3, yPos + 2));
 
-
+        componentContainer.addComponent(panel);
         return panel;
+    }
+
+    public void dispose() {
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 }

@@ -55,19 +55,21 @@ public class GebLaufSelection extends Model {
     public List<Bewohner> selectBewohnerList(long abrMonat) {
 
         List<Bewohner> bewohnerList = bewohnerManager.getBewohner(true);
-        List<Bewohner> selectedBewohner = new ArrayList<Bewohner>();
+        
+        //Das Einzugs und Auszugsdatum soll keine Auswirkung auf die Selection haben
+        //------------------------------------------------------------
+//        List<Bewohner> selectedBewohner = new ArrayList<Bewohner>();
+//        for (int i = 0; i < bewohnerList.size(); i++) {
+//            if (bewohnerList.get(i).getVon().getTime() <= abrMonat) {
+//                if (bewohnerList.get(i).getBis() == null || abrMonat <= bewohnerList.get(i).getBis().getTime()) {
+//                    selectedBewohner.add(bewohnerList.get(i));
+//                }
+//            }
+//        }
+//        return selectedBewohner;
+//---------------------------------------------------------------------
 
-
-        for (int i = 0; i < bewohnerList.size(); i++) {
-
-
-            if (bewohnerList.get(i).getVon().getTime() <= abrMonat) {
-                if (bewohnerList.get(i).getBis() == null || abrMonat <= bewohnerList.get(i).getBis().getTime()) {
-                    selectedBewohner.add(bewohnerList.get(i));
-                }
-            }
-        }
-        return selectedBewohner;
+        return bewohnerList;
     }
 
     private List<BewohnerGebSelection> selectGebBewohner(List<Bewohner> selectedBewohner) {

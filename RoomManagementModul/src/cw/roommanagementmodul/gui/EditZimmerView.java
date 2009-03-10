@@ -81,7 +81,9 @@ public class EditZimmerView implements Disposable{
                 .addComponent(cbBereich)
                 .addComponent(lZimmerName)
                 .addComponent(lBettenAnzahl)
-                .addComponent(lBereich);
+                .addComponent(lBereich)
+                .addComponent(tfZimmerName)
+                .addComponent(tfBettenAnzahl);
     }
 
     public JComponent buildPanel() {
