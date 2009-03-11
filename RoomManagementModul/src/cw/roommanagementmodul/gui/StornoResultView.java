@@ -41,6 +41,7 @@ public class StornoResultView implements Disposable {
     private void initComponents() {
         bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
+        componentContainer = CWComponentFactory.createCWComponentContainer();
     }
 
     public JPanel buildPanel() {
