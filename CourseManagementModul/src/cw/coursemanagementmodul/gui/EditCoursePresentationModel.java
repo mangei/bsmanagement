@@ -6,7 +6,6 @@
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.ButtonEvent;
@@ -14,6 +13,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -27,11 +27,11 @@ import cw.coursemanagementmodul.pojo.Course;
  *
  * @author André Salmhofer
  */
-public class EditCoursePresentationModel extends PresentationModel<Course>{
+public class EditCoursePresentationModel extends PresentationModel<Course>
+implements Disposable{
     //Definieren der Objekte in der oberen Leiste
     private Action saveButtonAction;
     private Action cancelButtonAction;
-    private Action resetButtonAction;
     private Action saveAndCloseButtonAction;
     //*******************************************
     
@@ -41,10 +41,13 @@ public class EditCoursePresentationModel extends PresentationModel<Course>{
     //Variable, die feststellt ob die Daten gespeichert sind oder nicht
     private ValueModel unsaved;
     
-    private SelectionInList<Course> courseSelection;
     private ButtonListenerSupport support;
 
     private HeaderInfo headerInfo;
+
+    private SelectionHandler selectionHandler;
+
+    private SaveListener saveListener;
     
     //Konstruktor
     public EditCoursePresentationModel(Course course) {
@@ -63,38 +66,44 @@ public class EditCoursePresentationModel extends PresentationModel<Course>{
     
     public void initEventHandling(){
         unsaved = new ValueHolder();
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+        unsaved.addValueChangeListener(selectionHandler = new SelectionHandler());
+        unsaved.setValue(false);
+    }
+
+    public void dispose() {
+        unsaved.removeValueChangeListener(selectionHandler);
+        getBufferedModel(Course.PROPERTYNAME_BEGINDATE).removePropertyChangeListener(saveListener);
+        getBufferedModel(Course.PROPERTYNAME_ENDDATE).removePropertyChangeListener(saveListener);
+        getBufferedModel(Course.PROPERTYNAME_NAME).removePropertyChangeListener(saveListener);
+        release();
+    }
+
+    private class SelectionHandler implements PropertyChangeListener{
+        public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
                     saveButtonAction.setEnabled(true);
-                    resetButtonAction.setEnabled(true);
                     saveAndCloseButtonAction.setEnabled(true);
                 } else {
                     saveButtonAction.setEnabled(false);
-                    resetButtonAction.setEnabled(false);
                     saveAndCloseButtonAction.setEnabled(false);
                 }
                 System.out.println("evt: " + evt.getNewValue());
             }
-        });
-        unsaved.setValue(false);
     }
     
     //**************************************************************************
     //Initialisieren der Objekte
     //**************************************************************************
     public void initModels(){
-        
-        resetButtonAction = new ResetButtonAction("Zurücksetzen");
         saveButtonAction = new SaveButtonAction("Speichern");
         cancelButtonAction = new CancelButtonAction("Schließen");
         saveAndCloseButtonAction = new SaveAndCloseButtonAction("Speichern u. Schließen");
         
         support = new ButtonListenerSupport();
-        
-        getBufferedModel(Course.PROPERTYNAME_BEGINDATE).addValueChangeListener(new SaveListener());
-        getBufferedModel(Course.PROPERTYNAME_ENDDATE).addValueChangeListener(new SaveListener());
-        getBufferedModel(Course.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());
+        saveListener = new SaveListener();
+        getBufferedModel(Course.PROPERTYNAME_BEGINDATE).addValueChangeListener(saveListener);
+        getBufferedModel(Course.PROPERTYNAME_ENDDATE).addValueChangeListener(saveListener);
+        getBufferedModel(Course.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
     }
     //**************************************************************************
     
@@ -105,9 +114,6 @@ public class EditCoursePresentationModel extends PresentationModel<Course>{
         return cancelButtonAction;
     }
 
-    Action getResetButtonAction() {
-        return resetButtonAction;
-    }
 
     Action getSaveButtonAction() {
         return saveButtonAction;
@@ -136,31 +142,6 @@ public class EditCoursePresentationModel extends PresentationModel<Course>{
             unsaved.setValue(true);
         }
     }
-    
-    //**************************************************************************
-    //Klasse zum Zurücksetzen eines Kurses
-    //**************************************************************************
-    private class ResetButtonAction extends AbstractAction{
-        {
-            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/back.png") );
-        }
-        private ResetButtonAction(String string){
-            super(string);
-        }
-        
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("RESET");
-            
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
-            if(i == JOptionPane.OK_OPTION) {
-                // TODO Wartedialog
-                resetCourse();
-                unsaved.setValue(false);
-                support.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
-            }
-        }
-    }
-    //**************************************************************************
     
     //**************************************************************************
     //Klasse zum Beenden des Eingabeformulars. Wechselt anschließend

@@ -75,4 +75,9 @@ implements AnnotatedClass
         this.price = price;
         firePropertyChange(PROPERTYNAME_PRICE, old, price);
     }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

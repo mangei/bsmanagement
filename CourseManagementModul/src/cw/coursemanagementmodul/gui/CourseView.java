@@ -11,22 +11,23 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 /**
  *
  * @author André Salmhofer
  */
-public class CourseView{
+public class CourseView implements Disposable{
     private CoursePresentationModel model;
+    private CWComponentFactory.CWComponentContainer componentContainer;
     
     //Definieren der Objekte in der oberen Leiste
     private JButton newButton;
@@ -37,15 +38,15 @@ public class CourseView{
     
     //Tabelle zur Darstellung der angelegten Kurse
     private JXTable courseTable;
-    private JTextField searchTextField;
     //********************************************
+
+    private JViewPanel panel;
     
     public CourseView(CoursePresentationModel model) {
         this.model = model;
     }
     
     private void initEventHandling() {
-        courseTable.addMouseListener(model.getDoubleClickHandler());
     }
     
     //******************************************************************
@@ -57,20 +58,28 @@ public class CourseView{
         deleteButton = CWComponentFactory.createButton(model.getDeleteButtonAction());
         detailButton = CWComponentFactory.createButton(model.getDetailButtonAction());
         
-        courseTable = new JXTable();
-        courseTable.setColumnControlVisible(true);
-        courseTable.setAutoCreateRowSorter(true);
-        courseTable.setPreferredScrollableViewportSize(new Dimension(10,10));
-        courseTable.setHighlighters(HighlighterFactory.createSimpleStriping());
+        courseTable = CWComponentFactory.createTable("Kein Kurs vorhanden!");
         
         courseTable.setModel(model.createCourseTableModel(model.getCourseSelection()));
+
         courseTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                model.getCourseSelection().getSelectionIndexHolder()));
-        courseTable.getColumn(1).setCellRenderer(new DateTimeTableCellRenderer(true));
-        courseTable.getColumn(2).setCellRenderer(new DateTimeTableCellRenderer(true));
+                    new JXTableSelectionConverter(
+                        model.getCourseSelection().getSelectionIndexHolder(),
+                        courseTable)));
         
-        searchTextField = new JTextField();
+        courseTable.getColumns(true).get(1).setCellRenderer(new DateTimeTableCellRenderer("dd.MM.yyyy"));
+        courseTable.getColumns(true).get(2).setCellRenderer(new DateTimeTableCellRenderer("dd.MM.yyyy"));
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(courseTable)
+                .addComponent(deleteButton)
+                .addComponent(detailButton)
+                .addComponent(editButton)
+                .addComponent(newButton)
+                .addComponent(editButton);
+
+        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
     }
     //**************************************************************************
     
@@ -80,22 +89,25 @@ public class CourseView{
     public JPanel buildPanel(){
         initComponents();
         initEventHandling();
-        JViewPanel panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         
         panel.getButtonPanel().add(newButton);
         panel.getButtonPanel().add(editButton);
         panel.getButtonPanel().add(deleteButton);
         panel.getButtonPanel().add(detailButton);
         
-        FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref","pref");
-        panel.getTopPanel().setLayout(layout);
+        FormLayout layout = new FormLayout("fill:pref:grow","fill:pref:grow");
+        panel.getContentPanel().setLayout(layout);
         CellConstraints cc = new CellConstraints();
         
-        panel.getTopPanel().add(searchTextField, cc.xy(3, 1));
-        
-        panel.getContentPanel().add(new JScrollPane(courseTable), BorderLayout.CENTER);
-        
+        panel.getContentPanel().add(new JScrollPane(courseTable), cc.xy(1, 1));
+        panel.addDisposableListener(this);
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
     //********************************************
 }

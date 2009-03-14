@@ -10,21 +10,21 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 /**
  *
  * @author André Salmhofer
  */
-public class SubjectView {
+public class SubjectView implements Disposable{
     private SubjectPresentationModel model;
+    private CWComponentFactory.CWComponentContainer componentContainer;
     
     //Definieren der Objekte in der oberen Leiste
     private JButton newButton;
@@ -35,13 +35,14 @@ public class SubjectView {
     //Tabelle zur Darstellung der angelegten Kursteilnehmer
     private JXTable subjectTable;
     //********************************************
+
+    private JViewPanel panel;
     
     public SubjectView(SubjectPresentationModel model) {
         this.model = model;
     }
     
     private void initEventHandling() {
-        subjectTable.addMouseListener(model.getDoubleClickHandler());
     }
     
     //******************************************************************
@@ -52,16 +53,21 @@ public class SubjectView {
         editButton   = CWComponentFactory.createButton(model.getEditButtonAction());
         deleteButton = CWComponentFactory.createButton(model.getDeleteButtonAction());
         
-        subjectTable = CWComponentFactory.createTable("");
-        subjectTable.setColumnControlVisible(true);
-        subjectTable.setAutoCreateRowSorter(true);
-        subjectTable.setPreferredScrollableViewportSize(new Dimension(10,10));
-        subjectTable.setHighlighters(HighlighterFactory.createSimpleStriping());
-        
+        subjectTable = CWComponentFactory.createTable("Keine Gegenstände vorhanden!");
         subjectTable.setModel(model.createSubjectTableModel(model.getSubjectSelection()));
         subjectTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                model.getSubjectSelection().getSelectionIndexHolder()));
+                    new JXTableSelectionConverter(
+                        model.getSubjectSelection().getSelectionIndexHolder(),
+                        subjectTable)));
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(deleteButton)
+                .addComponent(editButton)
+                .addComponent(newButton)
+                .addComponent(subjectTable);
+
+        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
     }
     //**************************************************************************
     
@@ -71,7 +77,6 @@ public class SubjectView {
     public JPanel buildPanel(){
         initComponents();
         initEventHandling();
-        JViewPanel panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         
         panel.getButtonPanel().add(newButton);
         panel.getButtonPanel().add(editButton);
@@ -82,8 +87,14 @@ public class SubjectView {
         CellConstraints cc = new CellConstraints();
         
         panel.getContentPanel().add(new JScrollPane(subjectTable), BorderLayout.CENTER);
-        
+        panel.addDisposableListener(this);
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
     //********************************************
 }

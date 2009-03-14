@@ -27,6 +27,8 @@ public class CourseAddition extends Model implements AnnotatedClass{
     private Course course;
     private List<Activity> activities;
     private List<Subject> subjects;
+    private double alreadyPayedAmount;
+    private Boolean posted;
     private double individualPrice;
     
     public final static String PROPERTYNAME_ID = "id";
@@ -34,13 +36,16 @@ public class CourseAddition extends Model implements AnnotatedClass{
     public final static String PROPERTYNAME_COURSE = "course";
     public final static String PROPERTYNAME_ACTIVITIES = "activities";
     public final static String PROPERTYNAME_SUBJECTS = "subjects";
-    public final static String PROPERTYNAME_INDIVIDUALPRICE = "individualPrice";
+    public final static String PROPERTYNAME_ALREADYPAYEDAMOUNT = "alreadyPayedAmount";
     public final static String PROPERTYNAME_ACCOUNTINGS = "accountings";
+    public final static String PROPERTYNAME_INDIVIDUALPRICE = "individualPrice";
 
     public CourseAddition() {
         course = new Course();
         activities = new ArrayList();
         subjects = new ArrayList();
+        posted = false;
+        alreadyPayedAmount = 0;
     }
     
     @ManyToMany
@@ -88,14 +93,28 @@ public class CourseAddition extends Model implements AnnotatedClass{
         this.course = course;
         firePropertyChange(PROPERTYNAME_COURSE, old, course);
     }
-    
+
+    public double getAlreadyPayedAmount() {
+        return alreadyPayedAmount;
+    }
+
+    public void setAlreadyPayedAmount(double alreadyPayedAmount) {
+        this.alreadyPayedAmount = alreadyPayedAmount;
+    }
+
+    public Boolean isPosted() {
+        return posted;
+    }
+
+    public void setPosted(Boolean posted) {
+        this.posted = posted;
+    }
+
     public double getIndividualPrice() {
         return individualPrice;
     }
 
     public void setIndividualPrice(double individualPrice) {
-        double old = this.individualPrice;
         this.individualPrice = individualPrice;
-        firePropertyChange(PROPERTYNAME_INDIVIDUALPRICE, old, individualPrice);
     }
 }

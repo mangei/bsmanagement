@@ -11,6 +11,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -24,8 +25,9 @@ import cw.coursemanagementmodul.pojo.Subject;
  *
  * @author André Salmhofer
  */
-public class EditSubjectView {
+public class EditSubjectView implements Disposable{
     private EditSubjectPresentationModel model;
+    private CWComponentFactory.CWComponentContainer componentContainer;
     
     //*********************Komponenten definieren*******************************
     private JLabel nameLabel;
@@ -33,8 +35,9 @@ public class EditSubjectView {
     
     private JButton saveButton;
     private JButton saveAndCloseButton;
-    private JButton rollbackButton;
     private JButton cancelButton;
+
+    private JViewPanel view;
     //**************************************************************************
     
     public EditSubjectView(EditSubjectPresentationModel model) {
@@ -48,7 +51,6 @@ public class EditSubjectView {
         
         saveButton = CWComponentFactory.createButton(model.getSaveButtonAction());
         saveAndCloseButton = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
-        rollbackButton = CWComponentFactory.createButton(model.getResetButtonAction());
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
         
         cancelButton.addActionListener(new ActionListener() {
@@ -57,6 +59,15 @@ public class EditSubjectView {
                 GUIManager.changeToLastView();
             }
         });
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(cancelButton)
+                .addComponent(nameLabel)
+                .addComponent(nameTextField)
+                .addComponent(saveAndCloseButton)
+                .addComponent(saveButton);
+
+        view = CWComponentFactory.createViewPanel(model.getHeaderInfo());
     }
     
     //**************************************************************************
@@ -65,13 +76,10 @@ public class EditSubjectView {
     public JPanel buildPanel(){
         initComponents();
         
-        JViewPanel view = CWComponentFactory.createViewPanel(model.getHeaderInfo());
-        
         JButtonPanel buttonPanel = view.getButtonPanel();
         
         buttonPanel.add(saveButton);
         buttonPanel.add(saveAndCloseButton);
-        buttonPanel.add(rollbackButton);
         buttonPanel.add(cancelButton);
         
         FormLayout layout = new FormLayout("pref, 4dlu, 200dlu, 4dlu, min",
@@ -82,8 +90,14 @@ public class EditSubjectView {
         
         view.getContentPanel().add(nameLabel, cc.xy (1, 1));
         view.getContentPanel().add(nameTextField, cc.xy(3, 1));
-        
+        view.addDisposableListener(this);
         return view;
+    }
+
+    public void dispose() {
+        view.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
     //**************************************************************************
 }

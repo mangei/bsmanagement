@@ -17,6 +17,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.Component;
 import java.awt.Font;
@@ -34,8 +35,6 @@ import javax.swing.JSeparator;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 import cw.coursemanagementmodul.pojo.Activity;
 import cw.coursemanagementmodul.pojo.Course;
@@ -43,12 +42,13 @@ import cw.coursemanagementmodul.pojo.Subject;
 import cw.coursemanagementmodul.pojo.manager.ActivityManager;
 import cw.coursemanagementmodul.pojo.manager.CourseManager;
 import cw.coursemanagementmodul.pojo.manager.SubjectManager;
+import java.text.DecimalFormat;
 
 /**
  *
  * @author André Salmhofer
  */
-public class CourseChooserPresentationModel{
+public class CourseChooserPresentationModel implements Disposable{
     
     //Definieren der Objekte in der oberen Leiste
     private Action addButtonAction;
@@ -65,7 +65,6 @@ public class CourseChooserPresentationModel{
     private CheckBoxListSelectionModel subjectSelectionModel;
     private DefaultListModel subjectModel;
     
-    private String headerText;
     private Course courseItem;
     
     private ButtonListenerSupport support;
@@ -77,6 +76,8 @@ public class CourseChooserPresentationModel{
     private ValueModel priceVM;
 
     private HeaderInfo headerInfo;
+
+    private SelectionHandler selectionHandler;
     
     public CourseChooserPresentationModel(Course course) {
         initModels();
@@ -119,16 +120,6 @@ public class CourseChooserPresentationModel{
 
         subjectSelectionModel = new CheckBoxListSelectionModel();
         subjectSelectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
-        
-        activitySelectionModel.addListSelectionListener(new ListSelectionListener() {
-
-            public void valueChanged(ListSelectionEvent e) {
-                System.out.println("e: " + e.toString() + " " + e.getSource());
-
-                System.out.println("min: " + activitySelectionModel.getMinSelectionIndex());
-                System.out.println("max: " + activitySelectionModel.getMaxSelectionIndex());
-            }
-        });
 
         subjectModel = new DefaultListModel();
         List<Subject> subjectList = SubjectManager.getInstance().getAll();
@@ -149,17 +140,17 @@ public class CourseChooserPresentationModel{
      
     
     private void initEventHandling() {
-        courseSelection.addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
-        courseSelection.addValueChangeListener(new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                updateCourseLabels();
-            }
-        });
-        updateCourseLabels();
+        courseSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
         
+        updateCourseLabels();
+        updateActionEnablement();
+    }
+
+    private class SelectionHandler implements PropertyChangeListener{
+        public void propertyChange(PropertyChangeEvent evt) {
+                updateCourseLabels();
+                updateActionEnablement();
+            }
     }
     
     private void updateCourseLabels(){
@@ -175,7 +166,15 @@ public class CourseChooserPresentationModel{
             bisVM.setValue("");
             priceVM.setValue("");
         }
-        
+    }
+
+    private void updateActionEnablement() {
+        boolean hasSelection = courseSelection.hasSelection();
+        addButtonAction.setEnabled(hasSelection);
+    }
+
+    public void dispose() {
+        courseSelection.removeValueChangeListener(selectionHandler);
     }
     
     //**************************************************************************
@@ -241,15 +240,6 @@ public class CourseChooserPresentationModel{
     }
     //**************************************************************************
     
-    
-    
-    private final class SelectionEmptyHandler implements PropertyChangeListener {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            //updateActionEnablement();
-        }
-    }
-    
     public SelectionInList<Course> getCourseSelection(){
         return courseSelection;
     }
@@ -260,15 +250,17 @@ public class CourseChooserPresentationModel{
     private class CourseTableModel extends AbstractTableAdapter<Course> {
 
         private ListModel listModel;
+        private DecimalFormat numberFormat;
 
         public CourseTableModel(ListModel listModel) {
             super(listModel);
             this.listModel = listModel;
+            numberFormat = new DecimalFormat("#0.00");
         }
 
         @Override
         public int getColumnCount() {
-            return 3;
+            return 4;
         }
 
         @Override
@@ -280,6 +272,8 @@ public class CourseChooserPresentationModel{
                     return "Von";
                 case 2:
                     return "Bis";
+                case 3:
+                    return "Preis";
                 default:
                     return "";
             }
@@ -299,6 +293,8 @@ public class CourseChooserPresentationModel{
                     return course.getBeginDate();
                 case 2:
                     return course.getEndDate();
+                case 3:
+                    return "€ " + numberFormat.format(course.getPrice());
                 default:
                     return "";
             }

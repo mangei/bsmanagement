@@ -12,7 +12,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.Dimension;
 import java.awt.Font;
 import javax.swing.JButton;
@@ -20,19 +22,16 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 /**
  *
  * @author André Salmhofer
  */
-public class EditCoursePartView {
+public class EditCoursePartView implements Disposable{
     private EditCoursePartPresentationModel model;
+    private CWComponentFactory.CWComponentContainer componentContainer;
     
     //*********************Komponenten definieren*******************************
-    private JLabel costumerLabel;
-    private JLabel courseLabel;
-    
     private JXTable courseTable;
     private JXTable activityTable;
     private JXTable subjectTable;
@@ -40,15 +39,9 @@ public class EditCoursePartView {
     private JButton courseButton;
     private JButton activityButton;
     private JButton subjectButton;
-    private JButton accountingButton;
     private JButton deleteCourseButton;
     private JButton deleteSubjectButton;
     private JButton deleteActivityButton;
-    
-    private JLabel courseName;
-    private JLabel beginDate;
-    private JLabel endDate;
-    private JLabel price;
 
     private JLabel soll;
     private JLabel haben;
@@ -62,6 +55,8 @@ public class EditCoursePartView {
     private JLabel vSoll;
     private JLabel vHaben;
     private JLabel vSaldo;
+
+    private JViewPanel view;
     
     //**************************************************************************
             
@@ -76,60 +71,43 @@ public class EditCoursePartView {
     //wird die Methode connect() von der Klasse PropertyConnector benötigt.
     //**************************************************************************
     public void initComponents(){
-        costumerLabel = CWComponentFactory.createLabel("Kunde");
-        courseLabel = CWComponentFactory.createLabel("Kurs");
-        
-        courseTable = CWComponentFactory.createTable("");
-        courseTable.setColumnControlVisible(true);
-        courseTable.setAutoCreateRowSorter(true);
+        courseTable = CWComponentFactory.createTable("Kein Kurs zugewiesen!");
         courseTable.setPreferredScrollableViewportSize(new Dimension(10, 70));
-        courseTable.setHighlighters(HighlighterFactory.createSimpleStriping());
-        
         courseTable.setModel(model.createCourseTableModel(model.getCourseSelection()));
         courseTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                model.getCourseSelection().getSelectionIndexHolder()));
-        
-        courseTable.setSelectionModel(new SingleListSelectionAdapter(model.getCourseSelection().getSelectionIndexHolder()));
-        
-        activityTable = CWComponentFactory.createTable("");
-        activityTable.setColumnControlVisible(true);
-        activityTable.setAutoCreateRowSorter(true);
+                    new JXTableSelectionConverter(
+                        model.getCourseSelection().getSelectionIndexHolder(),
+                        courseTable)));
+
+        activityTable = CWComponentFactory.createTable("Keine Aktivität zugewiesen!");
         activityTable.setPreferredScrollableViewportSize(new Dimension(10, 30));
-        activityTable.setHighlighters(HighlighterFactory.createSimpleStriping());
-        
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));//TODO-mit ValueModel
         activityTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                model.getActivitySelection().getSelectionIndexHolder()));
+                    new JXTableSelectionConverter(
+                        model.getActivitySelection().getSelectionIndexHolder(),
+                        activityTable)));
         
-        activityTable.setSelectionModel(new SingleListSelectionAdapter(model.getActivitySelection().getSelectionIndexHolder()));
-        
-        subjectTable = CWComponentFactory.createTable("");
-        subjectTable.setColumnControlVisible(true);
-        subjectTable.setAutoCreateRowSorter(true);
+        subjectTable = CWComponentFactory.createTable("Kein Gegenstand zugewiesen!");
         subjectTable.setPreferredScrollableViewportSize(new Dimension(10, 30));
-        subjectTable.setHighlighters(HighlighterFactory.createSimpleStriping());
-        
         subjectTable.setModel(model.createSubjectTableModel(model.getSubjectSelection()));
         subjectTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                model.getSubjectSelection().getSelectionIndexHolder()));
-        
-        subjectTable.setSelectionModel(new SingleListSelectionAdapter(model.getSubjectSelection().getSelectionIndexHolder()));
+                    new JXTableSelectionConverter(
+                        model.getSubjectSelection().getSelectionIndexHolder(),
+                        subjectTable)));
+
+        courseTable.getColumns(true).get(1).setCellRenderer(new DateTimeTableCellRenderer("dd.MM.yyyy"));
+        courseTable.getColumns(true).get(2).setCellRenderer(new DateTimeTableCellRenderer("dd.MM.yyyy"));
+
 
         courseButton = CWComponentFactory.createButton(model.getCourseChooserButtonAction());
         activityButton = CWComponentFactory.createButton(model.getActivityButtonAction());
         subjectButton = CWComponentFactory.createButton(model.getSubjectButtonAction());
-        accountingButton = CWComponentFactory.createButton(model.getPostingButtonAction());
         deleteCourseButton = CWComponentFactory.createButton(model.getRemoveCourseButtonAction());
         deleteSubjectButton = CWComponentFactory.createButton(model.getRemoveSubjectButtonAction());
         deleteActivityButton = CWComponentFactory.createButton(model.getRemoveActivityButtonAction());
-
-        courseName = CWComponentFactory.createLabel("Kursname:");
-        beginDate = CWComponentFactory.createLabel("Beginn:");
-        endDate = CWComponentFactory.createLabel("Ende:");
-        price = CWComponentFactory.createLabel("Preis:");
 
         soll = CWComponentFactory.createLabel("Sollbetrag:");
         haben = CWComponentFactory.createLabel("Habenbetrag:");
@@ -152,6 +130,29 @@ public class EditCoursePartView {
         vSoll.setFont(new Font(null, Font.BOLD, 11));
         vHaben.setFont(new Font(null, Font.BOLD, 11));
         vSaldo.setFont(new Font(null, Font.BOLD, 11));
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(activityButton)
+                .addComponent(activityTable)
+                .addComponent(courseButton)
+                .addComponent(courseTable)
+                .addComponent(deleteActivityButton)
+                .addComponent(deleteCourseButton)
+                .addComponent(deleteSubjectButton)
+                .addComponent(haben)
+                .addComponent(saldo)
+                .addComponent(soll)
+                .addComponent(subjectButton)
+                .addComponent(subjectTable)
+                .addComponent(vBeginDate)
+                .addComponent(vCourseName)
+                .addComponent(vEndDate)
+                .addComponent(vHaben)
+                .addComponent(vPrice)
+                .addComponent(vSaldo)
+                .addComponent(vSoll);
+
+        view = CWComponentFactory.createViewPanel(model.getHeaderInfo());
     }
     //**************************************************************************
     
@@ -161,7 +162,6 @@ public class EditCoursePartView {
     public JPanel buildPanel(){
         initComponents();
         
-        JViewPanel view = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         JPanel subjectButtonPanel = CWComponentFactory.createPanel(new FormLayout("pref, 4dlu, pref", "pref"));
         JPanel activityButtonPanel = CWComponentFactory.createPanel(new FormLayout("pref, 4dlu, pref", "pref"));
         
@@ -171,11 +171,10 @@ public class EditCoursePartView {
         
         buttonPanel.add(courseButton);
         buttonPanel.add(deleteCourseButton);
-        buttonPanel.add(accountingButton);
         
         FormLayout layout = new FormLayout("pref:grow, 15dlu, fill:pref:grow",
                 "pref, 4dlu, fill:pref:grow, 20dlu, pref, 4dlu," +
-                "pref, 4dlu, pref, 4dlu, pref, 4dlu, fill:pref:grow");
+                "pref, 4dlu, pref, 20dlu, pref, 4dlu, fill:pref:grow");
 
         FormLayout accountingLayout = new FormLayout("pref, 4dlu, pref", "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
         
@@ -213,8 +212,14 @@ public class EditCoursePartView {
         panelBuilder.addSeparator("Konto des Kursteilnehmers", cc.xyw(1, 11, 3));
         panelBuilder.add(accountingPanel, cc.xy(1, 13));
         panelBuilder.setOpaque(false);
-        
+        view.addDisposableListener(this);
         return view;
+    }
+
+    public void dispose() {
+        view.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
     //**************************************************************************
 }

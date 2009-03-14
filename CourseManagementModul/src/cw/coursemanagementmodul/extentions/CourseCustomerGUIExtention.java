@@ -1,36 +1,23 @@
 package cw.coursemanagementmodul.extentions;
 
-import com.jgoodies.binding.value.ValueModel;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import java.util.List;
 import javax.swing.JComponent;
 import cw.coursemanagementmodul.gui.EditCoursePartPresentationModel;
 import cw.coursemanagementmodul.gui.EditCoursePartView;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
-import cw.customermanagementmodul.extentions.interfaces.EditCustomerGUITabExtention;
-import java.util.ArrayList;
+import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 
 /**
  *
  * @author André Salmhofer
  */
-public class CourseCustomerGUIExtention implements EditCustomerGUITabExtention {
+public class CourseCustomerGUIExtention implements EditCustomerTabExtention {
 
     private static EditCoursePartPresentationModel model;
     private static EditCoursePartView view;
     private static CourseParticipant cp;
-
-    public void initPresentationModel(Customer customer, ValueModel unsaved) {
-        cp = CourseParticipantManager.getInstance().get(customer);
-        if(cp == null) {
-            cp = new CourseParticipant(customer);
-        }
-        model = new EditCoursePartPresentationModel(cp,unsaved);
-        view = new EditCoursePartView(model);
-
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-    }
 
     public JComponent getView() {
         return view.buildPanel();
@@ -38,19 +25,37 @@ public class CourseCustomerGUIExtention implements EditCustomerGUITabExtention {
 
     public void save() {
         model.save();
-        CourseParticipantManager.getInstance().save(cp);
     }
 
     public void reset() {
         model.reset();
     }
 
-    public boolean validate() {
-        return true;
+    public List<String> validate() {
+        return null;
     }
 
-    public List<String> getErrorMessages() {
-        return null;
+    public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
+        cp = CourseParticipantManager.getInstance().get(editCustomerModel.getBean());
+        System.out.println("_____________NEW CP: ["+cp+"]: Kunde: " + editCustomerModel.getBean().getSurname());
+        if(cp == null) {
+            
+            cp = new CourseParticipant(editCustomerModel.getBean());
+        }
+        model = new EditCoursePartPresentationModel(cp, editCustomerModel.getUnsaved());
+        view = new EditCoursePartView(model);
+    }
+
+    public void dispose() {
+        view.dispose();
+    }
+
+    public int priority() {
+        return 50;
+    }
+
+    public Object getModel() {
+        return model;
     }
 
 }

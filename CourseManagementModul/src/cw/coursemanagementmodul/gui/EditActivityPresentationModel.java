@@ -6,7 +6,6 @@
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.ButtonEvent;
@@ -14,6 +13,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -26,11 +26,11 @@ import cw.coursemanagementmodul.pojo.Activity;
  *
  * @author André Salmhofer
  */
-public class EditActivityPresentationModel  extends PresentationModel<Activity>{
+public class EditActivityPresentationModel  extends PresentationModel<Activity>
+implements Disposable{
     //Definieren der Objekte in der oberen Leiste
     private Action saveButtonAction;
     private Action cancelButtonAction;
-    private Action resetButtonAction;
     private Action saveAndCloseButtonAction;
     //*******************************************
     
@@ -40,10 +40,13 @@ public class EditActivityPresentationModel  extends PresentationModel<Activity>{
     //Variable, die feststellt ob die Daten gespeichert sind oder nicht
     private ValueModel unsaved;
     
-    private SelectionInList<Activity> activitySelection;
     private ButtonListenerSupport support;
 
     private HeaderInfo headerInfo;
+
+    private SelectionHandler selectionHandler;
+
+    private SaveListener saveListener;
     
     //Konstruktor
     public EditActivityPresentationModel(Activity activity) {
@@ -62,36 +65,40 @@ public class EditActivityPresentationModel  extends PresentationModel<Activity>{
     
     public void initEventHandling(){
         unsaved = new ValueHolder();
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+        unsaved.addValueChangeListener(selectionHandler = new SelectionHandler());
+        unsaved.setValue(false);
+    }
+
+    public void dispose() {
+        unsaved.removeValueChangeListener(selectionHandler);
+        getBufferedModel(Activity.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
+        release();
+    }
+
+    private class SelectionHandler implements PropertyChangeListener{
+        public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
                     saveButtonAction.setEnabled(true);
-                    resetButtonAction.setEnabled(true);
                     saveAndCloseButtonAction.setEnabled(true);
                 } else {
                     saveButtonAction.setEnabled(false);
-                    resetButtonAction.setEnabled(false);
                     saveAndCloseButtonAction.setEnabled(false);
                 }
                 System.out.println("evt: " + evt.getNewValue());
             }
-        });
-        unsaved.setValue(false);
     }
     
     //**************************************************************************
     //Initialisieren der Objekte
     //**************************************************************************
     public void initModels(){
-        
-        resetButtonAction = new ResetButtonAction("Zurücksetzen");
         saveButtonAction = new SaveButtonAction("Speichern");
         cancelButtonAction = new CancelButtonAction("Schließen");
         saveAndCloseButtonAction = new SaveAndCloseButtonAction("Speichern u. Schließen");
         
         support = new ButtonListenerSupport();
-        
-        getBufferedModel(Activity.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());
+        saveListener = new SaveListener();
+        getBufferedModel(Activity.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
     }
     //**************************************************************************
     
@@ -101,11 +108,7 @@ public class EditActivityPresentationModel  extends PresentationModel<Activity>{
     Action getCancelButtonAction() {
         return cancelButtonAction;
     }
-
-    Action getResetButtonAction() {
-        return resetButtonAction;
-    }
-
+    
     Action getSaveButtonAction() {
         return saveButtonAction;
     }
@@ -137,28 +140,6 @@ public class EditActivityPresentationModel  extends PresentationModel<Activity>{
     //**************************************************************************
     //Klasse zum Zurücksetzen eines Kurses
     //**************************************************************************
-    private class ResetButtonAction extends AbstractAction{
-        {
-            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/back.png") );
-        }
-        private ResetButtonAction(String string){
-            super(string);
-        }
-        
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("RESET");
-            
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
-            if(i == JOptionPane.OK_OPTION) {
-                // TODO Wartedialog
-                resetActivity();
-                unsaved.setValue(false);
-                support.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
-            }
-        }
-    }
-    //**************************************************************************
-    
     //**************************************************************************
     //Klasse zum Beenden des Eingabeformulars. Wechselt anschließend
     //in die letzte View

@@ -8,10 +8,9 @@ import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ListModel;
@@ -25,7 +24,7 @@ import cw.coursemanagementmodul.pojo.manager.ValueManager;
  *
  * @author André Salmhofer
  */
-public class DetailHistoryPresentationModel {
+public class DetailHistoryPresentationModel implements Disposable{
     private Action backAction;
     private SelectionInList<CoursePosting> accountings;
     private CourseParticipant selectedCourseParticipant;
@@ -34,19 +33,19 @@ public class DetailHistoryPresentationModel {
     private HeaderInfo headerInfoSaldo;
 
     public DetailHistoryPresentationModel(CourseParticipant courseParticipant) {
-        System.out.println("SELECTED = " + courseParticipant.getCostumer().getForename());
+        System.out.println("SELECTED = " + courseParticipant.getCustomer().getForename());
         selectedCourseParticipant = courseParticipant;
         initModels();
         initEventHandling();
 
         headerInfo = new  HeaderInfo(
                 "Buchungsdetailansicht für Ferienkurse",
-                    "<html>" + courseParticipant.getCostumer().getTitle()
-                    + " " + courseParticipant.getCostumer().getForename()
-                    + " " + courseParticipant.getCostumer().getSurname() + "<br/>"
-                    + courseParticipant.getCostumer().getStreet() + "<br/>"
-                    + courseParticipant.getCostumer().getPostOfficeNumber()
-                    + " " + courseParticipant.getCostumer().getCity() + "</html>",
+                    "<html>" + courseParticipant.getCustomer().getTitle()
+                    + " " + courseParticipant.getCustomer().getForename()
+                    + " " + courseParticipant.getCustomer().getSurname() + "<br/>"
+                    + courseParticipant.getCustomer().getStreet() + "<br/>"
+                    + courseParticipant.getCustomer().getPostOfficeNumber()
+                    + " " + courseParticipant.getCustomer().getCity() + "</html>",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/detail.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/detail.png"));
 
@@ -79,7 +78,7 @@ public class DetailHistoryPresentationModel {
     private void setPostingsOfOneCourseParticipant() {
         SelectionInList<CoursePosting> cA = new SelectionInList<CoursePosting>(CoursePostingManager.getInstance().getAll());
         for(int i = 0; i < cA.getList().size(); i++){
-            if(cA.getList().get(i).getPosting().getCustomer().equals(selectedCourseParticipant.getCostumer())){
+            if(cA.getList().get(i).getPosting().getCustomer().equals(selectedCourseParticipant.getCustomer())){
                 accountings.getList().add(cA.getList().get(i));
             }
         }
@@ -90,15 +89,9 @@ public class DetailHistoryPresentationModel {
     private void initEventHandling() {
         
     }
-    
-    //**************************************************************************
-    //Getter.- und Setter-Methoden
-    //**************************************************************************
-    private final class SelectionEmptyHandler implements PropertyChangeListener {
 
-        public void propertyChange(PropertyChangeEvent evt) {
-            updateActionEnablement();
-        }
+    public void dispose() {
+        
     }
 
     //**************************************************************************
@@ -115,7 +108,7 @@ public class DetailHistoryPresentationModel {
 
         @Override
         public int getColumnCount() {
-            return 3;
+            return 4;
         }
 
         @Override
@@ -127,6 +120,8 @@ public class DetailHistoryPresentationModel {
                     return "Haben";
                 case 2:
                     return "Beschreibung";
+                case 3:
+                    return "Buchungsdatum";
                 default:
                     return "";
             }
@@ -139,8 +134,6 @@ public class DetailHistoryPresentationModel {
 
         public Object getValueAt(int rowIndex, int columnIndex) {
             CoursePosting coursePosting = (CoursePosting) listModel.getElementAt(rowIndex);
-            int i = 0;
-            String string = "";
             switch (columnIndex) {
                 case 0:
                     if(coursePosting.getPosting().isLiabilities()){//isSoll
@@ -154,16 +147,14 @@ public class DetailHistoryPresentationModel {
                     else return "";
                 case 2:
                     return coursePosting.getPosting().getDescription();
+                case 3:
+                    return coursePosting.getPosting().getPostingDate();
                 default:
                     return "";
             }
         }
     }
-    //**************************************************************************
-
-    private void updateActionEnablement() {
-    }
-
+    
     private class BackAction extends AbstractAction {
 
         {
@@ -171,6 +162,7 @@ public class DetailHistoryPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
+            GUIManager.getInstance().unlockMenu();
             GUIManager.changeToLastView();
         }
 

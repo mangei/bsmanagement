@@ -8,6 +8,8 @@ package cw.coursemanagementmodul.pojo;
 import com.jgoodies.binding.beans.Model;
 import com.jgoodies.binding.list.ArrayListModel;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+import java.text.DateFormat;
+import java.text.Format;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
@@ -90,7 +92,8 @@ implements AnnotatedClass
     
     @Override
     public String toString(){
-        return name;
+        Format format = DateFormat.getDateInstance();
+        return "<html><b>" + name + "</b> " + format.format(beginDate) + "-" + format.format(endDate) + "</html>";
     }
     
     @ManyToMany

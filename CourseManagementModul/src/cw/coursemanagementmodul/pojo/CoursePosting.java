@@ -41,9 +41,10 @@ public class CoursePosting extends Model implements AnnotatedClass{
     }
 
     public CoursePosting() {
-        setPosting(new Posting());
-        setCourseAddition(new CourseAddition());
+        //setPosting(new Posting());
+        //setCourseAddition(new CourseAddition());
     }
+    
 
     @OneToOne
     public Posting getPosting() {

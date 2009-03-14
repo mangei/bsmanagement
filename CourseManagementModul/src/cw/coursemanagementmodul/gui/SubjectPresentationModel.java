@@ -11,28 +11,28 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.coursemanagementmodul.pojo.CourseParticipant;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.EventObject;
 import cw.coursemanagementmodul.pojo.Subject;
+import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 import cw.coursemanagementmodul.pojo.manager.SubjectManager;
+import java.util.List;
 
 /**
  *
  * @author André Salmhofer
  */
-public class SubjectPresentationModel{
+public class SubjectPresentationModel implements Disposable{
     //Definieren der Objekte in der oberen Leiste
     private Action newButtonAction;
     private Action editButtonAction;
@@ -44,6 +44,8 @@ public class SubjectPresentationModel{
     //**********************************************
 
     private HeaderInfo headerInfo;
+
+    private SelectionHandler selectionHandler;
     
     public SubjectPresentationModel() {
         initModels();
@@ -81,9 +83,18 @@ public class SubjectPresentationModel{
      
     
     private void initEventHandling() {
-        subjectSelection.addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+        subjectSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
+        updateActionEnablement();
+    }
+
+    private class SelectionHandler implements PropertyChangeListener{
+        public void propertyChange(PropertyChangeEvent evt) {
+                updateActionEnablement();
+            }
+    }
+
+    public void dispose() {
+        subjectSelection.removeValueChangeListener(selectionHandler);
     }
     
     //**************************************************************************
@@ -100,6 +111,7 @@ public class SubjectPresentationModel{
          }
 
         public void actionPerformed(ActionEvent e) {
+            GUIManager.getInstance().lockMenu();
             final Subject s = new Subject();
             final EditSubjectPresentationModel model = new EditSubjectPresentationModel(s);
             final EditSubjectView editView = new EditSubjectView(model);
@@ -121,6 +133,7 @@ public class SubjectPresentationModel{
                 }
                 
                 if(evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    GUIManager.getInstance().unlockMenu();
                     model.removeButtonListener(this);
                     GUIManager.changeToLastView();
                 }
@@ -168,25 +181,28 @@ public class SubjectPresentationModel{
         }
 
         public void actionPerformed(ActionEvent e) {
-            int ret = JOptionPane.showConfirmDialog(null, "Wollen Sie den Gegenstand wirklich löschen?");
-            if(ret == JOptionPane.OK_OPTION){
-            GUIManager.setLoadingScreenText("Kurs wird gelöscht...");
-            GUIManager.setLoadingScreenVisible(true);
-
-            new Thread(new Runnable() {
-
-                public void run() {
-                    Subject s = subjectSelection.getSelection();
-                    
+            Subject s = subjectSelection.getSelection();
+            List<CourseParticipant> courseParts = CourseParticipantManager.getInstance().getAll(s);
+            if(courseParts.size() > 0){
+                JOptionPane.showMessageDialog(null, "<html>Löschen des Kursgegenstands "
+                        + s.getName() + " nicht möglich!<br/>"
+                        + "Der Kursgegenstand wird noch von ein oder mehreren Kunden verwendet!</html>");
+            }
+            else{
+                int ret = JOptionPane.showConfirmDialog(null, "Wollen Sie den Kursgegenstand wirklich löschen?");
+                
+                if(ret == JOptionPane.OK_OPTION){
                     subjectSelection.getList().remove(s);
                     SubjectManager.getInstance().delete(s);
 
+                    GUIManager.setLoadingScreenText("Kursgegenstand wird gelöscht...");
+                    GUIManager.setLoadingScreenVisible(true);
+                    
                     GUIManager.setLoadingScreenVisible(false);
-                    GUIManager.getStatusbar().setTextAndFadeOut("Der Gegenstand wurde gelöscht!");
+                    GUIManager.getStatusbar().setTextAndFadeOut("Der Kursgegenstand wurde gelöscht!");
                 }
-            }).start();
+            }
         }
-      }
     }
     //**************************************************************************
     
@@ -213,14 +229,6 @@ public class SubjectPresentationModel{
         this.newButtonAction = newButtonAction;
     }
     //**************************************************************************
-    
-    
-    private final class SelectionEmptyHandler implements PropertyChangeListener {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            updateActionEnablement();
-        }
-    }
     
     public SelectionInList<Subject> getSubjectSelection(){
         return subjectSelection;
@@ -271,23 +279,6 @@ public class SubjectPresentationModel{
     }
     //**************************************************************************
     
-    //**************************************************************************
-    //Event Handling
-    //**************************************************************************
-    public MouseListener getDoubleClickHandler() {
-        return new DoubleClickHandler();
-    }
-
-    private final class DoubleClickHandler extends MouseAdapter {
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-                editSelectedItem(e);
-            }
-        }
-    }
-
     private void updateActionEnablement() {
         boolean hasSelection = subjectSelection.hasSelection();
         editButtonAction.setEnabled(hasSelection);
@@ -299,6 +290,7 @@ public class SubjectPresentationModel{
     //(Doppelclick oder Ändern-Button)
     //**************************************************************************
     private void editSelectedItem(EventObject e) {
+        GUIManager.getInstance().lockMenu();
         GUIManager.setLoadingScreenText("Kunde wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
 
@@ -317,6 +309,7 @@ public class SubjectPresentationModel{
                             GUIManager.getStatusbar().setTextAndFadeOut("Gegenstand wurde aktualisiert.");
                         }
                         if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                            GUIManager.getInstance().unlockMenu();
                             model.removeButtonListener(this);
                             GUIManager.changeToLastView();
                         }

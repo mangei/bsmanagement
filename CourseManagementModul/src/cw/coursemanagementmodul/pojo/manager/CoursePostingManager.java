@@ -2,8 +2,9 @@ package cw.coursemanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
-import cw.coursemanagementmodul.pojo.Activity;
 import cw.coursemanagementmodul.pojo.CoursePosting;
+import cw.customermanagementmodul.pojo.Posting;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 
@@ -29,6 +30,23 @@ public class CoursePostingManager extends AbstractPOJOManager<CoursePosting> {
     @Override
     public List<CoursePosting> getAll() {
         return HibernateUtil.getEntityManager().createQuery("FROM CoursePosting").getResultList();
+    }
+    
+    public CoursePosting get(Posting posting) {
+        return (CoursePosting) HibernateUtil.getEntityManager().createQuery("FROM CoursePosting p where p.posting = " + posting.getId()).getSingleResult();
+    }
+
+    public List<CoursePosting> getAllExceptStorno() {
+        List<CoursePosting> list = getAll();
+        List<CoursePosting> nonStornoList = new ArrayList<CoursePosting>();
+
+        for(int i = 0; i < list.size(); i++){
+            if(!list.get(i).getPosting().getPostingCategory().getKey().equals("Kurs-Buchung-Storno")){
+                nonStornoList.add(list.get(i));
+            }
+        }
+
+        return nonStornoList;
     }
 
     @Override

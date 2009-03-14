@@ -14,6 +14,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -27,27 +28,26 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 import cw.coursemanagementmodul.pojo.Activity;
 import cw.coursemanagementmodul.pojo.Course;
-import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.Subject;
-import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
 import cw.coursemanagementmodul.pojo.manager.CourseAdditionManager;
+import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
 import cw.coursemanagementmodul.pojo.manager.ValueManager;
-import cw.customermanagementmodul.pojo.Posting;
+import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author André Salmhofer
  */
-public class EditCoursePartPresentationModel extends PresentationModel<CourseParticipant> {
+public class EditCoursePartPresentationModel extends PresentationModel<CourseParticipant>
+implements Disposable{
     //Definieren der Objekte in der oberen Leiste
 
     private Action courseChooserButtonAction;
     private Action activityButtonAction;
     private Action subjectButtonAction;
-    private Action accountingButtonAction;
     private Action removeCourseButtonAction;
     private Action removeSubjectButtonAction;
     private Action removeActivityButtonAction;
@@ -65,7 +65,6 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
     private CourseChooserPresentationModel courseChooserModel;
     private ActivityChooserPresentationModel activityChooserModel;
     private SubjectChooserPresentationModel subjectChooserModel;
-    private EditCourseHabenPostingPresentationModel postingModel;
 
     private ValueModel nameVM;
     private ValueModel vonVM;
@@ -75,12 +74,16 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
     private ValueModel sollVM;
     private ValueModel habenVM;
     private ValueModel saldoVM;
-
-    Posting posting;
-    SelectionInList<CoursePosting> coursePostingList;
     
     private HeaderInfo headerInfo;
 
+    private CourseHandler selectionHandler;
+    private DataHandler dataHandler;
+    private DataHandler2 dataHandler2;
+
+    private SaveListener saveListener;
+
+    
     //Konstruktor
     public EditCoursePartPresentationModel(CourseParticipant coursePart, ValueModel unsaved) {
         super(coursePart);
@@ -89,29 +92,51 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
         initModels();
         initEventHandling();
 
-        headerInfo = new HeaderInfo("Ferienkurse", coursePart.getCostumer().getTitle() + " "
-                + coursePart.getCostumer().getForename() + " "
-                + coursePart.getCostumer().getSurname());
+        headerInfo = new HeaderInfo("Ferienkurse", coursePart.getCustomer().getTitle() + " "
+                + coursePart.getCustomer().getForename() + " "
+                + coursePart.getCustomer().getSurname());
     }
     //**************************************************************************
 
     public void initEventHandling() {
-        courseAdditionSelection.addValueChangeListener(new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                updateCourseModels();
-            }
-        });
+        courseAdditionSelection.addValueChangeListener(selectionHandler = new CourseHandler());
         updateCourseModels();
+        updateActionEnablement();
 
-        SaveListener saveListener = new SaveListener();
+        saveListener = new SaveListener();
         courseAdditionSelection.addValueChangeListener(saveListener);
         getBufferedModel(CourseParticipant.PROPERTYNAME_COSTUMER).addValueChangeListener(saveListener);
         getBufferedModel(CourseParticipant.PROPERTYNAME_COURSELIST).addValueChangeListener(saveListener);
 
-        courseAdditionSelection.addListDataListener(new ListDataListener() {
+        courseAdditionSelection.addListDataListener(dataHandler = new DataHandler());
 
-            public void intervalAdded(ListDataEvent e) {
+        courseAdditionSelection.addListDataListener(dataHandler2 = new DataHandler2());
+    }
+
+    public void dispose() {
+       courseAdditionSelection.removeValueChangeListener(selectionHandler);
+       courseAdditionSelection.removeListDataListener(dataHandler);
+       courseAdditionSelection.removeListDataListener(dataHandler2);
+       courseAdditionSelection.removeValueChangeListener(saveListener);
+       getBufferedModel(CourseParticipant.PROPERTYNAME_COSTUMER).removeValueChangeListener(saveListener);
+       getBufferedModel(CourseParticipant.PROPERTYNAME_COURSELIST).removeValueChangeListener(saveListener);
+
+       courseChooserModel.dispose();
+       activityChooserModel.dispose();
+       subjectChooserModel.dispose();
+
+       release();
+    }
+
+    private class CourseHandler implements PropertyChangeListener{
+        public void propertyChange(PropertyChangeEvent evt) {
+                updateCourseModels();
+                updateActionEnablement();
+            }
+    }
+    private class DataHandler implements ListDataListener{
+
+        public void intervalAdded(ListDataEvent e) {
                 unsaved.setValue(true);
             }
 
@@ -122,11 +147,9 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
             public void contentsChanged(ListDataEvent e) {
                 unsaved.setValue(true);
             }
-        });
-
-        courseAdditionSelection.addListDataListener(new ListDataListener() {
-
-            public void intervalAdded(ListDataEvent e) {
+    }
+    private class DataHandler2 implements ListDataListener{
+        public void intervalAdded(ListDataEvent e) {
                 update();
             }
 
@@ -141,14 +164,6 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
             public void update() {
                 setBufferedValue(CourseParticipant.PROPERTYNAME_COURSELIST, courseAdditionSelection.getList());
             }
-        });
-
-        courseAdditionSelection.addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
-        
-//        PropertyConnector.connectAndUpdate(getBufferedModel(CourseParticipant.PROPERTYNAME_COURSELIST), courseSelection, "list");
-
     }
 
     private void updateCourseModels() {
@@ -173,6 +188,9 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
             sollVM.setValue(ValueManager.getTotalSoll(coursePart) + "");
             habenVM.setValue(ValueManager.getTotalHaben(coursePart) + "");
             saldoVM.setValue(ValueManager.getTotalSaldo(coursePart) + "");
+
+            activitySelection.setList(null);
+            subjectSelection.setList(null);
         }
     }
 
@@ -180,16 +198,12 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
     //Initialisieren der Objekte
     //**************************************************************************
     public void initModels() {
-        posting = new Posting();
-        posting.setCustomer(coursePart.getCostumer());
-
         courseChooserButtonAction = new CourseChooserButtonAction("Kurs hinzufügen");
-        activityButtonAction = new ActivityButtonAction("<html>Aktivität<br/>hinzufügen</html>");
-        subjectButtonAction = new SubjectButtonAction("<html>Gegenstand<br/>hinzufügen<html>");
-        removeSubjectButtonAction = new RemoveSubjectButtonAction("<html>Gegenstand<br/>löschen<html>");
-        accountingButtonAction = new PostingButtonAction("Buchung tätigen");
+        activityButtonAction = new ActivityButtonAction("Aktivität hinzufügen");
+        subjectButtonAction = new SubjectButtonAction("Gegenstand hinzufügen");
+        removeSubjectButtonAction = new RemoveSubjectButtonAction("Gegenstand löschen");
         removeCourseButtonAction = new RemoveButtonAction("Kurs löschen");
-        removeActivityButtonAction = new RemoveActivityButtonAction("<html>Aktivität<br/>löschen</html>");
+        removeActivityButtonAction = new RemoveActivityButtonAction("Aktivität löschen");
 
         courseChooserModel = new CourseChooserPresentationModel(new Course());
         activityChooserModel = new ActivityChooserPresentationModel(new Activity());
@@ -200,8 +214,7 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
         courseAdditionSelection = new SelectionInList<CourseAddition>(coursePart.getCourseList());
         activitySelection = new SelectionInList<Activity>();
         subjectSelection = new SelectionInList<Subject>();
-        coursePostingList = new SelectionInList<CoursePosting>(CoursePostingManager.getInstance().getAll());
-
+        
         //----------------------------------------------------------------------
         nameVM = new ValueHolder();
         vonVM = new ValueHolder();
@@ -215,18 +228,9 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
         updateActionEnablement();
     }
     //**************************************************************************
-
-    private final class SelectionEmptyHandler implements PropertyChangeListener {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            updateActionEnablement();
-        }
-    }
-
+    
     private void updateActionEnablement() {
         boolean hasSelection = courseAdditionSelection.hasSelection();
-        System.out.println("HAS SELECTION = " + hasSelection);
-        accountingButtonAction.setEnabled(hasSelection);
         activityButtonAction.setEnabled(hasSelection);
         subjectButtonAction.setEnabled(hasSelection);
         removeActivityButtonAction.setEnabled(hasSelection);
@@ -247,10 +251,6 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
 
     Action getSubjectButtonAction() {
         return subjectButtonAction;
-    }
-
-    public Action getPostingButtonAction() {
-        return accountingButtonAction;
     }
     //**************************************************************************
 
@@ -299,12 +299,11 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
         }
 
         public void actionPerformed(ActionEvent e) {
-
+            GUIManager.setLoadingScreenText("Formular wird geladen...");
+            GUIManager.setLoadingScreenVisible(true);
             final CourseChooserView view = new CourseChooserView(courseChooserModel);
             final CourseAddition courseAddition = new CourseAddition();
             courseAddition.setCourse(courseChooserModel.getCourseItem());
-            
-            CourseAdditionManager.getInstance().save(courseAddition);
 
             courseChooserModel.addButtonListener(new ButtonListener() {
 
@@ -348,8 +347,9 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
                             }
                             subjectSelection.setList(subjectTempList);
                             courseAddition.setSubjects(subjectTempList);
-                            GUIManager.changeToLastView();
                             courseChooserModel.removeButtonListener(this);
+                            CourseAdditionManager.getInstance().save(courseAddition);
+                            GUIManager.changeToLastView();
                         }
                         else {
                             JOptionPane.showMessageDialog(null,
@@ -361,6 +361,7 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
             });
 
             GUIManager.changeView(view.buildPanel(), true);
+            GUIManager.setLoadingScreenVisible(false);
         }
     }
 
@@ -447,8 +448,8 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
         public void actionPerformed(ActionEvent e) {
             int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Kurs ("
                     + courseAdditionSelection.getSelection().getCourse().getName() + ") "
-                    + " des Kursteilnehmers " + coursePart.getCostumer().getForename()
-                    + " " + coursePart.getCostumer().getSurname() + " wirklich löschen?");
+                    + " des Kursteilnehmers " + coursePart.getCustomer().getForename()
+                    + " " + coursePart.getCustomer().getSurname() + " wirklich löschen?");
             if(check == JOptionPane.OK_OPTION){
                 CourseAddition cA = courseAdditionSelection.getSelection();
                 courseAdditionSelection.getList().remove(cA);
@@ -507,46 +508,6 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
             }
         }
     }
-
-    private class PostingButtonAction extends AbstractAction {
-
-        {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/customermanagementmodul/images/money.png"));
-        }
-
-        public PostingButtonAction(String name) {
-            super(name);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            
-
-            if(!isCourseAlreadyPosted(courseAdditionSelection.getSelection())){
-                postingModel = new EditCourseHabenPostingPresentationModel(coursePart,
-                courseAdditionSelection.getSelection());
-                final EditCourseHabenPostingView view = new EditCourseHabenPostingView(postingModel);
-                postingModel.setCourseAddition(courseAdditionSelection.getSelection());
-                GUIManager.changeView(view.buildPanel(), true);
-
-                postingModel.addButtonListener(new ButtonListener() {
-
-                public void buttonPressed(ButtonEvent evt) {
-                    habenVM.setValue(ValueManager.getTotalHaben(coursePart) + "");
-                    sollVM.setValue(ValueManager.getTotalSoll(coursePart) + "");
-                    saldoVM.setValue(ValueManager.getTotalSaldo(coursePart) + "");
-
-                    GUIManager.changeToLastView();
-                    postingModel.removeButtonListener(this);
-                }
-            });
-            }
-            else{
-                JOptionPane.showMessageDialog(null, "<html>Diese Buchung wurde bereits getätigt!<br/>" +
-                        "Sie haben die Möglichkeit in der allgemeinen Buchungsansicht eine Buchung zu tätigen!</html>");
-            }
-        }
-    }
-
     //**************************************************************************
     //Methoden die in den oben angelegten Klassen zum
     // + Speichern
@@ -556,6 +517,7 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
     //**************************************************************************
     public void saveCoursePart() {
         triggerCommit();
+        CourseParticipantManager.getInstance().save(coursePart);
     }
 
     public void resetCoursePart() {
@@ -593,10 +555,12 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
     private class CourseTableModel extends AbstractTableAdapter<Course> {
 
         private ListModel listModel;
+        private DecimalFormat numberFormat;
 
         public CourseTableModel(ListModel listModel) {
             super(listModel);
             this.listModel = listModel;
+            numberFormat = new DecimalFormat("#0.00");
         }
 
         @Override
@@ -614,7 +578,7 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
                 case 2:
                     return "Bis";
                 case 3:
-                    return "Buchungsstatus";
+                    return "Preis";
                 default:
                     return "";
             }
@@ -635,16 +599,12 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
                 case 2:
                     return courseAddition.getCourse().getEndDate();
                 case 3:
-                    if(isCourseAlreadyPosted(courseAddition)){
-                        return "Bezahlt";
-                    }
-                    return "Nicht Bezahlt";
+                    return "€ " + numberFormat.format(courseAddition.getCourse().getPrice());
                 default:
                     return "";
             }
         }
     }
-    //**************************************************************************
 
     //**************************************************************************
     //CourseTableModel, das die Art der Anzeige von Kursen regelt.
@@ -652,15 +612,17 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
     private class ActivityTableModel extends AbstractTableAdapter<Activity> {
 
         private ListModel listModel;
+        private DecimalFormat numberFormat;
 
         public ActivityTableModel(ListModel listModel) {
             super(listModel);
             this.listModel = listModel;
+            numberFormat = new DecimalFormat("#0.00");
         }
 
         @Override
         public int getColumnCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -670,6 +632,8 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
                     return "Aktivitätsname";
                 case 1:
                     return "Beschreibung";
+                case 2:
+                    return "Preis";
                 default:
                     return "";
             }
@@ -687,6 +651,8 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
                     return activity.getName();
                 case 1:
                     return activity.getDescription();
+                case 2:
+                    return "€ " + numberFormat.format(activity.getPrice());
                 default:
                     return "";
             }
@@ -817,17 +783,5 @@ public class EditCoursePartPresentationModel extends PresentationModel<CoursePar
 
     public Action getRemoveActivityButtonAction() {
         return removeActivityButtonAction;
-    }
-
-    private boolean isCourseAlreadyPosted(CourseAddition courseAddition) {
-        List<CoursePosting> list = CoursePostingManager.getInstance().getAll();
-
-        for(int i = 0; i < list.size(); i++){
-            if(list.get(i).getPosting().isAssets()
-                    && list.get(i).getCourseAddition() == courseAddition){
-                return true;
-            }
-        }
-        return false;
     }
 }

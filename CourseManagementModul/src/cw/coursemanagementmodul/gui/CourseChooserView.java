@@ -13,23 +13,23 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.CheckBoxList;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import java.awt.Dimension;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 /**
  *
  * @author André Salmhofer
  */
-public class CourseChooserView{
+public class CourseChooserView implements Disposable{
     private CourseChooserPresentationModel model;
+    private CWComponentFactory.CWComponentContainer componentContainer;
     
     //Definieren der Objekte in der oberen Leiste
     private JButton addButton;
@@ -51,9 +51,9 @@ public class CourseChooserView{
 
     private CheckBoxList activityList;
     private CheckBoxList subjectList;
-
-    private JTextField searchTextField;
     //********************************************
+
+    private JViewPanel mainPanel;
     
     public CourseChooserView(CourseChooserPresentationModel model) {
         this.model = model;
@@ -69,16 +69,18 @@ public class CourseChooserView{
     public void initComponents(){
         addButton = CWComponentFactory.createButton(model.getAddButtonAction());
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
-        courseTable = CWComponentFactory.createTable("");
-        courseTable.setColumnControlVisible(true);
-        courseTable.setAutoCreateRowSorter(true);
-        courseTable.setPreferredScrollableViewportSize(new Dimension(10,10));
-        courseTable.setHighlighters(HighlighterFactory.createSimpleStriping());
-        
+
+        courseTable = CWComponentFactory.createTable("Keine Kurse angelegt!");
         courseTable.setModel(model.createCourseTableModel(model.getCourseSelection()));
         courseTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                model.getCourseSelection().getSelectionIndexHolder()));
+                    new JXTableSelectionConverter(
+                        model.getCourseSelection().getSelectionIndexHolder(),
+                        courseTable)));
+
+        courseTable.getColumns(true).get(1).setCellRenderer(new DateTimeTableCellRenderer("dd.MM.yyyy"));
+        courseTable.getColumns(true).get(2).setCellRenderer(new DateTimeTableCellRenderer("dd.MM.yyyy"));
+
         
         courseName = CWComponentFactory.createLabel("Kursname:");
         beginDate = CWComponentFactory.createLabel("Beginn:");
@@ -105,7 +107,23 @@ public class CourseChooserView{
         subjectList.setCellRenderer(model.createSubjectListCellRenderer());
         
         courseTable.setOpaque(false);
-        
+
+        mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(addButton)
+                .addComponent(cancelButton)
+                .addComponent(courseTable)
+                .addComponent(activityList)
+                .addComponent(courseName)
+                .addComponent(beginDate)
+                .addComponent(endDate)
+                .addComponent(price)
+                .addComponent(vBeginDate)
+                .addComponent(vCourseName)
+                .addComponent(vEndDate)
+                .addComponent(vPrice)
+                .addComponent(subjectList);
     }
     //**************************************************************************
     
@@ -115,7 +133,6 @@ public class CourseChooserView{
     public JPanel buildPanel(){
         initComponents();
         initEventHandling();
-        JViewPanel mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         JPanel detailPanel = CWComponentFactory.createPanel();
         
         mainPanel.getButtonPanel().add(addButton);
@@ -150,8 +167,14 @@ public class CourseChooserView{
         panelBuilder.add(activityList, cc.xy(3, 7));
         panelBuilder.addSeparator("Gegenstände des Kurses", cc.xy(5, 5));
         panelBuilder.add(subjectList, cc.xy(5, 7));
-        
+        mainPanel.addDisposableListener(this);
         return mainPanel;
+    }
+
+    public void dispose() {
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
     //********************************************
 }

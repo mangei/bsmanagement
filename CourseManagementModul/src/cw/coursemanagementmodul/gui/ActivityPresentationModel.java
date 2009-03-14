@@ -11,11 +11,9 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.EventObject;
@@ -23,16 +21,20 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 import cw.coursemanagementmodul.pojo.Activity;
+import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.manager.ActivityManager;
+import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
+import java.text.DecimalFormat;
+import java.text.FieldPosition;
+import java.util.List;
 
 /**
  *
  * @author André Salmhofer
  */
-public class ActivityPresentationModel {
+public class ActivityPresentationModel implements Disposable{
     //Manager, der verschieden Methoden, wie beispielsweise
     //New, Edit, Delete enthalten
     //*********************************************************************************
@@ -48,6 +50,8 @@ public class ActivityPresentationModel {
     //**********************************************
 
     private HeaderInfo headerInfo;
+
+    private SelectionHandler selectionHandler;
     
     public ActivityPresentationModel() {
         initModels();
@@ -85,9 +89,19 @@ public class ActivityPresentationModel {
      
     
     private void initEventHandling() {
-        activitySelection.addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+        activitySelection.addValueChangeListener(selectionHandler = new SelectionHandler());
+        updateActionEnablement();
+    }
+
+    private class SelectionHandler implements PropertyChangeListener{
+
+        public void propertyChange(PropertyChangeEvent evt) {
+            updateActionEnablement();
+        }
+    }
+
+    public void dispose() {
+        activitySelection.removeValueChangeListener(selectionHandler);
     }
     
     //**************************************************************************
@@ -104,11 +118,14 @@ public class ActivityPresentationModel {
          }
 
         public void actionPerformed(ActionEvent e) {
+            GUIManager.getInstance().lockMenu();
+
             final Activity activity = new Activity();
             final EditActivityPresentationModel model = new EditActivityPresentationModel(activity);
             final EditActivityView editView = new EditActivityView(model);
+
             model.addButtonListener(new ButtonListener() {
-                
+            
             boolean activityAlreadyCreated = false;
 
             public void buttonPressed(ButtonEvent evt) {
@@ -125,6 +142,7 @@ public class ActivityPresentationModel {
                 }
                 
                 if(evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    GUIManager.getInstance().unlockMenu();
                     model.removeButtonListener(this);
                     GUIManager.changeToLastView();
                 }
@@ -172,25 +190,28 @@ public class ActivityPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            int ret = JOptionPane.showConfirmDialog(null, "Wollen Sie die Aktivität wirklich löschen?");
-            if(ret == JOptionPane.OK_OPTION){
-            GUIManager.setLoadingScreenText("Aktivität wird gelöscht...");
-            GUIManager.setLoadingScreenVisible(true);
-
-            new Thread(new Runnable() {
-
-                public void run() {
-                    Activity activity = activitySelection.getSelection();
-                    
+            Activity activity = activitySelection.getSelection();
+            List<CourseParticipant> courseParts = CourseParticipantManager.getInstance().getAll(activity);
+            
+            if(courseParts.size() > 0){
+                    JOptionPane.showMessageDialog(null, "<html>Löschen dieser Activity "
+                            + activity.getName() + " nicht möglich!<br/>"
+                            + "Diese Aktivität wird noch von ein oder mehreren Kunden verwendet!</html>");
+            }
+            else{
+                int ret = JOptionPane.showConfirmDialog(null, "Wollen Sie die Aktivität wirklich löschen?");
+                if(ret == JOptionPane.OK_OPTION){
                     activitySelection.getList().remove(activity);
                     ActivityManager.getInstance().delete(activity);
+
+                    GUIManager.setLoadingScreenText("Aktivität wird gelöscht...");
+                    GUIManager.setLoadingScreenVisible(true);
 
                     GUIManager.setLoadingScreenVisible(false);
                     GUIManager.getStatusbar().setTextAndFadeOut("Die Aktivität wurde gelöscht!");
                 }
-            }).start();
+            }
         }
-      }
     }
     //**************************************************************************
     
@@ -218,13 +239,6 @@ public class ActivityPresentationModel {
     }
     //**************************************************************************
     
-    private final class SelectionEmptyHandler implements PropertyChangeListener {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            updateActionEnablement();
-        }
-    }
-    
     public SelectionInList<Activity> getActivitySelection(){
         return activitySelection;
     }
@@ -233,17 +247,18 @@ public class ActivityPresentationModel {
     //CourseTableModel, das die Art der Anzeige von Kursen regelt.
     //**************************************************************************
     private class ActivityTableModel extends AbstractTableAdapter<Activity> {
-
+        private DecimalFormat numberFormat;
         private ListModel listModel;
 
         public ActivityTableModel(ListModel listModel) {
             super(listModel);
             this.listModel = listModel;
+            numberFormat = new DecimalFormat("#0.00");
         }
 
         @Override
         public int getColumnCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -251,9 +266,10 @@ public class ActivityPresentationModel {
             switch (column) {
                 case 0:
                     return "Aktivität-Name";
-                    
                 case 1:
                     return "Beschreibung";
+                case 2:
+                    return "Preis";
                 default:
                     return "";
             }
@@ -269,9 +285,10 @@ public class ActivityPresentationModel {
             switch (columnIndex) {
                 case 0:
                     return activity.getName();
-                
                 case 1:
                     return activity.getDescription();
+                case 2:
+                    return "€ " + numberFormat.format(activity.getPrice());
                 default:
                     return "";
             }
@@ -279,23 +296,6 @@ public class ActivityPresentationModel {
     }
     //**************************************************************************
     
-    //**************************************************************************
-    //Event Handling
-    //**************************************************************************
-    public MouseListener getDoubleClickHandler() {
-        return new DoubleClickHandler();
-    }
-
-    private final class DoubleClickHandler extends MouseAdapter {
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-                editSelectedItem(e);
-            }
-        }
-    }
-
     private void updateActionEnablement() {
         boolean hasSelection = activitySelection.hasSelection();
         editButtonAction.setEnabled(hasSelection);
@@ -309,32 +309,24 @@ public class ActivityPresentationModel {
     private void editSelectedItem(EventObject e) {
         GUIManager.setLoadingScreenText("Kunde wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
+        final Activity activity = activitySelection.getSelection();
+        final EditActivityPresentationModel model = new EditActivityPresentationModel(activity);
+        final EditActivityView editView = new EditActivityView(model);
+        model.addButtonListener(new ButtonListener() {
 
-        new Thread(new Runnable() {
-
-            public void run() {
-
-                final Activity activity = activitySelection.getSelection();
-                final EditActivityPresentationModel model = new EditActivityPresentationModel(activity);
-                final EditActivityView editView = new EditActivityView(model);
-                model.addButtonListener(new ButtonListener() {
-
-                    public void buttonPressed(ButtonEvent evt) {
-                        if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                            ActivityManager.getInstance().save(activity);
-                            GUIManager.getStatusbar().setTextAndFadeOut("Aktivität wurde aktualisiert.");
-                        }
-                        if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                            model.removeButtonListener(this);
-                            GUIManager.changeToLastView();
-                        }
-                    }
-                });
-                GUIManager.changeView(editView.buildPanel(), true);
-                GUIManager.setLoadingScreenVisible(false);
-
+            public void buttonPressed(ButtonEvent evt) {
+                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    ActivityManager.getInstance().save(activity);
+                    GUIManager.getStatusbar().setTextAndFadeOut("Aktivität wurde aktualisiert.");
+                }
+                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    model.removeButtonListener(this);
+                    GUIManager.changeToLastView();
+                }
             }
-        }).start();
+        });
+        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.setLoadingScreenVisible(false);
     }
 
     public HeaderInfo getHeaderInfo() {

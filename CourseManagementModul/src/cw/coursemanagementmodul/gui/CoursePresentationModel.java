@@ -11,11 +11,9 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.EventObject;
@@ -23,16 +21,19 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 import cw.coursemanagementmodul.pojo.Course;
+import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.manager.CourseManager;
+import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
+import java.text.DecimalFormat;
+import java.util.List;
 
 /**
  *
  * @author André Salmhofer
  */
-public class CoursePresentationModel{
+public class CoursePresentationModel implements Disposable{
     //Definieren der Objekte in der oberen Leiste
     private Action newButtonAction;
     private Action editButtonAction;
@@ -43,6 +44,8 @@ public class CoursePresentationModel{
     //Liste der Kurse
     private SelectionInList<Course> courseSelection;
     //**********************************************
+
+    private SelectionHandler selectionHandler;
 
     private HeaderInfo headerInfo;
     
@@ -83,11 +86,20 @@ public class CoursePresentationModel{
      
     
     private void initEventHandling() {
-        courseSelection.addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+        courseSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
+        updateActionEnablement();
     }
-    
+
+    public void dispose() {
+        courseSelection.removeValueChangeListener(selectionHandler);
+    }
+
+    private class SelectionHandler implements PropertyChangeListener{
+        public void propertyChange(PropertyChangeEvent evt) {
+                updateActionEnablement();
+            }
+    }
+
     //**************************************************************************
     //Private Klasse, die Events behandelt, die das Neuanlegen
     //von Kursen beinhaltet
@@ -102,6 +114,7 @@ public class CoursePresentationModel{
          }
 
         public void actionPerformed(ActionEvent e) {    
+            GUIManager.getInstance().lockMenu();
             final Course c = new Course();
             final EditCoursePresentationModel model = new EditCoursePresentationModel(c);
             final EditCourseView editView = new EditCourseView(model);
@@ -123,6 +136,7 @@ public class CoursePresentationModel{
                 }
                 
                 if(evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    GUIManager.getInstance().unlockMenu();
                     model.removeButtonListener(this);
                     GUIManager.changeToLastView();
                 }
@@ -170,25 +184,28 @@ public class CoursePresentationModel{
         }
 
         public void actionPerformed(ActionEvent e) {
-            int ret = JOptionPane.showConfirmDialog(null, "Wollen Sie den Kurs wirklich löschen?");
-            if(ret == JOptionPane.OK_OPTION){
-            GUIManager.setLoadingScreenText("Kurs wird gelöscht...");
-            GUIManager.setLoadingScreenVisible(true);
-
-            new Thread(new Runnable() {
-
-                public void run() {
-                    Course c = courseSelection.getSelection();
-                    
-                    courseSelection.getList().remove(c);
-                    CourseManager.getInstance().delete(c);
-
-                    GUIManager.setLoadingScreenVisible(false);
-                    GUIManager.getStatusbar().setTextAndFadeOut("Der Kurs wurde gelöscht!");
+                Course c = courseSelection.getSelection();
+                
+                List<CourseParticipant> courseParts = CourseParticipantManager.getInstance().getAll(c);
+                if(courseParts.size() > 0){
+                    JOptionPane.showMessageDialog(null, "<html>Löschen des Kurses "
+                            + c.getName() + " nicht möglich!<br/>"
+                            + "Der Kurs wird noch von ein oder mehreren Kunden verwendet!</html>");
                 }
-            }).start();
-        }
-      }
+                else{
+                    int ret = JOptionPane.showConfirmDialog(null, "Wollen Sie den Kurs wirklich löschen?");
+                    if(ret == JOptionPane.OK_OPTION){
+                        courseSelection.getList().remove(c);
+                        CourseManager.getInstance().delete(c);
+
+                        GUIManager.setLoadingScreenText("Kurs wird gelöscht...");
+                        GUIManager.setLoadingScreenVisible(true);
+                        
+                        GUIManager.setLoadingScreenVisible(false);
+                        GUIManager.getStatusbar().setTextAndFadeOut("Der Kurs wurde gelöscht!");
+                    }
+                }
+            }
     }
     //**************************************************************************
     
@@ -241,14 +258,6 @@ public class CoursePresentationModel{
     }
     //**************************************************************************
     
-    
-    private final class SelectionEmptyHandler implements PropertyChangeListener {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            updateActionEnablement();
-        }
-    }
-    
     public SelectionInList<Course> getCourseSelection(){
         return courseSelection;
     }
@@ -257,17 +266,18 @@ public class CoursePresentationModel{
     //CourseTableModel, das die Art der Anzeige von Kursen regelt.
     //**************************************************************************
     private class CourseTableModel extends AbstractTableAdapter<Course> {
-
+        private DecimalFormat numberFormat;
         private ListModel listModel;
 
         public CourseTableModel(ListModel listModel) {
             super(listModel);
             this.listModel = listModel;
+            numberFormat = new DecimalFormat("#0.00");
         }
 
         @Override
         public int getColumnCount() {
-            return 3;
+            return 4;
         }
 
         @Override
@@ -279,6 +289,8 @@ public class CoursePresentationModel{
                     return "Von";
                 case 2:
                     return "Bis";
+                case 3:
+                    return "Preis";
                 default:
                     return "";
             }
@@ -298,6 +310,8 @@ public class CoursePresentationModel{
                     return course.getBeginDate();
                 case 2:
                     return course.getEndDate();
+                case 3:
+                    return "€ " + numberFormat.format(course.getPrice());
                 default:
                     return "";
             }
@@ -305,23 +319,6 @@ public class CoursePresentationModel{
     }
     //**************************************************************************
     
-    //**************************************************************************
-    //Event Handling
-    //**************************************************************************
-    public MouseListener getDoubleClickHandler() {
-        return new DoubleClickHandler();
-    }
-
-    private final class DoubleClickHandler extends MouseAdapter {
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-                editSelectedItem(e);
-            }
-        }
-    }
-
     private void updateActionEnablement() {
         boolean hasSelection = courseSelection.hasSelection();
         editButtonAction.setEnabled(hasSelection);
@@ -334,34 +331,30 @@ public class CoursePresentationModel{
     //(Doppelclick oder Ändern-Button)
     //**************************************************************************
     private void editSelectedItem(EventObject e) {
+        GUIManager.getInstance().lockMenu();
         GUIManager.setLoadingScreenText("Kunde wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
 
-        new Thread(new Runnable() {
+        final Course c = courseSelection.getSelection();
+        final EditCoursePresentationModel model = new EditCoursePresentationModel(c);
+        final EditCourseView editView = new EditCourseView(model);
+        model.addButtonListener(new ButtonListener() {
 
-            public void run() {
-
-                final Course c = courseSelection.getSelection();
-                final EditCoursePresentationModel model = new EditCoursePresentationModel(c);
-                final EditCourseView editView = new EditCourseView(model);
-                model.addButtonListener(new ButtonListener() {
-
-                    public void buttonPressed(ButtonEvent evt) {
-                        if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                            CourseManager.getInstance().save(c);
-                            GUIManager.getStatusbar().setTextAndFadeOut("Kurs wurde aktualisiert.");
-                        }
-                        if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                            model.removeButtonListener(this);
-                            GUIManager.changeToLastView();
-                        }
-                    }
-                });
-                GUIManager.changeView(editView.buildPanel(), true);
-                GUIManager.setLoadingScreenVisible(false);
-
+            public void buttonPressed(ButtonEvent evt) {
+                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    CourseManager.getInstance().save(c);
+                    GUIManager.getStatusbar().setTextAndFadeOut("Kurs wurde aktualisiert.");
+                }
+                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    GUIManager.getInstance().unlockMenu();
+                    model.removeButtonListener(this);
+                    GUIManager.changeToLastView();
+                }
             }
-        }).start();
+        });
+        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.setLoadingScreenVisible(false);
+
     }
     //**************************************************************************
 

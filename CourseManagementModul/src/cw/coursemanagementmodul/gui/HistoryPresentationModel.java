@@ -4,38 +4,37 @@
  */
 package cw.coursemanagementmodul.gui;
 
-import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ListModel;
-import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 import cw.coursemanagementmodul.pojo.Course;
+import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.manager.CourseManager;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
+import cw.coursemanagementmodul.pojo.manager.ValueManager;
+import java.text.DecimalFormat;
+import java.util.Date;
+import javax.swing.table.AbstractTableModel;
 
 /**
  *
  * @author André Salmhofer
  */
-public class HistoryPresentationModel {
+public class HistoryPresentationModel implements Disposable{
     //Definieren der Objekte in der oberen Leiste
-
-    private Action cancelAction;
-    private Action printAction;
-    private Action accountingAction;
     private Action detailAction;
     //********************************************
 
@@ -46,6 +45,23 @@ public class HistoryPresentationModel {
     private Course selectedCourse;
 
     private HeaderInfo headerInfoComboBox;
+
+    private CourseSelectionHandler courseSelectionHandler;
+    private CoursePartSelectionHandler coursePartSelectionHandler;
+
+    private ValueModel courseSollValueHolder;
+    private ValueModel courseHabenValueHolder;
+    private ValueModel courseSaldoValueHolder;
+    private ValueModel sizeValueHolder;
+
+    private ValueModel nameVM;
+    private ValueModel vonVM;
+    private ValueModel bisVM;
+    private ValueModel priceVM;
+
+    private double sollValue;
+    private double habenValue;
+    private double saldoValue;
     
     public HistoryPresentationModel() {
         initModels();
@@ -63,20 +79,37 @@ public class HistoryPresentationModel {
     //**************************************************************************
     public void initModels() {
         //Anlegen der Aktionen, für die Buttons
-        cancelAction = new CancelAction("Abbrechen");
-        printAction = new PrintAction("Drucken");
         detailAction = new DetailAction("Anzeigen");
         
-        coursePartSelection = new SelectionInList<CourseParticipant>(CourseParticipantManager.getInstance().getAll());
+        coursePartSelection = new SelectionInList<CourseParticipant>();
         courseSelection = new SelectionInList<Course>(CourseManager.getInstance().getAll());
         
         updateActionEnablement();
 
-        courseSelection.addValueChangeListener(new PropertyChangeListener() {
+        courseSelection.addValueChangeListener(courseSelectionHandler = new CourseSelectionHandler());
 
-            public void propertyChange(PropertyChangeEvent evt) {
+        courseSollValueHolder = new ValueHolder();
+        courseHabenValueHolder = new ValueHolder();
+        courseSaldoValueHolder = new ValueHolder();
+        sizeValueHolder = new ValueHolder();
+
+        //----------------------------------------------------------------------
+        nameVM = new ValueHolder();
+        vonVM = new ValueHolder();
+        bisVM = new ValueHolder();
+        priceVM = new ValueHolder();
+        
+        updateElements();
+    }
+
+    public void dispose() {
+        courseSelection.removeValueChangeListener(courseSelectionHandler);
+        coursePartSelection.removeValueChangeListener(coursePartSelectionHandler);
+    }
+
+    private class CourseSelectionHandler implements PropertyChangeListener{
+        public void propertyChange(PropertyChangeEvent evt) {
                 selectedCourse = courseSelection.getSelection();
-
                 if (coursePartSelection.getList().size() != 0) {
                     coursePartSelection.getList().clear();
                     coursePartSelection.fireIntervalRemoved(0, getCoursePartSelection().getList().size() - 1);
@@ -84,15 +117,47 @@ public class HistoryPresentationModel {
 
                 List<CourseParticipant> list = CourseParticipantManager.getInstance().getAll(selectedCourse);
                 coursePartSelection.setList(list);
+
                 if (coursePartSelection.getList().size() != 0) {
                     coursePartSelection.fireIntervalAdded(0, list.size()-1);
                 }
-                
-                System.out.println("SELECTED COURSE = " + selectedCourse.getName());
+
+                updateElements();
             }
-        });
+    }
+
+    private class CoursePartSelectionHandler implements PropertyChangeListener{
+        public void propertyChange(PropertyChangeEvent evt) {
+                updateActionEnablement();
+            }
     }
     //**************************************************************************
+
+    private void updateElements(){
+        if(courseSelection.hasSelection()){
+            calculateTotalValue();
+            courseSollValueHolder.setValue(sollValue);
+            courseHabenValueHolder.setValue(habenValue);
+            courseSaldoValueHolder.setValue(saldoValue);
+            sizeValueHolder.setValue(coursePartSelection.getSize() + "");
+
+            nameVM.setValue(selectedCourse.getName());
+            vonVM.setValue(selectedCourse.getBeginDate());
+            bisVM.setValue(selectedCourse.getEndDate());
+            priceVM.setValue(selectedCourse.getPrice());
+        }
+        else{
+            courseSollValueHolder.setValue(0.0);
+            courseHabenValueHolder.setValue(0.0);
+            courseSaldoValueHolder.setValue(0.0);
+            sizeValueHolder.setValue("");
+
+            nameVM.setValue("");
+            vonVM.setValue(null);
+            bisVM.setValue(null);
+            priceVM.setValue(0.0);
+        }
+    }
 
     //**************************************************************************
     //Methode, die ein CourseTableModel erzeugt.
@@ -104,45 +169,12 @@ public class HistoryPresentationModel {
     //**************************************************************************
 
     private void initEventHandling() {
-        coursePartSelection.addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+        coursePartSelection.addValueChangeListener(coursePartSelectionHandler = new CoursePartSelectionHandler());
+        courseSelection.addValueChangeListener(courseSelectionHandler = new CourseSelectionHandler());
+        updateActionEnablement();
+        updateElements();
     }
-
-    //**************************************************************************
-    //Klasse zum Beenden des Eingabeformulars. Wechselt anschließend
-    //in die letzte View
-    //**************************************************************************
-    private class CancelAction extends AbstractAction {
-
-        {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/cancel.png"));
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            GUIManager.changeToLastView();
-        }
-
-        private CancelAction(String string) {
-            super(string);
-        }
-    }
-
-    private class PrintAction extends AbstractAction {
-
-        {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/print.png"));
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            System.out.println("*******PRINT*******");
-        }
-
-        private PrintAction(String string) {
-            super(string);
-        }
-    }
-
+    
     private class DetailAction extends AbstractAction {
 
         {
@@ -150,6 +182,7 @@ public class HistoryPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
+            GUIManager.getInstance().lockMenu();
             GUIManager.changeView(new DetailHistoryView(new DetailHistoryPresentationModel(coursePartSelection.getSelection())).buildPanel(), true);
         }
 
@@ -157,54 +190,57 @@ public class HistoryPresentationModel {
             super(string);
         }
     }
-
-    public Action getCancelAction() {
-        return cancelAction;
-    }
-
-    public Action getPrintAction() {
-        return printAction;
-    }
     //**************************************************************************
-
-    //**************************************************************************
-    //Getter.- und Setter-Methoden
-    //**************************************************************************
-    private final class SelectionEmptyHandler implements PropertyChangeListener {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            updateActionEnablement();
-        }
-    }
-
+    
     //**************************************************************************
     //CourseTableModel, das die Art der Anzeige von Kursen regelt.
     //**************************************************************************
-    private class CoursePartTableModel extends AbstractTableAdapter<CourseParticipant> {
+    private class CoursePartTableModel extends AbstractTableModel {
 
         private ListModel listModel;
+        private DecimalFormat numberFormat;
 
         public CoursePartTableModel(ListModel listModel) {
-            super(listModel);
             this.listModel = listModel;
+            numberFormat = new DecimalFormat("#0.00");
         }
 
         @Override
         public int getColumnCount() {
-            return 3;
+            return 8;
         }
 
         @Override
         public String getColumnName(int column) {
             switch (column) {
                 case 0:
-                    return "Vorname";
+                    return "Anrede";
                 case 1:
-                    return "Nachname";
+                    return "Vorname";
                 case 2:
-                    return "Kurse";
+                    return "Nachname";
+                case 3:
+                    return "Adresse";
+                case 4:
+                    return "PLZ";
+                case 5:
+                    return "Ort";
+                case 6:
+                    return "Betrag";
+                case 7:
+                    return "Status";
                 default:
                     return "";
+            }
+        }
+
+        @Override
+        public Class<?> getColumnClass(int columnIndex) {
+            switch (columnIndex) {
+                case 7:
+                    return Integer.class;
+                default:
+                    return String.class;
             }
         }
 
@@ -215,23 +251,37 @@ public class HistoryPresentationModel {
 
         public Object getValueAt(int rowIndex, int columnIndex) {
             CourseParticipant coursePart = (CourseParticipant) listModel.getElementAt(rowIndex);
-            int i = 0;
-            String string = "";
             switch (columnIndex) {
                 case 0:
-                    return coursePart.getCostumer().getForename();
+                    return coursePart.getCustomer().getTitle();
                 case 1:
-                    return coursePart.getCostumer().getSurname();
+                    return coursePart.getCustomer().getForename();
                 case 2:
-                    return coursePart.getCourseList().size();
+                    return coursePart.getCustomer().getSurname();
+                case 3:
+                    return coursePart.getCustomer().getStreet();
+                case 4:
+                    return coursePart.getCustomer().getPostOfficeNumber();
+                case 5:
+                    return coursePart.getCustomer().getCity();
+                case 6:
+                    return "€ " + numberFormat.format(selectedCourse.getPrice());
+                case 7:
+                    return getCorrectPosted(coursePart);
                 default:
                     return "";
             }
+        }
+
+        public int getRowCount() {
+            return listModel.getSize();
         }
     }
     //**************************************************************************
 
     private void updateActionEnablement() {
+        boolean hasSelection = coursePartSelection.hasSelection();
+        detailAction.setEnabled(hasSelection);
     }
 
     public SelectionInList<CourseParticipant> getCoursePartSelection() {
@@ -246,32 +296,83 @@ public class HistoryPresentationModel {
         return courseSelection;
     }
 
-    public Action getAccountingAction() {
-        return accountingAction;
-    }
-
     public Action getDetailAction() {
         return detailAction;
     }
 
-    //**************************************************************************
-    //Event Handling
-    //**************************************************************************
-    public MouseListener getDoubleClickHandler() {
-        return new DoubleClickHandler();
+    public HeaderInfo getHeaderInfoComboBox() {
+        return headerInfoComboBox;
     }
 
-    private final class DoubleClickHandler extends MouseAdapter {
-
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-                GUIManager.changeView(new DetailHistoryView(new DetailHistoryPresentationModel(coursePartSelection.getSelection())).buildPanel(), true);
-            }
+    private void calculateTotalValue(){
+        sollValue = 0.0;
+        habenValue = 0.0;
+        saldoValue = 0.0;
+        
+        for(int i = 0; i < coursePartSelection.getSize(); i++){
+            sollValue += ValueManager.getTotalSoll(coursePartSelection.getElementAt(i));
+            habenValue += ValueManager.getTotalHaben(coursePartSelection.getElementAt(i));
+            saldoValue += ValueManager.getTotalSaldo(coursePartSelection.getElementAt(i));
         }
     }
 
-    public HeaderInfo getHeaderInfoComboBox() {
-        return headerInfoComboBox;
+    public ValueModel getCourseSaldoValueHolder() {
+        return courseSaldoValueHolder;
+    }
+
+    public ValueModel getCourseSollValueHolder() {
+        return courseSollValueHolder;
+    }
+
+    public ValueModel getCourseHabenValueHolder() {
+        return courseHabenValueHolder;
+    }
+
+    public ValueModel getSizeValueHolder() {
+        return sizeValueHolder;
+    }
+
+    public ValueModel getBisVM() {
+        return bisVM;
+    }
+
+    public ValueModel getNameVM() {
+        return nameVM;
+    }
+
+    public ValueModel getPriceVM() {
+        return priceVM;
+    }
+
+    public ValueModel getVonVM() {
+        return vonVM;
+    }
+
+    public Integer getCorrectPosted(CourseParticipant courseParticipant){
+        CourseAddition courseAddition = new CourseAddition();
+
+        //CourseAddition suchen
+        for(int i = 0; i < courseParticipant.getCourseList().size(); i++){
+            if(courseParticipant.getCourseList().get(i).getCourse().getId() == selectedCourse.getId()){
+                courseAddition = courseParticipant.getCourseList().get(i);
+            }
+        }
+        //*************************
+
+        Date warningDate = new Date();
+        Date currentDate = new Date();
+        warningDate.setMonth(courseAddition.getCourse().getEndDate().getMonth()+1);
+        
+        if(currentDate.after(warningDate) && ValueManager.getTotalSaldo(courseAddition) != 0.0){
+            return -1;
+        }
+
+        if(ValueManager.getTotalSaldo(courseAddition) != 0.0){
+            return 1;
+        }
+        else{
+            return 0;
+        }
+        
     }
 }

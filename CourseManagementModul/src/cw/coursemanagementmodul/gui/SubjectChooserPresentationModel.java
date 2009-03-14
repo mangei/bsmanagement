@@ -13,6 +13,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -28,7 +29,8 @@ import cw.coursemanagementmodul.pojo.manager.SubjectManager;
  *
  * @author André Salmhofer
  */
-public class SubjectChooserPresentationModel extends PresentationModel<Subject>{
+public class SubjectChooserPresentationModel extends PresentationModel<Subject>
+implements Disposable{
 
     //Definieren der Objekte in der oberen Leiste
     private Action addButtonAction;
@@ -45,6 +47,8 @@ public class SubjectChooserPresentationModel extends PresentationModel<Subject>{
     private ButtonEvent buttonEvent;
 
     private HeaderInfo headerInfo;
+
+    private SelectionHandler selectionHandler;
 
     public SubjectChooserPresentationModel(Subject subject) {
         super(subject);
@@ -82,10 +86,23 @@ public class SubjectChooserPresentationModel extends PresentationModel<Subject>{
 
 
     private void initEventHandling() {
-        subjectSelection.addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+        subjectSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
+        updateActionEnablement();
+    }
 
+    public void dispose() {
+        subjectSelection.removeValueChangeListener(selectionHandler);
+    }
+
+    private class SelectionHandler implements PropertyChangeListener{
+        public void propertyChange(PropertyChangeEvent evt) {
+                updateActionEnablement();
+            }
+    }
+
+    private void updateActionEnablement() {
+        boolean hasSelection = subjectSelection.hasSelection();
+        addButtonAction.setEnabled(hasSelection);
     }
 
     //**************************************************************************
@@ -150,15 +167,6 @@ public class SubjectChooserPresentationModel extends PresentationModel<Subject>{
         support.addButtonListener(listener);
     }
     //**************************************************************************
-
-
-
-    private final class SelectionEmptyHandler implements PropertyChangeListener {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            //updateActionEnablement();
-        }
-    }
 
     public SelectionInList<Subject> getSubjectSelection(){
         return subjectSelection;

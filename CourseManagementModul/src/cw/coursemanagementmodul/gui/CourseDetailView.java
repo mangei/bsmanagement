@@ -7,26 +7,29 @@
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
+import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Font;
+import java.text.DecimalFormat;
+import java.text.Format;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 /**
  *
  * @author André Salmhofer
  */
-public class CourseDetailView{
+public class CourseDetailView implements Disposable{
     private CourseDetailPresentationModel detailModel;
+    private CWComponentFactory.CWComponentContainer componentContainer;
     
     //Definieren der Objekte in der oberen Leiste
     private JButton printButton;
@@ -47,11 +50,15 @@ public class CourseDetailView{
     
     //Tabelle zur Darstellung der angelegten Kurse
     private JXTable coursePartTable;//Kursteilnehmer eines Kurses
-    private JTextField searchTextField;
     //********************************************
+
+    private JViewPanel panel;
+
+    private Format numberFormat;
     
     public CourseDetailView(CourseDetailPresentationModel detailModel) {
         this.detailModel = detailModel;
+        numberFormat = DecimalFormat.getCurrencyInstance();
     }
     
     private void initEventHandling() {
@@ -64,12 +71,7 @@ public class CourseDetailView{
         cancelButton = CWComponentFactory.createButton(detailModel.getCancelAction());
         printButton =  CWComponentFactory.createButton(detailModel.getPrintAction());
         
-        coursePartTable = CWComponentFactory.createTable("");
-        coursePartTable.setColumnControlVisible(true);
-        coursePartTable.setAutoCreateRowSorter(true);
-        coursePartTable.setPreferredScrollableViewportSize(new Dimension(10,10));
-        coursePartTable.setHighlighters(HighlighterFactory.createSimpleStriping());
-        
+        coursePartTable = CWComponentFactory.createTable("Keine Kursteilnehmer zum selektierten Kurs vorhanden!");
         coursePartTable.setModel(detailModel.createCoursePartTableModel(detailModel.getCoursePartSelection()));
         coursePartTable.setSelectionModel(
                 new SingleListSelectionAdapter(
@@ -84,7 +86,27 @@ public class CourseDetailView{
         vCourseName = CWComponentFactory.createLabel(detailModel.getSelectedCourse().getName());
         vBeginDate = CWComponentFactory.createLabel(detailModel.getSelectedCourse().getBeginDate() + "");
         vEndDate = CWComponentFactory.createLabel(detailModel.getSelectedCourse().getEndDate() + "");
-        vPrice = CWComponentFactory.createLabel(detailModel.getSelectedCourse().getPrice() + "");
+        vPrice = CWComponentFactory.createLabel(new ValueHolder(detailModel.getSelectedCourse().getPrice()), numberFormat);
+
+        vCourseName.setFont(new Font(null, Font.BOLD, 11));
+        vBeginDate.setFont(new Font(null, Font.BOLD, 11));
+        vEndDate.setFont(new Font(null, Font.BOLD, 11));
+        vPrice.setFont(new Font(null, Font.BOLD, 11));
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(cancelButton)
+                .addComponent(printButton)
+                .addComponent(coursePartTable)
+                .addComponent(courseName)
+                .addComponent(beginDate)
+                .addComponent(endDate)
+                .addComponent(price)
+                .addComponent(vBeginDate)
+                .addComponent(vCourseName)
+                .addComponent(vEndDate)
+                .addComponent(vPrice);
+
+        panel = CWComponentFactory.createViewPanel(detailModel.getHeaderInfo());
     }
     //**************************************************************************
     
@@ -94,7 +116,6 @@ public class CourseDetailView{
     public JPanel buildPanel(){
         initComponents();
         initEventHandling();
-        JViewPanel panel = CWComponentFactory.createViewPanel();
         
         panel.getButtonPanel().add(cancelButton);
         panel.getButtonPanel().add(printButton);
@@ -117,8 +138,14 @@ public class CourseDetailView{
         panel.getTopPanel().add(descLabel, cc.xy(1, 9));
         
         panel.getContentPanel().add(new JScrollPane(coursePartTable), BorderLayout.CENTER);
-        
+        panel.addDisposableListener(this);
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+        componentContainer.dispose();
+        detailModel.dispose();
     }
     //********************************************
 }

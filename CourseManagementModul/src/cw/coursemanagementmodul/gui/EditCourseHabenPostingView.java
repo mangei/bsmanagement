@@ -8,26 +8,25 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import cw.customermanagementmodul.pojo.Posting;
-import java.awt.Dimension;
 import java.awt.Font;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 /**
  *
  * @author CreativeWorkers.at
  */
-public class EditCourseHabenPostingView {
+public class EditCourseHabenPostingView implements Disposable{
 
     private EditCourseHabenPostingPresentationModel model;
-    
+    private CWComponentFactory.CWComponentContainer componentContainer;
+
     private JTextField tfDescription;
     private JTextField tfValue;
     private JDateChooser dcPostingEntryDate;
@@ -42,6 +41,8 @@ public class EditCourseHabenPostingView {
     private JLabel customerNameLabel;
     private JLabel customerStreetLabel;
     private JLabel customerPLZLabel;
+
+    private JViewPanel panel;
 
     public EditCourseHabenPostingView(EditCourseHabenPostingPresentationModel model) {
         this.model = model;
@@ -60,11 +61,6 @@ public class EditCourseHabenPostingView {
 
         // MANGEI: hallo
         activityTable = CWComponentFactory.createTable("");
-        activityTable.setColumnControlVisible(true);
-        activityTable.setAutoCreateRowSorter(true);
-        activityTable.setPreferredScrollableViewportSize(new Dimension(10,10));
-        activityTable.setHighlighters(HighlighterFactory.createSimpleStriping());
-
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));//TODO-mit ValueModel
         activityTable.setSelectionModel(
                 new SingleListSelectionAdapter(
@@ -73,11 +69,6 @@ public class EditCourseHabenPostingView {
         activityTable.setSelectionModel(new SingleListSelectionAdapter(model.getActivitySelection().getSelectionIndexHolder()));
 
         subjectTable = CWComponentFactory.createTable("");
-        subjectTable.setColumnControlVisible(true);
-        subjectTable.setAutoCreateRowSorter(true);
-        subjectTable.setPreferredScrollableViewportSize(new Dimension(10,10));
-        subjectTable.setHighlighters(HighlighterFactory.createSimpleStriping());
-
         subjectTable.setModel(model.createSubjectTableModel(model.getSubjectSelection()));
         subjectTable.setSelectionModel(
                 new SingleListSelectionAdapter(
@@ -88,16 +79,31 @@ public class EditCourseHabenPostingView {
         courseLabel = CWComponentFactory.createLabel(model.getCourseAddition().getCourse().getName());
         courseLabel.setFont(new Font(null, Font.BOLD, 11));
 
-        customerNameLabel = CWComponentFactory.createLabel(model.getCoursePart().getCostumer().getForename()
-                + " " + model.getCoursePart().getCostumer().getSurname());
+        customerNameLabel = CWComponentFactory.createLabel(model.getCoursePart().getCustomer().getForename()
+                + " " + model.getCoursePart().getCustomer().getSurname());
         customerNameLabel.setFont(new Font(null, Font.BOLD, 11));
 
-        customerStreetLabel = CWComponentFactory.createLabel(model.getCoursePart().getCostumer().getStreet());
+        customerStreetLabel = CWComponentFactory.createLabel(model.getCoursePart().getCustomer().getStreet());
         customerStreetLabel.setFont(new Font(null, Font.BOLD, 11));
 
-        customerPLZLabel = CWComponentFactory.createLabel(model.getCoursePart().getCostumer().getPostOfficeNumber()
-                + " " + model.getCoursePart().getCostumer().getCity());
+        customerPLZLabel = CWComponentFactory.createLabel(model.getCoursePart().getCustomer().getPostOfficeNumber()
+                + " " + model.getCoursePart().getCustomer().getCity());
         customerPLZLabel.setFont(new Font(null, Font.BOLD, 11));
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(activityTable)
+                .addComponent(bCancel)
+                .addComponent(bSave)
+                .addComponent(courseLabel)
+                .addComponent(customerNameLabel)
+                .addComponent(customerPLZLabel)
+                .addComponent(customerStreetLabel)
+                .addComponent(dcPostingEntryDate)
+                .addComponent(subjectTable)
+                .addComponent(tfDescription)
+                .addComponent(tfValue);
+
+        panel = new JViewPanel(model.getHeaderInfo());
     }
 
     private void initEventHandling() {
@@ -107,7 +113,6 @@ public class EditCourseHabenPostingView {
     public JPanel buildPanel() {
         initComponents();
         
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = panel.getButtonPanel();
         
         buttonPanel.add(bSave);
@@ -148,7 +153,13 @@ public class EditCourseHabenPostingView {
         builder.add(new JScrollPane(subjectTable), cc.xyw(1, 23, 5));
 
         initEventHandling();
-
+        panel.addDisposableListener(this);
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 }

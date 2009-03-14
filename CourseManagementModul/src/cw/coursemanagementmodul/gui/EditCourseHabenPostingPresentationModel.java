@@ -10,6 +10,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.coursemanagementmodul.pojo.Activity;
 import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
@@ -35,7 +36,7 @@ import javax.swing.ListModel;
  *
  * @author CreativeWorkers.at
  */
-public class EditCourseHabenPostingPresentationModel {
+public class EditCourseHabenPostingPresentationModel implements Disposable{
 
     private SelectionInList<PostingCategory> postingCategorySelection;
     private ValueModel unsaved;
@@ -51,6 +52,8 @@ public class EditCourseHabenPostingPresentationModel {
     private CourseParticipant coursePart;
     
     private PresentationModel postingModel;
+
+    private SelectionHandler selectionHandler;
     
     public EditCourseHabenPostingPresentationModel(CourseParticipant coursePart, CourseAddition course) {
         this.coursePart = coursePart;
@@ -75,10 +78,10 @@ public class EditCourseHabenPostingPresentationModel {
         support = new ButtonListenerSupport();
 
         Posting posting = new Posting();
-        posting.setCustomer(coursePart.getCostumer());
+        posting.setCustomer(coursePart.getCustomer());
         postingModel = new PresentationModel<Posting>(posting);
 
-        saveButtonAction = new SaveAction("Buchen", CWUtils.loadIcon("cw/customermanagementmodul/images/money.png"));
+        saveButtonAction = new SaveAction("Buchen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting.png"));
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
 
         List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAll();
@@ -95,17 +98,24 @@ public class EditCourseHabenPostingPresentationModel {
     
     public void initEventHandling() {
         unsaved = new ValueHolder();
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
+        unsaved.addValueChangeListener(selectionHandler = new SelectionHandler());
+        unsaved.setValue(false);
+    }
+
+    public void dispose() {
+        unsaved.removeValueChangeListener(selectionHandler);
+    }
+
+    private class SelectionHandler implements PropertyChangeListener{
+        public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
                     saveButtonAction.setEnabled(true);
                 } else {
                     saveButtonAction.setEnabled(false);
                 }
             }
-        });
-        unsaved.setValue(false);
     }
+    
     /**
      * Wenn sich ein Document ändert, wird saved auf false gesetzt
      */
@@ -177,11 +187,13 @@ public class EditCourseHabenPostingPresentationModel {
     }
     
     public void save() {
+        PostingCategory cat = PostingCategoryManager.getInstance().get("Kurs-Buchung");
+        
         postingModel.getBufferedModel(Posting.PROPERTYNAME_POSTINGDATE).setValue(new Date());
+        postingModel.getBufferedModel(Posting.PROPERTYNAME_CATEGORY).setValue(cat);
         postingModel.triggerCommit();
-        System.out.println("VALUE = " + ((Posting)postingModel.getBean()).getAmount());
         PostingManager.getInstance().save(((Posting)postingModel.getBean()));
-
+        
         CoursePosting coursePosting = new CoursePosting();
         coursePosting.setPosting(((Posting)postingModel.getBean()));
         coursePosting.setCourseAddition(courseAddition);
@@ -313,14 +325,6 @@ public class EditCourseHabenPostingPresentationModel {
         return new SubjectTableModel(subjectSelection);
     }
 
-    public String getDescription(){
-//        String string = getCourseAddition().getCourse().getName()
-//                + " - " + getPosting().getCustomer().getForename() + " "
-//                + getPosting().getCustomer().getSurname() + "-"
-//                + getPosting().getCustomer().getId();
-//        return string;
-        return "";
-    }
     public double getCoursePrice(){
         return (double)(getCourseAddition().getCourse().getPrice());
     }
@@ -336,9 +340,18 @@ public class EditCourseHabenPostingPresentationModel {
     private void setVoreinstellungen(){
         //Setzen der Voreinstellungen
         postingModel.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).setValue(courseAddition.getCourse().getName() + " für "
-                + coursePart.getCostumer().getForename() + " "
-                + coursePart.getCostumer().getSurname());
-        postingModel.setBufferedValue(Posting.PROPERTYNAME_AMOUNT, courseAddition.getCourse().getPrice());
+                + coursePart.getCustomer().getForename() + " "
+                + coursePart.getCustomer().getSurname());
+        postingModel.setBufferedValue(Posting.PROPERTYNAME_AMOUNT, courseAddition.getCourse().getPrice()
+                + getActivitiesAmount(courseAddition));
         //****************************
+    }
+
+    private double getActivitiesAmount(CourseAddition courseAddition){
+        double amount = 0.0;
+        for(int i = 0; i < courseAddition.getActivities().size(); i++){
+            amount += courseAddition.getActivities().get(i).getPrice();
+        }
+        return amount;
     }
 }

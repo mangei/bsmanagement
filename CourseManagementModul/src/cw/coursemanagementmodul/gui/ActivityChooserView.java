@@ -12,19 +12,20 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import java.awt.Dimension;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 /**
  *
  * @author André Salmhofer
  */
-public class ActivityChooserView{
+public class ActivityChooserView implements Disposable{
     private ActivityChooserPresentationModel model;
+    private CWComponentFactory.CWComponentContainer componentContainer;
 
     //Definieren der Objekte in der oberen Leiste
     private JButton addButton;
@@ -34,6 +35,8 @@ public class ActivityChooserView{
     //Tabelle zur Darstellung der angelegten Kurse
     private JXTable activityTable;
     //********************************************
+
+    private JViewPanel mainPanel;
 
     public ActivityChooserView(ActivityChooserPresentationModel model) {
         this.model = model;
@@ -47,20 +50,22 @@ public class ActivityChooserView{
     //In dieser Methode werden alle oben definierten Objekte instanziert
     //******************************************************************
     public void initComponents(){
+        mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         addButton = CWComponentFactory.createButton(model.getAddButtonAction());
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
-        activityTable = CWComponentFactory.createTable("");
-        activityTable.setColumnControlVisible(true);
-        activityTable.setAutoCreateRowSorter(true);
-        activityTable.setPreferredScrollableViewportSize(new Dimension(10,10));
-        activityTable.setHighlighters(HighlighterFactory.createSimpleStriping());
 
+        activityTable = CWComponentFactory.createTable("Es wurden noch keine Aktivitäten angelegt!");
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));
         activityTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                model.getActivitySelection().getSelectionIndexHolder()));
+                    new JXTableSelectionConverter(
+                        model.getActivitySelection().getSelectionIndexHolder(),
+                        activityTable)));
 
-        activityTable.setOpaque(false);
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(addButton)
+                .addComponent(cancelButton)
+                .addComponent(activityTable);
     }
     //**************************************************************************
 
@@ -70,7 +75,6 @@ public class ActivityChooserView{
     public JPanel buildPanel(){
         initComponents();
         initEventHandling();
-        JViewPanel mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
 
         mainPanel.getButtonPanel().add(addButton);
         mainPanel.getButtonPanel().add(cancelButton);
@@ -84,8 +88,14 @@ public class ActivityChooserView{
         PanelBuilder panelBuilder = new PanelBuilder(mainLayout, mainPanel.getContentPanel());
         panelBuilder.addSeparator("Aktivitätstabelle", cc.xy(1, 1));
         panelBuilder.add(new JScrollPane(activityTable), cc.xy(1, 3));
-
+        mainPanel.addDisposableListener(this);
         return mainPanel;
+    }
+
+    public void dispose() {
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
     //********************************************
 }

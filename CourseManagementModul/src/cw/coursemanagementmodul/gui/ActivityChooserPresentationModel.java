@@ -13,6 +13,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -23,12 +24,14 @@ import javax.swing.ListModel;
 import javax.swing.table.TableModel;
 import cw.coursemanagementmodul.pojo.Activity;
 import cw.coursemanagementmodul.pojo.manager.ActivityManager;
+import java.text.DecimalFormat;
 
 /**
  *
  * @author André Salmhofer
  */
-public class ActivityChooserPresentationModel extends PresentationModel<Activity>{
+public class ActivityChooserPresentationModel extends PresentationModel<Activity>
+implements Disposable{
 
     //Definieren der Objekte in der oberen Leiste
     private Action addButtonAction;
@@ -45,6 +48,8 @@ public class ActivityChooserPresentationModel extends PresentationModel<Activity
     private ButtonEvent buttonEvent;
 
     private HeaderInfo headerInfo;
+
+    private SelectionHandler selectionHandler;
 
     public ActivityChooserPresentationModel(Activity activity) {
         super(activity);
@@ -81,10 +86,24 @@ public class ActivityChooserPresentationModel extends PresentationModel<Activity
 
 
     private void initEventHandling() {
-        activitySelection.addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                new SelectionEmptyHandler());
+        activitySelection.addValueChangeListener(selectionHandler = new SelectionHandler());
+        updateActionEnablement();
+    }
 
+    private class SelectionHandler implements PropertyChangeListener{
+
+        public void propertyChange(PropertyChangeEvent evt) {
+            updateActionEnablement();
+        }
+    }
+
+    private void updateActionEnablement() {
+        boolean hasSelection = activitySelection.hasSelection();
+        addButtonAction.setEnabled(hasSelection);
+    }
+
+    public void dispose() {
+        activitySelection.removeValueChangeListener(selectionHandler);
     }
 
     //**************************************************************************
@@ -149,16 +168,7 @@ public class ActivityChooserPresentationModel extends PresentationModel<Activity
         support.addButtonListener(listener);
     }
     //**************************************************************************
-
-
-
-    private final class SelectionEmptyHandler implements PropertyChangeListener {
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            //updateActionEnablement();
-        }
-    }
-
+    
     public SelectionInList<Activity> getActivitySelection(){
         return activitySelection;
     }
@@ -169,15 +179,17 @@ public class ActivityChooserPresentationModel extends PresentationModel<Activity
     private class ActivityTableModel extends AbstractTableAdapter<Activity> {
 
         private ListModel listModel;
+        private DecimalFormat numberFormat;
 
         public ActivityTableModel(ListModel listModel) {
             super(listModel);
             this.listModel = listModel;
+            numberFormat = new DecimalFormat("#0.00");
         }
 
         @Override
         public int getColumnCount() {
-            return 2;
+            return 3;
         }
 
         @Override
@@ -187,6 +199,8 @@ public class ActivityChooserPresentationModel extends PresentationModel<Activity
                     return "Aktivitätsname";
                 case 1:
                     return "Aktivitätsbeschreibung";
+                case 2:
+                    return "Preis";
                 default:
                     return "";
             }
@@ -204,6 +218,8 @@ public class ActivityChooserPresentationModel extends PresentationModel<Activity
                     return activity.getName();
                 case 1:
                     return activity.getDescription();
+                case 2:
+                    return "€ " + numberFormat.format(activity.getPrice());
                 default:
                     return "";
             }

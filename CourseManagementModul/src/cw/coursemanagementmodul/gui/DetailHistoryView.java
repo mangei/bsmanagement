@@ -11,27 +11,26 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import java.awt.Dimension;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.Font;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
-import javax.swing.JTextField;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 /**
  *
  * @author André Salmhofer
  */
-public class DetailHistoryView{
+public class DetailHistoryView implements Disposable{
     private DetailHistoryPresentationModel model;
+    private CWComponentFactory.CWComponentContainer componentContainer;
 
     //Tabelle zur Darstellung der angelegten Kurse
     private JXTable accountingTable;
-    private JTextField searchTextField;
     private JButton back;
     //********************************************
 
@@ -42,6 +41,8 @@ public class DetailHistoryView{
     private JLabel soll;
     private JLabel haben;
     private JLabel saldo;
+
+    private JViewPanel panel;
 
     public DetailHistoryView(DetailHistoryPresentationModel model) {
         this.model = model;
@@ -54,16 +55,13 @@ public class DetailHistoryView{
     //In dieser Methode werden alle oben definierten Objekte instanziert
     //******************************************************************
     public void initComponents(){
-        accountingTable = CWComponentFactory.createTable("");
-        accountingTable.setColumnControlVisible(true);
-        accountingTable.setAutoCreateRowSorter(true);
-        accountingTable.setPreferredScrollableViewportSize(new Dimension(10,10));
-        accountingTable.setHighlighters(HighlighterFactory.createSimpleStriping());
-
+        accountingTable = CWComponentFactory.createTable("Es wurden noch keine Buchungen zum Kursteilnehmer getätigt!");
         accountingTable.setModel(model.createCoursePostingTableModel(model.getPostings()));
         accountingTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                model.getPostings().getSelectionIndexHolder()));
+                    new JXTableSelectionConverter(
+                        model.getPostings().getSelectionIndexHolder(),
+                        accountingTable)));
 
         back = CWComponentFactory.createButton(model.getBackAction());
 
@@ -78,6 +76,18 @@ public class DetailHistoryView{
         vSoll.setFont(new Font(null, Font.BOLD, 11));
         vHaben.setFont(new Font(null, Font.BOLD, 11));
         vSaldo.setFont(new Font(null, Font.BOLD, 11));
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(accountingTable)
+                .addComponent(back)
+                .addComponent(haben)
+                .addComponent(saldo)
+                .addComponent(soll)
+                .addComponent(vHaben)
+                .addComponent(vSaldo)
+                .addComponent(vSoll);
+
+        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
     }
     //**************************************************************************
 
@@ -87,7 +97,6 @@ public class DetailHistoryView{
     public JPanel buildPanel(){
         initComponents();
         initEventHandling();
-        JViewPanel panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         JPanel accountingPanel = CWComponentFactory.createPanel();
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref, 2dlu, pref","fill:pref:grow, 4dlu, pref, 4dlu, pref");
@@ -115,8 +124,14 @@ public class DetailHistoryView{
         panel.getContentPanel().add(new JLabel("Gesamtübersicht:"), cc.xy(1, 3));
         panel.getContentPanel().add(new JSeparator(), cc.xy(3, 3));
         panel.getContentPanel().add(accountingPanel, cc.xy(1, 5));
-
+        panel.addDisposableListener(this);
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
     //********************************************
 }

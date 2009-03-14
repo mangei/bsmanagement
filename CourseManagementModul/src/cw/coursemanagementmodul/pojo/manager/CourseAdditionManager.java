@@ -2,7 +2,6 @@ package cw.coursemanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
-import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.CourseAddition;
 import java.util.List;
 import org.apache.log4j.Logger;

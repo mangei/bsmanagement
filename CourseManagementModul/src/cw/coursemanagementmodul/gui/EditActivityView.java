@@ -10,7 +10,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -25,19 +25,22 @@ import cw.coursemanagementmodul.pojo.Activity;
  *
  * @author André Salmhofer
  */
-public class EditActivityView {
+public class EditActivityView implements Disposable{
     private EditActivityPresentationModel model;
+    private CWComponentFactory.CWComponentContainer componentContainer;
     
     //*********************Komponenten definieren*******************************
     private JLabel nameLabel;
     private JLabel descLabel;
     private JTextField nameTextField;
+    private JTextField amountTextField;
     private JTextArea descTextField;
     
     private JButton saveButton;
     private JButton saveAndCloseButton;
-    private JButton rollbackButton;
     private JButton cancelButton;
+
+    private JViewPanel view;
     //**************************************************************************
     
     public EditActivityView(EditActivityPresentationModel model) {
@@ -50,10 +53,10 @@ public class EditActivityView {
         
         nameTextField = CWComponentFactory.createTextField(model.getBufferedModel(Activity.PROPERTYNAME_NAME), false);
         descTextField = CWComponentFactory.createTextArea(model.getBufferedModel(Activity.PROPERTYNAME_DESCRIPTION), false);
-        
+        amountTextField = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Activity.PROPERTYNAME_PRICE));
+
         saveButton = CWComponentFactory.createButton(model.getSaveButtonAction());
         saveAndCloseButton = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
-        rollbackButton = CWComponentFactory.createButton(model.getResetButtonAction());
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
         
         cancelButton.addActionListener(new ActionListener() {
@@ -62,6 +65,18 @@ public class EditActivityView {
                 GUIManager.changeToLastView();
             }
         });
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(amountTextField)
+                .addComponent(cancelButton)
+                .addComponent(descLabel)
+                .addComponent(descTextField)
+                .addComponent(nameLabel)
+                .addComponent(nameTextField)
+                .addComponent(saveAndCloseButton)
+                .addComponent(saveButton);
+
+        view = CWComponentFactory.createViewPanel(model.getHeaderInfo());
     }
     
     //**************************************************************************
@@ -70,13 +85,10 @@ public class EditActivityView {
     public JPanel buildPanel(){
         initComponents();
         
-        JViewPanel view = CWComponentFactory.createViewPanel(model.getHeaderInfo());
-        
         JButtonPanel buttonPanel = view.getButtonPanel();
         
         buttonPanel.add(saveButton);
         buttonPanel.add(saveAndCloseButton);
-        buttonPanel.add(rollbackButton);
         buttonPanel.add(cancelButton);
         
         FormLayout layout = new FormLayout("pref, 4dlu, 200dlu, 4dlu, min",
@@ -91,8 +103,16 @@ public class EditActivityView {
         view.getContentPanel().add(nameTextField, cc.xy(3, 1));
         view.getContentPanel().add(descLabel, cc.xy(1, 3));
         view.getContentPanel().add(descTextField, cc.xy(3, 3));
-        
+        view.getContentPanel().add(new JLabel("Preis"), cc.xy(1, 5));
+        view.getContentPanel().add(amountTextField, cc.xy(3, 5));
+        view.addDisposableListener(this);
         return view;
+    }
+
+    public void dispose() {
+        view.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
     //**************************************************************************
 }

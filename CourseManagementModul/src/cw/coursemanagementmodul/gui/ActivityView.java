@@ -10,20 +10,21 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.decorator.HighlighterFactory;
 
 /**
  *
  * @author André Salmhofer
  */
-public class ActivityView {
+public class ActivityView implements Disposable{
     private ActivityPresentationModel model;
+    private CWComponentFactory.CWComponentContainer componentContainer;
     
     //Definieren der Objekte in der oberen Leiste
     private JButton newButton;
@@ -34,13 +35,14 @@ public class ActivityView {
     //Tabelle zur Darstellung der angelegten Kurse
     private JXTable activityTable;
     //********************************************
+
+    private JViewPanel panel;
     
     public ActivityView(ActivityPresentationModel model) {
         this.model = model;
     }
     
     private void initEventHandling() {
-        activityTable.addMouseListener(model.getDoubleClickHandler());
     }
     
     //******************************************************************
@@ -51,16 +53,21 @@ public class ActivityView {
         editButton   = CWComponentFactory.createButton(model.getEditButtonAction());
         deleteButton = CWComponentFactory.createButton(model.getDeleteButtonAction());
         
-        activityTable = CWComponentFactory.createTable("");
-        activityTable.setColumnControlVisible(true);
-        activityTable.setAutoCreateRowSorter(true);
-        activityTable.setPreferredScrollableViewportSize(new Dimension(10,10));
-        activityTable.setHighlighters(HighlighterFactory.createSimpleStriping());
-        
+        activityTable = CWComponentFactory.createTable("Keine Aktivitäten vorhanden!");
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));
         activityTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                model.getActivitySelection().getSelectionIndexHolder()));
+                    new JXTableSelectionConverter(
+                        model.getActivitySelection().getSelectionIndexHolder(),
+                        activityTable)));
+
+        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(newButton)
+                .addComponent(editButton)
+                .addComponent(deleteButton)
+                .addComponent(activityTable);
     }
     //**************************************************************************
     
@@ -71,7 +78,6 @@ public class ActivityView {
     public JPanel buildPanel(){
         initComponents();
         initEventHandling();
-        JViewPanel panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         
         panel.getButtonPanel().add(newButton);
         panel.getButtonPanel().add(editButton);
@@ -82,8 +88,14 @@ public class ActivityView {
         CellConstraints cc = new CellConstraints();
         
         panel.getContentPanel().add(new JScrollPane(activityTable), BorderLayout.CENTER);
-        
+        panel.addDisposableListener(this);
         return panel;
+    }
+
+    public void dispose() {
+        panel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
     //**************************************************************************
 }

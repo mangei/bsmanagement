@@ -28,7 +28,7 @@ public class CourseParticipant extends Model implements AnnotatedClass {
     private List<CourseAddition> courseList;
     
     public final static String PROPERTYNAME_ID = "id";
-    public final static String PROPERTYNAME_COSTUMER = "costumer";
+    public final static String PROPERTYNAME_COSTUMER = "customer";
     public final static String PROPERTYNAME_COURSELIST = "courseList";
 
     public CourseParticipant() {
@@ -41,11 +41,11 @@ public class CourseParticipant extends Model implements AnnotatedClass {
     }
 
     @OneToOne
-    public Customer getCostumer() {
+    public Customer getCustomer() {
         return customer;
     }
 
-    public void setCostumer(Customer costumer) {
+    public void setCustomer(Customer costumer) {
         Customer old = this.customer;
         this.customer = costumer;
         firePropertyChange(PROPERTYNAME_COSTUMER, old, costumer);

@@ -6,12 +6,12 @@
 package cw.coursemanagementmodul.app;
 
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.app.CascadeEvent;
+import cw.boardingschoolmanagement.app.CascadeListener;
 import cw.boardingschoolmanagement.gui.component.JMenuPanel;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
-import cw.boardingschoolmanagement.manager.ModulManager;
-import cw.customermanagementmodul.pojo.Customer;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
@@ -26,12 +26,13 @@ import cw.coursemanagementmodul.gui.CoursePresentationModel;
 import cw.coursemanagementmodul.gui.CourseView;
 import cw.coursemanagementmodul.gui.SubjectPresentationModel;
 import cw.coursemanagementmodul.gui.SubjectView;
-import cw.coursemanagementmodul.pojo.CoursePosting;
-import cw.coursemanagementmodul.pojo.Activity;
-import cw.coursemanagementmodul.pojo.Course;
-import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
-import cw.coursemanagementmodul.pojo.Subject;
+import cw.coursemanagementmodul.pojo.CoursePosting;
+import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
+import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.pojo.PostingCategory;
+import cw.customermanagementmodul.pojo.manager.CustomerManager;
+import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
 import org.hibernate.cfg.AnnotationConfiguration;
 /**
  *
@@ -88,11 +89,34 @@ public class CourseManagementModul implements Modul{
             }
         });
 
+        CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
+            public void deleteAction(CascadeEvent evt) {
+                Customer customer = (Customer) evt.getObject();
+                List<CourseParticipant> courseParticipants = CourseParticipantManager.getInstance().getAll(customer);
+                CourseParticipantManager.getInstance().delete(courseParticipants);
+            }
+        });
+
         menuPanel.addItem(courseButton, "course");
         menuPanel.addItem(activityButton, "course");
         menuPanel.addItem(subjectButton, "course");
         menuPanel.addItem(accountingButton, "course");
         menuPanel.addItem(accountingHistoryButton, "course");
+
+        //Dere Geier --> Bitte nicht löschen --> wird für Kursbuchungen benötigt!!!
+        if(PostingCategoryManager.getInstance().get("Kurs-Buchung") == null) {
+            PostingCategory category = new PostingCategory();
+            category.setName("Kurs-Buchung");
+            category.setKey("Kurs-Buchung");
+            PostingCategoryManager.getInstance().save(category);
+        }
+
+        if(PostingCategoryManager.getInstance().get("Kurs-Buchung-Storno") == null) {
+            PostingCategory category = new PostingCategory();
+            category.setName("Kurs-Buchung-Storno");
+            category.setKey("Kurs-Buchung-Storno");
+            PostingCategoryManager.getInstance().save(category);
+        }
     }
 
     public Class getBaseClass() {
@@ -106,12 +130,13 @@ public class CourseManagementModul implements Modul{
     }
 
     public void registerAnnotationClasses(AnnotationConfiguration configuration) {
-        configuration.addAnnotatedClass(Course.class)
-                     .addAnnotatedClass(CourseParticipant.class)
-                     .addAnnotatedClass(Activity.class)
-                     .addAnnotatedClass(Subject.class)
-                     .addAnnotatedClass(CourseAddition.class)
-                     .addAnnotatedClass(CoursePosting.class);
+//        configuration.addAnnotatedClass(Course.class)
+//                     .addAnnotatedClass(CourseParticipant.class)
+//                     .addAnnotatedClass(Activity.class)
+//                     .addAnnotatedClass(Subject.class)
+//                     .addAnnotatedClass(CourseAddition.class)
+//                     .addAnnotatedClass(CoursePosting.class)
+//                     .addAnnotatedClass(PostingRun.class);
     }
 
     public List<Class> getDependencies() {
