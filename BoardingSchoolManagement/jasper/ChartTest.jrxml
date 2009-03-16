@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF8"?>
+<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+
+<jasperReport name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="79">
+			<stackedBar3DChart>
+				<chart isShowLegend="false">
+					<reportElement x="230" y="39" width="200" height="100"/>
+					<chartTitle/>
+					<chartSubtitle/>
+					<chartLegend/>
+				</chart>
+				<categoryDataset/>
+				<bar3DPlot>
+					<plot/>
+					<categoryAxisLabelExpression><![CDATA[new java.lang.Integer(10)]]></categoryAxisLabelExpression>
+					<valueAxisLabelExpression><![CDATA[new java.lang.Integer(100)]]></valueAxisLabelExpression>
+				</bar3DPlot>
+			</stackedBar3DChart>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61"/>
+	</columnHeader>
+	<detail>
+		<band height="125"/>
+	</detail>
+	<columnFooter>
+		<band height="45"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54"/>
+	</pageFooter>
+	<summary>
+		<band height="42"/>
+	</summary>
+</jasperReport>
