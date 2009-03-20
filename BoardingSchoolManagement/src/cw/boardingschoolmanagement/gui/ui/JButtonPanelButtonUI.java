@@ -36,13 +36,15 @@ public class JButtonPanelButtonUI
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
 
-    private static final Color BORDER = new Color(200,200,200);
-    private static final Color FILL = new Color(235,235,235);
+    private static final Color BORDER_OVER = new Color(200,200,200);
+    private static final Color FILL_OVER = new Color(235,235,235);
+    private static final Color BORDER_ACTIVE = new Color(200,200,200);
+    private static final Color FILL_ACTIVE = new Color(235,235,235);
 
     public void paint(Graphics g, JComponent c) {
 
         AbstractButton button = (AbstractButton) c;
-        if (button.getModel().isRollover() && button.getModel().isEnabled()) {
+        if ((button.getModel().isRollover() || (button.getClientProperty("active") != null && (Boolean)button.getClientProperty("active"))) && button.getModel().isEnabled()) {
             Color oldColor = g.getColor();
 
             int x = 0;
@@ -50,6 +52,19 @@ public class JButtonPanelButtonUI
             int w = c.getWidth()-1;
             int h = c.getHeight()-1;
             int arc = 6;
+
+            if(button.getClientProperty("roundCorners") != null && !(Boolean)button.getClientProperty("roundCorners")) {
+                arc = 0;
+            }
+
+            Color fillColor = (!button.getModel().isRollover()
+                    && button.getClientProperty("active") != null
+                    && (Boolean)button.getClientProperty("active"))
+                    ? FILL_ACTIVE : FILL_OVER;
+            Color borderColor = (!button.getModel().isRollover()
+                    && button.getClientProperty("active") != null
+                    && (Boolean)button.getClientProperty("active"))
+                    ? BORDER_ACTIVE : BORDER_OVER;
 
             Graphics2D g2d = (Graphics2D) g;
             g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
@@ -62,9 +77,9 @@ public class JButtonPanelButtonUI
                     h,
                     arc,arc
             );
-            g2d.setColor(FILL);
+            g2d.setColor(fillColor);
             g2d.fill(backgroundText);
-            g2d.setColor(BORDER);
+            g2d.setColor(borderColor);
             g2d.draw(backgroundText);
 
             g.setColor(oldColor);

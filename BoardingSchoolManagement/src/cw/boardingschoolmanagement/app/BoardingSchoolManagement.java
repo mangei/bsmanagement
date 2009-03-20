@@ -1,10 +1,14 @@
 package cw.boardingschoolmanagement.app;
 
+import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
+import cw.boardingschoolmanagement.gui.ConfigurationView;
 import cw.boardingschoolmanagement.gui.component.SplashScreen;
 import cw.boardingschoolmanagement.gui.HomeView;
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
 import cw.boardingschoolmanagement.gui.component.JMenuPanel;
 import java.awt.event.ActionEvent;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.logging.Level;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -15,11 +19,14 @@ import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.boardingschoolmanagement.manager.PropertiesManager;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+import java.util.logging.Logger;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import org.apache.log4j.Logger;
-import org.apache.log4j.PropertyConfigurator;
+import javax.swing.JPanel;
 import org.jvnet.substance.SubstanceLookAndFeel;
 import org.jvnet.substance.button.StandardButtonShaper;
 import org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel;
@@ -34,7 +41,7 @@ import org.jvnet.substance.utils.SubstanceConstants;
 public class BoardingSchoolManagement {
 
     private static BoardingSchoolManagement instance;
-    private static Logger logger = Logger.getLogger(BoardingSchoolManagement.class);
+    private static Logger logger = Logger.getLogger(BoardingSchoolManagement.class.getName());
     private ApplicationListenerSupport applicationListenerSupport = new ApplicationListenerSupport();
 
     private static boolean applicationStarted = false;
@@ -111,18 +118,49 @@ public class BoardingSchoolManagement {
             JDialog.setDefaultLookAndFeelDecorated(true);
             System.setProperty("sun.awt.noerasebackground", "true");
 
-            
-        ////////////////////////////////////////////////////////////////////
-        // Load logging settings
-        ////////////////////////////////////////////////////////////////////
-            ss.setText("Logging wird gestartet...");
-            PropertyConfigurator.configureAndWatch( "log4j.properties", 60*1000 );
 
         ////////////////////////////////////////////////////////////////////
         // Load configuration settings
         ////////////////////////////////////////////////////////////////////
             ss.setText("Einstellungen geladen...");
             PropertiesManager.loadProperties();
+            
+        ////////////////////////////////////////////////////////////////////
+        // Load logging settings
+        ////////////////////////////////////////////////////////////////////
+            ss.setText("Logging wird gestartet...");
+            if(Boolean.parseBoolean(PropertiesManager.getProperty("application.logging", "true")) == true) {
+                try {
+                    String logDirectoryName = PropertiesManager.getProperty("application.logDirectory", "logs");
+                    File logDirectory = new File(logDirectoryName);
+                    if(!logDirectory.exists()) {
+                        logDirectory.mkdir();
+                    }
+
+                    String logFileName = PropertiesManager.getProperty("application.logFile", "log.txt");
+                    File logFile = new File(logFileName);
+                    if(!logFile.exists()) {
+                        try {
+                            logFile.createNewFile();
+                        } catch (IOException ex) {
+                            Logger.getLogger(BoardingSchoolManagement.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    }
+
+                    String completeFileName = "";
+                    if(!logDirectoryName.isEmpty()) {
+                        completeFileName = logDirectoryName + System.getProperty("file.separator");
+                    }
+                    completeFileName = completeFileName + logFileName;
+
+                    FileOutputStream fileOutputStream = new FileOutputStream(logFile);
+                    PrintStream printStream = new PrintStream(fileOutputStream);
+                    System.setOut(printStream);
+                    System.setErr(printStream);
+                } catch (FileNotFoundException ex) {
+                    java.util.logging.Logger.getLogger(BoardingSchoolManagement.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
 
         ////////////////////////////////////////////////////////////////////
         // Load modules
@@ -136,7 +174,6 @@ public class BoardingSchoolManagement {
         ////////////////////////////////////////////////////////////////////
             ss.setText("Datenbankverbindung herstellen...");
             HibernateUtil.configure();
-            Logger.getLogger(BoardingSchoolManagement.class).debug("Datenbankverbindung herstellen...");
 
         ////////////////////////////////////////////////////////////////////
         // Load the GUI
@@ -163,7 +200,7 @@ public class BoardingSchoolManagement {
             GUIManager.getInstance().getMainFrame().setVisible(true);
 
         } catch (UnsupportedLookAndFeelException ex) {
-            logger.error(null, ex);
+            java.util.logging.Logger.getLogger(BoardingSchoolManagement.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -190,7 +227,7 @@ public class BoardingSchoolManagement {
         // Add an closeButton to the HeaderMenu
         GUIManager.getInstance().getHeader().addHeaderMenuItem(new AbstractAction(
                 "Beenden",
-                CWUtils.loadIcon("cw/boardingschoolmanagement/images/cross_16.png"
+                CWUtils.loadIcon("cw/boardingschoolmanagement/images/exit.png"
                 )) {
 
             public void actionPerformed(ActionEvent e) {
@@ -199,14 +236,47 @@ public class BoardingSchoolManagement {
         });
 
         GUIManager.getInstance().getHeader().addHeaderMenuItem(new AbstractAction(
-                "Einstellungen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/wrench_16.png")) {
+                "Einstellungen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/configuration.png")) {
 
             {
                 putValue(Action.SHORT_DESCRIPTION, "Einstellungen");
             }
 
+            private JDialog d;
+
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(null, "Einstellungen...");
+                GUIManager.setLoadingScreenText("Einstellungen...");
+                GUIManager.setLoadingScreenVisible(true);
+
+                final ConfigurationPresentationModel model = new ConfigurationPresentationModel();
+                ConfigurationView view = new ConfigurationView(model);
+
+                
+
+                JPanel panel = view.buildPanel();
+                d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
+                d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                d.setTitle(panel.getName());
+                d.add(panel);
+                d.pack();
+                CWUtils.centerWindow(d, GUIManager.getInstance().getMainFrame());
+
+                model.addButtonListener(new ButtonListener() {
+                    public void buttonPressed(ButtonEvent evt) {
+                        model.removeButtonListener(this);
+                        // TODO Testen ob Dialog noch disposed werden muss
+                        d.setVisible(false);
+                    }
+                });
+
+                d.setVisible(true);
+
+                d.dispose();
+                d = null;
+
+                view.dispose();
+
+                GUIManager.setLoadingScreenVisible(false);
             }
         });
     }

@@ -632,10 +632,11 @@ public class CWComponentFactory {
     public static CWJLabel createLabel(final ValueModel valueModel, Icon icon, final Format format) {
         CWJLabel label = new CWJLabel();
 
-        final ValueModel bufferedValueModel = new ValueHolder();
         ValueModel newValueModel = valueModel;
 
         if(format != null) {
+            final ValueModel bufferedValueModel = new ValueHolder();
+            
             PropertyChangeListener propertyChangeListener;
             valueModel.addValueChangeListener(propertyChangeListener = new PropertyChangeListener() {
                 public void propertyChange(PropertyChangeEvent evt) {

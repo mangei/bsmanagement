@@ -7,6 +7,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.JideSwingUtilities;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.interfaces.HeaderInfoCallable;
+import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
@@ -97,7 +98,7 @@ public class JViewPanel
         add(mainPanel, BorderLayout.CENTER);
 
         // Borderline
-        setBorder(BorderFactory.createLineBorder(BORDERCOLOR));
+        setBorder(BorderFactory.createLineBorder(GUIManager.BORDER_COLOR));
     }
 
     @Override
@@ -108,8 +109,6 @@ public class JViewPanel
 
         this.removeAll();
     }
-
-    private static Color BORDERCOLOR = new Color(215, 220, 228);
 
 //    @Override
 //    protected void paintComponent(Graphics g) {

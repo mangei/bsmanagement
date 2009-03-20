@@ -1,21 +1,14 @@
 package cw.boardingschoolmanagement.app;
 
-import java.awt.Component;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Window;
-import java.awt.event.ItemListener;
-import java.beans.PropertyChangeListener;
 import java.net.URL;
 import java.sql.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
-import javax.swing.JRadioButton;
-import javax.swing.JTextField;
-import javax.swing.event.DocumentListener;
-import javax.swing.text.PlainDocument;
-import org.apache.log4j.Logger;
 
 /**
  * Helperclass with helpful functions
@@ -24,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 public class CWUtils {
 
-    private static Logger logger = Logger.getLogger(CWUtils.class);
+    private static Logger logger = Logger.getLogger(CWUtils.class.getName());
 
     /**
      * Berechnet die Koordinate, damit das Bild zentriert ist

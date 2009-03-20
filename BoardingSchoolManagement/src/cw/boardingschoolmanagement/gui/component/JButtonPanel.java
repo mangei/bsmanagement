@@ -21,7 +21,7 @@ public class JButtonPanel extends JButtonBar {
         FlowLayout layout = new FlowLayout();
         layout.setAlignment(FlowLayout.LEFT);
         setLayout(layout);
-        
+        setOpaque(true);
     }
     
     public void add(JButton button) {
@@ -36,9 +36,10 @@ public class JButtonPanel extends JButtonBar {
     
     @Override
     protected void paintComponent(Graphics g) {
-        Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
-        JideSwingUtilities.fillGradient((Graphics2D) g, rect, Color.WHITE, COLOR1, true);
-        setOpaque(false);
         super.paintComponent(g);
+        if(isOpaque()) {
+            Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
+            JideSwingUtilities.fillGradient((Graphics2D) g, rect, Color.WHITE, COLOR1, true);
+        }
     }
 }

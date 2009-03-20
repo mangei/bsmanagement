@@ -56,6 +56,10 @@ public class GUIManager {
     private JPathPanel pathPanel;
     private JFrame frame;
 
+
+    // Colors
+    public static final Color BORDER_COLOR = new Color(215, 220, 228);
+
     /**
      * @param title Titel der Applikation
      * @param comp Komponente die am Start angezeigt wird

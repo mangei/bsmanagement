@@ -56,22 +56,21 @@ public class HibernateUtil {
             entityManager = entityManagerFactory.createEntityManager();
 
         } catch (Exception e) {
-            System.out.println("UUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUUU");
-            JOptionPane.showMessageDialog(null, "Datenbankverbindung konnte nicht aufgebaut werden.", "Fehler", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "<html><b>Datenbankverbindung konnte nicht aufgebaut werden.</b><br>"+e.getMessage()+"</hml>", "Fehler", JOptionPane.ERROR_MESSAGE);
             System.exit(0);
         }
 
     }
 
     public static EntityManager getEntityManager() {
-//        if(!entityManager.isOpen()) {
-//            entityManager = entityManagerFactory.createEntityManager();
-//        }
+        if(entityManager == null || !entityManager.isOpen()) {
+            JOptionPane.showMessageDialog(null, "EntityManager is null or not open.", "Fehler", JOptionPane.ERROR_MESSAGE);
+//            System.exit(0);
+        }
         return entityManager;
     }
 
     public static void close() {
-        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAUUUUUUUUUUUUUUUUUUUUUAAAAAAAAAAAAAAAAA");
         entityManager.close();
         entityManagerFactory.close();
     }

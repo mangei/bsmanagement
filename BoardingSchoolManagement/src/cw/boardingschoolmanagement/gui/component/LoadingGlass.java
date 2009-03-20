@@ -29,7 +29,7 @@ public class LoadingGlass extends JComponent {
 
     private String text;
     private ImageIcon iconImage;
-    boolean drawLoadingIcon;
+    private boolean drawLoadingIcon;
 
     public LoadingGlass(Container contentPane, boolean drawLoadingIcon) {
 
