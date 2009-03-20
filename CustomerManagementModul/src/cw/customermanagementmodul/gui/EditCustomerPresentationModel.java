@@ -38,9 +38,9 @@ public class EditCustomerPresentationModel
     private Customer customer;
     private ValueModel unsaved;
     private HeaderInfo headerInfo;
-    private Action saveButtonAction;
-    private Action cancelButtonAction;
-    private Action saveCancelButtonAction;
+    private Action saveAction;
+    private Action cancelAction;
+    private Action saveCancelAction;
     private ButtonListenerSupport support;
     private PresentationModel<Guardian> guardianPresentationModel;
     private List<EditCustomerTabExtention> editCustomerGUITabExtentions;
@@ -71,9 +71,9 @@ public class EditCustomerPresentationModel
             extention.initPresentationModel(this);
         }
 
-        saveButtonAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/customermanagementmodul/images/disk_16.png"));
-        cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
-        saveCancelButtonAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
+        saveAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/customermanagementmodul/images/disk_16.png"));
+        cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
+        saveCancelAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
 
         support = new ButtonListenerSupport();
 
@@ -103,11 +103,11 @@ public class EditCustomerPresentationModel
 
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
-                    saveButtonAction.setEnabled(true);
-                    saveCancelButtonAction.setEnabled(true);
+                    saveAction.setEnabled(true);
+                    saveCancelAction.setEnabled(true);
                 } else {
-                    saveButtonAction.setEnabled(false);
-                    saveCancelButtonAction.setEnabled(false);
+                    saveAction.setEnabled(false);
+                    saveCancelAction.setEnabled(false);
                 }
             }
         });
@@ -259,16 +259,16 @@ public class EditCustomerPresentationModel
         support.addButtonListener(listener);
     }
 
-    public Action getSaveButtonAction() {
-        return saveButtonAction;
+    public Action getSaveAction() {
+        return saveAction;
     }
 
-    public Action getCancelButtonAction() {
-        return cancelButtonAction;
+    public Action getCancelAction() {
+        return cancelAction;
     }
 
-    public Action getSaveCancelButtonAction() {
-        return saveCancelButtonAction;
+    public Action getSaveCancelAction() {
+        return saveCancelAction;
     }
 
     public HeaderInfo getHeaderInfo() {
@@ -373,6 +373,7 @@ public class EditCustomerPresentationModel
         }
 
         triggerCommit();
+        guardianPresentationModel.triggerCommit();
 
         for (EditCustomerTabExtention extention : extentions) {
             extention.save();

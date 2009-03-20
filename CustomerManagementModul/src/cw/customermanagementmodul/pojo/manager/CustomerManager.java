@@ -3,9 +3,9 @@ package cw.customermanagementmodul.pojo.manager;
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
-import org.apache.log4j.Logger;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Group;
+import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 
 /**
@@ -15,7 +15,7 @@ import javax.persistence.NoResultException;
 public class CustomerManager extends AbstractPOJOManager<Customer> {
 
     private static CustomerManager instance;
-    private static Logger logger = Logger.getLogger(CustomerManager.class);
+    private static Logger logger = Logger.getLogger(CustomerManager.class.getName());
 
     private CustomerManager() {
     }

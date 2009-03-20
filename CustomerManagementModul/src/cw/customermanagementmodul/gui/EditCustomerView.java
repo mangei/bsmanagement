@@ -36,9 +36,9 @@ public class EditCustomerView
     }
 
     private void initComponents() {
-        bSave               = CWComponentFactory.createButton(model.getSaveButtonAction());
-        bCancel             = CWComponentFactory.createButton(model.getCancelButtonAction());
-        bSaveCancel         = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
+        bSave               = CWComponentFactory.createButton(model.getSaveAction());
+        bCancel             = CWComponentFactory.createButton(model.getCancelAction());
+        bSaveCancel         = CWComponentFactory.createButton(model.getSaveCancelAction());
 
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(bSave)
@@ -48,7 +48,7 @@ public class EditCustomerView
         tabs = new JTabbedPane();
     }
 
-    private void initEvents() {
+    private void initEventhandling() {
         // If it is a new Customer and there is no id, disable the tabs for the extentions
         // because the id is null
         // If the customer is saved, then enable the tabs
@@ -89,7 +89,7 @@ public class EditCustomerView
         
         mainPanel.getContentPanel().add(tabs, BorderLayout.CENTER);
         
-        initEvents();
+        initEventhandling();
 
         mainPanel.addDisposableListener(this);
 

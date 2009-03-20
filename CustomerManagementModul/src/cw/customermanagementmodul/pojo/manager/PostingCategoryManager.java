@@ -3,8 +3,8 @@ package cw.customermanagementmodul.pojo.manager;
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
-import org.apache.log4j.Logger;
 import cw.customermanagementmodul.pojo.PostingCategory;
+import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 
 /**
@@ -15,7 +15,7 @@ public class PostingCategoryManager extends AbstractPOJOManager<PostingCategory>
 {
 
     private static PostingCategoryManager instance;
-    private static Logger logger = Logger.getLogger(PostingCategoryManager.class);
+    private static Logger logger = Logger.getLogger(PostingCategoryManager.class.getName());
 
     private PostingCategoryManager() {
     }

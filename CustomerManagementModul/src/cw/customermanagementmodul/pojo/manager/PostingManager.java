@@ -4,10 +4,10 @@ import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.Date;
 import java.util.List;
-import org.apache.log4j.Logger;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.PostingCategory;
 import cw.customermanagementmodul.pojo.Customer;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,7 +17,7 @@ public class PostingManager extends AbstractPOJOManager<Posting>
 {
 
     private static PostingManager instance;
-    private static Logger logger = Logger.getLogger(PostingManager.class);
+    private static Logger logger = Logger.getLogger(PostingManager.class.getName());
 
     private PostingManager() {
     }

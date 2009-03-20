@@ -6,6 +6,7 @@ import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -377,7 +378,7 @@ public class Customer
         firePropertyChange(PROPERTYNAME_ACCOUNTINGS, old, accountings);
     }
 
-    @OneToOne
+    @OneToOne(cascade={CascadeType.ALL})
     public Guardian getGuardian() {
         return guardian;
     }

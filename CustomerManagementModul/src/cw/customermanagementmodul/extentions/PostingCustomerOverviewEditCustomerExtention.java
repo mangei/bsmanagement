@@ -62,11 +62,11 @@ public class PostingCustomerOverviewEditCustomerExtention
         CellConstraints cc = new CellConstraints();
 
         builder.addSeparator("Buchungen",   cc.xyw(1, 1, 11));
-        builder.addLabel("Soll",            cc.xy(1, 3));
+        builder.addLabel("Soll:",            cc.xy(1, 3));
         builder.add(lLiabilities,           cc.xy(3, 3));
-        builder.addLabel("Haben",           cc.xy(5, 3));
+        builder.addLabel("Haben:",           cc.xy(5, 3));
         builder.add(lAssets,                cc.xy(7, 3));
-        builder.addLabel("Saldo",           cc.xy(9, 3));
+        builder.addLabel("Saldo:",           cc.xy(9, 3));
         builder.add(lSaldo,                 cc.xy(11, 3));
 
         return panel;

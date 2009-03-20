@@ -119,8 +119,7 @@ public class EditCustomerEditCustomerPresentationModel
 
     }
 
-    public boolean save() {
-        return true;
+    public void save() {
     }
 
     public void firePostOfficeNumberLostFocus() {

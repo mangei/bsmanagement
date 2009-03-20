@@ -86,6 +86,7 @@ public class CustomerManagementView
         panel.getContentPanel().add(customerSelectorView.buildPanel(), BorderLayout.CENTER);
 
         panel.addDisposableListener(this);
+        componentContainer.addComponent(panel);
 
         initEventHandling();
 

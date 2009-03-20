@@ -3,8 +3,8 @@ package cw.customermanagementmodul.pojo.manager;
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
-import org.apache.log4j.Logger;
 import cw.customermanagementmodul.pojo.Group;
+import java.util.logging.Logger;
 
 /**
  * Manages Groups
@@ -13,7 +13,7 @@ import cw.customermanagementmodul.pojo.Group;
 public class GroupManager extends AbstractPOJOManager<Group> {
 
     private static GroupManager instance;
-    private static Logger logger = Logger.getLogger(GroupManager.class);
+    private static Logger logger = Logger.getLogger(GroupManager.class.getName());
     
     private GroupManager() {
     }
