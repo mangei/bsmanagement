@@ -21,7 +21,7 @@ import javax.swing.JOptionPane;
 /**
  * @author CreativeWorkers.at
  */
-public class PostingOverviewPresentationModel {
+public class PostingManagement2PresentationModel {
 
     private Action newAction;
     private Action editAction;
@@ -33,7 +33,7 @@ public class PostingOverviewPresentationModel {
 
     private HeaderInfo headerInfo;
 
-    public PostingOverviewPresentationModel() {
+    public PostingManagement2PresentationModel() {
         initModels();
         initEventHandling();
     }

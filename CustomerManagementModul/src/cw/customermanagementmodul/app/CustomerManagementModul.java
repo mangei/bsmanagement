@@ -17,8 +17,8 @@ import cw.customermanagementmodul.pojo.manager.PostingManager;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.customermanagementmodul.gui.PostingCategoryManagementPresentationModel;
 import cw.customermanagementmodul.gui.PostingCategoryManagementView;
-import cw.customermanagementmodul.gui.PostingOverviewPresentationModel;
-import cw.customermanagementmodul.gui.PostingOverviewView;
+import cw.customermanagementmodul.gui.PostingManagement2PresentationModel;
+import cw.customermanagementmodul.gui.PostingManagement2View;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Group;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
@@ -111,8 +111,8 @@ public class CustomerManagementModul
                 GUIManager.setLoadingScreenText("Buchungen werden geladen...");
                 GUIManager.setLoadingScreenVisible(true);
 
-                PostingOverviewPresentationModel model = new PostingOverviewPresentationModel();
-                PostingOverviewView view = new PostingOverviewView(model);
+                PostingManagement2PresentationModel model = new PostingManagement2PresentationModel();
+                PostingManagement2View view = new PostingManagement2View(model);
                 JPanel panel = view.buildPanel();
 
                 GUIManager.changeView(panel);
