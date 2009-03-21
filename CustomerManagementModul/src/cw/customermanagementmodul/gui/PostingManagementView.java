@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 /**
  * @author CreativeWorkers.at
  */
-public class PostingManagement2View
+public class PostingManagementView
     
 {
 
@@ -21,7 +21,7 @@ public class PostingManagement2View
     private JButton bViewInactives;
     private CustomerSelectorView customerSelectorView;
 
-    public PostingManagement2View(PostingManagement2PresentationModel m) {
+    public PostingManagementView(PostingManagement2PresentationModel m) {
         model = m;
     }
 

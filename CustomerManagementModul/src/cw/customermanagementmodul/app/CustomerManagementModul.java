@@ -18,7 +18,7 @@ import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.customermanagementmodul.gui.PostingCategoryManagementPresentationModel;
 import cw.customermanagementmodul.gui.PostingCategoryManagementView;
 import cw.customermanagementmodul.gui.PostingManagement2PresentationModel;
-import cw.customermanagementmodul.gui.PostingManagement2View;
+import cw.customermanagementmodul.gui.PostingManagementView;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Group;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
@@ -112,7 +112,7 @@ public class CustomerManagementModul
                 GUIManager.setLoadingScreenVisible(true);
 
                 PostingManagement2PresentationModel model = new PostingManagement2PresentationModel();
-                PostingManagement2View view = new PostingManagement2View(model);
+                PostingManagementView view = new PostingManagementView(model);
                 JPanel panel = view.buildPanel();
 
                 GUIManager.changeView(panel);
