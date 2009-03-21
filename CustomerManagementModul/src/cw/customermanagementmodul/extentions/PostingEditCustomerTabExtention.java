@@ -3,8 +3,8 @@ package cw.customermanagementmodul.extentions;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
-import cw.customermanagementmodul.gui.PostingManagementPresentationModel;
-import cw.customermanagementmodul.gui.PostingManagementView;
+import cw.customermanagementmodul.gui.PostingManagementEditCustomerPresentationModel;
+import cw.customermanagementmodul.gui.PostingManagementEditCustomerView;
 import javax.swing.JComponent;
 import cw.customermanagementmodul.pojo.Posting;
 import java.util.List;
@@ -16,17 +16,17 @@ import java.util.List;
 public class PostingEditCustomerTabExtention
         implements EditCustomerTabExtention, Disposable {
 
-    private PostingManagementPresentationModel model;
-    private PostingManagementView view;
+    private PostingManagementEditCustomerPresentationModel model;
+    private PostingManagementEditCustomerView view;
     private EditCustomerPresentationModel editCustomerModel;
     
     public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
         this.editCustomerModel = editCustomerModel;
-        model = new PostingManagementPresentationModel(editCustomerModel.getBean());
+        model = new PostingManagementEditCustomerPresentationModel(editCustomerModel.getBean());
     }
     
     public JComponent getView() {
-        view = new PostingManagementView(model);
+        view = new PostingManagementEditCustomerView(model);
         return view.buildPanel();
     }
 

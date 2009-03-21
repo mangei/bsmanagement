@@ -8,7 +8,7 @@ import cw.boardingschoolmanagement.gui.component.CWJLabel;
 import cw.boardingschoolmanagement.gui.component.CWJPanel;
 import cw.customermanagementmodul.extentions.interfaces.CustomerOverviewEditCustomerExtention;
 import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationModel;
-import cw.customermanagementmodul.gui.PostingManagementPresentationModel;
+import cw.customermanagementmodul.gui.PostingManagementEditCustomerPresentationModel;
 import javax.swing.JComponent;
 
 /**
@@ -32,21 +32,21 @@ public class PostingCustomerOverviewEditCustomerExtention
         CWJPanel panel = CWComponentFactory.createPanel();
 
         lSaldo = CWComponentFactory.createLabel(
-                ((PostingManagementPresentationModel)
+                ((PostingManagementEditCustomerPresentationModel)
                     ((PostingEditCustomerTabExtention)customerOverviewEditCustomerPresentationModel
                         .getEditCustomerPresentationModel()
                         .getExtention(PostingEditCustomerTabExtention.class))
                         .getModel()).getSaldoTotalValue()
                     );
         lAssets = CWComponentFactory.createLabel(
-                ((PostingManagementPresentationModel)
+                ((PostingManagementEditCustomerPresentationModel)
                     ((PostingEditCustomerTabExtention)customerOverviewEditCustomerPresentationModel
                         .getEditCustomerPresentationModel()
                         .getExtention(PostingEditCustomerTabExtention.class))
                         .getModel()).getAssetsTotalValue()
                     );
         lLiabilities = CWComponentFactory.createLabel(
-                ((PostingManagementPresentationModel)
+                ((PostingManagementEditCustomerPresentationModel)
                     ((PostingEditCustomerTabExtention)customerOverviewEditCustomerPresentationModel
                         .getEditCustomerPresentationModel()
                         .getExtention(PostingEditCustomerTabExtention.class))
