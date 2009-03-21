@@ -10,11 +10,13 @@ import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
 import cw.boardingschoolmanagement.interfaces.Disposable;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.NumberFormat;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import java.awt.Font;
 import javax.swing.JComboBox;
 
 /**
@@ -42,6 +44,13 @@ public class PostingManagementEditCustomerView
     private JLabel lLiabilities;
     private JLabel lAssets;
     private JLabel lSaldo;
+    private JLabel lTotalLiabilities;
+    private JLabel lTotalAssets;
+    private JLabel lTotalSaldo;
+
+    private JPanel pFilteredValues;
+
+    private PropertyChangeListener filterActiveListener;
 
     public PostingManagementEditCustomerView(PostingManagementEditCustomerPresentationModel model) {
         this.model = model;
@@ -71,12 +80,12 @@ public class PostingManagementEditCustomerView
         tPostings.getColumns(true).get(4).setCellRenderer(new DateTimeTableCellRenderer(true));
         tPostings.getColumns(true).get(5).setCellRenderer(new DateTimeTableCellRenderer());
 
-        lLiabilities = CWComponentFactory.createLabel(model.getLiabilitiesValue());
-        lLiabilities.setFont(lLiabilities.getFont().deriveFont(Font.BOLD));
-        lAssets = CWComponentFactory.createLabel(model.getAssetsValue());
-        lAssets.setFont(lAssets.getFont().deriveFont(Font.BOLD));
-        lSaldo = CWComponentFactory.createLabel(model.getSaldoValue());
-        lSaldo.setFont(lSaldo.getFont().deriveFont(Font.BOLD));
+        lLiabilities = CWComponentFactory.createLabel(model.getLiabilitiesValue(), NumberFormat.getCurrencyInstance());
+        lAssets = CWComponentFactory.createLabel(model.getAssetsValue(), NumberFormat.getCurrencyInstance());
+        lSaldo = CWComponentFactory.createLabel(model.getSaldoValue(), NumberFormat.getCurrencyInstance());
+        lTotalLiabilities = CWComponentFactory.createLabel(model.getTotalLiabilitiesValue(), NumberFormat.getCurrencyInstance());
+        lTotalAssets = CWComponentFactory.createLabel(model.getTotalAssetsValue(), NumberFormat.getCurrencyInstance());
+        lTotalSaldo = CWComponentFactory.createLabel(model.getTotalSaldoValue(), NumberFormat.getCurrencyInstance());
 
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(bNew)
@@ -88,16 +97,23 @@ public class PostingManagementEditCustomerView
                 .addComponent(cbFilterPostingCategory)
                 .addComponent(lLiabilities)
                 .addComponent(lAssets)
-                .addComponent(lSaldo);
+                .addComponent(lSaldo)
+                .addComponent(lTotalLiabilities)
+                .addComponent(lTotalAssets)
+                .addComponent(lTotalSaldo);
     }
     
     private void initEventHandling() {
-        // Nothing to do
+        model.getFilterActive().addValueChangeListener(filterActiveListener = new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                pFilteredValues.setVisible((Boolean)evt.getNewValue());
+            }
+        });
+        pFilteredValues.setVisible(false);
     }
 
     public JPanel buildPanel() {
         initComponents();
-        initEventHandling();
         
         panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         panel.setName("Buchungen");
@@ -126,30 +142,71 @@ public class PostingManagementEditCustomerView
         builder.addLabel("Kategorie:", cc.xy(11, 1));
         builder.add(cbFilterPostingCategory, cc.xy(13, 1));
 
+        
+        // filterValue Layout
+        pFilteredValues = new JPanel();
+        pFilteredValues.setOpaque(false);
 
         layout = new FormLayout(
-                "4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref:grow",
-                "pref, 4dlu, fill:pref:grow, 4dlu, pref"
+                "4dlu, [100,pref], pref, 4dlu, pref, 10dlu, pref, 4dlu, pref, 10dlu, pref, 4dlu, pref",
+                "4dlu, pref"
+        );
+        builder = new PanelBuilder(layout, pFilteredValues);
+        cc = new CellConstraints();
+
+        builder.addLabel("<html><b>Gefiltert:</b></html>",  cc.xy(2, 2));
+        builder.addLabel("<html><b>Soll:</b></html>",       cc.xy(3, 2));
+        builder.add(lLiabilities,                           cc.xy(5, 2));
+        builder.addLabel("<html><b>Haben:</b></html>",      cc.xy(7, 2));
+        builder.add(lAssets,                                cc.xy(9, 2));
+        builder.addLabel("<html><b>Saldo:</b></html>",      cc.xy(11, 2));
+        builder.add(lSaldo,                                 cc.xy(13, 2));
+
+
+        // totalValue Layout
+        JPanel pTotalValues = new JPanel();
+        pTotalValues.setOpaque(false);
+
+        layout = new FormLayout(
+                "4dlu, [100,pref], pref, 4dlu, pref, 10dlu, pref, 4dlu, pref, 10dlu, pref, 4dlu, pref",
+                "pref"
+        );
+        builder = new PanelBuilder(layout, pTotalValues);
+        cc = new CellConstraints();
+
+        builder.addLabel("<html><b>Gesamt:</b></html>",     cc.xy(2, 1));
+        builder.addLabel("<html><b>Soll:</b></html>",       cc.xy(3, 1));
+        builder.add(lTotalLiabilities,                      cc.xy(5, 1));
+        builder.addLabel("<html><b>Haben:</b></html>",      cc.xy(7, 1));
+        builder.add(lTotalAssets,                           cc.xy(9, 1));
+        builder.addLabel("<html><b>Saldo:</b></html>",      cc.xy(11, 1));
+        builder.add(lTotalSaldo,                            cc.xy(13, 1));
+
+        
+        // Main layout
+        layout = new FormLayout(
+                "pref:grow",
+                "pref, 4dlu, pref, pref, 4dlu, pref"
         );
         builder = new PanelBuilder(layout, panel.getContentPanel());
         cc = new CellConstraints();
         
-        builder.add(pFilter, cc.xyw(1, 1, 12));
-        builder.add(new JScrollPane(tPostings), cc.xyw(1, 3, 12));
-        builder.addLabel("Soll:", cc.xy(2, 5));
-        builder.add(lLiabilities, cc.xy(4, 5));
-        builder.addLabel("Haben:", cc.xy(6, 5));
-        builder.add(lAssets, cc.xy(8, 5));
-        builder.addLabel("Saldo:", cc.xy(10, 5));
-        builder.add(lSaldo, cc.xy(12, 5));
+        builder.add(pFilter,                    cc.xy(1, 1));
+        builder.add(new JScrollPane(tPostings), cc.xy(1, 3));
+        builder.add(pFilteredValues,            cc.xy(1, 4));
+        builder.add(pTotalValues,               cc.xy(1, 6));
 
         panel.addDisposableListener(this);
+
+        initEventHandling();
 
         return panel;
     }
 
     public void dispose() {
         panel.removeDisposableListener(this);
+
+        model.getFilterActive().removeValueChangeListener(filterActiveListener);
 
         componentContainer.dispose();
 

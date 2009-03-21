@@ -51,10 +51,10 @@ public class PostingManagement2PresentationModel {
                 );
         
         headerInfo = new HeaderInfo(
-                "Kunden verwalten",
-                "Sie befinden sich Kundenverwaltungsbereich. Hier haben Sie einen Überblick über alle Kunden.",
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
+                "Buchungsübersicht",
+                "Sie befinden sich Buchungsverwaltungsbereich. Hier haben Sie einen Überblick über alle Buchungen.",
+                CWUtils.loadIcon("cw/customermanagementmodul/images/posting.png"),
+                CWUtils.loadIcon("cw/customermanagementmodul/images/posting.png")
         );
     }
 

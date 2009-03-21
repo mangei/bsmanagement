@@ -9,6 +9,7 @@ import cw.boardingschoolmanagement.gui.component.CWJPanel;
 import cw.customermanagementmodul.extentions.interfaces.CustomerOverviewEditCustomerExtention;
 import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.PostingManagementEditCustomerPresentationModel;
+import java.text.NumberFormat;
 import javax.swing.JComponent;
 
 /**
@@ -36,21 +37,24 @@ public class PostingCustomerOverviewEditCustomerExtention
                     ((PostingEditCustomerTabExtention)customerOverviewEditCustomerPresentationModel
                         .getEditCustomerPresentationModel()
                         .getExtention(PostingEditCustomerTabExtention.class))
-                        .getModel()).getSaldoTotalValue()
+                        .getModel()).getTotalSaldoValue(),
+                        NumberFormat.getCurrencyInstance()
                     );
         lAssets = CWComponentFactory.createLabel(
                 ((PostingManagementEditCustomerPresentationModel)
                     ((PostingEditCustomerTabExtention)customerOverviewEditCustomerPresentationModel
                         .getEditCustomerPresentationModel()
                         .getExtention(PostingEditCustomerTabExtention.class))
-                        .getModel()).getAssetsTotalValue()
+                        .getModel()).getTotalAssetsValue(),
+                        NumberFormat.getCurrencyInstance()
                     );
         lLiabilities = CWComponentFactory.createLabel(
                 ((PostingManagementEditCustomerPresentationModel)
                     ((PostingEditCustomerTabExtention)customerOverviewEditCustomerPresentationModel
                         .getEditCustomerPresentationModel()
                         .getExtention(PostingEditCustomerTabExtention.class))
-                        .getModel()).getLiabilitiesTotalValue()
+                        .getModel()).getTotalLiabilitiesValue(),
+                        NumberFormat.getCurrencyInstance()
                     );
 
         FormLayout layout = new FormLayout(
@@ -61,12 +65,12 @@ public class PostingCustomerOverviewEditCustomerExtention
         PanelBuilder builder = new PanelBuilder(layout,panel);
         CellConstraints cc = new CellConstraints();
 
-        builder.addSeparator("Buchungen",   cc.xyw(1, 1, 11));
-        builder.addLabel("Soll:",            cc.xy(1, 3));
+        builder.addSeparator("<html><b>Buchungen</b></html>",   cc.xyw(1, 1, 11));
+        builder.addLabel("<html><b>Soll:</b></html>",            cc.xy(1, 3));
         builder.add(lLiabilities,           cc.xy(3, 3));
-        builder.addLabel("Haben:",           cc.xy(5, 3));
+        builder.addLabel("<html><b>Haben:</b></html>",           cc.xy(5, 3));
         builder.add(lAssets,                cc.xy(7, 3));
-        builder.addLabel("Saldo:",           cc.xy(9, 3));
+        builder.addLabel("<html><b>Saldo:</b></html>",           cc.xy(9, 3));
         builder.add(lSaldo,                 cc.xy(11, 3));
 
         return panel;
