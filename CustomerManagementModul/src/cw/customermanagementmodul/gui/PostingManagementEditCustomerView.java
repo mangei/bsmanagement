@@ -186,7 +186,7 @@ public class PostingManagementEditCustomerView
         // Main layout
         layout = new FormLayout(
                 "pref:grow",
-                "pref, 4dlu, pref, pref, 4dlu, pref"
+                "pref, 4dlu, fill:pref:grow, pref, 4dlu, pref"
         );
         builder = new PanelBuilder(layout, panel.getContentPanel());
         cc = new CellConstraints();

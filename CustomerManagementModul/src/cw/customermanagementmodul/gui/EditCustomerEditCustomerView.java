@@ -229,7 +229,7 @@ public class EditCustomerEditCustomerView
         PanelBuilder builder = new PanelBuilder(layout,mainPanel.getContentPanel());
         
         CellConstraints cc = new CellConstraints();
-        builder.addSeparator("Allgemein:",  cc.xyw(1, 1, 8));
+        builder.addSeparator("<html><b>Allgemein</b></html>",  cc.xyw(1, 1, 8));
         builder.addLabel("Geschlecht:",     cc.xy(1, 3));
         builder.add(pGender,                cc.xy(3, 3));
         builder.add(pActive,                cc.xy(7, 3));
@@ -244,13 +244,13 @@ public class EditCustomerEditCustomerView
         builder.addLabel("Geburtsdatum:",   cc.xy(1, 11));
         builder.add(dcBirthday,             cc.xy(3, 11));
 
-        builder.addSeparator("Erziehungsberechtigter:",    cc.xyw(1, 13, 8));
+        builder.addSeparator("<html><b>Erziehungsberechtigter</b></html>",    cc.xyw(1, 13, 8));
         builder.addLabel("Vorname:",        cc.xy(1, 15));
         builder.add(tfGuardianForename,     cc.xy(3, 15));
         builder.addLabel("Nachname:",       cc.xy(5, 15));
         builder.add(tfGuardianSurname,      cc.xy(7, 15));
         
-        builder.addSeparator("Adresse:",    cc.xyw(1, 17, 8));
+        builder.addSeparator("<html><b>Adresse</b></html>",    cc.xyw(1, 17, 8));
         builder.addLabel("Straße:",         cc.xy(1, 19));
         builder.add(tfStreet,               cc.xyw(3, 19, 5));
         builder.addLabel("PLZ:",            cc.xy(1, 21));
@@ -264,7 +264,7 @@ public class EditCustomerEditCustomerView
 
         builder.add(bClearLocationData,     cc.xywh(8, 21, 1, 3, CellConstraints.LEFT, CellConstraints.CENTER));
         
-        builder.addSeparator("Kontakt:",    cc.xyw(1, 25, 8));
+        builder.addSeparator("<html><b>Kontakt</b></html>",    cc.xyw(1, 25, 8));
         builder.addLabel("Mobiltelefon:",   cc.xy(1, 27));
         builder.add(tfMobilphone,           cc.xyw(3, 27, 3));
         builder.addLabel("Festnetztelefon", cc.xy(1, 29));
@@ -274,7 +274,7 @@ public class EditCustomerEditCustomerView
         builder.addLabel("eMail:",          cc.xy(1, 33));
         builder.add(tfEmail,                cc.xyw(3, 33, 3));
 
-        builder.addSeparator("Bemerkung",   cc.xyw(1, 35, 8));
+        builder.addSeparator("<html><b>Bemerkung</b></html>",   cc.xyw(1, 35, 8));
         builder.add(taComment,              cc.xyw(1, 37, 8));
 
         initEvents();

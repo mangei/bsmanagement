@@ -58,14 +58,14 @@ public class PostingCustomerOverviewEditCustomerExtention
                     );
 
         FormLayout layout = new FormLayout(
-                "right:pref, 4dlu, pref, 4dlu, right:pref, 4dlu, pref, 4dlu, right:pref, 4dlu, pref",
+                "right:pref, 4dlu, pref, 4dlu, right:pref, 4dlu, pref, 4dlu, right:pref, 4dlu, pref:grow",
                 "pref, 4dlu, pref"
         );
 
         PanelBuilder builder = new PanelBuilder(layout,panel);
         CellConstraints cc = new CellConstraints();
 
-        builder.addSeparator("<html><b>Buchungen</b></html>",   cc.xyw(1, 1, 11));
+        builder.addSeparator("Buchungen",   cc.xyw(1, 1, 11));
         builder.addLabel("<html><b>Soll:</b></html>",            cc.xy(1, 3));
         builder.add(lLiabilities,           cc.xy(3, 3));
         builder.addLabel("<html><b>Haben:</b></html>",           cc.xy(5, 3));

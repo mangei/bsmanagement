@@ -9,6 +9,7 @@ import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JPanel;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Guardian;
+import java.awt.Font;
 import javax.swing.JLabel;
 
 /**
@@ -71,6 +72,30 @@ public class GeneralCustomerOverviewEditCustomerView
         lEmail             = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_EMAIL));
         lComment           = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_COMMENT));
 
+        Font font = lActive.getFont().deriveFont(Font.BOLD);
+
+        lActive.setFont(font);
+        lGender.setFont(font);
+        lTitle.setFont(font);
+        lForename.setFont(font);
+        lForename2.setFont(font);
+        lSurname.setFont(font);
+        lBirthday.setFont(font);
+
+        lGuardianForename.setFont(font);
+        lGuardianSurname.setFont(font);
+
+        lStreet.setFont(font);
+        lPostOfficeNumber.setFont(font);
+        lCity.setFont(font);
+        lCountry.setFont(font);
+        lProvince.setFont(font);
+        lMobilphone.setFont(font);
+        lLandlinephone.setFont(font);
+        lFax.setFont(font);
+        lEmail.setFont(font);
+        lComment.setFont(font);
+
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(lActive)
                 .addComponent(lGender)
@@ -109,7 +134,7 @@ public class GeneralCustomerOverviewEditCustomerView
         PanelBuilder builder = new PanelBuilder(layout,mainPanel);
 
         CellConstraints cc = new CellConstraints();
-        builder.addSeparator("Allgemein:",  cc.xyw(1, 1, 8));
+        builder.addSeparator("Allgemein",  cc.xyw(1, 1, 8));
         builder.addLabel("Geschlecht:",     cc.xy(1, 3));
         builder.add(lGender,                cc.xy(3, 3));
         builder.addLabel("Status:",         cc.xy(5, 3));
@@ -125,13 +150,13 @@ public class GeneralCustomerOverviewEditCustomerView
         builder.addLabel("Geburtsdatum:",   cc.xy(1, 11));
         builder.add(lBirthday,             cc.xy(3, 11));
 
-        builder.addSeparator("Erziehungsberechtigter:",    cc.xyw(1, 13, 8));
+        builder.addSeparator("Erziehungsberechtigter",    cc.xyw(1, 13, 8));
         builder.addLabel("Vorname:",        cc.xy(1, 15));
         builder.add(lGuardianForename,     cc.xy(3, 15));
         builder.addLabel("Nachname:",       cc.xy(5, 15));
         builder.add(lGuardianSurname,      cc.xy(7, 15));
 
-        builder.addSeparator("Adresse:",    cc.xyw(1, 17, 8));
+        builder.addSeparator("Adresse",    cc.xyw(1, 17, 8));
         builder.addLabel("Straße:",         cc.xy(1, 19));
         builder.add(lStreet,               cc.xyw(3, 19, 5));
         builder.addLabel("PLZ:",            cc.xy(1, 21));
@@ -143,7 +168,7 @@ public class GeneralCustomerOverviewEditCustomerView
         builder.addLabel("Staat:",          cc.xy(5, 23));
         builder.add(lCountry,              cc.xy(7, 23));
 
-        builder.addSeparator("Kontakt:",    cc.xyw(1, 25, 8));
+        builder.addSeparator("Kontakt",    cc.xyw(1, 25, 8));
         builder.addLabel("Mobiltelefon:",   cc.xy(1, 27));
         builder.add(lMobilphone,           cc.xyw(3, 27, 3));
         builder.addLabel("Festnetztelefon", cc.xy(1, 29));

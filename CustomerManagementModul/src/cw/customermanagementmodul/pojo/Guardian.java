@@ -2,12 +2,10 @@ package cw.customermanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 
 /**
  *
@@ -21,13 +19,11 @@ public class Guardian
     private Long id;
     private String forename;
     private String surname;
-    private Customer customer;
 
     // Properties - Constants
     public final static String PROPERTYNAME_ID = "id";
-    public final static String PROPERTYNAME_FORENAME = "forname";
+    public final static String PROPERTYNAME_FORENAME = "forename";
     public final static String PROPERTYNAME_SURNAME = "surname";
-    public final static String PROPERTYNAME_CUSTOMER = "customer";
 
     public Guardian() {
     }
@@ -58,17 +54,6 @@ public class Guardian
         Long old = this.id;
         this.id = id;
         firePropertyChange(PROPERTYNAME_ID, old, id);
-    }
-
-    @OneToOne(mappedBy="guardian", cascade=CascadeType.ALL)
-    public Customer getCustomer() {
-        return customer;
-    }
-
-    public void setCustomer(Customer customer) {
-        Customer old = this.customer;
-        this.customer = customer;
-        firePropertyChange(PROPERTYNAME_CUSTOMER, old, customer);
     }
 
     public String getForename() {

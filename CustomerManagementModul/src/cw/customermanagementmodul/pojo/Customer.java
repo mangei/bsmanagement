@@ -15,6 +15,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 
 /**
@@ -48,7 +49,7 @@ public class Customer
     private String email                = "";
     private Date creationdate;
     private String comment              = "";
-    private Guardian guardian;
+    private Guardian guardian           = new Guardian();
     
     private List<Group> groups          = new ArrayList<Group>();
 
@@ -378,7 +379,8 @@ public class Customer
         firePropertyChange(PROPERTYNAME_ACCOUNTINGS, old, accountings);
     }
 
-    @OneToOne(cascade={CascadeType.ALL})
+    @OneToOne
+    @Cascade(org.hibernate.annotations.CascadeType.ALL)
     public Guardian getGuardian() {
         return guardian;
     }
