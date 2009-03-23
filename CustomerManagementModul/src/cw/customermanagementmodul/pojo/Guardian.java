@@ -17,11 +17,17 @@ public class Guardian
         implements AnnotatedClass {
 
     private Long id;
+    private boolean active = false;
+    private boolean gender = true;
+    private String title;
     private String forename;
     private String surname;
 
     // Properties - Constants
     public final static String PROPERTYNAME_ID = "id";
+    public final static String PROPERTYNAME_TITLE = "title";
+    public final static String PROPERTYNAME_GENDER = "gender";
+    public final static String PROPERTYNAME_ACTIVE = "active";
     public final static String PROPERTYNAME_FORENAME = "forename";
     public final static String PROPERTYNAME_SURNAME = "surname";
 
@@ -74,6 +80,36 @@ public class Guardian
         String old = this.surname;
         this.surname = surname;
         firePropertyChange(PROPERTYNAME_SURNAME, old, surname);
+    }
+
+    public boolean getGender() {
+        return gender;
+    }
+
+    public void setGender(boolean gender) {
+        boolean old = this.gender;
+        this.gender = gender;
+        firePropertyChange(PROPERTYNAME_GENDER, old, gender);
+    }
+
+    public boolean getActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        boolean old = this.active;
+        this.active = active;
+        firePropertyChange(PROPERTYNAME_ACTIVE, old, active);
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        String old = this.title;
+        this.title = title;
+        firePropertyChange(PROPERTYNAME_TITLE, old, title);
     }
 
 }

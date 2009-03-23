@@ -9,6 +9,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.FocusEvent;
+import java.beans.PropertyChangeEvent;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
@@ -16,6 +17,9 @@ import javax.swing.JTextField;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Guardian;
 import java.awt.event.FocusListener;
+import java.beans.PropertyChangeListener;
+import javax.swing.JCheckBox;
+import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -36,6 +40,9 @@ public class EditCustomerEditCustomerView
     private JTextField tfForename;
     private JTextField tfForename2;
     private JTextField tfSurname;
+    private JCheckBox cGuardianActive;
+    private JPanel pGuardianGender;
+    private JTextField tfGuardianTitle;
     private JTextField tfGuardianForename;
     private JTextField tfGuardianSurname;
     private JDateChooser dcBirthday;
@@ -50,6 +57,8 @@ public class EditCustomerEditCustomerView
     private JTextField tfEmail;
     private JTextArea taComment;
     private JButton bClearLocationData;
+
+    private PropertyChangeListener guardianActiveListener;
 
     public EditCustomerEditCustomerView(EditCustomerEditCustomerPresentationModel model) {
         this.model = model;
@@ -66,6 +75,9 @@ public class EditCustomerEditCustomerView
 
         dcBirthday          = CWComponentFactory.createDateChooser(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY));
 
+        cGuardianActive     = CWComponentFactory.createCheckBox(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_ACTIVE), "Dieser Kunde hat einen Erziehungsberechtigen:");
+        pGuardianGender     = CWComponentFactory.createTrueFalsePanel(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_GENDER), "Herr", "Frau", model.getEditCustomerPresentationModel().getGuardianPresentationModel().getModel(Guardian.PROPERTYNAME_GENDER).booleanValue());
+        tfGuardianTitle     = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_TITLE), false);
         tfGuardianForename  = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_FORENAME), false);
         tfGuardianSurname   = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_SURNAME), false);
 
@@ -96,7 +108,11 @@ public class EditCustomerEditCustomerView
                 .addComponent(tfForename2)
                 .addComponent(tfSurname)
                 .addComponent(dcBirthday)
+                .addComponent(cGuardianActive)
+                .addComponent(pGuardianGender)
+                .addComponent(tfGuardianTitle)
                 .addComponent(tfGuardianForename)
+                .addComponent(tfGuardianSurname)
                 .addComponent(tfStreet)
                 .addComponent(tfPostOfficeNumber)
                 .addComponent(tfCity)
@@ -128,6 +144,19 @@ public class EditCustomerEditCustomerView
 //        tfProvince.addFocusListener(pacf);
 //        tfProvince.getDocument().addDocumentListener(pacf);
 
+        model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_ACTIVE).addValueChangeListener(guardianActiveListener = new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                setGuardianComponentsActive((Boolean)evt.getNewValue());
+            }
+        });
+        setGuardianComponentsActive((Boolean)model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_ACTIVE).getValue());
+    }
+
+    private void setGuardianComponentsActive(boolean b) {
+        pGuardianGender.setEnabled(b);
+        tfGuardianTitle.setEnabled(b);
+        tfGuardianForename.setEnabled(b);
+        tfGuardianSurname.setEnabled(b);
     }
 
     private class PostOfficeNumberAutoCompleteFire implements FocusListener, DocumentListener {
@@ -214,68 +243,77 @@ public class EditCustomerEditCustomerView
                 fireable = true;
             }
         }
-
     }
     
     public JPanel buildPanel() {
         initComponents();
         
         mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref",
-                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
+                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
 
         PanelBuilder builder = new PanelBuilder(layout,mainPanel.getContentPanel());
-        
+
+        int row = 1;
+        row+=2;
+
         CellConstraints cc = new CellConstraints();
-        builder.addSeparator("<html><b>Allgemein</b></html>",  cc.xyw(1, 1, 8));
-        builder.addLabel("Geschlecht:",     cc.xy(1, 3));
-        builder.add(pGender,                cc.xy(3, 3));
-        builder.add(pActive,                cc.xy(7, 3));
-        builder.addLabel("Titel:",          cc.xy(1, 5));
-        builder.add(tfTitle,                cc.xy(3, 5));
-        builder.addLabel("Vorname:",        cc.xy(1, 7));
-        builder.add(tfForename,             cc.xy(3, 7));
-        builder.addLabel("2. Vorname:",     cc.xy(5, 7));
-        builder.add(tfForename2,            cc.xy(7, 7));
-        builder.addLabel("Nachname",        cc.xy(1, 9));
-        builder.add(tfSurname,              cc.xyw(3, 9, 5));
-        builder.addLabel("Geburtsdatum:",   cc.xy(1, 11));
-        builder.add(dcBirthday,             cc.xy(3, 11));
+        builder.addSeparator("<html><b>Allgemein</b></html>",  cc.xyw(1, row, 8));
+        builder.addLabel("Anrede:",     cc.xy(1, row+=2));
+        builder.add(pGender,                cc.xy(3, row));
+        builder.add(pActive,                cc.xy(7, row));
+        builder.addLabel("Titel:",          cc.xy(1, row+=2));
+        builder.add(tfTitle,                cc.xy(3, row));
+        builder.addLabel("Vorname:",        cc.xy(1, row+=2));
+        builder.add(tfForename,             cc.xy(3, row));
+        builder.addLabel("2. Vorname:",     cc.xy(5, row));
+        builder.add(tfForename2,            cc.xy(7, row));
+        builder.addLabel("Nachname",        cc.xy(1, row+=2));
+        builder.add(tfSurname,              cc.xyw(3, row, 5));
+        builder.addLabel("Geburtsdatum:",   cc.xy(1, row+=2));
+        builder.add(dcBirthday,             cc.xy(3, row));
 
-        builder.addSeparator("<html><b>Erziehungsberechtigter</b></html>",    cc.xyw(1, 13, 8));
-        builder.addLabel("Vorname:",        cc.xy(1, 15));
-        builder.add(tfGuardianForename,     cc.xy(3, 15));
-        builder.addLabel("Nachname:",       cc.xy(5, 15));
-        builder.add(tfGuardianSurname,      cc.xy(7, 15));
+        builder.addSeparator("<html><b>Erziehungsberechtigter</b></html>",    cc.xyw(1, row+=2, 8));
+        builder.add(cGuardianActive,        cc.xyw(1, row+=2, 8));
+        builder.addLabel("Anrede:",         cc.xy(1, row+=2));
+        builder.add(pGuardianGender,        cc.xy(3, row));
+        builder.addLabel("Titel:",          cc.xy(5, row));
+        builder.add(tfGuardianTitle,        cc.xy(7, row));
+        builder.addLabel("Vorname:",        cc.xy(1, row+=2));
+        builder.add(tfGuardianForename,     cc.xy(3, row));
+        builder.addLabel("Nachname:",       cc.xy(5, row));
+        builder.add(tfGuardianSurname,      cc.xy(7, row));
         
-        builder.addSeparator("<html><b>Adresse</b></html>",    cc.xyw(1, 17, 8));
-        builder.addLabel("Straße:",         cc.xy(1, 19));
-        builder.add(tfStreet,               cc.xyw(3, 19, 5));
-        builder.addLabel("PLZ:",            cc.xy(1, 21));
-        builder.add(tfPostOfficeNumber,     cc.xy(3, 21));
-        builder.addLabel("Ort:",            cc.xy(5, 21));
-        builder.add(tfCity,                 cc.xy(7, 21));
-        builder.addLabel("Bundesland:",     cc.xy(1, 23));
-        builder.add(tfProvince,             cc.xy(3, 23));
-        builder.addLabel("Staat:",          cc.xy(5, 23));
-        builder.add(tfCountry,              cc.xy(7, 23));
+        builder.addSeparator("<html><b>Adresse</b></html>",    cc.xyw(1, row+=2, 8));
+        builder.addLabel("Straße:",         cc.xy(1, row+=2));
+        builder.add(tfStreet,               cc.xyw(3, row, 5));
+        builder.addLabel("PLZ:",            cc.xy(1, row+=2));
+        builder.add(tfPostOfficeNumber,     cc.xy(3, row));
+        builder.addLabel("Ort:",            cc.xy(5, row));
+        builder.add(tfCity,                 cc.xy(7, row));
+        builder.add(bClearLocationData,     cc.xywh(8, row, 1, 3, CellConstraints.LEFT, CellConstraints.CENTER));
+        builder.addLabel("Bundesland:",     cc.xy(1, row+=2));
+        builder.add(tfProvince,             cc.xy(3, row));
+        builder.addLabel("Staat:",          cc.xy(5, row));
+        builder.add(tfCountry,              cc.xy(7, row));
 
-        builder.add(bClearLocationData,     cc.xywh(8, 21, 1, 3, CellConstraints.LEFT, CellConstraints.CENTER));
         
-        builder.addSeparator("<html><b>Kontakt</b></html>",    cc.xyw(1, 25, 8));
-        builder.addLabel("Mobiltelefon:",   cc.xy(1, 27));
-        builder.add(tfMobilphone,           cc.xyw(3, 27, 3));
-        builder.addLabel("Festnetztelefon", cc.xy(1, 29));
-        builder.add(tfLandlinephone,        cc.xyw(3, 29, 3));
-        builder.addLabel("Fax:",            cc.xy(1, 31));
-        builder.add(tfFax,                  cc.xyw(3, 31, 3));
-        builder.addLabel("eMail:",          cc.xy(1, 33));
-        builder.add(tfEmail,                cc.xyw(3, 33, 3));
+        builder.addSeparator("<html><b>Kontakt</b></html>",    cc.xyw(1, row+=2, 8));
+        builder.addLabel("Mobiltelefon:",   cc.xy(1, row+=2));
+        builder.add(tfMobilphone,           cc.xyw(3, row, 3));
+        builder.addLabel("Festnetztelefon", cc.xy(1, row+=2));
+        builder.add(tfLandlinephone,        cc.xyw(3, row, 3));
+        builder.addLabel("Fax:",            cc.xy(1, row+=2));
+        builder.add(tfFax,                  cc.xyw(3, row, 3));
+        builder.addLabel("eMail:",          cc.xy(1, row+=2));
+        builder.add(tfEmail,                cc.xyw(3, row, 3));
 
-        builder.addSeparator("<html><b>Bemerkung</b></html>",   cc.xyw(1, 35, 8));
-        builder.add(taComment,              cc.xyw(1, 37, 8));
+        builder.addSeparator("<html><b>Bemerkung</b></html>",   cc.xyw(1, row+=2, 8));
+        builder.add(taComment,              cc.xyw(1, row+=2, 8));
 
         initEvents();
 

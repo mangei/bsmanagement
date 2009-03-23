@@ -94,6 +94,9 @@ public class EditCustomerPresentationModel
         getBufferedModel(Customer.PROPERTYNAME_COMMENT).addValueChangeListener(saveListener);
         getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).addValueChangeListener(saveListener);
 
+        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_ACTIVE).addValueChangeListener(saveListener);
+        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_TITLE).addValueChangeListener(saveListener);
+        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_GENDER).addValueChangeListener(saveListener);
         guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_FORENAME).addValueChangeListener(saveListener);
         guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_SURNAME).addValueChangeListener(saveListener);
     }

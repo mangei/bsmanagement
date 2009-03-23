@@ -6,7 +6,6 @@ import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -47,7 +46,8 @@ public class Customer
     private String mobilephone          = "";
     private String fax                  = "";
     private String email                = "";
-    private Date creationdate;
+    private Date creationDate;
+    private Date inactiveSinceDate;
     private String comment              = "";
     private Guardian guardian           = new Guardian();
     
@@ -72,7 +72,8 @@ public class Customer
     public final static String PROPERTYNAME_MOBILEPHONE = "mobilephone";
     public final static String PROPERTYNAME_EMAIL = "email";
     public final static String PROPERTYNAME_FAX = "fax";
-    public final static String PROPERTYNAME_CREATIONDATE = "creationdate";
+    public final static String PROPERTYNAME_CREATIONDATE = "creationDate";
+    public final static String PROPERTYNAME_INACTIVESINCEDATE = "inactiveSinceDate";
     public final static String PROPERTYNAME_COMMENT = "comment";
     public final static String PROPERTYNAME_ACTIVE = "active";
     public final static String PROPERTYNAME_GROUPS = "groups";
@@ -145,7 +146,9 @@ public class Customer
         buf.append(", ");
         buf.append(birthday);
         buf.append(", ");
-        buf.append(creationdate);
+        buf.append(creationDate);
+        buf.append(", ");
+        buf.append(inactiveSinceDate);
         buf.append(", ");
         buf.append(guardian);
 
@@ -283,14 +286,25 @@ public class Customer
     }
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    public Date getCreationdate() {
-        return creationdate;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setCreationdate(Date erstelldatum) {
-        Date old = this.creationdate;
-        this.creationdate = erstelldatum;
-        firePropertyChange(PROPERTYNAME_CREATIONDATE, old, erstelldatum);
+    public void setCreationDate(Date creationDate) {
+        Date old = this.creationDate;
+        this.creationDate = creationDate;
+        firePropertyChange(PROPERTYNAME_CREATIONDATE, old, creationDate);
+    }
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    public Date getInactiveSinceDate() {
+        return inactiveSinceDate;
+    }
+
+    public void setInactiveSinceDate(Date inactiveSinceDate) {
+        Date old = this.inactiveSinceDate;
+        this.inactiveSinceDate = inactiveSinceDate;
+        firePropertyChange(PROPERTYNAME_INACTIVESINCEDATE, old, inactiveSinceDate);
     }
 
     @Type(type="text")
