@@ -60,7 +60,7 @@ public class PrintZimmerPresentationModel implements Disposable{
         support = new ButtonListenerSupport();
         setBackAction(new BackAction());
 
-        reportSource="./src/cw/boardingschoolmanagement/jasper/templates/zimmer.jrxml";
+        reportSource="./jasper/zimmer.jrxml";
 
         try {
             jasperReport = JasperCompileManager.compileReport(reportSource);

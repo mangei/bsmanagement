@@ -4,6 +4,7 @@
  */
 package cw.roommanagementmodul.gui;
 
+import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
@@ -32,6 +33,7 @@ public class StornoResultPresentationModel implements Disposable{
 
     private String headerText;
     private Action backAction;
+    private Action printAction;
     private ButtonListenerSupport support;
     private List<Posting> postingList;
     private Map<Customer, List<Posting>> customerPostingMap;
@@ -48,6 +50,7 @@ public class StornoResultPresentationModel implements Disposable{
     private void initModels() {
         support = new ButtonListenerSupport();
         backAction = new BackAction();
+        printAction = new PrintAction();
 
         customerPostingMap = new HashMap<Customer, List<Posting>>();
         customerNoBewohnerMap = new HashMap<Customer, List<Posting>>();
@@ -134,6 +137,20 @@ public class StornoResultPresentationModel implements Disposable{
         this.backAction = backAction;
     }
 
+        /**
+     * @return the printAction
+     */
+    public Action getPrintAction() {
+        return printAction;
+    }
+
+    /**
+     * @param printAction the printAction to set
+     */
+    public void setPrintAction(Action printAction) {
+        this.printAction = printAction;
+    }
+
     public void removeButtonListener(ButtonListener listener) {
         support.removeButtonListener(listener);
     }
@@ -213,6 +230,31 @@ public class StornoResultPresentationModel implements Disposable{
             GUIManager.changeToLastView();  // Zur Übersicht wechseln
 //                GUIManager.removeView(); // Diese View nicht merken
         //support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
+
+        }
+    }
+
+    private class PrintAction extends AbstractAction {
+
+        {
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/printer.png"));
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            final PrintStornoPresentationModel model = new PrintStornoPresentationModel(bewohnerPostingMap,customerNoBewohnerMap, new HeaderInfo("Storno Lauf", "Storno Lauf zum Ausdrucken."));
+            final PrintStornoView printView = new PrintStornoView(model);
+            model.addButtonListener(new ButtonListener() {
+
+                public void buttonPressed(ButtonEvent evt) {
+                    if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    }
+                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                        model.removeButtonListener(this);
+                        GUIManager.changeToLastView();
+                    }
+                }
+            });
+            GUIManager.changeView(printView.buildPanel(), true);
 
         }
     }

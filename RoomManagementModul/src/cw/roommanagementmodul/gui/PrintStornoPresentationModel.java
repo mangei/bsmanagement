@@ -10,11 +10,11 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
+import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.pojo.Posting;
 import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.BewohnerGeb;
+import cw.roommanagementmodul.pojo.BewohnerStorno;
 import java.awt.event.ActionEvent;
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,76 +38,64 @@ import net.sf.jasperreports.engine.util.JRSaver;
  *
  * @author Dominik
  */
-public class PrintGebLaufPresentationModel implements Disposable {
+public class PrintStornoPresentationModel implements Disposable {
 
-    private BewohnerTarifSelection bewohnerTarifSelection;
+    private ButtonListenerSupport support;
     private HeaderInfo headerInfo;
     private Action backAction;
-    private ButtonListenerSupport support;
+    private Map<Bewohner, List<Posting>> bewohnerPostingMap;
+    private Map<Customer, List<Posting>> customerNoBewohnerMap;
+    private List<BewohnerStorno> printDataList;
     private JasperReport jasperReport;
     private JRDataSource ds;
     private JasperPrint jasperPrint;
     private String reportSource;
 
-    public PrintGebLaufPresentationModel(BewohnerTarifSelection bewohnerTarifSelection, HeaderInfo headerInfo) {
+    public PrintStornoPresentationModel(Map<Bewohner, List<Posting>> bewohnerPostingMap,
+            Map<Customer, List<Posting>> customerNoBewohnerMap, HeaderInfo headerInfo) {
 
-        this.bewohnerTarifSelection = bewohnerTarifSelection;
+        this.bewohnerPostingMap = bewohnerPostingMap;
+        this.customerNoBewohnerMap = customerNoBewohnerMap;
         this.headerInfo = headerInfo;
 
+        prepareData();
         initModels();
         this.initEventHandling();
-
     }
 
     private void initEventHandling() {
     }
 
     private void initModels() {
-        setSupport(new ButtonListenerSupport());
-        setBackAction(new BackAction());
+        support = new ButtonListenerSupport();
+        backAction = new BackAction();
 
-        setReportSource("./jasper/bewohner.jrxml");
-        List<Bewohner> bewohnerList = getBewohnerSelection(bewohnerTarifSelection);
-        
-        List<BewohnerGeb> bewohnerGebList= new ArrayList<BewohnerGeb>();
-        for(int i=0;i<bewohnerList.size();i++){
-            bewohnerGebList.add(new BewohnerGeb(bewohnerList.get(i),bewohnerTarifSelection.get(bewohnerList.get(i))));
-        }
+        reportSource = "./jasper/bewohnerSto.jrxml";
 
         Map<String, Object> main = new HashMap();
 //        JRDataSource tarifDS= new CustomDataSource(bewohnerList, bewohnerTarifSelection.getMap());
-        JasperReport subreport=null;
+        JasperReport subreport = null;
         try {
-            subreport=JasperCompileManager.compileReport("./jasper/gebuehren.jrxml");
-            JRSaver.saveObject(subreport, "./jasper/gebuehren.jasper");
+            subreport = JasperCompileManager.compileReport("./jasper/postingSto.jrxml");
+            JRSaver.saveObject(subreport, "./jasper/postingSto.jasper");
         } catch (JRException ex) {
             Logger.getLogger(PrintGebLaufPresentationModel.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        main.put("tarifSubreport", subreport);
-
+        main.put("stornoSubreport", subreport);
 
         try {
-            setJasperReport(JasperCompileManager.compileReport(getReportSource()));
+            jasperReport = JasperCompileManager.compileReport(reportSource);
 //            ds = new JRBeanCollectionDataSource(bewohnerList);
-              ds= new JRBeanCollectionDataSource(bewohnerGebList);
-            setJasperPrint(JasperFillManager.fillReport(getJasperReport(), main, ds));
+            ds = new JRBeanCollectionDataSource(this.printDataList);
+            jasperPrint = JasperFillManager.fillReport(jasperReport, main, ds);
         } catch (JRException ex) {
             Logger.getLogger(PrintZimmerPresentationModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 
-    private List<Bewohner> getBewohnerSelection(BewohnerTarifSelection bewohnerTarifSelection) {
-        List<Bewohner> bewohnerList = new ArrayList<Bewohner>();
-        Map map = bewohnerTarifSelection.getMap();
-        Set keySet = map.keySet();
-
-        Iterator iterator = keySet.iterator();
-
-        while (iterator.hasNext()) {
-            bewohnerList.add((Bewohner) iterator.next());
-        }
-        return bewohnerList;
+    public void dispose() {
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     public void removeButtonListener(ButtonListener listener) {
@@ -118,18 +106,58 @@ public class PrintGebLaufPresentationModel implements Disposable {
         support.addButtonListener(listener);
     }
 
+    private void prepareData() {
+        printDataList = new ArrayList<BewohnerStorno>();
+        List<Bewohner> bewohnerList = getBewohnerSelection();
+        List<Customer> customerList = getCustomerSelection();
+        List<Posting> postingList;
+        Bewohner bewohner;
+        Customer customer;
+
+        for (int i = 0; i < bewohnerList.size(); i++) {
+            bewohner = bewohnerList.get(i);
+            postingList = bewohnerPostingMap.get(bewohner);
+            printDataList.add(new BewohnerStorno(bewohner.getCustomer(), bewohner.getZimmer(), postingList));
+        }
+
+        for (int i = 0; i < customerList.size(); i++) {
+            customer = customerList.get(i);
+            postingList = customerNoBewohnerMap.get(customer);
+            printDataList.add(new BewohnerStorno(customer, null, postingList));
+        }
+    }
+
+    private List<Bewohner> getBewohnerSelection() {
+        List<Bewohner> bewohnerList = new ArrayList<Bewohner>();
+        Map map = bewohnerPostingMap;
+        Set keySet = map.keySet();
+
+        Iterator iterator = keySet.iterator();
+
+        while (iterator.hasNext()) {
+            bewohnerList.add((Bewohner) iterator.next());
+        }
+        return bewohnerList;
+    }
+
+    private List<Customer> getCustomerSelection() {
+        List<Customer> customerList = new ArrayList<Customer>();
+        Map map = customerNoBewohnerMap;
+        Set keySet = map.keySet();
+
+        Iterator iterator = keySet.iterator();
+
+        while (iterator.hasNext()) {
+            customerList.add((Customer) iterator.next());
+        }
+        return customerList;
+    }
+
     /**
      * @return the headerInfo
      */
     public HeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
     }
 
     /**
@@ -140,69 +168,10 @@ public class PrintGebLaufPresentationModel implements Disposable {
     }
 
     /**
-     * @param backAction the backAction to set
-     */
-    public void setBackAction(Action backAction) {
-        this.backAction = backAction;
-    }
-
-    /**
-     * @return the support
-     */
-    public ButtonListenerSupport getSupport() {
-        return support;
-    }
-
-    /**
-     * @param support the support to set
-     */
-    public void setSupport(ButtonListenerSupport support) {
-        this.support = support;
-    }
-
-    /**
-     * @return the jasperReport
-     */
-    public JasperReport getJasperReport() {
-        return jasperReport;
-    }
-
-    /**
-     * @param jasperReport the jasperReport to set
-     */
-    public void setJasperReport(JasperReport jasperReport) {
-        this.jasperReport = jasperReport;
-    }
-
-    /**
      * @return the jasperPrint
      */
     public JasperPrint getJasperPrint() {
         return jasperPrint;
-    }
-
-    /**
-     * @param jasperPrint the jasperPrint to set
-     */
-    public void setJasperPrint(JasperPrint jasperPrint) {
-        this.jasperPrint = jasperPrint;
-    }
-
-    /**
-     * @return the reportSource
-     */
-    public String getReportSource() {
-        return reportSource;
-    }
-
-    /**
-     * @param reportSource the reportSource to set
-     */
-    public void setReportSource(String reportSource) {
-        this.reportSource = reportSource;
-    }
-
-    public void dispose() {
     }
 
     private class BackAction

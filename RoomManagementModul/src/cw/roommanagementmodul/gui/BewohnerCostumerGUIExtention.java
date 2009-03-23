@@ -129,4 +129,8 @@ public class BewohnerCostumerGUIExtention implements EditCustomerTabExtention {
         return 0;
     }
 
+    public Object getModel() {
+        return model;
+    }
+
 }

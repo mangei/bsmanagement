@@ -31,6 +31,7 @@ public class StornoResultView implements Disposable {
 
     private StornoResultPresentationModel model;
     private JButton bBack;
+    private JButton bPrint;
     private CWComponentFactory.CWComponentContainer componentContainer;
     private JViewPanel mainPanel;
 
@@ -41,6 +42,8 @@ public class StornoResultView implements Disposable {
     private void initComponents() {
         bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
+        bPrint = CWComponentFactory.createButton(model.getPrintAction());
+        bPrint.setText("Drucken");
         componentContainer = CWComponentFactory.createCWComponentContainer();
     }
 
@@ -50,6 +53,7 @@ public class StornoResultView implements Disposable {
 
         mainPanel = new JViewPanel(model.getHeaderInfo());
         mainPanel.getButtonPanel().add(bBack);
+        mainPanel.getButtonPanel().add(bPrint);
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
         mainPanel.getTopPanel().setLayout(layout);
@@ -57,9 +61,13 @@ public class StornoResultView implements Disposable {
         JPanel contentPanel = new JPanel();
 
         StringBuffer row = new StringBuffer("pref, 6dlu");
-        for (int i = 1; i < model.getBewohner().size(); i++) {
+        for (int i = 0; i < model.getBewohner().size(); i++) {
             row.append(",pref, 6dlu");
         }
+        for(int i=0;i<model.getCustomerNoBewohner().size();i++){
+            row.append(",pref, 6dlu");
+        }
+
         FormLayout bewohnerLayout = new FormLayout("pref", row.toString());
         contentPanel.setLayout(bewohnerLayout);
         //contentPanel.setLayout(new GridLayout(model.getBewohnerAnzahl(), 1));
