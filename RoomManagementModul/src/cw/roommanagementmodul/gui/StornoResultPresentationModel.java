@@ -241,7 +241,7 @@ public class StornoResultPresentationModel implements Disposable{
         }
 
         public void actionPerformed(ActionEvent e) {
-            final PrintStornoPresentationModel model = new PrintStornoPresentationModel(bewohnerPostingMap,customerNoBewohnerMap, new HeaderInfo("Storno Lauf", "Storno Lauf zum Ausdrucken."));
+            final PrintStornoPresentationModel model = new PrintStornoPresentationModel(bewohnerPostingMap,customerNoBewohnerMap, new HeaderInfo("Storno Lauf", "Storno Lauf zum Ausdrucken."),headerInfo.getHeaderText());
             final PrintStornoView printView = new PrintStornoView(model);
             model.addButtonListener(new ButtonListener() {
 

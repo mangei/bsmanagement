@@ -92,7 +92,7 @@ public class BewohnerView implements Disposable {
         panel.getButtonPanel().add(bGeb);
         //panel.getButtonPanel().add(bHistory);
         panel.getButtonPanel().add(bDelete);
-        //panel.getButtonPanel().add(bKaution);
+        panel.getButtonPanel().add(bKaution);
         //panel.getButtonPanel().add(bInaktive);
 
 

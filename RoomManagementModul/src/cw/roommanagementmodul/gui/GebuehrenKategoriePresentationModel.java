@@ -54,6 +54,7 @@ public class GebuehrenKategoriePresentationModel implements Disposable{
 
     GebuehrenKategoriePresentationModel(GebuehrenKatManager gebKatManager, HeaderInfo header) {
         this.gebKatManager = gebKatManager;
+        selectionEmptyHandler=new SelectionEmptyHandler();
         doubleClickHandler=new DoubleClickHandler();
         this.headerText = header.getHeaderText();
         this.headerInfo=header;

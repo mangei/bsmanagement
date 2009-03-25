@@ -8,10 +8,11 @@ import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.roommanagementmodul.pojo.Bewohner;
+import cw.roommanagementmodul.pojo.Kaution;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -20,7 +21,7 @@ import org.apache.log4j.Logger;
 public class BewohnerManager extends AbstractPOJOManager<Bewohner> {
 
     private static BewohnerManager instance;
-    private static Logger logger = Logger.getLogger(BewohnerManager.class);
+    private static Logger logger = Logger.getLogger(BewohnerManager.class.getName());
 
     private BewohnerManager() {
     }
@@ -47,6 +48,12 @@ public class BewohnerManager extends AbstractPOJOManager<Bewohner> {
         EntityManager entityManager = HibernateUtil.getEntityManager();
         List<Bewohner> list = entityManager.createQuery("SELECT b FROM Bewohner b where b.active = " + activ + " and b.customer.active ="+true+" order by b.customer.surname asc, b.customer.forename asc").getResultList();
         return list;
+    }
+
+    public boolean existKaution(Kaution kaution){
+        EntityManager entityManager = HibernateUtil.getEntityManager();
+        List<Bewohner> list= entityManager.createQuery("SELECT b From Bewohner b where b.kaution.id = "+ kaution.getId()).getResultList();
+        return !list.isEmpty();
     }
 
     @Override

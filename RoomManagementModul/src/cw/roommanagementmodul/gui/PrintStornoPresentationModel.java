@@ -50,10 +50,12 @@ public class PrintStornoPresentationModel implements Disposable {
     private JRDataSource ds;
     private JasperPrint jasperPrint;
     private String reportSource;
+    private String printHeader;
 
     public PrintStornoPresentationModel(Map<Bewohner, List<Posting>> bewohnerPostingMap,
-            Map<Customer, List<Posting>> customerNoBewohnerMap, HeaderInfo headerInfo) {
+            Map<Customer, List<Posting>> customerNoBewohnerMap, HeaderInfo headerInfo, String printHeader) {
 
+        this.printHeader=printHeader;
         this.bewohnerPostingMap = bewohnerPostingMap;
         this.customerNoBewohnerMap = customerNoBewohnerMap;
         this.headerInfo = headerInfo;
@@ -82,6 +84,7 @@ public class PrintStornoPresentationModel implements Disposable {
             Logger.getLogger(PrintGebLaufPresentationModel.class.getName()).log(Level.SEVERE, null, ex);
         }
         main.put("stornoSubreport", subreport);
+        main.put("headerText", this.getPrintHeader());
 
         try {
             jasperReport = JasperCompileManager.compileReport(reportSource);
@@ -95,7 +98,7 @@ public class PrintStornoPresentationModel implements Disposable {
     }
 
     public void dispose() {
-        throw new UnsupportedOperationException("Not supported yet.");
+
     }
 
     public void removeButtonListener(ButtonListener listener) {
@@ -172,6 +175,20 @@ public class PrintStornoPresentationModel implements Disposable {
      */
     public JasperPrint getJasperPrint() {
         return jasperPrint;
+    }
+
+    /**
+     * @return the printHeader
+     */
+    public String getPrintHeader() {
+        return printHeader;
+    }
+
+    /**
+     * @param printHeader the printHeader to set
+     */
+    public void setPrintHeader(String printHeader) {
+        this.printHeader = printHeader;
     }
 
     private class BackAction

@@ -70,7 +70,7 @@ public class KautionView implements Disposable{
         initEventHandling();
 
         mainPanel = new JViewPanel();
-        mainPanel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        mainPanel.setHeaderInfo(model.getHeaderInfo());
         mainPanel.getButtonPanel().add(bNew);
         mainPanel.getButtonPanel().add(bEdit);
         mainPanel.getButtonPanel().add(bDelete);

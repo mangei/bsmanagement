@@ -8,6 +8,7 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
@@ -16,7 +17,6 @@ import java.awt.BorderLayout;
 import java.text.NumberFormat;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -36,7 +36,7 @@ public class EditKautionView implements Disposable{
     private JLabel lName;
     private JLabel lBetrag;
     private JTextField tfName;
-    private JFormattedTextField tfBetrag;
+    private CWCurrencyTextField tfBetrag;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
     private JViewPanel mainPanel;
@@ -50,7 +50,7 @@ public class EditKautionView implements Disposable{
         lBetrag = CWComponentFactory.createLabel("Betrag");
 
         tfName = CWComponentFactory.createTextField(model.getBufferedModel(Kaution.PROPERTYNAME_NAME),false);
-        tfBetrag = CWComponentFactory.createFormattedTextField(model.getBufferedModel(Kaution.PROPERTYNAME_BETRAG), NumberFormat.getCurrencyInstance());
+        tfBetrag = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Kaution.PROPERTYNAME_BETRAG));
 
         bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
         bSave.setText("Speichern");
@@ -74,8 +74,7 @@ public class EditKautionView implements Disposable{
     public JComponent buildPanel() {
         initComponents();
 
-        mainPanel = new JViewPanel();
-        mainPanel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
+        mainPanel = new JViewPanel(model.getHeaderInfo());
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
         buttonPanel.add(bSave);

@@ -9,11 +9,11 @@ import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
 import cw.roommanagementmodul.pojo.Bereich;
 import java.util.ArrayList;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 public class BereichManager extends AbstractPOJOManager<Bereich> {
 
     private static BereichManager instance;
-    private static Logger logger = Logger.getLogger(BereichManager.class);
+    private static Logger logger = Logger.getLogger(BereichManager.class.getName());
 
     private BereichManager() {
     }

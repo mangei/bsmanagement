@@ -85,8 +85,6 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif>
         saveCancelButtonAction = new SaveCancelAction();
 
 
-        dcVon = new JDateChooser();
-        dcBis = new JDateChooser();
 
         dcVon = CWComponentFactory.createDateChooser(getBufferedModel(Tarif.PROPERTYNAME_AB));
         dcBis = CWComponentFactory.createDateChooser(getBufferedModel(Tarif.PROPERTYNAME_BIS));
@@ -247,7 +245,7 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif>
             extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/boardingschoolmanagement/images/disk_16.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/boardingschoolmanagement/images/save.png"));
         }
 
         public void actionPerformed(ActionEvent e) {

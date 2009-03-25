@@ -12,6 +12,7 @@ import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.roommanagementmodul.pojo.Zimmer;
 import java.awt.event.ActionEvent;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -61,11 +62,13 @@ public class PrintZimmerPresentationModel implements Disposable{
         setBackAction(new BackAction());
 
         reportSource="./jasper/zimmer.jrxml";
+        HashMap para= new HashMap();
+        para.put("headerText", "Zimmer Liste");
 
         try {
             jasperReport = JasperCompileManager.compileReport(reportSource);
             ds = new JRBeanCollectionDataSource(zimmerList);
-            jasperPrint = JasperFillManager.fillReport(jasperReport, null, ds);
+            jasperPrint = JasperFillManager.fillReport(jasperReport, para, ds);
         } catch (JRException ex) {
             Logger.getLogger(PrintZimmerPresentationModel.class.getName()).log(Level.SEVERE, null, ex);
         }

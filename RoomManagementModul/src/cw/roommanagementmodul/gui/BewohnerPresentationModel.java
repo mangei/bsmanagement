@@ -245,10 +245,20 @@ public class BewohnerPresentationModel implements Disposable {
             int k = JOptionPane.showConfirmDialog(null, "Bewohner: " + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + " wirklich löschen?", "LÖSCHEN", JOptionPane.OK_CANCEL_OPTION);
             if (k == JOptionPane.OK_OPTION) {
 
-                b.setCustomer(null);
-                bewohnerManager.delete(b);
-                bewohnerSelection.setList(bewohnerManager.getBewohner(true));
-
+                boolean checkKaution = true;
+                if (b.getKautionStatus() == Bewohner.EINGEZAHLT) {
+                    JOptionPane.showMessageDialog(null, "Bewohner kann nicht gelöscht werden, da der Status der Kaution EINGEZAHLT ist!", "Kaution", JOptionPane.OK_OPTION);
+                    checkKaution = false;
+                }
+                    if (b.getKautionStatus() == Bewohner.NICHT_EINGEZAHLT) {
+                    JOptionPane.showMessageDialog(null, "Bewohner kann nicht gelöscht werden, da der Status der Kaution Nicht Eingezahlt ist!", "Kaution", JOptionPane.OK_OPTION);
+                    checkKaution = false;
+                }
+                if (checkKaution) {
+                    b.setCustomer(null);
+                    bewohnerManager.delete(b);
+                    bewohnerSelection.setList(bewohnerManager.getBewohner(true));
+                }
             }
         }
     }
@@ -303,7 +313,7 @@ public class BewohnerPresentationModel implements Disposable {
 
         public void actionPerformed(ActionEvent e) {
 
-            final KautionPresentationModel model = new KautionPresentationModel(KautionManager.getInstance(), "Kautionen Verwalten");
+            final KautionPresentationModel model = new KautionPresentationModel(KautionManager.getInstance(), new HeaderInfo("Kautionen Verwalten", "Übersicht aller vorhandenen Kautionen"));
             final KautionView kautionView = new KautionView(model);
 
             GUIManager.changeView(kautionView.buildPanel(), true);
@@ -423,7 +433,7 @@ public class BewohnerPresentationModel implements Disposable {
 
         @Override
         public int getColumnCount() {
-            return 7;
+            return 9;
         }
 
         @Override
@@ -442,6 +452,10 @@ public class BewohnerPresentationModel implements Disposable {
                 case 5:
                     return "Auszugsdatum";
                 case 6:
+                    return "Kaution";
+                case 7:
+                    return "Kaution Status";
+                case 8:
                     return "Gebühr Zuordnungen";
                 default:
                     return "";
@@ -476,8 +490,19 @@ public class BewohnerPresentationModel implements Disposable {
                     return b.getVon();
                 case 5:
                     return b.getBis();
-
                 case 6:
+                     if(b.getKaution()!=null){
+                        return b.getKaution();
+                    }else{return "Keine Kaution";}
+                case 7:
+                    switch(b.getKautionStatus()){
+                        case Bewohner.NICHT_EINGEZAHLT: return "Nicht eingezahlt";
+                        case Bewohner.EINGEZAHLT: return "Eingezahlt";
+                        case Bewohner.ZURUECK_GEZAHLT: return "Zurück Gezahlt";
+                        case Bewohner.EINGEZOGEN: return "Eingezogen";
+                        default: return "-";
+                    }
+                case 8:
                     GebuehrZuordnungManager gebZuoManager = GebuehrZuordnungManager.getInstance();
                     List<GebuehrZuordnung> l = gebZuoManager.getGebuehrZuordnung(b);
                     return l.size();

@@ -17,6 +17,7 @@ import cw.roommanagementmodul.pojo.Bewohner;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.text.DecimalFormat;
 import java.util.List;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -33,10 +34,12 @@ public class StornoResultView implements Disposable {
     private JButton bBack;
     private JButton bPrint;
     private CWComponentFactory.CWComponentContainer componentContainer;
+    private DecimalFormat numberFormat;
     private JViewPanel mainPanel;
 
     public StornoResultView(StornoResultPresentationModel m) {
         this.model = m;
+        numberFormat = new DecimalFormat("#0.00");
     }
 
     private void initComponents() {
@@ -44,7 +47,7 @@ public class StornoResultView implements Disposable {
         bBack.setText("Zurück");
         bPrint = CWComponentFactory.createButton(model.getPrintAction());
         bPrint.setText("Drucken");
-        componentContainer = CWComponentFactory.createCWComponentContainer();
+        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bBack).addComponent(bPrint);
     }
 
     public JPanel buildPanel() {
@@ -139,7 +142,7 @@ public class StornoResultView implements Disposable {
 
 
 
-            storno = new JLabel("" + postingList.get(i).getAmount());
+            storno = new JLabel("€ " + numberFormat.format(postingList.get(i).getAmount()));
 
             bezeichnung = new JLabel(postingList.get(i).getDescription());
 
@@ -160,7 +163,7 @@ public class StornoResultView implements Disposable {
         JLabel sumText = new JLabel("Summe: ");
         sumText.setFont(new Font("Arial", Font.BOLD, 12));
         if (summeCheck == false) {
-            summeLabel = new JLabel("" + summe);
+            summeLabel = new JLabel("€ " + numberFormat.format(summe));
             summeLabel.setForeground(Color.GREEN.darker());
 
         } else {
@@ -213,7 +216,7 @@ public class StornoResultView implements Disposable {
 
 
 
-            storno = new JLabel("" + postingList.get(i).getAmount());
+            storno = new JLabel("€ " + numberFormat.format(postingList.get(i).getAmount()));
 
             bezeichnung = new JLabel(postingList.get(i).getDescription());
 
@@ -234,7 +237,7 @@ public class StornoResultView implements Disposable {
         JLabel sumText = new JLabel("Summe: ");
         sumText.setFont(new Font("Arial", Font.BOLD, 12));
         if (summeCheck == false) {
-            summeLabel = new JLabel("" + summe);
+            summeLabel = new JLabel("€ " + numberFormat.format(summe));
             summeLabel.setForeground(Color.GREEN.darker());
 
         } else {

@@ -9,8 +9,8 @@ import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import cw.roommanagementmodul.pojo.Gebuehr;
 import cw.roommanagementmodul.pojo.GebuehrenKategorie;
 import java.util.List;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -19,7 +19,7 @@ import org.apache.log4j.Logger;
 public class GebuehrenManager extends AbstractPOJOManager<Gebuehr> {
 
     private static GebuehrenManager instance;
-    private static Logger logger = Logger.getLogger(GebuehrenManager.class);
+    private static Logger logger = Logger.getLogger(GebuehrenManager.class.getName());
 
     private GebuehrenManager() {
     }

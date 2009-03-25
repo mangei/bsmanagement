@@ -13,6 +13,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -25,7 +26,8 @@ import cw.roommanagementmodul.pojo.GebuehrenKategorie;
  *
  * @author Dominik
  */
-public class EditGebuehrenKategoriePresentationModel extends PresentationModel<GebuehrenKategorie> {
+public class EditGebuehrenKategoriePresentationModel extends PresentationModel<GebuehrenKategorie>
+                    implements Disposable{
 
     private GebuehrenKategorie gebKat;
     private ButtonListenerSupport support;
@@ -35,10 +37,12 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
     private ValueModel unsaved;
     private String headerText;
     private HeaderInfo headerInfo;
+    private SaveListener saveListener;
 
     public EditGebuehrenKategoriePresentationModel(GebuehrenKategorie gebKat) {
         super(gebKat);
         this.gebKat = gebKat;
+        saveListener= new SaveListener();
         initModels();
         initEventHandling();
     }
@@ -48,6 +52,7 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
         this.gebKat = gebKat;
         this.headerText=header.getHeaderText();
         this.headerInfo=header;
+        saveListener= new SaveListener();
         initModels();
         initEventHandling();
     }
@@ -78,6 +83,13 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
         support = new ButtonListenerSupport();
         getBufferedModel(GebuehrenKategorie.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());
     }
+
+     public void dispose() {
+
+        getBufferedModel(GebuehrenKategorie.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
+        release();
+    }
+
 
     public void removeButtonListener(ButtonListener listener) {
         support.removeButtonListener(listener);
@@ -121,7 +133,7 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
             extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/boardingschoolmanagement/images/disk_16.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/boardingschoolmanagement/images/save.png"));
         }
 
         public void actionPerformed(ActionEvent e) {

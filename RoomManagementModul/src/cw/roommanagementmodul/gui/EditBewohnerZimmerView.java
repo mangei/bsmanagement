@@ -87,7 +87,7 @@ public class EditBewohnerZimmerView {
             switch(model.getBewohner().getKautionStatus()){
                 case Bewohner.EINGEZAHLT: cbKautionStatus.setSelectedIndex(2);
                 break;
-                case Bewohner.KEINE_KAUTION: cbKautionStatus.setSelectedIndex(0);
+                case Bewohner.EINGEZOGEN: cbKautionStatus.setSelectedIndex(0);
                 break;
                 case Bewohner.NICHT_EINGEZAHLT: cbKautionStatus.setSelectedIndex(1);
                 break;

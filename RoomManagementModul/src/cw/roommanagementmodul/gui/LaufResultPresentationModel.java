@@ -164,7 +164,7 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
         }
 
         public void actionPerformed(ActionEvent e) {
-            final PrintGebLaufPresentationModel model = new PrintGebLaufPresentationModel(tarifSelection, new HeaderInfo("Gebühren Lauf", "Gebühren Lauf zum Ausdrucken."));
+            final PrintGebLaufPresentationModel model = new PrintGebLaufPresentationModel(tarifSelection, new HeaderInfo("Gebühren Lauf", "Gebühren Lauf zum Ausdrucken."),headerInfo.getHeaderText());
             final PrintGebLaufView printView = new PrintGebLaufView(model);
             model.addButtonListener(new ButtonListener() {
 

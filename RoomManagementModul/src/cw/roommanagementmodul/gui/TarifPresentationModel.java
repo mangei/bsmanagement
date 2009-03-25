@@ -31,6 +31,7 @@ import javax.swing.table.TableModel;
 import cw.roommanagementmodul.pojo.Gebuehr;
 import cw.roommanagementmodul.pojo.Tarif;
 import cw.roommanagementmodul.pojo.manager.TarifManager;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -50,10 +51,12 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> implement
     private HeaderInfo headerInfo;
     private SelectionEmptyHandler selectionEmptyHandler;
     private DoubleClickHandler doubleClickHandler;
+    private DecimalFormat numberFormat;
 
     public TarifPresentationModel(Gebuehr gebuehr) {
         super(gebuehr);
         this.gebuehr = gebuehr;
+        numberFormat = new DecimalFormat("#0.00");
         doubleClickHandler=new DoubleClickHandler();
         selectionEmptyHandler=new SelectionEmptyHandler();
         this.tarifManager = TarifManager.getInstance();
@@ -65,6 +68,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> implement
     public TarifPresentationModel(Gebuehr gebuehr, HeaderInfo header) {
         super(gebuehr);
         this.gebuehr = gebuehr;
+        numberFormat = new DecimalFormat("#0.00");
         this.tarifManager = TarifManager.getInstance();
         selectionEmptyHandler=new SelectionEmptyHandler();
         this.headerText=header.getHeaderText();
@@ -319,7 +323,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> implement
                 case 1:
                     return t.getBis();
                 case 2:
-                    return t.getTarif();
+                    return "€ "+ numberFormat.format(t.getTarif());
                 default:
                     return "";
             }

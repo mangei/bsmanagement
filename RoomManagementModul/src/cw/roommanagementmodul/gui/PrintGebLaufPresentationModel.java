@@ -48,11 +48,13 @@ public class PrintGebLaufPresentationModel implements Disposable {
     private JRDataSource ds;
     private JasperPrint jasperPrint;
     private String reportSource;
+    private String printHeader;
 
-    public PrintGebLaufPresentationModel(BewohnerTarifSelection bewohnerTarifSelection, HeaderInfo headerInfo) {
+    public PrintGebLaufPresentationModel(BewohnerTarifSelection bewohnerTarifSelection, HeaderInfo headerInfo,String printHeader) {
 
         this.bewohnerTarifSelection = bewohnerTarifSelection;
         this.headerInfo = headerInfo;
+        this.printHeader=printHeader;
 
         initModels();
         this.initEventHandling();
@@ -85,6 +87,7 @@ public class PrintGebLaufPresentationModel implements Disposable {
         }
 
         main.put("tarifSubreport", subreport);
+        main.put("headerText",printHeader);
 
 
         try {

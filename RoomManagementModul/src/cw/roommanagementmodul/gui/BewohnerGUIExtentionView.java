@@ -40,6 +40,9 @@ public class BewohnerGUIExtentionView implements Disposable {
     private CWComponentFactory.CWComponentContainer componentContainer;
     private JViewPanel mainPanel;
     private ItemListener bewohnerItemListener;
+    private JComboBox cbKaution;
+    private JComboBox cbKautionStatus;
+
 
     public BewohnerGUIExtentionView(BewohnerGUIExtentionPresentationModel model) {
         this.model = model;
@@ -57,11 +60,44 @@ public class BewohnerGUIExtentionView implements Disposable {
 
         cbBereich = CWComponentFactory.createComboBox(model.getBereichList());
         cbZimmer = CWComponentFactory.createComboBox(model.getZimmerList());
+        cbKaution=CWComponentFactory.createComboBox(model.getKautionList());
+        cbKaution.addItemListener(new ItemListener(){
+
+            public void itemStateChanged(ItemEvent e) {
+                if(model.getBewohner().getKaution()!=null){
+                    cbKautionStatus.setEnabled(true);
+                }else{
+                    cbKautionStatus.setEnabled(false);
+                }
+            }
+        });
         boxBewohner = CWComponentFactory.createCheckBox(model.getCheckBoxModel(), "Bewohner");
         bewohnerItemListener=new BewohnerItemListener();
         boxBewohner.addItemListener(bewohnerItemListener);
         dcEinzugsdatum = CWComponentFactory.createDateChooser(model.getBufferedModel(Bewohner.PROPERTYNAME_VON));
         dcAuszugsdatum = CWComponentFactory.createDateChooser(model.getBufferedModel(Bewohner.PROPERTYNAME_BIS));
+
+        cbKautionStatus = CWComponentFactory.createComboBox(model.getKautionStadi());
+
+
+        if(model.getBewohner().getKaution()==null){
+            cbKautionStatus.setEnabled(false);
+            cbKautionStatus.setSelectedIndex(0);
+        }else{
+            switch(model.getBewohner().getKautionStatus()){
+                case Bewohner.NICHT_EINGEZAHLT: cbKautionStatus.setSelectedIndex(0);
+                break;
+                case Bewohner.EINGEZAHLT: cbKautionStatus.setSelectedIndex(1);
+                break;
+                case Bewohner.ZURUECK_GEZAHLT: cbKautionStatus.setSelectedIndex(2);
+                break;
+                case Bewohner.EINGEZOGEN: cbKautionStatus.setSelectedIndex(3);
+                break;
+
+            }
+        }
+        cbKautionStatus.addItemListener(model.getKautionListener());
+
 
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(lbBereich)
@@ -75,6 +111,8 @@ public class BewohnerGUIExtentionView implements Disposable {
                 .addComponent(cbZimmer)
                 .addComponent(boxBewohner)
                 .addComponent(dcEinzugsdatum)
+                .addComponent(cbKaution)
+                .addComponent(lbKaution)
                 .addComponent(dcAuszugsdatum);
 
 
@@ -87,6 +125,10 @@ public class BewohnerGUIExtentionView implements Disposable {
             this.lbZimmer.setEnabled(false);
             this.lbAuszDat.setEnabled(false);
             this.lbEinzDat.setEnabled(false);
+            this.lbKautionStatus.setEnabled(false);
+            this.cbKautionStatus.setEnabled(false);
+            this.lbKaution.setEnabled(false);
+            this.cbKaution.setEnabled(false);
         }
 
     }
@@ -99,7 +141,7 @@ public class BewohnerGUIExtentionView implements Disposable {
         mainPanel.setName("Zimmer");
 
         FormLayout layout = new FormLayout("right:pref, 4dlu, 50dlu:grow, 4dlu, right:pref, 4dlu, 50dlu:grow",
-                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
+                "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref, 4dlu, pref");
 
         mainPanel.getContentPanel().setLayout(layout);
 
@@ -111,15 +153,15 @@ public class BewohnerGUIExtentionView implements Disposable {
         mainPanel.getContentPanel().add(lbZimmer, cc.xy(1, 7));
         mainPanel.getContentPanel().add(lbEinzDat, cc.xy(1, 9));
         mainPanel.getContentPanel().add(lbAuszDat, cc.xy(1, 11));
-        //panel.add(lbKaution, cc.xy(1, 13));
-        //panel.add(lbKautionStatus, cc.xy(1, 15));
+        mainPanel.getContentPanel().add(lbKaution, cc.xy(1, 13));
+        mainPanel.getContentPanel().add(lbKautionStatus, cc.xy(1, 15));
 
         mainPanel.getContentPanel().add(cbBereich, cc.xy(3, 5));
         mainPanel.getContentPanel().add(cbZimmer, cc.xy(3, 7));
         mainPanel.getContentPanel().add(dcEinzugsdatum, cc.xy(3, 9));
         mainPanel.getContentPanel().add(dcAuszugsdatum, cc.xy(3, 11));
-//        panel.add(cbKaution, cc.xy(3, 13));
-//        panel.add(cbKautionStatus, cc.xy(3, 15));
+        mainPanel.getContentPanel().add(cbKaution, cc.xy(3, 13));
+        mainPanel.getContentPanel().add(cbKautionStatus, cc.xy(3, 15));
 
 
         mainPanel.setHeaderInfo(model.getHeaderInfo());
@@ -142,6 +184,10 @@ public class BewohnerGUIExtentionView implements Disposable {
                 lbAuszDat.setEnabled(false);
                 lbEinzDat.setEnabled(false);
                 model.getCheckBoxModel().setValue(false);
+                lbKautionStatus.setEnabled(false);
+                lbKaution.setEnabled(false);
+                cbKaution.setEnabled(false);
+                cbKautionStatus.setEnabled(false);
             }
             if (e.getStateChange() == ItemEvent.SELECTED) {
                 cbBereich.setEnabled(true);
@@ -153,6 +199,12 @@ public class BewohnerGUIExtentionView implements Disposable {
                 lbAuszDat.setEnabled(true);
                 lbEinzDat.setEnabled(true);
                 model.getCheckBoxModel().setValue(true);
+                lbKautionStatus.setEnabled(true);
+                lbKaution.setEnabled(true);
+                cbKaution.setEnabled(true);
+                if(model.getBewohner().getKaution()!=null){
+                    cbKautionStatus.setEnabled(true);
+                }
             }
 
         }

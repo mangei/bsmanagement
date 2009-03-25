@@ -307,8 +307,8 @@ public class EditBewohnerZimmerPresentationModel extends PresentationModel<Bewoh
 
         public void itemStateChanged(ItemEvent e) {
 
-            if(e.getItem().equals("Keine Kaution")){
-                getBewohner().setKautionStatus(Bewohner.KEINE_KAUTION);
+            if(e.getItem().equals("Eingezogen")){
+                getBewohner().setKautionStatus(Bewohner.EINGEZOGEN);
                unsaved.setValue(true);
 
             }

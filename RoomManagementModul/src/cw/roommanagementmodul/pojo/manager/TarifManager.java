@@ -11,8 +11,8 @@ import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
 import cw.roommanagementmodul.pojo.Gebuehr;
 import cw.roommanagementmodul.pojo.Tarif;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
-import org.apache.log4j.Logger;
 
 
 /**
@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 public class TarifManager extends AbstractPOJOManager<Tarif> {
 
     private static TarifManager instance;
-    private static Logger logger = Logger.getLogger(TarifManager.class);
+    private static Logger logger = Logger.getLogger(TarifManager.class.getName());
 
     private TarifManager() {
     }

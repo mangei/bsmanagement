@@ -10,9 +10,9 @@ import java.util.List;
 import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.Gebuehr;
 import cw.roommanagementmodul.pojo.GebuehrZuordnung;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -21,7 +21,7 @@ import org.apache.log4j.Logger;
 public class GebuehrZuordnungManager extends AbstractPOJOManager<GebuehrZuordnung> {
 
     private static GebuehrZuordnungManager instance;
-    private static Logger logger = Logger.getLogger(GebuehrZuordnungManager.class);
+    private static Logger logger = Logger.getLogger(GebuehrZuordnungManager.class.getName());
 
     private GebuehrZuordnungManager() {
     }

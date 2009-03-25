@@ -409,7 +409,7 @@ public class InaktiveBewohnerPresentationModel {
                     switch (b.getKautionStatus()) {
                         case Bewohner.EINGEZAHLT:
                             return "Eingezahlt";
-                        case Bewohner.KEINE_KAUTION:
+                        case Bewohner.EINGEZOGEN:
                             return "Keine Kaution";
                         case Bewohner.NICHT_EINGEZAHLT:
                             return "Nicht Eingezahlt";

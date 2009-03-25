@@ -13,6 +13,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -30,19 +31,27 @@ public class EditKautionPresentationModel  extends PresentationModel<Kaution>
             implements Disposable{
 
 
-     private Kaution kaution;
+    private Kaution kaution;
     private ButtonListenerSupport support;
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
     private ValueModel unsaved;
     private String headerText;
+    private HeaderInfo headerInfo;
 
 
     EditKautionPresentationModel(Kaution kaution, String header) {
         super(kaution);
         this.kaution = kaution;
         this.headerText=header;
+        initModels();
+        initEventHandling();
+    }
+    EditKautionPresentationModel(Kaution kaution, HeaderInfo header) {
+        super(kaution);
+        this.kaution = kaution;
+        this.headerInfo=header;
         initModels();
         initEventHandling();
     }
@@ -105,7 +114,21 @@ public class EditKautionPresentationModel  extends PresentationModel<Kaution>
     }
 
     public void dispose() {
-        throw new UnsupportedOperationException("Not supported yet.");
+        this.release();
+    }
+
+    /**
+     * @return the headerInfo
+     */
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
+    }
+
+    /**
+     * @param headerInfo the headerInfo to set
+     */
+    public void setHeaderInfo(HeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
     }
 
     public class SaveListener implements PropertyChangeListener {
@@ -127,7 +150,7 @@ public class EditKautionPresentationModel  extends PresentationModel<Kaution>
             extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/boardingschoolmanagement/images/disk_16.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/boardingschoolmanagement/images/save.png"));
         }
 
         public void actionPerformed(ActionEvent e) {

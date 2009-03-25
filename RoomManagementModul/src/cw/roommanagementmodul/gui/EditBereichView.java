@@ -30,7 +30,6 @@ public class EditBereichView implements Disposable{
 
     private EditBereichPresentationModel model;
     private JButton bSave;
-    private JButton bReset;
     private JButton bCancel;
     private JButton bSaveCancel;
     private JLabel lName;

@@ -3,6 +3,7 @@ package cw.roommanagementmodul.pojo;
 import com.jgoodies.binding.beans.Model;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import java.beans.PropertyChangeSupport;
+import java.text.DecimalFormat;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -20,6 +21,7 @@ public class Kaution extends Model implements AnnotatedClass{
     protected transient PropertyChangeSupport support;
     public final static String PROPERTYNAME_NAME = "name";
     public final static String PROPERTYNAME_BETRAG = "betrag";
+    public final static DecimalFormat numberFormat=new DecimalFormat("#0.00");
 
     public Kaution(Long id, String name, double betrag) {
         this.id = id;
@@ -58,20 +60,31 @@ public class Kaution extends Model implements AnnotatedClass{
 
     @Override
     public boolean equals(Object obj) {
-        if (obj != null) {
-            if (this.getId() == ((Kaution) obj).getId()) {
-                return true;
-            } else {
-                return false;
-            }
-        } else {
+        if (obj == null) {
             return false;
         }
-
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Kaution other = (Kaution) obj;
+        if (this.id != other.id && (this.id == null || !this.id.equals(other.id))) {
+            return false;
+        }
+        return true;
     }
 
     @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 67 * hash + (this.id != null ? this.id.hashCode() : 0);
+        return hash;
+    }
+
+
+
+
+    @Override
     public String toString() {
-        return this.name + " " + this.betrag + " €";
+        return this.name + " € " + numberFormat.format(this.betrag);
     }
 }

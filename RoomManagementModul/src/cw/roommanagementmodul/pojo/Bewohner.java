@@ -34,7 +34,6 @@ public class Bewohner extends Model implements AnnotatedClass{
     
     private Long id;
     private Customer customer;
-//    private Customer einzahler;
     private Zimmer zimmer;
     private Kaution kaution;
     private int kautionStatus;
@@ -42,15 +41,13 @@ public class Bewohner extends Model implements AnnotatedClass{
     private Date bis;
     private boolean active;
 
-    private List<BewohnerHistory> historyList = new ArrayList<BewohnerHistory>();
     
-    public final static int KEINE_KAUTION = 0;
-    public final static int NICHT_EINGEZAHLT =1;
-    public final static int EINGEZAHLT = 2;
-    public final static int ZURUECK_GEZAHLT = 3;
+    public final static int NICHT_EINGEZAHLT =0;
+    public final static int EINGEZAHLT = 1;
+    public final static int ZURUECK_GEZAHLT = 2;
+    public final static int EINGEZOGEN = 3;
 
     public final static String PROPERTYNAME_COSTUMER = "costumer";
-    public final static String PROPERTYNAME_EINZAHLER = "einzahler";
     public final static String PROPERTYNAME_ZIMMER = "zimmer";
     public final static String PROPERTYNAME_VON = "von";
     public final static String PROPERTYNAME_BIS = "bis";
@@ -138,20 +135,6 @@ public class Bewohner extends Model implements AnnotatedClass{
         }
     }
 
-    /**
-     * @return the historyList
-     */
-    @OneToMany(mappedBy = "bewohner")
-    public List<BewohnerHistory> getHistoryList() {
-        return historyList;
-    }
-
-    /**
-     * @param historyList the historyList to set
-     */
-    public void setHistoryList(List<BewohnerHistory> historyList) {
-        this.historyList = historyList;
-    }
 
     /**
      * @return the kaution

@@ -11,9 +11,9 @@ import java.util.List;
 
 import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.BewohnerHistory;
+import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -22,7 +22,7 @@ import org.apache.log4j.Logger;
 public class BewohnerHistoryManager extends AbstractPOJOManager<BewohnerHistory> {
 
     private static BewohnerHistoryManager instance;
-    private static Logger logger = Logger.getLogger(BewohnerHistoryManager.class);
+    private static Logger logger = Logger.getLogger(BewohnerHistoryManager.class.getName());
 
     private BewohnerHistoryManager() {
     }

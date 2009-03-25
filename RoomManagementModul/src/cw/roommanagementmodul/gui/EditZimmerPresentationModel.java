@@ -235,7 +235,7 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> imple
             extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/boardingschoolmanagement/images/disk_16.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/boardingschoolmanagement/images/save.png"));
         }
 
         public void actionPerformed(ActionEvent e) {

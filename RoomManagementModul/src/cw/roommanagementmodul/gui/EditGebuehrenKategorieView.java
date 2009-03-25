@@ -7,9 +7,10 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -22,14 +23,16 @@ import cw.roommanagementmodul.pojo.GebuehrenKategorie;
  *
  * @author Dominik
  */
-public class EditGebuehrenKategorieView {
+public class EditGebuehrenKategorieView implements Disposable{
 
     private EditGebuehrenKategoriePresentationModel model;
-    public JButton bSave;
-    public JButton bCancel;
-    public JButton bSaveCancel;
-    public JLabel lKatName;
-    public JTextField tfKatName;
+    private JButton bSave;
+    private JButton bCancel;
+    private JButton bSaveCancel;
+    private JLabel lKatName;
+    private JTextField tfKatName;
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private JViewPanel mainPanel;
 
     public EditGebuehrenKategorieView(EditGebuehrenKategoriePresentationModel model) {
         this.model = model;
@@ -38,7 +41,7 @@ public class EditGebuehrenKategorieView {
     private void initComponents() {
         lKatName = new JLabel("Bezeichnung: ");
 
-        tfKatName = BasicComponentFactory.createTextField(model.getBufferedModel(GebuehrenKategorie.PROPERTYNAME_NAME),false);
+        tfKatName = BasicComponentFactory.createTextField(model.getBufferedModel(GebuehrenKategorie.PROPERTYNAME_NAME), false);
 
         bSave = new JButton(model.getSaveButtonAction());
         bSave.setText("Speichern");
@@ -49,6 +52,7 @@ public class EditGebuehrenKategorieView {
         bSaveCancel = new JButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schließen");
 
+        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(lKatName).addComponent(tfKatName).addComponent(bSave).addComponent(bCancel).addComponent(bSaveCancel);
 
 
     }
@@ -82,5 +86,11 @@ public class EditGebuehrenKategorieView {
         mainPanel.getContentPanel().add(panel, BorderLayout.CENTER);
 
         return mainPanel;
+    }
+
+    public void dispose() {
+        mainPanel.removeDisposableListener(this);
+        componentContainer.dispose();
+        model.dispose();
     }
 }

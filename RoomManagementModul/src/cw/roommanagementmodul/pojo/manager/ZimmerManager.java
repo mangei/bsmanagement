@@ -8,7 +8,7 @@ import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import cw.roommanagementmodul.pojo.Zimmer;
 import java.util.List;
-import org.apache.log4j.Logger;
+import java.util.logging.Logger;
 
 /**
  *
@@ -17,7 +17,7 @@ import org.apache.log4j.Logger;
 public class ZimmerManager extends AbstractPOJOManager<Zimmer> {
 
     private static ZimmerManager instance;
-    private static Logger logger = Logger.getLogger(ZimmerManager.class);
+    private static Logger logger = Logger.getLogger(ZimmerManager.class.getName());
 
     private ZimmerManager() {
     }

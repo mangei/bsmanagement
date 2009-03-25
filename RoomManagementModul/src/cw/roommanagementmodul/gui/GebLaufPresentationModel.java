@@ -241,10 +241,10 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
                     newPosting.setCustomer(oldPosting.getCustomer());
                     newPosting.setDescription("Storno " + oldPosting.getDescription());
-                    newPosting.setAmount(oldPosting.getAmount());
-                    newPosting.setAssets(!oldPosting.isAssets());
-                    newPosting.setLiabilities(!oldPosting.isLiabilities());
-                    newPosting.setLiabilitiesAssets(!oldPosting.isLiabilitiesAssets());
+                    newPosting.setAmount(oldPosting.getAmount()*(-1));
+                    newPosting.setAssets(oldPosting.isAssets());
+                    newPosting.setLiabilities(oldPosting.isLiabilities());
+                    newPosting.setLiabilitiesAssets(oldPosting.isLiabilitiesAssets());
                     newPosting.setPostingCategory(oldPosting.getPostingCategory());
                     newPosting.setPostingDate(new Date());
                     newPosting.setPostingEntryDate(new Date(stornoGebLauf.getAbrMonat()));
@@ -269,7 +269,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
                 String laufString;
                 if (betriebsart == false) {
-                    laufString = new String("Storno Lauf Ergebnis - " + monthStr + " " + yearInt);
+                    laufString = new String("Storno Lauf - " + monthStr + " " + yearInt);
                 } else {
                     laufString = new String("Storno Test Lauf - " + monthStr + " " + yearInt);
                 }
@@ -329,7 +329,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
                 String laufString;
                 if (betriebsart == false) {
-                    laufString = new String("Lauf Ergebnis - " + monthStr + " " + yearInt);
+                    laufString = new String("Gebühren Lauf - " + monthStr + " " + yearInt);
                 } else {
                     laufString = new String("Test Lauf - " + monthStr + " " + yearInt);
                 }

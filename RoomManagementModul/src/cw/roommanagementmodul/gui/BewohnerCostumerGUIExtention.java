@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -37,6 +38,9 @@ public class BewohnerCostumerGUIExtention implements EditCustomerTabExtention {
     public void save() {
         model.triggerCommit();
 
+        if(b.getKaution()==null){
+            b.setKautionStatus(-1);
+        }
         if (model.getCheckBoxState() == ItemEvent.SELECTED) {
 
             //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprüft werden kann
@@ -59,17 +63,26 @@ public class BewohnerCostumerGUIExtention implements EditCustomerTabExtention {
                 bewohnerManager.save(b);
             }
 
-//        if (tempZimmer == null) {
-//            historyManager.saveBewohnerHistory(b);
-//        } else {
-//            if (!tempZimmer.equals(b.getZimmer())) {
-//                historyManager.saveBewohnerHistory(b);
-//            }
-//        }
 
         }
         if (model.getCheckBoxState() == ItemEvent.DESELECTED) {
-            bewohnerManager.delete(b);
+             boolean checkKaution = true;
+                if (b.getKautionStatus() == Bewohner.EINGEZAHLT) {
+                    JOptionPane.showMessageDialog(null, "Bewohner kann nicht gelöscht werden, da der Status der Kaution EINGEZAHLT ist!", "Kaution", JOptionPane.OK_OPTION);
+                    checkKaution = false;
+                }
+                    if (b.getKautionStatus() == Bewohner.NICHT_EINGEZAHLT) {
+                    JOptionPane.showMessageDialog(null, "Bewohner kann nicht gelöscht werden, da der Status der Kaution Nicht Eingezahlt ist!", "Kaution", JOptionPane.OK_OPTION);
+                    checkKaution = false;
+                }
+                if (checkKaution==true) {
+                    System.out.println("hallo");
+                    b.setCustomer(null);
+                    bewohnerManager.delete(b);
+                    System.out.println("temse");
+                }else{
+                 model.getCheckBoxModel().setValue(true);
+                }
         }
 
     }

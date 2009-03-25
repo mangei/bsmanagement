@@ -80,7 +80,10 @@ public class EditTarifView implements Disposable{
                 .addComponent(bSave)
                 .addComponent(bCancel)
                 .addComponent(bSaveCancel)
+                .addComponent(model.getDcBis())
+                .addComponent(model.getDcVon())
                 .addComponent(tfTarif);
+
 
 
     }

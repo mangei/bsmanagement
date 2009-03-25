@@ -20,6 +20,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import cw.roommanagementmodul.pojo.Bewohner;
 import java.awt.Dimension;
+import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 
@@ -34,9 +35,11 @@ public class LaufResultView implements Disposable {
     private JButton bPrint;
     private CWComponentFactory.CWComponentContainer componentContainer;
     private JViewPanel mainPanel;
+    private DecimalFormat numberFormat;
 
     public LaufResultView(LaufResultPresentationModel m) {
         this.model = m;
+        numberFormat = new DecimalFormat("#0.00");
     }
 
     private void initComponents() {
@@ -145,7 +148,7 @@ public class LaufResultView implements Disposable {
             if (tarifSelectionList.get(i).isWarning() == false) {
                 gebuehr = new JLabel(tarifSelectionList.get(i).getGebuehr().getGebuehr().getName());
                 if (tarifSelectionList.get(i).getTarif() != null) {
-                    tarif = new JLabel("" + tarifSelectionList.get(i).getTarif().getTarif());
+                    tarif = new JLabel("€ "+numberFormat.format(tarifSelectionList.get(i).getTarif().getTarif()));
                     summe = summe + tarifSelectionList.get(i).getTarif().getTarif();
 
                 }
@@ -207,12 +210,13 @@ public class LaufResultView implements Disposable {
         JLabel sumText = new JLabel("Summe: ");
         sumText.setFont(new Font("Arial", Font.BOLD, 12));
         if (summeCheck == false) {
-            summeLabel = new JLabel("" + summe);
+            summeLabel = new JLabel("€ " + numberFormat.format(summe));
             summeLabel.setForeground(Color.GREEN.darker());
 
         } else {
             summeLabel = new JLabel("FEHLER");
             summeLabel.setForeground(Color.RED);
+            model.getPrintAction().setEnabled(false);
         }
 
         builder.addSeparator("", cc.xyw(1, yPos, 3));
