@@ -5,6 +5,7 @@ import cw.boardingschoolmanagement.app.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.app.CalendarUtil;
 import cw.boardingschoolmanagement.gui.component.CWJPanel;
 import cw.boardingschoolmanagement.gui.component.CWJXTable;
 import cw.boardingschoolmanagement.gui.component.JNotNullLabel;
@@ -51,8 +52,9 @@ public class CustomerSelectorView
                         tCustomers)));
 
         tCustomers.getColumns(true).get(0).setCellRenderer(new GenderTableCellRenderer());
-        tCustomers.getColumns(true).get(5).setCellRenderer(new DateTimeTableCellRenderer("dd.MM.yyyy"));
+        tCustomers.getColumns(true).get(5).setCellRenderer(new DateTimeTableCellRenderer(CalendarUtil.DATE_FORMAT_STANDARD));
         tCustomers.getColumns(true).get(16).setCellRenderer(new ActiveCustomerTableCellRenderer());
+        tCustomers.getColumns(true).get(17).setCellRenderer(new DateTimeTableCellRenderer(CalendarUtil.DATETIME_FORMAT_STANDARD));
     }
 
     private void initEventHandling() {

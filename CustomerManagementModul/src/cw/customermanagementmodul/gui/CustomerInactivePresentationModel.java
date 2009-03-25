@@ -85,6 +85,7 @@ public class CustomerInactivePresentationModel
             
             Customer c = customerSelectorPresentationModel.getSelectedCustomer();
             c.setActive(true);
+            c.setInactiveDate(null);
             customerSelectorPresentationModel.remove(c);
             CustomerManager.getInstance().save(c);
 

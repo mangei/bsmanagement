@@ -47,7 +47,7 @@ public class Customer
     private String fax                  = "";
     private String email                = "";
     private Date creationDate;
-    private Date inactiveSinceDate;
+    private Date inactiveDate;
     private String comment              = "";
     private Guardian guardian           = new Guardian();
     
@@ -73,7 +73,7 @@ public class Customer
     public final static String PROPERTYNAME_EMAIL = "email";
     public final static String PROPERTYNAME_FAX = "fax";
     public final static String PROPERTYNAME_CREATIONDATE = "creationDate";
-    public final static String PROPERTYNAME_INACTIVESINCEDATE = "inactiveSinceDate";
+    public final static String PROPERTYNAME_INACTIVEDATE = "inactiveDate";
     public final static String PROPERTYNAME_COMMENT = "comment";
     public final static String PROPERTYNAME_ACTIVE = "active";
     public final static String PROPERTYNAME_GROUPS = "groups";
@@ -148,7 +148,7 @@ public class Customer
         buf.append(", ");
         buf.append(creationDate);
         buf.append(", ");
-        buf.append(inactiveSinceDate);
+        buf.append(inactiveDate);
         buf.append(", ");
         buf.append(guardian);
 
@@ -297,14 +297,14 @@ public class Customer
     }
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    public Date getInactiveSinceDate() {
-        return inactiveSinceDate;
+    public Date getInactiveDate() {
+        return inactiveDate;
     }
 
-    public void setInactiveSinceDate(Date inactiveSinceDate) {
-        Date old = this.inactiveSinceDate;
-        this.inactiveSinceDate = inactiveSinceDate;
-        firePropertyChange(PROPERTYNAME_INACTIVESINCEDATE, old, inactiveSinceDate);
+    public void setInactiveDate(Date inactiveDate) {
+        Date old = this.inactiveDate;
+        this.inactiveDate = inactiveDate;
+        firePropertyChange(PROPERTYNAME_INACTIVEDATE, old, inactiveDate);
     }
 
     @Type(type="text")
@@ -326,6 +326,14 @@ public class Customer
         boolean old = this.active;
         this.active = active;
         firePropertyChange(PROPERTYNAME_ACTIVE, old, active);
+
+        if(active != old) {
+            if(active) {
+                setInactiveDate(null);
+            } else {
+                setInactiveDate(new Date());
+            }
+        }
     }
 
     public String getPostOfficeNumber() {

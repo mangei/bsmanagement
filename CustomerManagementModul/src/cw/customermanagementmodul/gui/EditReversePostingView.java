@@ -99,7 +99,7 @@ public class EditReversePostingView
 
         pPostingCategoryExtention = CWComponentFactory.createPanel();
         FormLayout pPostingCategoryExtentionLayout = new FormLayout(
-                "pref",
+                "fill:pref:grow:",
                 "4dlu, fill:pref"
         );
         pPostingCategoryExtention.setLayout(pPostingCategoryExtentionLayout);

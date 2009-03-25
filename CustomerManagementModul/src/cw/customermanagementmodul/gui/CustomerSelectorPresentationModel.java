@@ -301,7 +301,7 @@ public class CustomerSelectorPresentationModel
 
         @Override
         public int getColumnCount() {
-            return 17;
+            return 18;
         }
 
         @Override
@@ -341,6 +341,8 @@ public class CustomerSelectorPresentationModel
                     return "Bemerkung";
                 case 16:
                     return "Status";
+                case 17:
+                    return "Inaktiv seit";
                 default:
                     return "";
             }
@@ -355,6 +357,8 @@ public class CustomerSelectorPresentationModel
                     return Date.class;
                 case 16:
                     return Boolean.class;
+                case 17:
+                    return Date.class;
                 default:
                     return String.class;
             }
@@ -402,6 +406,8 @@ public class CustomerSelectorPresentationModel
                     return c.getComment();
                 case 16:
                     return c.isActive();
+                case 17:
+                    return c.getInactiveDate();
                 default:
                     return "";
             }

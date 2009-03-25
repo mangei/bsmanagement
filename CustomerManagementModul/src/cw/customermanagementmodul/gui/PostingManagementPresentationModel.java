@@ -219,18 +219,18 @@ public class PostingManagementPresentationModel {
     private void loadFilterMonths() {
         List<String> months = new ArrayList<String>();
         months.add("-");
-        months.add(CalendarUtil.getMonth(Calendar.JANUARY));
-        months.add(CalendarUtil.getMonth(Calendar.FEBRUARY));
-        months.add(CalendarUtil.getMonth(Calendar.MARCH));
-        months.add(CalendarUtil.getMonth(Calendar.APRIL));
-        months.add(CalendarUtil.getMonth(Calendar.MAY));
-        months.add(CalendarUtil.getMonth(Calendar.JUNE));
-        months.add(CalendarUtil.getMonth(Calendar.JULY));
-        months.add(CalendarUtil.getMonth(Calendar.AUGUST));
-        months.add(CalendarUtil.getMonth(Calendar.SEPTEMBER));
-        months.add(CalendarUtil.getMonth(Calendar.OCTOBER));
-        months.add(CalendarUtil.getMonth(Calendar.NOVEMBER));
-        months.add(CalendarUtil.getMonth(Calendar.DECEMBER));
+        months.add(CalendarUtil.getMonthName(Calendar.JANUARY));
+        months.add(CalendarUtil.getMonthName(Calendar.FEBRUARY));
+        months.add(CalendarUtil.getMonthName(Calendar.MARCH));
+        months.add(CalendarUtil.getMonthName(Calendar.APRIL));
+        months.add(CalendarUtil.getMonthName(Calendar.MAY));
+        months.add(CalendarUtil.getMonthName(Calendar.JUNE));
+        months.add(CalendarUtil.getMonthName(Calendar.JULY));
+        months.add(CalendarUtil.getMonthName(Calendar.AUGUST));
+        months.add(CalendarUtil.getMonthName(Calendar.SEPTEMBER));
+        months.add(CalendarUtil.getMonthName(Calendar.OCTOBER));
+        months.add(CalendarUtil.getMonthName(Calendar.NOVEMBER));
+        months.add(CalendarUtil.getMonthName(Calendar.DECEMBER));
 
         filterMonthSelection.setList(months);
     }
