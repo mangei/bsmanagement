@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF8"?>
+<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+
+<jasperReport name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0">
+	<field name="tarif.tarif" class="java.lang.Double">
+		<fieldDescription><![CDATA[tarif.tarif]]></fieldDescription>
+	</field>
+	<field name="gebuehr.gebuehr.name" class="java.lang.String">
+		<fieldDescription><![CDATA[gebuehr.gebuehr.name]]></fieldDescription>
+	</field>
+	<field name="gebuehr.gebuehr.gebKat.name" class="java.lang.String">
+		<fieldDescription><![CDATA[gebuehr.gebuehr.gebKat.name]]></fieldDescription>
+	</field>
+	<field name="gebuehr.anmerkung" class="java.lang.String">
+		<fieldDescription><![CDATA[gebuehr.anmerkung]]></fieldDescription>
+	</field>
+	<variable name="sum" class="java.lang.Double" calculation="Sum">
+		<variableExpression><![CDATA[$F{tarif.tarif}]]></variableExpression>
+	</variable>
+	<pageHeader>
+		<band height="19">
+			<staticText>
+				<reportElement x="357" y="2" width="100" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Anmerkung
+                ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="250" y="2" width="77" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kategorie
+                ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="153" y="2" width="72" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Gebühr
+                ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="65" y="2" width="58" height="15"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tarif
+                ]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="17">
+			<textField pattern="¤ #,##0.00" hyperlinkType="None">
+				<reportElement x="32" y="1" width="90" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$F{tarif.tarif}]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="None">
+				<reportElement x="153" y="0" width="72" height="15"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{gebuehr.gebuehr.name}]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="None">
+				<reportElement x="251" y="1" width="77" height="15">
+					<printWhenExpression><![CDATA[new java.lang.Boolean($F{gebuehr.gebuehr.gebKat.name}!=null)]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{gebuehr.gebuehr.gebKat.name}]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="None">
+				<reportElement x="356" y="1" width="118" height="15">
+					<printWhenExpression><![CDATA[new java.lang.Boolean($F{gebuehr.anmerkung}!=null)]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{gebuehr.anmerkung}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="20">
+			<staticText>
+				<reportElement x="11" y="5" width="46" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Summe:
+                ]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00" hyperlinkType="None">
+				<reportElement x="50" y="4" width="72" height="15"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$V{sum}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="64" y="2" width="58" height="1"/>
+			</line>
+		</band>
+	</columnFooter>
+</jasperReport>
