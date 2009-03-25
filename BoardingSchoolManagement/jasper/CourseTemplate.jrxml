@@ -10,7 +10,7 @@
 	<detail>
 		<band height="15">
 			<subreport>
-				<reportElement positionType="Float" x="125" y="0" width="50" height="15" isRemoveLineWhenBlank="true" backcolor="#99CCFF"/>
+				<reportElement positionType="Float" x="103" y="0" width="50" height="15" isRemoveLineWhenBlank="true" backcolor="#99CCFF"/>
 				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{activities})]]></dataSourceExpression>
 				<subreportExpression class="java.lang.String"><![CDATA[new String("./jasper/ActivityTemplate.jasper")]]></subreportExpression>
 			</subreport>
