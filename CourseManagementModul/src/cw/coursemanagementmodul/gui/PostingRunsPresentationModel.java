@@ -129,7 +129,7 @@ public class PostingRunsPresentationModel implements Disposable{
             }
         }
     }
-
+    
     private class DetailAction
             extends AbstractAction {
 

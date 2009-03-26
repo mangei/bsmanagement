@@ -11,7 +11,6 @@ import cw.customermanagementmodul.pojo.Customer;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.NoResultException;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -20,7 +19,6 @@ import org.apache.log4j.Logger;
 public class CourseParticipantManager extends AbstractPOJOManager<CourseParticipant> {
 
     private static CourseParticipantManager instance;
-    private static Logger logger = Logger.getLogger(CourseParticipantManager.class);
 
     private CourseParticipantManager() {
     }
@@ -42,13 +40,12 @@ public class CourseParticipantManager extends AbstractPOJOManager<CourseParticip
     }
     
     public List<CourseParticipant> getAll(Course course) {
-        List<CourseParticipant> myList =  HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant").getResultList();
+        List<CourseParticipant> myList =  HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant where customer.active = true").getResultList();
         
         List<CourseParticipant> list2 = new ArrayList<CourseParticipant>();
         for(CourseParticipant cp : myList) {
             for(CourseAddition ca: cp.getCourseList()) {
                 if(ca.getCourse().getId() == course.getId()) {
-                    System.out.println("SAME_COURSE___________________IN");
                     list2.add(cp);
                 }
             }
@@ -57,7 +54,7 @@ public class CourseParticipantManager extends AbstractPOJOManager<CourseParticip
     }
 
     public List<CourseParticipant> getAll(Activity activity) {
-        List<CourseParticipant> myList =  HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant").getResultList();
+        List<CourseParticipant> myList =  HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant where customer.active = true").getResultList();
 
         List<CourseParticipant> list2 = new ArrayList<CourseParticipant>();
         for(CourseParticipant cp : myList) {
@@ -71,7 +68,7 @@ public class CourseParticipantManager extends AbstractPOJOManager<CourseParticip
     }
 
     public List<CourseParticipant> getAll(Subject subject) {
-        List<CourseParticipant> myList =  HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant").getResultList();
+        List<CourseParticipant> myList =  HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant where customer.active = true").getResultList();
 
         List<CourseParticipant> list2 = new ArrayList<CourseParticipant>();
         for(CourseParticipant cp : myList) {
@@ -87,7 +84,7 @@ public class CourseParticipantManager extends AbstractPOJOManager<CourseParticip
     public CourseParticipant get(Customer customer) {
         CourseParticipant coursePart = null;
         try {
-            coursePart = (CourseParticipant) HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant WHERE customer.id=" + customer.getId()).getSingleResult();
+            coursePart = (CourseParticipant) HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant where customer.active = true AND customer.id=" + customer.getId()).getSingleResult();
         } catch (NoResultException ex) {
         }
         return coursePart;
@@ -95,6 +92,6 @@ public class CourseParticipantManager extends AbstractPOJOManager<CourseParticip
 
     @Override
     public int size() {
-        return ( (Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM CourseParticipant").getResultList().iterator().next() ).intValue();
+        return ( (Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM CourseParticipant where customer.active = true").getResultList().iterator().next() ).intValue();
     }
 }

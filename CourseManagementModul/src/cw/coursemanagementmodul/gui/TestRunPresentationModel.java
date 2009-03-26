@@ -25,6 +25,7 @@ public class TestRunPresentationModel implements Disposable{
     private SelectionInList<CourseParticipant> coursePartSelection;
     private Course selectedCourse;
     private Action backButtonAction;
+    private Action printAction;
     private HeaderInfo headerInfo;
 
     public TestRunPresentationModel(SelectionInList<CourseParticipant> courseParticipants,
@@ -47,6 +48,7 @@ public class TestRunPresentationModel implements Disposable{
     public void initModels() {
         //Anlegen der Aktionen, für die Buttons
         backButtonAction = new BackButtonAction("Zurück");
+        printAction = new PrintAction("Drucken");
     }
 
     public void dispose() {
@@ -69,6 +71,22 @@ public class TestRunPresentationModel implements Disposable{
             GUIManager.changeToLastView();
         }
     }
+
+    private class PrintAction extends AbstractAction{
+        {
+            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/print.png") );
+        }
+
+        public void actionPerformed(ActionEvent e){
+            GUIManager.changeView(new PrintPostingView(
+                    new PrintPostingRunPresentationModel(coursePartSelection.getList(),
+                    new HeaderInfo("Kursteilnehmerliste drucken"), selectedCourse)).buildPanel(), true);
+        }
+
+        private PrintAction(String string){
+            super(string);
+        }
+    }
     
     public Action getBackButtonAction() {
         return backButtonAction;
@@ -86,5 +104,9 @@ public class TestRunPresentationModel implements Disposable{
 
     public HeaderInfo getHeaderInfo() {
         return headerInfo;
+    }
+
+    public Action getPrintAction() {
+        return printAction;
     }
 }

@@ -19,6 +19,7 @@ import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
 import cw.coursemanagementmodul.pojo.manager.ValueManager;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -100,10 +101,12 @@ public class DetailHistoryPresentationModel implements Disposable{
     private class CoursePostingTableModel extends AbstractTableAdapter<CoursePosting> {
 
         private ListModel listModel;
+        private DecimalFormat numberFormat;
 
         public CoursePostingTableModel(ListModel listModel) {
             super(listModel);
             this.listModel = listModel;
+            numberFormat = new DecimalFormat("#0.00");
         }
 
         @Override
@@ -137,12 +140,12 @@ public class DetailHistoryPresentationModel implements Disposable{
             switch (columnIndex) {
                 case 0:
                     if(coursePosting.getPosting().isLiabilities()){//isSoll
-                        return coursePosting.getPosting().getAmount() + "";
+                        return "€ " + numberFormat.format(coursePosting.getPosting().getAmount());
                     }
                     else return "";
                 case 1:
                     if(coursePosting.getPosting().isAssets()){//isHaben
-                        return coursePosting.getPosting().getAmount() + "";
+                        return "€ " + numberFormat.format(coursePosting.getPosting().getAmount());
                     }
                     else return "";
                 case 2:
@@ -184,15 +187,15 @@ public class DetailHistoryPresentationModel implements Disposable{
     }
 
     public double getTotalSoll(){
-       return ValueManager.getTotalSoll(selectedCourseParticipant);
+       return ValueManager.getInstance().getTotalSoll(selectedCourseParticipant);
     }
 
     public double getTotalHaben(){
-       return ValueManager.getTotalHaben(selectedCourseParticipant);
+       return ValueManager.getInstance().getTotalHaben(selectedCourseParticipant);
     }
 
     public double getTotalSaldo(){
-       return ValueManager.getTotalSaldo(selectedCourseParticipant);
+       return ValueManager.getInstance().getTotalSaldo(selectedCourseParticipant);
     }
 
     public HeaderInfo getHeaderInfo() {

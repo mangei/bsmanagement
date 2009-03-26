@@ -9,7 +9,6 @@ import com.jgoodies.binding.beans.Model;
 import com.jgoodies.binding.list.ArrayListModel;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import java.text.DateFormat;
-import java.text.Format;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
@@ -92,7 +91,7 @@ implements AnnotatedClass
     
     @Override
     public String toString(){
-        Format format = DateFormat.getDateInstance();
+        DateFormat format = DateFormat.getDateInstance();
         return "<html><b>" + name + "</b> " + format.format(beginDate) + "-" + format.format(endDate) + "</html>";
     }
     
@@ -128,6 +127,4 @@ implements AnnotatedClass
         this.price = price;
         firePropertyChange(PROPERTYNAME_PRICE, old, price);
     }
-    
-    
 }

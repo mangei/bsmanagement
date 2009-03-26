@@ -4,7 +4,6 @@ import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import cw.coursemanagementmodul.pojo.Subject;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -13,7 +12,6 @@ import org.apache.log4j.Logger;
 public class SubjectManager extends AbstractPOJOManager<Subject> {
 
     private static SubjectManager instance;
-    private static Logger logger = Logger.getLogger(SubjectManager.class);
 
     private SubjectManager() {
     }

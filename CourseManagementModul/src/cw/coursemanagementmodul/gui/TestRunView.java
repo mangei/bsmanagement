@@ -27,6 +27,7 @@ public class TestRunView implements Disposable{
     private CWComponentFactory.CWComponentContainer componentContainer;
     
     private JButton backButton;
+    private JButton printButton;
 
     private JViewPanel mainPanel;
     private DecimalFormat numberFormat;
@@ -38,6 +39,7 @@ public class TestRunView implements Disposable{
 
     public void initComponents(){
         backButton = CWComponentFactory.createButton(model.getBackButtonAction());
+        printButton = CWComponentFactory.createButton(model.getPrintAction());
 
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(backButton);
@@ -51,6 +53,7 @@ public class TestRunView implements Disposable{
         JViewPanel view = CWComponentFactory.createViewPanel();
         
         mainPanel.getButtonPanel().add(backButton);
+        mainPanel.getButtonPanel().add(printButton);
 
         int vert = 1;
         String layoutVerticalString = "";

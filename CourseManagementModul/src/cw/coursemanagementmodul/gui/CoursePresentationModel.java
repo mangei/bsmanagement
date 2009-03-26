@@ -225,6 +225,7 @@ public class CoursePresentationModel implements Disposable{
         }
 
         public void actionPerformed(ActionEvent e) {
+            GUIManager.getInstance().lockMenu();
             GUIManager.changeView(new CourseDetailView(new CourseDetailPresentationModel(courseSelection.getSelection())).buildPanel(), true);
         }
       }

@@ -6,7 +6,6 @@ import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.customermanagementmodul.pojo.Posting;
 import java.util.ArrayList;
 import java.util.List;
-import org.apache.log4j.Logger;
 
 /**
  *
@@ -15,7 +14,6 @@ import org.apache.log4j.Logger;
 public class CoursePostingManager extends AbstractPOJOManager<CoursePosting> {
 
     private static CoursePostingManager instance;
-    private static Logger logger = Logger.getLogger(CoursePostingManager.class);
 
     private CoursePostingManager() {
     }

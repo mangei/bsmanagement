@@ -5,7 +5,6 @@
 package cw.coursemanagementmodul.gui;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
-import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
@@ -282,7 +281,7 @@ implements Disposable{
                 case 5:
                     return "Ort";
                 case 6:
-                    return "Betrag";
+                    return "Vorgeschriebener Betrag";
                 default:
                     return "";
             }
@@ -310,7 +309,7 @@ implements Disposable{
                 case 5:
                     return coursePart.getCustomer().getCity();
                 case 6:
-                    return "€ " + numberFormat.format(selectedCourse.getPrice());
+                    return "€ " + numberFormat.format(getPrice(coursePart));
                 default:
                     return "";
             }
@@ -338,7 +337,7 @@ implements Disposable{
         ArrayList<CoursePosting> postingList = new ArrayList<CoursePosting>();
         PostingRun run = new PostingRun();
         
-        run.setName("Gebührenlauf des Kurses " + selectedCourse);
+        run.setName(selectedCourse.toString());
         PostingCategory cat = PostingCategoryManager.getInstance().get("Kurs-Buchung");
 
         for(int i = 0; i < coursePartSelection.getSize(); i++){
@@ -369,6 +368,23 @@ implements Disposable{
 
     private double getPrice(CourseAddition courseAddition){
         double price = courseAddition.getCourse().getPrice();
+        for(int i = 0; i < courseAddition.getActivities().size(); i++){
+            price += courseAddition.getActivities().get(i).getPrice();
+        }
+        return price;
+    }
+
+    private double getPrice(CourseParticipant courseParticipant){
+        double price = selectedCourse.getPrice();
+
+        CourseAddition courseAddition = new CourseAddition();
+
+        for(int i = 0; i < courseParticipant.getCourseList().size(); i++){
+            if(courseParticipant.getCourseList().get(i).getCourse().getId() == selectedCourse.getId()){
+                courseAddition = courseParticipant.getCourseList().get(i);
+            }
+        }
+
         for(int i = 0; i < courseAddition.getActivities().size(); i++){
             price += courseAddition.getActivities().get(i).getPrice();
         }

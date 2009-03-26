@@ -173,9 +173,9 @@ implements Disposable{
             bisVM.setValue(courseAdditionSelection.getSelection().getCourse().getEndDate() + "");
             priceVM.setValue(courseAdditionSelection.getSelection().getCourse().getPrice() + "");
             
-            sollVM.setValue(ValueManager.getTotalSoll(coursePart) + "");
-            habenVM.setValue(ValueManager.getTotalHaben(coursePart) + "");
-            saldoVM.setValue(ValueManager.getTotalSaldo(coursePart) + "");
+            sollVM.setValue(ValueManager.getInstance().getTotalSoll(coursePart) + "");
+            habenVM.setValue(ValueManager.getInstance().getTotalHaben(coursePart) + "");
+            saldoVM.setValue(ValueManager.getInstance().getTotalSaldo(coursePart) + "");
             
             activitySelection.setList(courseAdditionSelection.getSelection().getActivities());
             subjectSelection.setList(courseAdditionSelection.getSelection().getSubjects());
@@ -185,9 +185,9 @@ implements Disposable{
             bisVM.setValue("");
             priceVM.setValue("");
 
-            sollVM.setValue(ValueManager.getTotalSoll(coursePart) + "");
-            habenVM.setValue(ValueManager.getTotalHaben(coursePart) + "");
-            saldoVM.setValue(ValueManager.getTotalSaldo(coursePart) + "");
+            sollVM.setValue(ValueManager.getInstance().getTotalSoll(coursePart) + "");
+            habenVM.setValue(ValueManager.getInstance().getTotalHaben(coursePart) + "");
+            saldoVM.setValue(ValueManager.getInstance().getTotalSaldo(coursePart) + "");
 
             activitySelection.setList(null);
             subjectSelection.setList(null);

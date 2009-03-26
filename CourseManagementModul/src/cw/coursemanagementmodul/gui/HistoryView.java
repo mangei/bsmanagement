@@ -15,6 +15,8 @@ import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.coursemanagementmodul.renderer.PostingHistoryTableCellRenderer;
 import java.awt.Font;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.Format;
@@ -60,9 +62,13 @@ public class HistoryView implements Disposable{
 
     private Format numberFormat;
     private Format dateFormat;
+
+    private JPanel detailPanel;
     //********************************************
 
     private JButton detailButton;
+    private JButton printButton;
+    private JButton chartButton;
     
     public HistoryView(HistoryPresentationModel model) {
         this.model = model;
@@ -71,6 +77,19 @@ public class HistoryView implements Disposable{
     }
 
     private void initEventHandling() {
+        model.getCourseSelection().addValueChangeListener(new PropertyChangeListener() {
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(model.getCourseSelection().isSelectionEmpty()){
+                    detailPanel.setVisible(false);
+                    coursePartTable.updateUI();
+                }
+                else{
+                    detailPanel.setVisible(true);
+                    coursePartTable.updateUI();
+                }
+            }
+        });
     }
 
     //******************************************************************
@@ -79,17 +98,18 @@ public class HistoryView implements Disposable{
     public void initComponents(){
         coursePartTable = CWComponentFactory.createTable("Keine Kursteilnehmer zum selektierten Kurs!");
         coursePartTable.setModel(model.createCoursePartTableModel(model.getCoursePartSelection()));
+        coursePartTable.getColumns(true).get(7).setCellRenderer(new PostingHistoryTableCellRenderer());
         coursePartTable.setSelectionModel(
                 new SingleListSelectionAdapter(
                     new JXTableSelectionConverter(
                         model.getCoursePartSelection().getSelectionIndexHolder(),
                         coursePartTable)));
-
-        coursePartTable.getColumns(true).get(7).setCellRenderer(new PostingHistoryTableCellRenderer());
-
+        
         courseComboBox = CWComponentFactory.createComboBox(model.getCourseSelection());
         
         detailButton = CWComponentFactory.createButton(model.getDetailAction());
+        printButton = CWComponentFactory.createButton(model.getPrintAction());
+        chartButton = CWComponentFactory.createButton(model.getChartAction());
         
         courseLabel = CWComponentFactory.createLabel("Kurs:");
 
@@ -118,8 +138,8 @@ public class HistoryView implements Disposable{
         price = CWComponentFactory.createLabel("Preis:");
 
         vCourseName = CWComponentFactory.createLabel(model.getNameVM());
-        vBeginDate = CWComponentFactory.createLabel(model.getBisVM(), dateFormat);
-        vEndDate = CWComponentFactory.createLabel(model.getVonVM(), dateFormat);
+        vBeginDate = CWComponentFactory.createLabel(model.getVonVM(), dateFormat);
+        vEndDate = CWComponentFactory.createLabel(model.getBisVM(), dateFormat);
         vPrice = CWComponentFactory.createLabel(model.getPriceVM(), numberFormat);
         
         vCourseName.setFont(new Font(null, Font.BOLD, 11));
@@ -140,6 +160,9 @@ public class HistoryView implements Disposable{
         vHabenLabel.setFont(new Font(null, Font.BOLD, 11));
         vSaldoLabel.setFont(new Font(null, Font.BOLD, 11));
         anzLabel.setFont(new Font(null, Font.BOLD, 11));
+
+        detailPanel = CWComponentFactory.createPanel();
+        detailPanel.setVisible(false);
     }
     //**************************************************************************
 
@@ -153,9 +176,9 @@ public class HistoryView implements Disposable{
         JPanel totalPanel = CWComponentFactory.createPanel();
         JPanel coursePartPanel = CWComponentFactory.createPanel();
         JPanel extendPanel = CWComponentFactory.createPanel();
-        JPanel detailPanel = CWComponentFactory.createPanel();
 
         panel.getButtonPanel().add(detailButton);
+        panel.getButtonPanel().add(printButton);
 
         FormLayout layout = new FormLayout("pref, 2dlu, pref:grow, 2dlu, right:pref","pref, 10dlu, pref, 2dlu, fill:pref:grow, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref");
         FormLayout panelLayout = new FormLayout("fill:pref:grow", "fill:pref:grow");

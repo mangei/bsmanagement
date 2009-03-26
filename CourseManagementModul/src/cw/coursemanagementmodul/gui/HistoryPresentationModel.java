@@ -36,6 +36,8 @@ import javax.swing.table.AbstractTableModel;
 public class HistoryPresentationModel implements Disposable{
     //Definieren der Objekte in der oberen Leiste
     private Action detailAction;
+    private Action printAction;
+    private Action chartAction;
     //********************************************
 
     //Liste der Kurse
@@ -46,7 +48,7 @@ public class HistoryPresentationModel implements Disposable{
 
     private HeaderInfo headerInfoComboBox;
 
-    private CourseSelectionHandler courseSelectionHandler;
+    private IntervallHandler intervallHandler;
     private CoursePartSelectionHandler coursePartSelectionHandler;
 
     private ValueModel courseSollValueHolder;
@@ -80,13 +82,13 @@ public class HistoryPresentationModel implements Disposable{
     public void initModels() {
         //Anlegen der Aktionen, für die Buttons
         detailAction = new DetailAction("Anzeigen");
+        printAction = new PrintAction("Drucken");
+        chartAction = new ChartAction("Chart");
         
         coursePartSelection = new SelectionInList<CourseParticipant>();
         courseSelection = new SelectionInList<Course>(CourseManager.getInstance().getAll());
         
         updateActionEnablement();
-
-        courseSelection.addValueChangeListener(courseSelectionHandler = new CourseSelectionHandler());
 
         courseSollValueHolder = new ValueHolder();
         courseHabenValueHolder = new ValueHolder();
@@ -103,13 +105,14 @@ public class HistoryPresentationModel implements Disposable{
     }
 
     public void dispose() {
-        courseSelection.removeValueChangeListener(courseSelectionHandler);
+        courseSelection.removeValueChangeListener(intervallHandler);
         coursePartSelection.removeValueChangeListener(coursePartSelectionHandler);
     }
 
-    private class CourseSelectionHandler implements PropertyChangeListener{
+    private class IntervallHandler implements PropertyChangeListener{
         public void propertyChange(PropertyChangeEvent evt) {
                 selectedCourse = courseSelection.getSelection();
+                
                 if (coursePartSelection.getList().size() != 0) {
                     coursePartSelection.getList().clear();
                     coursePartSelection.fireIntervalRemoved(0, getCoursePartSelection().getList().size() - 1);
@@ -117,13 +120,12 @@ public class HistoryPresentationModel implements Disposable{
 
                 List<CourseParticipant> list = CourseParticipantManager.getInstance().getAll(selectedCourse);
                 coursePartSelection.setList(list);
-
                 if (coursePartSelection.getList().size() != 0) {
                     coursePartSelection.fireIntervalAdded(0, list.size()-1);
                 }
-
                 updateElements();
-            }
+                updateActionEnablement();
+        }
     }
 
     private class CoursePartSelectionHandler implements PropertyChangeListener{
@@ -139,12 +141,11 @@ public class HistoryPresentationModel implements Disposable{
             courseSollValueHolder.setValue(sollValue);
             courseHabenValueHolder.setValue(habenValue);
             courseSaldoValueHolder.setValue(saldoValue);
-            sizeValueHolder.setValue(coursePartSelection.getSize() + "");
-
             nameVM.setValue(selectedCourse.getName());
             vonVM.setValue(selectedCourse.getBeginDate());
             bisVM.setValue(selectedCourse.getEndDate());
             priceVM.setValue(selectedCourse.getPrice());
+            sizeValueHolder.setValue(coursePartSelection.getSize() + "");
         }
         else{
             courseSollValueHolder.setValue(0.0);
@@ -153,8 +154,8 @@ public class HistoryPresentationModel implements Disposable{
             sizeValueHolder.setValue("");
 
             nameVM.setValue("");
-            vonVM.setValue(null);
-            bisVM.setValue(null);
+            vonVM.setValue(new Date());
+            bisVM.setValue(new Date());
             priceVM.setValue(0.0);
         }
     }
@@ -170,7 +171,7 @@ public class HistoryPresentationModel implements Disposable{
 
     private void initEventHandling() {
         coursePartSelection.addValueChangeListener(coursePartSelectionHandler = new CoursePartSelectionHandler());
-        courseSelection.addValueChangeListener(courseSelectionHandler = new CourseSelectionHandler());
+        courseSelection.addValueChangeListener(intervallHandler = new IntervallHandler());
         updateActionEnablement();
         updateElements();
     }
@@ -187,6 +188,37 @@ public class HistoryPresentationModel implements Disposable{
         }
 
         private DetailAction(String string) {
+            super(string);
+        }
+    }
+
+    private class PrintAction extends AbstractAction{
+        {
+            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/print.png") );
+        }
+
+        public void actionPerformed(ActionEvent e){
+            GUIManager.getInstance().lockMenu();
+            GUIManager.changeView(new PrintCalculationView(
+                    new PrintCalculationPresentationModel(coursePartSelection.getList(),
+                    new HeaderInfo("Kursteilnehmerliste drucken"), selectedCourse)).buildPanel(), true);
+        }
+
+        private PrintAction(String string){
+            super(string);
+        }
+    }
+
+    private class ChartAction extends AbstractAction{
+        {
+            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/print.png") );
+        }
+
+        public void actionPerformed(ActionEvent e){
+            
+        }
+
+        private ChartAction(String string){
             super(string);
         }
     }
@@ -265,7 +297,7 @@ public class HistoryPresentationModel implements Disposable{
                 case 5:
                     return coursePart.getCustomer().getCity();
                 case 6:
-                    return "€ " + numberFormat.format(selectedCourse.getPrice());
+                    return "€ " + numberFormat.format(ValueManager.getInstance().getTotalSoll(selectedCourse, coursePart));
                 case 7:
                     return getCorrectPosted(coursePart);
                 default:
@@ -278,10 +310,12 @@ public class HistoryPresentationModel implements Disposable{
         }
     }
     //**************************************************************************
-
+    
     private void updateActionEnablement() {
         boolean hasSelection = coursePartSelection.hasSelection();
         detailAction.setEnabled(hasSelection);
+        boolean hasCourseSelection = courseSelection.hasSelection();
+        printAction.setEnabled(hasCourseSelection);
     }
 
     public SelectionInList<CourseParticipant> getCoursePartSelection() {
@@ -308,11 +342,10 @@ public class HistoryPresentationModel implements Disposable{
         sollValue = 0.0;
         habenValue = 0.0;
         saldoValue = 0.0;
-        
         for(int i = 0; i < coursePartSelection.getSize(); i++){
-            sollValue += ValueManager.getTotalSoll(coursePartSelection.getElementAt(i));
-            habenValue += ValueManager.getTotalHaben(coursePartSelection.getElementAt(i));
-            saldoValue += ValueManager.getTotalSaldo(coursePartSelection.getElementAt(i));
+            sollValue += ValueManager.getInstance().getTotalSoll(selectedCourse, coursePartSelection.getList().get(i));
+            habenValue += ValueManager.getInstance().getTotalHaben(selectedCourse, coursePartSelection.getList().get(i));
+            saldoValue += ValueManager.getInstance().getTotalSaldo(selectedCourse, coursePartSelection.getList().get(i));
         }
     }
 
@@ -363,16 +396,23 @@ public class HistoryPresentationModel implements Disposable{
         Date currentDate = new Date();
         warningDate.setMonth(courseAddition.getCourse().getEndDate().getMonth()+1);
         
-        if(currentDate.after(warningDate) && ValueManager.getTotalSaldo(courseAddition) != 0.0){
+        if(currentDate.after(warningDate) && ValueManager.getInstance().getTotalSaldo(courseAddition) != 0.0){
             return -1;
         }
 
-        if(ValueManager.getTotalSaldo(courseAddition) != 0.0){
+        if(ValueManager.getInstance().getTotalSaldo(courseAddition) != 0.0){
             return 1;
         }
         else{
             return 0;
         }
-        
+    }
+
+    public Action getPrintAction() {
+        return printAction;
+    }
+
+    public Action getChartAction() {
+        return chartAction;
     }
 }

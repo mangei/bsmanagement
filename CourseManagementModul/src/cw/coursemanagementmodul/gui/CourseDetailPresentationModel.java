@@ -40,9 +40,9 @@ public class CourseDetailPresentationModel implements Disposable{
     private Course selectedCourse;
     
     public CourseDetailPresentationModel(Course selectedCourse) {
+        this.selectedCourse = selectedCourse;
         initModels();
         initEventHandling();
-        this.selectedCourse = selectedCourse;
 
         headerInfo = new HeaderInfo(
                 "Kurs bearbeiten",
@@ -58,8 +58,7 @@ public class CourseDetailPresentationModel implements Disposable{
         //Anlegen der Aktionen, für die Buttons
         cancelAction = new CancelAction("Zurück");
         printAction = new PrintAction("Drucken");
-        
-        coursePartSelection = new SelectionInList<CourseParticipant>(CourseParticipantManager.getInstance().getAll());
+        coursePartSelection = new SelectionInList<CourseParticipant>(CourseParticipantManager.getInstance().getAll(selectedCourse));
         updateActionEnablement();
     }
     //**************************************************************************
@@ -91,6 +90,7 @@ public class CourseDetailPresentationModel implements Disposable{
         }
         
         public void actionPerformed(ActionEvent e){
+            GUIManager.getInstance().unlockMenu();
             GUIManager.changeToLastView();
         }
         

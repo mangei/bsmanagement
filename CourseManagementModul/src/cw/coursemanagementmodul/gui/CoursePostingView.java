@@ -240,8 +240,4 @@ public class CoursePostingView implements Disposable{
         model.dispose();
     }
     //**************************************************************************
-
-//    public double getTotalValue(){
-//
-//    }
 }
