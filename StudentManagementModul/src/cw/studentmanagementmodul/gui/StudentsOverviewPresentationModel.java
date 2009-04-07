@@ -36,7 +36,7 @@ public class StudentsOverviewPresentationModel
 
         headerInfo = new HeaderInfo(
                 "Schüler anzeigen",
-                "<html>Hier haben Sie einen Überblick über alle Schüler der Klasse '<b>" + studentClass.getName() + "</b>'.<br>Anzahl: <b>" + studentSelection.getSize() + " Schüler</b></html>",
+                "<html>Hier haben Sie einen Überblick über alle Schüler der Klasse '<b>" + studentClass + "</b>'.<br>Anzahl: <b>" + studentSelection.getSize() + " Schüler</b></html>",
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/student.png"),
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/student.png")
         );

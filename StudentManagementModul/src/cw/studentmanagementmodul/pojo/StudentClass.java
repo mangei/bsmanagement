@@ -47,7 +47,14 @@ public class StudentClass
 
     @Override
     public String toString() {
-        return name;
+        StringBuilder builder = new StringBuilder();
+        builder.append(name);
+        if(organisationUnit != null) {
+            builder.append(" (");
+            builder.append(organisationUnit.toString());
+            builder.append(")");
+        }
+        return builder.toString();
     }
 
     public String getName() {

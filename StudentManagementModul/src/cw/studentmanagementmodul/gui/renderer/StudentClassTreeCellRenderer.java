@@ -29,8 +29,10 @@ public class StudentClassTreeCellRenderer extends DefaultTreeCellRenderer {
         Object obj = node.getUserObject();
         if (obj instanceof OrganisationUnit) {
             setIcon(organisationUnitIcon);
+            setText(((OrganisationUnit)obj).getName());
         } else if (obj instanceof StudentClass) {
             setIcon(studentClassIcon);
+            setText(((StudentClass)obj).getName());
         } else {
             setIcon(worldIcon);
         }

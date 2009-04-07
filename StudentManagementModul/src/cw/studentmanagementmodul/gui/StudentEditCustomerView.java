@@ -6,35 +6,39 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.studentmanagementmodul.pojo.Student;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import cw.studentmanagementmodul.pojo.Student;
 
 /**
  *
  * @author Manuel Geier
  */
-public class StudentEditCustomerTabExtentionView
+public class StudentEditCustomerView
         implements Disposable
 {
-    private StudentEditCustomerTabExtentionPresentationModel model;
+    private StudentEditCustomerPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
     private JViewPanel panel;
     private JCheckBox cIsStudent;
     private JButton bStudentClassChooser;
     private JLabel lStudentClassName;
+
+    private PropertyChangeListener activeChangeListener;
     
-    public StudentEditCustomerTabExtentionView(StudentEditCustomerTabExtentionPresentationModel model) {
+    public StudentEditCustomerView(StudentEditCustomerPresentationModel model) {
         this.model = model;
     }
 
     private void initComponents() {
         cIsStudent              = CWComponentFactory.createCheckBox(model.getBufferedModel(Student.PROPERTYNAME_ACTIVE), "Kunde ist ein Schüler?");
         bStudentClassChooser    = CWComponentFactory.createButton(model.getStudentClassChooserAction());
-        lStudentClassName       = CWComponentFactory.createLabel(model.getStudentClassName());
+        lStudentClassName       = CWComponentFactory.createLabel(model.getStudentClassNameModel());
 
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(cIsStudent)
@@ -43,13 +47,23 @@ public class StudentEditCustomerTabExtentionView
     }
     
     private void initEventHandling() {
-        // Nothing to do
+        model.getBufferedModel(Student.PROPERTYNAME_ACTIVE).addValueChangeListener(activeChangeListener = new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+//                model.setValue(true);
+                updateComponentsEnabled();
+            }
+        });
+        updateComponentsEnabled();
+    }
+
+    private void updateComponentsEnabled() {
+        bStudentClassChooser.setEnabled((Boolean)model.getBufferedModel(Student.PROPERTYNAME_ACTIVE).getValue());
     }
 
     public JPanel buildPanel() {
         initComponents();
         
-        panel = new JViewPanel();
+        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
         panel.setName("Schüler");
         
         FormLayout layout = new FormLayout(
@@ -74,6 +88,8 @@ public class StudentEditCustomerTabExtentionView
 
     public void dispose() {
         panel.removeDisposableListener(this);
+
+        model.getBufferedModel(Student.PROPERTYNAME_ACTIVE).removePropertyChangeListener(activeChangeListener);
 
         componentContainer.dispose();
 

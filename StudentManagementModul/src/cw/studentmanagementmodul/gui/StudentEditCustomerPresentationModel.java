@@ -6,6 +6,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -21,20 +22,20 @@ import javax.swing.Icon;
  *
  * @author Manuel Geier
  */
-public class StudentEditCustomerTabExtentionPresentationModel
+public class StudentEditCustomerPresentationModel
         extends PresentationModel<Student>
         implements Disposable
 {
     
     private Action studentClassChooserAction;
     private ValueModel studentClassName;
-    
+
+    private HeaderInfo headerInfo;
     private ValueModel unsaved;
 
     private PropertyChangeListener classChangeListener;
-    private PropertyChangeListener activeChangeListener;
     
-    public StudentEditCustomerTabExtentionPresentationModel(Student student, final ValueModel unsaved) {
+    public StudentEditCustomerPresentationModel(Student student, final ValueModel unsaved) {
         super(student);
         this.unsaved = unsaved;
 
@@ -55,19 +56,13 @@ public class StudentEditCustomerTabExtentionPresentationModel
             }
         });
         updateStudentClassName();
-
-        getBufferedModel(Student.PROPERTYNAME_ACTIVE).addValueChangeListener(activeChangeListener = new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
-                unsaved.setValue(true);
-                updateComponentsEnabled();
-            }
-        });
-        updateComponentsEnabled();
     }
 
     public void dispose() {
         getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS).removePropertyChangeListener(classChangeListener);
-        getBufferedModel(Student.PROPERTYNAME_ACTIVE).removePropertyChangeListener(activeChangeListener);
+        studentClassName = null;
+        unsaved = null;
+        release();
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -80,10 +75,6 @@ public class StudentEditCustomerTabExtentionPresentationModel
         } else {
             studentClassName.setValue("Keine Klasse");
         }
-    }
-
-    private void updateComponentsEnabled() {
-        studentClassChooserAction.setEnabled((Boolean)getBufferedModel(Student.PROPERTYNAME_ACTIVE).getValue());
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -122,22 +113,21 @@ public class StudentEditCustomerTabExtentionPresentationModel
         triggerCommit();
     }
     
-    public void reset() {
-        triggerFlush();
-    }
-
     
     ////////////////////////////////////////////////////////////////////////////
     // Getter methods for the model
     ////////////////////////////////////////////////////////////////////////////
 
-
     public Action getStudentClassChooserAction() {
         return studentClassChooserAction;
     }
 
-    public ValueModel getStudentClassName() {
+    public ValueModel getStudentClassNameModel() {
         return studentClassName;
+    }
+
+    public HeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
 }

@@ -79,7 +79,13 @@ public class OrganisationUnit
 
     @Override
     public String toString() {
-        return name;
+        StringBuilder builder = new StringBuilder();
+        if(parent != null) {
+            builder.append(parent.toString());
+            builder.append(" / ");
+        }
+        builder.append(name);
+        return builder.toString();
     }
 
     public String getName() {
