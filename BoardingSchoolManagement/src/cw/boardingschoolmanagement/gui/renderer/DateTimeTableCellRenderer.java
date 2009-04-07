@@ -48,12 +48,12 @@ public class DateTimeTableCellRenderer extends DefaultTableCellRenderer {
                 GregorianCalendar gc = new GregorianCalendar();
                 gc.setTime((Date) value);
                 StringBuilder builder = new StringBuilder();
-                builder.append(CalendarUtil.getDayOfWeekShort(gc.get(Calendar.DAY_OF_WEEK)));
-                builder.append(", ");
+//                builder.append(CalendarUtil.getDayOfWeekShort(gc.get(Calendar.DAY_OF_WEEK)));
+//                builder.append(", ");
                 builder.append(gc.get(Calendar.DAY_OF_MONTH));
-                builder.append(". ");
-                builder.append(CalendarUtil.getMonthShort(gc.get(Calendar.MONTH)));
-                builder.append(" ");
+                builder.append(".");
+                builder.append(CalendarUtil.getMonth(gc.get(Calendar.MONTH)));
+                builder.append(".");
                 builder.append(gc.get(Calendar.YEAR));
                 if(!dateOnly) {
                     builder.append(" ");

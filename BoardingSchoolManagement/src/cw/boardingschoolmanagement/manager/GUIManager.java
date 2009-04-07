@@ -320,7 +320,7 @@ public class GUIManager {
         // Hinzufügen
         gM.componentView.add(gM.shownComponent, BorderLayout.CENTER);
 
-        gM.componentView.validate();
+        gM.componentView.revalidate();
         gM.componentView.repaint();
 
         gM.reloadPath();

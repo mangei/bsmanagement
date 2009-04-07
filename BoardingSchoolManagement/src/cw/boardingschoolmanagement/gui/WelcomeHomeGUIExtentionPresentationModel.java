@@ -37,7 +37,7 @@ public class WelcomeHomeGUIExtentionPresentationModel {
                 str.append("</b>, der <b>");
                 str.append(c.get(Calendar.DAY_OF_MONTH));
                 str.append(". ");
-                str.append(CalendarUtil.getMonth(c.get(Calendar.MONTH)));
+                str.append(CalendarUtil.getMonthName(c.get(Calendar.MONTH)));
                 str.append(" ");
                 str.append(c.get(Calendar.YEAR));
                 str.append("</b> und es ist <b>");

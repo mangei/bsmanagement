@@ -52,7 +52,9 @@ public class CalendarUtil {
     public static String NOVEMBER_SHORT = "Nov";
     public static String DECEMBER_SHORT = "Dez";
 
-    public static String DATEFORMAT_STANDARD = "dd.MM.yyyy";
+    public static final String DATE_FORMAT_STANDARD = "dd.MM.yyyy";
+    public static final String DATETIME_FORMAT_STANDARD  ="dd.MM.yyyy HH:ii";
+
 
     public static String getDayOfWeek(int dayOfWeek) {
         switch(dayOfWeek) {
@@ -80,7 +82,7 @@ public class CalendarUtil {
         return "";
     }
 
-    public static String getMonth(int month) {
+    public static String getMonthName(int month) {
         switch(month) {
             case Calendar.JANUARY:      return JANUARY;
             case Calendar.FEBRUARY:     return FEBRUARY;
@@ -98,7 +100,7 @@ public class CalendarUtil {
         return "";
     }
 
-    public static String getMonthShort(int month) {
+    public static String getMonthNameShort(int month) {
         switch(month) {
             case Calendar.JANUARY:      return JANUARY_SHORT;
             case Calendar.FEBRUARY:     return FEBRUARY_SHORT;
@@ -114,6 +116,16 @@ public class CalendarUtil {
             case Calendar.DECEMBER:     return DECEMBER_SHORT;
         }
         return "";
+    }
+
+
+    public static String getMonth(int month) {
+        StringBuilder str = new StringBuilder();
+        if(month < 10) {
+            str.append("0");
+        }
+        str.append(month);
+        return str.toString();
     }
 
     public static String getHour(int hour) {
@@ -144,7 +156,7 @@ public class CalendarUtil {
     }
 
     public static String formatDate(Date date) {
-        return formatDate(date,DATEFORMAT_STANDARD);
+        return formatDate(date,DATE_FORMAT_STANDARD);
     }
 
     public static String formatDate(Date date, String dateFormat) {
