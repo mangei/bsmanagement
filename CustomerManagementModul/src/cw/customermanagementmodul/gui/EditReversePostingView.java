@@ -39,7 +39,7 @@ public class EditReversePostingView
     
     private JTextField tfReversePostingDescription;
     private JComboBox cbReversePostingCategory;
-    private JLabel lReversePostingAmount;
+    private JTextField tfReversePostingAmount;
     private JDateChooser dcReversePostingEntryDate;
     private JLabel lReversePostingLiabilitiesAssets;
     private JLabel lLocked;
@@ -64,7 +64,7 @@ public class EditReversePostingView
         
         tfReversePostingDescription    = CWComponentFactory.createTextField(model.getReversePostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION),false);
         cbReversePostingCategory       = CWComponentFactory.createComboBox(model.getPostingCategorySelection());
-        lReversePostingAmount          = CWComponentFactory.createLabel(Double.toString(model.getReversePostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_AMOUNT).doubleValue()));
+        tfReversePostingAmount          = CWComponentFactory.createCurrencyTextField(model.getReversePostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_AMOUNT));
         dcReversePostingEntryDate      = CWComponentFactory.createDateChooser(model.getReversePostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE));
 
         lReversePostingLiabilitiesAssets = CWComponentFactory.createLabel(model.getReversePostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).booleanValue() == true ? "Soll" : "Haben");
@@ -90,7 +90,7 @@ public class EditReversePostingView
                 .addComponent(lPostingLiabilitiesAssets)
                 .addComponent(tfReversePostingDescription)
                 .addComponent(cbReversePostingCategory)
-                .addComponent(lReversePostingAmount)
+                .addComponent(tfReversePostingAmount)
                 .addComponent(dcReversePostingEntryDate)
                 .addComponent(lReversePostingLiabilitiesAssets)
                 .addComponent(lLocked)
@@ -168,7 +168,7 @@ public class EditReversePostingView
         builder.add(lLocked,                    cc.xy(8, 17));
         builder.add(pPostingCategoryExtention,  cc.xy(4, 18));
         builder.addLabel("Betrag:",             cc.xy(2, 20));
-        builder.add(lReversePostingAmount,      cc.xy(4, 20, CellConstraints.RIGHT, CellConstraints.CENTER));
+        builder.add(tfReversePostingAmount,      cc.xy(4, 20, CellConstraints.RIGHT, CellConstraints.CENTER));
         builder.addLabel("€",                   cc.xy(6, 20));
         builder.addLabel("Art:",                cc.xy(2, 22));
         builder.add(lReversePostingLiabilitiesAssets, cc.xyw(4, 22, 3));
