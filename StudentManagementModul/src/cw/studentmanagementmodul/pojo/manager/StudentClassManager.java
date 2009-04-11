@@ -3,9 +3,9 @@ package cw.studentmanagementmodul.pojo.manager;
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
-import org.apache.log4j.Logger;
 import cw.studentmanagementmodul.pojo.OrganisationUnit;
 import cw.studentmanagementmodul.pojo.StudentClass;
+import java.util.logging.Logger;
 
 /**
  *
@@ -14,7 +14,7 @@ import cw.studentmanagementmodul.pojo.StudentClass;
 public class StudentClassManager extends AbstractPOJOManager<StudentClass>
 {
     private static StudentClassManager instance;
-    private static Logger logger = Logger.getLogger(StudentClassManager.class);
+    private static Logger logger = Logger.getLogger(StudentClassManager.class.getName());
 
     private StudentClassManager() {
     }

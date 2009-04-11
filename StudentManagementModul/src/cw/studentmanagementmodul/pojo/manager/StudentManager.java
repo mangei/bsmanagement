@@ -3,10 +3,10 @@ package cw.studentmanagementmodul.pojo.manager;
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
-import org.apache.log4j.Logger;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.studentmanagementmodul.pojo.Student;
 import cw.studentmanagementmodul.pojo.StudentClass;
+import java.util.logging.Logger;
 import javax.persistence.NoResultException;
 
 /**
@@ -16,7 +16,7 @@ import javax.persistence.NoResultException;
 public class StudentManager extends AbstractPOJOManager<Student> {
 
     private static StudentManager instance;
-    private static Logger logger = Logger.getLogger(StudentManager.class);
+    private static Logger logger = Logger.getLogger(StudentManager.class.getName());
 
     private StudentManager() {
     }

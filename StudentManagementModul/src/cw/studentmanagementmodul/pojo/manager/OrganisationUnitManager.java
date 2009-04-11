@@ -3,9 +3,8 @@ package cw.studentmanagementmodul.pojo.manager;
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
-import org.apache.log4j.Logger;
 import cw.studentmanagementmodul.pojo.OrganisationUnit;
-import javax.persistence.Query;
+import java.util.logging.Logger;
 
 /**
  * Manages OrganisationUnits
@@ -14,7 +13,7 @@ import javax.persistence.Query;
 public class OrganisationUnitManager extends AbstractPOJOManager<OrganisationUnit> {
 
     private static OrganisationUnitManager instance;
-    private static Logger logger = Logger.getLogger(OrganisationUnitManager.class);
+    private static Logger logger = Logger.getLogger(OrganisationUnitManager.class.getName());
 
     private OrganisationUnitManager() {
     }
