@@ -9,6 +9,7 @@ import cw.boardingschoolmanagement.manager.PropertiesManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import javax.swing.Icon;
 import java.awt.Graphics2D;
@@ -36,7 +37,7 @@ public class StatusBar
     }
 
     public StatusBar() {
-//        setPreferredSize(new Dimension(10, 23));
+        setPreferredSize(new Dimension(10, 23));
         setLayout(new BorderLayout());
 //        setPreferredSize(new Dimension(10, 50));
         setOpaque(false);
@@ -76,37 +77,37 @@ public class StatusBar
         statusBar.setOpaque(false);
         add(statusBar, BorderLayout.EAST);
 
-        final JLabel lGc = new JLabel("0/0");
-        statusBar.add(lGc);
-
-         new Timer().schedule(new TimerTask() {
-            @Override
-            public void run() {
-                lGc.setText( "availableProcessor:"
-                        + Runtime.getRuntime().availableProcessors()
-                        + " / maxMemory: "
-                        + Runtime.getRuntime().maxMemory() / 1024
-                        + "kb / freeMemory: "
-                        + Runtime.getRuntime().freeMemory() / 1024
-                        + "kb / totalMemory: "
-                        + Runtime.getRuntime().totalMemory() / 1024
-                        + "kb");
-//                Runtime.getRuntime().gc();
-//                Runtime.getRuntime().runFinalization();
-            }
-        }, 1000, 1000);
-
-        statusBar.add(new JLabel("Test"));
-
-        setTextAndFadeOut("Willkommen");
-
-        new Timer().schedule(new TimerTask() {
-
-            @Override
-            public void run() {
-                StatusBar.this.setTextAndFadeOut("Test222222222222222222222222222");
-            }
-        }, 5000);
+//        final JLabel lGc = new JLabel("0/0");
+//        statusBar.add(lGc);
+//
+//         new Timer().schedule(new TimerTask() {
+//            @Override
+//            public void run() {
+//                lGc.setText( "availableProcessor:"
+//                        + Runtime.getRuntime().availableProcessors()
+//                        + " / maxMemory: "
+//                        + Runtime.getRuntime().maxMemory() / 1024
+//                        + "kb / freeMemory: "
+//                        + Runtime.getRuntime().freeMemory() / 1024
+//                        + "kb / totalMemory: "
+//                        + Runtime.getRuntime().totalMemory() / 1024
+//                        + "kb");
+////                Runtime.getRuntime().gc();
+////                Runtime.getRuntime().runFinalization();
+//            }
+//        }, 1000, 1000);
+//
+//        statusBar.add(new JLabel("Test"));
+//
+//        setTextAndFadeOut("Willkommen");
+//
+//        new Timer().schedule(new TimerTask() {
+//
+//            @Override
+//            public void run() {
+//                StatusBar.this.setTextAndFadeOut("Test222222222222222222222222222");
+//            }
+//        }, 5000);
 
 //        setBackground(SystemColor.control);
     }

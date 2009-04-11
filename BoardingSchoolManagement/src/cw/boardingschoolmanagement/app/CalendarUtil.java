@@ -53,7 +53,7 @@ public class CalendarUtil {
     public static String DECEMBER_SHORT = "Dez";
 
     public static final String DATE_FORMAT_STANDARD = "dd.MM.yyyy";
-    public static final String DATETIME_FORMAT_STANDARD  ="dd.MM.yyyy HH:ii";
+    public static final String DATETIME_FORMAT_STANDARD  ="dd.MM.yyyy HH:mm";
 
 
     public static String getDayOfWeek(int dayOfWeek) {

@@ -1,5 +1,7 @@
 package cw.boardingschoolmanagement.app;
 
+import java.util.EventObject;
+
 /**
  * Descripes an CascadeEvent.
  *
@@ -9,29 +11,24 @@ package cw.boardingschoolmanagement.app;
  *
  * @author Manuel Geier (CreativeWorkers)
  */
-public class CascadeEvent{
+public class CascadeEvent extends EventObject {
 
-    public static final int TYPE_DELETE = 1;
-//    public static final int TYPE_UPDATE = 2;
+    public static final int TYPE_DELETE = 3001;
+//    public static final int TYPE_UPDATE = 3002;
 
-//    public static final int REFERENTIAL_ACTION_CASCADE      = 11;
-//    public static final int REFERENTIAL_ACTION_RESTRICT     = 12;
-//    public static final int REFERENTIAL_ACTION_NO_ACTION    = 13;
-//    public static final int REFERENTIAL_ACTION_SET_NULL     = 14;
-//    public static final int REFERENTIAL_ACTION_SET_DEFAULT  = 15;
+//    public static final int REFERENTIAL_ACTION_CASCADE      = 3011;
+//    public static final int REFERENTIAL_ACTION_RESTRICT     = 3012;
+//    public static final int REFERENTIAL_ACTION_NO_ACTION    = 3013;
+//    public static final int REFERENTIAL_ACTION_SET_NULL     = 3014;
+//    public static final int REFERENTIAL_ACTION_SET_DEFAULT  = 3015;
     
-    private Object object;
 //    private int referentialAction;
     private int type;
 
-    public CascadeEvent(Object object, int type) {
-        this.object = object;
+    public CascadeEvent(Object source, int type) {
+        super(source);
         this.type = type;
 //        this.referentialAction = referentialAction;
-    }
-
-    public Object getObject() {
-        return object;
     }
 
     public int getType() {
