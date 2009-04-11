@@ -45,11 +45,11 @@ public class EditCustomerEditCustomerPresentationModel
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
         );
 
-//        titleList               = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_TITLE);
-//        postOfficeNumberList    = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_POSTOFFICENUMBER);
-//        cityList                = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_CITY);
-//        provinceList            = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_PROVINCE);
-//        countryList             = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_COUNTRY);
+        titleList               = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_TITLE);
+        postOfficeNumberList    = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_POSTOFFICENUMBER);
+        cityList                = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_CITY);
+        provinceList            = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_PROVINCE);
+        countryList             = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_COUNTRY);
 
     }
 

@@ -4,6 +4,7 @@ import cw.boardingschoolmanagement.app.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.jidesoft.swing.AutoCompletion;
 import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
@@ -59,6 +60,14 @@ public class EditCustomerEditCustomerView
     private JButton bClearLocationData;
 
     private PropertyChangeListener guardianActiveListener;
+    private PostOfficeNumberAutoCompleteFire ponacf;
+    private CityAutoCompleteFire cacf;
+    private ProvinceAutoCompleteFire pacf;
+    private AutoCompletion titleAutoCompletion;
+    private AutoCompletion postOfficeNumberAutoCompletion;
+    private AutoCompletion cityAutoCompletion;
+    private AutoCompletion provinceAutoCompletion;
+    private AutoCompletion countryAutoCompletion;
 
     public EditCustomerEditCustomerView(EditCustomerEditCustomerPresentationModel model) {
         this.model = model;
@@ -127,22 +136,22 @@ public class EditCustomerEditCustomerView
     }
 
     private void initEvents() {
-//        new AutoCompletion(tfTitle,             model.getTitleList())           .setStrict(false);
-//        new AutoCompletion(tfPostOfficeNumber,  model.getPostOfficeNumberList()).setStrict(false);
-//        new AutoCompletion(tfCity,              model.getCityList())            .setStrict(false);
-//        new AutoCompletion(tfProvince,          model.getProvinceList())        .setStrict(false);
-//        new AutoCompletion(tfCountry,           model.getCountryList())         .setStrict(false);
+        (titleAutoCompletion = new AutoCompletion(tfTitle, model.getTitleList())).setStrict(false);
+        (postOfficeNumberAutoCompletion = new AutoCompletion(tfPostOfficeNumber, model.getPostOfficeNumberList())).setStrict(false);
+        (cityAutoCompletion = new AutoCompletion(tfCity, model.getCityList())).setStrict(false);
+        (provinceAutoCompletion = new AutoCompletion(tfProvince, model.getProvinceList())).setStrict(false);
+        (countryAutoCompletion = new AutoCompletion(tfCountry, model.getCountryList())).setStrict(false);
 
-//        PostOfficeNumberAutoCompleteFire ponacf = new PostOfficeNumberAutoCompleteFire();
-//        CityAutoCompleteFire cacf               = new CityAutoCompleteFire();
-//        ProvinceAutoCompleteFire pacf           = new ProvinceAutoCompleteFire();
+        ponacf = new PostOfficeNumberAutoCompleteFire();
+        cacf = new CityAutoCompleteFire();
+        pacf = new ProvinceAutoCompleteFire();
 
-//        tfPostOfficeNumber.addFocusListener(ponacf);
-//        tfPostOfficeNumber.getDocument().addDocumentListener(ponacf);
-//        tfCity.addFocusListener(cacf);
-//        tfCity.getDocument().addDocumentListener(cacf);
-//        tfProvince.addFocusListener(pacf);
-//        tfProvince.getDocument().addDocumentListener(pacf);
+        tfPostOfficeNumber.addFocusListener(ponacf);
+        tfPostOfficeNumber.getDocument().addDocumentListener(ponacf);
+        tfCity.addFocusListener(cacf);
+        tfCity.getDocument().addDocumentListener(cacf);
+        tfProvince.addFocusListener(pacf);
+        tfProvince.getDocument().addDocumentListener(pacf);
 
         model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_ACTIVE).addValueChangeListener(guardianActiveListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
@@ -328,6 +337,20 @@ public class EditCustomerEditCustomerView
         mainPanel.removeDisposableListener(this);
 
         componentContainer.dispose();
+
+        tfPostOfficeNumber.removeFocusListener(ponacf);
+        tfPostOfficeNumber.getDocument().removeDocumentListener(ponacf);
+        tfCity.removeFocusListener(cacf);
+        tfCity.getDocument().removeDocumentListener(cacf);
+        tfProvince.removeFocusListener(pacf);
+        tfProvince.getDocument().removeDocumentListener(pacf);
+        model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_ACTIVE).removeValueChangeListener(guardianActiveListener);
+
+        titleAutoCompletion.uninstallListeners();
+        postOfficeNumberAutoCompletion.uninstallListeners();
+        cityAutoCompletion.uninstallListeners();
+        provinceAutoCompletion.uninstallListeners();
+        countryAutoCompletion.uninstallListeners();
 
         model.dispose();
     }

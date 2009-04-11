@@ -71,7 +71,7 @@ public class EditPostingView
 
         pPostingCategoryExtention = CWComponentFactory.createPanel();
         FormLayout pPostingCategoryExtentionLayout = new FormLayout(
-                "fill:prefgrow:",
+                "fill:pref:grow:",
                 "4dlu, fill:pref"
         );
         pPostingCategoryExtention.setLayout(pPostingCategoryExtentionLayout);
