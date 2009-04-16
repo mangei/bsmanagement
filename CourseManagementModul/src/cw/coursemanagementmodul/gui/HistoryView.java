@@ -68,7 +68,6 @@ public class HistoryView implements Disposable{
 
     private JButton detailButton;
     private JButton printButton;
-    private JButton chartButton;
     
     public HistoryView(HistoryPresentationModel model) {
         this.model = model;
@@ -109,7 +108,15 @@ public class HistoryView implements Disposable{
         
         detailButton = CWComponentFactory.createButton(model.getDetailAction());
         printButton = CWComponentFactory.createButton(model.getPrintAction());
-        chartButton = CWComponentFactory.createButton(model.getChartAction());
+
+        detailButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Anzeigen",
+                "Zeigt den selektierten Kursteilnehmer in der Detailansicht an!",
+                "cw/coursemanagementmodul/images/lupe.png"));
+        printButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Drucken",
+                "Druckt eine detailierte Abrechnung des gesamten Kurses!",
+                "cw/coursemanagementmodul/images/print.png"));
         
         courseLabel = CWComponentFactory.createLabel("Kurs:");
 

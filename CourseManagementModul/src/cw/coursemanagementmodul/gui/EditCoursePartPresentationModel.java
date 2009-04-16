@@ -173,9 +173,9 @@ implements Disposable{
             bisVM.setValue(courseAdditionSelection.getSelection().getCourse().getEndDate() + "");
             priceVM.setValue(courseAdditionSelection.getSelection().getCourse().getPrice() + "");
             
-            sollVM.setValue(ValueManager.getInstance().getTotalSoll(coursePart) + "");
-            habenVM.setValue(ValueManager.getInstance().getTotalHaben(coursePart) + "");
-            saldoVM.setValue(ValueManager.getInstance().getTotalSaldo(coursePart) + "");
+            sollVM.setValue(ValueManager.getInstance().getTotalSoll(coursePart));
+            habenVM.setValue(ValueManager.getInstance().getTotalHaben(coursePart));
+            saldoVM.setValue(ValueManager.getInstance().getTotalSaldo(coursePart));
             
             activitySelection.setList(courseAdditionSelection.getSelection().getActivities());
             subjectSelection.setList(courseAdditionSelection.getSelection().getSubjects());
@@ -185,9 +185,9 @@ implements Disposable{
             bisVM.setValue("");
             priceVM.setValue("");
 
-            sollVM.setValue(ValueManager.getInstance().getTotalSoll(coursePart) + "");
-            habenVM.setValue(ValueManager.getInstance().getTotalHaben(coursePart) + "");
-            saldoVM.setValue(ValueManager.getInstance().getTotalSaldo(coursePart) + "");
+            sollVM.setValue(ValueManager.getInstance().getTotalSoll(coursePart));
+            habenVM.setValue(ValueManager.getInstance().getTotalHaben(coursePart));
+            saldoVM.setValue(ValueManager.getInstance().getTotalSaldo(coursePart));
 
             activitySelection.setList(null);
             subjectSelection.setList(null);
@@ -291,7 +291,7 @@ implements Disposable{
     private class CourseChooserButtonAction extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/course_add.png"));
         }
 
         public CourseChooserButtonAction(String name) {
@@ -368,7 +368,7 @@ implements Disposable{
     private class ActivityButtonAction extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/activity_add.png"));
         }
 
         public ActivityButtonAction(String name) {
@@ -403,7 +403,7 @@ implements Disposable{
     private class SubjectButtonAction extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/subject_add.png"));
         }
 
         public SubjectButtonAction(String name) {
@@ -438,7 +438,7 @@ implements Disposable{
     private class RemoveButtonAction extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/course_delete.png"));
         }
 
         public RemoveButtonAction(String name) {
@@ -462,7 +462,7 @@ implements Disposable{
     private class RemoveSubjectButtonAction extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/subject_delete.png"));
         }
 
         public RemoveSubjectButtonAction(String name) {
@@ -487,7 +487,7 @@ implements Disposable{
     private class RemoveActivityButtonAction extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/activity_delete.png"));
         }
 
         public RemoveActivityButtonAction(String name) {

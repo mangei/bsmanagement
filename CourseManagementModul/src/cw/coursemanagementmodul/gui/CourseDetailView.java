@@ -15,6 +15,7 @@ import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
 import java.awt.Font;
+import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.Format;
 import javax.swing.JButton;
@@ -46,6 +47,8 @@ public class CourseDetailView implements Disposable{
     private JLabel vPrice;
     
     private JLabel descLabel;
+
+    private Format dateFormat;
     //********************************************
     
     //Tabelle zur Darstellung der angelegten Kurse
@@ -59,6 +62,7 @@ public class CourseDetailView implements Disposable{
     public CourseDetailView(CourseDetailPresentationModel detailModel) {
         this.detailModel = detailModel;
         numberFormat = DecimalFormat.getCurrencyInstance();
+        dateFormat = DateFormat.getDateInstance();
     }
     
     private void initEventHandling() {
@@ -70,6 +74,15 @@ public class CourseDetailView implements Disposable{
     public void initComponents(){
         cancelButton = CWComponentFactory.createButton(detailModel.getCancelAction());
         printButton =  CWComponentFactory.createButton(detailModel.getPrintAction());
+        
+        printButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Drucken",
+                "Druckt die in der Tabelle angezeigten Kursteilnehmer!",
+                "cw/coursemanagementmodul/images/print.png"));
+        cancelButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Zurück",
+                "Zurück zur Kursübersicht!",
+                "cw/coursemanagementmodul/images/back.png"));
         
         coursePartTable = CWComponentFactory.createTable("Keine Kursteilnehmer zum selektierten Kurs vorhanden!");
         coursePartTable.setModel(detailModel.createCoursePartTableModel(detailModel.getCoursePartSelection()));
@@ -84,8 +97,8 @@ public class CourseDetailView implements Disposable{
         descLabel = CWComponentFactory.createLabel("Alle Kursteilnehmer des Kurses:");
         
         vCourseName = CWComponentFactory.createLabel(detailModel.getSelectedCourse().getName());
-        vBeginDate = CWComponentFactory.createLabel(detailModel.getSelectedCourse().getBeginDate() + "");
-        vEndDate = CWComponentFactory.createLabel(detailModel.getSelectedCourse().getEndDate() + "");
+        vBeginDate = CWComponentFactory.createLabel(new ValueHolder(detailModel.getSelectedCourse().getBeginDate()), dateFormat);
+        vEndDate = CWComponentFactory.createLabel(new ValueHolder(detailModel.getSelectedCourse().getEndDate()), dateFormat);
         vPrice = CWComponentFactory.createLabel(new ValueHolder(detailModel.getSelectedCourse().getPrice()), numberFormat);
 
         vCourseName.setFont(new Font(null, Font.BOLD, 11));

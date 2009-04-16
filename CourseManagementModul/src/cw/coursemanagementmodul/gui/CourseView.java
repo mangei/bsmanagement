@@ -14,11 +14,9 @@ import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
 import cw.boardingschoolmanagement.interfaces.Disposable;
-import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import org.jdesktop.swingx.JXTable;
 
 /**
@@ -57,6 +55,23 @@ public class CourseView implements Disposable{
         editButton   = CWComponentFactory.createButton(model.getEditButtonAction());
         deleteButton = CWComponentFactory.createButton(model.getDeleteButtonAction());
         detailButton = CWComponentFactory.createButton(model.getDetailButtonAction());
+
+        newButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Neu",
+                "Hier können Sie einen neuen Kurs hinzufügen!",
+                "cw/coursemanagementmodul/images/course_add.png"));
+        editButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Bearbeiten",
+                "Hier können Sie einen selektierten Kurs ändern!",
+                "cw/coursemanagementmodul/images/course_edit.png"));
+        deleteButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Löschen",
+                "Hier können Sie einen selektierten Kurs löschen!",
+                "cw/coursemanagementmodul/images/course_delete.png"));
+        detailButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Detailansicht",
+                "Hier sehen Sie alle Kursteilnehmer des selektierten Kurses!",
+                "cw/coursemanagementmodul/images/detail.png"));
         
         courseTable = CWComponentFactory.createTable("Kein Kurs vorhanden!");
         

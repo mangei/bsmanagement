@@ -113,7 +113,7 @@ public class PostingRunsPresentationModel implements Disposable{
             extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/posting.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/posting_delete.png"));
         }
 
         private StornoAction(String name) {

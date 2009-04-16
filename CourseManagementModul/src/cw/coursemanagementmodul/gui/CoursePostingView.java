@@ -19,6 +19,9 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DateFormat;
+import java.text.Format;
+import java.text.NumberFormat;
 import java.util.Date;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
@@ -70,8 +73,13 @@ public class CoursePostingView implements Disposable{
 
     private JViewPanel panel;
 
+    private Format dateFormat;
+    private Format currencyFormat;
+
     public CoursePostingView(CoursePostingPresentationModel model) {
         this.model = model;
+        dateFormat = DateFormat.getDateInstance();
+        currencyFormat = NumberFormat.getCurrencyInstance();
     }
 
     private void initEventHandling() {
@@ -130,9 +138,9 @@ public class CoursePostingView implements Disposable{
         price = CWComponentFactory.createLabel("Preis:");
 
         vCourseName = CWComponentFactory.createLabel(model.getNameVM());
-        vBeginDate = CWComponentFactory.createLabel(model.getBisVM());
-        vEndDate = CWComponentFactory.createLabel(model.getVonVM());
-        vPrice = CWComponentFactory.createLabel(model.getPriceVM());
+        vBeginDate = CWComponentFactory.createLabel(model.getBisVM(), dateFormat);
+        vEndDate = CWComponentFactory.createLabel(model.getVonVM(), dateFormat);
+        vPrice = CWComponentFactory.createLabel(model.getPriceVM(), currencyFormat);
 
         vCourseName.setFont(new Font(null, Font.BOLD, 11));
         vBeginDate.setFont(new Font(null, Font.BOLD, 11));
@@ -140,6 +148,15 @@ public class CoursePostingView implements Disposable{
         vPrice.setFont(new Font(null, Font.BOLD, 11));
 
         postingRunsButton = CWComponentFactory.createButton(model.getRunsAction());
+
+        accountingButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Buchen",
+                "Hier könne Sie eine Buchung durchführen!",
+                "cw/coursemanagementmodul/images/start.png"));
+        postingRunsButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Gebührenläufe",
+                "Hier sehen Sie alle bereits gebuchten Gebührenläufe!",
+                "cw/coursemanagementmodul/images/postingRuns.png"));
 
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(courseComboBox)

@@ -41,6 +41,15 @@ public class TestRunView implements Disposable{
         backButton = CWComponentFactory.createButton(model.getBackButtonAction());
         printButton = CWComponentFactory.createButton(model.getPrintAction());
 
+        backButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Zurück",
+                "Hier kehren Sie in die Gebührenlaufübersicht zurück!",
+                "cw/coursemanagementmodul/images/back.png"));
+        printButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Drucken",
+                "Druckt den Gebührenlauf!",
+                "cw/coursemanagementmodul/images/print.png"));
+
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(backButton);
 

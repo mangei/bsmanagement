@@ -52,6 +52,19 @@ public class PostingRunsView implements Disposable{
         backButton    = CWComponentFactory.createButton(model.getBackButtonAction());
         stornoButton    = CWComponentFactory.createButton(model.getStornoAction());
         detailButton    = CWComponentFactory.createButton(model.getDetailAction());
+
+        backButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Zurück",
+                "Hier kehren Sie wieder in den Kurs-Gebührenlauf zurück!",
+                "cw/coursemanagementmodul/images/back.png"));
+        stornoButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Stornieren",
+                "Hier wird der selektierte Gebührenlauf storniert!",
+                "cw/coursemanagementmodul/images/posting_delete.png"));
+        detailButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Detailansicht",
+                "Hier erhalten Sie eine detailierte Detailansicht zum selektierten Gebührenlauf!",
+                "cw/coursemanagementmodul/images/lupe.png"));
         
         runTable = CWComponentFactory.createTable("Es wurden noch keine Kursläufe erzeugt!");
         runTable.setModel(model.createPostingRunTableModel(model.getPostingRunList()));

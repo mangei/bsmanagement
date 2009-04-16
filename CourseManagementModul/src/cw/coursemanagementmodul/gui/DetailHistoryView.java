@@ -7,18 +7,22 @@
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.Font;
+import java.text.Format;
+import java.text.NumberFormat;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
 import org.jdesktop.swingx.JXTable;
 
 /**
@@ -44,8 +48,11 @@ public class DetailHistoryView implements Disposable{
 
     private JViewPanel panel;
 
+    private Format currencyFormat;
+
     public DetailHistoryView(DetailHistoryPresentationModel model) {
         this.model = model;
+        currencyFormat = NumberFormat.getCurrencyInstance();
     }
 
     private void initEventHandling() {
@@ -62,16 +69,22 @@ public class DetailHistoryView implements Disposable{
                     new JXTableSelectionConverter(
                         model.getPostings().getSelectionIndexHolder(),
                         accountingTable)));
+        accountingTable.getColumns(true).get(3).setCellRenderer(new DateTimeTableCellRenderer());
 
         back = CWComponentFactory.createButton(model.getBackAction());
+
+        back.setToolTipText(CWComponentFactory.createToolTip(
+                "Zurück",
+                "Hier kehren Sie zur Kurshistorie zurück!",
+                "cw/coursemanagementmodul/images/back.png"));
 
         soll =  CWComponentFactory.createLabel("Sollbetrag:");
         haben = CWComponentFactory.createLabel("Habenbetrag:");
         saldo = CWComponentFactory.createLabel("Saldo:");
 
-        vSoll = CWComponentFactory.createLabel(model.getTotalSoll() + "");
-        vHaben = CWComponentFactory.createLabel(model.getTotalHaben() + "");
-        vSaldo = CWComponentFactory.createLabel(model.getTotalSaldo() + "");
+        vSoll = CWComponentFactory.createLabel(new ValueHolder(model.getTotalSoll()), currencyFormat);
+        vHaben = CWComponentFactory.createLabel(new ValueHolder(model.getTotalHaben()), currencyFormat);
+        vSaldo = CWComponentFactory.createLabel(new ValueHolder(model.getTotalSaldo()), currencyFormat);
 
         vSoll.setFont(new Font(null, Font.BOLD, 11));
         vHaben.setFont(new Font(null, Font.BOLD, 11));
@@ -115,15 +128,16 @@ public class DetailHistoryView implements Disposable{
         accountingPanel.add(vSaldo, cc.xy(3, 7));
 
         accountingPanel.setOpaque(false);
-        
+
         panel.getContentPanel().setLayout(layout);
 
-        panel.getButtonPanel().add(back);
+        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
 
-        panel.getContentPanel().add(new JScrollPane(accountingTable), cc.xyw(1, 1, 5));
-        panel.getContentPanel().add(new JLabel("Gesamtübersicht:"), cc.xy(1, 3));
-        panel.getContentPanel().add(new JSeparator(), cc.xy(3, 3));
-        panel.getContentPanel().add(accountingPanel, cc.xy(1, 5));
+        panel.getButtonPanel().add(back);
+        builder.add(new JScrollPane(accountingTable), cc.xyw(1, 1, 5));
+        builder.addSeparator("Gesamtübersicht", cc.xyw(1, 3, 3));
+        builder.add(accountingPanel, cc.xy(1, 5));
+
         panel.addDisposableListener(this);
         return panel;
     }

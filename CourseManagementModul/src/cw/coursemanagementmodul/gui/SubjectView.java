@@ -52,6 +52,19 @@ public class SubjectView implements Disposable{
         newButton    = CWComponentFactory.createButton(model.getNewButtonAction());
         editButton   = CWComponentFactory.createButton(model.getEditButtonAction());
         deleteButton = CWComponentFactory.createButton(model.getDeleteButtonAction());
+
+        newButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Neu",
+                "Hier können Sie einen neuen Kursgegenstand hinzufügen!",
+                "cw/coursemanagementmodul/images/subject_add.png"));
+        editButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Bearbeiten",
+                "Hier können Sie einen selektierten Kursgegenstand ändern!",
+                "cw/coursemanagementmodul/images/subject_edit.png"));
+        deleteButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Löschen",
+                "Hier können Sie einen selektierten Kursgegenstand löschen!",
+                "cw/coursemanagementmodul/images/subject_delete.png"));
         
         subjectTable = CWComponentFactory.createTable("Keine Gegenstände vorhanden!");
         subjectTable.setModel(model.createSubjectTableModel(model.getSubjectSelection()));

@@ -63,6 +63,19 @@ public class EditCourseView implements Disposable{
         saveButton = CWComponentFactory.createButton(model.getSaveButtonAction());
         saveAndCloseButton = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
+
+        saveButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Speichern",
+                "Hier wird der Kurs gespeichert!",
+                "cw/coursemanagementmodul/images/save.png"));
+        saveAndCloseButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Speichern u. Schließen",
+                "Hier wird der Kurs gespeichert und anschließend in die Kursübersichts gewechselt!",
+                "cw/coursemanagementmodul/images/save_cancel.png"));
+        cancelButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Abbrechen",
+                "Hier kehren Sie zur Kursübersicht zurück!",
+                "cw/coursemanagementmodul/images/cancel.png"));
         
         beginDate = CWComponentFactory.createDateChooser(model.getBufferedModel(Course.PROPERTYNAME_BEGINDATE));
         

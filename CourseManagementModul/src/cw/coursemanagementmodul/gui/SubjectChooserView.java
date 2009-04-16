@@ -53,6 +53,16 @@ public class SubjectChooserView implements Disposable{
         addButton = CWComponentFactory.createButton(model.getAddButtonAction());
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
 
+        addButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Hinzufügen",
+                "Hier können Sie den selektierten Kursgegenstand zum Kurs hinzufügen!",
+                "cw/coursemanagementmodul/images/subject_add.png"));
+
+        cancelButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Schließen",
+                "Hier kehren Sie zur Ferienkursübersicht zurück!",
+                "cw/coursemanagementmodul/images/cancel.png"));
+
         subjectTable = CWComponentFactory.createTable("Es wurden noch keine Gegenstände angelegt!");
         subjectTable.setModel(model.createSubjectTableModel(model.getSubjectSelection()));
         subjectTable.setSelectionModel(

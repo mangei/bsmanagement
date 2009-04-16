@@ -43,6 +43,7 @@ import cw.coursemanagementmodul.pojo.manager.ActivityManager;
 import cw.coursemanagementmodul.pojo.manager.CourseManager;
 import cw.coursemanagementmodul.pojo.manager.SubjectManager;
 import java.text.DecimalFormat;
+import java.util.Date;
 
 /**
  *
@@ -156,15 +157,15 @@ public class CourseChooserPresentationModel implements Disposable{
     private void updateCourseLabels(){
         if(courseSelection.hasSelection()){
             nameVM.setValue(courseSelection.getSelection().getName());
-            vonVM.setValue(courseSelection.getSelection().getBeginDate() + "");
-            bisVM.setValue(courseSelection.getSelection().getEndDate() + "");
-            priceVM.setValue(courseSelection.getSelection().getPrice() + "");
+            vonVM.setValue(courseSelection.getSelection().getBeginDate());
+            bisVM.setValue(courseSelection.getSelection().getEndDate());
+            priceVM.setValue(courseSelection.getSelection().getPrice());
         }
         else{
             nameVM.setValue("");
-            vonVM.setValue("");
-            bisVM.setValue("");
-            priceVM.setValue("");
+            vonVM.setValue(new Date());
+            bisVM.setValue(new Date());
+            priceVM.setValue(0.0);
         }
     }
 
@@ -183,7 +184,7 @@ public class CourseChooserPresentationModel implements Disposable{
     //**************************************************************************
     private class AddAction extends AbstractAction{
           {
-            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/add.png") );
+            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/course_add.png") );
           }
          
          private AddAction(String name) {

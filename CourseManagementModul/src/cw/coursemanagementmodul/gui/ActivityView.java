@@ -52,6 +52,19 @@ public class ActivityView implements Disposable{
         newButton    = CWComponentFactory.createButton(model.getNewButtonAction());
         editButton   = CWComponentFactory.createButton(model.getEditButtonAction());
         deleteButton = CWComponentFactory.createButton(model.getDeleteButtonAction());
+
+        newButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Neu",
+                "Hier können Sie einen neue Aktivität hinzufügen!",
+                "cw/coursemanagementmodul/images/activity_add.png"));
+        editButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Bearbeiten",
+                "Hier können Sie eine selektierte Aktivität ändern!",
+                "cw/coursemanagementmodul/images/activity_edit.png"));
+        deleteButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Löschen",
+                "Hier können Sie eine selektierte Aktivität löschen!",
+                "cw/coursemanagementmodul/images/activity_delete.png"));
         
         activityTable = CWComponentFactory.createTable("Keine Aktivitäten vorhanden!");
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));

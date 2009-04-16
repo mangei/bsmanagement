@@ -58,6 +58,19 @@ public class EditActivityView implements Disposable{
         saveButton = CWComponentFactory.createButton(model.getSaveButtonAction());
         saveAndCloseButton = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
+
+        saveButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Speichern",
+                "Hier wird die Aktivität gespeichert!",
+                "cw/coursemanagementmodul/images/save.png"));
+        saveAndCloseButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Speichern u. Schließen",
+                "Hier wird die Aktivität gespeichert und anschließend in die Aktivitätsübersicht gewechselt!",
+                "cw/coursemanagementmodul/images/save_cancel.png"));
+        cancelButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Abbrechen",
+                "Hier kehren Sie zur Aktivitätsübersicht zurück!",
+                "cw/coursemanagementmodul/images/cancel.png"));
         
         cancelButton.addActionListener(new ActionListener() {
 

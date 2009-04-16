@@ -17,6 +17,8 @@ import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.text.DecimalFormat;
+import java.text.Format;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -57,11 +59,13 @@ public class EditCoursePartView implements Disposable{
     private JLabel vSaldo;
 
     private JViewPanel view;
-    
+
+    private Format currencyFormat;
     //**************************************************************************
             
     public EditCoursePartView(EditCoursePartPresentationModel model) {
         this.model = model;
+        currencyFormat = DecimalFormat.getCurrencyInstance();
     }
     
     //**************************************************************************
@@ -81,7 +85,7 @@ public class EditCoursePartView implements Disposable{
                         courseTable)));
 
         activityTable = CWComponentFactory.createTable("Keine Aktivität zugewiesen!");
-        activityTable.setPreferredScrollableViewportSize(new Dimension(10, 30));
+        activityTable.setPreferredScrollableViewportSize(new Dimension(10, 50));
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));//TODO-mit ValueModel
         activityTable.setSelectionModel(
                 new SingleListSelectionAdapter(
@@ -90,7 +94,7 @@ public class EditCoursePartView implements Disposable{
                         activityTable)));
         
         subjectTable = CWComponentFactory.createTable("Kein Gegenstand zugewiesen!");
-        subjectTable.setPreferredScrollableViewportSize(new Dimension(10, 30));
+        subjectTable.setPreferredScrollableViewportSize(new Dimension(10, 50));
         subjectTable.setModel(model.createSubjectTableModel(model.getSubjectSelection()));
         subjectTable.setSelectionModel(
                 new SingleListSelectionAdapter(
@@ -109,6 +113,32 @@ public class EditCoursePartView implements Disposable{
         deleteSubjectButton = CWComponentFactory.createButton(model.getRemoveSubjectButtonAction());
         deleteActivityButton = CWComponentFactory.createButton(model.getRemoveActivityButtonAction());
 
+        courseButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Kurs hinzufügen",
+                "Hier können Sie einen Kurs hinzufügen!",
+                "cw/coursemanagementmodul/images/course.png"));
+        activityButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Aktivität hinzufügen",
+                "Hier können Sie zum selektierten Kurs eine Aktivität hinzufügen!",
+                "cw/coursemanagementmodul/images/activity_add.png"));
+        subjectButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Gegenstand hinzufügen",
+                "Hier können Sie zum selektierten Kurs einen Kursgegenstand hinzufügen!",
+                "cw/coursemanagementmodul/images/subject_add.png"));
+
+        deleteCourseButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Kurs löschen",
+                "Hier können Sie den selektierten Kurs löschen!",
+                "cw/coursemanagementmodul/images/course_delete.png"));
+        deleteSubjectButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Gegenstand löschen",
+                "Hier können Sie zum selektierten Kurs einen Kursgegenstand löschen!",
+                "cw/coursemanagementmodul/images/subject_delete.png"));
+        deleteActivityButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Aktivität löschen",
+                "Hier können Sie zum selektierten Kurs eine Aktivität löschen!",
+                "cw/coursemanagementmodul/images/activity_delete.png"));
+
         soll = CWComponentFactory.createLabel("Sollbetrag:");
         haben = CWComponentFactory.createLabel("Habenbetrag:");
         saldo = CWComponentFactory.createLabel("Saldo:");
@@ -118,9 +148,9 @@ public class EditCoursePartView implements Disposable{
         vEndDate = CWComponentFactory.createLabel(model.getVonVM());
         vPrice = CWComponentFactory.createLabel(model.getPriceVM());
 
-        vSoll = CWComponentFactory.createLabel(model.getSollVM());
-        vHaben = CWComponentFactory.createLabel(model.getHabenVM());
-        vSaldo = CWComponentFactory.createLabel(model.getSaldoVM());
+        vSoll = CWComponentFactory.createLabel(model.getSollVM(), currencyFormat);
+        vHaben = CWComponentFactory.createLabel(model.getHabenVM(), currencyFormat);
+        vSaldo = CWComponentFactory.createLabel(model.getSaldoVM(), currencyFormat);
 
         vCourseName.setFont(new Font(null, Font.BOLD, 11));
         vBeginDate.setFont(new Font(null, Font.BOLD, 11));

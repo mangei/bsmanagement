@@ -48,10 +48,23 @@ public class EditSubjectView implements Disposable{
         nameLabel = CWComponentFactory.createLabel("Gegenstand:");
         
         nameTextField = BasicComponentFactory.createTextField(model.getBufferedModel(Subject.PROPERTYNAME_NAME), false);
-        
+
         saveButton = CWComponentFactory.createButton(model.getSaveButtonAction());
         saveAndCloseButton = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
+
+        saveButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Speichern",
+                "Hier wird der Kursgegenstand gespeichert!",
+                "cw/coursemanagementmodul/images/save.png"));
+        saveAndCloseButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Speichern u. Schließen",
+                "Hier wird der Kursgegenstand gespeichert und anschließend in die Gegenstandsübersicht gewechselt!",
+                "cw/coursemanagementmodul/images/save_cancel.png"));
+        cancelButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Abbrechen",
+                "Hier kehren Sie zur Kursgegenstandsübersicht zurück!",
+                "cw/coursemanagementmodul/images/cancel.png"));
         
         cancelButton.addActionListener(new ActionListener() {
 

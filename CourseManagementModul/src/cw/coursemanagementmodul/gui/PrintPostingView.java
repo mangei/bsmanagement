@@ -27,6 +27,12 @@ public class PrintPostingView {
     private void initComponents() {
         bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
+
+        bBack.setToolTipText(CWComponentFactory.createToolTip(
+                "Zurück",
+                "Hier kehren Sie in zur Gebührenlauf-Detailansicht zurück!",
+                "cw/coursemanagementmodul/images/back.png"));
+
         viewer = new JRViewer(model.getJasperPrint());
     }
 

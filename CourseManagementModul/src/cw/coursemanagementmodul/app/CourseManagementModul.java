@@ -91,7 +91,7 @@ public class CourseManagementModul implements Modul{
 
         CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
-                Customer customer = (Customer) evt.getObject();
+                Customer customer = new Customer();// = (Customer) evt.getObject();
                 List<CourseParticipant> courseParticipants = CourseParticipantManager.getInstance().getAll(customer);
                 CourseParticipantManager.getInstance().delete(courseParticipants);
             }

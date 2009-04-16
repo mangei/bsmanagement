@@ -194,7 +194,7 @@ public class ActivityPresentationModel implements Disposable{
             List<CourseParticipant> courseParts = CourseParticipantManager.getInstance().getAll(activity);
             
             if(courseParts.size() > 0){
-                    JOptionPane.showMessageDialog(null, "<html>Löschen dieser Activity "
+                    JOptionPane.showMessageDialog(null, "<html>Löschen der Aktivität "
                             + activity.getName() + " nicht möglich!<br/>"
                             + "Diese Aktivität wird noch von ein oder mehreren Kunden verwendet!</html>");
             }

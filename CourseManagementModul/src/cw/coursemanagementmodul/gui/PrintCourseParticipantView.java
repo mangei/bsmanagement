@@ -27,9 +27,13 @@ public class PrintCourseParticipantView {
     private void initComponents() {
         bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
+
+        bBack.setToolTipText(CWComponentFactory.createToolTip(
+                "Zurück",
+                "Hier kehren Sie zur Kursdetailansicht zurück!",
+                "cw/coursemanagementmodul/images/back.png"));
+
         viewer = new JRViewer(model.getJasperPrint());
-
-
     }
 
     public JPanel buildPanel() {

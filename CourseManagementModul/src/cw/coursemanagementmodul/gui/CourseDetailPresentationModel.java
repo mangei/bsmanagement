@@ -17,6 +17,7 @@ import javax.swing.Action;
 import javax.swing.ListModel;
 import javax.swing.table.TableModel;
 import cw.coursemanagementmodul.pojo.Course;
+import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
 import java.text.DecimalFormat;
@@ -190,7 +191,7 @@ public class CourseDetailPresentationModel implements Disposable{
                 case 5:
                     return coursePart.getCustomer().getCity();
                 case 6:
-                    return "€ " + numberFormat.format(selectedCourse.getPrice());
+                    return "€ " + numberFormat.format(getPrice(coursePart, selectedCourse));
                 default:
                     return "";
             }
@@ -198,7 +199,19 @@ public class CourseDetailPresentationModel implements Disposable{
     }
     //**************************************************************************
     
-    
+    private double getPrice(CourseParticipant courseParticipant, Course course){
+        double price = course.getPrice();
+        CourseAddition cA = new CourseAddition();
+        for(int i = 0; i < courseParticipant.getCourseList().size(); i++){
+            if(courseParticipant.getCourseList().get(i).getCourse().getId() == course.getId()){
+                cA = courseParticipant.getCourseList().get(i);
+            }
+        }
+        for(int i = 0; i < cA.getActivities().size(); i++){
+            price += cA.getActivities().get(i).getPrice();
+        }
+        return price;
+    }
     
     private void updateActionEnablement() {
     }

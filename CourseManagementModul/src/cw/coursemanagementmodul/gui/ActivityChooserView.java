@@ -54,6 +54,16 @@ public class ActivityChooserView implements Disposable{
         addButton = CWComponentFactory.createButton(model.getAddButtonAction());
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
 
+        addButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Hinzufügen",
+                "Hier können Sie die selektierte Aktivität zum Kurs hinzufügen!",
+                "cw/coursemanagementmodul/images/activity_add.png"));
+
+        cancelButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Schließen",
+                "Hier kehren Sie zur Ferienkursübersicht zurück!",
+                "cw/coursemanagementmodul/images/cancel.png"));
+
         activityTable = CWComponentFactory.createTable("Es wurden noch keine Aktivitäten angelegt!");
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));
         activityTable.setSelectionModel(

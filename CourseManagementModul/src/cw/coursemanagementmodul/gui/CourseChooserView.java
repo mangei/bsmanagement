@@ -17,6 +17,9 @@ import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.Font;
+import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.Format;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -53,10 +56,15 @@ public class CourseChooserView implements Disposable{
     private CheckBoxList subjectList;
     //********************************************
 
+    private Format dateFormat;
+    private Format currencyFormat;
+
     private JViewPanel mainPanel;
     
     public CourseChooserView(CourseChooserPresentationModel model) {
         this.model = model;
+        dateFormat = DateFormat.getDateInstance();
+        currencyFormat = DecimalFormat.getCurrencyInstance();
         initEventHandling();
     }
     
@@ -69,6 +77,16 @@ public class CourseChooserView implements Disposable{
     public void initComponents(){
         addButton = CWComponentFactory.createButton(model.getAddButtonAction());
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
+
+        addButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Hinzufügen",
+                "Hier können Sie den selektierten Kurs mit allen Aktivitäten und Gegenständen hinzufügen!",
+                "cw/coursemanagementmodul/images/course_add.png"));
+        
+        cancelButton.setToolTipText(CWComponentFactory.createToolTip(
+                "Schließen",
+                "Hier kehren Sie zur Ferienkursübersicht zurück!",
+                "cw/coursemanagementmodul/images/cancel.png"));
 
         courseTable = CWComponentFactory.createTable("Keine Kurse angelegt!");
         courseTable.setModel(model.createCourseTableModel(model.getCourseSelection()));
@@ -88,9 +106,9 @@ public class CourseChooserView implements Disposable{
         price = CWComponentFactory.createLabel("Preis:");
         
         vCourseName = CWComponentFactory.createLabel(model.getNameVM());
-        vBeginDate = CWComponentFactory.createLabel(model.getBisVM());
-        vEndDate = CWComponentFactory.createLabel(model.getVonVM());
-        vPrice = CWComponentFactory.createLabel(model.getPriceVM());
+        vBeginDate = CWComponentFactory.createLabel(model.getBisVM(), dateFormat);
+        vEndDate = CWComponentFactory.createLabel(model.getVonVM(), dateFormat);
+        vPrice = CWComponentFactory.createLabel(model.getPriceVM(), currencyFormat);
 
         vCourseName.setFont(new Font(null, Font.BOLD, 11));
         vBeginDate.setFont(new Font(null, Font.BOLD, 11));
