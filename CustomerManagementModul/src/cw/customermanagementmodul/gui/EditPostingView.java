@@ -108,7 +108,7 @@ public class EditPostingView
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout(
-                "right:pref, 4dlu, pref, 4dlu, left:200dlu, 4dlu, pref",
+                "right:pref, 4dlu, fill:pref, 4dlu, left:200dlu, 4dlu, pref",
                 "pref, 4dlu, pref, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
         
         PanelBuilder builder = new PanelBuilder(layout,panel.getContentPanel());

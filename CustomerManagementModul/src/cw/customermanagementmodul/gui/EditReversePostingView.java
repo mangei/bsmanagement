@@ -137,7 +137,7 @@ public class EditReversePostingView
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout(
-                "10dlu, left:pref, 4dlu, pref, 4dlu, left:200dlu, 4dlu, pref",
+                "10dlu, left:pref, 4dlu, fill:pref, 4dlu, left:200dlu, 4dlu, pref",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref, 4dlu, pref, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
         
         PanelBuilder builder = new PanelBuilder(layout,panel.getContentPanel());

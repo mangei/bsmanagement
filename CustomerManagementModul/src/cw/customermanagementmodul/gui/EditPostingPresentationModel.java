@@ -121,9 +121,10 @@ public class EditPostingPresentationModel
         getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).removeValueChangeListener(saveListener);
         getBufferedModel(Posting.PROPERTYNAME_CATEGORY).removeValueChangeListener(saveListener);
 
-        if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
-            editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).save();
-        }
+        // TODO Dispose all extentions
+//        if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
+//            editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).save();
+//        }
 
         unsaved.removeValueChangeListener(unsavedListener);
 
