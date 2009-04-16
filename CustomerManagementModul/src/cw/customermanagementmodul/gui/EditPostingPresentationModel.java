@@ -121,6 +121,10 @@ public class EditPostingPresentationModel
         getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).removeValueChangeListener(saveListener);
         getBufferedModel(Posting.PROPERTYNAME_CATEGORY).removeValueChangeListener(saveListener);
 
+        if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
+            editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).save();
+        }
+
         unsaved.removeValueChangeListener(unsavedListener);
 
         postingCategoryConnector.release();
@@ -231,13 +235,17 @@ public class EditPostingPresentationModel
         boolean valid = true;
         List<String> errorMessages = new ArrayList<String>();
 
-        for(EditPostingPostingCategoryExtention ex : getExtentions()) {
-            List<String> validate = ex.validate();
-            if(validate != null && validate.size() > 0) {
-                valid = false;
-                errorMessages.addAll(validate);
+//        for(EditPostingPostingCategoryExtention ex : getExtentions()) {
+
+            if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
+                List<String> validate = editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).validate();
+                if(validate != null && validate.size() > 0) {
+                    valid = false;
+                    errorMessages.addAll(validate);
+                }
             }
-        }
+
+//        }
 
         if(!valid) {
 
@@ -258,9 +266,14 @@ public class EditPostingPresentationModel
         triggerCommit();
         unsaved.setValue(false);
 
-        for(EditPostingPostingCategoryExtention ex : getExtentions()) {
-            ex.save();
+        // Save the selected extention
+        if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
+            editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).save();
         }
+        
+//        for(EditPostingPostingCategoryExtention ex : getExtentions()) {
+//            ex.save();
+//        }
 
         return true;
     }

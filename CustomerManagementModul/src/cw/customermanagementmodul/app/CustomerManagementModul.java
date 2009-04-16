@@ -100,25 +100,25 @@ public class CustomerManagementModul
         }), "manage");
 
         sideMenu.addCategory("Buchungen", "posting", 10);
-        sideMenu.addItem(new JButton(new AbstractAction(
-                "Übersicht", CWUtils.loadIcon("cw/customermanagementmodul/images/posting.png")) {
-
-            {
-                putValue(Action.SHORT_DESCRIPTION, "Buchungsübersicht");
-            }
-
-            public void actionPerformed(ActionEvent e) {
-                GUIManager.setLoadingScreenText("Buchungen werden geladen...");
-                GUIManager.setLoadingScreenVisible(true);
-
-                PostingManagement2PresentationModel model = new PostingManagement2PresentationModel();
-                PostingManagementView view = new PostingManagementView(model);
-                JPanel panel = view.buildPanel();
-
-                GUIManager.changeView(panel);
-                GUIManager.setLoadingScreenVisible(false);
-            }
-        }), "posting");
+//        sideMenu.addItem(new JButton(new AbstractAction(
+//                "Übersicht", CWUtils.loadIcon("cw/customermanagementmodul/images/posting.png")) {
+//
+//            {
+//                putValue(Action.SHORT_DESCRIPTION, "Buchungsübersicht");
+//            }
+//
+//            public void actionPerformed(ActionEvent e) {
+//                GUIManager.setLoadingScreenText("Buchungen werden geladen...");
+//                GUIManager.setLoadingScreenVisible(true);
+//
+//                PostingManagement2PresentationModel model = new PostingManagement2PresentationModel();
+//                PostingManagementView view = new PostingManagementView(model);
+//                JPanel panel = view.buildPanel();
+//
+//                GUIManager.changeView(panel);
+//                GUIManager.setLoadingScreenVisible(false);
+//            }
+//        }), "posting");
         sideMenu.addItem(new JButton(new AbstractAction(
                 "Kategorien", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category.png")) {
 
@@ -142,7 +142,7 @@ public class CustomerManagementModul
 
         PostingCategoryManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
-                PostingCategory accountingCategory = (PostingCategory) evt.getObject();
+                PostingCategory accountingCategory = (PostingCategory) evt.getSource();
                 List<Posting> accountings = PostingManager.getInstance().getAll(accountingCategory);
                 for (int i = 0, l = accountings.size(); i < l; i++) {
                     accountings.get(i).setPostingCategory(null);
@@ -152,7 +152,7 @@ public class CustomerManagementModul
 
         GroupManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
-                Group group = (Group) evt.getObject();
+                Group group = (Group) evt.getSource();
                 List<Customer> customers = CustomerManager.getInstance().getAll(group);
                 for(int i=0, l=customers.size(); i<l; i++) {
                     customers.get(i).getGroups().remove(group);
@@ -162,7 +162,7 @@ public class CustomerManagementModul
 
         CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
-                Customer customer = (Customer) evt.getObject();
+                Customer customer = (Customer) evt.getSource();
                 List<Posting> postings = PostingManager.getInstance().getAll(customer);
                 PostingManager.getInstance().delete(postings);
             }

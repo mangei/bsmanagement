@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
 import org.hibernate.annotations.Cascade;
@@ -33,6 +34,10 @@ public class Posting
     private PostingCategory postingCategory;
 //    private String source;
 
+    private boolean reversePosting = false;
+    private boolean balancePosting = false;
+    private Posting previousPosting;
+
     // Properties - Constants
     public final static String PROPERTYNAME_ID = "id";
     public final static String PROPERTYNAME_DESCRIPTION = "description";
@@ -42,6 +47,9 @@ public class Posting
     public final static String PROPERTYNAME_CATEGORY = "postingCategory";
     public final static String PROPERTYNAME_CUSTOMER = "customer";
     public final static String PROPERTYNAME_LIABILITIESASSETS = "liabilitiesAssets";
+    public final static String PROPERTYNAME_REVERSEPOSTING = "reversePosting";
+    public final static String PROPERTYNAME_BALANCEPOSTING = "balancePosting";
+    public final static String PROPERTYNAME_PREVIOUSPOSTING = "previousPosting";
 //    public final static String PROPERTYNAME_SOURCE = "source";
 
     /**
@@ -186,6 +194,50 @@ public class Posting
         firePropertyChange(PROPERTYNAME_CATEGORY, old, postingCategory);
     }
 
+    @OneToOne
+    public Posting getPartPosting() {
+        return previousPosting;
+    }
+
+    public void setPartPosting(Posting partPosting) {
+        Posting old = this.previousPosting;
+        this.previousPosting = partPosting;
+        firePropertyChange(PROPERTYNAME_PREVIOUSPOSTING, old, postingCategory);
+    }
+
+    public boolean isReversePosting() {
+        return reversePosting;
+    }
+
+    public void setReversePosting(boolean reversePosting) {
+        boolean old = this.reversePosting;
+        this.reversePosting = reversePosting;
+        firePropertyChange(PROPERTYNAME_REVERSEPOSTING, old, reversePosting);
+    }
+
+    public boolean isBalancePosting() {
+        return balancePosting;
+    }
+
+    public void setBalancePosting(boolean balancePosting) {
+        boolean old = this.balancePosting;
+        this.balancePosting = balancePosting;
+        firePropertyChange(PROPERTYNAME_BALANCEPOSTING, old, balancePosting);
+    }
+
+    @ManyToOne
+    public Posting getPreviousPosting() {
+        return previousPosting;
+    }
+
+    public void setPreviousPosting(Posting previousPosting) {
+        Posting old = this.previousPosting;
+        this.previousPosting = previousPosting;
+        firePropertyChange(PROPERTYNAME_PREVIOUSPOSTING, old, previousPosting);
+    }
+
+
+
 //    public String getSource() {
 //        return source;
 //    }
@@ -195,5 +247,6 @@ public class Posting
 //        this.source = source;
 //        firePropertyChange(PROPERTYNAME_SOURCE, old, source);
 //    }
+
 
 }

@@ -91,10 +91,14 @@ public class EditReversePostingPresentationModel
         editReversePostingPostingCategoryExtentions = getExtentions();
         editPostingPostingCategoryExtentionsKeyMap = new HashMap<String, EditReversePostingPostingCategoryExtention>();
 
-        // Initialize the extentions
+        // Load the extentions
         for(EditReversePostingPostingCategoryExtention ex : editReversePostingPostingCategoryExtentions) {
-            ex.initPresentationModel(this);
+//            ex.initPresentationModel(this);
             editPostingPostingCategoryExtentionsKeyMap.put(ex.getKey(), ex);
+        }
+        // Initialize the selected Extention
+        if(oldPosting.getPostingCategory() != null) {
+            editPostingPostingCategoryExtentionsKeyMap.get(oldPosting.getPostingCategory().getKey()).initPresentationModel(this);
         }
     }
     
@@ -110,12 +114,17 @@ public class EditReversePostingPresentationModel
             }
         });
         unsaved.setValue(false);
+        saveCancelButtonAction.setEnabled(true);
     }
 
     public void dispose() {
-        for(EditReversePostingPostingCategoryExtention ex : editReversePostingPostingCategoryExtentions) {
-            ex.initPresentationModel(this);
-            editPostingPostingCategoryExtentionsKeyMap.put(ex.getKey(), ex);
+//        for(EditReversePostingPostingCategoryExtention ex : editReversePostingPostingCategoryExtentions) {
+//            ex.initPresentationModel(this);
+//            editPostingPostingCategoryExtentionsKeyMap.put(ex.getKey(), ex);
+//        }
+
+        if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
+            editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).dispose();
         }
 
         unsaved.removeValueChangeListener(unsavedListener);
@@ -227,13 +236,22 @@ public class EditReversePostingPresentationModel
         boolean valid = true;
         List<String> errorMessages = new ArrayList<String>();
 
-        for(EditReversePostingPostingCategoryExtention ex : getExtentions()) {
-            List<String> validate = ex.validate();
-            if(validate != null && validate.size() > 0) {
-                valid = false;
-                errorMessages.addAll(validate);
+//        for(EditReversePostingPostingCategoryExtention ex : getExtentions()) {
+//            List<String> validate = ex.validate();
+//            if(validate != null && validate.size() > 0) {
+//                valid = false;
+//                errorMessages.addAll(validate);
+//            }
+            
+            if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
+                List<String> validate = editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).validate();
+                if(validate != null && validate.size() > 0) {
+                    valid = false;
+                    errorMessages.addAll(validate);
+                }
             }
-        }
+
+//        }
 
         if(!valid) {
 
@@ -253,9 +271,14 @@ public class EditReversePostingPresentationModel
         
         reversePostingPresentationModel.triggerCommit();
 
-        for(EditReversePostingPostingCategoryExtention ex : getExtentions()) {
-            ex.save();
+        // Save the selected extention
+        if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
+            editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).save();
         }
+        
+//        for(EditReversePostingPostingCategoryExtention ex : getExtentions()) {
+//            ex.save();
+//        }
 
         return true;
     }

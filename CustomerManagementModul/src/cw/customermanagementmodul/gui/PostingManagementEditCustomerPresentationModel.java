@@ -436,6 +436,8 @@ public class PostingManagementEditCustomerPresentationModel {
         reversePosting.setLiabilitiesAssets(posting.isLiabilitiesAssets());
         reversePosting.setDescription(posting.getDescription() + " - Storno");
         reversePosting.setPostingCategory(posting.getPostingCategory());
+        reversePosting.setPreviousPosting(posting);
+        reversePosting.setReversePosting(true);
 
         HeaderInfo reversePostingHeaderInfo = new HeaderInfo(
             "Buchung stornieren",
@@ -483,6 +485,14 @@ public class PostingManagementEditCustomerPresentationModel {
         reversePosting.setLiabilitiesAssets(!posting.isLiabilitiesAssets());
         reversePosting.setDescription(posting.getDescription() + " - Ausgleich");
         reversePosting.setPostingCategory(posting.getPostingCategory());
+
+        // Wenn der vorherige ein teil war, dann muss man die Grundbuchung heraussuchen
+        reversePosting.setBalancePosting(true);
+        if(posting.isBalancePosting()) {
+            reversePosting.setPreviousPosting(posting.getPreviousPosting());
+        } else {
+            reversePosting.setPreviousPosting(posting);
+        }
 
         HeaderInfo reversePostingHeaderInfo = new HeaderInfo(
                 "Buchung ausgleichen",
