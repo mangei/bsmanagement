@@ -31,7 +31,7 @@ public class CoursePostingManager extends AbstractPOJOManager<CoursePosting> {
     }
     
     public CoursePosting get(Posting posting) {
-        return (CoursePosting) HibernateUtil.getEntityManager().createQuery("FROM CoursePosting p where p.posting = " + posting.getId()).getSingleResult();
+        return (CoursePosting) HibernateUtil.getEntityManager().createQuery("FROM CoursePosting p where p.posting.id = " + posting.getId()).getResultList().get(0);
     }
 
     public List<CoursePosting> getAllExceptStorno() {

@@ -21,17 +21,25 @@ import javax.swing.JLabel;
  */
 public class ReversePostingCategoryExtention implements EditReversePostingPostingCategoryExtention{
     private EditReversePostingPresentationModel reversePostingModel;
+    private CoursePosting coursePosting;
     public void initPresentationModel(EditReversePostingPresentationModel editReversePostingModel) {
         reversePostingModel = editReversePostingModel;
+        Posting p = reversePostingModel.getPostingPresentationModel().getBean();
+        if(p.isBalancePosting()) {
+            p = p.getPreviousPosting();
+        }
+        coursePosting = CoursePostingManager.getInstance().get(p);
     }
 
     public JComponent getView() {
-        CoursePosting p = CoursePostingManager.getInstance().get(((Posting)reversePostingModel.getPostingPresentationModel().getBean()));
-        return new JLabel(p.getCourseAddition().getCourse().getName());
+        return new JLabel(coursePosting.getCourseAddition().getCourse().getName());
     }
 
     public void save() {
-        System.out.println("SAVE");
+        CoursePosting coursePostingNew = new CoursePosting();
+        coursePostingNew.setCourseAddition(coursePosting.getCourseAddition());
+        coursePostingNew.setPosting(reversePostingModel.getPostingPresentationModel().getBean());
+        CoursePostingManager.getInstance().save(coursePostingNew);
     }
 
     public List<String> validate() {
