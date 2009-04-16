@@ -34,7 +34,7 @@ public class EditOrganisationUnitPresentationModel
     private ValueModel unsaved;
     private String headerText;
 
-    private Action resetButtonAction;
+//    private Action resetButtonAction;
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
@@ -63,7 +63,7 @@ public class EditOrganisationUnitPresentationModel
         buttonListenerSupport = new ButtonListenerSupport();
 
         saveButtonAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/boardingschoolmanagement/images/disk_16.png"));
-        resetButtonAction = new ResetAction("Zurücksetzen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/arrow_rotate_anticlockwise.png"));
+//        resetButtonAction = new ResetAction("Zurücksetzen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/arrow_rotate_anticlockwise.png"));
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/cancel.png"));
         saveCancelButtonAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/save_cancel.png"));
 
@@ -77,6 +77,7 @@ public class EditOrganisationUnitPresentationModel
         removeChildren(organisationUnitList, getBean());
 
         selectionOrganisationUnit = new SelectionInList<OrganisationUnit>(organisationUnitList);
+        selectionOrganisationUnit.setSelection(getBean().getParent());
     }
 
     public void initEventHandling() {
@@ -95,11 +96,11 @@ public class EditOrganisationUnitPresentationModel
             public void propertyChange(PropertyChangeEvent evt) {
                 if((Boolean)evt.getNewValue() == true) {
                     saveButtonAction.setEnabled(true);
-                    resetButtonAction.setEnabled(true);
+//                    resetButtonAction.setEnabled(true);
                     saveCancelButtonAction.setEnabled(true);
                 } else {
                     saveButtonAction.setEnabled(false);
-                    resetButtonAction.setEnabled(false);
+//                    resetButtonAction.setEnabled(false);
                     saveCancelButtonAction.setEnabled(false);
                 }
             }
@@ -175,21 +176,21 @@ public class EditOrganisationUnitPresentationModel
         }
     }
 
-    private class ResetAction
-            extends AbstractAction {
-
-        private ResetAction(String name, Icon icon) {
-            super(name, icon);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
-            if(i == JOptionPane.OK_OPTION) {
-                triggerFlush();
-                buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
-            }
-        }
-    }
+//    private class ResetAction
+//            extends AbstractAction {
+//
+//        private ResetAction(String name, Icon icon) {
+//            super(name, icon);
+//        }
+//
+//        public void actionPerformed(ActionEvent e) {
+//            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie alle Änderungen verwerfen?");
+//            if(i == JOptionPane.OK_OPTION) {
+//                triggerFlush();
+//                buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.RESET_BUTTON));
+//            }
+//        }
+//    }
 
     private class CancelAction
             extends AbstractAction {
@@ -264,9 +265,9 @@ public class EditOrganisationUnitPresentationModel
         return cancelButtonAction;
     }
 
-    public Action getResetButtonAction() {
-        return resetButtonAction;
-    }
+//    public Action getResetButtonAction() {
+//        return resetButtonAction;
+//    }
 
     public Action getSaveButtonAction() {
         return saveButtonAction;

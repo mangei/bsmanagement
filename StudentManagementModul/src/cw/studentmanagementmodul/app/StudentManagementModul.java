@@ -41,7 +41,7 @@ implements Modul
 
         CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
-                Customer customer = (Customer) evt.getObject();
+                Customer customer = (Customer) evt.getSource();
                 Student student = StudentManager.getInstance().get(customer);
                 if(student != null) {
                     StudentManager.getInstance().delete(student);
@@ -51,7 +51,7 @@ implements Modul
 
         StudentClassManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
-                StudentClass studentClass = (StudentClass) evt.getObject();
+                StudentClass studentClass = (StudentClass) evt.getSource();
                 List<Student> students = StudentManager.getInstance().getAll(studentClass);
                 for(int i=0, l=students.size(); i<l; i++) {
                     students.get(i).setStudentClass(null);

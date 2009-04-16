@@ -30,7 +30,7 @@ public class EditStudentClassView
     private JComboBox cbNextStudentClass;
 
     private JButton bSave;
-    private JButton bReset;
+//    private JButton bReset;
     private JButton bCancel;
     private JButton bSaveCancel;
 
@@ -40,7 +40,7 @@ public class EditStudentClassView
 
     public void initModels() {
         bSave       = CWComponentFactory.createButton(model.getSaveButtonAction());
-        bReset      = CWComponentFactory.createButton(model.getResetButtonAction());
+//        bReset      = CWComponentFactory.createButton(model.getResetButtonAction());
         bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         
@@ -50,7 +50,7 @@ public class EditStudentClassView
 
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(bCancel)
-                .addComponent(bReset)
+//                .addComponent(bReset)
                 .addComponent(bSave)
                 .addComponent(bSaveCancel)
                 .addComponent(tfName)
@@ -70,7 +70,7 @@ public class EditStudentClassView
         JButtonPanel buttonPanel = panel.getButtonPanel();
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
-        buttonPanel.add(bReset);
+//        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout("right:pref, 4dlu, pref:grow", "pref, 4dlu, pref, 4dlu, pref");
