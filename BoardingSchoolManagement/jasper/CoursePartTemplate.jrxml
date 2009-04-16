@@ -142,14 +142,14 @@
 				</reportElement>
 			</rectangle>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement x="229" y="1" width="88" height="15"/>
+				<reportElement x="229" y="34" width="88" height="15"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.guardian.surname}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
 				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="20" y="2" width="109" height="15" backcolor="#FFFFFF"/>
 				<textElement>
-					<font fontName="sansserif" isBold="false"/>
+					<font fontName="sansserif" isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.forename} + " " + $F{customer.surname}]]></textFieldExpression>
 			</textField>
@@ -164,17 +164,17 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.postOfficeNumber} + " " + $F{customer.city}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement mode="Transparent" x="229" y="17" width="88" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="229" y="2" width="88" height="15" backcolor="#FFFFFF"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.landlinephone}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement mode="Transparent" x="229" y="32" width="88" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="229" y="18" width="88" height="15" backcolor="#FFFFFF"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.mobilephone}]]></textFieldExpression>
 			</textField>
 			<textField pattern="dd.MM.yyyy" isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement mode="Transparent" x="139" y="1" width="88" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="139" y="2" width="88" height="15" backcolor="#FFFFFF"/>
 				<textElement/>
 				<textFieldExpression class="java.util.Date"><![CDATA[$F{customer.birthday}]]></textFieldExpression>
 			</textField>

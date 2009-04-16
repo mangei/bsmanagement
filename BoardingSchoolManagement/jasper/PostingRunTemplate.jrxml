@@ -147,7 +147,7 @@
 	<detail>
 		<band height="57" isSplitAllowed="false">
 			<textField isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement x="229" y="5" width="88" height="15"/>
+				<reportElement x="229" y="36" width="88" height="15"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.guardian.surname}]]></textFieldExpression>
 			</textField>
@@ -169,12 +169,12 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.postOfficeNumber} + " " + $F{customer.city}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement mode="Transparent" x="229" y="21" width="88" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="229" y="5" width="88" height="15" backcolor="#FFFFFF"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.landlinephone}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement mode="Transparent" x="229" y="36" width="88" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="229" y="20" width="88" height="15" backcolor="#FFFFFF"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.mobilephone}]]></textFieldExpression>
 			</textField>

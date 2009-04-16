@@ -144,9 +144,9 @@
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="64" isSplitAllowed="false">
+		<band height="69" isSplitAllowed="false">
 			<textField isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement x="229" y="1" width="88" height="15"/>
+				<reportElement x="229" y="34" width="103" height="15" isRemoveLineWhenBlank="true"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.guardian.surname}]]></textFieldExpression>
 			</textField>
@@ -168,12 +168,12 @@
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.postOfficeNumber} + " " + $F{customer.city}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement mode="Transparent" x="229" y="17" width="88" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="229" y="3" width="88" height="15" backcolor="#FFFFFF"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.landlinephone}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true" hyperlinkType="None">
-				<reportElement mode="Transparent" x="229" y="32" width="88" height="15" backcolor="#FFFFFF"/>
+				<reportElement mode="Transparent" x="229" y="18" width="88" height="15" backcolor="#FFFFFF"/>
 				<textElement/>
 				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.mobilephone}]]></textFieldExpression>
 			</textField>
@@ -188,28 +188,28 @@
 				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{courseReport}]]></subreportExpression>
 			</subreport>
 			<textField hyperlinkType="None">
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" mode="Opaque" x="20" y="47" width="109" height="15" backcolor="#CCCCCC"/>
+				<reportElement stretchType="RelativeToTallestObject" mode="Opaque" x="20" y="51" width="130" height="15" backcolor="#CCCCCC"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Soll: " + $P{sollList}.toArray()[$V{REPORT_COUNT}.intValue()-1]]]></textFieldExpression>
 			</textField>
 			<textField hyperlinkType="None">
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" mode="Opaque" x="129" y="47" width="100" height="15" backcolor="#CCCCCC"/>
+				<reportElement stretchType="RelativeToTallestObject" mode="Opaque" x="138" y="51" width="124" height="15" backcolor="#CCCCCC"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Haben: " + $P{habenList}.toArray()[$V{REPORT_COUNT}.intValue()-1]]]></textFieldExpression>
 			</textField>
 			<textField hyperlinkType="None">
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" mode="Opaque" x="229" y="47" width="309" height="15" backcolor="#CCCCCC"/>
+				<reportElement stretchType="RelativeToTallestObject" mode="Opaque" x="243" y="51" width="295" height="15" backcolor="#CCCCCC"/>
 				<textElement textAlignment="Right">
 					<font isBold="true"/>
 				</textElement>
 				<textFieldExpression class="java.lang.String"><![CDATA["Saldo: " + $P{saldoList}.toArray()[$V{REPORT_COUNT}.intValue()-1]]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="20" y="61" width="518" height="1"/>
+				<reportElement stretchType="RelativeToTallestObject" x="20" y="66" width="518" height="1"/>
 			</line>
 			<textField pattern="¤ #,##0.00" hyperlinkType="None">
 				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="490" y="16" width="48" height="15">
@@ -374,14 +374,14 @@ der sich durch eine Buchung ergeben hat! In diesen Fällen sind die Aktivitätsp
 				<reportElement x="122" y="60" width="416" height="1"/>
 			</line>
 			<staticText>
-				<reportElement x="17" y="158" width="63" height="15"/>
+				<reportElement x="17" y="158" width="121" height="15"/>
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Abrechnung]]></text>
+				<text><![CDATA[Abrechnung des Kurses]]></text>
 			</staticText>
 			<line>
-				<reportElement x="80" y="165" width="458" height="1"/>
+				<reportElement x="138" y="165" width="399" height="1"/>
 			</line>
 			<textField pattern="¤ #,##0.00" hyperlinkType="None">
 				<reportElement x="162" y="175" width="100" height="15"/>
