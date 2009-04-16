@@ -38,7 +38,7 @@ public class ReversePostingCategoryExtention implements EditReversePostingPostin
     public void save() {
         CoursePosting coursePostingNew = new CoursePosting();
         coursePostingNew.setCourseAddition(coursePosting.getCourseAddition());
-        coursePostingNew.setPosting(reversePostingModel.getPostingPresentationModel().getBean());
+        coursePostingNew.setPosting(reversePostingModel.getReversePostingPresentationModel().getBean());
         CoursePostingManager.getInstance().save(coursePostingNew);
     }
 
