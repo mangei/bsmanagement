@@ -4,10 +4,10 @@ import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 import java.awt.BorderLayout;
 import java.util.List;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import cw.customermanagementmodul.pojo.Customer;
@@ -60,6 +60,8 @@ public class EditCustomerView
             });
             setTabsEnabled(false);
         }
+
+        model.getUnsaved().setValue(false);
     }
 
     private void setTabsEnabled(boolean enabled) {
@@ -82,9 +84,15 @@ public class EditCustomerView
         buttonPanel.add(bCancel);
         
         // Load dynamic components in tabs
-        List<JComponent> lComps = model.getExtentionComponents();
-        for(JComponent c : lComps) {
-            tabs.addTab(c.getName(), c);
+        List<EditCustomerTabExtention> lEx = model.getExtentions();
+        EditCustomerTabExtention ex;
+        Class activeEx = (Class) model.getProperties().get("activeExtention");
+        for(int i=0, l=lEx.size(); i<l; i++) {
+            ex = lEx.get(i);
+            tabs.addTab(ex.getView().getName(), ex.getView());
+            if (activeEx != null && ex.getClass().equals(activeEx)) {
+                tabs.setSelectedIndex(i);
+            }
         }
         
         mainPanel.getContentPanel().add(tabs, BorderLayout.CENTER);

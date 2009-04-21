@@ -11,6 +11,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.event.ListSelectionListener;
@@ -80,14 +81,16 @@ public class PostingManagement2PresentationModel {
             GUIManager.setLoadingScreenVisible(true);
 
             final Customer c = new Customer();
-            final EditCustomerPresentationModel model = new EditCustomerPresentationModel(
-                    c,
+            PresentationModelProperties p = new PresentationModelProperties();
+            p.put("customer", c);
+            p.put(PresentationModelProperties.HEADERINFO,
                     new HeaderInfo(
                         "Kunden erstellen",
                         "Bearbeiten sie hier alle Informationen über Ihren Kunden.",
                         CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png"),
                         CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png")
             ));
+            final EditCustomerPresentationModel model = new EditCustomerPresentationModel(p);
             final EditCustomerView editView = new EditCustomerView(model);
 
             final PropertyChangeListener activeListener = new PropertyChangeListener() {
@@ -305,14 +308,16 @@ public class PostingManagement2PresentationModel {
         GUIManager.setLoadingScreenText("Kunde wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
 
-        final EditCustomerPresentationModel model = new EditCustomerPresentationModel(
-                c,
+        PresentationModelProperties p = new PresentationModelProperties();
+        p.put("customer", c);
+        p.put(PresentationModelProperties.HEADERINFO,
                 new HeaderInfo(
                     "Kunden bearbeiten",
                     "Bearbeiten sie hier alle Informationen über Ihren Kunden.",
                     CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"),
                     CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")
         ));
+        final EditCustomerPresentationModel model = new EditCustomerPresentationModel(p);
         final EditCustomerView editView = new EditCustomerView(model);
 
         model.addButtonListener(new ButtonListener() {

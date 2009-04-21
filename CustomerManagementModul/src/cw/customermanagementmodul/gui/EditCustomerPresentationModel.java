@@ -11,6 +11,7 @@ import cw.boardingschoolmanagement.comparator.PriorityComparator;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.ModulManager;
+import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -35,6 +36,7 @@ public class EditCustomerPresentationModel
         extends PresentationModel<Customer>
         implements Disposable {
 
+    private PresentationModelProperties properties;
     private Customer customer;
     private ValueModel unsaved;
     private HeaderInfo headerInfo;
@@ -47,14 +49,11 @@ public class EditCustomerPresentationModel
     private PropertyChangeListener actionButtonListener;
     private SaveListener saveListener;
 
-    public EditCustomerPresentationModel(Customer customer) {
-        this(customer, new HeaderInfo());
-    }
-
-    public EditCustomerPresentationModel(Customer customer, HeaderInfo headerInfo) {
-        super(customer);
-        this.customer = customer;
-        this.headerInfo = headerInfo;
+    public EditCustomerPresentationModel(PresentationModelProperties properties) {
+        super((Customer)properties.get("customer"));
+        this.customer = (Customer)properties.get("customer");
+        this.headerInfo = properties.getHeaderInfo();
+        this.properties = properties;
 
         initModels();
         initEventHandling();
@@ -76,7 +75,9 @@ public class EditCustomerPresentationModel
         saveCancelAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
 
         support = new ButtonListenerSupport();
+    }
 
+    public void initEventHandling() {
         saveListener = new SaveListener();
         getBufferedModel(Customer.PROPERTYNAME_ACTIVE).addValueChangeListener(saveListener);
         getBufferedModel(Customer.PROPERTYNAME_GENDER).addValueChangeListener(saveListener);
@@ -99,9 +100,7 @@ public class EditCustomerPresentationModel
         guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_GENDER).addValueChangeListener(saveListener);
         guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_FORENAME).addValueChangeListener(saveListener);
         guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_SURNAME).addValueChangeListener(saveListener);
-    }
 
-    public void initEventHandling() {
         unsaved.addValueChangeListener(actionButtonListener = new PropertyChangeListener() {
 
             public void propertyChange(PropertyChangeEvent evt) {
@@ -252,6 +251,10 @@ public class EditCustomerPresentationModel
         }
 
         return null;
+    }
+
+    public PresentationModelProperties getProperties() {
+        return properties;
     }
 
     public void removeButtonListener(ButtonListener listener) {
