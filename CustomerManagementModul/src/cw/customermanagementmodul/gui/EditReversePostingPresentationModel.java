@@ -13,8 +13,6 @@ import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.customermanagementmodul.extentions.interfaces.EditReversePostingPostingCategoryExtention;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Date;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -24,6 +22,8 @@ import javax.swing.JOptionPane;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.PostingCategory;
 import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JComponent;
@@ -53,7 +53,8 @@ public class EditReversePostingPresentationModel
 
     private ButtonListenerSupport support;
 
-    private PropertyChangeListener unsavedListener;
+    private SaveListener saveListener;
+//    private PropertyChangeListener unsavedListener;
     
     public EditReversePostingPresentationModel(Posting oldPosting, Posting reversePosting, HeaderInfo headerInfo) {
         this.reversePosting = reversePosting;
@@ -82,11 +83,12 @@ public class EditReversePostingPresentationModel
         postingPresentationModel = new PresentationModel<Posting>(oldPosting);
         reversePostingPresentationModel = new PresentationModel<Posting>(reversePosting);
 
-        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(new SaveListener());
-        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_AMOUNT).addValueChangeListener(new SaveListener());
-        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(new SaveListener());
-        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).addValueChangeListener(new SaveListener());
-        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_CATEGORY).addValueChangeListener(new SaveListener());
+        saveListener = new SaveListener();
+        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(saveListener);
+        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_AMOUNT).addValueChangeListener(saveListener);
+        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(saveListener);
+        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).addValueChangeListener(saveListener);
+        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_CATEGORY).addValueChangeListener(saveListener);
 
         editReversePostingPostingCategoryExtentions = getExtentions();
         editPostingPostingCategoryExtentionsKeyMap = new HashMap<String, EditReversePostingPostingCategoryExtention>();
@@ -104,15 +106,15 @@ public class EditReversePostingPresentationModel
     
     public void initEventHandling() {
         unsaved = new ValueHolder();
-        unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
-                if((Boolean)evt.getNewValue() == true) {
-                    saveCancelButtonAction.setEnabled(true);
-                } else {
-                    saveCancelButtonAction.setEnabled(false);
-                }
-            }
-        });
+//        unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
+//            public void propertyChange(PropertyChangeEvent evt) {
+//                if((Boolean)evt.getNewValue() == true) {
+//                    saveCancelButtonAction.setEnabled(true);
+//                } else {
+//                    saveCancelButtonAction.setEnabled(false);
+//                }
+//            }
+//        });
         unsaved.setValue(false);
         saveCancelButtonAction.setEnabled(true);
     }
@@ -123,11 +125,18 @@ public class EditReversePostingPresentationModel
 //            editPostingPostingCategoryExtentionsKeyMap.put(ex.getKey(), ex);
 //        }
 
+        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).removeValueChangeListener(saveListener);
+        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_AMOUNT).removeValueChangeListener(saveListener);
+        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).removeValueChangeListener(saveListener);
+        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).removeValueChangeListener(saveListener);
+        reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_CATEGORY).removeValueChangeListener(saveListener);
+
+
         if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
             editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).dispose();
         }
 
-        unsaved.removeValueChangeListener(unsavedListener);
+//        unsaved.removeValueChangeListener(unsavedListener);
     }
 
     private List<EditReversePostingPostingCategoryExtention> getExtentions() {
@@ -141,11 +150,11 @@ public class EditReversePostingPresentationModel
      * Wenn sich ein Document ändert, wird saved auf false gesetzt
      */
     public class SaveListener implements PropertyChangeListener {
-        
+
         public void propertyChange(PropertyChangeEvent evt) {
             updateState();
         }
-        
+
         public void updateState() {
             unsaved.setValue(true);
         }
@@ -270,6 +279,7 @@ public class EditReversePostingPresentationModel
         }
         
         reversePostingPresentationModel.triggerCommit();
+        unsaved.setValue(false);
 
         // Save the selected extention
         if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {

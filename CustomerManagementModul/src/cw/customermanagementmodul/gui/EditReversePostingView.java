@@ -166,7 +166,7 @@ public class EditReversePostingView
         builder.addLabel("Kategorie:",          cc.xy(2, 17));
         builder.add(cbReversePostingCategory,   cc.xyw(4, 17, 3));
         builder.add(lLocked,                    cc.xy(8, 17));
-        builder.add(pPostingCategoryExtention,  cc.xy(4, 18));
+        builder.add(pPostingCategoryExtention,  cc.xyw(4, 18, 3));
         builder.addLabel("Betrag:",             cc.xy(2, 20));
         builder.add(tfReversePostingAmount,      cc.xy(4, 20, CellConstraints.RIGHT, CellConstraints.CENTER));
         builder.addLabel("€",                   cc.xy(6, 20));

@@ -14,8 +14,6 @@ import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.customermanagementmodul.extentions.interfaces.EditPostingPostingCategoryExtention;
 import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Date;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -25,6 +23,8 @@ import javax.swing.JOptionPane;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.PostingCategory;
 import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JComponent;
@@ -75,7 +75,7 @@ public class EditPostingPresentationModel
         saveCancelAction = new SaveCancelAction("Buchen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_lightning.png"));
 
         List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAll();
-        postingCategories.add(0, new PostingCategory("Keine"));
+        postingCategories.add(0, null);
         postingCategorySelection = new SelectionInList<PostingCategory>(postingCategories);
         postingCategorySelection.setSelectionIndex(0);
 
@@ -143,11 +143,11 @@ public class EditPostingPresentationModel
      * Wenn sich ein Document ändert, wird saved auf false gesetzt
      */
     public class SaveListener implements PropertyChangeListener {
-        
+
         public void propertyChange(PropertyChangeEvent evt) {
             updateState();
         }
-        
+
         public void updateState() {
             unsaved.setValue(true);
         }

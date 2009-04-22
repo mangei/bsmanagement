@@ -119,7 +119,7 @@ public class EditPostingView
         builder.add(tfDescription,              cc.xyw(3, 1, 3));
         builder.addLabel("Kategorie:",          cc.xy(1, 3));
         builder.add(cbPostingCategory,          cc.xyw(3, 3, 3));
-        builder.add(pPostingCategoryExtention,  cc.xy(3, 4));
+        builder.add(pPostingCategoryExtention,  cc.xyw(3, 4, 3));
         builder.addLabel("Betrag:",             cc.xy(1, 6));
         builder.add(tfAmount,                   cc.xy(3, 6));
         builder.addLabel("€",                   cc.xy(5, 6));

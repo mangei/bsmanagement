@@ -258,8 +258,8 @@ public class EditCustomerEditCustomerView
         initComponents();
         
         mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
-        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+//        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+//        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref",

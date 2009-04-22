@@ -165,10 +165,10 @@ public class PostingManagementPresentationModel {
             Posting p = list.get(i);
             if(p.isAssets()) {
                 assets = assets + p.getAmount();
-                saldo = saldo + p.getAmount();
+                saldo = saldo - p.getAmount();
             } else {
                 liabilities = liabilities + p.getAmount();
-                saldo = saldo - p.getAmount();
+                saldo = saldo + p.getAmount();
             }
         }
         liabilitiesValue.setValue(Double.toString(liabilities));

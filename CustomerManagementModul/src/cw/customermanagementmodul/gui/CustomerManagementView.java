@@ -3,7 +3,13 @@ package cw.customermanagementmodul.gui;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.pojo.Posting;
+import cw.customermanagementmodul.pojo.manager.PostingManager;
 import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.util.List;
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
@@ -81,6 +87,22 @@ public class CustomerManagementView
         panel.getButtonPanel().add(bDelete);
         panel.getButtonPanel().add(bInactive);
         panel.getButtonPanel().add(bViewInactives);
+        panel.getButtonPanel().add(new JButton(new AbstractAction("Show Postings") {
+
+            public void actionPerformed(ActionEvent e) {
+                Customer c = model.getCustomerSelectorPresentationModel().getSelectedCustomer();
+                List<Posting> all = PostingManager.getInstance().getAll(c);
+                Posting p;
+                for(int i=0,l=all.size(); i<l; i++) {
+                    p = all.get(i);
+                    System.out.println(p.getDescription());
+                    while(p.getPreviousPosting() != null) {
+                        p = p.getPreviousPosting();
+                        System.out.println(" -> " + p.getDescription());
+                    }
+                }
+            }
+        }));
 
         panel.getContentPanel().setLayout(new BorderLayout());
         panel.getContentPanel().add(customerSelectorView.buildPanel(), BorderLayout.CENTER);

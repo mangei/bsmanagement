@@ -13,6 +13,7 @@ import javax.swing.JTabbedPane;
 import cw.customermanagementmodul.pojo.Customer;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import javax.swing.ScrollPaneConstants;
 
 /**
  *
@@ -74,8 +75,8 @@ public class EditCustomerView
         initComponents();
         
         JViewPanel mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
-//        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(JideScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-//        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(JideScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+//        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+//        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         
         JButtonPanel buttonPanel = mainPanel.getButtonPanel();
         
@@ -89,6 +90,8 @@ public class EditCustomerView
         Class activeEx = (Class) model.getProperties().get("activeExtention");
         for(int i=0, l=lEx.size(); i<l; i++) {
             ex = lEx.get(i);
+            ex.getView().setPreferredSize(tabs.getSize());
+            ex.getView().setMaximumSize(tabs.getSize());
             tabs.addTab(ex.getView().getName(), ex.getView());
             if (activeEx != null && ex.getClass().equals(activeEx)) {
                 tabs.setSelectedIndex(i);

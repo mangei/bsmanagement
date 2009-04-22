@@ -9,7 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.Transient;
 import org.hibernate.annotations.Cascade;
@@ -192,17 +191,6 @@ public class Posting
         PostingCategory old = this.postingCategory;
         this.postingCategory = postingCategory;
         firePropertyChange(PROPERTYNAME_CATEGORY, old, postingCategory);
-    }
-
-    @OneToOne
-    public Posting getPartPosting() {
-        return previousPosting;
-    }
-
-    public void setPartPosting(Posting partPosting) {
-        Posting old = this.previousPosting;
-        this.previousPosting = partPosting;
-        firePropertyChange(PROPERTYNAME_PREVIOUSPOSTING, old, postingCategory);
     }
 
     public boolean isReversePosting() {
