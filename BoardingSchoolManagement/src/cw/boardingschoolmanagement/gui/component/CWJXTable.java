@@ -77,7 +77,7 @@ public class CWJXTable extends JXTable {
         super.paintComponent(g);
         if (getModel().getRowCount() == 0) {
             int x = (getWidth() - g.getFontMetrics().stringWidth(emptyText)) / 2;
-            int y = (getHeight() - g.getFontMetrics().getHeight()) / 2;
+            int y = (getHeight() - g.getFontMetrics().getHeight()) / 2 + 10;
             g.setColor(Color.GRAY);
             g.drawString(emptyText, x, y);
         }

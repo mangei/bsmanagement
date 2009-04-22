@@ -22,6 +22,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicPanelUI;
@@ -93,6 +94,8 @@ public class JViewPanel
         contentScrollPane.setBorder(new EmptyBorder(0,0,0,0));
         contentScrollPane.getViewport().setOpaque(false);
         contentScrollPane.setOpaque(false);
+//        contentScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
+//        contentScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         mainPanel.add(contentScrollPane, BorderLayout.CENTER);
 
         add(mainPanel, BorderLayout.CENTER);
