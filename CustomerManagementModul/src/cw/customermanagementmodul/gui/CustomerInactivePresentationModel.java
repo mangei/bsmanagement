@@ -91,7 +91,7 @@ public class CustomerInactivePresentationModel
 
             GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde wieder aktiviert.");
 
-            buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.OWN_BUTTON, BUTTON_OWN_ACTIVE));
+            buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.CUSTOM_BUTTON, BUTTON_OWN_ACTIVE));
         }
     }
 

@@ -671,7 +671,7 @@ public class PostingManagementPresentationModel {
                     GUIManager.getInstance().unlockMenu();
                     GUIManager.changeToLastView();
                 }
-                if (evt.getType() == ButtonEvent.OWN_BUTTON && evt.getOwnButtonText().equals("reversePostingButton")) {
+                if (evt.getType() == ButtonEvent.CUSTOM_BUTTON && evt.getCustomButtonText().equals("reversePostingButton")) {
                     model.removeButtonListener(this);
                     GUIManager.getInstance().unlockMenu();
                     GUIManager.changeToLastView();
