@@ -44,7 +44,7 @@ public class StudentEditCustomerPresentationModel
     }
 
     public void initModels() {
-        studentClassChooserAction = new StudentClassChooserAction("Klasse auswählen", CWUtils.loadIcon("cw/studentmanagementmodul/images/box_add.png"));
+        studentClassChooserAction = new StudentClassChooserAction("Klasse auswählen", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_go.png"));
         studentClassName = new ValueHolder();
     }
 
@@ -95,6 +95,9 @@ public class StudentEditCustomerPresentationModel
                 public void buttonPressed(ButtonEvent e) {
                     if(e.getType() == ButtonEvent.OK_BUTTON) {
                         setBufferedValue(Student.PROPERTYNAME_STUDENTCLASS, model.getSelectedStudentClass());
+                    }
+                    else if(e.getType() == ButtonEvent.CUSTOM_BUTTON && e.getCustomButtonText().equals("noClassButton")) {
+                        setBufferedValue(Student.PROPERTYNAME_STUDENTCLASS, null);
                     }
                     model.removeButtonListener(this);
                     GUIManager.changeToLastView();

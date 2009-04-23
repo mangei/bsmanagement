@@ -28,6 +28,7 @@ public class StudentClassChooserView
     private JViewPanel panel;
     private JXTree trStudentClass;
     private JButton bOk;
+    private JButton bNoClass;
     private JButton bCancel;
     private JButton bTreeExpand;
     private JButton bTreeCollapse;
@@ -38,6 +39,7 @@ public class StudentClassChooserView
 
     public void initModels() {
         bOk             = CWComponentFactory.createButton(model.getOkAction());
+        bNoClass        = CWComponentFactory.createButton(model.getNoClassAction());
         bCancel         = CWComponentFactory.createButton(model.getCancelAction());
         trStudentClass  = CWComponentFactory.createTree(model.getStudentClassTreeModel());
         trStudentClass.setSelectionModel(model.getStudentClassTreeSelectionModel());
@@ -57,6 +59,7 @@ public class StudentClassChooserView
 
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(bOk)
+                .addComponent(bNoClass)
                 .addComponent(bCancel)
                 .addComponent(bTreeCollapse)
                 .addComponent(bTreeExpand);
@@ -73,6 +76,7 @@ public class StudentClassChooserView
 
         panel.getButtonPanel().add(bOk);
         panel.getButtonPanel().add(bCancel);
+        panel.getButtonPanel().add(bNoClass);
 
         FormLayout layout = new FormLayout(
                 "pref:grow, 1dlu, pref",

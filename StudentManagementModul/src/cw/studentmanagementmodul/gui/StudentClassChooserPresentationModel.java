@@ -35,6 +35,7 @@ public class StudentClassChooserPresentationModel
     private String headerText;
     private StudentClass selectedStudentClass;
     private Action okAction;
+    private Action noClassAction;
     private Action cancelAction;
     private DefaultTreeModel studentClassTreeModel;
     private DefaultTreeSelectionModel studentClassTreeSelectionModel;
@@ -60,6 +61,7 @@ public class StudentClassChooserPresentationModel
     public void initModels() {
         studentClassTreeNodeMap = new HashMap<Object, DefaultMutableTreeNode>();
         okAction = new OkAction("Auswählen", CWUtils.loadIcon("cw/studentmanagementmodul/images/accept.png"));
+        noClassAction = new NoClassAction("Keine Klasse", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_no.png"));
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/studentmanagementmodul/images/cancel.png"));
 
         studentClassRootTreeNode = new DefaultMutableTreeNode("Welt", true);
@@ -162,6 +164,17 @@ public class StudentClassChooserPresentationModel
     ////////////////////////////////////////////////////////////////////////////
     // Action classes
     ////////////////////////////////////////////////////////////////////////////
+    private class NoClassAction extends AbstractAction {
+
+        public NoClassAction(String name, Icon icon) {
+            super(name, icon);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.CUSTOM_BUTTON, "noClassButton"));
+        }
+    }
+
     private class OkAction extends AbstractAction {
 
         public OkAction(String name, Icon icon) {
@@ -209,6 +222,10 @@ public class StudentClassChooserPresentationModel
 
     public Action getOkAction() {
         return okAction;
+    }
+
+    public Action getNoClassAction() {
+        return noClassAction;
     }
 
     public DefaultTreeCellRenderer getStudentClassTreeCellRenderer() {
