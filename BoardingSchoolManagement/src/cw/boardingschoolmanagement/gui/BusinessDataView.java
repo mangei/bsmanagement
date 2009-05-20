@@ -62,7 +62,7 @@ public class BusinessDataView
         
     }
 
-    public JPanel buildPanel() {
+    public JViewPanel buildPanel() {
         initComponents();
 
         panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());

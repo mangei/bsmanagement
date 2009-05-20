@@ -51,7 +51,7 @@ public class ConfigurationView
 
     }
 
-    public JPanel buildPanel() {
+    public JViewPanel buildPanel() {
         initComponents();
 
         panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
@@ -79,6 +79,7 @@ public class ConfigurationView
 
             // Create the button
             JButton button = new JButton(ex.getButtonName());
+            componentContainer.addComponent(button);
             button.putClientProperty("roundCorners", Boolean.FALSE);
 
             // Set the right icon

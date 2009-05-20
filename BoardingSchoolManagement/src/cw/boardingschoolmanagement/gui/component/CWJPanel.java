@@ -30,6 +30,7 @@ public class CWJPanel
     public void dispose() {
         Object[] toArray = disposableListenerList.toArray();
         for(int i=0, l=toArray.length; i<l; i++) {
+            System.out.println("dispose: " + toArray[i].getClass().getName());
             ((Disposable)toArray[i]).dispose();
         }
         disposableListenerList.clear();

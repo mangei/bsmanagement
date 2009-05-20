@@ -306,7 +306,17 @@ public class GUIManager {
                 gM.lastComponents.push(gM.shownComponent);
             } else {
                 // Die alten löschen, wenn sie nicht gespeichert werden sollen
-                gM.lastComponents.clear();
+
+                // Pop the old ones and dispose them if they are Disposable
+                for(int i=0, l=gM.lastComponents.size(); i<l; i++) {
+                    JComponent oldComp = gM.lastComponents.pop();
+                    if(oldComp instanceof Disposable) {
+                        ((Disposable)oldComp).dispose();
+                    }
+                }
+                
+//              not necessary
+//                gM.lastComponents.clear();
             }
 
             // Von der Ansicht entfernen
@@ -396,9 +406,11 @@ public class GUIManager {
             // Hinzufügen
             gM.componentView.add(gM.shownComponent, BorderLayout.CENTER);
 
+            // Neu zeichnen lassen
             gM.componentView.validate();
             gM.componentView.repaint();
 
+            // Pfadanzeige aktualisieren
             gM.reloadPath();
         }
     }

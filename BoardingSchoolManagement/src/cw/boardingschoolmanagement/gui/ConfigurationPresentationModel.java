@@ -75,6 +75,10 @@ public class ConfigurationPresentationModel extends PresentationModel
     
     public void dispose() {
         getTriggerChannel().removeValueChangeListener(actionButtonListener);
+
+        for (ConfigurationExtention ex : configurationExtentions) {
+            ex.dispose();
+        }
     }
 
     public List<JComponent> getExtentionComponents() {

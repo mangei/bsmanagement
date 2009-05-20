@@ -5,8 +5,6 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.JideSwingUtilities;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import cw.boardingschoolmanagement.interfaces.HeaderInfoCallable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -22,42 +20,38 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicPanelUI;
 
 /**
  *
- * @author Manuel Geier
+ * @author ManuelG
  */
-public class JViewPanel
-        extends CWJPanel
-        implements HeaderInfoCallable
-{
+public class CWView extends JComponent {
 
     private JButtonPanel buttonPanel;
     private JPanel topPanel;
     private JScrollPane contentScrollPane;
     private JPanel contentPanel;
     private JPanel mainPanel;
-    private HeaderInfoPanel headerInfoPanel;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfoPanel headerInfoPanel;
+    private CWHeaderInfo headerInfo;
 
     // Alignment of the header
     public static final int LEFT = JLabel.LEFT;
     public static final int CENTER = JLabel.CENTER;
     public static final int RIGHT = JLabel.RIGHT;
 
-    public JViewPanel() {
-        this(new HeaderInfo());
+    public CWView() {
+        this(new CWHeaderInfo());
     }
 
-    public JViewPanel(String headerText) {
-        this(new HeaderInfo(headerText));
+    public CWView(String headerText) {
+        this(new CWHeaderInfo(headerText));
     }
 
-    public JViewPanel(HeaderInfo headerInfo) {
+    public CWView(CWHeaderInfo headerInfo) {
         if(headerInfo == null) throw new NullPointerException("headerInfo is null");
 
         this.headerInfo = headerInfo;
@@ -68,14 +62,14 @@ public class JViewPanel
 
         int gab = 10;
         mainPanel = new JPanel(new BorderLayout());
-        mainPanel.setUI(new ViewPanelUI());
+        mainPanel.setUI(new CWViewUI());
         mainPanel.setBorder(new EmptyBorder(gab, gab, gab, gab));
 
         buttonPanel = new JButtonPanel();
         buttonPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
 
         JPanel topInfoActionPanel = new JPanel(new BorderLayout());
-        topInfoActionPanel.add(headerInfoPanel = new HeaderInfoPanel(headerInfo), BorderLayout.NORTH);
+        topInfoActionPanel.add(headerInfoPanel = new CWHeaderInfoPanel(headerInfo), BorderLayout.NORTH);
         topInfoActionPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(topInfoActionPanel, BorderLayout.NORTH);
@@ -104,12 +98,9 @@ public class JViewPanel
         setBorder(BorderFactory.createLineBorder(GUIManager.BORDER_COLOR));
     }
 
-    @Override
     public void dispose() {
-        super.dispose();
 
         System.out.println("  headerText: " + headerInfo.getHeaderText());
-        headerInfo.dispose();
         buttonPanel.removeAll();
         buttonPanel.setLayout(null);
         buttonPanel.setUI(null);
@@ -151,11 +142,11 @@ public class JViewPanel
         return contentScrollPane;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 
-    public void setHeaderInfo(HeaderInfo headerInfo) {
+    public void setHeaderInfo(CWHeaderInfo headerInfo) {
         headerInfoPanel.setHeaderInfo(headerInfo);
     }
 
@@ -163,9 +154,8 @@ public class JViewPanel
         mainPanel.setBorder(border);
     }
 
-    public static class HeaderInfo
+    public static class CWHeaderInfo
             extends Model
-            implements Disposable
     {
 
         private String headerText;
@@ -173,27 +163,23 @@ public class JViewPanel
         private Icon icon;
         private Icon smallIcon;
 
-        public HeaderInfo() {
+        public CWHeaderInfo() {
             this("");
         }
 
-        public HeaderInfo(String headerText) {
+        public CWHeaderInfo(String headerText) {
             this(headerText, "");
         }
 
-        public HeaderInfo(String headerText, String description) {
+        public CWHeaderInfo(String headerText, String description) {
             this(headerText, description, null, null);
         }
 
-        public HeaderInfo(String headerText, String description, Icon icon, Icon smallIcon) {
+        public CWHeaderInfo(String headerText, String description, Icon icon, Icon smallIcon) {
             this.headerText = headerText;
             this.description = description;
             this.icon = icon;
             this.smallIcon = smallIcon;
-        }
-
-        public void dispose() {
-            System.out.println("_____ANZ LISTENERS: :" + getPropertyChangeListeners());
         }
 
         public String getDescription() {
@@ -235,22 +221,22 @@ public class JViewPanel
 
     }
 
-    private static class HeaderInfoPanel 
-            extends CWJPanel 
+    private static class CWHeaderInfoPanel
+            extends CWJPanel
             implements PropertyChangeListener {
 
         private JLabel lHeaderText;
         private JLabel lDescription;
         private JLabel lImage;
 
-        private HeaderInfo headerInfo;
+        private CWHeaderInfo headerInfo;
 
-        public HeaderInfoPanel(HeaderInfo headerInfo) {
+        public CWHeaderInfoPanel(CWHeaderInfo headerInfo) {
 
             this.headerInfo = headerInfo;
             headerInfo.addPropertyChangeListener(this);
 
-            setUI(new HeaderPanelUI());
+            setUI(new CWHeaderPanelUI());
             int gab = 3;
             setBorder(new EmptyBorder(gab, gab + 5, gab, gab));
             setOpaque(false);
@@ -288,11 +274,11 @@ public class JViewPanel
             headerInfo.removePropertyChangeListener(this);
         }
 
-        public HeaderInfo getHeaderInfo() {
+        public CWHeaderInfo getHeaderInfo() {
             return headerInfo;
         }
 
-        public void setHeaderInfo(HeaderInfo headerInfo) {
+        public void setHeaderInfo(CWHeaderInfo headerInfo) {
             this.headerInfo.removePropertyChangeListener(this);
             this.headerInfo = headerInfo;
             this.headerInfo.addPropertyChangeListener(this);
@@ -317,7 +303,7 @@ public class JViewPanel
 
     }
 
-    private class ViewPanelUI extends BasicPanelUI {
+    private class CWViewUI extends BasicPanelUI {
 
         private final Color bottomBorderColor = new Color(215, 220, 228);
         private final Color lightGrayColor = new Color(234, 237, 241);
@@ -329,17 +315,17 @@ public class JViewPanel
 
             // If the topPanel isn't visible, than twist the gradient
             // > 1: because the topPanel, contains the buttonPanel
-            if (JViewPanel.this.buttonPanel.getComponentCount() > 0) {
+            if (CWView.this.buttonPanel.getComponentCount() > 0) {
                 JideSwingUtilities.fillGradient((Graphics2D) g, rect, lightGrayColor, Color.WHITE, true);
             } else {
-                JViewPanel.this.buttonPanel.setVisible(false);
+                CWView.this.buttonPanel.setVisible(false);
                 JideSwingUtilities.fillGradient((Graphics2D) g, rect, Color.WHITE, lightGrayColor, true);
             }
 
         }
     }
 
-    private static class HeaderPanelUI extends BasicPanelUI {
+    private static class CWHeaderPanelUI extends BasicPanelUI {
 
         private static final Color bottomBorderColor = new Color(215, 220, 228);
         private static final Color lightGrayColor = new Color(234, 237, 241);
@@ -380,4 +366,5 @@ public class JViewPanel
 
 
     }
+
 }

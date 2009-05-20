@@ -153,15 +153,19 @@ public class CWComponentFactory {
                     ((JDateChooser)comp).cleanup();
                 }
 
+//                if(comp instanceof JViewPanel) {
+//                    ((JViewPanel)comp).dispose();
+//                }
+
                 if(comp instanceof JPanel) {
                     ((JPanel)comp).removeAll();
                     ((JPanel)comp).setLayout(null);
                     ((JPanel)comp).setUI(null);
                 }
 
-                TextComponentConnector textComponentConnecotr = (TextComponentConnector) comp.getClientProperty(TEXT_COMPONENT_CONNECTOR_KEY);
-                if(textComponentConnecotr != null) {
-                    textComponentConnecotr.release();
+                TextComponentConnector textComponentConnector = (TextComponentConnector) comp.getClientProperty(TEXT_COMPONENT_CONNECTOR_KEY);
+                if(textComponentConnector != null) {
+                    textComponentConnector.release();
                     comp.putClientProperty(TEXT_COMPONENT_CONNECTOR_KEY, null);
                 }
 
@@ -182,6 +186,7 @@ public class CWComponentFactory {
                     ItemListener itemListener = (ItemListener) comp.getClientProperty(RADIO_BUTTON_ITEM_LISTENER_KEY);
                     if(itemListener != null) {
                         button.removeItemListener(itemListener);
+                        System.out.println("removeitemlistener");
                         comp.putClientProperty(RADIO_BUTTON_ITEM_LISTENER_KEY, null);
                     }
                     comp.putClientProperty(RADIO_BUTTON_KEY, null);

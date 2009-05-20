@@ -32,8 +32,9 @@ public class ButtonListenerSupport {
         // TODO: this is not good if we have "i<listeners.size()", but otherwise
         // it doesn't work, because if one listener removes himself from the list
         // the count of the listeners isn't correct anymore
-        for (int i = 0; i < listeners.size(); i++) {
-            listeners.get(i).buttonPressed(evt);
+        Object[] toArray = listeners.toArray();
+        for (int i=0, l=toArray.length; i < l; i++) {
+            ((ButtonListener)toArray[i]).buttonPressed(evt);
         }
     }
 }

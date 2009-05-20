@@ -2,35 +2,36 @@ package cw.boardingschoolmanagement.app;
 
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.ConfigurationView;
-import cw.boardingschoolmanagement.gui.component.SplashScreen;
-import cw.boardingschoolmanagement.gui.HomeView;
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
+import cw.boardingschoolmanagement.gui.HomeView;
 import cw.boardingschoolmanagement.gui.component.JMenuPanel;
-import java.awt.event.ActionEvent;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.logging.Level;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
+import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.component.SplashScreen;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.boardingschoolmanagement.manager.PropertiesManager;
+import java.awt.event.ActionEvent;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import org.jvnet.substance.SubstanceLookAndFeel;
 import org.jvnet.substance.button.StandardButtonShaper;
 import org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel;
 import org.jvnet.substance.utils.SubstanceConstants;
+
 
 /**
  * BoardingSchoolManagement - Mainprogramm. <br />
@@ -242,8 +243,6 @@ public class BoardingSchoolManagement {
                 putValue(Action.SHORT_DESCRIPTION, "Einstellungen");
             }
 
-            private JDialog d;
-
             public void actionPerformed(ActionEvent e) {
                 GUIManager.setLoadingScreenText("Einstellungen...");
                 GUIManager.setLoadingScreenVisible(true);
@@ -252,9 +251,8 @@ public class BoardingSchoolManagement {
                 ConfigurationView view = new ConfigurationView(model);
 
                 
-
-                JPanel panel = view.buildPanel();
-                d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
+                JViewPanel panel = view.buildPanel();
+                final JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
                 d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
                 d.setTitle(panel.getName());
                 d.add(panel);
@@ -271,10 +269,8 @@ public class BoardingSchoolManagement {
 
                 d.setVisible(true);
 
+                panel.dispose();
                 d.dispose();
-                d = null;
-
-                view.dispose();
 
                 GUIManager.setLoadingScreenVisible(false);
             }
