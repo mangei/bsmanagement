@@ -73,6 +73,13 @@ public class CustomerManagementPresentationModel
 
     public void dispose() {
         customerSelectorPresentationModel.getCustomerSelection().removeValueChangeListener(selectionHandler);
+
+        // Kill references
+        newAction = null;
+        editAction = null;
+        deleteAction = null;
+        inactiveAction = null;
+        viewInactivesAction = null;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -171,7 +178,7 @@ public class CustomerManagementPresentationModel
 
         public void actionPerformed(ActionEvent e) {
             final Customer c = customerSelectorPresentationModel.getSelectedCustomer();
-            EditCustomerPresentationModel model = editCustomer(c);
+            final EditCustomerPresentationModel model = editCustomer(c);
 
             final PropertyChangeListener activeListener = new PropertyChangeListener() {
                 public void propertyChange(PropertyChangeEvent evt) {
@@ -187,12 +194,19 @@ public class CustomerManagementPresentationModel
             model.addButtonListener(new ButtonListener() {
                 public void buttonPressed(ButtonEvent evt) {
                     if(evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON || evt.getType() == ButtonEvent.EXIT_BUTTON) {
+//                        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA------------- DELETE");
+//                        System.out.println("before: " + c.getPropertyChangeListeners().length);
                         c.removePropertyChangeListener(activeListener);
+//                        System.out.println("after: " + c.getPropertyChangeListeners().length);
+                        model.removeButtonListener(this);
                     }
                 }
             });
 
+//            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA------------- ADD");
+//            System.out.println("before: " + c.getPropertyChangeListeners().length);
             c.addPropertyChangeListener(Customer.PROPERTYNAME_ACTIVE, activeListener);
+//            System.out.println("after: " + c.getPropertyChangeListeners().length);
         }
     }
 

@@ -41,7 +41,7 @@ public class GroupCustomerSelectorFilterExtentionView
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
+    public CWJPanel buildPanel() {
         initComponents();
 
         panel = CWComponentFactory.createPanel();

@@ -38,7 +38,7 @@ public class CustomerHomeExtentionView
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
+    public JViewPanel buildPanel() {
         initComponents();
 
         panel  = new JViewPanel("Kundeninformationen");

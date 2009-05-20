@@ -87,22 +87,22 @@ public class CustomerManagementView
         panel.getButtonPanel().add(bDelete);
         panel.getButtonPanel().add(bInactive);
         panel.getButtonPanel().add(bViewInactives);
-        panel.getButtonPanel().add(new JButton(new AbstractAction("Show Postings") {
-
-            public void actionPerformed(ActionEvent e) {
-                Customer c = model.getCustomerSelectorPresentationModel().getSelectedCustomer();
-                List<Posting> all = PostingManager.getInstance().getAll(c);
-                Posting p;
-                for(int i=0,l=all.size(); i<l; i++) {
-                    p = all.get(i);
-                    System.out.println(p.getDescription());
-                    while(p.getPreviousPosting() != null) {
-                        p = p.getPreviousPosting();
-                        System.out.println(" -> " + p.getDescription());
-                    }
-                }
-            }
-        }));
+//        panel.getButtonPanel().add(new JButton(new AbstractAction("Show Postings") {
+//
+//            public void actionPerformed(ActionEvent e) {
+//                Customer c = model.getCustomerSelectorPresentationModel().getSelectedCustomer();
+//                List<Posting> all = PostingManager.getInstance().getAll(c);
+//                Posting p;
+//                for(int i=0,l=all.size(); i<l; i++) {
+//                    p = all.get(i);
+//                    System.out.println(p.getDescription());
+//                    while(p.getPreviousPosting() != null) {
+//                        p = p.getPreviousPosting();
+//                        System.out.println(" -> " + p.getDescription());
+//                    }
+//                }
+//            }
+//        }));
 
         panel.getContentPanel().setLayout(new BorderLayout());
         panel.getContentPanel().add(customerSelectorView.buildPanel(), BorderLayout.CENTER);

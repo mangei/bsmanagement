@@ -47,6 +47,14 @@ public class CustomerManager extends AbstractPOJOManager<Customer> {
         return ( (Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM Customer").getResultList().iterator().next() ).intValue();
     }
 
+    public int sizeActive() {
+        return ( (Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM Customer WHERE active=true").getResultList().iterator().next() ).intValue();
+    }
+
+    public int sizeInactive() {
+        return ( (Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM Customer WHERE active=false").getResultList().iterator().next() ).intValue();
+    }
+
     @Override
     public List<Customer> getAll() {
         return HibernateUtil.getEntityManager().createQuery("FROM Customer").getResultList();

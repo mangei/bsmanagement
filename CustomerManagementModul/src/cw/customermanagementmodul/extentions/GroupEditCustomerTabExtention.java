@@ -1,5 +1,6 @@
 package cw.customermanagementmodul.extentions;
 
+import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.GroupEditCustomerPresentationModel;
@@ -17,6 +18,7 @@ public class GroupEditCustomerTabExtention
     private GroupEditCustomerPresentationModel model;
     private GroupEditCustomerView view;
     private EditCustomerPresentationModel editCustomerModel;
+    private JViewPanel panel;
 
     public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
         this.editCustomerModel = editCustomerModel;
@@ -25,7 +27,8 @@ public class GroupEditCustomerTabExtention
     
     public JComponent getView() {
          view = new GroupEditCustomerView(model);
-         return view.buildPanel();
+         panel = view.buildPanel();
+         return panel;
     }
 
     public Object getModel() {
@@ -41,7 +44,7 @@ public class GroupEditCustomerTabExtention
     }
 
     public void dispose() {
-        view.dispose();
+        panel.dispose();
     }
 
     public int priority() {

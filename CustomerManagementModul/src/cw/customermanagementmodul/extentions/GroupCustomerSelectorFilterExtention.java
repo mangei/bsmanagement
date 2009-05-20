@@ -1,6 +1,7 @@
 package cw.customermanagementmodul.extentions;
 
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.gui.component.CWJPanel;
 import cw.customermanagementmodul.extentions.interfaces.CustomerSelectorFilterExtention;
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionPresentationModel;
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionView;
@@ -14,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+
+
 /**
  *
  * @author ManuelG
@@ -22,6 +25,7 @@ public class GroupCustomerSelectorFilterExtention implements CustomerSelectorFil
 
     private GroupCustomerSelectorFilterExtentionPresentationModel model;
     private GroupCustomerSelectorFilterExtentionView view;
+    private CWJPanel panel;
     private ValueModel change;
 
     private ListSelectionListener changeListener;
@@ -31,6 +35,7 @@ public class GroupCustomerSelectorFilterExtention implements CustomerSelectorFil
 
         model = new GroupCustomerSelectorFilterExtentionPresentationModel();
         view = new GroupCustomerSelectorFilterExtentionView(model);
+        panel = view.buildPanel();
     }
 
     public void initEventHandling() {
@@ -139,10 +144,11 @@ public class GroupCustomerSelectorFilterExtention implements CustomerSelectorFil
     }
 
     public JPanel getPanel() {
-        return view.buildPanel();
+        return panel;
     }
 
     public void dispose() {
+        panel.dispose();
         changeListener = null;
     }
 }

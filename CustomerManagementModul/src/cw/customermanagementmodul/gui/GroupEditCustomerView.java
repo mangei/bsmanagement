@@ -48,7 +48,7 @@ public class GroupEditCustomerView
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
+    public JViewPanel buildPanel() {
         initComponents();
 
         panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());

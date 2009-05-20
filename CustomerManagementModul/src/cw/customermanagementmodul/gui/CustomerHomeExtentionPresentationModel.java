@@ -21,7 +21,7 @@ public class CustomerHomeExtentionPresentationModel
     }
 
     private void initModels() {
-        sizeCustomersValueModel = new ValueHolder("Kunden: " + CustomerManager.getInstance().size());
+        sizeCustomersValueModel = new ValueHolder("Kunden: " + CustomerManager.getInstance().sizeActive());
     }
 
     private void initEventHandling() {

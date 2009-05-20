@@ -32,7 +32,7 @@ public class CustomerOverviewEditCustomerView
     private void initEventHandling() {
     }
 
-    public JPanel buildPanel() {
+    public JViewPanel buildPanel() {
         initComponents();
         
         mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
@@ -69,5 +69,9 @@ public class CustomerOverviewEditCustomerView
         mainPanel.removeDisposableListener(this);
 
         model.dispose();
+
+        // Kill references
+        model = null;
+        mainPanel = null;
     }
 }

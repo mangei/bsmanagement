@@ -112,7 +112,7 @@ public class PostingManagementEditCustomerView
         pFilteredValues.setVisible(false);
     }
 
-    public JPanel buildPanel() {
+    public JViewPanel buildPanel() {
         initComponents();
         
         panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());

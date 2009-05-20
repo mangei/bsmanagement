@@ -59,6 +59,12 @@ public class CustomerOverviewEditCustomerPresentationModel
         for (CustomerOverviewEditCustomerExtention extention : customerOverviewEditCustomerExtentions) {
             extention.dispose();
         }
+        customerOverviewEditCustomerExtentions.clear();
+
+        // Kill references
+        editCustomerPresentationModel = null;
+        unsaved = null;
+        headerInfo = null;
     }
 
     /**

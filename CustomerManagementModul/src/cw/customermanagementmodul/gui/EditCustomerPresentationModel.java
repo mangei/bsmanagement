@@ -121,8 +121,10 @@ public class EditCustomerPresentationModel
         for (EditCustomerTabExtention extention : editCustomerGUITabExtentions) {
             extention.dispose();
         }
+        editCustomerGUITabExtentions.clear();
 
         unsaved.removeValueChangeListener(actionButtonListener);
+        actionButtonListener = null;
 
         if (saveListener != null) {
             getBufferedModel(Customer.PROPERTYNAME_ACTIVE).removeValueChangeListener(saveListener);
@@ -163,20 +165,34 @@ public class EditCustomerPresentationModel
         guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_FORENAME).release();
         guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_SURNAME).release();
 
-        PropertyChangeListener[] beanPropertyChangeListeners = super.getBeanPropertyChangeListeners();
-        for (PropertyChangeListener l : beanPropertyChangeListeners) {
-            removeBeanPropertyChangeListener(l);
-        }
-        PropertyChangeListener[] propertyChangeListeners = super.getPropertyChangeListeners();
-        for (PropertyChangeListener l : propertyChangeListeners) {
-            removePropertyChangeListener(l);
-        }
-        VetoableChangeListener[] vetoableChangeListeners = super.getVetoableChangeListeners();
-        for (VetoableChangeListener l : vetoableChangeListeners) {
-            removeVetoableChangeListener(l);
-        }
+//        PropertyChangeListener[] beanPropertyChangeListeners = super.getBeanPropertyChangeListeners();
+//        for (PropertyChangeListener l : beanPropertyChangeListeners) {
+//            removeBeanPropertyChangeListener(l);
+//        }
+//        PropertyChangeListener[] propertyChangeListeners = super.getPropertyChangeListeners();
+//        for (PropertyChangeListener l : propertyChangeListeners) {
+//            removePropertyChangeListener(l);
+//        }
+//        VetoableChangeListener[] vetoableChangeListeners = super.getVetoableChangeListeners();
+//        for (VetoableChangeListener l : vetoableChangeListeners) {
+//            removeVetoableChangeListener(l);
+//        }
 
-        editCustomerGUITabExtentions.clear();
+//        editCustomerGUITabExtentions.clear();
+
+        // Kill references
+//        properties = null;
+//        customer = null;
+//        unsaved = null;
+//        headerInfo = null;
+//        saveAction = null;
+//        cancelAction = null;
+//        saveCancelAction = null;
+//        support = null;
+//        guardianPresentationModel = null;
+//        editCustomerGUITabExtentions = null;
+//        actionButtonListener = null;
+//        saveListener = null;
 
         release();
     }

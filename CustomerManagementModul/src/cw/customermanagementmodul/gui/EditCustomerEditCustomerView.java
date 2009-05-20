@@ -254,7 +254,7 @@ public class EditCustomerEditCustomerView
         }
     }
     
-    public JPanel buildPanel() {
+    public JViewPanel buildPanel() {
         initComponents();
         
         mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());

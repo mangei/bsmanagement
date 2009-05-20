@@ -90,8 +90,8 @@ public class EditCustomerView
         Class activeEx = (Class) model.getProperties().get("activeExtention");
         for(int i=0, l=lEx.size(); i<l; i++) {
             ex = lEx.get(i);
-            ex.getView().setPreferredSize(tabs.getSize());
-            ex.getView().setMaximumSize(tabs.getSize());
+//            ex.getView().setPreferredSize(tabs.getSize());
+//            ex.getView().setMaximumSize(tabs.getSize());
             tabs.addTab(ex.getView().getName(), ex.getView());
             if (activeEx != null && ex.getClass().equals(activeEx)) {
                 tabs.setSelectedIndex(i);

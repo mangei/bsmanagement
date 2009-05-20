@@ -121,7 +121,7 @@ public class GeneralCustomerOverviewEditCustomerView
     private void initEventHandling() {
     }
 
-    public JPanel buildPanel() {
+    public CWJPanel buildPanel() {
         initComponents();
         
         mainPanel = CWComponentFactory.createPanel();

@@ -20,6 +20,7 @@ public class PostingCustomerOverviewEditCustomerExtention
         implements CustomerOverviewEditCustomerExtention {
 
     private CustomerOverviewEditCustomerPresentationModel customerOverviewEditCustomerPresentationModel;
+    private CWComponentFactory.CWComponentContainer componentContainer;
 
     private CWJLabel lSaldo;
     private CWJLabel lAssets;
@@ -27,6 +28,8 @@ public class PostingCustomerOverviewEditCustomerExtention
 
     public void initPresentationModel(CustomerOverviewEditCustomerPresentationModel customerOverviewEditCustomerPresentationModel) {
         this.customerOverviewEditCustomerPresentationModel = customerOverviewEditCustomerPresentationModel;
+        componentContainer = CWComponentFactory.createCWComponentContainer();
+
     }
     
     public JComponent getView() {
@@ -57,6 +60,11 @@ public class PostingCustomerOverviewEditCustomerExtention
                         NumberFormat.getCurrencyInstance()
                     );
 
+        componentContainer
+                .addComponent(lSaldo)
+                .addComponent(lAssets)
+                .addComponent(lLiabilities);
+
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, pref, 4dlu, right:pref, 4dlu, pref, 4dlu, right:pref, 4dlu, pref:grow",
                 "pref, 4dlu, pref"
@@ -77,7 +85,7 @@ public class PostingCustomerOverviewEditCustomerExtention
     }
 
     public void dispose() {
-        
+        componentContainer.dispose();
     }
 
     public int priority() {

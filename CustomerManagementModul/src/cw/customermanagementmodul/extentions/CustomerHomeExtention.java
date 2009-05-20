@@ -4,6 +4,7 @@ import cw.boardingschoolmanagement.gui.HomePresentationModel;
 import cw.customermanagementmodul.gui.CustomerHomeExtentionPresentationModel;
 import cw.customermanagementmodul.gui.CustomerHomeExtentionView;
 import cw.boardingschoolmanagement.extentions.interfaces.HomeExtention;
+import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import javax.swing.JPanel;
 
 /**
@@ -14,6 +15,7 @@ public class CustomerHomeExtention implements HomeExtention {
 
     private CustomerHomeExtentionPresentationModel model;
     private CustomerHomeExtentionView view;
+    private JViewPanel panel;
 
     public void initPresentationModel(HomePresentationModel homePresentationModel) {
         model = new CustomerHomeExtentionPresentationModel();
@@ -21,11 +23,12 @@ public class CustomerHomeExtention implements HomeExtention {
     }
 
     public JPanel getPanel() {
-        return view.buildPanel();
+        panel = view.buildPanel();
+        return panel;
     }
 
     public void dispose() {
-        view.dispose();
+        panel.dispose();
     }
 
     public Object getModel() {
