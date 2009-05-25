@@ -7,8 +7,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.AutoCompletion;
 import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import java.awt.event.FocusEvent;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JButton;
@@ -20,7 +19,6 @@ import cw.customermanagementmodul.pojo.Guardian;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeListener;
 import javax.swing.JCheckBox;
-import javax.swing.JScrollPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -28,13 +26,11 @@ import javax.swing.event.DocumentListener;
  *
  * @author CreativeWorkers.at
  */
-public class EditCustomerEditCustomerView
-    implements Disposable {
-
+public class EditCustomerEditCustomerView extends CWView
+{
     private EditCustomerEditCustomerPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
     private JPanel pActive;
     private JPanel pGender;
     private JTextField tfTitle;
@@ -71,6 +67,10 @@ public class EditCustomerEditCustomerView
 
     public EditCustomerEditCustomerView(EditCustomerEditCustomerPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -135,7 +135,7 @@ public class EditCustomerEditCustomerView
                 .addComponent(bClearLocationData);
     }
 
-    private void initEvents() {
+    private void initEventHandling() {
         (titleAutoCompletion = new AutoCompletion(tfTitle, model.getTitleList())).setStrict(false);
         (postOfficeNumberAutoCompletion = new AutoCompletion(tfPostOfficeNumber, model.getPostOfficeNumberList())).setStrict(false);
         (cityAutoCompletion = new AutoCompletion(tfCity, model.getCityList())).setStrict(false);
@@ -254,10 +254,8 @@ public class EditCustomerEditCustomerView
         }
     }
     
-    public JViewPanel buildPanel() {
-        initComponents();
-        
-        mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
 //        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 //        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         
@@ -265,7 +263,7 @@ public class EditCustomerEditCustomerView
                 "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
 
-        PanelBuilder builder = new PanelBuilder(layout,mainPanel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout,this.getContentPanel());
 
         int row = 1;
         row+=2;
@@ -323,28 +321,22 @@ public class EditCustomerEditCustomerView
 
         builder.addSeparator("<html><b>Bemerkung</b></html>",   cc.xyw(1, row+=2, 8));
         builder.add(taComment,              cc.xyw(1, row+=2, 8));
-
-        initEvents();
-
-        mainPanel.addDisposableListener(this);
-
-//        componentContainer.addComponent(mainPanel);
-        return mainPanel;
     }
 
     public void dispose() {
-
-        mainPanel.removeDisposableListener(this);
-
         componentContainer.dispose();
 
         tfPostOfficeNumber.removeFocusListener(ponacf);
         tfPostOfficeNumber.getDocument().removeDocumentListener(ponacf);
+        ponacf = null;
         tfCity.removeFocusListener(cacf);
         tfCity.getDocument().removeDocumentListener(cacf);
+        cacf = null;
         tfProvince.removeFocusListener(pacf);
         tfProvince.getDocument().removeDocumentListener(pacf);
+        pacf = null;
         model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_ACTIVE).removeValueChangeListener(guardianActiveListener);
+        guardianActiveListener = null;
 
         titleAutoCompletion.uninstallListeners();
         postOfficeNumberAutoCompletion.uninstallListeners();

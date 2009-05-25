@@ -1,8 +1,7 @@
 package cw.customermanagementmodul.gui;
 
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -15,10 +14,10 @@ import cw.customermanagementmodul.pojo.manager.CustomerManager;
  * @author CreativeWorkers.at
  */
 public class EditCustomerEditCustomerPresentationModel
-        implements Disposable {
+{
 
     private EditCustomerPresentationModel editCustomerPresentationModel;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private Action clearLocationDataAction;
 
     private List<String> titleList;
@@ -38,7 +37,7 @@ public class EditCustomerEditCustomerPresentationModel
 
         clearLocationDataAction = new ClearLocationDataAction("");
 
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Allgemein",
                 "Hier können sie allgemeine Kundeninformationen eingeben.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
@@ -72,7 +71,7 @@ public class EditCustomerEditCustomerPresentationModel
         return clearLocationDataAction;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

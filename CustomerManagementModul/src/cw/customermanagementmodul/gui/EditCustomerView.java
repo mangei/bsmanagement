@@ -1,26 +1,23 @@
 package cw.customermanagementmodul.gui;
 
 import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 import java.awt.BorderLayout;
 import java.util.List;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import cw.customermanagementmodul.pojo.Customer;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.ScrollPaneConstants;
 
 /**
  *
  * @author CreativeWorkers.at
  */
-public class EditCustomerView
-    implements Disposable {
+public class EditCustomerView extends CWView
+{
 
     private EditCustomerPresentationModel model;
 
@@ -34,6 +31,10 @@ public class EditCustomerView
 
     public EditCustomerView(EditCustomerPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventhandling();
     }
 
     private void initComponents() {
@@ -71,14 +72,12 @@ public class EditCustomerView
         }
     }
     
-    public JPanel buildPanel() {
-        initComponents();
-        
-        JViewPanel mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
 //        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 //        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         
-        JButtonPanel buttonPanel = mainPanel.getButtonPanel();
+        CWButtonPanel buttonPanel = this.getButtonPanel();
         
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
@@ -98,18 +97,13 @@ public class EditCustomerView
             }
         }
         
-        mainPanel.getContentPanel().add(tabs, BorderLayout.CENTER);
-        
-        initEventhandling();
-
-        mainPanel.addDisposableListener(this);
-
-//        componentContainer.addComponent(mainPanel);
-        return mainPanel;
+        this.getContentPanel().add(tabs, BorderLayout.CENTER);
     }
 
+    @Override
     public void dispose() {
         model.getBufferedModel(Customer.PROPERTYNAME_ID).removePropertyChangeListener(tabsEnableListener);
+        tabsEnableListener = null;
 
         componentContainer.dispose();
 

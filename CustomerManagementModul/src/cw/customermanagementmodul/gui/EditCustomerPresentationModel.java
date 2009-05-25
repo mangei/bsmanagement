@@ -8,14 +8,12 @@ import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.comparator.PriorityComparator;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.beans.VetoableChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -34,12 +32,12 @@ import javax.swing.Icon;
  */
 public class EditCustomerPresentationModel
         extends PresentationModel<Customer>
-        implements Disposable {
+{
 
     private PresentationModelProperties properties;
     private Customer customer;
     private ValueModel unsaved;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private Action saveAction;
     private Action cancelAction;
     private Action saveCancelAction;
@@ -164,6 +162,7 @@ public class EditCustomerPresentationModel
         getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).release();
         guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_FORENAME).release();
         guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_SURNAME).release();
+        guardianPresentationModel.release();
 
 //        PropertyChangeListener[] beanPropertyChangeListeners = super.getBeanPropertyChangeListeners();
 //        for (PropertyChangeListener l : beanPropertyChangeListeners) {
@@ -293,7 +292,7 @@ public class EditCustomerPresentationModel
         return saveCancelAction;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 
