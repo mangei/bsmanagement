@@ -4,33 +4,33 @@ import cw.boardingschoolmanagement.app.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.CWJXList;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWList;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 /**
  *
  * @author ManuelG
  */
-public class GroupManagementView
-    implements Disposable
+public class GroupManagementView extends CWView
 {
 
     private GroupManagementPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
     private JButton bNewGroup;
     private JButton bEditGroup;
     private JButton bRemoveGroup;
-    private CWJXList liGroups;
+    private CWList liGroups;
     private CustomerSelectorView customerSelectorView;
 
     public GroupManagementView(GroupManagementPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -59,12 +59,11 @@ public class GroupManagementView
 //        });
     }
 
-    public JPanel buildPanel() {
-        initComponents();
+    public void buildView() {
 
-        panel = new JViewPanel(model.getHeaderInfo());
+        this.setHeaderInfo(model.getHeaderInfo());
 
-        JButtonPanel buttonPanel = panel.getButtonPanel();
+        CWButtonPanel buttonPanel = getButtonPanel();
         buttonPanel.add(bNewGroup);
         buttonPanel.add(bEditGroup);
         buttonPanel.add(bRemoveGroup);
@@ -74,22 +73,15 @@ public class GroupManagementView
                 "fill:pref:grow"
         );
 
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, getContentPanel());
         CellConstraints cc = new CellConstraints();
 
         builder.add(liGroups, cc.xy(1,1));
 //        builder.add(liCustomers, cc.xy(3,1));
-        builder.add(customerSelectorView.buildPanel(), cc.xy(3,1));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return panel;
+        builder.add(customerSelectorView, cc.xy(3,1));
     }
 
     public void dispose() {
-        panel.removeDisposableListener(this);
 
         customerSelectorView.dispose();
 

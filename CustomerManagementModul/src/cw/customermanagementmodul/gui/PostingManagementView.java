@@ -1,15 +1,14 @@
 package cw.customermanagementmodul.gui;
 
 import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 /**
  * @author CreativeWorkers.at
  */
-public class PostingManagementView
+public class PostingManagementView extends CWView
     
 {
 
@@ -23,6 +22,10 @@ public class PostingManagementView
 
     public PostingManagementView(PostingManagement2PresentationModel m) {
         model = m;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -60,11 +63,8 @@ public class PostingManagementView
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
-        initComponents();
-        initEventHandling();
-
-        JViewPanel panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+   private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
 
 //        panel.getButtonPanel().add(bNew);
 //        panel.getButtonPanel().add(bEdit);
@@ -72,10 +72,8 @@ public class PostingManagementView
 //        panel.getButtonPanel().add(bInactive);
 //        panel.getButtonPanel().add(bViewInactives);
 
-        panel.getContentPanel().setLayout(new BorderLayout());
-        panel.getContentPanel().add(CWComponentFactory.createLabel("In Arbeit... :D"), BorderLayout.CENTER);
-
-        return panel;
+        this.getContentPanel().setLayout(new BorderLayout());
+        this.getContentPanel().add(CWComponentFactory.createLabel("In Arbeit... :D"), BorderLayout.CENTER);
     }
 
 }

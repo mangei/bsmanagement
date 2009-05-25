@@ -10,7 +10,7 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CalendarUtil;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -42,7 +42,7 @@ import javax.swing.table.TableColumnModel;
 public class PostingManagementEditCustomerPresentationModel {
 
     private Customer customer;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private Action newAction;
     private Action editAction;
@@ -89,7 +89,7 @@ public class PostingManagementEditCustomerPresentationModel {
 
         postingSelection = new SelectionInList<Posting>(PostingManager.getInstance().getAll(customer));
 
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Buchungsübersicht",
                 "Hier sehen sie eine Übersicht über alle Buchungen für Ihren Kunden.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/posting.png"),
@@ -150,8 +150,11 @@ public class PostingManagementEditCustomerPresentationModel {
         postingSelection.removeValueChangeListener(selectionHandler);
 
         filterYearSelection.removeValueChangeListener(filterYearSelectionListener);
+        filterYearSelectionListener = null;
         filterMonthSelection.removeValueChangeListener(filterMonthSelectionListener);
+        filterMonthSelectionListener = null;
         filterPostingCategorySelection.removeValueChangeListener(filterPostingCategorySelectionListener);
+        filterPostingCategorySelectionListener = null;
     }
 
     public void updateEvents() {
@@ -359,7 +362,7 @@ public class PostingManagementEditCustomerPresentationModel {
             final Posting posting = new Posting(customer);
             final EditPostingPresentationModel model = new EditPostingPresentationModel(
                     posting,
-                    new HeaderInfo(
+                    new CWHeaderInfo(
                         "Buchung hinzufügen",
                         "<html>Fügen Sie eine neue Buchung für '<b>" + customer.getForename() + " " + customer.getSurname() + "</b>' hinzu.</html>",
                         CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"),
@@ -384,7 +387,8 @@ public class PostingManagementEditCustomerPresentationModel {
                     }
                 }
             });
-            GUIManager.changeView(editView.buildPanel(), true);
+
+            GUIManager.changeView(editView, true);
             GUIManager.setLoadingScreenVisible(false);
         }
     }
@@ -439,7 +443,7 @@ public class PostingManagementEditCustomerPresentationModel {
         reversePosting.setPreviousPosting(posting);
         reversePosting.setReversePosting(true);
 
-        HeaderInfo reversePostingHeaderInfo = new HeaderInfo(
+        CWHeaderInfo reversePostingHeaderInfo = new CWHeaderInfo(
             "Buchung stornieren",
             "<html>Stornieren Sie eine Buchung von '<b>" + posting.getCustomer().getForename() + " " + posting.getCustomer().getSurname() + "</b>'.</html>",
             CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"),
@@ -470,7 +474,8 @@ public class PostingManagementEditCustomerPresentationModel {
                 }
             }
         });
-        GUIManager.changeView(editView.buildPanel(), true);
+        
+        GUIManager.changeView(editView, true);
         GUIManager.setLoadingScreenVisible(false);
     }
 
@@ -494,7 +499,7 @@ public class PostingManagementEditCustomerPresentationModel {
             reversePosting.setPreviousPosting(posting);
         }
 
-        HeaderInfo reversePostingHeaderInfo = new HeaderInfo(
+        CWHeaderInfo reversePostingHeaderInfo = new CWHeaderInfo(
                 "Buchung ausgleichen",
                 "<html>Gleichen Sie die Buchung von '<b>" + posting.getCustomer().getForename() + " " + posting.getCustomer().getSurname() + "</b>' aus.</html>",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/posting_go.png"),
@@ -525,7 +530,8 @@ public class PostingManagementEditCustomerPresentationModel {
                 }
             }
         });
-        GUIManager.changeView(editView.buildPanel(), true);
+        
+        GUIManager.changeView(editView, true);
         GUIManager.setLoadingScreenVisible(false);
     }
 
@@ -579,7 +585,7 @@ public class PostingManagementEditCustomerPresentationModel {
 //a
 //                    d.setVisible(true);
 
-            GUIManager.changeView(CWComponentFactory.createBackPanel(view.buildPanel()).getPanel(), true);
+            GUIManager.changeView(CWComponentFactory.createBackView(view), true);
             GUIManager.setLoadingScreenVisible(false);
             
         }
@@ -661,7 +667,7 @@ public class PostingManagementEditCustomerPresentationModel {
         return filterPostingCategorySelection;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 
@@ -673,7 +679,7 @@ public class PostingManagementEditCustomerPresentationModel {
         final EditPostingPresentationModel model = new EditPostingPresentationModel(
                 posting,
                 true,
-                new HeaderInfo(
+                new CWHeaderInfo(
                         "Buchung bearbeiten",
                         "Hier können Sie die Buchung bearbeiten.",
                         CWUtils.loadIcon("cw/customermanagementmodul/images/posting_edit.png"),
@@ -703,7 +709,8 @@ public class PostingManagementEditCustomerPresentationModel {
                 }
             }
         });
-        GUIManager.changeView(editView.buildPanel(), true);
+
+        GUIManager.changeView(editView, true);
         GUIManager.setLoadingScreenVisible(false);
     }
 

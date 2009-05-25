@@ -11,8 +11,7 @@ import cw.customermanagementmodul.pojo.Group;
 import cw.customermanagementmodul.pojo.manager.GroupManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 import javax.swing.Icon;
@@ -23,12 +22,11 @@ import javax.swing.event.ListDataListener;
  * @author ManuelG
  */
 public class GroupEditCustomerPresentationModel
-    implements Disposable
 {
 
     private Customer customer;
     private ValueModel unsaved;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     
     private SelectionInList<Group> selectionCustomerGroups;
     private SelectionInList<Group> selectionGroups;
@@ -57,7 +55,7 @@ public class GroupEditCustomerPresentationModel
         addGroupAction = new AddGroupAction("Hinzufügen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_left.png"));
         removeGroupAction = new RemoveGroupAction("Entfernen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_right.png"));
     
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Gruppenzugehörigkeit",
                 "Hier können Sie die Gruppenzugehörigkeiten für den Kunden einstellen.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/group.png"),
@@ -193,7 +191,7 @@ public class GroupEditCustomerPresentationModel
         return selectionGroups;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

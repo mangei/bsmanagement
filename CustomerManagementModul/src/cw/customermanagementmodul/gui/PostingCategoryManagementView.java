@@ -6,37 +6,37 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWJXTable;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.customermanagementmodul.gui.renderer.LockTableCellRenderer;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 /**
  *
  * @author Manuel Geier
  */
-public class PostingCategoryManagementView
-    implements Disposable
+public class PostingCategoryManagementView extends CWView
 {
     private PostingCategoryManagementPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
     private JButton bNew;
     private JButton bEdit;
     private JButton bDelete;
     private JLabel lLocked;
 
-    private CWJXTable tPostingsCategories;
+    private CWTable tPostingsCategories;
 
     
     public PostingCategoryManagementView(PostingCategoryManagementPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
     
     private void initComponents() {
@@ -67,21 +67,18 @@ public class PostingCategoryManagementView
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
-        initComponents();
-        initEventHandling();
-        
-        panel = new JViewPanel(model.getHeaderInfo());
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
 
-        panel.getButtonPanel().add(bNew);
-        panel.getButtonPanel().add(bEdit);
-        panel.getButtonPanel().add(bDelete);
+        this.getButtonPanel().add(bNew);
+        this.getButtonPanel().add(bEdit);
+        this.getButtonPanel().add(bDelete);
 
         FormLayout layout = new FormLayout(
                 "fill:pref:grow",
                 "fill:pref:grow, 4dlu, pref"
         );
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         CellConstraints cc = new CellConstraints();
         
         builder.add(new JScrollPane(tPostingsCategories), cc.xy(1, 1));
@@ -90,15 +87,9 @@ public class PostingCategoryManagementView
         // Buttons am Anfang deaktivieren
         bEdit.setEnabled(false);
         bDelete.setEnabled(false);
-
-        panel.addDisposableListener(this);
-
-        return panel;
     }
 
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         componentContainer.dispose();
 
         model.dispose();

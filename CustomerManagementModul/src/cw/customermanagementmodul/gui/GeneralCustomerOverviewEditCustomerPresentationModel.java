@@ -1,13 +1,11 @@
 package cw.customermanagementmodul.gui;
 
-import cw.boardingschoolmanagement.interfaces.Disposable;
-
 /**
  *
  * @author CreativeWorkers.at
  */
 public class GeneralCustomerOverviewEditCustomerPresentationModel
-        implements Disposable {
+{
 
     private CustomerOverviewEditCustomerPresentationModel customerOverviewEditCustomerPresentationModel;
 

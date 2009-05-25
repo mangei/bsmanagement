@@ -5,11 +5,10 @@ import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.CWJXTable;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
@@ -23,13 +22,11 @@ import javax.swing.JComboBox;
  *
  * @author Manuel Geier
  */
-public class PostingManagementEditCustomerView
-        implements Disposable
+public class PostingManagementEditCustomerView extends CWView
 {
     private PostingManagementEditCustomerPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
     private JButton bNew;
     private JButton bReversePosting;
     private JButton bBalancePosting;
@@ -39,7 +36,7 @@ public class PostingManagementEditCustomerView
     private JComboBox cbFilterMonth;
     private JComboBox cbFilterPostingCategory;
 
-    private CWJXTable tPostings;
+    private CWTable tPostings;
 
     private JLabel lLiabilities;
     private JLabel lAssets;
@@ -54,6 +51,10 @@ public class PostingManagementEditCustomerView
 
     public PostingManagementEditCustomerView(PostingManagementEditCustomerPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
     
     private void initComponents() {
@@ -112,17 +113,15 @@ public class PostingManagementEditCustomerView
         pFilteredValues.setVisible(false);
     }
 
-    public JViewPanel buildPanel() {
-        initComponents();
-        
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
-        panel.setName("Buchungen");
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
+        this.setName("Buchungen");
 
-        panel.getButtonPanel().add(bNew);
-        panel.getButtonPanel().add(bBalancePosting);
-        panel.getButtonPanel().add(bReversePosting);
-//        panel.getButtonPanel().add(bDelete);
-        panel.getButtonPanel().add(bManagePostingCategories);
+        this.getButtonPanel().add(bNew);
+        this.getButtonPanel().add(bBalancePosting);
+        this.getButtonPanel().add(bReversePosting);
+//        this.getButtonPanel().add(bDelete);
+        this.getButtonPanel().add(bManagePostingCategories);
 
         JPanel pFilter = new JPanel();
         pFilter.setOpaque(false);
@@ -188,25 +187,18 @@ public class PostingManagementEditCustomerView
                 "pref:grow",
                 "pref, 4dlu, fill:pref:grow, pref, 4dlu, pref"
         );
-        builder = new PanelBuilder(layout, panel.getContentPanel());
+        builder = new PanelBuilder(layout, this.getContentPanel());
         cc = new CellConstraints();
         
         builder.add(pFilter,                    cc.xy(1, 1));
         builder.add(new JScrollPane(tPostings), cc.xy(1, 3));
         builder.add(pFilteredValues,            cc.xy(1, 4));
         builder.add(pTotalValues,               cc.xy(1, 6));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return panel;
     }
 
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         model.getFilterActive().removeValueChangeListener(filterActiveListener);
+        filterActiveListener = null;
 
         componentContainer.dispose();
 

@@ -4,9 +4,7 @@ import cw.boardingschoolmanagement.app.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.CWJPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import javax.swing.JPanel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Guardian;
 import java.awt.Font;
@@ -16,13 +14,12 @@ import javax.swing.JLabel;
  *
  * @author CreativeWorkers.at
  */
-public class GeneralCustomerOverviewEditCustomerView
-    implements Disposable {
+public class GeneralCustomerOverviewEditCustomerView extends CWPanel
+{
 
     private GeneralCustomerOverviewEditCustomerPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private CWJPanel mainPanel;
     private JLabel lActive;
     private JLabel lGender;
     private JLabel lTitle;
@@ -45,6 +42,10 @@ public class GeneralCustomerOverviewEditCustomerView
 
     public GeneralCustomerOverviewEditCustomerView(GeneralCustomerOverviewEditCustomerPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -121,17 +122,14 @@ public class GeneralCustomerOverviewEditCustomerView
     private void initEventHandling() {
     }
 
-    public CWJPanel buildPanel() {
-        initComponents();
-        
-        mainPanel = CWComponentFactory.createPanel();
+    private void buildView() {
 //        mainPanel.setUI(new RoundPanelUI());
         
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref:grow",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
 
-        PanelBuilder builder = new PanelBuilder(layout,mainPanel);
+        PanelBuilder builder = new PanelBuilder(layout, this);
 
         CellConstraints cc = new CellConstraints();
         builder.addSeparator("Allgemein",  cc.xyw(1, 1, 8));
@@ -180,18 +178,9 @@ public class GeneralCustomerOverviewEditCustomerView
 
         builder.addSeparator("Bemerkung",   cc.xyw(1, 35, 8));
         builder.add(lComment,              cc.xyw(1, 37, 8));
-
-        initEventHandling();
-
-        mainPanel.addDisposableListener(this);
-
-//        componentContainer.addComponent(mainPanel);
-        return mainPanel;
     }
 
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
-
         componentContainer.dispose();
 
         model.dispose();

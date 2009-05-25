@@ -3,25 +3,21 @@ package cw.customermanagementmodul.gui;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import org.jdesktop.swingx.JXList;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
 
 /**
  *
  * @author ManuelG
  */
-public class GroupEditCustomerView
-    implements Disposable
+public class GroupEditCustomerView extends CWView
 {
 
     private GroupEditCustomerPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
     private JXList liCustomerGroups;
     private JXList liGroups;
     private JButton bAdd;
@@ -29,6 +25,10 @@ public class GroupEditCustomerView
 
     public GroupEditCustomerView(GroupEditCustomerPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -48,35 +48,25 @@ public class GroupEditCustomerView
         // Nothing to do
     }
 
-    public JViewPanel buildPanel() {
-        initComponents();
-
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
-        panel.setName("Gruppen");
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
+        this.setName("Gruppen");
 
         FormLayout layout = new FormLayout(
                 "200dlu, 4dlu, pref, 4dlu, 200dlu",
                 "pref:grow, pref, 4dlu, pref, pref:grow"
         );
 
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         CellConstraints cc = new CellConstraints();
 
         builder.add(CWComponentFactory.createViewPanel("Aktive Gruppen", liCustomerGroups), cc.xywh(1, 1, 1, 5));
         builder.add(bAdd,               cc.xy(3, 2));
         builder.add(bRemove,            cc.xy(3, 4));
         builder.add(CWComponentFactory.createViewPanel("Andere Gruppen", liGroups), cc.xywh(5, 1, 1, 5));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return panel;
     }
 
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         componentContainer.dispose();
 
         model.dispose();

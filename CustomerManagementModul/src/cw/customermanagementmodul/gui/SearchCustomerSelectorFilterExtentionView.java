@@ -5,29 +5,29 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWJPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
  * @author CreativeWorkers.at
  */
-public class SearchCustomerSelectorFilterExtentionView
-    implements Disposable
+public class SearchCustomerSelectorFilterExtentionView extends CWPanel
 {
 
     private SearchCustomerSelectorFilterExtentionPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private CWJPanel panel;
     private JTextField tfSearch;
     private JButton bClear;
 
     public SearchCustomerSelectorFilterExtentionView(SearchCustomerSelectorFilterExtentionPresentationModel m) {
         model = m;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -48,33 +48,22 @@ public class SearchCustomerSelectorFilterExtentionView
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
-        initComponents();
-
-        panel = CWComponentFactory.createPanel();
-        panel.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
+    private void buildView() {
+        this.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
 
         FormLayout layout = new FormLayout(
                 "pref, 4dlu, fill:pref:grow, 4dlu, pref",
                 "pref");
         CellConstraints cc = new CellConstraints();
 
-        PanelBuilder builder = new PanelBuilder(layout, panel);
+        PanelBuilder builder = new PanelBuilder(layout, this);
 
         builder.addLabel("Suche:", cc.xy(1, 1));
         builder.add(tfSearch, cc.xy(3, 1));
         builder.add(bClear, cc.xy(5, 1));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-        
-        return panel;
     }
 
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         componentContainer.dispose();
 
         model.dispose();

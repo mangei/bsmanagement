@@ -1,6 +1,5 @@
 package cw.customermanagementmodul.gui;
 
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.util.List;
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
@@ -15,7 +14,6 @@ import javax.swing.event.ListSelectionListener;
  * @author CreativeWorkers.at
  */
 public class GroupCustomerSelectorFilterExtentionPresentationModel
-    implements Disposable
 {
 
     private DefaultListModel groupSelection;

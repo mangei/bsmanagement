@@ -4,8 +4,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.list.SelectionInList;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -24,7 +23,6 @@ import javax.swing.JOptionPane;
  * @author ManuelG
  */
 public class GroupManagementPresentationModel
-    implements Disposable
 {
 
     private Action newGroupAction;
@@ -34,7 +32,7 @@ public class GroupManagementPresentationModel
     private SelectionInList<Customer> customerSelection;
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private SelectionEmptyHandler selectionEmptyHandler;
     private PropertyChangeListener groupChangeListener;
@@ -58,7 +56,7 @@ public class GroupManagementPresentationModel
                 "cw.customerboardingmanagement.GroupManangementView.customerTableState"
                 );
 
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Gruppen verwalten",
                 "Sie befinden sich Gruppenverwaltungsbereich. Hier haben Sie einen Überblick über alle Gruppen und den zugewiesenen Kunden.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/group.png"),
@@ -118,7 +116,10 @@ public class GroupManagementPresentationModel
 
             final Group group = new Group();
 
-            final EditGroupPresentationModel model = new EditGroupPresentationModel(group, "Gruppe erstellen");
+            final EditGroupPresentationModel model = new EditGroupPresentationModel(
+                    group,
+                    new CWHeaderInfo("Gruppe erstellen")
+            );
             final EditGroupView editView = new EditGroupView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -146,7 +147,7 @@ public class GroupManagementPresentationModel
 
             });
 
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
             GUIManager.setLoadingScreenVisible(false);
 
         }
@@ -165,7 +166,10 @@ public class GroupManagementPresentationModel
 
             final Group group = groupSelection.getSelection();
 
-            final EditGroupPresentationModel model = new EditGroupPresentationModel(group, "Gruppe bearbeiten");
+            final EditGroupPresentationModel model = new EditGroupPresentationModel(
+                    group,
+                    new CWHeaderInfo("Gruppe bearbeiten")
+            );
             final EditGroupView editView = new EditGroupView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -183,7 +187,7 @@ public class GroupManagementPresentationModel
 
             });
 
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
             GUIManager.setLoadingScreenVisible(false);
 
         }
@@ -255,7 +259,7 @@ public class GroupManagementPresentationModel
         return customerSelection;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

@@ -5,8 +5,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -34,7 +33,6 @@ import javax.swing.table.TableColumnModel;
  * @author Manuel Geier
  */
 public class PostingCategoryManagementPresentationModel
-    implements Disposable
 {
 
     private Customer customer;
@@ -43,7 +41,7 @@ public class PostingCategoryManagementPresentationModel
     private Action editAction;
     private Action deleteAction;
     private SelectionInList<PostingCategory> postingCategorySelection;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private PropertyChangeListener postingCategoryListener;
 
@@ -65,7 +63,7 @@ public class PostingCategoryManagementPresentationModel
 
         postingCategorySelection = new SelectionInList<PostingCategory>(PostingCategoryManager.getInstance().getAll());
 
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Buchungskategorien verwalten",
                 "Hier können Sie Kategorien die sie für die Buchen benötigen einsehen und verwalten.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category.png"),
@@ -107,7 +105,7 @@ public class PostingCategoryManagementPresentationModel
             final PostingCategory pc = new PostingCategory();
             final EditPostingCategoryPresentationModel model = new EditPostingCategoryPresentationModel(
                     pc,
-                    new HeaderInfo(
+                    new CWHeaderInfo(
                         "Buchungskategorie erstellen",
                         "Hier können Sie eine neue Buchungskategorie erstellen.",
                         CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_add.png"),
@@ -137,7 +135,8 @@ public class PostingCategoryManagementPresentationModel
                     }
                 }
             });
-            GUIManager.changeView(editView.buildPanel(), true);
+
+            GUIManager.changeView(editView, true);
             GUIManager.setLoadingScreenVisible(false);
 
         }
@@ -209,7 +208,7 @@ public class PostingCategoryManagementPresentationModel
         return newAction;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 
@@ -221,7 +220,7 @@ public class PostingCategoryManagementPresentationModel
         final PostingCategory pc = postingCategorySelection.getSelection();
         final EditPostingCategoryPresentationModel model = new EditPostingCategoryPresentationModel(
                 pc,
-                new HeaderInfo(
+                new CWHeaderInfo(
                     "Buchungskategorie bearbeiten",
                     "Hier können Sie eine Buchungskategorie bearbeiten.",
                     CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category_edit.png"),
@@ -242,8 +241,8 @@ public class PostingCategoryManagementPresentationModel
                 }
             }
         });
-        
-        GUIManager.changeView(editView.buildPanel(), true);
+
+        GUIManager.changeView(editView, true);
         GUIManager.setLoadingScreenVisible(false);
     }
 

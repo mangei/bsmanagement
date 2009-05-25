@@ -4,7 +4,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import javax.swing.event.ListSelectionEvent;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import java.awt.event.ActionEvent;
@@ -32,7 +32,7 @@ public class PostingManagement2PresentationModel {
 
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     public PostingManagement2PresentationModel() {
         initModels();
@@ -51,7 +51,7 @@ public class PostingManagement2PresentationModel {
                 "cw.customerboardingmanagement.CustomerManangementView.customerTableState"
                 );
         
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Buchungsübersicht",
                 "Sie befinden sich Buchungsverwaltungsbereich. Hier haben Sie einen Überblick über alle Buchungen.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/posting.png"),
@@ -84,7 +84,7 @@ public class PostingManagement2PresentationModel {
             PresentationModelProperties p = new PresentationModelProperties();
             p.put("customer", c);
             p.put(PresentationModelProperties.HEADERINFO,
-                    new HeaderInfo(
+                    new CWHeaderInfo(
                         "Kunden erstellen",
                         "Bearbeiten sie hier alle Informationen über Ihren Kunden.",
                         CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png"),
@@ -135,7 +135,7 @@ public class PostingManagement2PresentationModel {
                 }
             });
 
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
             GUIManager.setLoadingScreenVisible(false);
 
         }
@@ -264,7 +264,7 @@ public class PostingManagement2PresentationModel {
                 }
             });
 
-            GUIManager.changeView(CWComponentFactory.createBackPanel(view.buildPanel()).getPanel(), true);
+            GUIManager.changeView(CWComponentFactory.createBackView(view), true);
 
             GUIManager.setLoadingScreenVisible(false);
 
@@ -295,7 +295,7 @@ public class PostingManagement2PresentationModel {
         return viewInactivesAction;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 
@@ -311,7 +311,7 @@ public class PostingManagement2PresentationModel {
         PresentationModelProperties p = new PresentationModelProperties();
         p.put("customer", c);
         p.put(PresentationModelProperties.HEADERINFO,
-                new HeaderInfo(
+                new CWHeaderInfo(
                     "Kunden bearbeiten",
                     "Bearbeiten sie hier alle Informationen über Ihren Kunden.",
                     CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"),
@@ -334,7 +334,8 @@ public class PostingManagement2PresentationModel {
                 }
             }
         });
-        GUIManager.changeView(editView.buildPanel(), true);
+
+        GUIManager.changeView(editView, true);
         GUIManager.setLoadingScreenVisible(false);
 
         return model;
