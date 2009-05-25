@@ -8,8 +8,7 @@ import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.customermanagementmodul.extentions.interfaces.EditReversePostingPostingCategoryExtention;
 import java.awt.event.ActionEvent;
@@ -33,7 +32,6 @@ import javax.swing.JComponent;
  * @author CreativeWorkers.at
  */
 public class EditReversePostingPresentationModel
-    implements Disposable
 {
 
     private PresentationModel<Posting> postingPresentationModel;
@@ -43,7 +41,7 @@ public class EditReversePostingPresentationModel
     private Posting oldPosting;
     private SelectionInList<PostingCategory> postingCategorySelection;
     private ValueModel unsaved;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
@@ -56,7 +54,7 @@ public class EditReversePostingPresentationModel
     private SaveListener saveListener;
 //    private PropertyChangeListener unsavedListener;
     
-    public EditReversePostingPresentationModel(Posting oldPosting, Posting reversePosting, HeaderInfo headerInfo) {
+    public EditReversePostingPresentationModel(Posting oldPosting, Posting reversePosting, CWHeaderInfo headerInfo) {
         this.reversePosting = reversePosting;
         this.oldPosting = oldPosting;
         this.headerInfo = headerInfo;
@@ -188,7 +186,7 @@ public class EditReversePostingPresentationModel
         return reversePostingPresentationModel;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

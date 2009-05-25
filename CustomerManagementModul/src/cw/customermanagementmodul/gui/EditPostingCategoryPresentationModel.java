@@ -7,8 +7,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -24,7 +23,6 @@ import cw.customermanagementmodul.pojo.PostingCategory;
  */
 public class EditPostingCategoryPresentationModel
         extends PresentationModel<PostingCategory>
-        implements Disposable
 {
 
     private PostingCategory postingCategory;
@@ -35,13 +33,13 @@ public class EditPostingCategoryPresentationModel
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private ButtonListenerSupport support;
 
     private SaveListener saveListener;
     private PropertyChangeListener unsavedListener;
     
-    public EditPostingCategoryPresentationModel(PostingCategory postingCategory, HeaderInfo headerInfo) {
+    public EditPostingCategoryPresentationModel(PostingCategory postingCategory, CWHeaderInfo headerInfo) {
         super(postingCategory);
         this.postingCategory = postingCategory;
         this.headerInfo = headerInfo;
@@ -85,6 +83,7 @@ public class EditPostingCategoryPresentationModel
     public void dispose() {
         getBufferedModel(PostingCategory.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
         unsaved.removeValueChangeListener(unsavedListener);
+        release();
     }
 
     /**
@@ -125,7 +124,7 @@ public class EditPostingCategoryPresentationModel
         return saveCancelButtonAction;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

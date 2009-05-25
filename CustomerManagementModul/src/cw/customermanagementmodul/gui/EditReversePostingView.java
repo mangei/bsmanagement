@@ -6,9 +6,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -23,14 +22,12 @@ import javax.swing.JLabel;
  *
  * @author CreativeWorkers.at
  */
-public class EditReversePostingView
-    implements Disposable
+public class EditReversePostingView extends CWView
 {
 
     private EditReversePostingPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
     private JLabel lPostingDescription;
     private JLabel lPostingCategory;
     private JLabel lPostingAmount;
@@ -53,6 +50,10 @@ public class EditReversePostingView
 
     public EditReversePostingView(EditReversePostingPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -122,16 +123,12 @@ public class EditReversePostingView
             CellConstraints cc = new CellConstraints();
             pPostingCategoryExtention.add(comp, cc.xy(1, 2));
         }
-        if(panel != null) {
-            panel.validate();
-        }
+        this.validate();
     }
     
-    public JPanel buildPanel() {
-        initComponents();
-        
-        panel = new JViewPanel(model.getHeaderInfo());
-        JButtonPanel buttonPanel = panel.getButtonPanel();
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
+        CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
@@ -140,7 +137,7 @@ public class EditReversePostingView
                 "10dlu, left:pref, 4dlu, fill:pref, 4dlu, left:200dlu, 4dlu, pref",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref, 4dlu, pref, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
         
-        PanelBuilder builder = new PanelBuilder(layout,panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         builder.setDefaultDialogBorder();
 
         CellConstraints cc = new CellConstraints();
@@ -174,17 +171,9 @@ public class EditReversePostingView
         builder.add(lReversePostingLiabilitiesAssets, cc.xyw(4, 22, 3));
         builder.addLabel("Eingangsdatum:",      cc.xy(2, 24));
         builder.add(dcReversePostingEntryDate,  cc.xy(4, 24));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return panel;
     }
 
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         model.getPostingCategorySelection().removeValueChangeListener(postingCategoryChangeListener);
 
         componentContainer.dispose();

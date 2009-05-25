@@ -7,7 +7,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -23,7 +23,6 @@ import javax.swing.Icon;
  */
 public class EditGroupPresentationModel
     extends PresentationModel<Group>
-    implements Disposable
 {
 
     private Action resetButtonAction;
@@ -31,20 +30,16 @@ public class EditGroupPresentationModel
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
 
-    private String headerText;
+    private CWHeaderInfo headerInfo;
     private ValueModel unsaved;
     private ButtonListenerSupport support;
 
     private SaveListener saveListener;
     private PropertyChangeListener unsavedListener;
 
-    public EditGroupPresentationModel(Group group) {
-        this(group, "");
-    }
-
-    public EditGroupPresentationModel(Group group, String headerText) {
+    public EditGroupPresentationModel(Group group, CWHeaderInfo headerInfo) {
         super(group);
-        this.headerText = headerText;
+        this.headerInfo = headerInfo;
 
         initModels();
         initEventHandling();
@@ -85,6 +80,8 @@ public class EditGroupPresentationModel
         getBufferedModel(Group.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
         
         unsaved.removeValueChangeListener(unsavedListener);
+
+        release();
     }
 
 
@@ -208,8 +205,8 @@ public class EditGroupPresentationModel
         return saveCancelButtonAction;
     }
 
-    public String getHeaderText() {
-        return headerText;
+    public CWHeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
 }

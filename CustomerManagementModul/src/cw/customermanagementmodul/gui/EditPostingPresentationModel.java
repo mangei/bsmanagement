@@ -9,8 +9,7 @@ import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.customermanagementmodul.extentions.interfaces.EditPostingPostingCategoryExtention;
 import java.awt.event.ActionEvent;
@@ -35,13 +34,12 @@ import javax.swing.JComponent;
  */
 public class EditPostingPresentationModel
         extends PresentationModel<Posting>
-        implements Disposable
 {
 
     private Posting posting;
     private SelectionInList<PostingCategory> postingCategorySelection;
     private ValueModel unsaved;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     
     private Action cancelAction;
     private Action saveCancelAction;
@@ -55,11 +53,11 @@ public class EditPostingPresentationModel
     private PropertyChangeListener unsavedListener;
     private PropertyConnector postingCategoryConnector;
     
-    public EditPostingPresentationModel(Posting posting, HeaderInfo headerInfo) {
+    public EditPostingPresentationModel(Posting posting,  CWHeaderInfo headerInfo) {
         this(posting, false, headerInfo);
     }
 
-    public EditPostingPresentationModel(Posting posting, boolean editMode, HeaderInfo headerInfo) {
+    public EditPostingPresentationModel(Posting posting, boolean editMode, CWHeaderInfo headerInfo) {
         super(posting);
         this.posting = posting;
         this.headerInfo = headerInfo;
@@ -121,14 +119,15 @@ public class EditPostingPresentationModel
         getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).removeValueChangeListener(saveListener);
         getBufferedModel(Posting.PROPERTYNAME_CATEGORY).removeValueChangeListener(saveListener);
 
-        // TODO Dispose all extentions
-//        if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
-//            editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).save();
-//        }
+        // Initialize the extentions
+        for(EditPostingPostingCategoryExtention ex : editPostingPostingCategoryExtentions) {
+            ex.dispose();
+        }
 
         unsaved.removeValueChangeListener(unsavedListener);
 
         postingCategoryConnector.release();
+        release();
     }
 
     private List<EditPostingPostingCategoryExtention> getExtentions() {
@@ -177,7 +176,7 @@ public class EditPostingPresentationModel
         return unsaved;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

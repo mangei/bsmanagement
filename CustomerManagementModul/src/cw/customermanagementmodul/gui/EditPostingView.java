@@ -5,9 +5,8 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import java.beans.PropertyChangeEvent;
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -21,14 +20,12 @@ import javax.swing.JComboBox;
  *
  * @author CreativeWorkers.at
  */
-public class EditPostingView
-    implements Disposable
+public class EditPostingView extends CWView
 {
 
     private EditPostingPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
     private JTextField tfDescription;
     private JComboBox cbPostingCategory;
     private JTextField tfAmount;
@@ -38,10 +35,15 @@ public class EditPostingView
     private JButton bCancel;
     private JButton bSaveCancel;
     private JPanel pPostingCategoryExtention;
-    
+
+    private PropertyChangeListener postingCategoryChangeListener;
 
     public EditPostingView(EditPostingPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -78,7 +80,7 @@ public class EditPostingView
     }
 
     private void initEventHandling() {
-        model.getPostingCategorySelection().addValueChangeListener(new PropertyChangeListener() {
+        model.getPostingCategorySelection().addValueChangeListener(postingCategoryChangeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 // Change the extention component
                 changePostingCategoryExtentionComponent();
@@ -93,16 +95,12 @@ public class EditPostingView
             CellConstraints cc = new CellConstraints();
             pPostingCategoryExtention.add(comp, cc.xy(1, 2));
         }
-        if(panel != null) {
-            panel.validate();
-        }
+        this.validate();
     }
     
-    public JPanel buildPanel() {
-        initComponents();
-        
-        panel = new JViewPanel(model.getHeaderInfo());
-        JButtonPanel buttonPanel = panel.getButtonPanel();
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
+        CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
@@ -111,7 +109,7 @@ public class EditPostingView
                 "right:pref, 4dlu, fill:pref, 4dlu, left:200dlu, 4dlu, pref",
                 "pref, 4dlu, pref, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
         
-        PanelBuilder builder = new PanelBuilder(layout,panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         builder.setDefaultDialogBorder();
 
         CellConstraints cc = new CellConstraints();
@@ -127,16 +125,13 @@ public class EditPostingView
         builder.add(pLiabilitiesAssets,         cc.xyw(3, 8, 3));
         builder.addLabel("Eingangsdatum:",      cc.xy(1, 10));
         builder.add(dcPostingEntryDate,         cc.xy(3, 10));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return panel;
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
+        System.out.println("7777777777777777777777777777777777777777777777777777");
+
+        model.getPostingCategorySelection().removeValueChangeListener(postingCategoryChangeListener);
 
         componentContainer.dispose();
 
