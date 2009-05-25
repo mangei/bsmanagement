@@ -4,8 +4,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import javax.swing.event.ListSelectionEvent;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import java.awt.event.ActionEvent;
@@ -26,7 +25,6 @@ import javax.swing.JOptionPane;
  * @author CreativeWorkers.at
  */
 public class CustomerManagementPresentationModel
-    implements Disposable
 {
 
     private Action newAction;
@@ -37,7 +35,7 @@ public class CustomerManagementPresentationModel
 
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     
     private SelectionHandler selectionHandler;
 
@@ -58,7 +56,7 @@ public class CustomerManagementPresentationModel
                 "cw.customerboardingmanagement.CustomerManangementView.customerTableState"
                 );
         
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Kunden verwalten",
                 "Sie befinden sich Kundenverwaltungsbereich. Hier haben Sie einen Überblick über alle Kunden.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
@@ -101,7 +99,7 @@ public class CustomerManagementPresentationModel
             PresentationModelProperties p = new PresentationModelProperties();
             p.put("customer", c);
             p.put(PresentationModelProperties.HEADERINFO,
-                    new HeaderInfo(
+                    new CWHeaderInfo(
                         "Kunden erstellen",
                         "Bearbeiten sie hier alle Informationen über Ihren Kunden.",
                         CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png"),
@@ -146,7 +144,7 @@ public class CustomerManagementPresentationModel
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         model.removeButtonListener(this);
-                        c.removePropertyChangeListener(activeListener);
+                        c.removePropertyChangeListener(Customer.PROPERTYNAME_ACTIVE, activeListener);
                         GUIManager.changeToLastView();
                         GUIManager.getInstance().unlockMenu();
                     }
@@ -163,7 +161,7 @@ public class CustomerManagementPresentationModel
 //            d.setVisible(true);
 //            d.dispose();
 
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
             GUIManager.setLoadingScreenVisible(false);
 
         }
@@ -194,19 +192,13 @@ public class CustomerManagementPresentationModel
             model.addButtonListener(new ButtonListener() {
                 public void buttonPressed(ButtonEvent evt) {
                     if(evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON || evt.getType() == ButtonEvent.EXIT_BUTTON) {
-//                        System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA------------- DELETE");
-//                        System.out.println("before: " + c.getPropertyChangeListeners().length);
-                        c.removePropertyChangeListener(activeListener);
-//                        System.out.println("after: " + c.getPropertyChangeListeners().length);
+                        c.removePropertyChangeListener(Customer.PROPERTYNAME_ACTIVE, activeListener);
                         model.removeButtonListener(this);
                     }
                 }
             });
 
-//            System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAA------------- ADD");
-//            System.out.println("before: " + c.getPropertyChangeListeners().length);
             c.addPropertyChangeListener(Customer.PROPERTYNAME_ACTIVE, activeListener);
-//            System.out.println("after: " + c.getPropertyChangeListeners().length);
         }
     }
 
@@ -297,7 +289,7 @@ public class CustomerManagementPresentationModel
                 }
             });
 
-            GUIManager.changeView(CWComponentFactory.createBackPanel(view.buildPanel()).getPanel(), true);
+            GUIManager.changeView(CWComponentFactory.createBackView(view), true);
 
             GUIManager.setLoadingScreenVisible(false);
 
@@ -328,7 +320,7 @@ public class CustomerManagementPresentationModel
         return viewInactivesAction;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 
@@ -345,7 +337,7 @@ public class CustomerManagementPresentationModel
         PresentationModelProperties p = new PresentationModelProperties();
         p.put("customer", c);
         p.put(PresentationModelProperties.HEADERINFO,
-                new HeaderInfo(
+                new CWHeaderInfo(
                     "Kunden bearbeiten",
                     "Bearbeiten sie hier alle Informationen über Ihren Kunden.",
                     CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"),
@@ -369,7 +361,8 @@ public class CustomerManagementPresentationModel
                 }
             }
         });
-        GUIManager.changeView(editView.buildPanel(), true);
+
+        GUIManager.changeView(editView, true);
         GUIManager.setLoadingScreenVisible(false);
 
         return model;

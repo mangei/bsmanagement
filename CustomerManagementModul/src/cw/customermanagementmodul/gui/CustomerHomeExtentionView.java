@@ -4,27 +4,27 @@ import cw.boardingschoolmanagement.app.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  *
  * @author ManuelG
  */
-public class CustomerHomeExtentionView
-    implements Disposable
+public class CustomerHomeExtentionView extends CWView
 {
 
     private CustomerHomeExtentionPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
     private JLabel lSizeCustomers;
 
     public CustomerHomeExtentionView(CustomerHomeExtentionPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
     
     private void initComponents() {
@@ -38,30 +38,21 @@ public class CustomerHomeExtentionView
         // Nothing to do
     }
 
-    public JViewPanel buildPanel() {
-        initComponents();
-
-        panel  = new JViewPanel("Kundeninformationen");
+    private void buildView() {
+        this.setHeaderInfo(new CWHeaderInfo("Kundeninformationen"));
 
         FormLayout layout = new FormLayout(
                 "pref",
                 "pref"
         );
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
 
         CellConstraints cc = new CellConstraints();
         builder.add(lSizeCustomers, cc.xy(1, 1));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return panel;
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         componentContainer.dispose();
 
         model.dispose();

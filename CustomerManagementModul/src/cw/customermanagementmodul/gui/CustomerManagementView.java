@@ -1,23 +1,14 @@
 package cw.customermanagementmodul.gui;
 
 import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Posting;
-import cw.customermanagementmodul.pojo.manager.PostingManager;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.util.List;
-import javax.swing.AbstractAction;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 /**
  * @author CreativeWorkers.at
  */
-public class CustomerManagementView
-    implements Disposable
+public class CustomerManagementView extends CWView
 {
 
     private CustomerManagementPresentationModel model;
@@ -28,11 +19,14 @@ public class CustomerManagementView
     private JButton bDelete;
     private JButton bInactive;
     private JButton bViewInactives;
-    private JViewPanel panel;
     private CustomerSelectorView customerSelectorView;
 
     public CustomerManagementView(CustomerManagementPresentationModel m) {
         model = m;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -77,16 +71,14 @@ public class CustomerManagementView
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
-        initComponents();
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
 
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
-
-        panel.getButtonPanel().add(bNew);
-        panel.getButtonPanel().add(bEdit);
-        panel.getButtonPanel().add(bDelete);
-        panel.getButtonPanel().add(bInactive);
-        panel.getButtonPanel().add(bViewInactives);
+        this.getButtonPanel().add(bNew);
+        this.getButtonPanel().add(bEdit);
+        this.getButtonPanel().add(bDelete);
+        this.getButtonPanel().add(bInactive);
+        this.getButtonPanel().add(bViewInactives);
 //        panel.getButtonPanel().add(new JButton(new AbstractAction("Show Postings") {
 //
 //            public void actionPerformed(ActionEvent e) {
@@ -104,19 +96,12 @@ public class CustomerManagementView
 //            }
 //        }));
 
-        panel.getContentPanel().setLayout(new BorderLayout());
-        panel.getContentPanel().add(customerSelectorView.buildPanel(), BorderLayout.CENTER);
-
-        panel.addDisposableListener(this);
-        componentContainer.addComponent(panel);
-
-        initEventHandling();
-
-        return panel;
+        this.getContentPanel().setLayout(new BorderLayout());
+        this.getContentPanel().add(customerSelectorView, BorderLayout.CENTER);
     }
 
     public void dispose() {
-        panel.removeDisposableListener(this);
+        System.out.println("000000000000000000000000000000000000000");
 
         customerSelectorView.dispose();
         

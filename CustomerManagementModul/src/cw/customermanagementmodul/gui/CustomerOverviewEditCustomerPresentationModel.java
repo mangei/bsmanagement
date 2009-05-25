@@ -3,8 +3,7 @@ package cw.customermanagementmodul.gui;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.customermanagementmodul.extentions.interfaces.CustomerOverviewEditCustomerExtention;
 import java.beans.PropertyChangeEvent;
@@ -18,11 +17,11 @@ import javax.swing.JComponent;
  * @author CreativeWorkers.at
  */
 public class CustomerOverviewEditCustomerPresentationModel
-        implements Disposable {
+{
 
     private EditCustomerPresentationModel editCustomerPresentationModel;
     private ValueModel unsaved;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private List<CustomerOverviewEditCustomerExtention> customerOverviewEditCustomerExtentions;
 
@@ -42,7 +41,7 @@ public class CustomerOverviewEditCustomerPresentationModel
             extention.initPresentationModel(this);
         }
 
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Kundenübersicht",
                 "Hier haben Sie alle Informationen für den Kunden im Überblick.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
@@ -100,7 +99,7 @@ public class CustomerOverviewEditCustomerPresentationModel
         return editCustomerPresentationModel;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

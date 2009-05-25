@@ -6,12 +6,11 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CalendarUtil;
-import cw.boardingschoolmanagement.gui.component.CWJPanel;
-import cw.boardingschoolmanagement.gui.component.CWJXTable;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.JNotNullLabel;
 import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.customermanagementmodul.gui.renderer.ActiveCustomerTableCellRenderer;
 import cw.customermanagementmodul.gui.renderer.GenderTableCellRenderer;
 import java.awt.Color;
@@ -27,16 +26,18 @@ import java.awt.BorderLayout;
 /**
  * @author CreativeWorkers.at
  */
-public class CustomerSelectorView
-    implements Disposable
+public class CustomerSelectorView extends CWPanel
 {
 
     private CustomerSelectorPresentationModel model;
-    private CWJPanel panel;
-    private CWJXTable tCustomers;
+    private CWTable tCustomers;
 
     public CustomerSelectorView(CustomerSelectorPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -61,26 +62,23 @@ public class CustomerSelectorView
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
-        initComponents();
-
-        panel = CWComponentFactory.createPanel(new BorderLayout());
-        panel.setOpaque(false);
+    private void buildView() {
+        this.setLayout(new BorderLayout());
         JPanel pCenter = new JPanel();
         pCenter.setOpaque(false);
 
         if (model.getNorthPanel() != null) {
-            panel.add(model.getNorthPanel(), BorderLayout.NORTH);
+            this.add(model.getNorthPanel(), BorderLayout.NORTH);
         }
         if (model.getSouthPanel() != null) {
-            panel.add(model.getSouthPanel(), BorderLayout.SOUTH);
+            this.add(model.getSouthPanel(), BorderLayout.SOUTH);
         }
-        panel.add(pCenter, BorderLayout.CENTER);
+        this.add(pCenter, BorderLayout.CENTER);
         if (model.getWestPanel() != null) {
-            panel.add(model.getWestPanel(), BorderLayout.WEST);
+            this.add(model.getWestPanel(), BorderLayout.WEST);
         }
         if (model.getEastPanel() != null) {
-            panel.add(model.getEastPanel(), BorderLayout.EAST);
+            this.add(model.getEastPanel(), BorderLayout.EAST);
         }
 
         FormLayout layout = new FormLayout(
@@ -91,16 +89,9 @@ public class CustomerSelectorView
         CellConstraints cc = new CellConstraints();
         builder.addLabel("Kunden:", cc.xy(1, 1));
         builder.add(CWComponentFactory.createScrollPane(tCustomers), cc.xy(1, 3));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return panel;
     }
 
     public void dispose() {
-        panel.removeDisposableListener(this);
         model.dispose();
     }
 

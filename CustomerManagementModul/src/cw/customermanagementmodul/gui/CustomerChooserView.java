@@ -2,8 +2,7 @@ package cw.customermanagementmodul.gui;
 
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import com.l2fprod.common.swing.JButtonBar;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -12,20 +11,22 @@ import javax.swing.JPanel;
  *
  * @author ManuelG
  */
-public class CustomerChooserView
-    implements Disposable
+public class CustomerChooserView extends CWView
 {
 
     private CustomerChooserPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
     private JButton bOk;
     private JButton bCancel;
     private CustomerSelectorView customerSelectorView;
 
     public CustomerChooserView(CustomerChooserPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -43,27 +44,17 @@ public class CustomerChooserView
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
-        initComponents();
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
         
-        panel = new JViewPanel(model.getHeaderText());
-        
-        JButtonBar buttonBar = panel.getButtonPanel();
+        JButtonBar buttonBar = this.getButtonPanel();
         buttonBar.add(bOk);
         buttonBar.add(bCancel);
 
-        panel.getContentPanel().add(customerSelectorView.buildPanel(), BorderLayout.CENTER);
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return panel;
+        this.getContentPanel().add(customerSelectorView, BorderLayout.CENTER);
     }
 
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         customerSelectorView.dispose();
 
         componentContainer.dispose();

@@ -2,7 +2,6 @@ package cw.customermanagementmodul.gui;
 
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
 
 /**
@@ -10,7 +9,6 @@ import cw.customermanagementmodul.pojo.manager.CustomerManager;
  * @author ManuelG
  */
 public class CustomerHomeExtentionPresentationModel
-    implements Disposable
 {
 
     private ValueModel sizeCustomersValueModel;

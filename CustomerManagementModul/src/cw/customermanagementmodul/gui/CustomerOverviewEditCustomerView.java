@@ -1,28 +1,27 @@
 package cw.customermanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import java.util.List;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
 
 /**
  *
  * @author CreativeWorkers.at
  */
-public class CustomerOverviewEditCustomerView
-    implements Disposable {
+public class CustomerOverviewEditCustomerView extends CWView
+{
 
     private CustomerOverviewEditCustomerPresentationModel model;
 
-    private JViewPanel mainPanel;
-
     public CustomerOverviewEditCustomerView(CustomerOverviewEditCustomerPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -32,10 +31,8 @@ public class CustomerOverviewEditCustomerView
     private void initEventHandling() {
     }
 
-    public JViewPanel buildPanel() {
-        initComponents();
-        
-        mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
         
         List<JComponent> extentionComponents = model.getExtentionComponents();
 
@@ -51,27 +48,18 @@ public class CustomerOverviewEditCustomerView
                 "fill:pref:grow",
                 rowLayoutString.toString());
 
-        PanelBuilder builder = new PanelBuilder(layout,mainPanel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         CellConstraints cc = new CellConstraints();
 
         for(int i=0, l=extentionComponents.size(); i<l; i++) {
             builder.add(extentionComponents.get(i), cc.xy(1, i*2+1));
         }
-
-        mainPanel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return mainPanel;
     }
 
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
-
         model.dispose();
 
         // Kill references
         model = null;
-        mainPanel = null;
     }
 }

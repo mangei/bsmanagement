@@ -4,8 +4,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import javax.swing.event.ListSelectionEvent;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import java.awt.event.ActionEvent;
@@ -23,7 +22,6 @@ import javax.swing.JOptionPane;
  * @author Manuel Geier (CreativeWorkers)
  */
 public class CustomerInactivePresentationModel
-    implements Disposable
 {
 
     private Action activateAction;
@@ -33,7 +31,7 @@ public class CustomerInactivePresentationModel
 
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private ButtonListenerSupport buttonListenerSupport;
 
     private SelectionHandler selectionHandler;
@@ -54,7 +52,7 @@ public class CustomerInactivePresentationModel
                 "cw.customerboardingmanagement.CustomerInactiveView.customerTableState"
                 );
         
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Inaktive Kunden",
                 "Hier sehen Sie alle inaktiven Kunden die sich noch im System befinden.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactives.png"),
@@ -139,7 +137,7 @@ public class CustomerInactivePresentationModel
         return deleteAction;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

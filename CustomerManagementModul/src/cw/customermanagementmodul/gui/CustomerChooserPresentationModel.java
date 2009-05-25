@@ -4,7 +4,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -17,11 +17,10 @@ import cw.customermanagementmodul.pojo.Customer;
  * @author ManuelG
  */
 public class CustomerChooserPresentationModel
-    implements Disposable
 {
 
     private List<Customer> customerList;
-    private String headerText;
+    private CWHeaderInfo headerInfo;
     private ButtonListenerSupport buttonListenerSupport;
 
     private Action okAction;
@@ -31,16 +30,16 @@ public class CustomerChooserPresentationModel
 
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
 
-    public CustomerChooserPresentationModel(String headerText) {
-        this(headerText, null);
+    public CustomerChooserPresentationModel(CWHeaderInfo headerInfo) {
+        this(headerInfo, null);
     }
 
-    public CustomerChooserPresentationModel(String headerText, List<Customer> customerList) {
-        this(headerText, customerList, null);
+    public CustomerChooserPresentationModel(CWHeaderInfo headerInfo, List<Customer> customerList) {
+        this(headerInfo, customerList, null);
     }
     
-    public CustomerChooserPresentationModel(String headerText, List<Customer> customerList, Customer selectedCustomer) {
-        this.headerText = headerText;
+    public CustomerChooserPresentationModel(CWHeaderInfo headerInfo, List<Customer> customerList, Customer selectedCustomer) {
+        this.headerInfo = headerInfo;
         this.customerList = customerList;
         this.selectedCustomer = selectedCustomer;
 
@@ -110,23 +109,23 @@ public class CustomerChooserPresentationModel
     // Getter methods for the model
     ////////////////////////////////////////////////////////////////////////////
 
-    Action getCancelAction() {
+    public Action getCancelAction() {
         return cancelAction;
     }
 
-    Action getOkAction() {
+    public Action getOkAction() {
         return okAction;
     }
 
-    String getHeaderText() {
-        return headerText;
+    public CWHeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
     public Customer getSelectedCustomer() {
         return customerSelectorPresentationModel.getSelectedCustomer();
     }
 
-    CustomerSelectorPresentationModel getCustomerSelectorPresentationModel() {
+    public CustomerSelectorPresentationModel getCustomerSelectorPresentationModel() {
         return customerSelectorPresentationModel;
     }
 
