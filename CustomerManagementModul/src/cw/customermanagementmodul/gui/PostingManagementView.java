@@ -12,7 +12,7 @@ public class PostingManagementView extends CWView
     
 {
 
-    private PostingManagement2PresentationModel model;
+    private PostingManagementPresentationModel model;
     private JButton bNew;
     private JButton bEdit;
     private JButton bDelete;
@@ -20,7 +20,7 @@ public class PostingManagementView extends CWView
     private JButton bViewInactives;
     private CustomerSelectorView customerSelectorView;
 
-    public PostingManagementView(PostingManagement2PresentationModel m) {
+    public PostingManagementView(PostingManagementPresentationModel m) {
         model = m;
 
         initComponents();

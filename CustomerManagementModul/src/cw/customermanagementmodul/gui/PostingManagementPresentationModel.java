@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
 /**
  * @author CreativeWorkers.at
  */
-public class PostingManagement2PresentationModel {
+public class PostingManagementPresentationModel {
 
     private Action newAction;
     private Action editAction;
@@ -34,7 +34,7 @@ public class PostingManagement2PresentationModel {
 
     private CWHeaderInfo headerInfo;
 
-    public PostingManagement2PresentationModel() {
+    public PostingManagementPresentationModel() {
         initModels();
         initEventHandling();
     }
