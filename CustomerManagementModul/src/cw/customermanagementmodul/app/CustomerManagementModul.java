@@ -3,7 +3,7 @@ package cw.customermanagementmodul.app;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CascadeEvent;
 import cw.boardingschoolmanagement.app.CascadeListener;
-import cw.boardingschoolmanagement.gui.component.JMenuPanel;
+import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
 import cw.customermanagementmodul.gui.CustomerManagementPresentationModel;
@@ -17,8 +17,6 @@ import cw.customermanagementmodul.pojo.manager.PostingManager;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.customermanagementmodul.gui.PostingCategoryManagementPresentationModel;
 import cw.customermanagementmodul.gui.PostingCategoryManagementView;
-import cw.customermanagementmodul.gui.PostingManagement2PresentationModel;
-import cw.customermanagementmodul.gui.PostingManagementView;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Group;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
@@ -28,7 +26,6 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 
 /**
  * The CostumerManagement Modul
@@ -41,7 +38,7 @@ public class CustomerManagementModul
     }
 
     public void init() {
-        JMenuPanel sideMenu = MenuManager.getSideMenu();
+        CWMenuPanel sideMenu = MenuManager.getSideMenu();
 
         sideMenu.addCategory("Verwaltung", "manage", 10);
         sideMenu.addItem(new JButton(new AbstractAction(
@@ -58,10 +55,11 @@ public class CustomerManagementModul
 
                 CustomerManagementPresentationModel model = new CustomerManagementPresentationModel();
                 CustomerManagementView view = new CustomerManagementView(model);
-                JPanel panel = view.buildPanel();
 
-                GUIManager.changeView(panel);
+                GUIManager.changeView(view);
                 GUIManager.setLoadingScreenVisible(false);
+
+                model = null;
 
 //                model = new CustomerManagementPresentationModel();
 //                view = new CustomerManagementView(model);
@@ -92,9 +90,8 @@ public class CustomerManagementModul
 
                 GroupManagementPresentationModel model = new GroupManagementPresentationModel();
                 GroupManagementView view = new GroupManagementView(model);
-                JPanel panel = view.buildPanel();
 
-                GUIManager.changeView(panel);
+                GUIManager.changeView(view);
                 GUIManager.setLoadingScreenVisible(false);
             }
         }), "manage");
@@ -132,9 +129,8 @@ public class CustomerManagementModul
 
                 PostingCategoryManagementPresentationModel model = new PostingCategoryManagementPresentationModel();
                 PostingCategoryManagementView view = new PostingCategoryManagementView(model);
-                JPanel panel = view.buildPanel();
 
-                GUIManager.changeView(panel);
+                GUIManager.changeView(view);
                 GUIManager.setLoadingScreenVisible(false);
             }
         }), "posting");
@@ -168,11 +164,5 @@ public class CustomerManagementModul
             }
         });
 
-        if(PostingCategoryManager.getInstance().get("test") == null) {
-            PostingCategory category = new PostingCategory();
-            category.setName("Test");
-            category.setKey("test");
-            PostingCategoryManager.getInstance().save(category);
-        }
     }
 }
