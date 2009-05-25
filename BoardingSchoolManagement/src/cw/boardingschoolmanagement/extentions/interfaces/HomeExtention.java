@@ -1,7 +1,7 @@
 package cw.boardingschoolmanagement.extentions.interfaces;
 
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
-import javax.swing.JPanel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 
 /**
  *
@@ -17,7 +17,7 @@ public interface HomeExtention extends Extention {
      * The panel you want to add on the home view <br>
      * @return JPanel
      */
-    public JPanel getPanel();
+    public CWPanel getView();
 
     public void dispose();
 }

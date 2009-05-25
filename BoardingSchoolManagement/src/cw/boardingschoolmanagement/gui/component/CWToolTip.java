@@ -14,21 +14,21 @@ import javax.swing.plaf.basic.BasicToolTipUI;
  *
  * @author ManuelG
  */
-public class CWJToolTip extends JToolTip {
+public class CWToolTip extends JToolTip {
 
     private String header;
     private String description;
     private URL imgURL;
 
-    public CWJToolTip() {
+    public CWToolTip() {
         setUI(new CWToolTipUI());
     }
 
-    public CWJToolTip(String header, String description) {
+    public CWToolTip(String header, String description) {
         this(header,description,null);
     }
 
-    public CWJToolTip(String header, String description, URL imgURL) {
+    public CWToolTip(String header, String description, URL imgURL) {
         this.header = header;
         this.description = description;
         this.imgURL = imgURL;

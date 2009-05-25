@@ -14,9 +14,9 @@ import javax.swing.JButton;
  *
  * @author Manuel Geier
  */
-public class JButtonPanel extends JButtonBar {
+public class CWButtonPanel extends JButtonBar {
 
-    public JButtonPanel() {
+    public CWButtonPanel() {
         setUI(new JButtonPanelUI());
         FlowLayout layout = new FlowLayout();
         layout.setAlignment(FlowLayout.LEFT);

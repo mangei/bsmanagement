@@ -8,8 +8,7 @@ import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.comparator.PriorityComparator;
 import cw.boardingschoolmanagement.extentions.interfaces.ConfigurationExtention;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -28,10 +27,9 @@ import javax.swing.JOptionPane;
  * @author ManuelG
  */
 public class ConfigurationPresentationModel extends PresentationModel
-    implements Disposable
 {
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private List<ConfigurationExtention> configurationExtentions;
     private ButtonListenerSupport support;
     private Action saveAction;
@@ -55,7 +53,7 @@ public class ConfigurationPresentationModel extends PresentationModel
             extention.initPresentationModel(this);
         }
 
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Einstellungen",
                 "Hier können Sie Ihre Einstellungen vornehmen.",
                 CWUtils.loadIcon("cw/boardingschoolmanagement/images/configuration.png"),
@@ -219,7 +217,7 @@ public class ConfigurationPresentationModel extends PresentationModel
         support.addButtonListener(listener);
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

@@ -4,29 +4,28 @@ import cw.boardingschoolmanagement.app.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  *
  * @author ManuelG
  */
-public class WelcomeHomeGUIExtentionView
-    implements Disposable
+public class WelcomeHomeGUIExtentionView extends CWView
 {
 
     private WelcomeHomeGUIExtentionPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
     private JLabel lWelcomeMessage;
     private JLabel lTimeMessage;
 
     public WelcomeHomeGUIExtentionView(WelcomeHomeGUIExtentionPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
     
     private void initComponents() {
@@ -42,10 +41,8 @@ public class WelcomeHomeGUIExtentionView
 
     }
 
-    public JPanel buildPanel() {
-        initComponents();
-
-        panel  = CWComponentFactory.createViewPanel(new HeaderInfo(
+    private void buildView() {
+        this.setHeaderInfo(new CWHeaderInfo(
                 "Willkommen"
         ));
 
@@ -53,22 +50,14 @@ public class WelcomeHomeGUIExtentionView
                 "fill:pref:grow",
                 "pref, 4dlu, pref"
         );
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
 
         CellConstraints cc = new CellConstraints();
         builder.add(lWelcomeMessage, cc.xy(1, 1));
         builder.add(lTimeMessage, cc.xy(1, 3));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return panel;
     }
 
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         componentContainer.dispose();
 
         model.dispose();

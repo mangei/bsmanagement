@@ -2,10 +2,7 @@ package cw.boardingschoolmanagement.gui.component;
 
 import com.jidesoft.swing.JideSwingUtilities;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.gui.ui.JButtonPanelButtonUI;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import cw.boardingschoolmanagement.interfaces.HeaderInfoCallable;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -24,33 +21,32 @@ import javax.swing.plaf.basic.BasicPanelUI;
  *
  * @author ManuelG
  */
-public class JBackPanel
-        extends JPanel
-        implements HeaderInfoCallable, Disposable
+public class CWBackView
+        extends CWView
 {
 
     private String backText;
-    private JPanel panel;
-    private HeaderInfo headerInfo;
+    private JComponent comp;
+    private CWHeaderInfo headerInfo;
 
-    public JBackPanel(JPanel panel) {
-        this(panel, "");
+    public CWBackView(JComponent comp) {
+        this(comp, "");
     }
 
-    public JBackPanel(JPanel panel, String backText) {
-        if (panel == null) {
+    public CWBackView(JComponent comp, String backText) {
+        if (comp == null) {
             throw new NullPointerException("panel is null");
         }
 
-        if (panel instanceof HeaderInfoCallable) {
-            headerInfo = ((HeaderInfoCallable) panel).getHeaderInfo();
+        if (comp instanceof CWView) {
+            headerInfo = ((CWView) comp).getHeaderInfo();
         }
 
         this.setLayout(new BorderLayout());
         this.backText = backText;
-        this.panel = panel;
+        this.comp = comp;
 
-        this.add(panel, BorderLayout.CENTER);
+        this.add(comp, BorderLayout.CENTER);
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         topPanel.setOpaque(false);
@@ -74,12 +70,8 @@ public class JBackPanel
         this.setUI(new BackPanelUI());
     }
 
-    public JPanel getPanel() {
+    public CWView getPanel() {
         return this;
-    }
-
-    public HeaderInfo getHeaderInfo() {
-        return headerInfo;
     }
 
     private class BackPanelUI extends BasicPanelUI {
@@ -95,9 +87,10 @@ public class JBackPanel
         }
     }
 
+    @Override
     public void dispose() {
-        if(panel instanceof Disposable) {
-            ((Disposable)panel).dispose();
+        if(comp instanceof CWView) {
+            ((CWView)comp).dispose();
         }
     }
 }

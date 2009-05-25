@@ -1,6 +1,6 @@
 package cw.boardingschoolmanagement.manager;
 
-import cw.boardingschoolmanagement.gui.component.JMenuPanel;
+import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import javax.swing.AbstractAction;
 
 /**
@@ -18,11 +18,11 @@ public class MenuManager {
     /**
      * Sidemenu
      */
-    private JMenuPanel  sideMenu;
+    private CWMenuPanel  sideMenu;
     
     
     private MenuManager() {
-        sideMenu = new JMenuPanel();
+        sideMenu = new CWMenuPanel();
     }
     
     /**
@@ -40,7 +40,7 @@ public class MenuManager {
      * Returns the SideMenu
      * @return JMenuPanel
      */
-    public static JMenuPanel getSideMenu() {
+    public static CWMenuPanel getSideMenu() {
         MenuManager mM = getInstance();
         return mM.sideMenu;
     }

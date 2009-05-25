@@ -1,6 +1,6 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import cw.boardingschoolmanagement.interfaces.HeaderInfoCallable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -10,7 +10,6 @@ import java.util.LinkedList;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -18,12 +17,12 @@ import javax.swing.JPanel;
  *
  * @author ManuelG
  */
-public class JPathPanel extends JPanel {
+public class CWPathPanel extends JPanel {
 
     private String separator = ">";
     private JPanel pathPanel;
 
-    public JPathPanel() {
+    public CWPathPanel() {
         setLayout(new BorderLayout());
 
         setBackground(new Color(201,208,218));
@@ -36,23 +35,23 @@ public class JPathPanel extends JPanel {
         
         add(new JButton(new AbstractAction("   X   ") {
             public void actionPerformed(ActionEvent e) {
-                JPathPanel.this.setVisible(false);
+                CWPathPanel.this.setVisible(false);
             }
         }), BorderLayout.EAST);
     }
 
-    public void reloadPath(LinkedList<JComponent> lastComponents, JComponent shownComponent) {
+    public void reloadPath(LinkedList<CWView> lastViews, CWView shownView) {
 
         pathPanel.removeAll();
 
         pathPanel.add(new JLabel("Sie sind hier: "));
         
-        for (int i = lastComponents.size()-1; i >= 0; i--) {
-            pathPanel.add(createLabel(lastComponents.get(i)));
+        for (int i = lastViews.size()-1; i >= 0; i--) {
+            pathPanel.add(createLabel(lastViews.get(i)));
             pathPanel.add(new JLabel(separator));
         }
 
-        JLabel l = createLabel(shownComponent);
+        JLabel l = createLabel(shownView);
         l.setFont(l.getFont().deriveFont(Font.BOLD));
         pathPanel.add(l);
 
@@ -60,17 +59,15 @@ public class JPathPanel extends JPanel {
         pathPanel.repaint();
     }
 
-    private JLabel createLabel(JComponent comp) {
-        HeaderInfoCallable headerInfoCallable;
+    private JLabel createLabel(CWView view) {
         JLabel label = new JLabel();
-        if (comp instanceof HeaderInfoCallable) {
-            headerInfoCallable = (HeaderInfoCallable) comp;
-            label.setText(headerInfoCallable.getHeaderInfo().getHeaderText());
-            label.setToolTipText(headerInfoCallable.getHeaderInfo().getDescription());
-            label.setIcon(headerInfoCallable.getHeaderInfo().getSmallIcon());
-        } else {
-            label.setText(comp.getName());
-        }
+
+        CWHeaderInfo headerInfo = view.getHeaderInfo();
+        
+        label.setText(headerInfo.getHeaderText());
+        label.setToolTipText(headerInfo.getDescription());
+        label.setIcon(headerInfo.getSmallIcon());
+
         return label;
     }
 }

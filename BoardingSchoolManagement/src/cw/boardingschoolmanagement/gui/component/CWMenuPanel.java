@@ -26,7 +26,7 @@ import org.jvnet.lafwidget.animation.FadeKind;
  *
  * @author Manuel Geier
  */
-public class JMenuPanel
+public class CWMenuPanel
         extends JList {
 
     private List<Category> categories;
@@ -34,7 +34,7 @@ public class JMenuPanel
     private Item currentItem = new Item(new AbstractButton() {}, 0);
     private Item startItem;
 
-    public JMenuPanel() {
+    public CWMenuPanel() {
         categories = new ArrayList<Category>();
         jListList = new ArrayList();
         
@@ -105,7 +105,7 @@ public class JMenuPanel
      * @param category_key Key of the Category of the item
      * @return this JMenuPanel
      */
-    public JMenuPanel addItem(AbstractButton item, String category_key) {
+    public CWMenuPanel addItem(AbstractButton item, String category_key) {
         addItem(item, category_key, 0, false);
         return this;
     }
@@ -117,7 +117,7 @@ public class JMenuPanel
      * @param startpage if the item is the startpage
      * @return this JMenuPanel
      */
-    public JMenuPanel addItem(AbstractButton item, String category_key, boolean startpage) {
+    public CWMenuPanel addItem(AbstractButton item, String category_key, boolean startpage) {
         addItem(item, category_key, 0, startpage);
         return this;
     }
@@ -129,7 +129,7 @@ public class JMenuPanel
      * @param priority Orderpriority of the item in the category
      * @return this JMenuPanel
      */
-    public JMenuPanel addItem(AbstractButton item, String category_key, int priority) {
+    public CWMenuPanel addItem(AbstractButton item, String category_key, int priority) {
         addItem(item, category_key, priority, false);
         return this;
     }
@@ -142,7 +142,7 @@ public class JMenuPanel
      * @param startpage if the item is the startpage
      * @return this JMenuPanel
      */
-    public JMenuPanel addItem(AbstractButton item, String category_key, int priority, boolean startpage) {
+    public CWMenuPanel addItem(AbstractButton item, String category_key, int priority, boolean startpage) {
         Category c = getCategoryByKey(category_key);
         if(c != null) {
             Item item2 = new Item(item, priority);
@@ -163,7 +163,7 @@ public class JMenuPanel
      * @param key Key of the category
      * @return this JMenuPanel
      */
-    public JMenuPanel addCategory(String name, String key) {
+    public CWMenuPanel addCategory(String name, String key) {
         addCategory(name, key, 0);
         return this;
     }
@@ -175,7 +175,7 @@ public class JMenuPanel
      * @param priority Orderpriority of the category
      * @return this JMenuPanel
      */
-    public JMenuPanel addCategory(String name, String key, int priority) {
+    public CWMenuPanel addCategory(String name, String key, int priority) {
         categories.add(new Category(name, key, priority));
         positionElements();
         return this;

@@ -3,13 +3,13 @@ package cw.boardingschoolmanagement.manager;
 import cw.boardingschoolmanagement.app.ApplicationListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.BoardingSchoolManagement;
-import cw.boardingschoolmanagement.gui.component.LoadingGlass;
+import cw.boardingschoolmanagement.gui.component.CWLoadingGlass;
 import cw.boardingschoolmanagement.exception.NotInitializedException;
-import cw.boardingschoolmanagement.gui.component.JHeader;
-import cw.boardingschoolmanagement.gui.component.JMenuPanel;
-import cw.boardingschoolmanagement.gui.component.JPathPanel;
-import cw.boardingschoolmanagement.gui.component.StatusBar;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.component.CWHeader;
+import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
+import cw.boardingschoolmanagement.gui.component.CWPathPanel;
+import cw.boardingschoolmanagement.gui.component.CWStatusBar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -21,7 +21,6 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
-import javax.swing.BorderFactory;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -45,15 +44,14 @@ public class GUIManager {
     /**
      * Eine Referenz auf die Haupt-Kompenente die angezeigt wird
      */
-    private JComponent shownComponent;
-    private JScrollPane shownComponentScrollPane;
-    private LoadingGlass glassPane;
-    private LinkedList<JComponent> lastComponents;
-    private JHeader header;
-    private StatusBar statusbar;
+    private CWView shownView;
+    private CWLoadingGlass glassPane;
+    private LinkedList<CWView> lastViews;
+    private CWHeader header;
+    private CWStatusBar statusbar;
     private JSplitPane splitPane;
     private JPanel componentView;
-    private JPathPanel pathPanel;
+    private CWPathPanel pathPanel;
     private JFrame frame;
 
 
@@ -88,7 +86,7 @@ public class GUIManager {
         });
 
         // The Panel of the Path
-        pathPanel = new JPathPanel();
+        pathPanel = new CWPathPanel();
 
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true) {
 
@@ -121,8 +119,8 @@ public class GUIManager {
 
 
         // Angezeigte Komponente
-        shownComponent = null;
-        lastComponents = new LinkedList<JComponent>();
+        shownView = null;
+        lastViews = new LinkedList<CWView>();
 
         // View on the right side
         componentView = new JPanel(new BorderLayout());
@@ -131,7 +129,7 @@ public class GUIManager {
 //        shownComponent.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 1, new Color(178,187,200)));
 
         // GlassPane for the loading screen
-        frame.setGlassPane(glassPane = new LoadingGlass(frame.getRootPane(), false));
+        frame.setGlassPane(glassPane = new CWLoadingGlass(frame.getRootPane(), false));
 
         // Um den richtigen Mauszeiger anzuzeigen, da beim Look'n&Feel nach dem 
         // ändern der Größe ein falscher Cursor angezeigt wird.
@@ -205,7 +203,7 @@ public class GUIManager {
      */
     private void generateGUI() {
         frame.setLayout(new BorderLayout());
-        frame.add(header = new JHeader(), BorderLayout.NORTH);
+        frame.add(header = new CWHeader(), BorderLayout.NORTH);
 
         JPanel rightPanel = new JPanel(new BorderLayout());
         rightPanel.add(pathPanel, BorderLayout.SOUTH);
@@ -214,7 +212,7 @@ public class GUIManager {
         splitPane.add(createSidePanel(), JSplitPane.LEFT);
         splitPane.add(rightPanel, JSplitPane.RIGHT);
 
-        componentView.add(shownComponentScrollPane = createScrollPane(shownComponent), BorderLayout.CENTER);
+//        componentView.add(shownView, BorderLayout.CENTER);
 //        splitPane.add(shownComponentScrollPane = createScrollPane(shownComponent), JSplitPane.RIGHT);
 
         frame.add(splitPane, BorderLayout.CENTER);
@@ -223,7 +221,7 @@ public class GUIManager {
 //        add(shownComponentScrollPane = createScrollPane(shownComponent), BorderLayout.CENTER);
 
 //        add(MenuManager.getToolBar(),BorderLayout.PAGE_START);
-        frame.add(statusbar = new StatusBar(), BorderLayout.SOUTH);
+        frame.add(statusbar = new CWStatusBar(), BorderLayout.SOUTH);
     }
 //
 //    /**
@@ -254,7 +252,7 @@ public class GUIManager {
      * @return JComponent
      */
     private JComponent createSidePanel() {
-        JMenuPanel sideBar = MenuManager.getSideMenu();
+        CWMenuPanel sideBar = MenuManager.getSideMenu();
 
         sideBar.setPreferredSize(new Dimension(115, 80));
         sideBar.addComponentListener(new ComponentAdapter() {
@@ -268,52 +266,56 @@ public class GUIManager {
     }
 
     /**
-     * Changes the shown component
-     * @param comp New View
+     * Changes the shown view
+     * @param view New View
      */
-    public static void changeView(JComponent comp) {
-        changeView(comp, false);
+    public static void changeView(CWView view) {
+        changeView(view, false);
     }
 
     /**
-     * Changes the shown component
-     * @param comp New View
+     * Changes the shown view
+     * @param view New View
      * @param saveOldView Whether the old view will be saved or not
      */
-    public static void changeView(JComponent comp, boolean saveOldView) {
+    public static void changeView(CWView view, boolean saveOldView) {
 //        changeView(comp, saveOldView, true);
-        changeView2(comp, saveOldView);
+        changeView2(view, saveOldView);
     }
 
+    /**
+     * Reloads the pathview
+     */
     private void reloadPath() {
-        pathPanel.reloadPath(lastComponents, shownComponent);
+        pathPanel.reloadPath(lastViews, shownView);
     }
 
-    private static void changeView2(JComponent comp, boolean saveOldView) {
+    private static void changeView2(CWView view, boolean saveOldView) {
         GUIManager gM = getInstance();
 
         // Prüfen ob es nicht leer ist.. zb beim 1. Mal
-        if (gM.shownComponent != null) {
+        if (gM.shownView != null) {
 
             // Nur ändern, wenn es nicht schon angezeigt wird
-            if (gM.shownComponent.equals(comp)) {
+            if (gM.shownView.equals(view)) {
                 return;
             }
 
             // Alte Speichern
             if (saveOldView) {
                 // Alte Speichern
-                gM.lastComponents.push(gM.shownComponent);
+                gM.lastViews.push(gM.shownView);
             } else {
                 // Die alten löschen, wenn sie nicht gespeichert werden sollen
 
                 // Pop the old ones and dispose them if they are Disposable
-                for(int i=0, l=gM.lastComponents.size(); i<l; i++) {
-                    JComponent oldComp = gM.lastComponents.pop();
-                    if(oldComp instanceof Disposable) {
-                        ((Disposable)oldComp).dispose();
-                    }
+                for(int i=0, l=gM.lastViews.size(); i<l; i++) {
+                    CWView oldView = gM.lastViews.pop();
+                    oldView.dispose();
                 }
+
+                // Dispose the current view
+                gM.shownView.dispose();
                 
 //              not necessary
 //                gM.lastComponents.clear();
@@ -325,10 +327,10 @@ public class GUIManager {
         }
 
         // Neue Ansicht
-        gM.shownComponent = comp;
+        gM.shownView = view;
 
         // Hinzufügen
-        gM.componentView.add(gM.shownComponent, BorderLayout.CENTER);
+        gM.componentView.add(gM.shownView, BorderLayout.CENTER);
 
         gM.componentView.revalidate();
         gM.componentView.repaint();
@@ -336,75 +338,73 @@ public class GUIManager {
         gM.reloadPath();
     }
 
-    /**
-     * Changes the shown component
-     * @param comp New View
-     * @param saveOldView Whether the old view will be saved or not
-     * @param deleteOldOnes Whether the old ones will be deleted or not
-     */
-    private static void changeView(JComponent comp, boolean saveOldView, boolean deleteOldOnes) {
-        GUIManager gM = getInstance();
-
-        // Wenn die alten nicht gespeichert werden sollen, diese löschen
-        if (!saveOldView && deleteOldOnes) {
-            removeAllLastViews();
-        }
-
-        // Nur ändern, wenn es nicht schon angezeigt wird
-        if (gM.shownComponent == null || !gM.shownComponent.equals(comp)) {
-            // Entfernen der alten Komponente
-
-            if (gM.shownComponent != null && gM.shownComponentScrollPane != null) {
-                gM.componentView.remove(gM.shownComponentScrollPane);
-//                gM.splitPane.remove(gM.shownComponentScrollPane);
-            }
-
-            // Save old component?
-            if (saveOldView/* && gM.shownComponent != null*/) {
-                gM.lastComponents.push(gM.shownComponent);
-            } else {
-                // TODO manage Views in GUIManager
-//                removeAllLastViews();
-            }
-
-            // Zuweisen der neuen Komponente
-            gM.shownComponent = comp;
-
-            // Rahmen geben
-            gM.shownComponent.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 1, new Color(178, 187, 200)));
-
-            // Neue Komponente einfügen
-            gM.componentView.add(gM.shownComponentScrollPane = createScrollPane(gM.shownComponent), BorderLayout.CENTER);
-//            gM.splitPane.add(gM.shownComponentScrollPane = createScrollPane(gM.shownComponent), JSplitPane.RIGHT);
-
-//            gM.pathPanel.reloadPath(gM.lastComponents, gM.shownComponent);
-
-            // Neu zeichnen
-            gM.componentView.validate();
-            gM.componentView.repaint();
-        }
-    }
+//    /**
+//     * Changes the shown component
+//     * @param comp New View
+//     * @param saveOldView Whether the old view will be saved or not
+//     * @param deleteOldOnes Whether the old ones will be deleted or not
+//     */
+//    private static void changeView(JComponent comp, boolean saveOldView, boolean deleteOldOnes) {
+//        GUIManager gM = getInstance();
+//
+//        // Wenn die alten nicht gespeichert werden sollen, diese löschen
+//        if (!saveOldView && deleteOldOnes) {
+//            removeAllLastViews();
+//        }
+//
+//        // Nur ändern, wenn es nicht schon angezeigt wird
+//        if (gM.shownView == null || !gM.shownView.equals(comp)) {
+//            // Entfernen der alten Komponente
+//
+//            if (gM.shownView != null && gM.shownComponentScrollPane != null) {
+//                gM.componentView.remove(gM.shownComponentScrollPane);
+////                gM.splitPane.remove(gM.shownComponentScrollPane);
+//            }
+//
+//            // Save old component?
+//            if (saveOldView/* && gM.shownComponent != null*/) {
+//                gM.lastViews.push(gM.shownView);
+//            } else {
+//                // TODO manage Views in GUIManager
+////                removeAllLastViews();
+//            }
+//
+//            // Zuweisen der neuen Komponente
+//            gM.shownView = comp;
+//
+//            // Rahmen geben
+//            gM.shownView.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 1, new Color(178, 187, 200)));
+//
+//            // Neue Komponente einfügen
+//            gM.componentView.add(gM.shownComponentScrollPane = createScrollPane(gM.shownView), BorderLayout.CENTER);
+////            gM.splitPane.add(gM.shownComponentScrollPane = createScrollPane(gM.shownComponent), JSplitPane.RIGHT);
+//
+////            gM.pathPanel.reloadPath(gM.lastComponents, gM.shownComponent);
+//
+//            // Neu zeichnen
+//            gM.componentView.validate();
+//            gM.componentView.repaint();
+//        }
+//    }
 
     /**
      * Shows the last compontent
      */
     public static void changeToLastView() {
         GUIManager gM = getInstance();
-        if (!gM.lastComponents.isEmpty()) {
+        if (!gM.lastViews.isEmpty()) {
 
             // Von der Ansicht entfernen
             gM.componentView.removeAll();
 
-            if(gM.shownComponent instanceof Disposable) {
-                ((Disposable)gM.shownComponent).dispose();
-                System.gc();
-            }
+            gM.shownView.dispose();
+            System.gc();
 
             // Neue Ansicht
-            gM.shownComponent = gM.lastComponents.pop();
+            gM.shownView = gM.lastViews.pop();
 
             // Hinzufügen
-            gM.componentView.add(gM.shownComponent, BorderLayout.CENTER);
+            gM.componentView.add(gM.shownView, BorderLayout.CENTER);
 
             // Neu zeichnen lassen
             gM.componentView.validate();
@@ -429,34 +429,30 @@ public class GUIManager {
      * Removes the last component, when it was saved
      */
     public static void removeLastView() {
-        JComponent comp = getInstance().lastComponents.pop();
-        if(comp instanceof Disposable) {
-            ((Disposable)comp).dispose();
-            System.gc();
-        }
+        CWView view = getInstance().lastViews.pop();
+        view.dispose();
+        System.gc();
     }
 
     /**
      * Removes all components
      */
     public static void removeAllLastViews() {
-        LinkedList<JComponent> components = getInstance().lastComponents;
+        LinkedList<CWView> views = getInstance().lastViews;
 
-        for(JComponent comp : components) {
-            if(comp instanceof Disposable) {
-                ((Disposable)comp).dispose();
-            }
+        for(CWView view : views) {
+            view.dispose();
         }
         System.gc();
 
-        getInstance().lastComponents.clear();
+        getInstance().lastViews.clear();
     }
 
     /**
      * Liefert die Statusleiste
      * @return StatusBar
      */
-    public static StatusBar getStatusbar() {
+    public static CWStatusBar getStatusbar() {
         return getInstance().statusbar;
     }
 
@@ -468,7 +464,7 @@ public class GUIManager {
         getInstance().glassPane.setText(text);
     }
 
-    public JHeader getHeader() {
+    public CWHeader getHeader() {
         return header;
     }
 

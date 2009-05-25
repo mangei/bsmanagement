@@ -1,11 +1,9 @@
 package cw.boardingschoolmanagement.gui;
 
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
 import cw.boardingschoolmanagement.extentions.interfaces.ConfigurationExtention;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import cw.boardingschoolmanagement.interfaces.HeaderInfoCallable;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
@@ -21,14 +19,12 @@ import javax.swing.JPanel;
  *
  * @author ManuelG
  */
-public class ConfigurationView
-    implements Disposable
+public class ConfigurationView extends CWView
 {
 
     private ConfigurationPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
     private JButton bSave;
     private JButton bCancel;
 
@@ -36,9 +32,13 @@ public class ConfigurationView
 
     public ConfigurationView(ConfigurationPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
-    public void initComponents() {
+    private void initComponents() {
         bSave               = CWComponentFactory.createButton(model.getSaveAction());
         bCancel             = CWComponentFactory.createButton(model.getCancelAction());
 
@@ -47,24 +47,22 @@ public class ConfigurationView
                 .addComponent(bCancel);
     }
 
-    public void initEventHandling() {
+    private void initEventHandling() {
 
     }
 
-    public JViewPanel buildPanel() {
-        initComponents();
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
 
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
-
-        JButtonPanel buttonPanel = panel.getButtonPanel();
+        CWButtonPanel buttonPanel = this.getButtonPanel();
         buttonPanel.add(bSave);
         buttonPanel.add(bCancel);
 
         JPanel buttonBarPanel = CWComponentFactory.createPanel();
         buttonBarPanel.setOpaque(false);
         buttonBarPanel.setBorder(BorderFactory.createMatteBorder(1, 1, 1, 0, GUIManager.BORDER_COLOR));
-        final JButtonPanel buttonBar = new JButtonPanel();
-        buttonBar.setOrientation(JButtonPanel.VERTICAL);
+        final CWButtonPanel buttonBar = new CWButtonPanel();
+        buttonBar.setOrientation(CWButtonPanel.VERTICAL);
         buttonBar.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
         buttonBar.setOpaque(false);
         buttonBarPanel.add(buttonBar, BorderLayout.CENTER);
@@ -117,19 +115,11 @@ public class ConfigurationView
             cardPanel.add(ex.getView(), Integer.toString(i));
         }
 
-        panel.getContentPanel().add(buttonBarPanel, BorderLayout.WEST);
-        panel.getContentPanel().add(cardPanel, BorderLayout.CENTER);
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return panel;
+        this.getContentPanel().add(buttonBarPanel, BorderLayout.WEST);
+        this.getContentPanel().add(cardPanel, BorderLayout.CENTER);
     }
 
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         componentContainer.dispose();
 
         model.dispose();

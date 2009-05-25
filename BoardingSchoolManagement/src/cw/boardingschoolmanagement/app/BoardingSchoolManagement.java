@@ -4,8 +4,7 @@ import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.ConfigurationView;
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
 import cw.boardingschoolmanagement.gui.HomeView;
-import cw.boardingschoolmanagement.gui.component.JMenuPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import cw.boardingschoolmanagement.gui.component.SplashScreen;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
@@ -206,7 +205,7 @@ public class BoardingSchoolManagement {
     }
 
     private void initGUI() {
-        JMenuPanel sideMenu = MenuManager.getSideMenu();
+        CWMenuPanel sideMenu = MenuManager.getSideMenu();
 
         sideMenu.addCategory("Startseite", "home", 10);
         sideMenu.addItem(new JButton(new AbstractAction(
@@ -219,7 +218,7 @@ public class BoardingSchoolManagement {
             public void actionPerformed(ActionEvent e) {
 //                GUIManager.setLoadingScreenText("Startseite werden geladen...");
 //                GUIManager.setLoadingScreenVisible(true);
-                GUIManager.changeView(new HomeView(new HomePresentationModel()).buildPanel());
+                GUIManager.changeView(new HomeView(new HomePresentationModel()));
 //                GUIManager.setLoadingScreenVisible(false);
             }
         }), "home", true);
@@ -251,11 +250,10 @@ public class BoardingSchoolManagement {
                 ConfigurationView view = new ConfigurationView(model);
 
                 
-                JViewPanel panel = view.buildPanel();
                 final JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
                 d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                d.setTitle(panel.getName());
-                d.add(panel);
+                d.setTitle(view.getName());
+                d.add(view);
                 d.pack();
                 CWUtils.centerWindow(d, GUIManager.getInstance().getMainFrame());
 
@@ -269,7 +267,7 @@ public class BoardingSchoolManagement {
 
                 d.setVisible(true);
 
-                panel.dispose();
+                view.dispose();
                 d.dispose();
 
                 GUIManager.setLoadingScreenVisible(false);

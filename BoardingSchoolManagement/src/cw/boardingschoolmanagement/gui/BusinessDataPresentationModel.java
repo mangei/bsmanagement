@@ -2,8 +2,7 @@ package cw.boardingschoolmanagement.gui;
 
 import com.jgoodies.binding.PresentationModel;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.pojo.BusinessData;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -15,12 +14,11 @@ import java.util.List;
  */
 public class BusinessDataPresentationModel
     extends PresentationModel<BusinessData>
-    implements Disposable
 {
 
     private BusinessData businessData;
     private ConfigurationPresentationModel configurationPresentationModel;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private SaveListener saveListener;
 
     public BusinessDataPresentationModel(BusinessData businessData, ConfigurationPresentationModel configurationPresentationModel) {
@@ -31,8 +29,8 @@ public class BusinessDataPresentationModel
         initEventHandling();
     }
 
-    public void initModels() {
-        headerInfo = new HeaderInfo(
+    private void initModels() {
+        headerInfo = new CWHeaderInfo(
                 "Unternehmensinformationen",
                 "Geben Sie hier alle Informationen über Ihr Unternehmen ein.",
                 CWUtils.loadIcon("cw/boardingschoolmanagement/images/information.png"),
@@ -40,7 +38,7 @@ public class BusinessDataPresentationModel
         );
     }
 
-    public void initEventHandling() {
+    private void initEventHandling() {
         saveListener = new SaveListener();
         getBufferedModel(BusinessData.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
         getBufferedModel(BusinessData.PROPERTYNAME_POSTOFFICENUMBER).addValueChangeListener(saveListener);
@@ -76,7 +74,7 @@ public class BusinessDataPresentationModel
         }
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

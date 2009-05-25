@@ -19,11 +19,11 @@ import javax.swing.JPanel;
  *
  * @author Manuel Geier
  */
-public class JHeader extends JComponent {
+public class CWHeader extends JComponent {
 
     private JPanel menubuttons;
 
-    public JHeader() {
+    public CWHeader() {
         setPreferredSize(new Dimension(100, 50));
 
         setLayout(null);
@@ -42,9 +42,9 @@ public class JHeader extends JComponent {
     protected void paintComponent(Graphics g) {
         Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
         JideSwingUtilities.fillGradient((Graphics2D) g, rect, COLOR1, COLOR2, true);
-        ImageIcon logo = (ImageIcon) CWUtils.loadIcon("cw/boardingschoolmanagement/images/cw-logo.png");
+        ImageIcon logo = CWUtils.loadIcon("cw/boardingschoolmanagement/images/cw-logo.png");
         g.drawImage(logo.getImage(), getWidth() - logo.getIconWidth() - (getHeight() - logo.getIconHeight()) / 2, getHeight() - logo.getIconHeight() - (getHeight() - logo.getIconHeight()) / 2, null);
-        ImageIcon title = (ImageIcon) CWUtils.loadIcon("cw/boardingschoolmanagement/images/header.png");
+        ImageIcon title = CWUtils.loadIcon("cw/boardingschoolmanagement/images/header.png");
         g.drawImage(title.getImage(), 0, 0, null);
         setOpaque(false);
         super.paintComponent(g);

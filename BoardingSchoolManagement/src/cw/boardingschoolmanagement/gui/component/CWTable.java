@@ -21,7 +21,7 @@ import org.jdesktop.swingx.table.ColumnControlButton;
  *  + You can save and load the table state (view)
  * @author ManuelG
  */
-public class CWJXTable extends JXTable {
+public class CWTable extends JXTable {
 
     private String emptyText = "";
     private String tableStateName = "";
@@ -34,12 +34,12 @@ public class CWJXTable extends JXTable {
     private Action saveTableStateAction;
     private Action loadTableStateAction;
 
-    public CWJXTable(TableModel dm) {
+    public CWTable(TableModel dm) {
         super(dm);
         init();
     }
 
-    public CWJXTable() {
+    public CWTable() {
         init();
     }
 

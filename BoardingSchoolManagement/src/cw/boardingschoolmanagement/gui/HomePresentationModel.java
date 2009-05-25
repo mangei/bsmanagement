@@ -1,7 +1,6 @@
 package cw.boardingschoolmanagement.gui;
 
 import cw.boardingschoolmanagement.extentions.interfaces.HomeExtention;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -12,7 +11,6 @@ import cw.boardingschoolmanagement.manager.ModulManager;
  * @author Manuel Geier (CreativeWorkers)
  */
 public class HomePresentationModel
-    implements Disposable
 {
 
     private List<HomeExtention> homeExtentions;
@@ -51,7 +49,7 @@ public class HomePresentationModel
 
         List<HomeExtention> aList = getExtentions();
         for (HomeExtention ex : aList) {
-            panels.add(ex.getPanel());
+            panels.add(ex.getView());
         }
 
         return panels;

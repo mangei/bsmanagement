@@ -25,13 +25,13 @@ import javax.swing.event.MouseInputAdapter;
  *
  * @author Manuel Geier (CreativeWorkers)
  */
-public class LoadingGlass extends JComponent {
+public class CWLoadingGlass extends JComponent {
 
     private String text;
     private ImageIcon iconImage;
     private boolean drawLoadingIcon;
 
-    public LoadingGlass(Container contentPane, boolean drawLoadingIcon) {
+    public CWLoadingGlass(Container contentPane, boolean drawLoadingIcon) {
 
         if(drawLoadingIcon) {
             iconImage = CWUtils.loadIcon("cw/boardingschoolmanagement/images/loadingicon.gif");
@@ -128,11 +128,11 @@ public class LoadingGlass extends JComponent {
 class CBListener extends MouseInputAdapter {
 
     Toolkit toolkit;
-    LoadingGlass glassPane;
+    CWLoadingGlass glassPane;
     Container contentPane;
 
     public CBListener(
-            LoadingGlass glassPane, Container contentPane) {
+            CWLoadingGlass glassPane, Container contentPane) {
         toolkit = Toolkit.getDefaultToolkit();
         this.glassPane = glassPane;
         this.contentPane = contentPane;

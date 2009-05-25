@@ -8,33 +8,33 @@ import javax.swing.JToolTip;
  *
  * @author ManuelG
  */
-public class CWJLabel extends JLabel {
+public class CWLabel extends JLabel {
 
-    public CWJLabel() {
+    public CWLabel() {
     }
 
-    public CWJLabel(Icon image) {
+    public CWLabel(Icon image) {
         super(image);
     }
 
-    public CWJLabel(Icon image, int horizontalAlignment) {
+    public CWLabel(Icon image, int horizontalAlignment) {
         super(image, horizontalAlignment);
     }
 
-    public CWJLabel(String text) {
+    public CWLabel(String text) {
         super(text);
     }
 
-    public CWJLabel(String text, int horizontalAlignment) {
+    public CWLabel(String text, int horizontalAlignment) {
         super(text, horizontalAlignment);
     }
 
-    public CWJLabel(String text, Icon icon, int horizontalAlignment) {
+    public CWLabel(String text, Icon icon, int horizontalAlignment) {
         super(text, icon, horizontalAlignment);
     }
 
     @Override
     public JToolTip createToolTip() {
-        return new CWJToolTip();
+        return new CWToolTip();
     }
 }

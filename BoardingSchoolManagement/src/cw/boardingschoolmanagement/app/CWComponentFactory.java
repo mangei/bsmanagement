@@ -11,19 +11,19 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import com.toedter.calendar.JDateChooser;
 import com.toedter.calendar.JTextFieldDateEditor;
+import cw.boardingschoolmanagement.gui.component.CWBackView;
 import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.CWIntegerTextField;
-import cw.boardingschoolmanagement.gui.component.CWJButton;
-import cw.boardingschoolmanagement.gui.component.CWJLabel;
-import cw.boardingschoolmanagement.gui.component.CWJPanel;
-import cw.boardingschoolmanagement.gui.component.CWJTextArea;
-import cw.boardingschoolmanagement.gui.component.CWJTextField;
-import cw.boardingschoolmanagement.gui.component.CWJXList;
-import cw.boardingschoolmanagement.gui.component.CWJXTable;
-import cw.boardingschoolmanagement.gui.component.CWJToolTip;
-import cw.boardingschoolmanagement.gui.component.JBackPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWTextArea;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
+import cw.boardingschoolmanagement.gui.component.CWList;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWToolTip;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -234,21 +234,21 @@ public class CWComponentFactory {
         return dc;
     }
 
-    public static CWJXTable createTable(String emptyText) {
+    public static CWTable createTable(String emptyText) {
         return createTable(null, emptyText);
     }
 
-    public static CWJXTable createTable(TableModel tableModel, final String emptyText) {
+    public static CWTable createTable(TableModel tableModel, final String emptyText) {
         return createTable(null, emptyText, null);
     }
 
-    public static CWJXTable createTable(TableModel tableModel, final String emptyText, String tableStateName) {
-        CWJXTable table;
+    public static CWTable createTable(TableModel tableModel, final String emptyText, String tableStateName) {
+        CWTable table;
         
         if (tableModel != null) {
-            table = new CWJXTable(tableModel);
+            table = new CWTable(tableModel);
         } else {
-            table = new CWJXTable();
+            table = new CWTable();
         }
 
         table.setColumnControlVisible(true);
@@ -264,20 +264,20 @@ public class CWComponentFactory {
         return table;
     }
 
-    public static CWJXList createList(ListModel listModel) {
-        CWJXList list = new CWJXList(listModel);
+    public static CWList createList(ListModel listModel) {
+        CWList list = new CWList(listModel);
 
         list.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
 
         return list;
     }
 
-    public static CWJXList createList(SelectionInList selectionInList) {
+    public static CWList createList(SelectionInList selectionInList) {
         return createList(selectionInList, "");
     }
 
-    public static CWJXList createList(SelectionInList selectionInList, final String emptyText) {
-        CWJXList list = new CWJXList();
+    public static CWList createList(SelectionInList selectionInList, final String emptyText) {
+        CWList list = new CWList();
         list.setEmptyText(emptyText);
 
         list.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
@@ -305,8 +305,8 @@ public class CWComponentFactory {
         return sp;
     }
 
-    public static CWJButton createButton(Action a) {
-        CWJButton button = new CWJButton(a);
+    public static CWButton createButton(Action a) {
+        CWButton button = new CWButton(a);
         button.setOpaque(false);
         return button;
     }
@@ -490,6 +490,8 @@ public class CWComponentFactory {
 
         // add the changelistener
         valueModel.addValueChangeListener(valueModelPropertyChangeListener);
+        textField.putClientProperty(VALUE_MODEL_KEY, valueModel);
+        textField.putClientProperty(VALUE_MODEL_CHANGE_LISTENER_KEY, valueModelPropertyChangeListener);
 
         // Change the value if the textfield changes
         DocumentListener dl = new DocumentListener() {
@@ -574,16 +576,16 @@ public class CWComponentFactory {
         return textField;
     }
 
-    public static CWJTextArea createTextArea(ValueModel valueModel, boolean commitOnFocusLost) {
+    public static CWTextArea createTextArea(ValueModel valueModel, boolean commitOnFocusLost) {
         return createTextArea(valueModel);
     }
 
-    public static CWJTextArea createTextArea(ValueModel valueModel) {
+    public static CWTextArea createTextArea(ValueModel valueModel) {
         return createTextArea(valueModel, MAX_TEXTAREA_LENGTH);
     }
 
-    public static CWJTextArea createTextArea(ValueModel valueModel, int maxTextLength) {
-        CWJTextArea textArea = new CWJTextArea(maxTextLength);
+    public static CWTextArea createTextArea(ValueModel valueModel, int maxTextLength) {
+        CWTextArea textArea = new CWTextArea(maxTextLength);
 
 //        Bindings.bind(textArea, valueModel);
 
@@ -594,16 +596,16 @@ public class CWComponentFactory {
         return textArea;
     }
 
-    public static CWJTextField createTextField(ValueModel valueModel, boolean commitOnFocusLost) {
+    public static CWTextField createTextField(ValueModel valueModel, boolean commitOnFocusLost) {
         return createTextField(valueModel);
     }
 
-    public static CWJTextField createTextField(ValueModel valueModel) {
+    public static CWTextField createTextField(ValueModel valueModel) {
         return createTextField(valueModel, MAX_TEXTFIELD_LENGTH);
     }
 
-    public static CWJTextField createTextField(ValueModel valueModel, int maxTextLength) {
-        CWJTextField textField = new CWJTextField(maxTextLength);
+    public static CWTextField createTextField(ValueModel valueModel, int maxTextLength) {
+        CWTextField textField = new CWTextField(maxTextLength);
 
 //        Bindings.bind(textField, valueModel);
 
@@ -614,28 +616,28 @@ public class CWComponentFactory {
         return textField;
     }
 
-    public static CWJLabel createLabel(String text) {
+    public static CWLabel createLabel(String text) {
         return createLabel(text, null);
     }
 
-    public static CWJLabel createLabel(ValueModel valueModel) {
+    public static CWLabel createLabel(ValueModel valueModel) {
         return createLabel(valueModel, null, null);
     }
 
-    public static CWJLabel createLabel(ValueModel valueModel, Format format) {
+    public static CWLabel createLabel(ValueModel valueModel, Format format) {
         return createLabel(valueModel, null, format);
     }
 
-    public static CWJLabel createLabel(String text, Icon icon) {
+    public static CWLabel createLabel(String text, Icon icon) {
         return createLabel(new ValueHolder(text), icon, null);
     }
 
-    public static CWJLabel createLabel(ValueModel valueModel, Icon icon) {
+    public static CWLabel createLabel(ValueModel valueModel, Icon icon) {
         return createLabel(valueModel, icon, null);
     }
 
-    public static CWJLabel createLabel(final ValueModel valueModel, Icon icon, final Format format) {
-        CWJLabel label = new CWJLabel();
+    public static CWLabel createLabel(final ValueModel valueModel, Icon icon, final Format format) {
+        CWLabel label = new CWLabel();
 
         ValueModel newValueModel = valueModel;
 
@@ -667,9 +669,9 @@ public class CWComponentFactory {
         return label;
     }
 
-    public static CWJLabel createLabelBoolean(final ValueModel valueModel, final String trueString, final String falseString) {
+    public static CWLabel createLabelBoolean(final ValueModel valueModel, final String trueString, final String falseString) {
 
-        CWJLabel label = new CWJLabel();
+        CWLabel label = new CWLabel();
 
         final ValueModel bufferedValueModel = new ValueHolder();
 
@@ -701,9 +703,9 @@ public class CWComponentFactory {
         return label;
     }
 
-    public static CWJLabel createLabelDate(final ValueModel valueModel) {
+    public static CWLabel createLabelDate(final ValueModel valueModel) {
 
-        CWJLabel label = new CWJLabel();
+        CWLabel label = new CWLabel();
         
         final ValueModel bufferedValueModel = new ValueHolder();
 
@@ -726,49 +728,49 @@ public class CWComponentFactory {
         return label;
     }
 
-    public static CWJPanel createPanel() {
+    public static CWPanel createPanel() {
         return createPanel(new FlowLayout(FlowLayout.LEFT));
     }
 
-    public static CWJPanel createPanel(LayoutManager layout) {
-        CWJPanel panel = new CWJPanel();
+    public static CWPanel createPanel(LayoutManager layout) {
+        CWPanel panel = new CWPanel();
         panel.setLayout(layout);
         panel.setOpaque(false);
         return panel;
     }
 
-    public static JBackPanel createBackPanel(JPanel panel) {
-        return createBackPanel(panel, "Zurück");
+    public static CWBackView createBackView(CWPanel panel) {
+        return createBackView(panel, "Zurück");
     }
 
-    public static JBackPanel createBackPanel(JPanel panel, String backText) {
-        JBackPanel backPanel = new JBackPanel(panel, backText);
-        return backPanel;
+    public static CWBackView createBackView(CWPanel panel, String backText) {
+        CWBackView backView = new CWBackView(panel, backText);
+        return backView;
     }
 
-    public static JViewPanel createViewPanel() {
-        return new JViewPanel();
+    public static CWView createViewPanel() {
+        return new CWView();
     }
 
-    public static JViewPanel createViewPanel(HeaderInfo headerInfo) {
+    public static CWView createViewPanel(CWHeaderInfo headerInfo) {
         return createViewPanel(headerInfo, null);
     }
 
-    public static JViewPanel createViewPanel(String headerText, JComponent comp) {
-        return createViewPanel(new HeaderInfo(headerText), comp);
+    public static CWView createViewPanel(String headerText, JComponent comp) {
+        return createViewPanel(new CWHeaderInfo(headerText), comp);
     }
 
-    public static JViewPanel createViewPanel( JComponent comp) {
-        return createViewPanel(new HeaderInfo(), comp);
+    public static CWView createViewPanel( JComponent comp) {
+        return createViewPanel(new CWHeaderInfo(), comp);
     }
 
-    public static JViewPanel createViewPanel(HeaderInfo headerInfo, JComponent comp) {
-        if(headerInfo == null) headerInfo = new HeaderInfo();
-        JViewPanel panel = new JViewPanel(headerInfo);
+    public static CWView createViewPanel(CWHeaderInfo headerInfo, JComponent comp) {
+        if(headerInfo == null) headerInfo = new CWHeaderInfo();
+        CWView view = new CWView(headerInfo);
         if(comp != null) {
-            panel.getContentPanel().add(comp, BorderLayout.CENTER);
+            view.getContentPanel().add(comp, BorderLayout.CENTER);
         }
-        return panel;
+        return view;
     }
 
     public static String createToolTip(String header, String description) {
@@ -776,7 +778,7 @@ public class CWComponentFactory {
     }
 
     public static String createToolTip(String header, String description, String path) {
-        CWJToolTip tt = new CWJToolTip(header,description,CWUtils.getURL(path));
+        CWToolTip tt = new CWToolTip(header,description,CWUtils.getURL(path));
         return tt.getToolTip();
     }
 }

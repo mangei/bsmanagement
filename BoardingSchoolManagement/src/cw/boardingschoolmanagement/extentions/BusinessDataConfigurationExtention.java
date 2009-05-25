@@ -4,12 +4,11 @@ import cw.boardingschoolmanagement.extentions.interfaces.ConfigurationExtention;
 import cw.boardingschoolmanagement.gui.BusinessDataPresentationModel;
 import cw.boardingschoolmanagement.gui.BusinessDataView;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.manager.PropertiesManager;
 import cw.boardingschoolmanagement.pojo.BusinessData;
 import java.util.List;
 import javax.swing.Icon;
-import javax.swing.JComponent;
 
 /**
  *
@@ -20,7 +19,6 @@ public class BusinessDataConfigurationExtention implements ConfigurationExtentio
     private BusinessData businessData;
     private BusinessDataPresentationModel model;
     private BusinessDataView view;
-    private JViewPanel panel;
 
     public void initPresentationModel(ConfigurationPresentationModel configurationModel) {
         businessData = new BusinessData();
@@ -36,11 +34,10 @@ public class BusinessDataConfigurationExtention implements ConfigurationExtentio
 
         model = new BusinessDataPresentationModel(businessData, configurationModel);
         view = new BusinessDataView(model);
-        panel = view.buildPanel();
     }
 
-    public JComponent getView() {
-        return panel;
+    public CWPanel getView() {
+        return view;
     }
 
     public Object getModel() {
@@ -65,7 +62,7 @@ public class BusinessDataConfigurationExtention implements ConfigurationExtentio
     }
 
     public void dispose() {
-        panel.dispose();
+        view.dispose();
     }
 
     public int priority() {

@@ -1,6 +1,6 @@
 package cw.boardingschoolmanagement.pojo;
 
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.util.HashMap;
 
 /**
@@ -17,10 +17,10 @@ public class PresentationModelProperties {
         properties = new HashMap<String, Object>();
     }
 
-    public HeaderInfo getHeaderInfo() {
-        HeaderInfo headerInfo = (HeaderInfo) properties.get(HEADERINFO);
+    public CWHeaderInfo getHeaderInfo() {
+        CWHeaderInfo headerInfo = (CWHeaderInfo) properties.get(HEADERINFO);
         if (headerInfo == null) {
-            headerInfo = new HeaderInfo();
+            headerInfo = new CWHeaderInfo();
             properties.put(HEADERINFO, headerInfo);
         }
         return headerInfo;

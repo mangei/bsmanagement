@@ -9,14 +9,14 @@ import org.jdesktop.swingx.JXList;
  *
  * @author ManuelG
  */
-public class CWJXList extends JXList {
+public class CWList extends JXList {
     private String emptyText = "";
 
-    public CWJXList(ListModel dataModel) {
+    public CWList(ListModel dataModel) {
         super(dataModel);
     }
 
-    public CWJXList() {
+    public CWList() {
     }
 
     @Override

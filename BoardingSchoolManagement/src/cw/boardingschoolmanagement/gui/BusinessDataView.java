@@ -3,24 +3,20 @@ package cw.boardingschoolmanagement.gui;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.pojo.BusinessData;
-import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 /**
  *
  * @author ManuelG
  */
-public class BusinessDataView
-    implements Disposable
+public class BusinessDataView extends CWView
 {
 
     private BusinessDataPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
     private JTextField tfName;
     private JTextField tfPostOfficeNumber;
     private JTextField tfCity;
@@ -33,6 +29,10 @@ public class BusinessDataView
 
     public BusinessDataView(BusinessDataPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     public void initComponents() {
@@ -62,17 +62,15 @@ public class BusinessDataView
         
     }
 
-    public JViewPanel buildPanel() {
-        initComponents();
-
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
 
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, pref:grow",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu"
         );
         CellConstraints cc = new CellConstraints();
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         builder.addLabel("Name:",           cc.xy(1, 1));
         builder.add(tfName,                 cc.xy(3, 1));
         builder.addLabel("Straße:",         cc.xy(1, 3));
@@ -91,17 +89,10 @@ public class BusinessDataView
         builder.add(tfEmail,                cc.xy(3, 15));
         builder.addLabel("DVR-Nummer:",     cc.xy(1, 17));
         builder.add(tfDvrNumber,            cc.xy(3, 17));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return panel;
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         componentContainer.dispose();
 
         model.dispose();

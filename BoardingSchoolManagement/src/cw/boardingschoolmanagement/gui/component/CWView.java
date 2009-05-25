@@ -12,8 +12,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JComponent;
@@ -28,9 +26,9 @@ import javax.swing.plaf.basic.BasicPanelUI;
  *
  * @author ManuelG
  */
-public class CWView extends JComponent {
+public class CWView extends CWPanel {
 
-    private JButtonPanel buttonPanel;
+    private CWButtonPanel buttonPanel;
     private JPanel topPanel;
     private JScrollPane contentScrollPane;
     private JPanel contentPanel;
@@ -52,7 +50,9 @@ public class CWView extends JComponent {
     }
 
     public CWView(CWHeaderInfo headerInfo) {
-        if(headerInfo == null) throw new NullPointerException("headerInfo is null");
+        if(headerInfo == null) {
+            throw new NullPointerException("headerInfo is null");
+        }
 
         this.headerInfo = headerInfo;
 
@@ -65,7 +65,7 @@ public class CWView extends JComponent {
         mainPanel.setUI(new CWViewUI());
         mainPanel.setBorder(new EmptyBorder(gab, gab, gab, gab));
 
-        buttonPanel = new JButtonPanel();
+        buttonPanel = new CWButtonPanel();
         buttonPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
 
         JPanel topInfoActionPanel = new JPanel(new BorderLayout());
@@ -121,7 +121,7 @@ public class CWView extends JComponent {
 //
 //    }
 
-    public JButtonPanel getButtonPanel() {
+    public CWButtonPanel getButtonPanel() {
         return buttonPanel;
     }
 
@@ -147,6 +147,8 @@ public class CWView extends JComponent {
     }
 
     public void setHeaderInfo(CWHeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
+        setName(headerInfo.getHeaderText());
         headerInfoPanel.setHeaderInfo(headerInfo);
     }
 
@@ -222,8 +224,7 @@ public class CWView extends JComponent {
     }
 
     private static class CWHeaderInfoPanel
-            extends CWJPanel
-            implements PropertyChangeListener {
+            extends CWPanel {
 
         private JLabel lHeaderText;
         private JLabel lDescription;
@@ -232,9 +233,7 @@ public class CWView extends JComponent {
         private CWHeaderInfo headerInfo;
 
         public CWHeaderInfoPanel(CWHeaderInfo headerInfo) {
-
             this.headerInfo = headerInfo;
-            headerInfo.addPropertyChangeListener(this);
 
             setUI(new CWHeaderPanelUI());
             int gab = 3;
@@ -268,20 +267,12 @@ public class CWView extends JComponent {
             updateHeaderInfo();
         }
 
-        @Override
-        public void dispose() {
-            super.dispose();
-            headerInfo.removePropertyChangeListener(this);
-        }
-
         public CWHeaderInfo getHeaderInfo() {
             return headerInfo;
         }
 
         public void setHeaderInfo(CWHeaderInfo headerInfo) {
-            this.headerInfo.removePropertyChangeListener(this);
             this.headerInfo = headerInfo;
-            this.headerInfo.addPropertyChangeListener(this);
             updateHeaderInfo();
         }
 
@@ -296,11 +287,6 @@ public class CWView extends JComponent {
                 lHeaderText.setHorizontalAlignment(JLabel.LEFT);
             }
         }
-
-        public void propertyChange(PropertyChangeEvent evt) {
-            updateHeaderInfo();
-        }
-
     }
 
     private class CWViewUI extends BasicPanelUI {
@@ -312,13 +298,14 @@ public class CWView extends JComponent {
         public void paint(Graphics g, JComponent c) {
 
             Rectangle rect = new Rectangle(0, 0, c.getWidth(), c.getHeight());
+            CWView view = (CWView) c.getParent();
 
             // If the topPanel isn't visible, than twist the gradient
             // > 1: because the topPanel, contains the buttonPanel
-            if (CWView.this.buttonPanel.getComponentCount() > 0) {
+            if (view.buttonPanel.getComponentCount() > 0) {
                 JideSwingUtilities.fillGradient((Graphics2D) g, rect, lightGrayColor, Color.WHITE, true);
             } else {
-                CWView.this.buttonPanel.setVisible(false);
+                view.buttonPanel.setVisible(false);
                 JideSwingUtilities.fillGradient((Graphics2D) g, rect, Color.WHITE, lightGrayColor, true);
             }
 

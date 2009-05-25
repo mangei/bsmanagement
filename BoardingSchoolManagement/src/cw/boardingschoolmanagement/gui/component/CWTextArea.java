@@ -10,18 +10,18 @@ import javax.swing.text.PlainDocument;
  *
  * @author ManuelG
  */
-public class CWJTextArea extends JTextArea {
+public class CWTextArea extends JTextArea {
 
     private int maxTextLength;
 
-    public CWJTextArea(String text) {
+    public CWTextArea(String text) {
         super(text);
     }
 
-    public CWJTextArea() {
+    public CWTextArea() {
     }
 
-    public CWJTextArea(int maxTextLength) {
+    public CWTextArea(int maxTextLength) {
         this.maxTextLength = maxTextLength;
     }
 

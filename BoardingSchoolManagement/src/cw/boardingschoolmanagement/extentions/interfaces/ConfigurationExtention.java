@@ -1,8 +1,8 @@
 package cw.boardingschoolmanagement.extentions.interfaces;
 
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.interfaces.Priority;
-import javax.swing.JComponent;
 import java.util.List;
 import javax.swing.Icon;
 
@@ -15,7 +15,7 @@ public interface ConfigurationExtention
 
     public void initPresentationModel(ConfigurationPresentationModel configurationModel);
 
-    public JComponent getView();
+    public CWPanel getView();
 
     public Object getModel();
     

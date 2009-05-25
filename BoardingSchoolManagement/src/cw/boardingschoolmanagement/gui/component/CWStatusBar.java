@@ -21,7 +21,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import org.jdesktop.swingx.JXStatusBar;
 
-public class StatusBar
+
+public class CWStatusBar
         extends JPanel
 {
 
@@ -36,7 +37,7 @@ public class StatusBar
         DURABLE = Integer.parseInt(PropertiesManager.getProperty("application.gui.statusbar.durable", "5000"));
     }
 
-    public StatusBar() {
+    public CWStatusBar() {
         setPreferredSize(new Dimension(10, 23));
         setLayout(new BorderLayout());
 //        setPreferredSize(new Dimension(10, 50));
@@ -192,7 +193,6 @@ public class StatusBar
 
     }
 }
-
 class AngledLinesWindowsCornerIcon
         implements Icon {
 

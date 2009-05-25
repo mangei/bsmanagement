@@ -9,29 +9,29 @@ import javax.swing.JToolTip;
  *
  * @author ManuelG
  */
-public class CWJButton extends JButton {
+public class CWButton extends JButton {
 
-    public CWJButton(String text, Icon icon) {
+    public CWButton(String text, Icon icon) {
         super(text, icon);
     }
 
-    public CWJButton(Action a) {
+    public CWButton(Action a) {
         super(a);
     }
 
-    public CWJButton(String text) {
+    public CWButton(String text) {
         super(text);
     }
 
-    public CWJButton(Icon icon) {
+    public CWButton(Icon icon) {
         super(icon);
     }
 
-    public CWJButton() {
+    public CWButton() {
     }
 
     @Override
     public JToolTip createToolTip() {
-        return new CWJToolTip();
+        return new CWToolTip();
     }
 }

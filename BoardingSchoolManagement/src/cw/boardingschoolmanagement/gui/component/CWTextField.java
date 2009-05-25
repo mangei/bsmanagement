@@ -10,18 +10,18 @@ import javax.swing.text.PlainDocument;
  *
  * @author ManuelG
  */
-public class CWJTextField extends JTextField {
+public class CWTextField extends JTextField {
 
     private int maxTextLength;
 
-    public CWJTextField(String text) {
+    public CWTextField(String text) {
         super(text);
     }
 
-    public CWJTextField() {
+    public CWTextField() {
     }
 
-    public CWJTextField(int maxTextLength) {
+    public CWTextField(int maxTextLength) {
         this.maxTextLength = maxTextLength;
     }
 
