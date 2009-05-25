@@ -4,13 +4,13 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.CWJLabel;
-import cw.boardingschoolmanagement.gui.component.CWJPanel;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extentions.interfaces.CustomerOverviewEditCustomerExtention;
 import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationModel;
+import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.PostingManagementEditCustomerPresentationModel;
 import java.text.NumberFormat;
-import javax.swing.JComponent;
 
 /**
  *
@@ -22,9 +22,9 @@ public class PostingCustomerOverviewEditCustomerExtention
     private CustomerOverviewEditCustomerPresentationModel customerOverviewEditCustomerPresentationModel;
     private CWComponentFactory.CWComponentContainer componentContainer;
 
-    private CWJLabel lSaldo;
-    private CWJLabel lAssets;
-    private CWJLabel lLiabilities;
+    private CWLabel lSaldo;
+    private CWLabel lAssets;
+    private CWLabel lLiabilities;
 
     public void initPresentationModel(CustomerOverviewEditCustomerPresentationModel customerOverviewEditCustomerPresentationModel) {
         this.customerOverviewEditCustomerPresentationModel = customerOverviewEditCustomerPresentationModel;
@@ -32,31 +32,35 @@ public class PostingCustomerOverviewEditCustomerExtention
 
     }
     
-    public JComponent getView() {
-        CWJPanel panel = CWComponentFactory.createPanel();
+    public CWPanel getView() {
+        CWPanel panel = CWComponentFactory.createPanel();
+
+        EditCustomerPresentationModel editCustomerPresentationModel =
+                customerOverviewEditCustomerPresentationModel
+                    .getEditCustomerPresentationModel();
+
+        PostingEditCustomerTabExtention postingExtention =
+                (PostingEditCustomerTabExtention)
+                    editCustomerPresentationModel
+                        .getExtention(PostingEditCustomerTabExtention.class);
+
+        PostingManagementEditCustomerPresentationModel postingManagementModel =
+                (PostingManagementEditCustomerPresentationModel) 
+                    postingExtention
+                        .getModel();
+
+        System.out.println("postingManagementModel: " + postingManagementModel);
 
         lSaldo = CWComponentFactory.createLabel(
-                ((PostingManagementEditCustomerPresentationModel)
-                    ((PostingEditCustomerTabExtention)customerOverviewEditCustomerPresentationModel
-                        .getEditCustomerPresentationModel()
-                        .getExtention(PostingEditCustomerTabExtention.class))
-                        .getModel()).getTotalSaldoValue(),
+                postingManagementModel.getTotalSaldoValue(),
                         NumberFormat.getCurrencyInstance()
                     );
         lAssets = CWComponentFactory.createLabel(
-                ((PostingManagementEditCustomerPresentationModel)
-                    ((PostingEditCustomerTabExtention)customerOverviewEditCustomerPresentationModel
-                        .getEditCustomerPresentationModel()
-                        .getExtention(PostingEditCustomerTabExtention.class))
-                        .getModel()).getTotalAssetsValue(),
+                postingManagementModel.getTotalAssetsValue(),
                         NumberFormat.getCurrencyInstance()
                     );
         lLiabilities = CWComponentFactory.createLabel(
-                ((PostingManagementEditCustomerPresentationModel)
-                    ((PostingEditCustomerTabExtention)customerOverviewEditCustomerPresentationModel
-                        .getEditCustomerPresentationModel()
-                        .getExtention(PostingEditCustomerTabExtention.class))
-                        .getModel()).getTotalLiabilitiesValue(),
+                postingManagementModel.getTotalLiabilitiesValue(),
                         NumberFormat.getCurrencyInstance()
                     );
 

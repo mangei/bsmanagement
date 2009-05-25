@@ -1,6 +1,7 @@
 package cw.customermanagementmodul.extentions;
 
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extentions.interfaces.CustomerSelectorFilterExtention;
 import cw.customermanagementmodul.gui.SearchCustomerSelectorFilterExtentionPresentationModel;
 import cw.customermanagementmodul.gui.SearchCustomerSelectorFilterExtentionView;
@@ -11,13 +12,13 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.JPanel;
 
 /**
  *
  * @author ManuelG
  */
-public class SearchCustomerSelectorFilterExtention implements CustomerSelectorFilterExtention {
+public class SearchCustomerSelectorFilterExtention
+        implements CustomerSelectorFilterExtention {
 
     private SearchCustomerSelectorFilterExtentionPresentationModel model;
     private SearchCustomerSelectorFilterExtentionView view;
@@ -139,11 +140,12 @@ public class SearchCustomerSelectorFilterExtention implements CustomerSelectorFi
         return BorderLayout.NORTH;
     }
 
-    public JPanel getPanel() {
-        return view.buildPanel();
+    public CWPanel getView() {
+        return view;
     }
 
     public void dispose() {
+        view.dispose();
         changeListener = null;
     }
 }

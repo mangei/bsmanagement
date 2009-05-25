@@ -1,12 +1,11 @@
 package cw.customermanagementmodul.extentions;
 
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.GroupEditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.GroupEditCustomerView;
 import java.util.List;
-import javax.swing.JComponent;
 
 /**
  *
@@ -18,17 +17,15 @@ public class GroupEditCustomerTabExtention
     private GroupEditCustomerPresentationModel model;
     private GroupEditCustomerView view;
     private EditCustomerPresentationModel editCustomerModel;
-    private JViewPanel panel;
 
     public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
         this.editCustomerModel = editCustomerModel;
         model = new GroupEditCustomerPresentationModel(editCustomerModel.getBean(), editCustomerModel.getUnsaved());
+        view = new GroupEditCustomerView(model);
     }
     
-    public JComponent getView() {
-         view = new GroupEditCustomerView(model);
-         panel = view.buildPanel();
-         return panel;
+    public CWPanel getView() {
+        return view;
     }
 
     public Object getModel() {
@@ -44,7 +41,7 @@ public class GroupEditCustomerTabExtention
     }
 
     public void dispose() {
-        panel.dispose();
+        view.dispose();
     }
 
     public int priority() {

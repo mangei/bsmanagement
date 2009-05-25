@@ -1,9 +1,9 @@
 package cw.customermanagementmodul.extentions.interfaces;
 
 import cw.boardingschoolmanagement.extentions.interfaces.Extention;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.interfaces.Priority;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
-import javax.swing.JComponent;
 import java.util.List;
 
 /**
@@ -20,11 +20,11 @@ public interface EditCustomerTabExtention
     public void initPresentationModel(EditCustomerPresentationModel editCustomerModel);
 
     /**
-     * The component you want to add in an new tab. <br>
+     * The panel you want to add in an new tab. <br>
      * Tip: Set the name of the component, to set the name of the tab
-     * @return JComponent
+     * @return CWPanel
      */
-    public JComponent getView();
+    public CWPanel getView();
 
     public Object getModel();
     

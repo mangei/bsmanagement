@@ -1,9 +1,9 @@
 package cw.customermanagementmodul.extentions.interfaces;
 
 import cw.boardingschoolmanagement.extentions.interfaces.Extention;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.interfaces.Priority;
 import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationModel;
-import javax.swing.JComponent;
 
 /**
  *
@@ -14,7 +14,7 @@ public interface CustomerOverviewEditCustomerExtention
 
     public void initPresentationModel(CustomerOverviewEditCustomerPresentationModel customerOverviewEditCustomerPresentationModel);
 
-    public JComponent getView();
+    public CWPanel getView();
     
     public void dispose();
 

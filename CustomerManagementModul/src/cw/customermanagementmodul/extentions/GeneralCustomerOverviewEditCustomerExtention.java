@@ -1,11 +1,10 @@
 package cw.customermanagementmodul.extentions;
 
-import cw.boardingschoolmanagement.gui.component.CWJPanel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extentions.interfaces.CustomerOverviewEditCustomerExtention;
 import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.GeneralCustomerOverviewEditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.GeneralCustomerOverviewEditCustomerView;
-import javax.swing.JComponent;
 
 /**
  *
@@ -17,27 +16,24 @@ public class GeneralCustomerOverviewEditCustomerExtention
     private GeneralCustomerOverviewEditCustomerPresentationModel model;
     private GeneralCustomerOverviewEditCustomerView view;
     private CustomerOverviewEditCustomerPresentationModel customerOverviewEditCustomerPresentationModel;
-    private CWJPanel panel;
 
     public void initPresentationModel(CustomerOverviewEditCustomerPresentationModel customerOverviewEditCustomerPresentationModel) {
         this.customerOverviewEditCustomerPresentationModel = customerOverviewEditCustomerPresentationModel;
         model = new GeneralCustomerOverviewEditCustomerPresentationModel(customerOverviewEditCustomerPresentationModel);
+        view = new GeneralCustomerOverviewEditCustomerView(model);
     }
     
-    public JComponent getView() {
-         view = new GeneralCustomerOverviewEditCustomerView(model);
-         panel = view.buildPanel();
-         return panel;
+    public CWPanel getView() {
+         return view;
     }
 
     public void dispose() {
-        panel.dispose();
+        view.dispose();
 
         // Kill references
         model = null;
         view = null;
         customerOverviewEditCustomerPresentationModel = null;
-        panel = null;
     }
 
     public int priority() {

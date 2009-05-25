@@ -1,7 +1,7 @@
 package cw.customermanagementmodul.extentions;
 
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.gui.component.CWJPanel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extentions.interfaces.CustomerSelectorFilterExtention;
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionPresentationModel;
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionView;
@@ -11,7 +11,6 @@ import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import javax.swing.JPanel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -21,11 +20,11 @@ import javax.swing.event.ListSelectionListener;
  *
  * @author ManuelG
  */
-public class GroupCustomerSelectorFilterExtention implements CustomerSelectorFilterExtention {
+public class GroupCustomerSelectorFilterExtention
+        implements CustomerSelectorFilterExtention {
 
     private GroupCustomerSelectorFilterExtentionPresentationModel model;
     private GroupCustomerSelectorFilterExtentionView view;
-    private CWJPanel panel;
     private ValueModel change;
 
     private ListSelectionListener changeListener;
@@ -35,7 +34,6 @@ public class GroupCustomerSelectorFilterExtention implements CustomerSelectorFil
 
         model = new GroupCustomerSelectorFilterExtentionPresentationModel();
         view = new GroupCustomerSelectorFilterExtentionView(model);
-        panel = view.buildPanel();
     }
 
     public void initEventHandling() {
@@ -143,12 +141,12 @@ public class GroupCustomerSelectorFilterExtention implements CustomerSelectorFil
         return BorderLayout.EAST;
     }
 
-    public JPanel getPanel() {
-        return panel;
+    public CWPanel getView() {
+        return view;
     }
 
     public void dispose() {
-        panel.dispose();
+        view.dispose();
         changeListener = null;
     }
 }
