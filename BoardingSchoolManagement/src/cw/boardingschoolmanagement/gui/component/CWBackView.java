@@ -29,11 +29,11 @@ public class CWBackView
     private JComponent comp;
     private CWHeaderInfo headerInfo;
 
-    public CWBackView(JComponent comp) {
+    CWBackView(JComponent comp) {
         this(comp, "");
     }
 
-    public CWBackView(JComponent comp, String backText) {
+    CWBackView(JComponent comp, String backText) {
         if (comp == null) {
             throw new NullPointerException("panel is null");
         }

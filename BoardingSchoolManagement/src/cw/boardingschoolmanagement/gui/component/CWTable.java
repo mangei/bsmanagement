@@ -34,12 +34,12 @@ public class CWTable extends JXTable {
     private Action saveTableStateAction;
     private Action loadTableStateAction;
 
-    public CWTable(TableModel dm) {
+    CWTable(TableModel dm) {
         super(dm);
         init();
     }
 
-    public CWTable() {
+    CWTable() {
         init();
     }
 

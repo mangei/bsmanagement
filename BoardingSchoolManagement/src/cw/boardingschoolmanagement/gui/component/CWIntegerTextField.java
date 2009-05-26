@@ -14,11 +14,11 @@ public class CWIntegerTextField extends JTextField {
 
     private int maxDigits;
 
-    public CWIntegerTextField() {
+    CWIntegerTextField() {
         maxDigits = -1;
     }
     
-    public CWIntegerTextField(int maxDigits) {
+    CWIntegerTextField(int maxDigits) {
         this.maxDigits = maxDigits;
     }
 

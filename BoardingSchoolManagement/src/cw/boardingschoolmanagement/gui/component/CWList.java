@@ -12,11 +12,11 @@ import org.jdesktop.swingx.JXList;
 public class CWList extends JXList {
     private String emptyText = "";
 
-    public CWList(ListModel dataModel) {
+    CWList(ListModel dataModel) {
         super(dataModel);
     }
 
-    public CWList() {
+    CWList() {
     }
 
     @Override

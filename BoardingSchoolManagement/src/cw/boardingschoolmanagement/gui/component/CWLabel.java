@@ -10,26 +10,26 @@ import javax.swing.JToolTip;
  */
 public class CWLabel extends JLabel {
 
-    public CWLabel() {
+    CWLabel() {
     }
 
-    public CWLabel(Icon image) {
+    CWLabel(Icon image) {
         super(image);
     }
 
-    public CWLabel(Icon image, int horizontalAlignment) {
+    CWLabel(Icon image, int horizontalAlignment) {
         super(image, horizontalAlignment);
     }
 
-    public CWLabel(String text) {
+    CWLabel(String text) {
         super(text);
     }
 
-    public CWLabel(String text, int horizontalAlignment) {
+    CWLabel(String text, int horizontalAlignment) {
         super(text, horizontalAlignment);
     }
 
-    public CWLabel(String text, Icon icon, int horizontalAlignment) {
+    CWLabel(String text, Icon icon, int horizontalAlignment) {
         super(text, icon, horizontalAlignment);
     }
 

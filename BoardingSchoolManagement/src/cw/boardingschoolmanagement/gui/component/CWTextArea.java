@@ -14,14 +14,14 @@ public class CWTextArea extends JTextArea {
 
     private int maxTextLength;
 
-    public CWTextArea(String text) {
+    CWTextArea(String text) {
         super(text);
     }
 
-    public CWTextArea() {
+    CWTextArea() {
     }
 
-    public CWTextArea(int maxTextLength) {
+    CWTextArea(int maxTextLength) {
         this.maxTextLength = maxTextLength;
     }
 

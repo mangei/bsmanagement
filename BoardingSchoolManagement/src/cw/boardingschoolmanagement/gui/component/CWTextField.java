@@ -14,14 +14,14 @@ public class CWTextField extends JTextField {
 
     private int maxTextLength;
 
-    public CWTextField(String text) {
+    CWTextField(String text) {
         super(text);
     }
 
-    public CWTextField() {
+    CWTextField() {
     }
 
-    public CWTextField(int maxTextLength) {
+    CWTextField(int maxTextLength) {
         this.maxTextLength = maxTextLength;
     }
 

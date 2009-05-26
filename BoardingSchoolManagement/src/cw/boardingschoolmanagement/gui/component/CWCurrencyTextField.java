@@ -15,7 +15,7 @@ public class CWCurrencyTextField extends JTextField {
     private int decimalPlaces = 2;
     private double maxValue=9999999.99;
 
-    public CWCurrencyTextField() {
+    CWCurrencyTextField() {
     }
 
     @Override

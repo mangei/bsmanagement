@@ -15,7 +15,7 @@ public class CWAnimatedLabel extends JLabel implements Runnable {
     protected int index = 0;
     protected boolean isRunning;
 
-    public CWAnimatedLabel(String gifName, int numGifs) {
+    CWAnimatedLabel(String gifName, int numGifs) {
         icons = new Icon[numGifs];
         for (int i = 0; i < numGifs; i++) {
             icons[i] = new ImageIcon(gifName + i + ".gif");

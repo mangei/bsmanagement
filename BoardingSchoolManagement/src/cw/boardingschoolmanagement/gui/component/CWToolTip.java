@@ -20,15 +20,15 @@ public class CWToolTip extends JToolTip {
     private String description;
     private URL imgURL;
 
-    public CWToolTip() {
+    CWToolTip() {
         setUI(new CWToolTipUI());
     }
 
-    public CWToolTip(String header, String description) {
+    CWToolTip(String header, String description) {
         this(header,description,null);
     }
 
-    public CWToolTip(String header, String description, URL imgURL) {
+    CWToolTip(String header, String description, URL imgURL) {
         this.header = header;
         this.description = description;
         this.imgURL = imgURL;

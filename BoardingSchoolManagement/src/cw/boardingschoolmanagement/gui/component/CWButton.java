@@ -11,23 +11,23 @@ import javax.swing.JToolTip;
  */
 public class CWButton extends JButton {
 
-    public CWButton(String text, Icon icon) {
+    CWButton(String text, Icon icon) {
         super(text, icon);
     }
 
-    public CWButton(Action a) {
+    CWButton(Action a) {
         super(a);
     }
 
-    public CWButton(String text) {
+    CWButton(String text) {
         super(text);
     }
 
-    public CWButton(Icon icon) {
+    CWButton(Icon icon) {
         super(icon);
     }
 
-    public CWButton() {
+    CWButton() {
     }
 
     @Override
