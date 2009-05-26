@@ -69,6 +69,8 @@ public class PrintGebLaufPresentationModel implements Disposable {
         setBackAction(new BackAction());
 
         setReportSource("./jasper/bewohner.jrxml");
+//        setReportSource("./cw/boardingschoolmanagement/jasper/templates/bewohner.jrxml");
+
         List<Bewohner> bewohnerList = getBewohnerSelection(bewohnerTarifSelection);
         
         List<BewohnerGeb> bewohnerGebList= new ArrayList<BewohnerGeb>();
@@ -80,8 +82,12 @@ public class PrintGebLaufPresentationModel implements Disposable {
 //        JRDataSource tarifDS= new CustomDataSource(bewohnerList, bewohnerTarifSelection.getMap());
         JasperReport subreport=null;
         try {
+//            subreport=JasperCompileManager.compileReport(ClassLoader.getSystemResourceAsStream("./jasper/gebuehren.jrxml"));
             subreport=JasperCompileManager.compileReport("./jasper/gebuehren.jrxml");
+//            subreport=JasperCompileManager.compileReport("./cw/boardingschoolmanagement/jasper/templates/gebuehren.jrxml");
+
             JRSaver.saveObject(subreport, "./jasper/gebuehren.jasper");
+//            JRSaver.saveObject(subreport, "./cw/boardingschoolmanagement/jasper/templates/gebuehren.jasper");
         } catch (JRException ex) {
             Logger.getLogger(PrintGebLaufPresentationModel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -92,9 +98,14 @@ public class PrintGebLaufPresentationModel implements Disposable {
 
         try {
             setJasperReport(JasperCompileManager.compileReport(getReportSource()));
-//            ds = new JRBeanCollectionDataSource(bewohnerList);
+//            setJasperReport(JasperCompileManager.compileReport(ClassLoader.getSystemResourceAsStream(getReportSource())));
+
+//
+            ds = new JRBeanCollectionDataSource(bewohnerList);
               ds= new JRBeanCollectionDataSource(bewohnerGebList);
-            setJasperPrint(JasperFillManager.fillReport(getJasperReport(), main, ds));
+//
+              setJasperPrint(JasperFillManager.fillReport(getJasperReport(), main, ds));
+//            setJasperPrint(JasperFillManager.fillReport(ClassLoader.getSystemResourceAsStream("./cw/boardingschoolmanagement/jasper/templates/bewohner.jasper"), main, ds));
         } catch (JRException ex) {
             Logger.getLogger(PrintZimmerPresentationModel.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -433,7 +433,7 @@ public class BewohnerPresentationModel implements Disposable {
 
         @Override
         public int getColumnCount() {
-            return 9;
+            return 8;
         }
 
         @Override
@@ -455,8 +455,6 @@ public class BewohnerPresentationModel implements Disposable {
                     return "Kaution";
                 case 7:
                     return "Kaution Status";
-                case 8:
-                    return "Gebühr Zuordnungen";
                 default:
                     return "";
             }
@@ -502,10 +500,7 @@ public class BewohnerPresentationModel implements Disposable {
                         case Bewohner.EINGEZOGEN: return "Eingezogen";
                         default: return "-";
                     }
-                case 8:
-                    GebuehrZuordnungManager gebZuoManager = GebuehrZuordnungManager.getInstance();
-                    List<GebuehrZuordnung> l = gebZuoManager.getGebuehrZuordnung(b);
-                    return l.size();
+
 
                 default:
                     return "";

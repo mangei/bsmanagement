@@ -162,6 +162,9 @@ public class GebLaufView implements ItemListener, Disposable {
 
         if (e.getStateChange() == ItemEvent.SELECTED) {
 
+            //Unbedingt Überarbeiten:
+            //Je nachdem ob Storno aktiviert oder deaktiviert ist sollen die
+            //dazu gehörigen Komponenten enabled oder disabled werden
             if ((model.getStornoInt() + 1) % 2 == 0) {
                 lMonat.setEnabled(false);
                 monatComboBox.setEnabled(false);

@@ -190,7 +190,7 @@ public class KautionPresentationModel implements Disposable {
             extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/category_add.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/add.png"));
         }
 
         public void actionPerformed(ActionEvent e) {
@@ -219,7 +219,7 @@ public class KautionPresentationModel implements Disposable {
             extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/category_edit.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/pencil.png"));
         }
 
         public void actionPerformed(ActionEvent e) {
@@ -231,7 +231,7 @@ public class KautionPresentationModel implements Disposable {
             extends AbstractAction {
 
         {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/category_remove.png"));
+            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/delete.png"));
         }
 
         public void actionPerformed(ActionEvent e) {

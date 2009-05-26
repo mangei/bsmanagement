@@ -183,7 +183,7 @@ public class ZimmerModul implements Modul {
         CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
 
             public void deleteAction(CascadeEvent evt) {
-                Customer c = (Customer) evt.getObject();
+                Customer c = (Customer) evt.getSource();
                 BewohnerManager bewManager = BewohnerManager.getInstance();
 
                 Bewohner b = bewManager.getBewohner(c);
@@ -198,7 +198,7 @@ public class ZimmerModul implements Modul {
         PostingManager.getInstance().addCascadeListener(new CascadeListener() {
 
             public void deleteAction(CascadeEvent evt) {
-                Posting p = (Posting) evt.getObject();
+                Posting p = (Posting) evt.getSource();
                 BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
 
 
@@ -213,7 +213,7 @@ public class ZimmerModul implements Modul {
         BewohnerManager.getInstance().addCascadeListener(new CascadeListener() {
 
             public void deleteAction(CascadeEvent evt) {
-                Bewohner b = (Bewohner) evt.getObject();
+                Bewohner b = (Bewohner) evt.getSource();
                 GebuehrZuordnungManager gebZuordnungManager = GebuehrZuordnungManager.getInstance();
                 //TODO überlegen
                 gebZuordnungManager.removeGebuehrZuordnung(b);
@@ -223,7 +223,7 @@ public class ZimmerModul implements Modul {
         GebuehrenManager.getInstance().addCascadeListener(new CascadeListener() {
 
             public void deleteAction(CascadeEvent evt) {
-                Gebuehr g = (Gebuehr) evt.getObject();
+                Gebuehr g = (Gebuehr) evt.getSource();
                 GebuehrZuordnungManager gebZuordnungManager = GebuehrZuordnungManager.getInstance();
                 gebZuordnungManager.removeGebuehrZuordnung(g);
 
@@ -239,7 +239,7 @@ public class ZimmerModul implements Modul {
 
             public void deleteAction(CascadeEvent evt) {
 
-                GebuehrenKategorie k = (GebuehrenKategorie) evt.getObject();
+                GebuehrenKategorie k = (GebuehrenKategorie) evt.getSource();
                 GebuehrenManager gebManager = GebuehrenManager.getInstance();
                 List<Gebuehr> gebList = gebManager.getGebuehr(k);
 
