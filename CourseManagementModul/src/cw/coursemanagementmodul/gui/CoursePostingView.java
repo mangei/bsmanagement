@@ -6,6 +6,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWButtonGroup;
 import cw.boardingschoolmanagement.gui.component.CWComboBox;
 import cw.boardingschoolmanagement.gui.component.CWDateChooser;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
@@ -23,7 +24,6 @@ import java.text.DateFormat;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.Date;
-import javax.swing.ButtonGroup;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
@@ -40,7 +40,7 @@ public class CoursePostingView extends CWView
     //Tabelle zur Darstellung der angelegten Kurse
     private CWTable coursePartTable;
     private CWComboBox courseComboBox;
-    private ButtonGroup buttonGroup;
+    private CWButtonGroup buttonGroup;
 
     private CWRadioButton normal;
     private CWRadioButton test;
