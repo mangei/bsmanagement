@@ -5,7 +5,7 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import javax.swing.JButton;
 import org.jdesktop.swingx.JXList;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
 
 /**
@@ -60,10 +60,10 @@ public class GroupEditCustomerView extends CWView
         PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         CellConstraints cc = new CellConstraints();
 
-        builder.add(CWComponentFactory.createViewPanel("Aktive Gruppen", liCustomerGroups), cc.xywh(1, 1, 1, 5));
+        builder.add(CWComponentFactory.createView("Aktive Gruppen", liCustomerGroups), cc.xywh(1, 1, 1, 5));
         builder.add(bAdd,               cc.xy(3, 2));
         builder.add(bRemove,            cc.xy(3, 4));
-        builder.add(CWComponentFactory.createViewPanel("Andere Gruppen", liGroups), cc.xywh(5, 1, 1, 5));
+        builder.add(CWComponentFactory.createView("Andere Gruppen", liGroups), cc.xywh(5, 1, 1, 5));
     }
 
     public void dispose() {

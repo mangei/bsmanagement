@@ -1,6 +1,6 @@
 package cw.customermanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
