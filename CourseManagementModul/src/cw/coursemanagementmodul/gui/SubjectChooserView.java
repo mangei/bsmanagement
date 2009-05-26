@@ -1,55 +1,49 @@
-/*
- * Die Course View representiert das Startfenster,
- * dass angezeigt wird, wenn man auf 'Kurs' in der
- * linken Auswahlliste klickt.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
- *
+ * Die Course View representiert das Startfenster,
+ * dass angezeigt wird, wenn man auf 'Kurs' in der
+ * linken Auswahlliste klickt.
+ * 
  * @author André Salmhofer
  */
-public class SubjectChooserView implements Disposable{
+public class SubjectChooserView extends CWView
+{
     private SubjectChooserPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
 
     //Definieren der Objekte in der oberen Leiste
-    private JButton addButton;
-    private JButton cancelButton;
+    private CWButton addButton;
+    private CWButton cancelButton;
     //********************************************
 
     //Tabelle zur Darstellung der angelegten Kurse
-    private JXTable subjectTable;
+    private CWTable subjectTable;
     //********************************************
-
-    private JViewPanel mainPanel;
 
     public SubjectChooserView(SubjectChooserPresentationModel model) {
         this.model = model;
-        initEventHandling();
-    }
 
-    private void initEventHandling() {
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     //******************************************************************
     //In dieser Methode werden alle oben definierten Objekte instanziert
     //******************************************************************
-    public void initComponents(){
+    private void initComponents(){
         addButton = CWComponentFactory.createButton(model.getAddButtonAction());
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
 
@@ -67,7 +61,7 @@ public class SubjectChooserView implements Disposable{
         subjectTable.setModel(model.createSubjectTableModel(model.getSubjectSelection()));
         subjectTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getSubjectSelection().getSelectionIndexHolder(),
                         subjectTable)));
 
@@ -76,36 +70,34 @@ public class SubjectChooserView implements Disposable{
                 .addComponent(cancelButton)
                 .addComponent(subjectTable);
 
-        mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
     }
     //**************************************************************************
+
+    private void initEventHandling() {
+    }
 
     //**************************************************************************
     //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
     //**************************************************************************
-    public JPanel buildPanel(){
-        initComponents();
-        initEventHandling();
+    private void buildView(){
 
-        mainPanel.getButtonPanel().add(addButton);
-        mainPanel.getButtonPanel().add(cancelButton);
+        this.setHeaderInfo(model.getHeaderInfo());
+
+        this.getButtonPanel().add(addButton);
+        this.getButtonPanel().add(cancelButton);
 
         FormLayout mainLayout = new FormLayout("pref:grow", "pref, 4dlu, fill:pref:grow");
 
-        mainPanel.getContentPanel().setLayout(mainLayout);
-
         CellConstraints cc = new CellConstraints();
 
-        PanelBuilder panelBuilder = new PanelBuilder(mainLayout, mainPanel.getContentPanel());
+        PanelBuilder panelBuilder = new PanelBuilder(mainLayout, this.getContentPanel());
 
         panelBuilder.addSeparator("Kursgegenstandstabelle", cc.xy(1, 1));
         panelBuilder.add(new JScrollPane(subjectTable), cc.xy(1, 3));
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
     }
 
+    @Override
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

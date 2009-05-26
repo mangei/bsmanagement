@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
@@ -12,8 +7,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -26,8 +20,9 @@ import cw.coursemanagementmodul.pojo.Activity;
  *
  * @author André Salmhofer
  */
-public class EditActivityPresentationModel  extends PresentationModel<Activity>
-implements Disposable{
+public class EditActivityPresentationModel
+        extends PresentationModel<Activity>
+{
     //Definieren der Objekte in der oberen Leiste
     private Action saveButtonAction;
     private Action cancelButtonAction;
@@ -42,7 +37,7 @@ implements Disposable{
     
     private ButtonListenerSupport support;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private SelectionHandler selectionHandler;
 
@@ -54,15 +49,30 @@ implements Disposable{
         this.activity = activity;
         initModels();
         initEventHandling();
+    }
+    //**************************************************************************
 
-        headerInfo = new HeaderInfo(
+    //**************************************************************************
+    //Initialisieren der Objekte
+    //**************************************************************************
+    public void initModels(){
+
+        headerInfo = new CWHeaderInfo(
                 "Aktivität bearbeiten",
                 "Sie befinden sich im Aktivitätsbereich. Hier können Sie Aktivitätsdaten eigeben!",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
+
+        saveButtonAction = new SaveButtonAction("Speichern");
+        cancelButtonAction = new CancelButtonAction("Schließen");
+        saveAndCloseButtonAction = new SaveAndCloseButtonAction("Speichern u. Schließen");
+
+        support = new ButtonListenerSupport();
+        saveListener = new SaveListener();
+        getBufferedModel(Activity.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
     }
     //**************************************************************************
-    
+
     public void initEventHandling(){
         unsaved = new ValueHolder();
         unsaved.addValueChangeListener(selectionHandler = new SelectionHandler());
@@ -87,20 +97,6 @@ implements Disposable{
                 System.out.println("evt: " + evt.getNewValue());
             }
     }
-    
-    //**************************************************************************
-    //Initialisieren der Objekte
-    //**************************************************************************
-    public void initModels(){
-        saveButtonAction = new SaveButtonAction("Speichern");
-        cancelButtonAction = new CancelButtonAction("Schließen");
-        saveAndCloseButtonAction = new SaveAndCloseButtonAction("Speichern u. Schließen");
-        
-        support = new ButtonListenerSupport();
-        saveListener = new SaveListener();
-        getBufferedModel(Activity.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
-    }
-    //**************************************************************************
     
     //**************************************************************************
     //Getter- und Setter-Methoden der Aktionen
@@ -231,7 +227,7 @@ implements Disposable{
 
     //**************************************************************************
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 }

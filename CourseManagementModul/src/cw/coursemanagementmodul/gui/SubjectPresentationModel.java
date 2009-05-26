@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
@@ -10,8 +5,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import java.awt.event.ActionEvent;
@@ -32,7 +26,8 @@ import java.util.List;
  *
  * @author André Salmhofer
  */
-public class SubjectPresentationModel implements Disposable{
+public class SubjectPresentationModel
+{
     //Definieren der Objekte in der oberen Leiste
     private Action newButtonAction;
     private Action editButtonAction;
@@ -43,34 +38,40 @@ public class SubjectPresentationModel implements Disposable{
     private SelectionInList<Subject> subjectSelection;
     //**********************************************
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private SelectionHandler selectionHandler;
     
     public SubjectPresentationModel() {
         initModels();
         initEventHandling();
+    }
+    
+    public void initModels() {
 
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Kursgegenstand",
                 "Sie befinden sich im Kursgegenstandsbereich. Hier können Sie Kursgegenstände anlegen",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"));
-    }
-    
-    //**************************************************************************
-    //Initialisieren der Objekte
-    //**************************************************************************
-    public void initModels() {
+        
         //Anlegen der Aktionen, für die Buttons
         newButtonAction = new NewAction("Neu");
         editButtonAction = new EditAction("Bearbeiten");
         deleteButtonAction = new DeleteAction("Löschen");
         
         subjectSelection = new SelectionInList<Subject>(SubjectManager.getInstance().getAll());
+    }
+
+    private void initEventHandling() {
+        subjectSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
         updateActionEnablement();
     }
-    //**************************************************************************
+
+    public void dispose() {
+        subjectSelection.removeValueChangeListener(selectionHandler);
+        subjectSelection.release();
+    }
     
     //**************************************************************************
     //Methode, die ein CourseTableModel erzeugt.
@@ -80,21 +81,11 @@ public class SubjectPresentationModel implements Disposable{
         return new SubjectTableModel(subjectSelection);
     }
     //**************************************************************************
-     
-    
-    private void initEventHandling() {
-        subjectSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
-        updateActionEnablement();
-    }
 
     private class SelectionHandler implements PropertyChangeListener{
         public void propertyChange(PropertyChangeEvent evt) {
                 updateActionEnablement();
             }
-    }
-
-    public void dispose() {
-        subjectSelection.removeValueChangeListener(selectionHandler);
     }
     
     //**************************************************************************
@@ -139,7 +130,7 @@ public class SubjectPresentationModel implements Disposable{
                 }
               }
             });
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
         }
     }
     //**************************************************************************
@@ -315,14 +306,14 @@ public class SubjectPresentationModel implements Disposable{
                         }
                     }
                 });
-                GUIManager.changeView(editView.buildPanel(), true);
+                GUIManager.changeView(editView, true);
                 GUIManager.setLoadingScreenVisible(false);
 
             }
         }).start();
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
     //**************************************************************************

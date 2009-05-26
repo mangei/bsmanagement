@@ -1,15 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -33,7 +28,8 @@ import javax.swing.table.AbstractTableModel;
  *
  * @author André Salmhofer
  */
-public class HistoryPresentationModel implements Disposable{
+public class HistoryPresentationModel
+{
     //Definieren der Objekte in der oberen Leiste
     private Action detailAction;
     private Action printAction;
@@ -46,7 +42,7 @@ public class HistoryPresentationModel implements Disposable{
     //**********************************************
     private Course selectedCourse;
 
-    private HeaderInfo headerInfoComboBox;
+    private CWHeaderInfo headerInfoComboBox;
 
     private IntervallHandler intervallHandler;
     private CoursePartSelectionHandler coursePartSelectionHandler;
@@ -68,18 +64,19 @@ public class HistoryPresentationModel implements Disposable{
     public HistoryPresentationModel() {
         initModels();
         initEventHandling();
-
-        headerInfoComboBox = headerInfoComboBox = new HeaderInfo(
-                "Buchungshistorie",
-                "<html>Sie befinden sich im Kursbuchungsbereich. Hier können Sie die Historie der Kursbuchungen betrachten!<br/>Wählen Sie bitte zunächst den Kurs aus!</html>",
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/courseHistory.png"),
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/courseHistory.png"));
     }
 
     //**************************************************************************
     //Initialisieren der Objekte
     //**************************************************************************
     public void initModels() {
+
+        headerInfoComboBox = headerInfoComboBox = new CWHeaderInfo(
+                "Buchungshistorie",
+                "<html>Sie befinden sich im Kursbuchungsbereich. Hier können Sie die Historie der Kursbuchungen betrachten!<br/>Wählen Sie bitte zunächst den Kurs aus!</html>",
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/courseHistory.png"),
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/courseHistory.png"));
+
         //Anlegen der Aktionen, für die Buttons
         detailAction = new DetailAction("Anzeigen");
         printAction = new PrintAction("Drucken");
@@ -88,8 +85,6 @@ public class HistoryPresentationModel implements Disposable{
         coursePartSelection = new SelectionInList<CourseParticipant>();
         courseSelection = new SelectionInList<Course>(CourseManager.getInstance().getAll());
         
-        updateActionEnablement();
-
         courseSollValueHolder = new ValueHolder();
         courseHabenValueHolder = new ValueHolder();
         courseSaldoValueHolder = new ValueHolder();
@@ -100,13 +95,22 @@ public class HistoryPresentationModel implements Disposable{
         vonVM = new ValueHolder();
         bisVM = new ValueHolder();
         priceVM = new ValueHolder();
-        
+
+    }
+
+    private void initEventHandling() {
+        coursePartSelection.addValueChangeListener(coursePartSelectionHandler = new CoursePartSelectionHandler());
+        courseSelection.addValueChangeListener(intervallHandler = new IntervallHandler());
+        updateActionEnablement();
         updateElements();
     }
 
     public void dispose() {
         courseSelection.removeValueChangeListener(intervallHandler);
         coursePartSelection.removeValueChangeListener(coursePartSelectionHandler);
+
+        courseSelection.release();
+        coursePartSelection.release();
     }
 
     private class IntervallHandler implements PropertyChangeListener{
@@ -168,13 +172,6 @@ public class HistoryPresentationModel implements Disposable{
         return new CoursePartTableModel(coursePartSelection);
     }
     //**************************************************************************
-
-    private void initEventHandling() {
-        coursePartSelection.addValueChangeListener(coursePartSelectionHandler = new CoursePartSelectionHandler());
-        courseSelection.addValueChangeListener(intervallHandler = new IntervallHandler());
-        updateActionEnablement();
-        updateElements();
-    }
     
     private class DetailAction extends AbstractAction {
 
@@ -184,7 +181,7 @@ public class HistoryPresentationModel implements Disposable{
 
         public void actionPerformed(ActionEvent e) {
             GUIManager.getInstance().lockMenu();
-            GUIManager.changeView(new DetailHistoryView(new DetailHistoryPresentationModel(coursePartSelection.getSelection())).buildPanel(), true);
+            GUIManager.changeView(new DetailHistoryView(new DetailHistoryPresentationModel(coursePartSelection.getSelection())), true);
         }
 
         private DetailAction(String string) {
@@ -201,7 +198,7 @@ public class HistoryPresentationModel implements Disposable{
             GUIManager.getInstance().lockMenu();
             GUIManager.changeView(new PrintCalculationView(
                     new PrintCalculationPresentationModel(coursePartSelection.getList(),
-                    new HeaderInfo("Kursteilnehmerliste drucken"), selectedCourse)).buildPanel(), true);
+                    new CWHeaderInfo("Kursteilnehmerliste drucken"), selectedCourse)), true);
         }
 
         private PrintAction(String string){
@@ -334,7 +331,7 @@ public class HistoryPresentationModel implements Disposable{
         return detailAction;
     }
 
-    public HeaderInfo getHeaderInfoComboBox() {
+    public CWHeaderInfo getHeaderInfoComboBox() {
         return headerInfoComboBox;
     }
 

@@ -1,18 +1,17 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.coursemanagementmodul.renderer.PostingHistoryTableCellRenderer;
 import java.awt.Font;
 import java.beans.PropertyChangeEvent;
@@ -20,87 +19,72 @@ import java.beans.PropertyChangeListener;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.Format;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
  *
  * @author André Salmhofer
  */
-public class HistoryView implements Disposable{
+public class HistoryView extends CWView
+{
     private HistoryPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
 
     //Tabelle zur Darstellung der angelegten Kurse
-    private JXTable coursePartTable;
-    private JComboBox courseComboBox;
-    private JLabel courseLabel;
+    private CWTable coursePartTable;
+    private CWComboBox courseComboBox;
+    private CWLabel courseLabel;
 
-    private JViewPanel panel;
+    private CWLabel courseName;
+    private CWLabel beginDate;
+    private CWLabel endDate;
+    private CWLabel price;
 
-    private JLabel courseName;
-    private JLabel beginDate;
-    private JLabel endDate;
-    private JLabel price;
+    private CWLabel vCourseName;
+    private CWLabel vBeginDate;
+    private CWLabel vEndDate;
+    private CWLabel vPrice;
 
-    private JLabel vCourseName;
-    private JLabel vBeginDate;
-    private JLabel vEndDate;
-    private JLabel vPrice;
+    private CWLabel totalValue;
+    private CWLabel coursePartLabel;
 
-    private JLabel totalValue;
-    private JLabel coursePartLabel;
-
-    private JLabel vSollLabel;
-    private JLabel vHabenLabel;
-    private JLabel vSaldoLabel;
-    private JLabel anzLabel;
+    private CWLabel vSollLabel;
+    private CWLabel vHabenLabel;
+    private CWLabel vSaldoLabel;
+    private CWLabel anzLabel;
 
     private Format numberFormat;
     private Format dateFormat;
 
-    private JPanel detailPanel;
+    private CWPanel detailPanel;
     //********************************************
 
-    private JButton detailButton;
-    private JButton printButton;
+    private CWButton detailButton;
+    private CWButton printButton;
     
     public HistoryView(HistoryPresentationModel model) {
         this.model = model;
-        numberFormat = DecimalFormat.getCurrencyInstance();
-        dateFormat = DateFormat.getDateInstance();
-    }
 
-    private void initEventHandling() {
-        model.getCourseSelection().addValueChangeListener(new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                if(model.getCourseSelection().isSelectionEmpty()){
-                    detailPanel.setVisible(false);
-                    coursePartTable.updateUI();
-                }
-                else{
-                    detailPanel.setVisible(true);
-                    coursePartTable.updateUI();
-                }
-            }
-        });
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     //******************************************************************
     //In dieser Methode werden alle oben definierten Objekte instanziert
     //******************************************************************
     public void initComponents(){
+
+        numberFormat = DecimalFormat.getCurrencyInstance();
+        dateFormat = DateFormat.getDateInstance();
+
         coursePartTable = CWComponentFactory.createTable("Keine Kursteilnehmer zum selektierten Kurs!");
         coursePartTable.setModel(model.createCoursePartTableModel(model.getCoursePartSelection()));
         coursePartTable.getColumns(true).get(7).setCellRenderer(new PostingHistoryTableCellRenderer());
         coursePartTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getCoursePartSelection().getSelectionIndexHolder(),
                         coursePartTable)));
         
@@ -137,8 +121,6 @@ public class HistoryView implements Disposable{
                 .addComponent(vHabenLabel)
                 .addComponent(vSaldoLabel);
 
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfoComboBox());
-
         courseName = CWComponentFactory.createLabel("Kursname:");
         beginDate = CWComponentFactory.createLabel("Beginn:");
         endDate = CWComponentFactory.createLabel("Ende:");
@@ -154,9 +136,9 @@ public class HistoryView implements Disposable{
         vEndDate.setFont(new Font(null, Font.BOLD, 11));
         vPrice.setFont(new Font(null, Font.BOLD, 11));
         
-        totalValue = new JLabel("Gesamtbetrag:");
-        coursePartLabel = new JLabel("Anzahl der Teilnehmer:");
-        totalValue = new JLabel("Soll:");
+        totalValue = CWComponentFactory.createLabel("Gesamtbetrag:");
+        coursePartLabel = CWComponentFactory.createLabel("Anzahl der Teilnehmer:");
+        totalValue = CWComponentFactory.createLabel("Soll:");
 
         vSollLabel = CWComponentFactory.createLabel(model.getCourseSollValueHolder(), numberFormat);
         anzLabel = CWComponentFactory.createLabel(model.getSizeValueHolder());
@@ -174,18 +156,35 @@ public class HistoryView implements Disposable{
     //**************************************************************************
 
 
+    private void initEventHandling() {
+        model.getCourseSelection().addValueChangeListener(new PropertyChangeListener() {
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(model.getCourseSelection().isSelectionEmpty()){
+                    detailPanel.setVisible(false);
+                    coursePartTable.updateUI();
+                }
+                else{
+                    detailPanel.setVisible(true);
+                    coursePartTable.updateUI();
+                }
+            }
+        });
+    }
+
     //**************************************************************************
     //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
     //**************************************************************************
-    public JPanel buildPanel(){
-        initComponents();
+    private void buildView(){
 
-        JPanel totalPanel = CWComponentFactory.createPanel();
-        JPanel coursePartPanel = CWComponentFactory.createPanel();
-        JPanel extendPanel = CWComponentFactory.createPanel();
+        this.setHeaderInfo(model.getHeaderInfoComboBox());
 
-        panel.getButtonPanel().add(detailButton);
-        panel.getButtonPanel().add(printButton);
+        CWPanel totalPanel = CWComponentFactory.createPanel();
+        CWPanel coursePartPanel = CWComponentFactory.createPanel();
+        CWPanel extendPanel = CWComponentFactory.createPanel();
+
+        this.getButtonPanel().add(detailButton);
+        this.getButtonPanel().add(printButton);
 
         FormLayout layout = new FormLayout("pref, 2dlu, pref:grow, 2dlu, right:pref","pref, 10dlu, pref, 2dlu, fill:pref:grow, 5dlu, pref, 5dlu, pref, 5dlu, pref, 5dlu, pref");
         FormLayout panelLayout = new FormLayout("fill:pref:grow", "fill:pref:grow");
@@ -221,7 +220,7 @@ public class HistoryView implements Disposable{
         totalPanel.add(new JLabel("Saldo:"), cc.xy(1, 7));
         totalPanel.add(vSaldoLabel, cc.xy(3, 7, CellConstraints.RIGHT, CellConstraints.TOP));
 
-        panel.getContentPanel().setLayout(layout);
+        this.getContentPanel().setLayout(layout);
         coursePartPanel.setLayout(panelLayout);
 
         coursePartPanel.add(new JScrollPane(coursePartTable), cc.xy(1, 1));
@@ -230,7 +229,7 @@ public class HistoryView implements Disposable{
         extendPanel.add(courseLabel, cc.xy(1, 1));
         extendPanel.add(courseComboBox, cc.xy(3, 1));
 
-        PanelBuilder panelBuilder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder panelBuilder = new PanelBuilder(layout, this.getContentPanel());
 
         panelBuilder.add(extendPanel, cc.xy(1, 1));
         panelBuilder.addSeparator("Kursteilnehmer", cc.xyw(1, 3, 3));
@@ -241,16 +240,13 @@ public class HistoryView implements Disposable{
         panelBuilder.addSeparator("Buchungsdetails", cc.xyw(1, 11, 3));
         panelBuilder.add(totalPanel, cc.xy(1, 13));
 
-        panel.setOpaque(false);
+        this.setOpaque(false);
         coursePartPanel.setOpaque(false);
-
-        initEventHandling();
-        panel.addDisposableListener(this);
-        return panel;
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
+        super.dispose();
         componentContainer.dispose();
         model.dispose();
     }

@@ -1,48 +1,40 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
-import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
  *
  * @author André Salmhofer
  */
-public class PostingRunsView implements Disposable{
+public class PostingRunsView extends CWView
+{
     private PostingRunsPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
 
     //Definieren der Objekte in der oberen Leiste
-    private JButton backButton;
-    private JButton stornoButton;
-    private JButton detailButton;
+    private CWButton backButton;
+    private CWButton stornoButton;
+    private CWButton detailButton;
     //********************************************
 
     //Tabelle zur Darstellung der angelegten Kurse
-    private JXTable runTable;
+    private CWTable runTable;
     //********************************************
-
-    private JViewPanel panel;
 
     public PostingRunsView(PostingRunsPresentationModel model) {
         this.model = model;
-    }
 
-    private void initEventHandling() {
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     //******************************************************************
@@ -70,7 +62,7 @@ public class PostingRunsView implements Disposable{
         runTable.setModel(model.createPostingRunTableModel(model.getPostingRunList()));
         runTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getPostingRunList().getSelectionIndexHolder(),
                         runTable)));
 
@@ -82,32 +74,29 @@ public class PostingRunsView implements Disposable{
                 .addComponent(stornoButton)
                 .addComponent(detailButton);
 
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
     }
     //**************************************************************************
 
+
+    private void initEventHandling() {
+    }
 
     //**************************************************************************
     //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
     //**************************************************************************
-    public JPanel buildPanel(){
-        initComponents();
-        initEventHandling();
+    private void buildView(){
 
-        panel.getButtonPanel().add(backButton);
-        panel.getButtonPanel().add(stornoButton);
-        panel.getButtonPanel().add(detailButton);
+        this.setHeaderInfo(model.getHeaderInfo());
 
-        FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref","pref");
-        panel.getTopPanel().setLayout(layout);
+        this.getButtonPanel().add(backButton);
+        this.getButtonPanel().add(stornoButton);
+        this.getButtonPanel().add(detailButton);
 
-        panel.getContentPanel().add(new JScrollPane(runTable), BorderLayout.CENTER);
-        panel.addDisposableListener(this);
-        return panel;
+        this.getContentPanel().add(new JScrollPane(runTable), BorderLayout.CENTER);
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

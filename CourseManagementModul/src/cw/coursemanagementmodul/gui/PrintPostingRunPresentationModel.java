@@ -1,19 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package cw.coursemanagementmodul.gui;
-
-/**
- *
- * @author André Salmhofer
- */
 
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.coursemanagementmodul.pojo.Course;
 import cw.coursemanagementmodul.pojo.CourseAddition;
@@ -38,7 +29,6 @@ import java.util.Date;
 import java.util.HashMap;
 import net.sf.jasperreports.engine.util.JRSaver;
 
-
 /**
  *
  * @author André Salmhofer
@@ -47,7 +37,7 @@ public class PrintPostingRunPresentationModel {
 
     private List<CourseParticipant> coursePartList;
     private List totalAmountList;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private Action backAction;
     private ButtonListenerSupport support;
 
@@ -68,22 +58,23 @@ public class PrintPostingRunPresentationModel {
 
     private List<CourseAddition> courseAdditionList;
 
-    public PrintPostingRunPresentationModel(List<CourseParticipant> list, HeaderInfo headerInfo, Course course) {
+    public PrintPostingRunPresentationModel(List<CourseParticipant> list, CWHeaderInfo headerInfo, Course course) {
         this.coursePartList = list;
         this.headerInfo = headerInfo;
         this.course = course;
-        totalAmountList = new ArrayList();
-        courseAdditionList = new ArrayList<CourseAddition>();
-        coursePriceList = new ArrayList();
+        
         initModels();
-        this.initEventHandling();
+        initEventHandling();
     }
 
-    private void initEventHandling() {
-    }
 
     private void initModels(){
         Format f = DateFormat.getDateInstance();
+
+        totalAmountList = new ArrayList();
+        courseAdditionList = new ArrayList<CourseAddition>();
+        coursePriceList = new ArrayList();
+
         createTotalAmountList();
         try {
             courseReport = JasperCompileManager.compileReport("./jasper/CourseTemplate.jrxml");
@@ -111,7 +102,7 @@ public class PrintPostingRunPresentationModel {
             param.put("totalAmountList", totalAmountList);
 
             support = new ButtonListenerSupport();
-            setBackAction(new BackAction());
+            backAction = new BackAction();
             reportSource = "./jasper/PostingRunTemplate.jrxml";
             jasperReport = JasperCompileManager.compileReport(reportSource);
             ds = new JRBeanCollectionDataSource(coursePartList);
@@ -120,6 +111,12 @@ public class PrintPostingRunPresentationModel {
             Logger.getLogger(PrintCourseParticipantPresentationModel.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
+    }
+
+    private void initEventHandling() {
+    }
+
+    public void dispose() {
     }
 
     public void removeButtonListener(ButtonListener listener) {
@@ -133,15 +130,8 @@ public class PrintPostingRunPresentationModel {
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
     }
 
     /**
@@ -152,24 +142,10 @@ public class PrintPostingRunPresentationModel {
     }
 
     /**
-     * @param backAction the backAction to set
-     */
-    public void setBackAction(Action backAction) {
-        this.backAction = backAction;
-    }
-
-    /**
      * @return the jasperPrint
      */
     public JasperPrint getJasperPrint() {
         return jasperPrint;
-    }
-
-    /**
-     * @param jasperPrint the jasperPrint to set
-     */
-    public void setJasperPrint(JasperPrint jasperPrint) {
-        this.jasperPrint = jasperPrint;
     }
 
     private class BackAction

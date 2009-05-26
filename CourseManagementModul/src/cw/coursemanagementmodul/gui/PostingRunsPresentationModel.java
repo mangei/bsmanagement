@@ -1,15 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
@@ -38,14 +32,15 @@ import javax.swing.ListModel;
  *
  * @author André Salmhofer
  */
-public class PostingRunsPresentationModel implements Disposable{
+public class PostingRunsPresentationModel
+{
     private SelectionInList<PostingRun> postingRunList;
 
     private Action backButtonAction;
     private Action stornoAction;
     private Action detailAction;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private SelectionHandler selectionHandler;
 
@@ -53,22 +48,31 @@ public class PostingRunsPresentationModel implements Disposable{
         postingRunList = new SelectionInList<PostingRun>(PostingRunManager.getInstance().getAll());
         initModels();
         initEventHandling();
+    }
 
-        headerInfo = new HeaderInfo(
+    public void initModels() {
+
+        headerInfo = new CWHeaderInfo(
                 "Gebührenlaufübersicht",
                 "<html>Sie befinden in der Übersichtsmaske der bereits gebuchten Gebührenläufe!<br/>"
                 + "Hier können Sie einen Buchungslauf wieder stornieren!<html>",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/posting.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/posting.png"));
 
-
-    }
-
-    public void initModels() {
         //Anlegen der Aktionen, für die Buttons
         backButtonAction = new BackButtonAction("Zurück");
         stornoAction = new StornoAction("Stornieren");
         detailAction = new DetailAction("Detailansicht");
+    }
+
+    private void initEventHandling() {
+        postingRunList.addValueChangeListener(selectionHandler = new SelectionHandler());
+        updateActionEnablement();
+    }
+
+    public void dispose() {
+        postingRunList.removeValueChangeListener(selectionHandler);
+        postingRunList.release();
     }
 
     private void updateActionEnablement() {
@@ -77,19 +81,10 @@ public class PostingRunsPresentationModel implements Disposable{
         detailAction.setEnabled(hasSelection);
     }
 
-    private void initEventHandling() {
-        postingRunList.addValueChangeListener(selectionHandler = new SelectionHandler());
-        updateActionEnablement();
-    }
-
     private class SelectionHandler implements PropertyChangeListener{
         public void propertyChange(PropertyChangeEvent evt) {
                 updateActionEnablement();
             }
-    }
-
-    public void dispose() {
-        postingRunList.removeValueChangeListener(selectionHandler);
     }
 
     private class BackButtonAction
@@ -157,7 +152,10 @@ public class PostingRunsPresentationModel implements Disposable{
                 courseParticipants.add(cP);
             }
             GUIManager.getInstance().lockMenu();
-            GUIManager.changeView(new TestRunView(new TestRunPresentationModel(new SelectionInList<CourseParticipant>(courseParticipants), courseAdditions.get(0).getCourse())).buildPanel(), true);
+
+            // CWTODO: This could be a problem if we give over a SelectionInList and don't release() it.
+
+            GUIManager.changeView(new TestRunView(new TestRunPresentationModel(new SelectionInList<CourseParticipant>(courseParticipants), courseAdditions.get(0).getCourse())), true);
         }
     }
 
@@ -231,7 +229,7 @@ public class PostingRunsPresentationModel implements Disposable{
         return new PostingRunTableModel(list);
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

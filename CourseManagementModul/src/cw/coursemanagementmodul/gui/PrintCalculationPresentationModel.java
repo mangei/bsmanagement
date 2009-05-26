@@ -1,19 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
-
-/**
- *
- * @author André Salmhofer
- */
 
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.coursemanagementmodul.pojo.Course;
 import cw.coursemanagementmodul.pojo.CourseAddition;
@@ -48,7 +38,7 @@ public class PrintCalculationPresentationModel {
 
     private List<CourseParticipant> coursePartList;
     private List<CourseParticipant> myCoursePartList;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private Action backAction;
     private ButtonListenerSupport support;
 
@@ -72,25 +62,25 @@ public class PrintCalculationPresentationModel {
 
     private List<CourseAddition> courseAdditionList;
 
-    public PrintCalculationPresentationModel(List<CourseParticipant> list, HeaderInfo headerInfo, Course course) {
+    public PrintCalculationPresentationModel(List<CourseParticipant> list, CWHeaderInfo headerInfo, Course course) {
         this.coursePartList = list;
         this.headerInfo = headerInfo;
         this.course = course;
+        
+        initModels();
+        initEventHandling();
+    }
+
+    private void initModels(){
+        Format f = DateFormat.getDateInstance();
+
         courseAdditionList = new ArrayList<CourseAddition>();
         myCoursePartList = new ArrayList<CourseParticipant>();
         sollList = new ArrayList();
         habenList = new ArrayList();
         saldoList = new ArrayList();
         coursePriceList = new ArrayList();
-        initModels();
-        this.initEventHandling();
-    }
 
-    private void initEventHandling() {
-    }
-
-    private void initModels(){
-        Format f = DateFormat.getDateInstance();
         try {
             courseReport = JasperCompileManager.compileReport("./jasper/CourseTemplate.jrxml");
             activityReport = JasperCompileManager.compileReport("./jasper/ActivityTemplate.jrxml");
@@ -123,7 +113,7 @@ public class PrintCalculationPresentationModel {
             param.put("courseAdditionList", courseAdditionList);
 
             support = new ButtonListenerSupport();
-            setBackAction(new BackAction());
+            backAction = new BackAction();
             reportSource = "./jasper/CalculationTemplate.jrxml";
             jasperReport = JasperCompileManager.compileReport(reportSource);
             ds = new JRBeanCollectionDataSource(myCoursePartList);
@@ -132,6 +122,14 @@ public class PrintCalculationPresentationModel {
             Logger.getLogger(PrintCourseParticipantPresentationModel.class.getName()).log(Level.SEVERE, null, ex);
             ex.printStackTrace();
         }
+    }
+
+    private void initEventHandling() {
+        
+    }
+
+    public void dispose() {
+        
     }
 
     public void removeButtonListener(ButtonListener listener) {
@@ -145,15 +143,8 @@ public class PrintCalculationPresentationModel {
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
     }
 
     /**
@@ -163,12 +154,6 @@ public class PrintCalculationPresentationModel {
         return backAction;
     }
 
-    /**
-     * @param backAction the backAction to set
-     */
-    public void setBackAction(Action backAction) {
-        this.backAction = backAction;
-    }
 
     /**
      * @return the jasperPrint
@@ -177,12 +162,6 @@ public class PrintCalculationPresentationModel {
         return jasperPrint;
     }
 
-    /**
-     * @param jasperPrint the jasperPrint to set
-     */
-    public void setJasperPrint(JasperPrint jasperPrint) {
-        this.jasperPrint = jasperPrint;
-    }
 
     private class BackAction
             extends AbstractAction {

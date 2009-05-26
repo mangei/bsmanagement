@@ -1,17 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,7 +16,8 @@ import cw.coursemanagementmodul.pojo.Course;
  *
  * @author André Salmhofer
  */
-public class EditCourseView implements Disposable{
+public class EditCourseView extends CWView
+{
     private EditCoursePresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     
@@ -39,11 +34,14 @@ public class EditCourseView implements Disposable{
     private JDateChooser beginDate;
     private JDateChooser endDate;
 
-    private JViewPanel view;
     //**************************************************************************
             
     public EditCourseView(EditCoursePresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
     
     //**************************************************************************
@@ -52,7 +50,7 @@ public class EditCourseView implements Disposable{
     //mitgeben. Bei Datum-Komponenten ist dies jedoch nicht möglich. Hierzu
     //wird die Methode connect() von der Klasse PropertyConnector benötigt.
     //**************************************************************************
-    public void initComponents(){
+    private void initComponents(){
         nameLabel = CWComponentFactory.createLabel("Kursname");
         beginLabel = CWComponentFactory.createLabel("Beginn");
         endLabel = CWComponentFactory.createLabel("Ende");
@@ -93,18 +91,21 @@ public class EditCourseView implements Disposable{
                 .addComponent(saveButton)
                 .addComponent(valueLabel)
                 .addComponent(valueTextField);
-
-        view = CWComponentFactory.createViewPanel(model.getHeaderInfo());
     }
     //**************************************************************************
-    
+
+    private void initEventHandling() {
+        
+    }
+
     //**************************************************************************
     //Diese Methode gibt die Maske des EditPanels in Form einse JPanels zurück
     //**************************************************************************
-    public JPanel buildPanel(){
-        initComponents();
+    private void buildView() {
+
+        this.setHeaderInfo(model.getHeaderInfo());
         
-        JButtonPanel buttonPanel = view.getButtonPanel();
+        CWButtonPanel buttonPanel = this.getButtonPanel();
         
         buttonPanel.add(saveButton);
         buttonPanel.add(saveAndCloseButton);
@@ -114,24 +115,20 @@ public class EditCourseView implements Disposable{
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref"); // rows
         
         CellConstraints cc = new CellConstraints();
-        view.getContentPanel().setLayout(layout);
+        this.getContentPanel().setLayout(layout);
         
-        view.getContentPanel().add(nameLabel, cc.xy (1, 1));
-        view.getContentPanel().add(nameTextField, cc.xyw(3, 1, 3));
-        view.getContentPanel().add(beginLabel, cc.xy (1, 3));
-        view.getContentPanel().add(beginDate, cc.xy (3, 3));
-        view.getContentPanel().add(endLabel, cc.xy (1, 5));
-        view.getContentPanel().add(endDate, cc.xy (3, 5));
-        view.getContentPanel().add(valueLabel, cc.xy(1, 7));
-        view.getContentPanel().add(valueTextField, cc.xy(3, 7));
-
-        view.addDisposableListener(this);
-
-        return view;
+        this.getContentPanel().add(nameLabel, cc.xy (1, 1));
+        this.getContentPanel().add(nameTextField, cc.xyw(3, 1, 3));
+        this.getContentPanel().add(beginLabel, cc.xy (1, 3));
+        this.getContentPanel().add(beginDate, cc.xy (3, 3));
+        this.getContentPanel().add(endLabel, cc.xy (1, 5));
+        this.getContentPanel().add(endDate, cc.xy (3, 5));
+        this.getContentPanel().add(valueLabel, cc.xy(1, 7));
+        this.getContentPanel().add(valueTextField, cc.xy(3, 7));
     }
 
+    @Override
     public void dispose() {
-        view.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

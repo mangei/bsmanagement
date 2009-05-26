@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
@@ -12,8 +7,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -27,8 +21,9 @@ import cw.coursemanagementmodul.pojo.Course;
  *
  * @author André Salmhofer
  */
-public class EditCoursePresentationModel extends PresentationModel<Course>
-implements Disposable{
+public class EditCoursePresentationModel
+        extends PresentationModel<Course>
+{
     //Definieren der Objekte in der oberen Leiste
     private Action saveButtonAction;
     private Action cancelButtonAction;
@@ -43,7 +38,7 @@ implements Disposable{
     
     private ButtonListenerSupport support;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private SelectionHandler selectionHandler;
 
@@ -53,19 +48,40 @@ implements Disposable{
     public EditCoursePresentationModel(Course course) {
         super(course);
         this.course = course;
+
         initModels();
         initEventHandling();
+    }
+    //**************************************************************************
 
-        headerInfo = new HeaderInfo(
+
+    //**************************************************************************
+    //Initialisieren der Objekte
+    //**************************************************************************
+    public void initModels(){
+
+        headerInfo = new CWHeaderInfo(
                 "Kurs bearbeiten",
                 "Sie befinden sich im Kursbereich. Hier können Sie Kursdaten eigeben!",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
+
+        saveButtonAction = new SaveButtonAction("Speichern");
+        cancelButtonAction = new CancelButtonAction("Schließen");
+        saveAndCloseButtonAction = new SaveAndCloseButtonAction("Speichern u. Schließen");
+
+        support = new ButtonListenerSupport();
+        unsaved = new ValueHolder();
     }
     //**************************************************************************
-    
+
     public void initEventHandling(){
-        unsaved = new ValueHolder();
+
+        saveListener = new SaveListener();
+        getBufferedModel(Course.PROPERTYNAME_BEGINDATE).addValueChangeListener(saveListener);
+        getBufferedModel(Course.PROPERTYNAME_ENDDATE).addValueChangeListener(saveListener);
+        getBufferedModel(Course.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
+        
         unsaved.addValueChangeListener(selectionHandler = new SelectionHandler());
         unsaved.setValue(false);
     }
@@ -90,22 +106,6 @@ implements Disposable{
                 System.out.println("evt: " + evt.getNewValue());
             }
     }
-    
-    //**************************************************************************
-    //Initialisieren der Objekte
-    //**************************************************************************
-    public void initModels(){
-        saveButtonAction = new SaveButtonAction("Speichern");
-        cancelButtonAction = new CancelButtonAction("Schließen");
-        saveAndCloseButtonAction = new SaveAndCloseButtonAction("Speichern u. Schließen");
-        
-        support = new ButtonListenerSupport();
-        saveListener = new SaveListener();
-        getBufferedModel(Course.PROPERTYNAME_BEGINDATE).addValueChangeListener(saveListener);
-        getBufferedModel(Course.PROPERTYNAME_ENDDATE).addValueChangeListener(saveListener);
-        getBufferedModel(Course.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
-    }
-    //**************************************************************************
     
     //**************************************************************************
     //Getter- und Setter-Methoden der Aktionen
@@ -237,7 +237,7 @@ implements Disposable{
         saveCourse();
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
     //**************************************************************************

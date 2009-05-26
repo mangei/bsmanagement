@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
@@ -13,8 +9,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -39,10 +34,11 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class EditCoursePartPresentationModel extends PresentationModel<CourseParticipant>
-implements Disposable{
+public class EditCoursePartPresentationModel
+        extends PresentationModel<CourseParticipant>
+{
     //Definieren der Objekte in der oberen Leiste
 
     private Action courseChooserButtonAction;
@@ -75,7 +71,7 @@ implements Disposable{
     private ValueModel habenVM;
     private ValueModel saldoVM;
     
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private CourseHandler selectionHandler;
     private DataHandler dataHandler;
@@ -92,7 +88,7 @@ implements Disposable{
         initModels();
         initEventHandling();
 
-        headerInfo = new HeaderInfo("Ferienkurse", coursePart.getCustomer().getTitle() + " "
+        headerInfo = new CWHeaderInfo("Ferienkurse", coursePart.getCustomer().getTitle() + " "
                 + coursePart.getCustomer().getForename() + " "
                 + coursePart.getCustomer().getSurname());
     }
@@ -120,6 +116,10 @@ implements Disposable{
        courseAdditionSelection.removeValueChangeListener(saveListener);
        getBufferedModel(CourseParticipant.PROPERTYNAME_COSTUMER).removeValueChangeListener(saveListener);
        getBufferedModel(CourseParticipant.PROPERTYNAME_COURSELIST).removeValueChangeListener(saveListener);
+
+       courseAdditionSelection.release();
+       activitySelection.release();
+       subjectSelection.release();
 
        courseChooserModel.dispose();
        activityChooserModel.dispose();
@@ -360,7 +360,7 @@ implements Disposable{
                 }
             });
 
-            GUIManager.changeView(view.buildPanel(), true);
+            GUIManager.changeView(view, true);
             GUIManager.setLoadingScreenVisible(false);
         }
     }
@@ -396,7 +396,7 @@ implements Disposable{
                     }
                 }
             });
-            GUIManager.changeView(view.buildPanel(), true);
+            GUIManager.changeView(view, true);
         }
     }
 
@@ -431,7 +431,7 @@ implements Disposable{
                     }
                 }
             });
-            GUIManager.changeView(view.buildPanel(), true);
+            GUIManager.changeView(view, true);
         }
     }
 
@@ -733,7 +733,7 @@ implements Disposable{
         return sollVM;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

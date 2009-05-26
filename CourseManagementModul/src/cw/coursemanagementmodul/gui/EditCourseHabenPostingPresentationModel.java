@@ -9,8 +9,7 @@ import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.coursemanagementmodul.pojo.Activity;
 import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
@@ -34,9 +33,9 @@ import javax.swing.ListModel;
 
 /**
  *
- * @author CreativeWorkers.at
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class EditCourseHabenPostingPresentationModel implements Disposable{
+public class EditCourseHabenPostingPresentationModel {
 
     private SelectionInList<PostingCategory> postingCategorySelection;
     private ValueModel unsaved;
@@ -46,7 +45,7 @@ public class EditCourseHabenPostingPresentationModel implements Disposable{
     
     private ButtonListenerSupport support;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private CourseAddition courseAddition;
     private CourseParticipant coursePart;
@@ -59,23 +58,19 @@ public class EditCourseHabenPostingPresentationModel implements Disposable{
         this.coursePart = coursePart;
         this.courseAddition = course;
 
-        support = new ButtonListenerSupport();
-        
         initModels();
         initEventHandling();
+    }
+    
+    public void initModels() {
+        support = new ButtonListenerSupport();
 
-        setVoreinstellungen();
-
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Kurs bearbeiten",
                 "<html>Sie befinden sich im Kursbuchungsbereich!<br/>"
                 + "Hier können Sie eine Habenbuchung tätigen!<html>",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/posting.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/posting.png"));
-    }
-    
-    public void initModels() {
-        support = new ButtonListenerSupport();
 
         Posting posting = new Posting();
         posting.setCustomer(coursePart.getCustomer());
@@ -89,21 +84,33 @@ public class EditCourseHabenPostingPresentationModel implements Disposable{
         postingCategorySelection = new SelectionInList<PostingCategory>(postingCategories);
         postingCategorySelection.setSelection(((Posting)postingModel.getBean()).getPostingCategory());
 
+        //Setzen der Voreinstellungen
+        postingModel.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).setValue(courseAddition.getCourse().getName() + " für "
+                + coursePart.getCustomer().getForename() + " "
+                + coursePart.getCustomer().getSurname());
+        postingModel.setBufferedValue(Posting.PROPERTYNAME_AMOUNT, courseAddition.getCourse().getPrice()
+                + getActivitiesAmount(courseAddition));
+        //****************************
+
+        unsaved = new ValueHolder();
+    }
+    
+    public void initEventHandling() {
         postingModel.getBufferedModel(Posting.PROPERTYNAME_AMOUNT).addValueChangeListener(new SaveListener());
         postingModel.getBufferedModel(Posting.PROPERTYNAME_CATEGORY).addValueChangeListener(new SaveListener());
         postingModel.getBufferedModel(Posting.PROPERTYNAME_CUSTOMER).addValueChangeListener(new SaveListener());
         postingModel.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(new SaveListener());
         postingModel.getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(new SaveListener());
-    }
-    
-    public void initEventHandling() {
-        unsaved = new ValueHolder();
+
+
         unsaved.addValueChangeListener(selectionHandler = new SelectionHandler());
         unsaved.setValue(false);
     }
 
     public void dispose() {
         unsaved.removeValueChangeListener(selectionHandler);
+        postingCategorySelection.release();
+        postingModel.release();
     }
 
     private class SelectionHandler implements PropertyChangeListener{
@@ -201,7 +208,7 @@ public class EditCourseHabenPostingPresentationModel implements Disposable{
         CoursePostingManager.getInstance().save(coursePosting);
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 
@@ -335,16 +342,6 @@ public class EditCourseHabenPostingPresentationModel implements Disposable{
 
     public PresentationModel getPostingModel() {
         return postingModel;
-    }
-
-    private void setVoreinstellungen(){
-        //Setzen der Voreinstellungen
-        postingModel.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).setValue(courseAddition.getCourse().getName() + " für "
-                + coursePart.getCustomer().getForename() + " "
-                + coursePart.getCustomer().getSurname());
-        postingModel.setBufferedValue(Posting.PROPERTYNAME_AMOUNT, courseAddition.getCourse().getPrice()
-                + getActivitiesAmount(courseAddition));
-        //****************************
     }
 
     private double getActivitiesAmount(CourseAddition courseAddition){

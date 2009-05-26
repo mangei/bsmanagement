@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
@@ -12,8 +7,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -29,8 +23,9 @@ import cw.coursemanagementmodul.pojo.manager.SubjectManager;
  *
  * @author André Salmhofer
  */
-public class SubjectChooserPresentationModel extends PresentationModel<Subject>
-implements Disposable{
+public class SubjectChooserPresentationModel
+        extends PresentationModel<Subject>
+{
 
     //Definieren der Objekte in der oberen Leiste
     private Action addButtonAction;
@@ -46,7 +41,7 @@ implements Disposable{
     private ButtonListenerSupport support;
     private ButtonEvent buttonEvent;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private SelectionHandler selectionHandler;
 
@@ -54,26 +49,34 @@ implements Disposable{
         super(subject);
         initModels();
         initEventHandling();
-        buttonEvent = new ButtonEvent(ButtonEvent.OK_BUTTON);
     }
 
-    //**************************************************************************
-    //Initialisieren der Objekte
-    //**************************************************************************
     public void initModels() {
+        buttonEvent = new ButtonEvent(ButtonEvent.OK_BUTTON);
+
         //Anlegen der Aktionen, für die Buttons
         addButtonAction = new AddAction("Hinzufügen");
         cancelButtonAction = new CancelButtonAction("Schließen");
         subjectSelection = new SelectionInList<Subject>(SubjectManager.getInstance().getAll());
         support = new ButtonListenerSupport();
 
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Kursgegenstand hinzufügen!",
                 "Hier können Sie Gegenstände zum markierten Kurs hinzufügen!",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"));
     }
-    //**************************************************************************
+
+    private void initEventHandling() {
+        subjectSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
+        updateActionEnablement();
+    }
+
+    public void dispose() {
+        subjectSelection.removeValueChangeListener(selectionHandler);
+        subjectSelection.release();
+        release();
+    }
 
     //**************************************************************************
     //Methode, die ein CourseTableModel erzeugt.
@@ -85,14 +88,6 @@ implements Disposable{
     //**************************************************************************
 
 
-    private void initEventHandling() {
-        subjectSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
-        updateActionEnablement();
-    }
-
-    public void dispose() {
-        subjectSelection.removeValueChangeListener(selectionHandler);
-    }
 
     private class SelectionHandler implements PropertyChangeListener{
         public void propertyChange(PropertyChangeEvent evt) {
@@ -223,7 +218,7 @@ implements Disposable{
         this.subjectItem = subjectItem;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
     //**************************************************************************

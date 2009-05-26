@@ -1,71 +1,67 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.text.Format;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class EditCoursePartView implements Disposable{
+public class EditCoursePartView extends CWView
+{
     private EditCoursePartPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     
     //*********************Komponenten definieren*******************************
-    private JXTable courseTable;
-    private JXTable activityTable;
-    private JXTable subjectTable;
+    private CWTable courseTable;
+    private CWTable activityTable;
+    private CWTable subjectTable;
     
-    private JButton courseButton;
-    private JButton activityButton;
-    private JButton subjectButton;
-    private JButton deleteCourseButton;
-    private JButton deleteSubjectButton;
-    private JButton deleteActivityButton;
+    private CWButton courseButton;
+    private CWButton activityButton;
+    private CWButton subjectButton;
+    private CWButton deleteCourseButton;
+    private CWButton deleteSubjectButton;
+    private CWButton deleteActivityButton;
 
-    private JLabel soll;
-    private JLabel haben;
-    private JLabel saldo;
+    private CWLabel soll;
+    private CWLabel haben;
+    private CWLabel saldo;
     
-    private JLabel vCourseName;
-    private JLabel vBeginDate;
-    private JLabel vEndDate;
-    private JLabel vPrice;
+    private CWLabel vCourseName;
+    private CWLabel vBeginDate;
+    private CWLabel vEndDate;
+    private CWLabel vPrice;
 
-    private JLabel vSoll;
-    private JLabel vHaben;
-    private JLabel vSaldo;
-
-    private JViewPanel view;
+    private CWLabel vSoll;
+    private CWLabel vHaben;
+    private CWLabel vSaldo;
 
     private Format currencyFormat;
     //**************************************************************************
             
     public EditCoursePartView(EditCoursePartPresentationModel model) {
         this.model = model;
-        currencyFormat = DecimalFormat.getCurrencyInstance();
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
     
     //**************************************************************************
@@ -74,13 +70,15 @@ public class EditCoursePartView implements Disposable{
     //mitgeben. Bei Datum-Komponenten ist dies jedoch nicht möglich. Hierzu
     //wird die Methode connect() von der Klasse PropertyConnector benötigt.
     //**************************************************************************
-    public void initComponents(){
+    private void initComponents(){
+        currencyFormat = DecimalFormat.getCurrencyInstance();
+
         courseTable = CWComponentFactory.createTable("Kein Kurs zugewiesen!");
         courseTable.setPreferredScrollableViewportSize(new Dimension(10, 70));
         courseTable.setModel(model.createCourseTableModel(model.getCourseSelection()));
         courseTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getCourseSelection().getSelectionIndexHolder(),
                         courseTable)));
 
@@ -89,7 +87,7 @@ public class EditCoursePartView implements Disposable{
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));//TODO-mit ValueModel
         activityTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getActivitySelection().getSelectionIndexHolder(),
                         activityTable)));
         
@@ -98,7 +96,7 @@ public class EditCoursePartView implements Disposable{
         subjectTable.setModel(model.createSubjectTableModel(model.getSubjectSelection()));
         subjectTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getSubjectSelection().getSelectionIndexHolder(),
                         subjectTable)));
 
@@ -181,23 +179,26 @@ public class EditCoursePartView implements Disposable{
                 .addComponent(vPrice)
                 .addComponent(vSaldo)
                 .addComponent(vSoll);
-
-        view = CWComponentFactory.createViewPanel(model.getHeaderInfo());
     }
     //**************************************************************************
-    
+
+    private void initEventHandling() {
+
+    }
+
     //**************************************************************************
     //Diese Methode gibt die Maske des EditPanels in Form einse JPanels zurück
     //**************************************************************************
-    public JPanel buildPanel(){
-        initComponents();
+    private void buildView(){
+
+        this.setHeaderInfo(model.getHeaderInfo());
         
         JPanel subjectButtonPanel = CWComponentFactory.createPanel(new FormLayout("pref, 4dlu, pref", "pref"));
         JPanel activityButtonPanel = CWComponentFactory.createPanel(new FormLayout("pref, 4dlu, pref", "pref"));
         
         JPanel accountingPanel = CWComponentFactory.createPanel();
 
-        JButtonPanel buttonPanel = view.getButtonPanel();
+        CWButtonPanel buttonPanel = this.getButtonPanel();
         
         buttonPanel.add(courseButton);
         buttonPanel.add(deleteCourseButton);
@@ -229,7 +230,7 @@ public class EditCoursePartView implements Disposable{
         accountingPanel.add(vHaben, cc.xy(3, 3));
         accountingPanel.add(vSaldo, cc.xy(3, 5));
 
-        PanelBuilder panelBuilder = new PanelBuilder(layout, view.getContentPanel());
+        PanelBuilder panelBuilder = new PanelBuilder(layout, this.getContentPanel());
 
         panelBuilder.addSeparator("Ferienkurse", cc.xyw(1, 1, 3));
         panelBuilder.add(new JScrollPane(courseTable), cc.xyw(1, 3, 3));
@@ -242,12 +243,10 @@ public class EditCoursePartView implements Disposable{
         panelBuilder.addSeparator("Konto des Kursteilnehmers", cc.xyw(1, 11, 3));
         panelBuilder.add(accountingPanel, cc.xy(1, 13));
         panelBuilder.setOpaque(false);
-        view.addDisposableListener(this);
-        return view;
     }
 
+    @Override
     public void dispose() {
-        view.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

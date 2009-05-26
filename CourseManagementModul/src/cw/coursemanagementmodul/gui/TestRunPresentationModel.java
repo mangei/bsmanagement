@@ -1,14 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.coursemanagementmodul.pojo.Course;
 import cw.coursemanagementmodul.pojo.CourseAddition;
@@ -21,38 +15,45 @@ import javax.swing.Action;
  *
  * @author André Salmhofer
  */
-public class TestRunPresentationModel implements Disposable{
+public class TestRunPresentationModel
+{
     private SelectionInList<CourseParticipant> coursePartSelection;
     private Course selectedCourse;
     private Action backButtonAction;
     private Action printAction;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     public TestRunPresentationModel(SelectionInList<CourseParticipant> courseParticipants,
             Course selectedCourse) {
         this.coursePartSelection = courseParticipants;
         this.selectedCourse = selectedCourse;
-        initModels();
 
-        headerInfo = new HeaderInfo(
+        initModels();
+        initEventHandling();
+    }
+
+    private void initModels() {
+
+        headerInfo = new CWHeaderInfo(
                 "Testlauf",
                 "Sie befinden sich im Soll-Testlauf des Kurses " + selectedCourse.getName() + "!",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
-    }
 
-    public SelectionInList<CourseParticipant> getCoursePartSelection() {
-        return coursePartSelection;
-    }
-
-    public void initModels() {
         //Anlegen der Aktionen, für die Buttons
         backButtonAction = new BackButtonAction("Zurück");
         printAction = new PrintAction("Drucken");
     }
 
+    private void initEventHandling() {
+    }
+
     public void dispose() {
-        
+    }
+
+
+    public SelectionInList<CourseParticipant> getCoursePartSelection() {
+        return coursePartSelection;
     }
 
     private class BackButtonAction
@@ -80,7 +81,7 @@ public class TestRunPresentationModel implements Disposable{
         public void actionPerformed(ActionEvent e){
             GUIManager.changeView(new PrintPostingView(
                     new PrintPostingRunPresentationModel(coursePartSelection.getList(),
-                    new HeaderInfo("Kursteilnehmerliste drucken"), selectedCourse)).buildPanel(), true);
+                    new CWHeaderInfo("Kursteilnehmerliste drucken"), selectedCourse)), true);
         }
 
         private PrintAction(String string){
@@ -102,7 +103,7 @@ public class TestRunPresentationModel implements Disposable{
         return new CourseAddition();
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

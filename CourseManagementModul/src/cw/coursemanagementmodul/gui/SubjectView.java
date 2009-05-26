@@ -1,48 +1,39 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
  *
  * @author André Salmhofer
  */
-public class SubjectView implements Disposable{
+public class SubjectView extends CWView
+{
     private SubjectPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     
     //Definieren der Objekte in der oberen Leiste
-    private JButton newButton;
-    private JButton editButton;
-    private JButton deleteButton;
+    private CWButton newButton;
+    private CWButton editButton;
+    private CWButton deleteButton;
     //********************************************
     
     //Tabelle zur Darstellung der angelegten Kursteilnehmer
-    private JXTable subjectTable;
+    private CWTable subjectTable;
     //********************************************
 
-    private JViewPanel panel;
-    
     public SubjectView(SubjectPresentationModel model) {
         this.model = model;
-    }
-    
-    private void initEventHandling() {
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
     
     //******************************************************************
@@ -70,7 +61,7 @@ public class SubjectView implements Disposable{
         subjectTable.setModel(model.createSubjectTableModel(model.getSubjectSelection()));
         subjectTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getSubjectSelection().getSelectionIndexHolder(),
                         subjectTable)));
 
@@ -80,32 +71,25 @@ public class SubjectView implements Disposable{
                 .addComponent(newButton)
                 .addComponent(subjectTable);
 
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
-    }
-    //**************************************************************************
-    
-    //**************************************************************************
-    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
-    //**************************************************************************
-    public JPanel buildPanel(){
-        initComponents();
-        initEventHandling();
         
-        panel.getButtonPanel().add(newButton);
-        panel.getButtonPanel().add(editButton);
-        panel.getButtonPanel().add(deleteButton);
-        
-        FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref","pref");
-        panel.getTopPanel().setLayout(layout);
-        CellConstraints cc = new CellConstraints();
-        
-        panel.getContentPanel().add(new JScrollPane(subjectTable), BorderLayout.CENTER);
-        panel.addDisposableListener(this);
-        return panel;
     }
 
+    private void initEventHandling() {
+    }
+
+    private void buildView(){
+
+        this.setHeaderInfo(model.getHeaderInfo());
+        
+        this.getButtonPanel().add(newButton);
+        this.getButtonPanel().add(editButton);
+        this.getButtonPanel().add(deleteButton);
+        
+        this.getContentPanel().add(new JScrollPane(subjectTable), BorderLayout.CENTER);
+    }
+
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

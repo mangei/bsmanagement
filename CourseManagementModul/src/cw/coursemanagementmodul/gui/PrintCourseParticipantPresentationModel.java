@@ -1,19 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
-
-/**
- *
- * @author André Salmhofer
- */
 
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.coursemanagementmodul.pojo.Course;
 import cw.coursemanagementmodul.pojo.CourseAddition;
@@ -38,7 +28,6 @@ import java.util.Date;
 import java.util.HashMap;
 import net.sf.jasperreports.engine.util.JRSaver;
 
-
 /**
  *
  * @author André Salmhofer
@@ -47,7 +36,7 @@ public class PrintCourseParticipantPresentationModel {
 
     private List<CourseParticipant> coursePartList;
     private List<CourseParticipant> myCoursePartList;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private Action backAction;
     private ButtonListenerSupport support;
 
@@ -60,17 +49,16 @@ public class PrintCourseParticipantPresentationModel {
     private String reportSource;
     private Course course;
 
-    public PrintCourseParticipantPresentationModel(List<CourseParticipant> list, HeaderInfo headerInfo, Course course) {
+    public PrintCourseParticipantPresentationModel(List<CourseParticipant> list, CWHeaderInfo headerInfo, Course course) {
         myCoursePartList = new ArrayList<CourseParticipant>();
         this.coursePartList = list;
         this.headerInfo = headerInfo;
         this.course = course;
+
         initModels();
-        this.initEventHandling();
+        initEventHandling();
     }
 
-    private void initEventHandling() {
-    }
 
     private void initModels(){
         Format f = DateFormat.getDateInstance();
@@ -95,7 +83,7 @@ public class PrintCourseParticipantPresentationModel {
             param.put("headerText", "Kursteilnehmerliste");
             
             support = new ButtonListenerSupport();
-            setBackAction(new BackAction());
+            backAction = new BackAction();
             reportSource = "./jasper/CoursePartTemplate.jrxml";
             jasperReport = JasperCompileManager.compileReport(reportSource);
             ds = new JRBeanCollectionDataSource(myCoursePartList);
@@ -105,8 +93,12 @@ public class PrintCourseParticipantPresentationModel {
             ex.printStackTrace();
         }
 
+    }
 
+    private void initEventHandling() {
+    }
 
+    public void dispose() {
     }
 
     public void removeButtonListener(ButtonListener listener) {
@@ -120,16 +112,10 @@ public class PrintCourseParticipantPresentationModel {
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
-    }
 
     /**
      * @return the backAction
@@ -139,24 +125,10 @@ public class PrintCourseParticipantPresentationModel {
     }
 
     /**
-     * @param backAction the backAction to set
-     */
-    public void setBackAction(Action backAction) {
-        this.backAction = backAction;
-    }
-
-    /**
      * @return the jasperPrint
      */
     public JasperPrint getJasperPrint() {
         return jasperPrint;
-    }
-
-    /**
-     * @param jasperPrint the jasperPrint to set
-     */
-    public void setJasperPrint(JasperPrint jasperPrint) {
-        this.jasperPrint = jasperPrint;
     }
 
     private class BackAction

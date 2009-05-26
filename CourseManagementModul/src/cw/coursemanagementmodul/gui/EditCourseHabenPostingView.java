@@ -1,51 +1,53 @@
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.toedter.calendar.JDateChooser;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
+import cw.boardingschoolmanagement.gui.component.CWDateChooser;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.customermanagementmodul.pojo.Posting;
 import java.awt.Font;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
  *
- * @author CreativeWorkers.at
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class EditCourseHabenPostingView implements Disposable{
+public class EditCourseHabenPostingView extends CWView
+{
 
     private EditCourseHabenPostingPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
 
-    private JTextField tfDescription;
-    private JTextField tfValue;
-    private JDateChooser dcPostingEntryDate;
+    private CWTextField tfDescription;
+    private CWCurrencyTextField tfValue;
+    private CWDateChooser dcPostingEntryDate;
     
-    private JButton bSave;
-    private JButton bCancel;
+    private CWButton bSave;
+    private CWButton bCancel;
 
-    private JXTable activityTable;
-    private JXTable subjectTable;
+    private CWTable activityTable;
+    private CWTable subjectTable;
 
-    private JLabel courseLabel;
-    private JLabel customerNameLabel;
-    private JLabel customerStreetLabel;
-    private JLabel customerPLZLabel;
-
-    private JViewPanel panel;
+    private CWLabel courseLabel;
+    private CWLabel customerNameLabel;
+    private CWLabel customerStreetLabel;
+    private CWLabel customerPLZLabel;
 
     public EditCourseHabenPostingView(EditCourseHabenPostingPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -102,18 +104,16 @@ public class EditCourseHabenPostingView implements Disposable{
                 .addComponent(subjectTable)
                 .addComponent(tfDescription)
                 .addComponent(tfValue);
-
-        panel = new JViewPanel(model.getHeaderInfo());
     }
 
     private void initEventHandling() {
         // Nothing to do
     }
     
-    public JPanel buildPanel() {
-        initComponents();
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
         
-        JButtonPanel buttonPanel = panel.getButtonPanel();
+        CWButtonPanel buttonPanel = this.getButtonPanel();
         
         buttonPanel.add(bSave);
         buttonPanel.add(bCancel);
@@ -124,7 +124,7 @@ public class EditCourseHabenPostingView implements Disposable{
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, fill:pref:grow," +
                 "20dlu, pref, 4dlu, fill:pref:grow");
         
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         builder.setDefaultDialogBorder();
 
         CellConstraints cc = new CellConstraints();
@@ -151,14 +151,10 @@ public class EditCourseHabenPostingView implements Disposable{
          builder.addSeparator("Gegenstände zu "
                 + model.getCourseAddition().getCourse().getName(), cc.xyw(1, 21, 5));
         builder.add(new JScrollPane(subjectTable), cc.xyw(1, 23, 5));
-
-        initEventHandling();
-        panel.addDisposableListener(this);
-        return panel;
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

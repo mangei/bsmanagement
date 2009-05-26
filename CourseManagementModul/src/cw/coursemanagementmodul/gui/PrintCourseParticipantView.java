@@ -1,30 +1,33 @@
 package cw.coursemanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import net.sf.jasperreports.view.JRViewer;
 
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 /**
  *
  * @author André Salmhofer
  */
-public class PrintCourseParticipantView {
+public class PrintCourseParticipantView extends CWView
+{
 
+    private CWComponentFactory.CWComponentContainer componentContainer;
     private PrintCourseParticipantPresentationModel model;
-    private JButton bBack;
+    private CWButton bBack;
     private JRViewer viewer;
 
-       public PrintCourseParticipantView(PrintCourseParticipantPresentationModel m) {
+    public PrintCourseParticipantView(PrintCourseParticipantPresentationModel m) {
         this.model = m;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
+        componentContainer = CWComponentFactory.createCWComponentContainer();
+
         bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
 
@@ -34,14 +37,23 @@ public class PrintCourseParticipantView {
                 "cw/coursemanagementmodul/images/back.png"));
 
         viewer = new JRViewer(model.getJasperPrint());
+
+        componentContainer.addComponent(bBack);
     }
 
-    public JPanel buildPanel() {
-        initComponents();
-        JViewPanel panel = new JViewPanel(model.getHeaderInfo());
-        panel.getButtonPanel().add(bBack);
-        panel.getContentPanel().add(viewer);
-        return panel;
+    private void initEventHandling() {
+
     }
 
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
+        this.getButtonPanel().add(bBack);
+        this.getContentPanel().add(viewer);
+    }
+
+    @Override
+    public void dispose() {
+        componentContainer.dispose();
+        model.dispose();
+    }
 }

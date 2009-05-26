@@ -1,20 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.coursemanagementmodul.pojo.CourseAddition;
 import java.text.DecimalFormat;
-import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
@@ -22,22 +15,25 @@ import javax.swing.JPanel;
  *
  * @author André Salmhofer
  */
-public class TestRunView implements Disposable{
+public class TestRunView extends CWView
+{
     private TestRunPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     
-    private JButton backButton;
-    private JButton printButton;
+    private CWButton backButton;
+    private CWButton printButton;
 
-    private JViewPanel mainPanel;
     private DecimalFormat numberFormat;
 
     public TestRunView(TestRunPresentationModel model) {
         this.model = model;
+
         initComponents();
+        buildView();
+        initEventHandling();
     }
 
-    public void initComponents(){
+    private void initComponents(){
         backButton = CWComponentFactory.createButton(model.getBackButtonAction());
         printButton = CWComponentFactory.createButton(model.getPrintAction());
 
@@ -53,16 +49,20 @@ public class TestRunView implements Disposable{
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(backButton);
 
-        mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+        
 
         numberFormat = new DecimalFormat("#0.00");
     }
 
-    public JComponent buildPanel(){
-        JViewPanel view = CWComponentFactory.createViewPanel();
-        
-        mainPanel.getButtonPanel().add(backButton);
-        mainPanel.getButtonPanel().add(printButton);
+    private void initEventHandling() {
+
+    }
+
+    private void buildView(){
+        this.setHeaderInfo(model.getHeaderInfo());
+
+        this.getButtonPanel().add(backButton);
+        this.getButtonPanel().add(printButton);
 
         int vert = 1;
         String layoutVerticalString = "";
@@ -74,7 +74,7 @@ public class TestRunView implements Disposable{
         FormLayout layout = new FormLayout("pref, 50dlu, pref, 50dlu, pref, 50dlu, pref",
                 layoutVerticalString);
 
-
+        CWView view = CWComponentFactory.createView();
         view.getContentPanel().setLayout(layout);
 
         CellConstraints cc = new CellConstraints();
@@ -161,9 +161,7 @@ public class TestRunView implements Disposable{
 
             vert += 2;
         }
-        mainPanel.add(CWComponentFactory.createScrollPane(view));
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
+        this.add(CWComponentFactory.createScrollPane(view));
     }
 
     public double getTotalActivityAmount(CourseAddition courseAddition){
@@ -178,8 +176,8 @@ public class TestRunView implements Disposable{
         return (courseAddition.getCourse().getPrice() + getTotalActivityAmount(courseAddition));
     }
 
+    @Override
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

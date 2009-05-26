@@ -1,53 +1,49 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
-import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import cw.coursemanagementmodul.pojo.Subject;
 
 /**
  *
  * @author André Salmhofer
  */
-public class EditSubjectView implements Disposable{
+public class EditSubjectView extends CWView
+{
     private EditSubjectPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     
     //*********************Komponenten definieren*******************************
-    private JLabel nameLabel;
-    private JTextField nameTextField;
+    private CWLabel nameLabel;
+    private CWTextField nameTextField;
     
-    private JButton saveButton;
-    private JButton saveAndCloseButton;
-    private JButton cancelButton;
+    private CWButton saveButton;
+    private CWButton saveAndCloseButton;
+    private CWButton cancelButton;
 
-    private JViewPanel view;
     //**************************************************************************
     
     public EditSubjectView(EditSubjectPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
     
-    public void initComponents(){
+    private void initComponents(){
         nameLabel = CWComponentFactory.createLabel("Gegenstand:");
         
-        nameTextField = BasicComponentFactory.createTextField(model.getBufferedModel(Subject.PROPERTYNAME_NAME), false);
+        nameTextField = CWComponentFactory.createTextField(model.getBufferedModel(Subject.PROPERTYNAME_NAME), false);
 
         saveButton = CWComponentFactory.createButton(model.getSaveButtonAction());
         saveAndCloseButton = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
@@ -79,17 +75,21 @@ public class EditSubjectView implements Disposable{
                 .addComponent(nameTextField)
                 .addComponent(saveAndCloseButton)
                 .addComponent(saveButton);
-
-        view = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+        
     }
-    
+
+    private void initEventHandling() {
+
+    }
+
     //**************************************************************************
     //Diese Methode gibt die Maske des EditPanels in Form einse JPanels zurück
     //**************************************************************************
-    public JPanel buildPanel(){
-        initComponents();
+    private void buildView(){
+
+        this.setHeaderInfo(model.getHeaderInfo());
         
-        JButtonPanel buttonPanel = view.getButtonPanel();
+        CWButtonPanel buttonPanel = this.getButtonPanel();
         
         buttonPanel.add(saveButton);
         buttonPanel.add(saveAndCloseButton);
@@ -99,16 +99,14 @@ public class EditSubjectView implements Disposable{
                 "pref, 2dlu, pref"); // rows
         
         CellConstraints cc = new CellConstraints();
-        view.getContentPanel().setLayout(layout);
+        this.getContentPanel().setLayout(layout);
         
-        view.getContentPanel().add(nameLabel, cc.xy (1, 1));
-        view.getContentPanel().add(nameTextField, cc.xy(3, 1));
-        view.addDisposableListener(this);
-        return view;
+        this.getContentPanel().add(nameLabel, cc.xy (1, 1));
+        this.getContentPanel().add(nameTextField, cc.xy(3, 1));
     }
 
+    @Override
     public void dispose() {
-        view.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }
