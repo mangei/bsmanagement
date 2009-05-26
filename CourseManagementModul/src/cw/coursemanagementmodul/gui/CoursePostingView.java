@@ -143,26 +143,25 @@ public class CoursePostingView extends CWView
                 "Hier sehen Sie alle bereits gebuchten Gebührenläufe!",
                 "cw/coursemanagementmodul/images/postingRuns.png"));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
-                .addComponent(courseComboBox)
-                .addComponent(accountingButton)
-                .addComponent(accountingDate)
-                .addComponent(accountingDateLabel)
-                .addComponent(beginDate)
-                .addComponent(courseComboBox)
-                .addComponent(courseLabel)
-                .addComponent(courseName)
-                .addComponent(coursePartTable)
-                .addComponent(detailPanel)
-                .addComponent(endDate)
-                .addComponent(normal)
-                .addComponent(postingRunsButton)
-                .addComponent(price)
-                .addComponent(test)
-                .addComponent(vBeginDate)
-                .addComponent(vCourseName)
-                .addComponent(vEndDate)
-                .addComponent(vPrice);
+        componentContainer = CWComponentFactory.createCWComponentContainer();
+                componentContainer.addComponent(courseComboBox);
+                componentContainer.addComponent(accountingButton);
+                componentContainer.addComponent(accountingDate);
+                componentContainer.addComponent(accountingDateLabel);
+                componentContainer.addComponent(beginDate);
+                componentContainer.addComponent(courseComboBox);
+                componentContainer.addComponent(courseLabel);
+                componentContainer.addComponent(courseName);
+                componentContainer.addComponent(coursePartTable);
+                componentContainer.addComponent(endDate);
+                componentContainer.addComponent(normal);
+                componentContainer.addComponent(postingRunsButton);
+                componentContainer.addComponent(price);
+                componentContainer.addComponent(test);
+                componentContainer.addComponent(vBeginDate);
+                componentContainer.addComponent(vCourseName);
+                componentContainer.addComponent(vEndDate);
+                componentContainer.addComponent(vPrice);
     }
     //**************************************************************************
 

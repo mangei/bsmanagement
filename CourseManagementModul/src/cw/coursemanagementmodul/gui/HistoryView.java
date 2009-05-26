@@ -104,23 +104,6 @@ public class HistoryView extends CWView
         
         courseLabel = CWComponentFactory.createLabel("Kurs:");
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
-                .addComponent(courseComboBox)
-                .addComponent(courseLabel)
-                .addComponent(coursePartTable)
-                .addComponent(detailButton)
-                .addComponent(vBeginDate)
-                .addComponent(vCourseName)
-                .addComponent(vEndDate)
-                .addComponent(vPrice)
-                .addComponent(vSollLabel)
-                .addComponent(beginDate)
-                .addComponent(courseName)
-                .addComponent(endDate)
-                .addComponent(price)
-                .addComponent(vHabenLabel)
-                .addComponent(vSaldoLabel);
-
         courseName = CWComponentFactory.createLabel("Kursname:");
         beginDate = CWComponentFactory.createLabel("Beginn:");
         endDate = CWComponentFactory.createLabel("Ende:");
@@ -152,6 +135,24 @@ public class HistoryView extends CWView
 
         detailPanel = CWComponentFactory.createPanel();
         detailPanel.setVisible(false);
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(courseComboBox)
+                .addComponent(courseLabel)
+                .addComponent(coursePartTable)
+                .addComponent(detailButton)
+                .addComponent(vBeginDate)
+                .addComponent(vCourseName)
+                .addComponent(vEndDate)
+                .addComponent(vPrice)
+                .addComponent(vSollLabel)
+                .addComponent(beginDate)
+                .addComponent(courseName)
+                .addComponent(endDate)
+                .addComponent(price)
+                .addComponent(vHabenLabel)
+                .addComponent(anzLabel)
+                .addComponent(vSaldoLabel);
     }
     //**************************************************************************
 
