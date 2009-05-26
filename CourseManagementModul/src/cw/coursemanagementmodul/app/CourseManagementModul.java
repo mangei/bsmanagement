@@ -1,14 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.app;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CascadeEvent;
 import cw.boardingschoolmanagement.app.CascadeListener;
-import cw.boardingschoolmanagement.gui.component.JMenuPanel;
+import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
@@ -33,15 +28,14 @@ import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.PostingCategory;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
-import org.hibernate.cfg.AnnotationConfiguration;
 /**
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
 public class CourseManagementModul implements Modul{
 
     public void init() {
-        JMenuPanel menuPanel = MenuManager.getSideMenu();
+        CWMenuPanel menuPanel = MenuManager.getSideMenu();
         menuPanel.addCategory("Kursverwaltung", "course");
         
         JButton courseButton = new JButton("Kurse");
@@ -49,7 +43,7 @@ public class CourseManagementModul implements Modul{
         courseButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                GUIManager.changeView(new CourseView(new CoursePresentationModel()).buildPanel());
+                GUIManager.changeView(new CourseView(new CoursePresentationModel()));
             }
         });
         
@@ -58,7 +52,7 @@ public class CourseManagementModul implements Modul{
         activityButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                GUIManager.changeView(new ActivityView(new ActivityPresentationModel()).buildPanel());
+                GUIManager.changeView(new ActivityView(new ActivityPresentationModel()));
             }
         });
         
@@ -67,7 +61,7 @@ public class CourseManagementModul implements Modul{
         subjectButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                GUIManager.changeView(new SubjectView(new SubjectPresentationModel()).buildPanel());
+                GUIManager.changeView(new SubjectView(new SubjectPresentationModel()));
             }
         });
 
@@ -76,7 +70,7 @@ public class CourseManagementModul implements Modul{
         accountingButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                GUIManager.changeView(new CoursePostingView(new CoursePostingPresentationModel(new CoursePosting())).buildPanel());
+                GUIManager.changeView(new CoursePostingView(new CoursePostingPresentationModel(new CoursePosting())));
             }
         });
 
@@ -85,7 +79,7 @@ public class CourseManagementModul implements Modul{
         accountingHistoryButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
-                GUIManager.changeView(new HistoryView(new HistoryPresentationModel()).buildPanel());
+                GUIManager.changeView(new HistoryView(new HistoryPresentationModel()));
             }
         });
 
@@ -117,30 +111,6 @@ public class CourseManagementModul implements Modul{
             category.setKey("Kurs-Buchung-Storno");
             PostingCategoryManager.getInstance().save(category);
         }
-    }
-
-    public Class getBaseClass() {
-        return Customer.class;
-    }
-
-    public Modul createModul(Object obj) {
-        
-//        throw new UnsupportedOperationException("Not supported yet.");
-        return null;
-    }
-
-    public void registerAnnotationClasses(AnnotationConfiguration configuration) {
-//        configuration.addAnnotatedClass(Course.class)
-//                     .addAnnotatedClass(CourseParticipant.class)
-//                     .addAnnotatedClass(Activity.class)
-//                     .addAnnotatedClass(Subject.class)
-//                     .addAnnotatedClass(CourseAddition.class)
-//                     .addAnnotatedClass(CoursePosting.class)
-//                     .addAnnotatedClass(PostingRun.class);
-    }
-
-    public List<Class> getDependencies() {
-        throw new UnsupportedOperationException("Not supported yet.");
     }
 
 }

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.extentions;
 
 import cw.coursemanagementmodul.pojo.CoursePosting;
@@ -17,9 +12,9 @@ import javax.swing.JLabel;
 
 /**
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class ReversePostingCategoryExtention implements EditReversePostingPostingCategoryExtention{
+public class CoursePostingEditReversePostingPostingCategoryExtention implements EditReversePostingPostingCategoryExtention{
     private EditReversePostingPresentationModel reversePostingModel;
     private CoursePosting coursePosting;
     public void initPresentationModel(EditReversePostingPresentationModel editReversePostingModel) {

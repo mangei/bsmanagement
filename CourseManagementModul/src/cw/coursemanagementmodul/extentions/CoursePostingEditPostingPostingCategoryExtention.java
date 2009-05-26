@@ -1,10 +1,6 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.extentions;
 
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.coursemanagementmodul.gui.CourseParticipantForPostingPresentationModel;
 import cw.coursemanagementmodul.gui.CourseParticipantForPostingView;
 import cw.coursemanagementmodul.pojo.CourseAddition;
@@ -19,13 +15,12 @@ import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.extentions.interfaces.EditPostingPostingCategoryExtention;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JComponent;
 
 /**
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class PostingCategoryExtention implements EditPostingPostingCategoryExtention {
+public class CoursePostingEditPostingPostingCategoryExtention implements EditPostingPostingCategoryExtention {
     private CourseParticipantForPostingPresentationModel model;
     private EditPostingPresentationModel postingModel;
     private CourseParticipantForPostingView view;
@@ -58,8 +53,8 @@ public class PostingCategoryExtention implements EditPostingPostingCategoryExten
         CoursePostingManager.getInstance().save(coursePosting);
     }
 
-    public JComponent getView() {
-        return view.buildPanel();
+    public CWPanel getView() {
+        return view;
     }
 
     public List<String> validate() {

@@ -1,8 +1,8 @@
 package cw.coursemanagementmodul.extentions;
 
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import java.util.List;
-import javax.swing.JComponent;
 import cw.coursemanagementmodul.gui.EditCoursePartPresentationModel;
 import cw.coursemanagementmodul.gui.EditCoursePartView;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
@@ -11,16 +11,27 @@ import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention
 
 /**
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class CourseCustomerGUIExtention implements EditCustomerTabExtention {
+public class CourseEditCustomerTabExtention implements EditCustomerTabExtention {
 
     private static EditCoursePartPresentationModel model;
     private static EditCoursePartView view;
     private static CourseParticipant cp;
 
-    public JComponent getView() {
-        return view.buildPanel();
+    public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
+        cp = CourseParticipantManager.getInstance().get(editCustomerModel.getBean());
+        System.out.println("_____________NEW CP: ["+cp+"]: Kunde: " + editCustomerModel.getBean().getSurname());
+        if(cp == null) {
+
+            cp = new CourseParticipant(editCustomerModel.getBean());
+        }
+        model = new EditCoursePartPresentationModel(cp, editCustomerModel.getUnsaved());
+        view = new EditCoursePartView(model);
+    }
+
+    public CWPanel getView() {
+        return view;
     }
 
     public void save() {
@@ -33,17 +44,6 @@ public class CourseCustomerGUIExtention implements EditCustomerTabExtention {
 
     public List<String> validate() {
         return null;
-    }
-
-    public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
-        cp = CourseParticipantManager.getInstance().get(editCustomerModel.getBean());
-        System.out.println("_____________NEW CP: ["+cp+"]: Kunde: " + editCustomerModel.getBean().getSurname());
-        if(cp == null) {
-            
-            cp = new CourseParticipant(editCustomerModel.getBean());
-        }
-        model = new EditCoursePartPresentationModel(cp, editCustomerModel.getUnsaved());
-        view = new EditCoursePartView(model);
     }
 
     public void dispose() {
