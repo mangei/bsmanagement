@@ -1,6 +1,6 @@
 package cw.boardingschoolmanagement.gui;
 
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.extentions.interfaces.ConfigurationExtention;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWView;
@@ -119,6 +119,7 @@ public class ConfigurationView extends CWView
         this.getContentPanel().add(cardPanel, BorderLayout.CENTER);
     }
 
+    @Override
     public void dispose() {
         componentContainer.dispose();
 

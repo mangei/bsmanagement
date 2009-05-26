@@ -2,14 +2,14 @@ package cw.boardingschoolmanagement.gui.helper;
 
 import com.jgoodies.binding.value.AbstractConverter;
 import com.jgoodies.binding.value.ValueModel;
-import org.jdesktop.swingx.JXTable;
+import cw.boardingschoolmanagement.gui.component.CWTable;
 
 
-public class JXTableSelectionConverter extends AbstractConverter {
+public class CWTableSelectionConverter extends AbstractConverter {
 
-    final JXTable table;
+    private final CWTable table;
 
-    public JXTableSelectionConverter(final ValueModel selectionIndexHolder, final JXTable table) {
+    public CWTableSelectionConverter(final ValueModel selectionIndexHolder, final CWTable table) {
         super(selectionIndexHolder);
         this.table = table;
     }

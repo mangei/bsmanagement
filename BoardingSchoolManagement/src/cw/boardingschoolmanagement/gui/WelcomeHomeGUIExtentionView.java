@@ -1,6 +1,6 @@
 package cw.boardingschoolmanagement.gui;
 
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -57,6 +57,7 @@ public class WelcomeHomeGUIExtentionView extends CWView
         builder.add(lTimeMessage, cc.xy(1, 3));
     }
 
+    @Override
     public void dispose() {
         componentContainer.dispose();
 
