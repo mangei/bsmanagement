@@ -1,14 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -23,44 +18,47 @@ import java.text.DecimalFormat;
 
 /**
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class DetailHistoryPresentationModel implements Disposable{
+public class DetailHistoryPresentationModel
+{
     private Action backAction;
     private SelectionInList<CoursePosting> accountings;
     private CourseParticipant selectedCourseParticipant;
 
-    private HeaderInfo headerInfo;
-    private HeaderInfo headerInfoSaldo;
+    private CWHeaderInfo headerInfo;
+    private CWHeaderInfo headerInfoSaldo;
 
     public DetailHistoryPresentationModel(CourseParticipant courseParticipant) {
         System.out.println("SELECTED = " + courseParticipant.getCustomer().getForename());
         selectedCourseParticipant = courseParticipant;
         initModels();
         initEventHandling();
-
-        headerInfo = new  HeaderInfo(
-                "Buchungsdetailansicht für Ferienkurse",
-                    "<html>" + courseParticipant.getCustomer().getTitle()
-                    + " " + courseParticipant.getCustomer().getForename()
-                    + " " + courseParticipant.getCustomer().getSurname() + "<br/>"
-                    + courseParticipant.getCustomer().getStreet() + "<br/>"
-                    + courseParticipant.getCustomer().getPostOfficeNumber()
-                    + " " + courseParticipant.getCustomer().getCity() + "</html>",
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/detail.png"),
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/detail.png"));
-
-        headerInfoSaldo = new HeaderInfo(
-                "Buchungsübersicht für den Kurs",
-                "Sie befinden sich im Kursverwaltungsbereich. Hier können Sie Kurse anlegen",
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
     }
 
     //**************************************************************************
     //Initialisieren der Objekte
     //**************************************************************************
     public void initModels() {
+
+        headerInfo = new CWHeaderInfo(
+                "Buchungsdetailansicht für Ferienkurse",
+                    new StringBuilder().append("<html>").append(selectedCourseParticipant.getCustomer().getTitle())
+                    .append(" ").append(selectedCourseParticipant.getCustomer().getForename())
+                    .append(" ").append(selectedCourseParticipant.getCustomer().getSurname()).append("<br/>")
+                    .append(selectedCourseParticipant.getCustomer().getStreet()).append("<br/>")
+                    .append(selectedCourseParticipant.getCustomer().getPostOfficeNumber())
+                    .append(" ").append(selectedCourseParticipant.getCustomer().getCity()).append("</html>")
+                    .toString(),
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/detail.png"),
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/detail.png"));
+
+        headerInfoSaldo = new CWHeaderInfo(
+                "Buchungsübersicht für den Kurs",
+                "Sie befinden sich im Kursverwaltungsbereich. Hier können Sie Kurse anlegen",
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
+
         backAction = new BackAction("Zurück");
         accountings = new SelectionInList<CoursePosting>();
         setPostingsOfOneCourseParticipant();
@@ -142,12 +140,12 @@ public class DetailHistoryPresentationModel implements Disposable{
                     if(coursePosting.getPosting().isLiabilities()){//isSoll
                         return "€ " + numberFormat.format(coursePosting.getPosting().getAmount());
                     }
-                    else return "";
+                    return "";
                 case 1:
                     if(coursePosting.getPosting().isAssets()){//isHaben
                         return "€ " + numberFormat.format(coursePosting.getPosting().getAmount());
                     }
-                    else return "";
+                    return "";
                 case 2:
                     return coursePosting.getPosting().getDescription();
                 case 3:
@@ -198,11 +196,11 @@ public class DetailHistoryPresentationModel implements Disposable{
        return ValueManager.getInstance().getTotalSaldo(selectedCourseParticipant);
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 
-    public HeaderInfo getHeaderInfoSaldo() {
+    public CWHeaderInfo getHeaderInfoSaldo() {
         return headerInfoSaldo;
     }
 }

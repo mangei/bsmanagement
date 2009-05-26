@@ -1,9 +1,3 @@
-/*
- * Die Course View representiert das Startfenster,
- * dass angezeigt wird, wenn man auf 'Kurs' in der
- * linken Auswahlliste klickt.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
@@ -11,62 +5,65 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.Font;
 import java.text.Format;
 import java.text.NumberFormat;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
- *
- * @author André Salmhofer
+ * Die Course View representiert das Startfenster,
+ * dass angezeigt wird, wenn man auf 'Kurs' in der
+ * linken Auswahlliste klickt.
+ * 
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class DetailHistoryView implements Disposable{
+public class DetailHistoryView extends CWView
+{
     private DetailHistoryPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
 
     //Tabelle zur Darstellung der angelegten Kurse
-    private JXTable accountingTable;
-    private JButton back;
+    private CWTable accountingTable;
+    private CWButton back;
     //********************************************
 
-    private JLabel vSoll;
-    private JLabel vHaben;
-    private JLabel vSaldo;
+    private CWLabel vSoll;
+    private CWLabel vHaben;
+    private CWLabel vSaldo;
 
-    private JLabel soll;
-    private JLabel haben;
-    private JLabel saldo;
-
-    private JViewPanel panel;
+    private CWLabel soll;
+    private CWLabel haben;
+    private CWLabel saldo;
 
     private Format currencyFormat;
 
     public DetailHistoryView(DetailHistoryPresentationModel model) {
         this.model = model;
-        currencyFormat = NumberFormat.getCurrencyInstance();
-    }
 
-    private void initEventHandling() {
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     //******************************************************************
     //In dieser Methode werden alle oben definierten Objekte instanziert
     //******************************************************************
-    public void initComponents(){
+    private void initComponents(){
+        currencyFormat = NumberFormat.getCurrencyInstance();
+
         accountingTable = CWComponentFactory.createTable("Es wurden noch keine Buchungen zum Kursteilnehmer getätigt!");
         accountingTable.setModel(model.createCoursePostingTableModel(model.getPostings()));
         accountingTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getPostings().getSelectionIndexHolder(),
                         accountingTable)));
         accountingTable.getColumns(true).get(3).setCellRenderer(new DateTimeTableCellRenderer());
@@ -100,16 +97,20 @@ public class DetailHistoryView implements Disposable{
                 .addComponent(vSaldo)
                 .addComponent(vSoll);
 
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
     }
     //**************************************************************************
+
+    private void initEventHandling() {
+
+    }
 
     //**************************************************************************
     //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
     //**************************************************************************
-    public JPanel buildPanel(){
-        initComponents();
-        initEventHandling();
+    private void buildView(){
+
+        this.setHeaderInfo(model.getHeaderInfo());
+
         JPanel accountingPanel = CWComponentFactory.createPanel();
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref, 2dlu, pref","fill:pref:grow, 4dlu, pref, 4dlu, pref");
@@ -129,21 +130,18 @@ public class DetailHistoryView implements Disposable{
 
         accountingPanel.setOpaque(false);
 
-        panel.getContentPanel().setLayout(layout);
+        this.getContentPanel().setLayout(layout);
 
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
 
-        panel.getButtonPanel().add(back);
+        this.getButtonPanel().add(back);
         builder.add(new JScrollPane(accountingTable), cc.xyw(1, 1, 5));
         builder.addSeparator("Gesamtübersicht", cc.xyw(1, 3, 3));
-        builder.add(accountingPanel, cc.xy(1, 5));
 
-        panel.addDisposableListener(this);
-        return panel;
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

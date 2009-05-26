@@ -1,56 +1,52 @@
-/*
- * Die Course View representiert das Startfenster,
- * dass angezeigt wird, wenn man auf 'Kurs' in der
- * linken Auswahlliste klickt.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
- *
- * @author André Salmhofer
+ * Die Course View representiert das Startfenster,
+ * dass angezeigt wird, wenn man auf 'Kurs' in der
+ * linken Auswahlliste klickt.
+ * 
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class CourseView implements Disposable{
+public class CourseView extends CWView
+{
     private CoursePresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     
     //Definieren der Objekte in der oberen Leiste
-    private JButton newButton;
-    private JButton editButton;
-    private JButton deleteButton;
-    private JButton detailButton;
+    private CWButton newButton;
+    private CWButton editButton;
+    private CWButton deleteButton;
+    private CWButton detailButton;
     //********************************************
     
     //Tabelle zur Darstellung der angelegten Kurse
-    private JXTable courseTable;
+    private CWTable courseTable;
     //********************************************
 
-    private JViewPanel panel;
-    
     public CourseView(CoursePresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
     
-    private void initEventHandling() {
-    }
     
     //******************************************************************
     //In dieser Methode werden alle oben definierten Objekte instanziert
     //******************************************************************
-    public void initComponents(){
+    private void initComponents(){
         newButton    = CWComponentFactory.createButton(model.getNewButtonAction());
         editButton   = CWComponentFactory.createButton(model.getEditButtonAction());
         deleteButton = CWComponentFactory.createButton(model.getDeleteButtonAction());
@@ -79,7 +75,7 @@ public class CourseView implements Disposable{
 
         courseTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getCourseSelection().getSelectionIndexHolder(),
                         courseTable)));
         
@@ -93,34 +89,34 @@ public class CourseView implements Disposable{
                 .addComponent(editButton)
                 .addComponent(newButton)
                 .addComponent(editButton);
-
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+        
     }
     //**************************************************************************
-    
+
+    private void initEventHandling() {
+    }
+
     //**************************************************************************
     //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
     //**************************************************************************
-    public JPanel buildPanel(){
-        initComponents();
-        initEventHandling();
-        
-        panel.getButtonPanel().add(newButton);
-        panel.getButtonPanel().add(editButton);
-        panel.getButtonPanel().add(deleteButton);
-        panel.getButtonPanel().add(detailButton);
+    private void buildView(){
+
+        this.setHeaderInfo(model.getHeaderInfo());
+
+        this.getButtonPanel().add(newButton);
+        this.getButtonPanel().add(editButton);
+        this.getButtonPanel().add(deleteButton);
+        this.getButtonPanel().add(detailButton);
         
         FormLayout layout = new FormLayout("fill:pref:grow","fill:pref:grow");
-        panel.getContentPanel().setLayout(layout);
+        this.getContentPanel().setLayout(layout);
         CellConstraints cc = new CellConstraints();
         
-        panel.getContentPanel().add(new JScrollPane(courseTable), cc.xy(1, 1));
-        panel.addDisposableListener(this);
-        return panel;
+        this.getContentPanel().add(new JScrollPane(courseTable), cc.xy(1, 1));
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

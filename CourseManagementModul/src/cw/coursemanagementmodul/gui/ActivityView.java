@@ -1,48 +1,39 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class ActivityView implements Disposable{
+public class ActivityView extends CWView
+{
     private ActivityPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     
     //Definieren der Objekte in der oberen Leiste
-    private JButton newButton;
-    private JButton editButton;
-    private JButton deleteButton;
+    private CWButton newButton;
+    private CWButton editButton;
+    private CWButton deleteButton;
     //********************************************
     
     //Tabelle zur Darstellung der angelegten Kurse
-    private JXTable activityTable;
+    private CWTable activityTable;
     //********************************************
-
-    private JViewPanel panel;
     
     public ActivityView(ActivityPresentationModel model) {
         this.model = model;
-    }
-    
-    private void initEventHandling() {
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
     
     //******************************************************************
@@ -70,11 +61,9 @@ public class ActivityView implements Disposable{
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));
         activityTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getActivitySelection().getSelectionIndexHolder(),
                         activityTable)));
-
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
 
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(newButton)
@@ -83,30 +72,26 @@ public class ActivityView implements Disposable{
                 .addComponent(activityTable);
     }
     //**************************************************************************
-    
+
+
+    private void initEventHandling() {
+    }
     
     //**************************************************************************
     //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
     //**************************************************************************
-    public JPanel buildPanel(){
-        initComponents();
-        initEventHandling();
+    private void buildView(){
+        this.setHeaderInfo(model.getHeaderInfo());
+
+        this.getButtonPanel().add(newButton);
+        this.getButtonPanel().add(editButton);
+        this.getButtonPanel().add(deleteButton);
         
-        panel.getButtonPanel().add(newButton);
-        panel.getButtonPanel().add(editButton);
-        panel.getButtonPanel().add(deleteButton);
-        
-        FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref","pref");
-        panel.getTopPanel().setLayout(layout);
-        CellConstraints cc = new CellConstraints();
-        
-        panel.getContentPanel().add(new JScrollPane(activityTable), BorderLayout.CENTER);
-        panel.addDisposableListener(this);
-        return panel;
+        this.getContentPanel().add(new JScrollPane(activityTable), BorderLayout.CENTER);
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

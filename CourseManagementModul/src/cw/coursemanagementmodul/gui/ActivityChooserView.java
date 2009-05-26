@@ -10,36 +10,37 @@ import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class ActivityChooserView implements Disposable{
+public class ActivityChooserView extends CWView
+
+{
     private ActivityChooserPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
 
     //Definieren der Objekte in der oberen Leiste
-    private JButton addButton;
-    private JButton cancelButton;
+    private CWButton addButton;
+    private CWButton cancelButton;
     //********************************************
     
     //Tabelle zur Darstellung der angelegten Kurse
-    private JXTable activityTable;
+    private CWTable activityTable;
     //********************************************
-
-    private JViewPanel mainPanel;
 
     public ActivityChooserView(ActivityChooserPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
         initEventHandling();
     }
     
@@ -49,8 +50,7 @@ public class ActivityChooserView implements Disposable{
     //******************************************************************
     //In dieser Methode werden alle oben definierten Objekte instanziert
     //******************************************************************
-    public void initComponents(){
-        mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+    private void initComponents(){
         addButton = CWComponentFactory.createButton(model.getAddButtonAction());
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
 
@@ -68,7 +68,7 @@ public class ActivityChooserView implements Disposable{
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));
         activityTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getActivitySelection().getSelectionIndexHolder(),
                         activityTable)));
 
@@ -82,28 +82,24 @@ public class ActivityChooserView implements Disposable{
     //**************************************************************************
     //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
     //**************************************************************************
-    public JPanel buildPanel(){
-        initComponents();
-        initEventHandling();
+    private void buildView(){
 
-        mainPanel.getButtonPanel().add(addButton);
-        mainPanel.getButtonPanel().add(cancelButton);
+        this.setHeaderInfo(model.getHeaderInfo());
+
+        this.getButtonPanel().add(addButton);
+        this.getButtonPanel().add(cancelButton);
 
         FormLayout mainLayout = new FormLayout("pref:grow", "pref, 4dlu, fill:pref:grow");
 
-        mainPanel.getContentPanel().setLayout(mainLayout);
-
         CellConstraints cc = new CellConstraints();
 
-        PanelBuilder panelBuilder = new PanelBuilder(mainLayout, mainPanel.getContentPanel());
+        PanelBuilder panelBuilder = new PanelBuilder(mainLayout, this.getContentPanel());
         panelBuilder.addSeparator("Aktivitätstabelle", cc.xy(1, 1));
         panelBuilder.add(new JScrollPane(activityTable), cc.xy(1, 3));
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
     }
 
+    @Override
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

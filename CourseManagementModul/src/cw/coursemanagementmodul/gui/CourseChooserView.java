@@ -1,70 +1,66 @@
-/*
- * Die Course View representiert das Startfenster,
- * dass angezeigt wird, wenn man auf 'Kurs' in der
- * linken Auswahlliste klickt.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.jidesoft.swing.CheckBoxList;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWCheckBoxList;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.Font;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.Format;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
+ * Die Course View representiert das Startfenster,
+ * dass angezeigt wird, wenn man auf 'Kurs' in der
+ * linken Auswahlliste klickt.
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class CourseChooserView implements Disposable{
+public class CourseChooserView extends CWView
+{
     private CourseChooserPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     
     //Definieren der Objekte in der oberen Leiste
-    private JButton addButton;
-    private JButton cancelButton;
+    private CWButton addButton;
+    private CWButton cancelButton;
     //********************************************
     
-    private JLabel courseName;
-    private JLabel beginDate;
-    private JLabel endDate;
-    private JLabel price;
+    private CWLabel courseName;
+    private CWLabel beginDate;
+    private CWLabel endDate;
+    private CWLabel price;
     
-    private JLabel vCourseName;
-    private JLabel vBeginDate;
-    private JLabel vEndDate;
-    private JLabel vPrice;
+    private CWLabel vCourseName;
+    private CWLabel vBeginDate;
+    private CWLabel vEndDate;
+    private CWLabel vPrice;
     
     //Tabelle zur Darstellung der angelegten Kurse
-    private JXTable courseTable;
+    private CWTable courseTable;
 
-    private CheckBoxList activityList;
-    private CheckBoxList subjectList;
+    private CWCheckBoxList activityList;
+    private CWCheckBoxList subjectList;
     //********************************************
 
     private Format dateFormat;
     private Format currencyFormat;
 
-    private JViewPanel mainPanel;
-    
     public CourseChooserView(CourseChooserPresentationModel model) {
         this.model = model;
-        dateFormat = DateFormat.getDateInstance();
-        currencyFormat = DecimalFormat.getCurrencyInstance();
+        
+        initComponents();
+        buildView();
         initEventHandling();
     }
     
@@ -74,7 +70,10 @@ public class CourseChooserView implements Disposable{
     //******************************************************************
     //In dieser Methode werden alle oben definierten Objekte instanziert
     //******************************************************************
-    public void initComponents(){
+    private void initComponents() {
+        dateFormat = DateFormat.getDateInstance();
+        currencyFormat = DecimalFormat.getCurrencyInstance();
+
         addButton = CWComponentFactory.createButton(model.getAddButtonAction());
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
 
@@ -92,7 +91,7 @@ public class CourseChooserView implements Disposable{
         courseTable.setModel(model.createCourseTableModel(model.getCourseSelection()));
         courseTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getCourseSelection().getSelectionIndexHolder(),
                         courseTable)));
 
@@ -115,18 +114,16 @@ public class CourseChooserView implements Disposable{
         vEndDate.setFont(new Font(null, Font.BOLD, 11));
         vPrice.setFont(new Font(null, Font.BOLD, 11));
         
-        activityList = new CheckBoxList(model.getActivityModel());
+        activityList = CWComponentFactory.createCheckBoxList(model.getActivityModel());
         activityList.setCheckBoxListSelectionModel(model.getActivitySelectionModel());
         activityList.setCellRenderer(model.createActivityListCellRenderer());
 
 
-        subjectList = new CheckBoxList(model.getSubjectModel());
+        subjectList = CWComponentFactory.createCheckBoxList(model.getSubjectModel());
         subjectList.setCheckBoxListSelectionModel(model.getSubjectSelection());
         subjectList.setCellRenderer(model.createSubjectListCellRenderer());
         
         courseTable.setOpaque(false);
-
-        mainPanel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
 
         componentContainer = CWComponentFactory.createCWComponentContainer()
                 .addComponent(addButton)
@@ -148,20 +145,19 @@ public class CourseChooserView implements Disposable{
     //**************************************************************************
     //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
     //**************************************************************************
-    public JPanel buildPanel(){
-        initComponents();
-        initEventHandling();
+    private void buildView(){
         JPanel detailPanel = CWComponentFactory.createPanel();
+
+       this.setHeaderInfo(model.getHeaderInfo());
         
-        mainPanel.getButtonPanel().add(addButton);
-        mainPanel.getButtonPanel().add(cancelButton);
+        this.getButtonPanel().add(addButton);
+        this.getButtonPanel().add(cancelButton);
         
         FormLayout mainLayout = new FormLayout("pref:grow, 10dlu, pref:grow, 10dlu, pref:grow",
                 "pref, 4dlu, fill:pref:grow, 35dlu, pref, 4dlu, fill:pref:grow");
         FormLayout layout = new FormLayout("pref, 10dlu, pref", 
                 "pref, 5dlu, pref, 5dlu, pref, 5dlu, pref, 10dlu, pref");
         
-        mainPanel.getContentPanel().setLayout(mainLayout);
         detailPanel.setLayout(layout);
         
         CellConstraints cc = new CellConstraints();
@@ -176,7 +172,7 @@ public class CourseChooserView implements Disposable{
         detailPanel.add(vEndDate, cc.xy(3, 5));
         detailPanel.add(vPrice, cc.xy(3, 7));
 
-        PanelBuilder panelBuilder = new PanelBuilder(mainLayout, mainPanel.getContentPanel());
+        PanelBuilder panelBuilder = new PanelBuilder(mainLayout, this.getContentPanel());
         panelBuilder.addSeparator("Kurse des Kursteilnehmers:", cc.xyw(1, 1, 5));
         panelBuilder.add(new JScrollPane(courseTable), cc.xyw(1, 3, 5));
         panelBuilder.addSeparator("Detailansicht des Kurses", cc.xy(1, 5));
@@ -185,12 +181,10 @@ public class CourseChooserView implements Disposable{
         panelBuilder.add(activityList, cc.xy(3, 7));
         panelBuilder.addSeparator("Gegenstände des Kurses", cc.xy(5, 5));
         panelBuilder.add(subjectList, cc.xy(5, 7));
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
     }
 
+    @Override
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

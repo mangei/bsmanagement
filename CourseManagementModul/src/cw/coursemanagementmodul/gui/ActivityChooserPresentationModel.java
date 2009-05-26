@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
@@ -12,8 +7,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -28,10 +22,11 @@ import java.text.DecimalFormat;
 
 /**
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class ActivityChooserPresentationModel extends PresentationModel<Activity>
-implements Disposable{
+public class ActivityChooserPresentationModel
+        extends PresentationModel<Activity>
+{
 
     //Definieren der Objekte in der oberen Leiste
     private Action addButtonAction;
@@ -47,7 +42,7 @@ implements Disposable{
     private ButtonListenerSupport support;
     private ButtonEvent buttonEvent;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private SelectionHandler selectionHandler;
 
@@ -55,18 +50,18 @@ implements Disposable{
         super(activity);
         initModels();
         initEventHandling();
-        buttonEvent = new ButtonEvent(ButtonEvent.OK_BUTTON);
-
-        headerInfo = new HeaderInfo("Aktivität hinzufügen", "Hier können Sie Aktivitäten " +
-                "zum markierten Kurs hinzufügen!",
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"),
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
     }
 
     //**************************************************************************
     //Initialisieren der Objekte
     //**************************************************************************
-    public void initModels() {
+    private void initModels() {
+        buttonEvent = new ButtonEvent(ButtonEvent.OK_BUTTON);
+
+        headerInfo = new CWHeaderInfo("Aktivität hinzufügen", "Hier können Sie Aktivitäten " +
+                "zum markierten Kurs hinzufügen!",
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"),
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
         //Anlegen der Aktionen, für die Buttons
         addButtonAction = new AddAction("Hinzufügen");
         cancelButtonAction = new CancelButtonAction("Schließen");
@@ -74,6 +69,17 @@ implements Disposable{
         support = new ButtonListenerSupport();
     }
     //**************************************************************************
+
+    private void initEventHandling() {
+        activitySelection.addValueChangeListener(selectionHandler = new SelectionHandler());
+        updateActionEnablement();
+    }
+
+    public void dispose() {
+        activitySelection.removeValueChangeListener(selectionHandler);
+        activitySelection.release();
+        release();
+    }
 
     //**************************************************************************
     //Methode, die ein CourseTableModel erzeugt.
@@ -83,12 +89,6 @@ implements Disposable{
         return new ActivityTableModel(activitySelection);
     }
     //**************************************************************************
-
-
-    private void initEventHandling() {
-        activitySelection.addValueChangeListener(selectionHandler = new SelectionHandler());
-        updateActionEnablement();
-    }
 
     private class SelectionHandler implements PropertyChangeListener{
 
@@ -100,10 +100,6 @@ implements Disposable{
     private void updateActionEnablement() {
         boolean hasSelection = activitySelection.hasSelection();
         addButtonAction.setEnabled(hasSelection);
-    }
-
-    public void dispose() {
-        activitySelection.removeValueChangeListener(selectionHandler);
     }
 
     //**************************************************************************
@@ -234,7 +230,7 @@ implements Disposable{
         this.activityItem = activityItem;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
     //**************************************************************************

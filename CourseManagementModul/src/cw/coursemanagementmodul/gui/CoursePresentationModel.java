@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
@@ -10,8 +5,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -31,9 +25,10 @@ import java.util.List;
 
 /**
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class CoursePresentationModel implements Disposable{
+public class CoursePresentationModel
+{
     //Definieren der Objekte in der oberen Leiste
     private Action newButtonAction;
     private Action editButtonAction;
@@ -47,23 +42,23 @@ public class CoursePresentationModel implements Disposable{
 
     private SelectionHandler selectionHandler;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     
     public CoursePresentationModel() {
         initModels();
         initEventHandling();
-
-        headerInfo = new HeaderInfo(
-                "Kurs",
-                "Sie befinden sich im Kursverwaltungsbereich. Hier können Sie Kurse anlegen",
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
     }
     
     //**************************************************************************
     //Initialisieren der Objekte
     //**************************************************************************
     public void initModels() {
+        headerInfo = new CWHeaderInfo(
+                "Kurs",
+                "Sie befinden sich im Kursverwaltungsbereich. Hier können Sie Kurse anlegen",
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
+        
         //Anlegen der Aktionen, für die Buttons
         newButtonAction = new NewAction("Neu");
         editButtonAction = new EditAction("Bearbeiten");
@@ -71,10 +66,19 @@ public class CoursePresentationModel implements Disposable{
         detailButtonAction = new DetailAction("Detailansicht");
         
         courseSelection = new SelectionInList<Course>(CourseManager.getInstance().getAll());
-        updateActionEnablement();
     }
     //**************************************************************************
-    
+
+    private void initEventHandling() {
+        courseSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
+        updateActionEnablement();
+    }
+
+    public void dispose() {
+        courseSelection.removeValueChangeListener(selectionHandler);
+        courseSelection.release();
+    }
+
     //**************************************************************************
     //Methode, die ein CourseTableModel erzeugt.
     //Die private Klasse befindet sich in der gleichen Datei
@@ -84,16 +88,6 @@ public class CoursePresentationModel implements Disposable{
     }
     //**************************************************************************
      
-    
-    private void initEventHandling() {
-        courseSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
-        updateActionEnablement();
-    }
-
-    public void dispose() {
-        courseSelection.removeValueChangeListener(selectionHandler);
-    }
-
     private class SelectionHandler implements PropertyChangeListener{
         public void propertyChange(PropertyChangeEvent evt) {
                 updateActionEnablement();
@@ -142,7 +136,7 @@ public class CoursePresentationModel implements Disposable{
                 }
               }
             });
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
         }
     }
     //**************************************************************************
@@ -226,7 +220,7 @@ public class CoursePresentationModel implements Disposable{
 
         public void actionPerformed(ActionEvent e) {
             GUIManager.getInstance().lockMenu();
-            GUIManager.changeView(new CourseDetailView(new CourseDetailPresentationModel(courseSelection.getSelection())).buildPanel(), true);
+            GUIManager.changeView(new CourseDetailView(new CourseDetailPresentationModel(courseSelection.getSelection())), true);
         }
       }
     //**************************************************************************
@@ -353,13 +347,13 @@ public class CoursePresentationModel implements Disposable{
                 }
             }
         });
-        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.changeView(editView, true);
         GUIManager.setLoadingScreenVisible(false);
 
     }
     //**************************************************************************
 
-    public HeaderInfo getHeaderInfo(){
+    public CWHeaderInfo getHeaderInfo(){
         return headerInfo;
     }
 }

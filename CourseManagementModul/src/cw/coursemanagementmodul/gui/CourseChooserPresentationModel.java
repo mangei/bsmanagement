@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
@@ -16,8 +11,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.Component;
 import java.awt.Font;
@@ -49,7 +43,8 @@ import java.util.Date;
  *
  * @author André Salmhofer
  */
-public class CourseChooserPresentationModel implements Disposable{
+public class CourseChooserPresentationModel
+{
     
     //Definieren der Objekte in der oberen Leiste
     private Action addButtonAction;
@@ -76,27 +71,28 @@ public class CourseChooserPresentationModel implements Disposable{
     private ValueModel bisVM;
     private ValueModel priceVM;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private SelectionHandler selectionHandler;
     
     public CourseChooserPresentationModel(Course course) {
         initModels();
         initEventHandling();
-        buttonEvent = new ButtonEvent(ButtonEvent.OK_BUTTON);
-
-        headerInfo = new HeaderInfo(
-                "Alle Ferienkurse",
-                "<html>Sie befinden sich im Kurs-Auswahlbereich.<br/>Hier können Sie dem Kursteilnehmer" +
-                " einen Kurs mit beliebig vielen Aktivitäten und Gegenständen zuweisen!</html>",
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
     }
     
     //**************************************************************************
     //Initialisieren der Objekte
     //**************************************************************************
     public void initModels() {
+        buttonEvent = new ButtonEvent(ButtonEvent.OK_BUTTON);
+
+        headerInfo = new CWHeaderInfo(
+                "Alle Ferienkurse",
+                "<html>Sie befinden sich im Kurs-Auswahlbereich.<br/>Hier können Sie dem Kursteilnehmer" +
+                " einen Kurs mit beliebig vielen Aktivitäten und Gegenständen zuweisen!</html>",
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
+
         //Anlegen der Aktionen, für die Buttons
         addButtonAction = new AddAction("Hinzufügen");
         cancelButtonAction = new CancelButtonAction("Schließen");
@@ -129,6 +125,18 @@ public class CourseChooserPresentationModel implements Disposable{
         }
     }
     //**************************************************************************
+
+    private void initEventHandling() {
+        courseSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
+
+        updateCourseLabels();
+        updateActionEnablement();
+    }
+
+    public void dispose() {
+        courseSelection.removeValueChangeListener(selectionHandler);
+        courseSelection.release();
+    }
     
     //**************************************************************************
     //Methode, die ein CourseTableModel erzeugt.
@@ -139,13 +147,6 @@ public class CourseChooserPresentationModel implements Disposable{
     }
     //**************************************************************************
      
-    
-    private void initEventHandling() {
-        courseSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
-        
-        updateCourseLabels();
-        updateActionEnablement();
-    }
 
     private class SelectionHandler implements PropertyChangeListener{
         public void propertyChange(PropertyChangeEvent evt) {
@@ -172,10 +173,6 @@ public class CourseChooserPresentationModel implements Disposable{
     private void updateActionEnablement() {
         boolean hasSelection = courseSelection.hasSelection();
         addButtonAction.setEnabled(hasSelection);
-    }
-
-    public void dispose() {
-        courseSelection.removeValueChangeListener(selectionHandler);
     }
     
     //**************************************************************************
@@ -402,7 +399,7 @@ public class CourseChooserPresentationModel implements Disposable{
         return subjectModel;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 }

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.coursemanagementmodul.gui;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
@@ -9,8 +5,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -40,10 +35,11 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class CoursePostingPresentationModel extends PresentationModel<CoursePosting>
-implements Disposable{
+public class CoursePostingPresentationModel
+        extends PresentationModel<CoursePosting>
+{
     
     //Definieren der Objekte in der oberen Leiste
     private Action postingAction;
@@ -59,7 +55,7 @@ implements Disposable{
 
     private PresentationModel<Posting> postingPresentationModel;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private Course selectedCourse;
     private boolean isEchtlauf = false;
@@ -76,17 +72,17 @@ implements Disposable{
         super(coursePosting);
         initModels();
         initEventHandling();
-        headerInfo = new HeaderInfo(
-                "Kursbuchungen",
-                "Sie befinden sich im Kursbuchungsbereich. Hier können Sie Kursbuchungen tätigen",
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/accounting.png"),
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/accounting.png"));
     }
 
     //**************************************************************************
     //Initialisieren der Objekte
     //**************************************************************************
     public void initModels() {
+        headerInfo = new CWHeaderInfo(
+                "Kursbuchungen",
+                "Sie befinden sich im Kursbuchungsbereich. Hier können Sie Kursbuchungen tätigen",
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/accounting.png"),
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/accounting.png"));
         //Anlegen der Aktionen, für die Buttons
         postingAction = new PostingAction("Buchen");
         normalRadioButtonAction = new NormalRadioButtonAction("Echtlauf");
@@ -108,6 +104,21 @@ implements Disposable{
         //----------------------------------------------------------------------
     }
     //**************************************************************************
+
+
+    private void initEventHandling() {
+        courseSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
+        updateCourseLabels();
+        updateActionEnablement();
+    }
+
+    public void dispose() {
+        courseSelection.removeValueChangeListener(selectionHandler);
+        courseSelection.removeValueChangeListener(intervallHandler);
+        coursePartSelection.release();
+        courseSelection.release();
+        release();
+    }
 
     private void updateCourseLabels(){
         if(courseSelection.hasSelection()){
@@ -138,17 +149,6 @@ implements Disposable{
     }
     //**************************************************************************
 
-    private void initEventHandling() {
-        courseSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
-        updateCourseLabels();
-        updateActionEnablement();
-    }
-
-    public void dispose() {
-        courseSelection.removeValueChangeListener(selectionHandler);
-        courseSelection.removeValueChangeListener(intervallHandler);
-        release();
-    }
 
     private class SelectionHandler implements PropertyChangeListener{
         public void propertyChange(PropertyChangeEvent evt) {
@@ -188,7 +188,7 @@ implements Disposable{
             else{
                 GUIManager.getInstance().lockMenu();
                 GUIManager.changeView(new TestRunView(new TestRunPresentationModel(
-                        coursePartSelection, selectedCourse)).buildPanel(), true);
+                        coursePartSelection, selectedCourse)), true);
             }
         }
 
@@ -242,7 +242,7 @@ implements Disposable{
 
         public void actionPerformed(ActionEvent e) {
             GUIManager.getInstance().lockMenu();
-            GUIManager.changeView(new PostingRunsView(new PostingRunsPresentationModel()).buildPanel(), true);
+            GUIManager.changeView(new PostingRunsView(new PostingRunsPresentationModel()), true);
         }
     }
     
@@ -405,7 +405,7 @@ implements Disposable{
         return postingPresentationModel;
     }
     
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

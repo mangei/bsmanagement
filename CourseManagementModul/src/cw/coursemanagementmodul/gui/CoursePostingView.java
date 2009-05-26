@@ -1,19 +1,19 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.toedter.calendar.JDateChooser;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWDateChooser;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.boardingschoolmanagement.gui.component.CWRadioButton;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.customermanagementmodul.pojo.Posting;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -24,83 +24,68 @@ import java.text.Format;
 import java.text.NumberFormat;
 import java.util.Date;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 /**
  *
  * @author André Salmhofer
  */
-public class CoursePostingView implements Disposable{
+public class CoursePostingView extends CWView
+{
     
     private CoursePostingPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     
     //Tabelle zur Darstellung der angelegten Kurse
-    private JXTable coursePartTable;
-    private JComboBox courseComboBox;
+    private CWTable coursePartTable;
+    private CWComboBox courseComboBox;
     private ButtonGroup buttonGroup;
 
-    private JRadioButton normal;
-    private JRadioButton test;
+    private CWRadioButton normal;
+    private CWRadioButton test;
 
-    private JDateChooser accountingDate;
+    private CWDateChooser accountingDate;
 
-    private JLabel accountingDateLabel;
+    private CWLabel accountingDateLabel;
 
-    private JButton accountingButton;
-    private JButton postingRunsButton;
+    private CWButton accountingButton;
+    private CWButton postingRunsButton;
 
-    private JLabel courseLabel;
+    private CWLabel courseLabel;
 
-    private JLabel courseName;
-    private JLabel beginDate;
-    private JLabel endDate;
-    private JLabel price;
+    private CWLabel courseName;
+    private CWLabel beginDate;
+    private CWLabel endDate;
+    private CWLabel price;
 
-    private JLabel vCourseName;
-    private JLabel vBeginDate;
-    private JLabel vEndDate;
-    private JLabel vPrice;
+    private CWLabel vCourseName;
+    private CWLabel vBeginDate;
+    private CWLabel vEndDate;
+    private CWLabel vPrice;
     //********************************************
 
-    private JPanel detailPanel;
-
-    private JViewPanel panel;
+    private CWPanel detailPanel;
 
     private Format dateFormat;
     private Format currencyFormat;
 
     public CoursePostingView(CoursePostingPresentationModel model) {
         this.model = model;
-        dateFormat = DateFormat.getDateInstance();
-        currencyFormat = NumberFormat.getCurrencyInstance();
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
-    private void initEventHandling() {
-        detailPanel.setVisible(false);
-        model.getCourseSelection().addValueChangeListener(new PropertyChangeListener() {
-
-            public void propertyChange(PropertyChangeEvent evt) {
-                if(model.getCourseSelection().isSelectionEmpty()){
-                    detailPanel.setVisible(false);
-                }
-                else{
-                    detailPanel.setVisible(true);
-                }
-            }
-        });
-    }
 
     //******************************************************************
     //In dieser Methode werden alle oben definierten Objekte instanziert
     //******************************************************************
-    public void initComponents(){
+    private void initComponents(){
+        dateFormat = DateFormat.getDateInstance();
+        currencyFormat = NumberFormat.getCurrencyInstance();
+
         coursePartTable = CWComponentFactory.createTable("Keine Kursteilnehmer ausgewählt!");
         coursePartTable.setColumnControlVisible(true);
         coursePartTable.setAutoCreateRowSorter(true);
@@ -110,13 +95,13 @@ public class CoursePostingView implements Disposable{
         coursePartTable.setModel(model.createCoursePartTableModel(model.getCoursePartSelection()));
         coursePartTable.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getCoursePartSelection().getSelectionIndexHolder(),
                         coursePartTable)));
 
         courseComboBox = CWComponentFactory.createComboBox(model.getCourseSelection());
         
-        courseLabel = new JLabel("Kurs:");//CWComponentFactory.createLabel("Kurs:");
+        courseLabel = CWComponentFactory.createLabel("Kurs:");
 
         normal = CWComponentFactory.createRadioButton(model.getNormalRadioButtonAction());
         
@@ -178,17 +163,31 @@ public class CoursePostingView implements Disposable{
                 .addComponent(vCourseName)
                 .addComponent(vEndDate)
                 .addComponent(vPrice);
-
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
     }
     //**************************************************************************
 
+    private void initEventHandling() {
+        detailPanel.setVisible(false);
+        model.getCourseSelection().addValueChangeListener(new PropertyChangeListener() {
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                if(model.getCourseSelection().isSelectionEmpty()){
+                    detailPanel.setVisible(false);
+                }
+                else{
+                    detailPanel.setVisible(true);
+                }
+            }
+        });
+    }
 
     //**************************************************************************
     //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
     //**************************************************************************
-    public JPanel buildPanel(){
-        initComponents();
+    private void buildView(){
+
+        this.setHeaderInfo(model.getHeaderInfo());
+
         JPanel coursePartPanel = CWComponentFactory.createPanel();
         detailPanel = CWComponentFactory.createPanel();
 
@@ -199,10 +198,9 @@ public class CoursePostingView implements Disposable{
         FormLayout detailLayout = new FormLayout("pref, 4dlu, pref, 10dlu, pref, 4dlu, pref",
                 "pref, 5dlu, pref, 5dlu, pref");
 
-        panel.getButtonPanel().add(accountingButton);
-        panel.getButtonPanel().add(postingRunsButton);
+        this.getButtonPanel().add(accountingButton);
+        this.getButtonPanel().add(postingRunsButton);
 
-        panel.getContentPanel().setLayout(layout);
         coursePartPanel.setLayout(panelLayout);
 
         detailPanel.setLayout(detailLayout);
@@ -221,7 +219,7 @@ public class CoursePostingView implements Disposable{
         
         coursePartPanel.add(new JScrollPane(coursePartTable), cc.xy(1, 1));
 
-        PanelBuilder panelBuilder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder panelBuilder = new PanelBuilder(layout, this.getContentPanel());
 
         panelBuilder.addSeparator("<html><b>Zu buchende Kurse</b></html>", cc.xyw(1, 1, 5));
         panelBuilder.add(courseLabel, cc.xy(1, 3));
@@ -243,16 +241,12 @@ public class CoursePostingView implements Disposable{
         panelBuilder.add(accountingDateLabel, cc.xy(1, 11));
         panelBuilder.add(accountingDate, cc.xy(3, 11));
 
-        panel.setOpaque(false);
+        this.setOpaque(false);
         coursePartPanel.setOpaque(false);
-
-        initEventHandling();
-        panel.addDisposableListener(this);
-        return panel;
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

@@ -1,15 +1,9 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -26,7 +20,8 @@ import java.text.DecimalFormat;
  *
  * @author André Salmhofer
  */
-public class CourseDetailPresentationModel implements Disposable{
+public class CourseDetailPresentationModel
+{
     //Definieren der Objekte in der oberen Leiste
     private Action cancelAction;
     private Action printAction;
@@ -35,7 +30,7 @@ public class CourseDetailPresentationModel implements Disposable{
     //Liste der Kurse
     private SelectionInList<CourseParticipant> coursePartSelection;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     //**********************************************
     
     private Course selectedCourse;
@@ -44,26 +39,34 @@ public class CourseDetailPresentationModel implements Disposable{
         this.selectedCourse = selectedCourse;
         initModels();
         initEventHandling();
-
-        headerInfo = new HeaderInfo(
-                "Kurs bearbeiten",
-                "Sie befinden sich im Kurs - Kursteilnehmer. Hier sehen Sie alle Kursteilnehmer des Kurses " + selectedCourse.getName() + "!",
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
     }
     
     //**************************************************************************
     //Initialisieren der Objekte
     //**************************************************************************
     public void initModels() {
+        headerInfo = new CWHeaderInfo(
+                "Kurs bearbeiten",
+                "Sie befinden sich im Kurs - Kursteilnehmer. Hier sehen Sie alle Kursteilnehmer des Kurses " + selectedCourse.getName() + "!",
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
+
         //Anlegen der Aktionen, für die Buttons
         cancelAction = new CancelAction("Zurück");
         printAction = new PrintAction("Drucken");
         coursePartSelection = new SelectionInList<CourseParticipant>(CourseParticipantManager.getInstance().getAll(selectedCourse));
-        updateActionEnablement();
+        
     }
     //**************************************************************************
-    
+
+    private void initEventHandling() {
+        updateActionEnablement();
+    }
+
+    public void dispose() {
+        coursePartSelection.release();
+    }
+
     //**************************************************************************
     //Methode, die ein CourseTableModel erzeugt.
     //Die private Klasse befindet sich in der gleichen Datei
@@ -73,14 +76,6 @@ public class CourseDetailPresentationModel implements Disposable{
     }
     //**************************************************************************
      
-    
-    private void initEventHandling() {
-    }
-
-    public void dispose() {
-
-    }
-    
     //**************************************************************************
     //Klasse zum Beenden des Eingabeformulars. Wechselt anschließend
     //in die letzte View
@@ -108,7 +103,7 @@ public class CourseDetailPresentationModel implements Disposable{
         public void actionPerformed(ActionEvent e){
             GUIManager.changeView(new PrintCourseParticipantView(
                     new PrintCourseParticipantPresentationModel(coursePartSelection.getList(),
-                    new HeaderInfo("Kursteilnehmerliste drucken"), selectedCourse)).buildPanel(), true);
+                    new CWHeaderInfo("Kursteilnehmerliste drucken"), selectedCourse)), true);
         }
         
         private PrintAction(String string){
@@ -224,7 +219,7 @@ public class CourseDetailPresentationModel implements Disposable{
         return selectedCourse;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
@@ -10,8 +5,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -27,14 +21,14 @@ import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.manager.ActivityManager;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
 import java.text.DecimalFormat;
-import java.text.FieldPosition;
 import java.util.List;
 
 /**
  *
- * @author André Salmhofer
+ * @author André Salmhofer (CreativeWorkers)
  */
-public class ActivityPresentationModel implements Disposable{
+public class ActivityPresentationModel
+{
     //Manager, der verschieden Methoden, wie beispielsweise
     //New, Edit, Delete enthalten
     //*********************************************************************************
@@ -49,35 +43,42 @@ public class ActivityPresentationModel implements Disposable{
     private SelectionInList<Activity> activitySelection;
     //**********************************************
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     private SelectionHandler selectionHandler;
     
     public ActivityPresentationModel() {
         initModels();
         initEventHandling();
-
-        headerInfo = new HeaderInfo(
-                "Aktivität",
-                "Sie befinden sich im Aktivitätsbereich. Hier können Sie Aktivitäten anlegen",
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"),
-                CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
     }
     
     //**************************************************************************
     //Initialisieren der Objekte
     //**************************************************************************
-    public void initModels() {
+    private void initModels() {
+        headerInfo = new CWHeaderInfo(
+                "Aktivität",
+                "Sie befinden sich im Aktivitätsbereich. Hier können Sie Aktivitäten anlegen",
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"),
+                CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
         //Anlegen der Aktionen, für die Buttons
         newButtonAction = new NewAction("Neu");
         editButtonAction = new EditAction("Bearbeiten");
         deleteButtonAction = new DeleteAction("Löschen");
         
         activitySelection = new SelectionInList<Activity>(ActivityManager.getInstance().getAll());
-        updateActionEnablement();
     }
     //**************************************************************************
-    
+
+    private void initEventHandling() {
+        activitySelection.addValueChangeListener(selectionHandler = new SelectionHandler());
+        updateActionEnablement();
+    }
+
+    public void dispose() {
+        activitySelection.removeValueChangeListener(selectionHandler);
+    }
+
     //**************************************************************************
     //Methode, die ein CourseTableModel erzeugt.
     //Die private Klasse befindet sich in der gleichen Datei
@@ -87,12 +88,6 @@ public class ActivityPresentationModel implements Disposable{
     }
     //**************************************************************************
      
-    
-    private void initEventHandling() {
-        activitySelection.addValueChangeListener(selectionHandler = new SelectionHandler());
-        updateActionEnablement();
-    }
-
     private class SelectionHandler implements PropertyChangeListener{
 
         public void propertyChange(PropertyChangeEvent evt) {
@@ -100,9 +95,6 @@ public class ActivityPresentationModel implements Disposable{
         }
     }
 
-    public void dispose() {
-        activitySelection.removeValueChangeListener(selectionHandler);
-    }
     
     //**************************************************************************
     //Private Klasse, die Events behandelt, die das Neuanlegen
@@ -148,7 +140,7 @@ public class ActivityPresentationModel implements Disposable{
                 }
               }
             });
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
         }
     }
     //**************************************************************************
@@ -325,11 +317,11 @@ public class ActivityPresentationModel implements Disposable{
                 }
             }
         });
-        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.changeView(editView, true);
         GUIManager.setLoadingScreenVisible(false);
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 }

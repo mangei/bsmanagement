@@ -12,7 +12,6 @@ import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
@@ -34,8 +33,9 @@ import javax.swing.Action;
  *
  * @author André Salmhofer
  */
-public class CourseParticipantForPostingPresentationModel extends PresentationModel<CourseParticipant>
-implements Disposable{
+public class CourseParticipantForPostingPresentationModel
+        extends PresentationModel<CourseParticipant>
+{
     //Instanz eines Kurses
     private CourseParticipant coursePart;
     //Variable, die feststellt ob die Daten gespeichert sind oder nicht
@@ -48,8 +48,8 @@ implements Disposable{
 
     private ButtonListenerSupport support;
 
-    Posting posting;
-    SelectionInList<CoursePosting> coursePostingList;
+    private Posting posting;
+    private SelectionInList<CoursePosting> coursePostingList;
 
     private EditPostingPresentationModel postingModel;
 
@@ -69,6 +69,25 @@ implements Disposable{
     }
     //**************************************************************************
 
+
+    //**************************************************************************
+    //Initialisieren der Objekte
+    //**************************************************************************
+    public void initModels() {
+        posting = new Posting();
+        posting.setCustomer(coursePart.getCustomer());
+
+        support = new ButtonListenerSupport();
+
+        courseAdditionSelection = new SelectionInList<CourseAddition>(coursePart.getCourseList());
+
+        activitySelection = new SelectionInList<Activity>();
+        subjectSelection = new SelectionInList<Subject>();
+
+        vorschlagAction = new VorschlagAction("Vorschlag");
+    }
+    //**************************************************************************
+
     public void initEventHandling() {
         courseAdditionSelection.addValueChangeListener(selectionHandler = new SelectionHandler());
         updateCourseModels();
@@ -78,6 +97,9 @@ implements Disposable{
     public void dispose() {
         courseAdditionSelection.removeValueChangeListener(selectionHandler);
         postingModel.dispose();
+        coursePostingList.release();
+        activitySelection.release();
+        subjectSelection.release();
         release();
     }
 
@@ -101,25 +123,6 @@ implements Disposable{
             vorschlagAction.setEnabled(false);
         }
     }
-
-    //**************************************************************************
-    //Initialisieren der Objekte
-    //**************************************************************************
-    public void initModels() {
-        posting = new Posting();
-        posting.setCustomer(coursePart.getCustomer());
-
-        support = new ButtonListenerSupport();
-
-        courseAdditionSelection = new SelectionInList<CourseAddition>(coursePart.getCourseList());
-        
-        activitySelection = new SelectionInList<Activity>();
-        subjectSelection = new SelectionInList<Subject>();
-
-        vorschlagAction = new VorschlagAction("Vorschlag");
-        updateActionEnablement();
-    }
-    //**************************************************************************
 
     private void updateActionEnablement() {
     }
