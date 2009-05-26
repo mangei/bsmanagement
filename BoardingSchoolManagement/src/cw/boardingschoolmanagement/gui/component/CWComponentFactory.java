@@ -86,11 +86,17 @@ public class CWComponentFactory {
         }
 
         public CWComponentContainer addComponent(JComponent comp) {
+            if(comp == null) {
+                throw new NullPointerException("comp is null");
+            }
             components.add(comp);
             return this;
         }
 
         public JComponent addComponentAndReturn(JComponent comp) {
+            if(comp == null) {
+                throw new NullPointerException("comp is null");
+            }
             components.add(comp);
             return comp;
         }
