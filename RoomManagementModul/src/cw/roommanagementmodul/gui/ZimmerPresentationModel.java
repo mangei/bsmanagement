@@ -216,6 +216,8 @@ public class ZimmerPresentationModel implements Disposable{
 
         public void actionPerformed(ActionEvent e) {
             Zimmer z = zimmerSelection.getSelection();
+            zimmerManager.refresh(z);
+            System.out.println(z.getBewohnerList().size());
             if (z.getBewohnerList() == null || z.getBewohnerList().size() == 0) {
                 zimmerManager.delete(z);
                 zimmerSelection.setList(zimmerManager.getAll());

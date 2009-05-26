@@ -40,6 +40,9 @@ public class ZimmerManager extends AbstractPOJOManager<Zimmer> {
         return ((Long) HibernateUtil.getEntityManager().createQuery("SELECT COUNT(*) FROM Zimmer").getResultList().iterator().next()).intValue();
     }
 
+    public void refresh(Zimmer z){
+        HibernateUtil.getEntityManager().refresh(z);
+    }
 
 
     

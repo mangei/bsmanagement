@@ -551,6 +551,7 @@ public class BereichPresentationModel implements Disposable{
 
         public void actionPerformed(ActionEvent e) {
             Zimmer z = selectedZimmer;
+             zimmerManager.refresh(z);
             if (z.getBewohnerList() == null || z.getBewohnerList().size() == 0) {
                 DefaultMutableTreeNode bereichNode = searchTreeNode(treeModel, z.getBereich());
                 Enumeration children = bereichNode.children();
