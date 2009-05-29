@@ -7,9 +7,9 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -57,7 +57,7 @@ public class ZimmerView implements Disposable {
         tZimmer = CWComponentFactory.createTable(model.createZimmerTableModel(model.getZimmerSelection()), "keine Zimmer vorhanden", zimmerTableStateName);
 
 
-        tZimmer.setSelectionModel(new SingleListSelectionAdapter(new JXTableSelectionConverter(
+        tZimmer.setSelectionModel(new SingleListSelectionAdapter(new CWTableSelectionConverter(
                 model.getZimmerSelection().getSelectionIndexHolder(),
                 tZimmer)));
 

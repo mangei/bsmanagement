@@ -7,9 +7,9 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.roommanagementmodul.component.DateTimeTableCellRenderer;
 import java.awt.BorderLayout;
@@ -53,7 +53,7 @@ public class GebZuordnunglBewohnerView implements Disposable{
         tZuordnung = CWComponentFactory.createTable(model.createZuordnungTableModel(model.getGebuehrZuordnungSelection()), "keine Gebühr Zuordnungen vorhanden",zuordnungenTableStateName);
 
 
-        tZuordnung.setSelectionModel(new SingleListSelectionAdapter(new JXTableSelectionConverter(
+        tZuordnung.setSelectionModel(new SingleListSelectionAdapter(new CWTableSelectionConverter(
                 model.getGebuehrZuordnungSelection().getSelectionIndexHolder(),
                 tZuordnung)));
 

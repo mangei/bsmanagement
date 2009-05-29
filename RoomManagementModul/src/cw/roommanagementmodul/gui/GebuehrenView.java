@@ -7,9 +7,9 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -55,7 +55,7 @@ public class GebuehrenView implements Disposable{
          String gebuehrenTableStateName = "cw.roommanagementmodul.GebuehrenView.gebuehrenTableState";
         tGebuehr = CWComponentFactory.createTable(model.createGebuehrenTableModel(model.getGebuehrenSelection()), "keine Gebühren vorhanden",gebuehrenTableStateName);
 
-        tGebuehr.setSelectionModel(new SingleListSelectionAdapter(new JXTableSelectionConverter(
+        tGebuehr.setSelectionModel(new SingleListSelectionAdapter(new CWTableSelectionConverter(
                 model.getGebuehrenSelection().getSelectionIndexHolder(),
                 tGebuehr)));
 

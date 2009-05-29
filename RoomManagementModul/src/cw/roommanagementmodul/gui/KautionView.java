@@ -8,7 +8,7 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Disposable;

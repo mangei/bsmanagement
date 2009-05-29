@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
@@ -11,8 +7,7 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -32,7 +27,9 @@ import java.awt.event.ItemEvent;
  *
  * @author Dominik
  */
-public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bewohner> implements Disposable {
+public class BewohnerGUIExtentionPresentationModel 
+        extends PresentationModel<Bewohner>
+{
 
     private Bewohner bewohner;
     private ButtonListenerSupport support;
@@ -45,7 +42,7 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
     private SelectionInList<Bereich> kautionList;
     private int checkBoxState;
     private ValueModel checkBoxModel;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private CheckBoxListener checkBoxListener;
     private BereichPropertyListener bereichPropertyListener;
     private ZimmerPropertyListener zimmerPropertyListener;
@@ -61,14 +58,16 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
         bereichManager = BereichManager.getInstance();
         kautionManager= KautionManager.getInstance();
         kautionListener= new KautionStatusItemListener();
-        initModels();
         this.unsaved = unsaved;
 
-        headerInfo = new HeaderInfo("Zimmer Zuweisung", "Hier können Sie einem Kunden ein Zimmer zuweisen und machen ihn damit zu einem Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"));
+        initModels();
+        initEventHandling();
 
     }
 
     private void initModels() {
+        headerInfo = new CWHeaderInfo("Zimmer Zuweisung", "Hier können Sie einem Kunden ein Zimmer zuweisen und machen ihn damit zu einem Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"));
+
         checkBoxModel = new ValueHolder();
         checkBoxListener= new CheckBoxListener();
         checkBoxModel.addValueChangeListener(checkBoxListener);
@@ -89,7 +88,7 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
         kList.add("Eingezahlt");
         kList.add("Zurück gezahlt");
         kList.add("Eingezogen");
-        setKautionStadi((SelectionInList<String>) new SelectionInList(kList));
+        kautionStadi = (SelectionInList<String>) new SelectionInList(kList);
 
         if (getBewohner().getZimmer() != null) {
             bereichList.setSelection(getBewohner().getZimmer().getBereich());
@@ -103,9 +102,11 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
         } else {
             zimmerList.setList(zimmerManager.getAll());
         }
+    }
+
+    private void initEventHandling() {
         zimmerPropertyListener = new ZimmerPropertyListener();
         zimmerList.addValueChangeListener(zimmerPropertyListener);
-
 
         getBufferedModel(Bewohner.PROPERTYNAME_ZIMMER).addValueChangeListener(new SaveListener());
         getBufferedModel(Bewohner.PROPERTYNAME_VON).addValueChangeListener(new SaveListener());
@@ -118,6 +119,17 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
         kautionList.addValueChangeListener(saveListener);
 
         updateActionEnablement();
+    }
+
+    public void dispose() {
+        checkBoxModel.removeValueChangeListener(this.checkBoxListener);
+        bereichList.removeValueChangeListener(bereichPropertyListener);
+        zimmerList.removeValueChangeListener(this.zimmerPropertyListener);
+        zimmerList.removeValueChangeListener(this.saveListener);
+        checkBoxModel.removeValueChangeListener(this.saveListener);
+        kautionList.removeValueChangeListener(this.saveListener);
+        release();
+
     }
 
     private List<Bereich> extractLeafBereich(List<Bereich> l) {
@@ -161,24 +173,10 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
     }
 
     /**
-     * @param unsaved the unsaved to set
-     */
-    public void setUnsaved(ValueModel unsaved) {
-        this.unsaved = unsaved;
-    }
-
-    /**
      * @return the bewohner
      */
     public Bewohner getBewohner() {
         return bewohner;
-    }
-
-    /**
-     * @param bewohner the bewohner to set
-     */
-    public void setBewohner(Bewohner bewohner) {
-        this.bewohner = bewohner;
     }
 
     /**
@@ -189,13 +187,6 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
     }
 
     /**
-     * @param checkBoxState the checkBoxState to set
-     */
-    public void setCheckBoxState(int checkBoxState) {
-        this.checkBoxState = checkBoxState;
-    }
-
-    /**
      * @return the checkBoxModel
      */
     public ValueModel getCheckBoxModel() {
@@ -203,35 +194,10 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
     }
 
     /**
-     * @param checkBoxModel the checkBoxModel to set
-     */
-    public void setCheckBoxModel(ValueModel checkBoxModel) {
-        this.checkBoxModel = checkBoxModel;
-    }
-
-    /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
-    }
-
-    public void dispose() {
-        checkBoxModel.removeValueChangeListener(this.checkBoxListener);
-        bereichList.removeValueChangeListener(bereichPropertyListener);
-        zimmerList.removeValueChangeListener(this.zimmerPropertyListener);
-        zimmerList.removeValueChangeListener(this.saveListener);
-        checkBoxModel.removeValueChangeListener(this.saveListener);
-        kautionList.removeValueChangeListener(this.saveListener);
-        release();
-
     }
 
     /**
@@ -242,13 +208,6 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
     }
 
     /**
-     * @param kautionList the kautionList to set
-     */
-    public void setKautionList(SelectionInList<Bereich> kautionList) {
-        this.kautionList = kautionList;
-    }
-
-    /**
      * @return the kautionStadi
      */
     public SelectionInList<String> getKautionStadi() {
@@ -256,24 +215,10 @@ public class BewohnerGUIExtentionPresentationModel extends PresentationModel<Bew
     }
 
     /**
-     * @param kautionStadi the kautionStadi to set
-     */
-    public void setKautionStadi(SelectionInList<String> kautionStadi) {
-        this.kautionStadi = kautionStadi;
-    }
-
-    /**
      * @return the kautionListener
      */
     public KautionStatusItemListener getKautionListener() {
         return kautionListener;
-    }
-
-    /**
-     * @param kautionListener the kautionListener to set
-     */
-    public void setKautionListener(KautionStatusItemListener kautionListener) {
-        this.kautionListener = kautionListener;
     }
 
     public class SaveListener implements PropertyChangeListener {

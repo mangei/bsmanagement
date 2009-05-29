@@ -1,22 +1,21 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.toedter.calendar.JDateChooser;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWDateChooser;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import cw.roommanagementmodul.pojo.Bewohner;
@@ -25,27 +24,32 @@ import cw.roommanagementmodul.pojo.Bewohner;
  *
  * @author Dominik
  */
-public class EditBewohnerZimmerView {
+public class EditBewohnerZimmerView extends CWView
+{
 
     EditBewohnerZimmerPresentationModel model;
-    private JLabel lbBereich;
-    private JLabel lbZimmer;
-    private JLabel lbEinzDat;
-    private JLabel lbAuszDat;
-    private JLabel lbKaution;
-    private JLabel lbKautionStatus;
-    public JButton bSave;
-    public JButton bCancel;
-    public JButton bSaveCancel;
-    private JComboBox cbBereich;
-    private JComboBox cbZimmer;
-    private JComboBox cbKaution;
-    private JComboBox cbKautionStatus;
-    private JDateChooser dcEinzugsdatum;
-    private JDateChooser dcAuszugsdatum;
+    private CWLabel lbBereich;
+    private CWLabel lbZimmer;
+    private CWLabel lbEinzDat;
+    private CWLabel lbAuszDat;
+    private CWLabel lbKaution;
+    private CWLabel lbKautionStatus;
+    private CWButton bSave;
+    private CWButton bCancel;
+    private CWButton bSaveCancel;
+    private CWComboBox cbBereich;
+    private CWComboBox cbZimmer;
+    private CWComboBox cbKaution;
+    private CWComboBox cbKautionStatus;
+    private CWDateChooser dcEinzugsdatum;
+    private CWDateChooser dcAuszugsdatum;
 
     public EditBewohnerZimmerView(EditBewohnerZimmerPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     public void initComponents() {
@@ -66,7 +70,7 @@ public class EditBewohnerZimmerView {
         lbKaution = new JLabel("Kaution: ");
         lbKautionStatus = new JLabel("Kaution Status: ");
 
-        cbKaution = new JComboBox(model.createKautionComboModel(model.getKautionList()));
+        cbKaution = CWComponentFactory.createComboBox(model.getKautionList());
         cbKaution.addItemListener(new ItemListener(){
 
             public void itemStateChanged(ItemEvent e) {
@@ -75,7 +79,7 @@ public class EditBewohnerZimmerView {
 
         });
 
-        cbKautionStatus = new JComboBox();
+        cbKautionStatus = CWComponentFactory.createComboBox(selectionInList);
         cbKautionStatus.addItem("Keine Kaution");
         cbKautionStatus.addItem("Nicht eingezahlt");
         cbKautionStatus.addItem("Eingezahlt");
@@ -113,20 +117,18 @@ public class EditBewohnerZimmerView {
         PropertyConnector.connectAndUpdate(model.getBufferedModel(Bewohner.PROPERTYNAME_BIS), dcAuszugsdatum, "date");
     }
 
-    public JComponent buildPanel() {
-        initComponents();
-        initEventHandling();
+    private void initEventHandling() {
+    }
 
-        JViewPanel mainPanel = new JViewPanel();
-        mainPanel.setHeaderInfo(new HeaderInfo("Bewohner: " + model.getHeaderText()));
-        JButtonPanel buttonPanel = mainPanel.getButtonPanel();
+    private void buildView() {
+        this.setHeaderInfo(new CWHeaderInfo("Bewohner: " + model.getHeaderText()));
+        CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
-        JViewPanel panel = new JViewPanel();
-        JPanel contentPanel = panel.getContentPanel();
+        JPanel panel = this.getContentPanel();
 
         //panel.setName("Zimmer");
 
@@ -151,11 +153,7 @@ public class EditBewohnerZimmerView {
         panel.add(cbKaution, cc.xy(3, 13));
         panel.add(cbKautionStatus, cc.xy(3, 15));
 
-        mainPanel.getContentPanel().add(panel, BorderLayout.CENTER);
-        return mainPanel;
-
+        this.getContentPanel().add(panel, BorderLayout.CENTER);
     }
 
-    private void initEventHandling() {
-    }
 }

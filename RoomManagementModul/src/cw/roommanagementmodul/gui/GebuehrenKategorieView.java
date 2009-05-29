@@ -6,7 +6,7 @@ package cw.roommanagementmodul.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;

@@ -75,7 +75,7 @@ public class EditKautionView implements Disposable{
         initComponents();
 
         mainPanel = new JViewPanel(model.getHeaderInfo());
-        JButtonPanel buttonPanel = mainPanel.getButtonPanel();
+        CWButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);

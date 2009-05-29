@@ -13,8 +13,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -31,7 +30,9 @@ import java.util.List;
  *
  * @author Dominik
  */
-public class EditBereichPresentationModel extends PresentationModel<Bereich> implements Disposable{
+public class EditBereichPresentationModel 
+        extends PresentationModel<Bereich>
+{
 
     private BereichManager bereichManager;
     private Action saveButtonAction;
@@ -45,7 +46,7 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> imp
     private String headerText;
     private List<Bereich> editBereichList;
     private Bereich vaterBereich;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private ButtonEnable buttonEnable;
 
     public EditBereichPresentationModel(Bereich bereich) {
@@ -57,12 +58,11 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> imp
 
     }
 
-    EditBereichPresentationModel(Bereich bereich, HeaderInfo header, Bereich vaterBereich) {
+    EditBereichPresentationModel(Bereich bereich, CWHeaderInfo header, Bereich vaterBereich) {
         super(bereich);
         this.bereich = bereich;
         this.vaterBereich = vaterBereich;
         bereichManager = BereichManager.getInstance();
-        this.headerText = header.getHeaderText();
         this.headerInfo=header;
 
         initModels();
@@ -70,7 +70,7 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> imp
     }
 
     private void initEventHandling() {
-        setUnsaved(new ValueHolder());
+        unsaved = new ValueHolder();
         buttonEnable=new ButtonEnable();
         getUnsaved().addValueChangeListener(buttonEnable);
         getUnsaved().setValue(false);
@@ -88,7 +88,7 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> imp
             checkBereichList(getBereich().getChildBereichList());
             editBereichList.remove(getBereich());
         }
-        setBereichList((SelectionInList<Bereich>) new SelectionInList(editBereichList, getModel(Bereich.PROPERTYNAME_PARENTBEREICH)));
+        bereichList = (SelectionInList<Bereich>) new SelectionInList(editBereichList, getModel(Bereich.PROPERTYNAME_PARENTBEREICH));
 
 
         support = new ButtonListenerSupport();
@@ -97,6 +97,11 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> imp
         getBufferedModel(Bereich.PROPERTYNAME_PARENTBEREICH).addValueChangeListener(new SaveListener());
     //getBufferedModel(Bereich.PROPERTYNAME_CHILDBEREICHLIST).addValueChangeListener(new SaveListener());
     //getBufferedModel(Bereich.PROPERTYNAME_ZIMMERLIST).addValueChangeListener(new SaveListener());
+    }
+
+    public void dispose() {
+        getUnsaved().removeValueChangeListener(buttonEnable);
+        release();
     }
 
     private void checkZimmerBereich(Bereich bereich) {
@@ -160,29 +165,11 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> imp
         return bereichList;
     }
 
-    public String getHeaderText() {
-        return headerText;
-    }
-
-    /**
-     * @param bereichList the bereichList to set
-     */
-    public void setBereichList(SelectionInList<Bereich> bereichList) {
-        this.bereichList = bereichList;
-    }
-
     /**
      * @return the bereich
      */
     public Bereich getBereich() {
         return bereich;
-    }
-
-    /**
-     * @param bereich the bereich to set
-     */
-    public void setBereich(Bereich bereich) {
-        this.bereich = bereich;
     }
 
     /**
@@ -193,24 +180,10 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> imp
     }
 
     /**
-     * @param vaterBereich the vaterBereich to set
-     */
-    public void setVaterBereich(Bereich vaterBereich) {
-        this.vaterBereich = vaterBereich;
-    }
-
-    /**
      * @return the unsaved
      */
     public ValueModel getUnsaved() {
         return unsaved;
-    }
-
-    /**
-     * @param unsaved the unsaved to set
-     */
-    public void setUnsaved(ValueModel unsaved) {
-        this.unsaved = unsaved;
     }
 
     /**
@@ -221,30 +194,12 @@ public class EditBereichPresentationModel extends PresentationModel<Bereich> imp
     }
 
     /**
-     * @param bereichManager the bereichManager to set
-     */
-    public void setBereichManager(BereichManager bereichManager) {
-        this.bereichManager = bereichManager;
-    }
-
-    /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
-    }
-
-    public void dispose() {
-        getUnsaved().removeValueChangeListener(buttonEnable);
-        release();
-    }
 
     public class SaveListener implements PropertyChangeListener {
 

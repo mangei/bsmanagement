@@ -103,7 +103,7 @@ public class GebLauf implements AnnotatedClass {
         gc.setTimeInMillis(this.abrMonat);
         StringBuilder builder = new StringBuilder();
         
-        builder.append(CalendarUtil.getMonth(gc.get(Calendar.MONTH)));
+        builder.append(CalendarUtil.getMonthName(gc.get(Calendar.MONTH)));
         builder.append(" ");
         builder.append(gc.get(Calendar.YEAR));
 

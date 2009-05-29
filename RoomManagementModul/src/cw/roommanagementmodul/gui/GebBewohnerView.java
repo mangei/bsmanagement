@@ -6,8 +6,8 @@ package cw.roommanagementmodul.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JButton;
@@ -81,7 +81,7 @@ public class GebBewohnerView implements Disposable{
         mainPanel = new JViewPanel(model.getHeaderInfo());
         //panel.setName("Zimmer");
         
-        JButtonPanel buttonPanel = mainPanel.getButtonPanel();
+        CWButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);

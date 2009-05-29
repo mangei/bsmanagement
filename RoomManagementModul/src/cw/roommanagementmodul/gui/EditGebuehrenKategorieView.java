@@ -61,7 +61,7 @@ public class EditGebuehrenKategorieView implements Disposable{
         initComponents();
 
         JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
-        JButtonPanel buttonPanel = mainPanel.getButtonPanel();
+        CWButtonPanel buttonPanel = mainPanel.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);

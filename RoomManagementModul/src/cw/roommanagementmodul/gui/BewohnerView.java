@@ -1,48 +1,45 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.roommanagementmodul.component.DateTimeTableCellRenderer;
 import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
  *
  * @author Dominik
  */
-public class BewohnerView implements Disposable {
+public class BewohnerView extends CWView
+{
 
     private BewohnerPresentationModel model;
-    private JButton bGeb;
-    private JButton bDelete;
-    private JButton bGebZuordnung;
-    private JButton bEditBewohner;
-    private JButton bHistory;
-    private JButton bInaktive;
-    private JButton bDetail;
-    private JButton bKaution;
-    private JXTable tBewohner;
+    private CWButton bGeb;
+    private CWButton bDelete;
+    private CWButton bGebZuordnung;
+    private CWButton bEditBewohner;
+    private CWButton bHistory;
+    private CWButton bInaktive;
+    private CWButton bDetail;
+    private CWButton bKaution;
+    private CWTable tBewohner;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
 
     public BewohnerView(BewohnerPresentationModel m) {
         this.model = m;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
-
 
         bGeb = CWComponentFactory.createButton(model.getGebAction());
         bGeb.setText("Neue Gebühr");
@@ -62,7 +59,7 @@ public class BewohnerView implements Disposable {
         String bewohnerTableStateName = "cw.roommanagementmodul.BewohnerView.bewohnerTableState";
         tBewohner = CWComponentFactory.createTable(model.createBewohnerTableModel(model.getBewohnerSelection()), "keine Bewohner vorhanden", bewohnerTableStateName);
 
-        tBewohner.setSelectionModel(new SingleListSelectionAdapter(new JXTableSelectionConverter(
+        tBewohner.setSelectionModel(new SingleListSelectionAdapter(new CWTableSelectionConverter(
                 model.getBewohnerSelection().getSelectionIndexHolder(),
                 tBewohner)));
 
@@ -76,28 +73,24 @@ public class BewohnerView implements Disposable {
     }
 
     private void initEventHandling() {
-
         tBewohner.addMouseListener(model.getDoubleClickHandler());
     }
 
-    public JPanel buildPanel() {
-        initComponents();
-        initEventHandling();
+    private void buildView() {
 
-        panel = new JViewPanel(model.getHeaderInfo());
+        this.setHeaderInfo(model.getHeaderInfo());
 
-
-        panel.getButtonPanel().add(bDetail);
-        panel.getButtonPanel().add(bGebZuordnung);
-        panel.getButtonPanel().add(bGeb);
-        //panel.getButtonPanel().add(bHistory);
-        panel.getButtonPanel().add(bDelete);
-        panel.getButtonPanel().add(bKaution);
-        //panel.getButtonPanel().add(bInaktive);
+        this.getButtonPanel().add(bDetail);
+        this.getButtonPanel().add(bGebZuordnung);
+        this.getButtonPanel().add(bGeb);
+        //this.getButtonPanel().add(bHistory);
+        this.getButtonPanel().add(bDelete);
+        this.getButtonPanel().add(bKaution);
+        //this.getButtonPanel().add(bInaktive);
 
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
-        panel.getTopPanel().setLayout(layout);
+        this.getTopPanel().setLayout(layout);
         CellConstraints cc = new CellConstraints();
 
 //        ArrayListModel list = new ArrayListModel();
@@ -105,15 +98,12 @@ public class BewohnerView implements Disposable {
 //        list.add(sel);
 //
 //        panel.getTopPanel().add(new JObjectChooser(list, null), cc.xy(1, 1));
-        panel.getContentPanel().add(new JScrollPane(tBewohner), BorderLayout.CENTER);
-
-        panel.addDisposableListener(this);
-        return panel;
+        this.getContentPanel().add(new JScrollPane(tBewohner), BorderLayout.CENTER);
     }
 
+    @Override
     public void dispose() {
         tBewohner.removeMouseListener(model.getDoubleClickHandler());
-        panel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

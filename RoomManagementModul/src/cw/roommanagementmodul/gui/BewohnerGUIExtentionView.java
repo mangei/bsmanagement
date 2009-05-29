@@ -1,51 +1,50 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.toedter.calendar.JDateChooser;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
+import cw.boardingschoolmanagement.gui.component.CWCheckBox;
+import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWDateChooser;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.roommanagementmodul.pojo.Bewohner;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import javax.swing.JCheckBox;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Dominik
  */
-public class BewohnerGUIExtentionView implements Disposable {
+public class BewohnerGUIExtentionView extends CWView
+{
 
     BewohnerGUIExtentionPresentationModel model;
-    private JLabel lbBereich;
-    private JLabel lbZimmer;
-    private JLabel lbEinzDat;
-    private JLabel lbAuszDat;
-    private JLabel lbKaution;
-    private JLabel lbKautionStatus;
-    private JLabel lbBewohner;
-    private JComboBox cbBereich;
-    private JComboBox cbZimmer;
-    private JDateChooser dcEinzugsdatum;
-    private JDateChooser dcAuszugsdatum;
-    private JCheckBox boxBewohner;
+    private CWLabel lbBereich;
+    private CWLabel lbZimmer;
+    private CWLabel lbEinzDat;
+    private CWLabel lbAuszDat;
+    private CWLabel lbKaution;
+    private CWLabel lbKautionStatus;
+    private CWLabel lbBewohner;
+    private CWComboBox cbBereich;
+    private CWComboBox cbZimmer;
+    private CWDateChooser dcEinzugsdatum;
+    private CWDateChooser dcAuszugsdatum;
+    private CWCheckBox boxBewohner;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
     private ItemListener bewohnerItemListener;
-    private JComboBox cbKaution;
-    private JComboBox cbKautionStatus;
+    private CWComboBox cbKaution;
+    private CWComboBox cbKautionStatus;
 
 
     public BewohnerGUIExtentionView(BewohnerGUIExtentionPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     public void initComponents() {
@@ -133,40 +132,38 @@ public class BewohnerGUIExtentionView implements Disposable {
 
     }
 
-    public JComponent buildPanel() {
-        initComponents();
-        initEventHandling();
+    private void initEventHandling() {
+        
+    }
 
-        mainPanel = new JViewPanel();
-        mainPanel.setName("Zimmer");
+    private void buildView() {
+        
+        this.setHeaderInfo(model.getHeaderInfo());
+        this.setName("Zimmer");
 
         FormLayout layout = new FormLayout("right:pref, 4dlu, 50dlu:grow, 4dlu, right:pref, 4dlu, 50dlu:grow",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref, 4dlu, pref");
 
-        mainPanel.getContentPanel().setLayout(layout);
+        this.getContentPanel().setLayout(layout);
 
         CellConstraints cc = new CellConstraints();
         //builder.addSeparator("Allgemein:", cc.xyw(1, 1, 7));
 
-        mainPanel.getContentPanel().add(boxBewohner, cc.xy(1, 3));
-        mainPanel.getContentPanel().add(lbBereich, cc.xy(1, 5));
-        mainPanel.getContentPanel().add(lbZimmer, cc.xy(1, 7));
-        mainPanel.getContentPanel().add(lbEinzDat, cc.xy(1, 9));
-        mainPanel.getContentPanel().add(lbAuszDat, cc.xy(1, 11));
-        mainPanel.getContentPanel().add(lbKaution, cc.xy(1, 13));
-        mainPanel.getContentPanel().add(lbKautionStatus, cc.xy(1, 15));
+        JPanel contentPanel = this.getContentPanel();
+        contentPanel.add(boxBewohner, cc.xy(1, 3));
+        contentPanel.add(lbBereich, cc.xy(1, 5));
+        contentPanel.add(lbZimmer, cc.xy(1, 7));
+        contentPanel.add(lbEinzDat, cc.xy(1, 9));
+        contentPanel.add(lbAuszDat, cc.xy(1, 11));
+        contentPanel.add(lbKaution, cc.xy(1, 13));
+        contentPanel.add(lbKautionStatus, cc.xy(1, 15));
 
-        mainPanel.getContentPanel().add(cbBereich, cc.xy(3, 5));
-        mainPanel.getContentPanel().add(cbZimmer, cc.xy(3, 7));
-        mainPanel.getContentPanel().add(dcEinzugsdatum, cc.xy(3, 9));
-        mainPanel.getContentPanel().add(dcAuszugsdatum, cc.xy(3, 11));
-        mainPanel.getContentPanel().add(cbKaution, cc.xy(3, 13));
-        mainPanel.getContentPanel().add(cbKautionStatus, cc.xy(3, 15));
-
-
-        mainPanel.setHeaderInfo(model.getHeaderInfo());
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
+        contentPanel.add(cbBereich, cc.xy(3, 5));
+        contentPanel.add(cbZimmer, cc.xy(3, 7));
+        contentPanel.add(dcEinzugsdatum, cc.xy(3, 9));
+        contentPanel.add(dcAuszugsdatum, cc.xy(3, 11));
+        contentPanel.add(cbKaution, cc.xy(3, 13));
+        contentPanel.add(cbKautionStatus, cc.xy(3, 15));
 
     }
 
@@ -210,13 +207,11 @@ public class BewohnerGUIExtentionView implements Disposable {
         }
     }
 
+    @Override
     public void dispose() {
         boxBewohner.removeItemListener(bewohnerItemListener);
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }
 
-    private void initEventHandling() {
-    }
 }

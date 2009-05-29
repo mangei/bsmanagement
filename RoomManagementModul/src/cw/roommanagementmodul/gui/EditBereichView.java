@@ -1,46 +1,44 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.manager.BereichManager;
+import gui.component.JViewPanel;
 import javax.swing.JOptionPane;
 
 /**
  *
  * @author Dominik
  */
-public class EditBereichView implements Disposable{
+public class EditBereichView extends CWView
+{
 
     private EditBereichPresentationModel model;
-    private JButton bSave;
-    private JButton bCancel;
-    private JButton bSaveCancel;
-    private JLabel lName;
-    private JTextField tfName;
-    private JLabel lParentBereich;
-    private JComboBox parentComboBox;
+    private CWButton bSave;
+    private CWButton bCancel;
+    private CWButton bSaveCancel;
+    private CWLabel lName;
+    private CWTextField tfName;
+    private CWLabel lParentBereich;
+    private CWComboBox parentComboBox;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
 
     public EditBereichView(EditBereichPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -95,11 +93,12 @@ public class EditBereichView implements Disposable{
                 .addComponent(bSaveCancel);
     }
 
-    public JComponent buildPanel() {
-        initComponents();
+    private void initEventHandling() {
+    }
 
-        mainPanel = new JViewPanel(model.getHeaderInfo());
-        JButtonPanel buttonPanel = mainPanel.getButtonPanel();
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
+        CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
@@ -127,14 +126,11 @@ public class EditBereichView implements Disposable{
 //        builder.addSeparator(lBemerkung.getText(), cc.xyw(1, 29, 7));
 
 
-        mainPanel.getContentPanel().add(panel, BorderLayout.CENTER);
-
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
+        this.getContentPanel().add(panel, BorderLayout.CENTER);
     }
 
+    @Override
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
@@ -17,7 +13,9 @@ import cw.roommanagementmodul.pojo.Bewohner;
  *
  * @author Dominik
  */
-public class DetailBewohnerPresentationModel extends PresentationModel<Bewohner> {
+public class DetailBewohnerPresentationModel 
+        extends PresentationModel<Bewohner>
+{
 
     private Action backAction;
     private Bewohner bewohner;
@@ -27,14 +25,21 @@ public class DetailBewohnerPresentationModel extends PresentationModel<Bewohner>
     public DetailBewohnerPresentationModel(Bewohner bewohner, String header) {
         super(bewohner);
         this.bewohner = bewohner;
-        this.headerText=header;
+        this.headerText = header;
         initModels();
-        //this.initEventHandling();
+        initEventHandling();
     }
 
     private void initModels() {
         support = new ButtonListenerSupport();
         backAction = new BackAction();
+    }
+
+    private void initEventHandling() {
+    }
+
+    public void dispose() {
+        
     }
 
     /**

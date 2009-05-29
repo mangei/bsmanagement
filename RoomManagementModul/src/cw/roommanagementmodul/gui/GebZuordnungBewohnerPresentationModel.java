@@ -10,7 +10,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;

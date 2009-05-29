@@ -5,7 +5,7 @@
 
 package cw.roommanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import javax.swing.JButton;

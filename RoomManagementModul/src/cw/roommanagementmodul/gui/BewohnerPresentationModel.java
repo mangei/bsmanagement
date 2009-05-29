@@ -10,8 +10,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.gui.CustomerManagementPresentationModel;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
@@ -37,13 +36,13 @@ import cw.roommanagementmodul.pojo.manager.BewohnerHistoryManager;
 import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
 import cw.roommanagementmodul.pojo.manager.BewohnerManager;
 import cw.roommanagementmodul.pojo.manager.KautionManager;
-import java.util.List;
 
 /**
  *
  * @author Dominik
  */
-public class BewohnerPresentationModel implements Disposable {
+public class BewohnerPresentationModel
+{
 
     private BewohnerManager bewohnerManager;
     private String headerText;
@@ -57,7 +56,7 @@ public class BewohnerPresentationModel implements Disposable {
     private Action detailAction;
     private Action kautionAction;
     private SelectionInList<Bewohner> bewohnerSelection;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private SelectionEmptyHandler selectionEmptyHandler;
     private EditCustomerPresentationModel editCustomerModel;
     private DoubleClickHandler doubleClickHandler;
@@ -72,12 +71,11 @@ public class BewohnerPresentationModel implements Disposable {
 
     }
 
-    public BewohnerPresentationModel(BewohnerManager bewohnerManager, HeaderInfo header) {
+    public BewohnerPresentationModel(BewohnerManager bewohnerManager, CWHeaderInfo header) {
         //super(bewohnerManager);
         this.bewohnerManager = bewohnerManager;
 
         this.headerInfo = header;
-        this.headerText = header.getHeaderText();
         historyManager = BewohnerHistoryManager.getInstance();
         gebZuordnungManager = GebuehrZuordnungManager.getInstance();
         initModels();
@@ -88,7 +86,7 @@ public class BewohnerPresentationModel implements Disposable {
         doubleClickHandler = new DoubleClickHandler();
         gebAction = new GebAction();
         deleteAction = new DeleteAction();
-        setGebuehrZuordnungAction(new GebuehrZuordnungAction());
+        gebuehrZuordnungAction = new GebuehrZuordnungAction();
         historyAction = new HistoryAction();
         inaktiveAction = new InaktiveAction();
         kautionAction = new KautionAction();
@@ -111,7 +109,20 @@ public class BewohnerPresentationModel implements Disposable {
             }
         };
         bewohnerSelection = new SelectionInList<Bewohner>(getBewohnerManager().getBewohner(true));
+    }
+
+
+    private void initEventHandling() {
         updateActionEnablement();
+        selectionEmptyHandler = new SelectionEmptyHandler();
+        getBewohnerSelection().addPropertyChangeListener(
+                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
+                selectionEmptyHandler);
+    }
+
+
+    public void dispose() {
+        getBewohnerSelection().removeValueChangeListener(this.selectionEmptyHandler);
     }
 
     public TableModel createBewohnerTableModel(ListModel listModel) {
@@ -129,13 +140,6 @@ public class BewohnerPresentationModel implements Disposable {
         getGebuehrZuordnungAction().setEnabled(hasSelection);
         historyAction.setEnabled(hasSelection);
         detailAction.setEnabled(hasSelection);
-    }
-
-    private void initEventHandling() {
-        selectionEmptyHandler = new SelectionEmptyHandler();
-        getBewohnerSelection().addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                selectionEmptyHandler);
     }
 
     public SelectionInList<Bewohner> getBewohnerSelection() {
@@ -187,24 +191,10 @@ public class BewohnerPresentationModel implements Disposable {
     }
 
     /**
-     * @param gebuehrZuordnungAction the gebuehrZuordnungAction to set
-     */
-    public void setGebuehrZuordnungAction(Action gebuehrZuordnungAction) {
-        this.gebuehrZuordnungAction = gebuehrZuordnungAction;
-    }
-
-    /**
      * @return the detailAction
      */
     public Action getDetailAction() {
         return detailAction;
-    }
-
-    /**
-     * @param detailAction the detailAction to set
-     */
-    public void setDetailAction(Action detailAction) {
-        this.detailAction = detailAction;
     }
 
     /**
@@ -217,19 +207,8 @@ public class BewohnerPresentationModel implements Disposable {
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
-    }
-
-    public void dispose() {
-        getBewohnerSelection().removeValueChangeListener(this.selectionEmptyHandler);
     }
 
     private class DeleteAction
@@ -299,7 +278,7 @@ public class BewohnerPresentationModel implements Disposable {
             final InaktiveBewohnerPresentationModel model = new InaktiveBewohnerPresentationModel(getBewohnerManager(), "Inaktive Bewohner");
             final InaktiveBewohnerView inaktiveBewohnerView = new InaktiveBewohnerView(model);
 
-            GUIManager.changeView(inaktiveBewohnerView.buildPanel(), true);
+            GUIManager.changeView(inaktiveBewohnerView, true);
 
         }
     }
@@ -316,7 +295,7 @@ public class BewohnerPresentationModel implements Disposable {
             final KautionPresentationModel model = new KautionPresentationModel(KautionManager.getInstance(), new HeaderInfo("Kautionen Verwalten", "Übersicht aller vorhandenen Kautionen"));
             final KautionView kautionView = new KautionView(model);
 
-            GUIManager.changeView(kautionView.buildPanel(), true);
+            GUIManager.changeView(kautionView, true);
 
         }
     }
@@ -344,7 +323,7 @@ public class BewohnerPresentationModel implements Disposable {
                     }
                 }
             });
-            GUIManager.changeView(editBewohnerView.buildPanel(), true);
+            GUIManager.changeView(editBewohnerView, true);
 
         }
     }
@@ -377,7 +356,7 @@ public class BewohnerPresentationModel implements Disposable {
         final GebuehrZuordnung gb = new GebuehrZuordnung();
         Customer c = bewohnerSelection.getSelection().getCustomer();
         gb.setBewohner(bewohnerSelection.getSelection());
-        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new HeaderInfo("Bewohner: " + c.getSurname() + " " + c.getForename(), "Hier können Sie alle Gebühren verwalten, die zu einem Bewohner zugeordnet sind."));
+        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: " + c.getSurname() + " " + c.getForename(), "Hier können Sie alle Gebühren verwalten, die zu einem Bewohner zugeordnet sind."));
         final GebBewohnerView gebView = new GebBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -395,12 +374,12 @@ public class BewohnerPresentationModel implements Disposable {
 
             }
         });
-        GUIManager.changeView(gebView.buildPanel(), true);
+        GUIManager.changeView(gebView, true);
     }
 
     private void gebZuordnungSelectedItem(EventObject e) {
         Customer c = bewohnerSelection.getSelection().getCustomer();
-        final GebZuordnungBewohnerPresentationModel model = new GebZuordnungBewohnerPresentationModel(this.getBewohnerSelection().getSelection(), new HeaderInfo("Gebühren Übersicht: " + c.getSurname() + " " + c.getForename(), "Übersicht aller Gebühren die diesem Bewohner zugeordnet sind."));
+        final GebZuordnungBewohnerPresentationModel model = new GebZuordnungBewohnerPresentationModel(this.getBewohnerSelection().getSelection(), new CWHeaderInfo("Gebühren Übersicht: " + c.getSurname() + " " + c.getForename(), "Übersicht aller Gebühren die diesem Bewohner zugeordnet sind."));
         final GebZuordnunglBewohnerView detailView = new GebZuordnunglBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -418,7 +397,7 @@ public class BewohnerPresentationModel implements Disposable {
 
             }
         });
-        GUIManager.changeView(detailView.buildPanel(), true);
+        GUIManager.changeView(detailView, true);
     }
 
     private class BewohnerTableModel

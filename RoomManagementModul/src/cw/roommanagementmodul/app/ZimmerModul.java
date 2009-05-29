@@ -3,8 +3,7 @@ package cw.roommanagementmodul.app;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CascadeEvent;
 import cw.boardingschoolmanagement.app.CascadeListener;
-import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
@@ -98,7 +97,7 @@ public class ZimmerModul implements Modul {
 
                 bewohnerManager = BewohnerManager.getInstance();
 
-                GUIManager.changeView(new BewohnerView(new BewohnerPresentationModel(bewohnerManager, new HeaderInfo("Bewohner Verwaltung", "Übersicht aller Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png")))).buildPanel());
+                GUIManager.changeView(new BewohnerView(new BewohnerPresentationModel(bewohnerManager, new HeaderInfo("Bewohner Verwaltung", "Übersicht aller Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
             }
@@ -124,7 +123,7 @@ public class ZimmerModul implements Modul {
 
                 bereichManager = BereichManager.getInstance();
 
-                GUIManager.changeView(new BereichView(new BereichPresentationModel(bereichManager, new HeaderInfo("Bereich Verwaltung", "Hier können Sie anhand des Baumes die Zimmer und Bereiche bearbeiten", CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/door.png")))).buildPanel());
+                GUIManager.changeView(new BereichView(new BereichPresentationModel(bereichManager, new CWHeaderInfo("Bereich Verwaltung", "Hier können Sie anhand des Baumes die Zimmer und Bereiche bearbeiten", CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/door.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
 
@@ -150,7 +149,7 @@ public class ZimmerModul implements Modul {
 
                 gebuehrenManager = GebuehrenManager.getInstance();
 
-                GUIManager.changeView(new GebuehrenView(new GebuehrenPresentationModel(gebuehrenManager, new HeaderInfo("Gebühren Verwaltung", "Hier können Sie die Gebühren, Kategorien und Tarife verwalten", CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/money.png")))).buildPanel());
+                GUIManager.changeView(new GebuehrenView(new GebuehrenPresentationModel(gebuehrenManager, new CWHeaderInfo("Gebühren Verwaltung", "Hier können Sie die Gebühren, Kategorien und Tarife verwalten", CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/money.png")))).buildPanel());
                 GUIManager.setLoadingScreenVisible(false);
 
 
@@ -174,7 +173,7 @@ public class ZimmerModul implements Modul {
 
 
 
-                GUIManager.changeView(new GebLaufView(new GebLaufPresentationModel(gebLauf, new HeaderInfo("Gebühren Lauf", "Hier können Sie denn Gebühren oder Storno Lauf durchführen", CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png")))).buildPanel());
+                GUIManager.changeView(new GebLaufView(new GebLaufPresentationModel(gebLauf, new CWHeaderInfo("Gebühren Lauf", "Hier können Sie denn Gebühren oder Storno Lauf durchführen", CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
             }

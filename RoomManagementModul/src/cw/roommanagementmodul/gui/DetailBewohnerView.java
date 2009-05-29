@@ -1,132 +1,129 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.customermanagementmodul.pojo.Customer;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Font;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import cw.roommanagementmodul.pojo.Bewohner;
 
 /**
  *
  * @author Dominik
  */
-public class DetailBewohnerView {
+public class DetailBewohnerView extends CWView
+{
 
     private DetailBewohnerPresentationModel model;
-    private JButton bBack;
-    private JLabel lAnrede;
-    private JLabel lVorname;
-    private JLabel lVorname2;
-    private JLabel lNachname;
-    private JLabel lGeburtsdatum;
-    private JLabel lStrasse;
-    private JLabel lPlz;
-    private JLabel lOrt;
-    private JLabel lBundesland;
-    private JLabel lStaat;
-    private JLabel lMobiltelefon;
-    private JLabel lFestnetztelefon;
-    private JLabel lFax;
-    private JLabel lEmail;
-    private JLabel lBemerkung;
+    private CWButton bBack;
+    private CWLabel lAnrede;
+    private CWLabel lVorname;
+    private CWLabel lVorname2;
+    private CWLabel lNachname;
+    private CWLabel lGeburtsdatum;
+    private CWLabel lStrasse;
+    private CWLabel lPlz;
+    private CWLabel lOrt;
+    private CWLabel lBundesland;
+    private CWLabel lStaat;
+    private CWLabel lMobiltelefon;
+    private CWLabel lFestnetztelefon;
+    private CWLabel lFax;
+    private CWLabel lEmail;
+    private CWLabel lBemerkung;
     
-    private JLabel lZimmer;
-    private JLabel lBereich;
-    private JLabel lVon;
-    private JLabel lBis;
+    private CWLabel lZimmer;
+    private CWLabel lBereich;
+    private CWLabel lVon;
+    private CWLabel lBis;
 
     public DetailBewohnerView(DetailBewohnerPresentationModel m) {
         this.model = m;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
 
-        bBack = new JButton(model.getBackAction());
+        bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
 
         Bewohner b = model.getBewohner();
         Customer c = b.getCustomer();
 
-        this.lAnrede = new JLabel(c.getTitle());
-        this.lNachname = new JLabel(c.getSurname());
-        this.lVorname = new JLabel(c.getForename());
-        this.lVorname2 = new JLabel(c.getForename2());
+        this.lAnrede = CWComponentFactory.createLabel(c.getTitle());
+        this.lNachname = CWComponentFactory.createLabel(c.getSurname());
+        this.lVorname = CWComponentFactory.createLabel(c.getForename());
+        this.lVorname2 = CWComponentFactory.createLabel(c.getForename2());
         if (c.getPostOfficeNumber() != null) {
-            lGeburtsdatum = new JLabel(c.getBirthday().toString());
+            lGeburtsdatum = CWComponentFactory.createLabel(c.getBirthday().toString());
         } else {
-            lGeburtsdatum = new JLabel("");
+            lGeburtsdatum = CWComponentFactory.createLabel("");
         }
-        lStrasse = new JLabel(c.getStreet());
+        lStrasse = CWComponentFactory.createLabel(c.getStreet());
         if (c.getPostOfficeNumber() != null) {
-            lPlz = new JLabel(c.getPostOfficeNumber().toString());
+            lPlz = CWComponentFactory.createLabel(c.getPostOfficeNumber().toString());
         } else {
-            lPlz = new JLabel("");
+            lPlz = CWComponentFactory.createLabel("");
         }
-        lOrt = new JLabel(c.getCity());
-        lBundesland = new JLabel(c.getProvince());
-        lStaat = new JLabel(c.getCountry());
-        lMobiltelefon = new JLabel(c.getMobilephone());
-        lFestnetztelefon = new JLabel(c.getLandlinephone());
-        lFax = new JLabel(c.getFax());
-        lEmail = new JLabel(c.getEmail());
-        lBemerkung = new JLabel(c.getComment());
+        lOrt = CWComponentFactory.createLabel(c.getCity());
+        lBundesland = CWComponentFactory.createLabel(c.getProvince());
+        lStaat = CWComponentFactory.createLabel(c.getCountry());
+        lMobiltelefon = CWComponentFactory.createLabel(c.getMobilephone());
+        lFestnetztelefon = CWComponentFactory.createLabel(c.getLandlinephone());
+        lFax = CWComponentFactory.createLabel(c.getFax());
+        lEmail = CWComponentFactory.createLabel(c.getEmail());
+        lBemerkung = CWComponentFactory.createLabel(c.getComment());
 
 
         //Zimmer und Bereich Label setzen und auf NULL abfragen
         if(b.getZimmer()!=null){
-            lZimmer= new JLabel(b.getZimmer().toString());
+            lZimmer= CWComponentFactory.createLabel(b.getZimmer().toString());
             if(b.getZimmer().getBereich()!=null){
-                lBereich= new JLabel(b.getZimmer().getBereich().toString());
+                lBereich= CWComponentFactory.createLabel(b.getZimmer().getBereich().toString());
             }else{
-                lBereich = new JLabel("-");
+                lBereich = CWComponentFactory.createLabel("-");
             }
         }else{
-            lZimmer = new JLabel("INAKTIV");
+            lZimmer = CWComponentFactory.createLabel("INAKTIV");
             lZimmer.setFont(new Font("Arial",Font.BOLD,11));
             lZimmer.setForeground(Color.RED);
-            lBereich = new JLabel("-");
+            lBereich = CWComponentFactory.createLabel("-");
         }
         
         if(b.getVon()!=null){
-            lVon = new JLabel(b.getVon().toString());
-        }else { lVon = new JLabel("");}
+            lVon = CWComponentFactory.createLabel(b.getVon().toString());
+        }else { lVon = CWComponentFactory.createLabel("");}
          if(b.getBis()!=null){
-            lBis = new JLabel(b.getBis().toString());
-        }else { lBis = new JLabel("");}
+            lBis = CWComponentFactory.createLabel(b.getBis().toString());
+        }else { lBis = CWComponentFactory.createLabel("");}
         
     }
 
-    public JPanel buildPanel() {
+    private void initEventHandling() {
+        
+    }
 
-        initComponents();
+    private void buildView() {
+        this.setHeaderInfo(new CWHeaderInfo(model.getHeaderText()));
 
-        JViewPanel mainPanel = new JViewPanel();
-
-        mainPanel.setHeaderInfo(new HeaderInfo(model.getHeaderText()));
-        JButtonPanel buttonPanel = mainPanel.getButtonPanel();
-
+        CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bBack);
-        JViewPanel panel = new JViewPanel();
 
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, 50dlu:grow, 4dlu, right:pref, 4dlu, 50dlu:grow",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref,4dlu, pref,4dlu, pref,4dlu, pref");
 
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
 
         CellConstraints cc = new CellConstraints();
         builder.addSeparator("Allgemein:", cc.xyw(1, 1, 7));
@@ -176,11 +173,10 @@ public class DetailBewohnerView {
 
         builder.addSeparator("Bemerkung", cc.xyw(1, 35, 7));
         builder.add(lBemerkung, cc.xyw(1, 37, 7));
+    }
 
-
-        mainPanel.getContentPanel().add(panel, BorderLayout.CENTER);
-
-        //  mainPanel.getContentPanel().add(tabs, BorderLayout.CENTER);
-        return mainPanel;
+    @Override
+    public void dispose() {
+        
     }
 }

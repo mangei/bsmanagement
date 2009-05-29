@@ -1,15 +1,11 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.Zimmer;
+import gui.component.JViewPanel;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.JButton;
@@ -24,7 +20,8 @@ import javax.swing.tree.TreeSelectionModel;
  *
  * @author Dominik
  */
-public class BereichView implements Disposable {
+public class BereichView extends CWView
+{
 
     BereichPresentationModel model;
     private JButton bNew;
@@ -36,10 +33,13 @@ public class BereichView implements Disposable {
     private JTree bereichTree;
     private JButton viewZimmerTabelle;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
 
     public BereichView(BereichPresentationModel m) {
         this.model = m;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -81,26 +81,26 @@ public class BereichView implements Disposable {
 
     }
 
-    public JPanel buildPanel() {
-        panel = new JViewPanel(model.getHeaderInfo());
-        this.initComponents();
+    private void initEventHandling() {
 
-        panel.getButtonPanel().add(bNew);
-        panel.getButtonPanel().add(bEdit);
-        panel.getButtonPanel().add(bDelete);
-        panel.getButtonPanel().add(bZimmerNew);
-        panel.getButtonPanel().add(bZimmerEdit);
-        panel.getButtonPanel().add(bZimmerDelete);
-        panel.getButtonPanel().add(viewZimmerTabelle);
-        panel.getContentPanel().add(new JScrollPane(bereichTree), BorderLayout.CENTER);
-
-
-        return panel;
     }
 
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
+
+        this.getButtonPanel().add(bNew);
+        this.getButtonPanel().add(bEdit);
+        this.getButtonPanel().add(bDelete);
+        this.getButtonPanel().add(bZimmerNew);
+        this.getButtonPanel().add(bZimmerEdit);
+        this.getButtonPanel().add(bZimmerDelete);
+        this.getButtonPanel().add(viewZimmerTabelle);
+        this.getContentPanel().add(new JScrollPane(bereichTree), BorderLayout.CENTER);
+    }
+
+    @Override
     public void dispose() {
         bereichTree.removeTreeSelectionListener(model.getBereichListener());
-        panel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

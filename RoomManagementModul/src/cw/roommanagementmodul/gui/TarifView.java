@@ -7,9 +7,9 @@ package cw.roommanagementmodul.gui;
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.roommanagementmodul.component.DateTimeTableCellRenderer;
 import java.awt.BorderLayout;
@@ -54,7 +54,7 @@ public class TarifView implements Disposable{
         String tarifTableStateName = "cw.roommanagementmodul.TarifView.tarifTableState";
         tTarif = CWComponentFactory.createTable(model.createZuordnungTableModel(model.getTarifSelection()), "kein Tarif vorhanden",tarifTableStateName);
 
-        tTarif.setSelectionModel(new SingleListSelectionAdapter(new JXTableSelectionConverter(
+        tTarif.setSelectionModel(new SingleListSelectionAdapter(new CWTableSelectionConverter(
                 model.getTarifSelection().getSelectionIndexHolder(),
                 tTarif)));
 

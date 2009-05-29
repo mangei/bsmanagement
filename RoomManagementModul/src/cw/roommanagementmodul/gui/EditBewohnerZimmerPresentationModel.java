@@ -141,10 +141,6 @@ public class EditBewohnerZimmerPresentationModel extends PresentationModel<Bewoh
         return new ComboBoxAdapter(zimmerList);
     }
 
-     public ComboBoxModel createKautionComboModel(SelectionInList kautionList) {
-        return new ComboBoxAdapter(kautionList);
-    }
-    
     private List<Bereich> extractLeafBereich(List<Bereich> l) {
         List<Bereich> extractList = new ArrayList<Bereich>();
         for (int i = 0; i < l.size(); i++) {

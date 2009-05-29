@@ -264,7 +264,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                 }
                 Calendar c = new GregorianCalendar();
                 c.setTimeInMillis(stornoGebLauf.getAbrMonat());
-                String monthStr = CalendarUtil.getMonth(c.get(Calendar.MONTH));
+                String monthStr = CalendarUtil.getMonthName(c.get(Calendar.MONTH));
                 int yearInt = c.get(Calendar.YEAR);
 
                 String laufString;
@@ -324,7 +324,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
             if (checkAccounting == true) {
                 Calendar c = new GregorianCalendar();
                 c.setTimeInMillis(gebLauf.getAbrMonat());
-                String monthStr = CalendarUtil.getMonth(c.get(Calendar.MONTH));
+                String monthStr = CalendarUtil.getMonthName(c.get(Calendar.MONTH));
                 int yearInt = c.get(Calendar.YEAR);
 
                 String laufString;
