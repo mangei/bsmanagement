@@ -5,10 +5,10 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
-import javax.swing.JTextField;
 
 /**
  * @author CreativeWorkers.at
@@ -19,8 +19,8 @@ public class SearchCustomerSelectorFilterExtentionView extends CWPanel
     private SearchCustomerSelectorFilterExtentionPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JTextField tfSearch;
-    private JButton bClear;
+    private CWTextField tfSearch;
+    private CWButton bClear;
 
     public SearchCustomerSelectorFilterExtentionView(SearchCustomerSelectorFilterExtentionPresentationModel m) {
         model = m;

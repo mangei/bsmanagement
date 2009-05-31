@@ -1,9 +1,9 @@
 package cw.customermanagementmodul.gui;
 
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import java.awt.BorderLayout;
-import javax.swing.JButton;
 
 /**
  * @author CreativeWorkers.at
@@ -14,11 +14,11 @@ public class CustomerManagementView extends CWView
     private CustomerManagementPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JButton bNew;
-    private JButton bEdit;
-    private JButton bDelete;
-    private JButton bInactive;
-    private JButton bViewInactives;
+    private CWButton bNew;
+    private CWButton bEdit;
+    private CWButton bDelete;
+    private CWButton bInactive;
+    private CWButton bViewInactives;
     private CustomerSelectorView customerSelectorView;
 
     public CustomerManagementView(CustomerManagementPresentationModel m) {
@@ -100,9 +100,8 @@ public class CustomerManagementView extends CWView
         this.getContentPanel().add(customerSelectorView, BorderLayout.CENTER);
     }
 
+    @Override
     public void dispose() {
-        System.out.println("000000000000000000000000000000000000000");
-
         customerSelectorView.dispose();
         
         componentContainer.dispose();

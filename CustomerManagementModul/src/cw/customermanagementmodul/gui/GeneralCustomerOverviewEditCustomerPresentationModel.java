@@ -29,8 +29,6 @@ public class GeneralCustomerOverviewEditCustomerPresentationModel
     }
 
     public void dispose() {
-        // Kill references
-        customerOverviewEditCustomerPresentationModel = null;
     }
 
 }

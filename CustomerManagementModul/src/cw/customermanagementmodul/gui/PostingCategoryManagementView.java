@@ -6,12 +6,12 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.customermanagementmodul.gui.renderer.LockTableCellRenderer;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
 /**
@@ -23,10 +23,10 @@ public class PostingCategoryManagementView extends CWView
     private PostingCategoryManagementPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JButton bNew;
-    private JButton bEdit;
-    private JButton bDelete;
-    private JLabel lLocked;
+    private CWButton bNew;
+    private CWButton bEdit;
+    private CWButton bDelete;
+    private CWLabel lLocked;
 
     private CWTable tPostingsCategories;
 
@@ -89,6 +89,7 @@ public class PostingCategoryManagementView extends CWView
         bDelete.setEnabled(false);
     }
 
+    @Override
     public void dispose() {
         componentContainer.dispose();
 

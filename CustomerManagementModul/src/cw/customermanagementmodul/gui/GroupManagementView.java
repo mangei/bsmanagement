@@ -4,10 +4,10 @@ import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWList;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
-import javax.swing.JButton;
 
 /**
  *
@@ -19,9 +19,9 @@ public class GroupManagementView extends CWView
     private GroupManagementPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JButton bNewGroup;
-    private JButton bEditGroup;
-    private JButton bRemoveGroup;
+    private CWButton bNewGroup;
+    private CWButton bEditGroup;
+    private CWButton bRemoveGroup;
     private CWList liGroups;
     private CustomerSelectorView customerSelectorView;
 
@@ -81,6 +81,7 @@ public class GroupManagementView extends CWView
         builder.add(customerSelectorView, cc.xy(3,1));
     }
 
+    @Override
     public void dispose() {
 
         customerSelectorView.dispose();

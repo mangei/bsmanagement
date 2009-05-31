@@ -5,6 +5,10 @@ import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
@@ -12,11 +16,8 @@ import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
-import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JComboBox;
 
 /**
  *
@@ -27,25 +28,25 @@ public class PostingManagementEditCustomerView extends CWView
     private PostingManagementEditCustomerPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JButton bNew;
-    private JButton bReversePosting;
-    private JButton bBalancePosting;
-    private JButton bManagePostingCategories;
+    private CWButton bNew;
+    private CWButton bReversePosting;
+    private CWButton bBalancePosting;
+    private CWButton bManagePostingCategories;
 
-    private JComboBox cbFilterYear;
-    private JComboBox cbFilterMonth;
-    private JComboBox cbFilterPostingCategory;
+    private CWComboBox cbFilterYear;
+    private CWComboBox cbFilterMonth;
+    private CWComboBox cbFilterPostingCategory;
 
     private CWTable tPostings;
 
-    private JLabel lLiabilities;
-    private JLabel lAssets;
-    private JLabel lSaldo;
-    private JLabel lTotalLiabilities;
-    private JLabel lTotalAssets;
-    private JLabel lTotalSaldo;
+    private CWLabel lLiabilities;
+    private CWLabel lAssets;
+    private CWLabel lSaldo;
+    private CWLabel lTotalLiabilities;
+    private CWLabel lTotalAssets;
+    private CWLabel lTotalSaldo;
 
-    private JPanel pFilteredValues;
+    private CWPanel pFilteredValues;
 
     private PropertyChangeListener filterActiveListener;
 
@@ -143,7 +144,7 @@ public class PostingManagementEditCustomerView extends CWView
 
         
         // filterValue Layout
-        pFilteredValues = new JPanel();
+        pFilteredValues = CWComponentFactory.createPanel();
         pFilteredValues.setOpaque(false);
 
         layout = new FormLayout(
@@ -196,6 +197,7 @@ public class PostingManagementEditCustomerView extends CWView
         builder.add(pTotalValues,               cc.xy(1, 6));
     }
 
+    @Override
     public void dispose() {
         model.getFilterActive().removeValueChangeListener(filterActiveListener);
         filterActiveListener = null;

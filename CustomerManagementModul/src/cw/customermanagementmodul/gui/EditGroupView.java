@@ -4,10 +4,10 @@ import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
-import javax.swing.JButton;
-import javax.swing.JTextField;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.customermanagementmodul.pojo.Group;
 
 /**
@@ -20,11 +20,11 @@ public class EditGroupView extends CWView
     private EditGroupPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JTextField tfName;
+    private CWTextField tfName;
 
-    private JButton bSave;
-    private JButton bCancel;
-    private JButton bSaveCancel;
+    private CWButton bSave;
+    private CWButton bCancel;
+    private CWButton bSaveCancel;
 
     public EditGroupView(EditGroupPresentationModel model) {
         this.model = model;
@@ -71,6 +71,7 @@ public class EditGroupView extends CWView
         builder.add(tfName, cc.xy(3, 1));
     }
 
+    @Override
     public void dispose() {
         componentContainer.dispose();
 

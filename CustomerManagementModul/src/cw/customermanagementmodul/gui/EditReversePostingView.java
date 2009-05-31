@@ -4,19 +4,20 @@ import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
+import cw.boardingschoolmanagement.gui.component.CWDateChooser;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.customermanagementmodul.pojo.Posting;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import javax.swing.JLabel;
 
 /**
  *
@@ -28,23 +29,23 @@ public class EditReversePostingView extends CWView
     private EditReversePostingPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JLabel lPostingDescription;
-    private JLabel lPostingCategory;
-    private JLabel lPostingAmount;
-    private JLabel lPostingEntryDate;
-    private JLabel lPostingLiabilitiesAssets;
+    private CWLabel lPostingDescription;
+    private CWLabel lPostingCategory;
+    private CWLabel lPostingAmount;
+    private CWLabel lPostingEntryDate;
+    private CWLabel lPostingLiabilitiesAssets;
     
-    private JTextField tfReversePostingDescription;
-    private JComboBox cbReversePostingCategory;
-    private JTextField tfReversePostingAmount;
-    private JDateChooser dcReversePostingEntryDate;
-    private JLabel lReversePostingLiabilitiesAssets;
-    private JLabel lLocked;
+    private CWTextField tfReversePostingDescription;
+    private CWComboBox cbReversePostingCategory;
+    private CWCurrencyTextField tfReversePostingAmount;
+    private CWDateChooser dcReversePostingEntryDate;
+    private CWLabel lReversePostingLiabilitiesAssets;
+    private CWLabel lLocked;
     
-    private JPanel pPostingCategoryExtention;
+    private CWPanel pPostingCategoryExtention;
     
-    private JButton bCancel;
-    private JButton bSaveCancel;
+    private CWButton bCancel;
+    private CWButton bSaveCancel;
 
     private PropertyChangeListener postingCategoryChangeListener;
 
@@ -173,6 +174,7 @@ public class EditReversePostingView extends CWView
         builder.add(dcReversePostingEntryDate,  cc.xy(4, 24));
     }
 
+    @Override
     public void dispose() {
         model.getPostingCategorySelection().removeValueChangeListener(postingCategoryChangeListener);
 

@@ -4,11 +4,11 @@ import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.customermanagementmodul.pojo.PostingCategory;
-import javax.swing.JButton;
-import javax.swing.JTextField;
 
 /**
  *
@@ -19,11 +19,11 @@ public class EditPostingCategoryView extends CWView
 
     private EditPostingCategoryPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JTextField tfName;
+    private CWTextField tfName;
     
-    private JButton bSave;
-    private JButton bSaveCancel;
-    private JButton bCancel;
+    private CWButton bSave;
+    private CWButton bSaveCancel;
+    private CWButton bCancel;
     
 
     public EditPostingCategoryView(EditPostingCategoryPresentationModel model) {
@@ -73,6 +73,7 @@ public class EditPostingCategoryView extends CWView
         builder.add(tfName,              cc.xy(3, 1));
     }
 
+    @Override
     public void dispose() {
         componentContainer.dispose();
 

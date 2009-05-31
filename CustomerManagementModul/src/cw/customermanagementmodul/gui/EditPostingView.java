@@ -4,17 +4,18 @@ import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.toedter.calendar.JDateChooser;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
+import cw.boardingschoolmanagement.gui.component.CWDateChooser;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
 import java.beans.PropertyChangeEvent;
-import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 import cw.customermanagementmodul.pojo.Posting;
 import java.beans.PropertyChangeListener;
-import javax.swing.JComboBox;
 
 /**
  *
@@ -26,15 +27,15 @@ public class EditPostingView extends CWView
     private EditPostingPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JTextField tfDescription;
-    private JComboBox cbPostingCategory;
-    private JTextField tfAmount;
-    private JDateChooser dcPostingEntryDate;
-    private JPanel pLiabilitiesAssets;
+    private CWTextField tfDescription;
+    private CWComboBox cbPostingCategory;
+    private CWCurrencyTextField tfAmount;
+    private CWDateChooser dcPostingEntryDate;
+    private CWPanel pLiabilitiesAssets;
     
-    private JButton bCancel;
-    private JButton bSaveCancel;
-    private JPanel pPostingCategoryExtention;
+    private CWButton bCancel;
+    private CWButton bSaveCancel;
+    private CWPanel pPostingCategoryExtention;
 
     private PropertyChangeListener postingCategoryChangeListener;
 

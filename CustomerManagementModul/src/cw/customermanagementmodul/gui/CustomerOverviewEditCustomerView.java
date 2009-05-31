@@ -56,6 +56,7 @@ public class CustomerOverviewEditCustomerView extends CWView
         }
     }
 
+    @Override
     public void dispose() {
         model.dispose();
 

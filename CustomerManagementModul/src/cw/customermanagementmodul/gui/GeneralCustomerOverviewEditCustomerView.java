@@ -4,11 +4,11 @@ import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Guardian;
 import java.awt.Font;
-import javax.swing.JLabel;
 
 /**
  *
@@ -20,25 +20,25 @@ public class GeneralCustomerOverviewEditCustomerView extends CWPanel
     private GeneralCustomerOverviewEditCustomerPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JLabel lActive;
-    private JLabel lGender;
-    private JLabel lTitle;
-    private JLabel lForename;
-    private JLabel lForename2;
-    private JLabel lSurname;
-    private JLabel lBirthday;
-    private JLabel lGuardianForename;
-    private JLabel lGuardianSurname;
-    private JLabel lStreet;
-    private JLabel lPostOfficeNumber;
-    private JLabel lCity;
-    private JLabel lCountry;
-    private JLabel lProvince;
-    private JLabel lMobilphone;
-    private JLabel lLandlinephone;
-    private JLabel lFax;
-    private JLabel lEmail;
-    private JLabel lComment;
+    private CWLabel lActive;
+    private CWLabel lGender;
+    private CWLabel lTitle;
+    private CWLabel lForename;
+    private CWLabel lForename2;
+    private CWLabel lSurname;
+    private CWLabel lBirthday;
+    private CWLabel lGuardianForename;
+    private CWLabel lGuardianSurname;
+    private CWLabel lStreet;
+    private CWLabel lPostOfficeNumber;
+    private CWLabel lCity;
+    private CWLabel lCountry;
+    private CWLabel lProvince;
+    private CWLabel lMobilphone;
+    private CWLabel lLandlinephone;
+    private CWLabel lFax;
+    private CWLabel lEmail;
+    private CWLabel lComment;
 
     public GeneralCustomerOverviewEditCustomerView(GeneralCustomerOverviewEditCustomerPresentationModel model) {
         this.model = model;
@@ -184,6 +184,5 @@ public class GeneralCustomerOverviewEditCustomerView extends CWPanel
         componentContainer.dispose();
 
         model.dispose();
-        model = null;
     }
 }

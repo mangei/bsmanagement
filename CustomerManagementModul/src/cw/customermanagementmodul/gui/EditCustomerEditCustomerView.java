@@ -5,20 +5,20 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.AutoCompletion;
-import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWCheckBox;
+import cw.boardingschoolmanagement.gui.component.CWDateChooser;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.boardingschoolmanagement.gui.component.CWTextArea;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import java.awt.event.FocusEvent;
 import java.beans.PropertyChangeEvent;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextArea;
-import javax.swing.JTextField;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Guardian;
 import java.awt.event.FocusListener;
 import java.beans.PropertyChangeListener;
-import javax.swing.JCheckBox;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
@@ -31,29 +31,29 @@ public class EditCustomerEditCustomerView extends CWView
     private EditCustomerEditCustomerPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JPanel pActive;
-    private JPanel pGender;
-    private JTextField tfTitle;
-    private JTextField tfForename;
-    private JTextField tfForename2;
-    private JTextField tfSurname;
-    private JCheckBox cGuardianActive;
-    private JPanel pGuardianGender;
-    private JTextField tfGuardianTitle;
-    private JTextField tfGuardianForename;
-    private JTextField tfGuardianSurname;
-    private JDateChooser dcBirthday;
-    private JTextField tfStreet;
-    private JTextField tfPostOfficeNumber;
-    private JTextField tfCity;
-    private JTextField tfCountry;
-    private JTextField tfProvince;
-    private JTextField tfMobilphone;
-    private JTextField tfLandlinephone;
-    private JTextField tfFax;
-    private JTextField tfEmail;
-    private JTextArea taComment;
-    private JButton bClearLocationData;
+    private CWPanel pActive;
+    private CWPanel pGender;
+    private CWTextField tfTitle;
+    private CWTextField tfForename;
+    private CWTextField tfForename2;
+    private CWTextField tfSurname;
+    private CWCheckBox cGuardianActive;
+    private CWPanel pGuardianGender;
+    private CWTextField tfGuardianTitle;
+    private CWTextField tfGuardianForename;
+    private CWTextField tfGuardianSurname;
+    private CWDateChooser dcBirthday;
+    private CWTextField tfStreet;
+    private CWTextField tfPostOfficeNumber;
+    private CWTextField tfCity;
+    private CWTextField tfCountry;
+    private CWTextField tfProvince;
+    private CWTextField tfMobilphone;
+    private CWTextField tfLandlinephone;
+    private CWTextField tfFax;
+    private CWTextField tfEmail;
+    private CWTextArea taComment;
+    private CWButton bClearLocationData;
 
     private PropertyChangeListener guardianActiveListener;
     private PostOfficeNumberAutoCompleteFire ponacf;
@@ -323,6 +323,7 @@ public class EditCustomerEditCustomerView extends CWView
         builder.add(taComment,              cc.xyw(1, row+=2, 8));
     }
 
+    @Override
     public void dispose() {
         componentContainer.dispose();
 

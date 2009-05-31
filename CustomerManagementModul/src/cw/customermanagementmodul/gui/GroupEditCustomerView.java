@@ -3,9 +3,9 @@ package cw.customermanagementmodul.gui;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import javax.swing.JButton;
-import org.jdesktop.swingx.JXList;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWList;
 import cw.boardingschoolmanagement.gui.component.CWView;
 
 /**
@@ -18,10 +18,10 @@ public class GroupEditCustomerView extends CWView
     private GroupEditCustomerPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JXList liCustomerGroups;
-    private JXList liGroups;
-    private JButton bAdd;
-    private JButton bRemove;
+    private CWList liCustomerGroups;
+    private CWList liGroups;
+    private CWButton bAdd;
+    private CWButton bRemove;
 
     public GroupEditCustomerView(GroupEditCustomerPresentationModel model) {
         this.model = model;
@@ -66,6 +66,7 @@ public class GroupEditCustomerView extends CWView
         builder.add(CWComponentFactory.createView("Andere Gruppen", liGroups), cc.xywh(5, 1, 1, 5));
     }
 
+    @Override
     public void dispose() {
         componentContainer.dispose();
 

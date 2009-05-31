@@ -4,8 +4,8 @@ import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import javax.swing.JLabel;
 
 /**
  *
@@ -17,7 +17,7 @@ public class CustomerHomeExtentionView extends CWView
     private CustomerHomeExtentionPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JLabel lSizeCustomers;
+    private CWLabel lSizeCustomers;
 
     public CustomerHomeExtentionView(CustomerHomeExtentionPresentationModel model) {
         this.model = model;

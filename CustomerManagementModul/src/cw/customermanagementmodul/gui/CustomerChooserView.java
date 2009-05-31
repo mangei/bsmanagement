@@ -2,10 +2,9 @@ package cw.customermanagementmodul.gui;
 
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.l2fprod.common.swing.JButtonBar;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 
 /**
  *
@@ -17,8 +16,8 @@ public class CustomerChooserView extends CWView
     private CustomerChooserPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JButton bOk;
-    private JButton bCancel;
+    private CWButton bOk;
+    private CWButton bCancel;
     private CustomerSelectorView customerSelectorView;
 
     public CustomerChooserView(CustomerChooserPresentationModel model) {
@@ -54,6 +53,7 @@ public class CustomerChooserView extends CWView
         this.getContentPanel().add(customerSelectorView, BorderLayout.CENTER);
     }
 
+    @Override
     public void dispose() {
         customerSelectorView.dispose();
 
