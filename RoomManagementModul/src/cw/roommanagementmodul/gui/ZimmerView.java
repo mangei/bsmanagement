@@ -1,44 +1,38 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
  *
  * @author Dominik
  */
-public class ZimmerView implements Disposable {
+public class ZimmerView extends CWView{
 
     private ZimmerPresentationModel model;
-    private JButton bNew;
-    private JButton bEdit;
-    private JButton bDelete;
-    private JButton bBack;
-    private JButton bPrint;
-    private JXTable tZimmer;
+    private CWButton bNew;
+    private CWButton bEdit;
+    private CWButton bDelete;
+    private CWButton bBack;
+    private CWButton bPrint;
+    private CWTable tZimmer;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
 
     public ZimmerView(ZimmerPresentationModel m) {
         this.model = m;
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
-
 
         bNew = CWComponentFactory.createButton(model.getNewAction());
         bNew.setText("Neu");
@@ -74,30 +68,21 @@ public class ZimmerView implements Disposable {
         tZimmer.addMouseListener(model.getDoubleClickHandler());
     }
 
-    public JPanel buildPanel() {
-        initComponents();
-        initEventHandling();
+    private void buildView() {
 
-        mainPanel = new JViewPanel(model.getHeaderInfo());
-        mainPanel.getButtonPanel().add(bNew);
-        mainPanel.getButtonPanel().add(bEdit);
-        mainPanel.getButtonPanel().add(bDelete);
-        mainPanel.getButtonPanel().add(bPrint);
-        mainPanel.getButtonPanel().add(bBack);
-
-        FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
-        mainPanel.getTopPanel().setLayout(layout);
+        this.setHeaderInfo(model.getHeaderInfo());
+        this.getButtonPanel().add(bNew);
+        this.getButtonPanel().add(bEdit);
+        this.getButtonPanel().add(bDelete);
+        this.getButtonPanel().add(bPrint);
+        this.getButtonPanel().add(bBack);
         
-
-        mainPanel.getContentPanel().add(new JScrollPane(tZimmer), BorderLayout.CENTER);
-
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
+        this.getContentPanel().add(new JScrollPane(tZimmer), BorderLayout.CENTER);
     }
 
+    @Override
     public void dispose() {
         tZimmer.removeMouseListener(model.getDoubleClickHandler());
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

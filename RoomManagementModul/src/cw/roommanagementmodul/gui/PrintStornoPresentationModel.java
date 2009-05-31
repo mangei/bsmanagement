@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cw.roommanagementmodul.gui;
 
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Posting;
@@ -38,10 +34,10 @@ import net.sf.jasperreports.engine.util.JRSaver;
  *
  * @author Dominik
  */
-public class PrintStornoPresentationModel implements Disposable {
+public class PrintStornoPresentationModel{
 
     private ButtonListenerSupport support;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private Action backAction;
     private Map<Bewohner, List<Posting>> bewohnerPostingMap;
     private Map<Customer, List<Posting>> customerNoBewohnerMap;
@@ -53,7 +49,7 @@ public class PrintStornoPresentationModel implements Disposable {
     private String printHeader;
 
     public PrintStornoPresentationModel(Map<Bewohner, List<Posting>> bewohnerPostingMap,
-            Map<Customer, List<Posting>> customerNoBewohnerMap, HeaderInfo headerInfo, String printHeader) {
+            Map<Customer, List<Posting>> customerNoBewohnerMap, CWHeaderInfo headerInfo, String printHeader) {
 
         this.printHeader=printHeader;
         this.bewohnerPostingMap = bewohnerPostingMap;
@@ -62,10 +58,7 @@ public class PrintStornoPresentationModel implements Disposable {
 
         prepareData();
         initModels();
-        this.initEventHandling();
-    }
-
-    private void initEventHandling() {
+        initEventHandling();
     }
 
     private void initModels() {
@@ -75,7 +68,6 @@ public class PrintStornoPresentationModel implements Disposable {
         reportSource = "./jasper/bewohnerSto.jrxml";
 
         Map<String, Object> main = new HashMap();
-//        JRDataSource tarifDS= new CustomDataSource(bewohnerList, bewohnerTarifSelection.getMap());
         JasperReport subreport = null;
         try {
             subreport = JasperCompileManager.compileReport("./jasper/postingSto.jrxml");
@@ -88,13 +80,14 @@ public class PrintStornoPresentationModel implements Disposable {
 
         try {
             jasperReport = JasperCompileManager.compileReport(reportSource);
-//            ds = new JRBeanCollectionDataSource(bewohnerList);
             ds = new JRBeanCollectionDataSource(this.printDataList);
             jasperPrint = JasperFillManager.fillReport(jasperReport, main, ds);
         } catch (JRException ex) {
             Logger.getLogger(PrintZimmerPresentationModel.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
 
+    private void initEventHandling() {
     }
 
     public void dispose() {
@@ -159,7 +152,7 @@ public class PrintStornoPresentationModel implements Disposable {
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

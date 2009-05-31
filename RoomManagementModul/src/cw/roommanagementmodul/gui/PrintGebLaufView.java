@@ -1,31 +1,26 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.roommanagementmodul.gui;
 
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import net.sf.jasperreports.swing.JRViewer;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWView;
 
 /**
  *
  * @author Dominik
  */
-public class PrintGebLaufView implements Disposable {
+public class PrintGebLaufView extends CWView{
 
     private PrintGebLaufPresentationModel model;
-    private JButton bBack;
+    private CWButton bBack;
     private JRViewer viewer;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
 
     public PrintGebLaufView(PrintGebLaufPresentationModel m) {
         this.model = m;
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -36,22 +31,20 @@ public class PrintGebLaufView implements Disposable {
         componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bBack);
     }
 
-    public JPanel buildPanel() {
+    private void initEventHandling() {
+    }
+
+    private void buildView() {
         initComponents();
 
-        mainPanel = new JViewPanel(model.getHeaderInfo());
-        mainPanel.getButtonPanel().add(bBack);
+        this.setHeaderInfo(model.getHeaderInfo());
+        this.getButtonPanel().add(bBack);
+        this.getContentPanel().add(viewer);
 
-        mainPanel.getContentPanel().add(viewer);
-
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
     }
 
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }
-
 }

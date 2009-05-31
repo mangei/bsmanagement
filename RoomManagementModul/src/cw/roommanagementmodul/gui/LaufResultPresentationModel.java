@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
@@ -9,8 +5,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
 import java.awt.event.ActionEvent;
@@ -27,27 +22,30 @@ import cw.roommanagementmodul.pojo.Bewohner;
  *
  * @author Dominik
  */
-public class LaufResultPresentationModel extends PresentationModel<BewohnerTarifSelection>
-        implements Disposable {
+public class LaufResultPresentationModel extends PresentationModel<BewohnerTarifSelection> {
 
     private BewohnerTarifSelection tarifSelection;
-    private String headerText;
     private Action backAction;
     private Action printAction;
     private ButtonListenerSupport support;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
-    public LaufResultPresentationModel(BewohnerTarifSelection tarifSelection, HeaderInfo header) {
+    public LaufResultPresentationModel(BewohnerTarifSelection tarifSelection, CWHeaderInfo header) {
         super(tarifSelection);
         this.tarifSelection = tarifSelection;
         this.headerInfo = header;
         initModels();
+        initEventHandling();
     }
 
     private void initModels() {
         support = new ButtonListenerSupport();
         backAction = new BackAction();
         printAction = new PrintAction();
+
+    }
+
+    private void initEventHandling() {
 
     }
 
@@ -90,20 +88,6 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
     }
 
     /**
-     * @return the headerText
-     */
-    public String getHeaderText() {
-        return headerText;
-    }
-
-    /**
-     * @param headerText the headerText to set
-     */
-    public void setHeaderText(String headerText) {
-        this.headerText = headerText;
-    }
-
-    /**
      * @return the backAction
      */
     public Action getBackAction() {
@@ -128,15 +112,8 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
     }
 
     /**
@@ -144,13 +121,6 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
      */
     public Action getPrintAction() {
         return printAction;
-    }
-
-    /**
-     * @param printAction the printAction to set
-     */
-    public void setPrintAction(Action printAction) {
-        this.printAction = printAction;
     }
 
     public void dispose() {
@@ -164,7 +134,7 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
         }
 
         public void actionPerformed(ActionEvent e) {
-            final PrintGebLaufPresentationModel model = new PrintGebLaufPresentationModel(tarifSelection, new HeaderInfo("Gebühren Lauf", "Gebühren Lauf zum Ausdrucken."),headerInfo.getHeaderText());
+            final PrintGebLaufPresentationModel model = new PrintGebLaufPresentationModel(tarifSelection, new CWHeaderInfo("Gebühren Lauf", "Gebühren Lauf zum Ausdrucken."), headerInfo.getHeaderText());
             final PrintGebLaufView printView = new PrintGebLaufView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -177,7 +147,7 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
                     }
                 }
             });
-            GUIManager.changeView(printView.buildPanel(), true);
+            GUIManager.changeView(printView, true);
 
         }
     }

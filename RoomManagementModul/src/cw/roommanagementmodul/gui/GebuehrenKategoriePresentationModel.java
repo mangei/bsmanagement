@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.list.SelectionInList;
@@ -9,8 +5,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -30,7 +25,7 @@ import javax.swing.JOptionPane;
  *
  * @author Dominik
  */
-public class GebuehrenKategoriePresentationModel implements Disposable{
+public class GebuehrenKategoriePresentationModel {
 
     private GebuehrenKatManager gebKatManager;
     private Action newAction;
@@ -39,25 +34,23 @@ public class GebuehrenKategoriePresentationModel implements Disposable{
     private Action backAction;
     private ButtonListenerSupport support;
     private SelectionInList<GebuehrenKategorie> gebuehrenKatSelection;
-    private String headerText;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private SelectionEmptyHandler selectionEmptyHandler;
     private DoubleClickHandler doubleClickHandler;
 
     public GebuehrenKategoriePresentationModel(GebuehrenKatManager gebKatManager) {
-        selectionEmptyHandler=new SelectionEmptyHandler();
+        selectionEmptyHandler = new SelectionEmptyHandler();
         this.gebKatManager = gebKatManager;
-        doubleClickHandler=new DoubleClickHandler();
+        doubleClickHandler = new DoubleClickHandler();
         initModels();
         this.initEventHandling();
     }
 
-    GebuehrenKategoriePresentationModel(GebuehrenKatManager gebKatManager, HeaderInfo header) {
+    public GebuehrenKategoriePresentationModel(GebuehrenKatManager gebKatManager, CWHeaderInfo header) {
         this.gebKatManager = gebKatManager;
-        selectionEmptyHandler=new SelectionEmptyHandler();
-        doubleClickHandler=new DoubleClickHandler();
-        this.headerText = header.getHeaderText();
-        this.headerInfo=header;
+        selectionEmptyHandler = new SelectionEmptyHandler();
+        doubleClickHandler = new DoubleClickHandler();
+        this.headerInfo = header;
         initModels();
         this.initEventHandling();
     }
@@ -77,6 +70,10 @@ public class GebuehrenKategoriePresentationModel implements Disposable{
 
         setGebuehrenKatSelection(new SelectionInList<GebuehrenKategorie>(getGebKatManager().getAll()));
         updateActionEnablement();
+    }
+
+    public void dispose() {
+        getGebuehrenKatSelection().removeValueChangeListener(selectionEmptyHandler);
     }
 
     public void removeButtonListener(ButtonListener listener) {
@@ -131,26 +128,11 @@ public class GebuehrenKategoriePresentationModel implements Disposable{
         this.gebuehrenKatSelection = gebuehrenKatSelection;
     }
 
-    public String getHeaderText() {
-        return headerText;
-    }
-
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
-    }
-
-    public void dispose() {
-        getGebuehrenKatSelection().removeValueChangeListener(selectionEmptyHandler);
     }
 
     private class NewAction
@@ -162,7 +144,7 @@ public class GebuehrenKategoriePresentationModel implements Disposable{
 
         public void actionPerformed(ActionEvent e) {
             final GebuehrenKategorie gk = new GebuehrenKategorie();
-            final EditGebuehrenKategoriePresentationModel model = new EditGebuehrenKategoriePresentationModel(gk, new HeaderInfo("Kategorie erstellen","Hier können Sie eine neue Gebühren Kategorie erstellen"));
+            final EditGebuehrenKategoriePresentationModel model = new EditGebuehrenKategoriePresentationModel(gk, new CWHeaderInfo("Kategorie erstellen", "Hier können Sie eine neue Gebühren Kategorie erstellen"));
             final EditGebuehrenKategorieView editView = new EditGebuehrenKategorieView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -178,7 +160,7 @@ public class GebuehrenKategoriePresentationModel implements Disposable{
                     }
                 }
             });
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
         }
     }
 
@@ -258,7 +240,7 @@ public class GebuehrenKategoriePresentationModel implements Disposable{
 
     private void editSelectedItem(EventObject e) {
         final GebuehrenKategorie gk = this.getGebuehrenKatSelection().getSelection();
-        final EditGebuehrenKategoriePresentationModel model = new EditGebuehrenKategoriePresentationModel(gk, new HeaderInfo("Kategorie bearbeiten","Hier können Sie eine bestehende Gebühren Kategorie bearbeiten"));
+        final EditGebuehrenKategoriePresentationModel model = new EditGebuehrenKategoriePresentationModel(gk, new CWHeaderInfo("Kategorie bearbeiten", "Hier können Sie eine bestehende Gebühren Kategorie bearbeiten"));
         final EditGebuehrenKategorieView editView = new EditGebuehrenKategorieView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -276,6 +258,6 @@ public class GebuehrenKategoriePresentationModel implements Disposable{
 
             }
         });
-        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.changeView(editView, true);
     }
 }

@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
@@ -10,8 +6,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.manager.ZimmerManager;
@@ -36,7 +31,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
  *
  * @author Dominik
  */
-public class ZimmerPresentationModel implements Disposable{
+public class ZimmerPresentationModel {
 
     private ZimmerManager zimmerManager;
     private Action newAction;
@@ -44,35 +39,46 @@ public class ZimmerPresentationModel implements Disposable{
     private Action deleteAction;
     private Action backAction;
     private Action printAction;
-    private String headerText;
     private ButtonListenerSupport support;
     private SelectionInList<Zimmer> zimmerSelection;
     private BereichPresentationModel bereichModel;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private SelectionEmptyHandler selectionEmptyHandler;
     private DoubleClickHandler doubleClickHandler;
 
-    public ZimmerPresentationModel(ZimmerManager zimmerManager, HeaderInfo header, BereichPresentationModel bereichModel) {
-        doubleClickHandler=new DoubleClickHandler();
-        selectionEmptyHandler =new SelectionEmptyHandler();
+    public ZimmerPresentationModel(ZimmerManager zimmerManager, CWHeaderInfo header, BereichPresentationModel bereichModel) {
         this.bereichModel = bereichModel;
         this.zimmerManager = zimmerManager;
-        this.headerText = header.getHeaderText();
-        this.headerInfo=header;
+        this.headerInfo = header;
         initModels();
-        this.initEventHandling();
+        initEventHandling();
     }
 
     private void initModels() {
+        doubleClickHandler = new DoubleClickHandler();
+        selectionEmptyHandler = new SelectionEmptyHandler();
         support = new ButtonListenerSupport();
         newAction = new NewAction();
         editAction = new EditAction();
         deleteAction = new DeleteAction();
-        setPrintAction(new PrintAction());
-        setBackAction(new BackAction());
+        printAction = new PrintAction();
+        backAction = new BackAction();
 
         zimmerSelection = new SelectionInList<Zimmer>(zimmerManager.getAll());
+
+    }
+
+    private void initEventHandling() {
+        getZimmerSelection().addPropertyChangeListener(
+                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
+                selectionEmptyHandler);
         updateActionEnablement();
+    }
+
+
+    public void dispose() {
+        getZimmerSelection().removeValueChangeListener(selectionEmptyHandler);
+        zimmerSelection.release();
     }
 
     public TableModel createZimmerTableModel(ListModel listModel) {
@@ -83,12 +89,6 @@ public class ZimmerPresentationModel implements Disposable{
         boolean hasSelection = getZimmerSelection().hasSelection();
         getEditAction().setEnabled(hasSelection);
         getDeleteAction().setEnabled(hasSelection);
-    }
-
-    private void initEventHandling() {
-        getZimmerSelection().addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                selectionEmptyHandler);
     }
 
     public Action getNewAction() {
@@ -115,10 +115,6 @@ public class ZimmerPresentationModel implements Disposable{
         support.addButtonListener(listener);
     }
 
-    public String getHeaderText() {
-        return headerText;
-    }
-
     /**
      * @return the backAction
      */
@@ -127,24 +123,10 @@ public class ZimmerPresentationModel implements Disposable{
     }
 
     /**
-     * @param backAction the backAction to set
-     */
-    public void setBackAction(Action backAction) {
-        this.backAction = backAction;
-    }
-
-    /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
     }
 
     /**
@@ -154,16 +136,6 @@ public class ZimmerPresentationModel implements Disposable{
         return printAction;
     }
 
-    /**
-     * @param printAction the printAction to set
-     */
-    public void setPrintAction(Action printAction) {
-        this.printAction = printAction;
-    }
-
-    public void dispose() {
-        getZimmerSelection().removeValueChangeListener(selectionEmptyHandler);
-    }
 
     private class NewAction
             extends AbstractAction {
@@ -174,7 +146,7 @@ public class ZimmerPresentationModel implements Disposable{
 
         public void actionPerformed(ActionEvent e) {
             final Zimmer z = new Zimmer();
-            final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new HeaderInfo("Zimmer erstellen","Hier können Sie ein neus Zimmer erstellen"));
+            final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new CWHeaderInfo("Zimmer erstellen", "Hier können Sie ein neus Zimmer erstellen"));
             final EditZimmerView editView = new EditZimmerView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -190,10 +162,9 @@ public class ZimmerPresentationModel implements Disposable{
                     }
                 }
             });
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
         }
     }
-
 
     private class EditAction
             extends AbstractAction {
@@ -256,7 +227,7 @@ public class ZimmerPresentationModel implements Disposable{
         }
     }
 
-        private class PrintAction
+    private class PrintAction
             extends AbstractAction {
 
         {
@@ -265,7 +236,7 @@ public class ZimmerPresentationModel implements Disposable{
 
         public void actionPerformed(ActionEvent e) {
 
-            final PrintZimmerPresentationModel model = new PrintZimmerPresentationModel(zimmerSelection.getList(), new HeaderInfo("Zimmer Liste drucken","Hier können Sie die aktuelle Zimmer Liste ausdrucken oder speichern."));
+            final PrintZimmerPresentationModel model = new PrintZimmerPresentationModel(zimmerSelection.getList(), new CWHeaderInfo("Zimmer Liste drucken", "Hier können Sie die aktuelle Zimmer Liste ausdrucken oder speichern."));
             final PrintZimmerView printView = new PrintZimmerView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -278,7 +249,7 @@ public class ZimmerPresentationModel implements Disposable{
                     }
                 }
             });
-            GUIManager.changeView(printView.buildPanel(), true);
+            GUIManager.changeView(printView, true);
 
 
         }
@@ -361,7 +332,7 @@ public class ZimmerPresentationModel implements Disposable{
 
     private void editSelectedItem(EventObject e) {
         final Zimmer z = zimmerSelection.getSelection();
-        final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new HeaderInfo("Zimmer bearbeiten","Hier können Sie ein bestehendes Zimmer bearbeiten"));
+        final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new CWHeaderInfo("Zimmer bearbeiten", "Hier können Sie ein bestehendes Zimmer bearbeiten"));
         final EditZimmerView editView = new EditZimmerView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -379,6 +350,6 @@ public class ZimmerPresentationModel implements Disposable{
 
             }
         });
-        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.changeView(editView, true);
     }
 }

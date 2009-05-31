@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cw.roommanagementmodul.gui;
 
 
@@ -12,8 +9,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -37,7 +33,7 @@ import java.text.DecimalFormat;
  *
  * @author Dominik
  */
-public class TarifPresentationModel extends PresentationModel<Gebuehr> implements Disposable{
+public class TarifPresentationModel extends PresentationModel<Gebuehr>{
 
     private TarifManager tarifManager;
     private Action newAction;
@@ -47,8 +43,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> implement
     private Gebuehr gebuehr;
     private ButtonListenerSupport support;
     private SelectionInList<Tarif> tarifSelection;
-    private String headerText;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private SelectionEmptyHandler selectionEmptyHandler;
     private DoubleClickHandler doubleClickHandler;
     private DecimalFormat numberFormat;
@@ -62,26 +57,19 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> implement
         this.tarifManager = TarifManager.getInstance();
         initModels();
         this.initEventHandling();
-
     }
 
-    public TarifPresentationModel(Gebuehr gebuehr, HeaderInfo header) {
+    public TarifPresentationModel(Gebuehr gebuehr, CWHeaderInfo header) {
         super(gebuehr);
         this.gebuehr = gebuehr;
         numberFormat = new DecimalFormat("#0.00");
         this.tarifManager = TarifManager.getInstance();
         selectionEmptyHandler=new SelectionEmptyHandler();
-        this.headerText=header.getHeaderText();
         this.headerInfo=header;
         initModels();
         this.initEventHandling();
     }
 
-    private void initEventHandling() {
-        getTarifSelection().addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                selectionEmptyHandler);
-    }
 
     private void initModels() {
         support = new ButtonListenerSupport();
@@ -90,10 +78,16 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> implement
         deleteAction = new DeleteAction();
         backAction = new BackAction();
 
+        tarifSelection=new SelectionInList<Tarif>(tarifManager.getAllOrderd(gebuehr));
+    }
 
-        setTarifSelection(new SelectionInList<Tarif>(tarifManager.getAllOrderd(gebuehr)));
+    private void initEventHandling() {
+        getTarifSelection().addPropertyChangeListener(
+                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
+                selectionEmptyHandler);
         updateActionEnablement();
     }
+
 
     private void updateActionEnablement() {
         boolean hasSelection = getTarifSelection().hasSelection();
@@ -133,26 +127,18 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> implement
         this.tarifSelection = tarifSelection;
     }
 
-    public String getHeaderText() {
-        return headerText;
-    }
+ 
 
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
     }
 
     public void dispose() {
         getTarifSelection().removeValueChangeListener(selectionEmptyHandler);
+        tarifSelection.release();
         release();
     }
 
@@ -217,7 +203,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> implement
     private void newSelectedItem(EventObject e) {
         final Tarif t = new Tarif();
         t.setGebuehr(gebuehr);
-        final EditTarifPresentationModel model = new EditTarifPresentationModel(t,new HeaderInfo("Tarif erstellen","Hier können Sie einen neuen Tarif erstellen"));
+        final EditTarifPresentationModel model = new EditTarifPresentationModel(t,new CWHeaderInfo("Tarif erstellen","Hier können Sie einen neuen Tarif erstellen"));
         final EditTarifView gebView = new EditTarifView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -233,12 +219,12 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> implement
                 }
             }
         });
-        GUIManager.changeView(gebView.buildPanel(), true);
+        GUIManager.changeView(gebView, true);
     }
 
     private void editSelectedItem(EventObject e) {
         final Tarif t= tarifSelection.getSelection();
-        final EditTarifPresentationModel model = new EditTarifPresentationModel(t,new HeaderInfo("Tarif bearbeiten","Hier können Sie einen bestehenden Tarif bearbeiten"));
+        final EditTarifPresentationModel model = new EditTarifPresentationModel(t,new CWHeaderInfo("Tarif bearbeiten","Hier können Sie einen bestehenden Tarif bearbeiten"));
         final EditTarifView editView = new EditTarifView(model);
         model.addButtonListener(new ButtonListener() {
             public void buttonPressed(ButtonEvent evt) {
@@ -253,7 +239,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr> implement
                 }
             }
         });
-        GUIManager.changeView(editView.buildPanel(),true);
+        GUIManager.changeView(editView,true);
     }
 
     public TableModel createZuordnungTableModel(ListModel listModel) {

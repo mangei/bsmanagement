@@ -1,15 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Posting;
@@ -29,7 +24,7 @@ import javax.swing.Action;
  *
  * @author Dominik
  */
-public class StornoResultPresentationModel implements Disposable{
+public class StornoResultPresentationModel {
 
     private String headerText;
     private Action backAction;
@@ -39,12 +34,13 @@ public class StornoResultPresentationModel implements Disposable{
     private Map<Customer, List<Posting>> customerPostingMap;
     private Map<Bewohner, List<Posting>> bewohnerPostingMap;
     private Map<Customer, List<Posting>> customerNoBewohnerMap;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
-    public StornoResultPresentationModel(List<Posting> postingList, HeaderInfo header) {
+    public StornoResultPresentationModel(List<Posting> postingList, CWHeaderInfo header) {
         this.postingList = postingList;
         this.headerInfo = header;
         initModels();
+        initEventHandling();
     }
 
     private void initModels() {
@@ -85,6 +81,9 @@ public class StornoResultPresentationModel implements Disposable{
         }
     }
 
+    private void initEventHandling() {
+    }
+
     public List<Bewohner> getBewohner() {
 
         List<Bewohner> bewohnerList = new ArrayList<Bewohner>();
@@ -110,20 +109,6 @@ public class StornoResultPresentationModel implements Disposable{
     }
 
     /**
-     * @return the headerText
-     */
-    public String getHeaderText() {
-        return headerText;
-    }
-
-    /**
-     * @param headerText the headerText to set
-     */
-    public void setHeaderText(String headerText) {
-        this.headerText = headerText;
-    }
-
-    /**
      * @return the backAction
      */
     public Action getBackAction() {
@@ -131,25 +116,12 @@ public class StornoResultPresentationModel implements Disposable{
     }
 
     /**
-     * @param backAction the backAction to set
-     */
-    public void setBackAction(Action backAction) {
-        this.backAction = backAction;
-    }
-
-        /**
      * @return the printAction
      */
     public Action getPrintAction() {
         return printAction;
     }
 
-    /**
-     * @param printAction the printAction to set
-     */
-    public void setPrintAction(Action printAction) {
-        this.printAction = printAction;
-    }
 
     public void removeButtonListener(ButtonListener listener) {
         support.removeButtonListener(listener);
@@ -204,19 +176,11 @@ public class StornoResultPresentationModel implements Disposable{
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
-    }
-
     public void dispose() {
-
     }
 
     private class BackAction
@@ -241,7 +205,7 @@ public class StornoResultPresentationModel implements Disposable{
         }
 
         public void actionPerformed(ActionEvent e) {
-            final PrintStornoPresentationModel model = new PrintStornoPresentationModel(bewohnerPostingMap,customerNoBewohnerMap, new HeaderInfo("Storno Lauf", "Storno Lauf zum Ausdrucken."),headerInfo.getHeaderText());
+            final PrintStornoPresentationModel model = new PrintStornoPresentationModel(bewohnerPostingMap, customerNoBewohnerMap, new CWHeaderInfo("Storno Lauf", "Storno Lauf zum Ausdrucken."), headerInfo.getHeaderText());
             final PrintStornoView printView = new PrintStornoView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -254,7 +218,7 @@ public class StornoResultPresentationModel implements Disposable{
                     }
                 }
             });
-            GUIManager.changeView(printView.buildPanel(), true);
+            GUIManager.changeView(printView, true);
 
         }
     }

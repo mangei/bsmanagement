@@ -1,21 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.roommanagementmodul.geblauf.GebTarifSelection;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.List;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import cw.roommanagementmodul.pojo.Bewohner;
@@ -28,18 +22,21 @@ import javax.swing.JScrollPane;
  *
  * @author Dominik
  */
-public class LaufResultView implements Disposable {
+public class LaufResultView extends CWView {
 
     private LaufResultPresentationModel model;
-    private JButton bBack;
-    private JButton bPrint;
+    private CWButton bBack;
+    private CWButton bPrint;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
     private DecimalFormat numberFormat;
 
     public LaufResultView(LaufResultPresentationModel m) {
         this.model = m;
         numberFormat = new DecimalFormat("#0.00");
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -53,16 +50,18 @@ public class LaufResultView implements Disposable {
 
     }
 
-    public JPanel buildPanel() {
-        initComponents();
+    private void initEventHandling() {
+    }
+
+    private void buildView() {
 
         boolean warningNoGebuehr = false;
-        mainPanel = new JViewPanel(model.getHeaderInfo());
-        mainPanel.getButtonPanel().add(bPrint);
-        mainPanel.getButtonPanel().add(bBack);
+        this.setHeaderInfo(model.getHeaderInfo());
+        this.getButtonPanel().add(bPrint);
+        this.getButtonPanel().add(bBack);
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
-        mainPanel.getTopPanel().setLayout(layout);
+        this.getTopPanel().setLayout(layout);
 
         //JPanel contentPanel = panel.getContentPanel();
         JPanel contentPanel = new JPanel();
@@ -78,7 +77,7 @@ public class LaufResultView implements Disposable {
         PanelBuilder builder = new PanelBuilder(bewohnerLayout, contentPanel);
         CellConstraints cc = new CellConstraints();
 
-        JViewPanel bewohnerPanel;
+        CWView bewohnerPanel = CWComponentFactory.createView();
         List<Bewohner> bewohnerList = model.getBewohner();
         int j = 1;
         for (int i = 0; i < bewohnerList.size(); i++) {
@@ -94,21 +93,18 @@ public class LaufResultView implements Disposable {
 
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setPreferredSize(new Dimension(10, 10));
-        mainPanel.getContentPanel().add(scroll);
+        this.getContentPanel().add(scroll);
 
         if (warningNoGebuehr) {
             JOptionPane.showMessageDialog(null, "Es sind Bewohner vorhanden die keine Gebühr für dieses Datum zugewießen bekommen haben.", "Warunung", JOptionPane.INFORMATION_MESSAGE);
         }
-
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
     }
 
-    public JViewPanel createBewohnerPanel(Bewohner b, List<GebTarifSelection> tarifSelectionList) {
+    public CWView createBewohnerPanel(Bewohner b, List<GebTarifSelection> tarifSelectionList) {
 
 
-        JViewPanel panel = new JViewPanel();
-        panel.setHeaderInfo(new HeaderInfo("" + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + "     Zimmer: " + b.getZimmer().getName() + "     Bereich: " + b.getZimmer().getBereich()));
+        CWView panel = CWComponentFactory.createView();
+        panel.setHeaderInfo(new CWHeaderInfo("" + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + "     Zimmer: " + b.getZimmer().getName() + "     Bereich: " + b.getZimmer().getBereich()));
 
         StringBuffer row = new StringBuffer("pref, 3dlu, pref, 12dlu,pref, 3dlu, pref, 12dlu");
         for (int i = 1; i < tarifSelectionList.size(); i++) {
@@ -148,7 +144,7 @@ public class LaufResultView implements Disposable {
             if (tarifSelectionList.get(i).isWarning() == false) {
                 gebuehr = new JLabel(tarifSelectionList.get(i).getGebuehr().getGebuehr().getName());
                 if (tarifSelectionList.get(i).getTarif() != null) {
-                    tarif = new JLabel("€ "+numberFormat.format(tarifSelectionList.get(i).getTarif().getTarif()));
+                    tarif = new JLabel("€ " + numberFormat.format(tarifSelectionList.get(i).getTarif().getTarif()));
                     summe = summe + tarifSelectionList.get(i).getTarif().getTarif();
 
                 }
@@ -228,7 +224,6 @@ public class LaufResultView implements Disposable {
     }
 
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

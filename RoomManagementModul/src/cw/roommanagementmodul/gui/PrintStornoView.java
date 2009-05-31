@@ -1,35 +1,30 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 
 package cw.roommanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import net.sf.jasperreports.swing.JRViewer;
 
 /**
  *
  * @author Dominik
  */
-public class PrintStornoView implements Disposable{
+public class PrintStornoView extends CWView {
 
     private PrintStornoPresentationModel model;
-    private JButton bBack;
+    private CWButton bBack;
     private JRViewer viewer;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
 
-
-    public PrintStornoView(PrintStornoPresentationModel model){
-        this.model=model;
+    public PrintStornoView(PrintStornoPresentationModel model) {
+        this.model = model;
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
-     private void initComponents() {
+    private void initComponents() {
         bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
         viewer = new JRViewer(model.getJasperPrint());
@@ -37,20 +32,17 @@ public class PrintStornoView implements Disposable{
         componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bBack);
     }
 
-    public JPanel buildPanel() {
-        initComponents();
+    private void initEventHandling() {
+    }
 
-        mainPanel = new JViewPanel(model.getHeaderInfo());
-        mainPanel.getButtonPanel().add(bBack);
+    private void buildView() {
 
-        mainPanel.getContentPanel().add(viewer);
-
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
+        this.setHeaderInfo(model.getHeaderInfo());
+        this.getButtonPanel().add(bBack);
+        this.getContentPanel().add(viewer);
     }
 
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

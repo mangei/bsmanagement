@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.list.SelectionInList;
@@ -9,8 +5,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -31,7 +26,7 @@ import javax.swing.JOptionPane;
  *
  * @author Dominik
  */
-public class KautionPresentationModel implements Disposable {
+public class KautionPresentationModel {
 
     private KautionManager kautionManager;
     private BewohnerManager bewohnerManager;
@@ -44,7 +39,7 @@ public class KautionPresentationModel implements Disposable {
     private String headerText;
     private SelectionEmptyHandler selectionEmptyHandler;
     private DoubleClickHandler doubleClickHandler;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     KautionPresentationModel(KautionManager kautionManager, String header) {
         this.kautionManager = kautionManager;
@@ -56,7 +51,7 @@ public class KautionPresentationModel implements Disposable {
         this.initEventHandling();
     }
 
-    KautionPresentationModel(KautionManager kautionManager, HeaderInfo header) {
+    KautionPresentationModel(KautionManager kautionManager, CWHeaderInfo header) {
         this.kautionManager = kautionManager;
         bewohnerManager = BewohnerManager.getInstance();
         selectionEmptyHandler = new SelectionEmptyHandler();
@@ -175,15 +170,8 @@ public class KautionPresentationModel implements Disposable {
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
     }
 
     private class NewAction
@@ -195,7 +183,7 @@ public class KautionPresentationModel implements Disposable {
 
         public void actionPerformed(ActionEvent e) {
             final Kaution k = new Kaution();
-            final EditKautionPresentationModel model = new EditKautionPresentationModel(k, new HeaderInfo("Kaution erstellen", "Hier können Sie eine Kaution erstellen"));
+            final EditKautionPresentationModel model = new EditKautionPresentationModel(k, new CWHeaderInfo("Kaution erstellen", "Hier können Sie eine Kaution erstellen"));
             final EditKautionView editView = new EditKautionView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -211,7 +199,7 @@ public class KautionPresentationModel implements Disposable {
                     }
                 }
             });
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
         }
     }
 
@@ -298,7 +286,7 @@ public class KautionPresentationModel implements Disposable {
 
     private void editSelectedItem(EventObject e) {
         final Kaution k = this.getKautionSelection().getSelection();
-        final EditKautionPresentationModel model = new EditKautionPresentationModel(k, new HeaderInfo("Kaution bearbeiten", "Hier können Sie ein Kaution bearbeiten"));
+        final EditKautionPresentationModel model = new EditKautionPresentationModel(k, new CWHeaderInfo("Kaution bearbeiten", "Hier können Sie ein Kaution bearbeiten"));
         final EditKautionView editView = new EditKautionView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -316,6 +304,6 @@ public class KautionPresentationModel implements Disposable {
 
             }
         });
-        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.changeView(editView, true);
     }
 }

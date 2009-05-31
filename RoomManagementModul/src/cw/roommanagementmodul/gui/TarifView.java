@@ -1,41 +1,34 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.roommanagementmodul.component.DateTimeTableCellRenderer;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWTable;
 import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
 
 /**
  *
  * @author Dominik
  */
-public class TarifView implements Disposable{
+public class TarifView extends CWView {
 
     private TarifPresentationModel model;
-    private JButton bNew;
-    private JButton bDelete;
-    private JButton bEdit;
-    private JButton bBack;
-    private JXTable tTarif;
-
+    private CWButton bNew;
+    private CWButton bDelete;
+    private CWButton bEdit;
+    private CWButton bBack;
+    private CWTable tTarif;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
 
     public TarifView(TarifPresentationModel m) {
         this.model = m;
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -52,7 +45,7 @@ public class TarifView implements Disposable{
 
 
         String tarifTableStateName = "cw.roommanagementmodul.TarifView.tarifTableState";
-        tTarif = CWComponentFactory.createTable(model.createZuordnungTableModel(model.getTarifSelection()), "kein Tarif vorhanden",tarifTableStateName);
+        tTarif = CWComponentFactory.createTable(model.createZuordnungTableModel(model.getTarifSelection()), "kein Tarif vorhanden", tarifTableStateName);
 
         tTarif.setSelectionModel(new SingleListSelectionAdapter(new CWTableSelectionConverter(
                 model.getTarifSelection().getSelectionIndexHolder(),
@@ -61,42 +54,26 @@ public class TarifView implements Disposable{
         tTarif.getColumnModel().getColumn(0).setCellRenderer(new DateTimeTableCellRenderer(true));
         tTarif.getColumnModel().getColumn(1).setCellRenderer(new DateTimeTableCellRenderer(true));
 
-        componentContainer=CWComponentFactory.createCWComponentContainer()
-                .addComponent(bNew)
-                .addComponent(bDelete)
-                .addComponent(bEdit)
-                .addComponent(bBack)
-                .addComponent(tTarif);
+        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bNew).addComponent(bDelete).addComponent(bEdit).addComponent(bBack).addComponent(tTarif);
     }
 
     private void initEventHandling() {
         tTarif.addMouseListener(model.getDoubleClickHandler());
     }
 
-    public JPanel buildPanel() {
-        initComponents();
-        initEventHandling();
+    private void buildView() {
 
-        mainPanel = new JViewPanel(model.getHeaderInfo());
+        this.getButtonPanel().add(bNew);
+        this.getButtonPanel().add(bEdit);
+        this.getButtonPanel().add(bDelete);
+        this.getButtonPanel().add(bBack);
 
-        mainPanel.getButtonPanel().add(bNew);
-        mainPanel.getButtonPanel().add(bEdit);
-        mainPanel.getButtonPanel().add(bDelete);
-        mainPanel.getButtonPanel().add(bBack);
-
-
-        FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
-        mainPanel.getTopPanel().setLayout(layout);
-        CellConstraints cc = new CellConstraints();
-
-        mainPanel.getContentPanel().add(new JScrollPane(tTarif), BorderLayout.CENTER);
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
+        this.getContentPanel().add(new JScrollPane(tTarif), BorderLayout.CENTER);
     }
 
+    @Override
     public void dispose() {
         tTarif.removeMouseListener(model.getDoubleClickHandler());
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

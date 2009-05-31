@@ -1,25 +1,19 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Posting;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.roommanagementmodul.pojo.Bewohner;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.util.List;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -28,18 +22,20 @@ import javax.swing.JScrollPane;
  *
  * @author Dominik
  */
-public class StornoResultView implements Disposable {
+public class StornoResultView extends CWView {
 
     private StornoResultPresentationModel model;
-    private JButton bBack;
-    private JButton bPrint;
+    private CWButton bBack;
+    private CWButton bPrint;
     private CWComponentFactory.CWComponentContainer componentContainer;
     private DecimalFormat numberFormat;
-    private JViewPanel mainPanel;
 
     public StornoResultView(StornoResultPresentationModel m) {
         this.model = m;
         numberFormat = new DecimalFormat("#0.00");
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -50,16 +46,17 @@ public class StornoResultView implements Disposable {
         componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bBack).addComponent(bPrint);
     }
 
-    public JPanel buildPanel() {
+    private void initEventHandling() {
+    }
 
-        initComponents();
+    private void buildView() {
 
-        mainPanel = new JViewPanel(model.getHeaderInfo());
-        mainPanel.getButtonPanel().add(bBack);
-        mainPanel.getButtonPanel().add(bPrint);
+        this.setHeaderInfo(model.getHeaderInfo());
+        this.getButtonPanel().add(bBack);
+        this.getButtonPanel().add(bPrint);
 
         FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
-        mainPanel.getTopPanel().setLayout(layout);
+        this.getTopPanel().setLayout(layout);
 
         JPanel contentPanel = new JPanel();
 
@@ -67,7 +64,7 @@ public class StornoResultView implements Disposable {
         for (int i = 0; i < model.getBewohner().size(); i++) {
             row.append(",pref, 6dlu");
         }
-        for(int i=0;i<model.getCustomerNoBewohner().size();i++){
+        for (int i = 0; i < model.getCustomerNoBewohner().size(); i++) {
             row.append(",pref, 6dlu");
         }
 
@@ -78,7 +75,7 @@ public class StornoResultView implements Disposable {
         PanelBuilder builder = new PanelBuilder(bewohnerLayout, contentPanel);
         CellConstraints cc = new CellConstraints();
 
-        JViewPanel bewohnerPanel;
+        CWView bewohnerPanel=CWComponentFactory.createView();
         List<Bewohner> bewohnerList = model.getBewohner();
         int j = 1;
         for (int i = 0; i < bewohnerList.size(); i++) {
@@ -97,19 +94,16 @@ public class StornoResultView implements Disposable {
 
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setPreferredSize(new Dimension(10, 10));
-        mainPanel.getContentPanel().add(scroll);
+        this.getContentPanel().add(scroll);
 
         componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bBack);
 
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
     }
 
-    public JViewPanel createBewohnerPanel(Bewohner b, List<Posting> postingList) {
+    public CWView createBewohnerPanel(Bewohner b, List<Posting> postingList) {
 
-
-        JViewPanel panel = new JViewPanel();
-        panel.setHeaderInfo(new HeaderInfo("" + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + "     Zimmer: " + b.getZimmer().getName() + "     Bereich: " + b.getZimmer().getBereich()));
+        CWView panel = CWComponentFactory.createView();
+        panel.setHeaderInfo(new CWHeaderInfo("" + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + "     Zimmer: " + b.getZimmer().getName() + "     Bereich: " + b.getZimmer().getBereich()));
 
         StringBuffer row = new StringBuffer("pref, 3dlu, pref, 12dlu,pref, 3dlu, pref, 12dlu");
         for (int i = 1; i < postingList.size(); i++) {
@@ -179,11 +173,11 @@ public class StornoResultView implements Disposable {
         return panel;
     }
 
-    public JViewPanel createKundePanel(Customer c, List<Posting> postingList) {
+    public CWView createKundePanel(Customer c, List<Posting> postingList) {
 
 
-        JViewPanel panel = new JViewPanel();
-        panel.setHeaderInfo(new HeaderInfo("Kunde: " + c.getSurname() + " " + c.getForename()));
+        CWView panel = CWComponentFactory.createView();
+        panel.setHeaderInfo(new CWHeaderInfo("Kunde: " + c.getSurname() + " " + c.getForename()));
 
         StringBuffer row = new StringBuffer("pref, 3dlu, pref, 12dlu,pref, 3dlu, pref, 12dlu");
         for (int i = 1; i < postingList.size(); i++) {
@@ -253,8 +247,8 @@ public class StornoResultView implements Disposable {
         return panel;
     }
 
+    @Override
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

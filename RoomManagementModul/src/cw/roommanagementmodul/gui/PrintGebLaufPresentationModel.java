@@ -1,20 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
 import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.BewohnerGeb;
 import java.awt.event.ActionEvent;
-import java.lang.String;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,10 +32,10 @@ import net.sf.jasperreports.engine.util.JRSaver;
  *
  * @author Dominik
  */
-public class PrintGebLaufPresentationModel implements Disposable {
+public class PrintGebLaufPresentationModel{
 
     private BewohnerTarifSelection bewohnerTarifSelection;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private Action backAction;
     private ButtonListenerSupport support;
     private JasperReport jasperReport;
@@ -50,14 +44,14 @@ public class PrintGebLaufPresentationModel implements Disposable {
     private String reportSource;
     private String printHeader;
 
-    public PrintGebLaufPresentationModel(BewohnerTarifSelection bewohnerTarifSelection, HeaderInfo headerInfo,String printHeader) {
+    public PrintGebLaufPresentationModel(BewohnerTarifSelection bewohnerTarifSelection, CWHeaderInfo headerInfo,String printHeader) {
 
         this.bewohnerTarifSelection = bewohnerTarifSelection;
         this.headerInfo = headerInfo;
         this.printHeader=printHeader;
 
         initModels();
-        this.initEventHandling();
+        initEventHandling();
 
     }
 
@@ -66,7 +60,7 @@ public class PrintGebLaufPresentationModel implements Disposable {
 
     private void initModels() {
         setSupport(new ButtonListenerSupport());
-        setBackAction(new BackAction());
+        backAction=new BackAction();
 
         setReportSource("./jasper/bewohner.jrxml");
 //        setReportSource("./cw/boardingschoolmanagement/jasper/templates/bewohner.jrxml");
@@ -135,15 +129,8 @@ public class PrintGebLaufPresentationModel implements Disposable {
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
     }
 
     /**
@@ -153,12 +140,6 @@ public class PrintGebLaufPresentationModel implements Disposable {
         return backAction;
     }
 
-    /**
-     * @param backAction the backAction to set
-     */
-    public void setBackAction(Action backAction) {
-        this.backAction = backAction;
-    }
 
     /**
      * @return the support

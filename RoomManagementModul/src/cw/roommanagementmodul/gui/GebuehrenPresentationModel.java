@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
@@ -9,8 +5,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -33,7 +28,7 @@ import javax.swing.JOptionPane;
  *
  * @author Dominik
  */
-public class GebuehrenPresentationModel implements Disposable{
+public class GebuehrenPresentationModel {
 
     private GebuehrenManager gebuehrenManager;
     private Action newAction;
@@ -41,34 +36,16 @@ public class GebuehrenPresentationModel implements Disposable{
     private Action deleteAction;
     private Action kategorieAction;
     private Action tarifAction;
-    private String headerText;
     private SelectionInList<Gebuehr> gebuehrenSelection;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private SelectionEmptyHandler selectionEmptyHandler;
     private DoubleClickHandler doubleClickHandler;
 
-    public GebuehrenPresentationModel(GebuehrenManager gebuehrenManager) {
+    public GebuehrenPresentationModel(GebuehrenManager gebuehrenManager, CWHeaderInfo header) {
         this.gebuehrenManager = gebuehrenManager;
-        doubleClickHandler = new DoubleClickHandler();
+        this.headerInfo = header;
         initModels();
-        this.initEventHandling();
-
-    }
-
-    public GebuehrenPresentationModel(GebuehrenManager gebuehrenManager, HeaderInfo header) {
-        this.gebuehrenManager = gebuehrenManager;
-        this.headerText = header.getHeaderText();
-        doubleClickHandler = new DoubleClickHandler();
-        this.headerInfo=header;
-        initModels();
-        this.initEventHandling();
-    }
-
-    private void initEventHandling() {
-        selectionEmptyHandler=new SelectionEmptyHandler();
-        gebuehrenSelection.addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                selectionEmptyHandler);
+        initEventHandling();
     }
 
     private void initModels() {
@@ -82,8 +59,21 @@ public class GebuehrenPresentationModel implements Disposable{
         updateActionEnablement();
     }
 
+    private void initEventHandling() {
+        selectionEmptyHandler = new SelectionEmptyHandler();
+        gebuehrenSelection.addPropertyChangeListener(
+                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
+                selectionEmptyHandler);
+    }
+
+    public void dispose() {
+        gebuehrenSelection.release();
+        gebuehrenSelection.removeValueChangeListener(selectionEmptyHandler);
+    }
+
     private void updateActionEnablement() {
         boolean hasSelection = gebuehrenSelection.hasSelection();
+        doubleClickHandler = new DoubleClickHandler();
         getEditAction().setEnabled(hasSelection);
         getDeleteAction().setEnabled(hasSelection);
         getTarifAction().setEnabled(hasSelection);
@@ -113,26 +103,11 @@ public class GebuehrenPresentationModel implements Disposable{
         return gebuehrenSelection;
     }
 
-    public String getHeaderText() {
-        return headerText;
-    }
-
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
-    }
-
-    public void dispose() {
-        gebuehrenSelection.removeValueChangeListener(selectionEmptyHandler);
     }
 
     private class NewAction
@@ -144,7 +119,7 @@ public class GebuehrenPresentationModel implements Disposable{
 
         public void actionPerformed(ActionEvent e) {
             final Gebuehr g = new Gebuehr();
-            final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new HeaderInfo("Gebühr erstellen","Hier können Sie eine neue Gebühr erstellen"));
+            final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new CWHeaderInfo("Gebühr erstellen", "Hier können Sie eine neue Gebühr erstellen"));
             final EditGebuehrenView editView = new EditGebuehrenView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -160,7 +135,7 @@ public class GebuehrenPresentationModel implements Disposable{
                     }
                 }
             });
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
 
 
         }
@@ -175,23 +150,18 @@ public class GebuehrenPresentationModel implements Disposable{
 
         public void actionPerformed(ActionEvent e) {
             final GebuehrenKatManager gebKatManager = GebuehrenKatManager.getInstance();
-            final GebuehrenKategoriePresentationModel model = new GebuehrenKategoriePresentationModel(gebKatManager, new HeaderInfo("Kategorien verwalten","Übersicht aller Gebühren Kategorien"));
+            final GebuehrenKategoriePresentationModel model = new GebuehrenKategoriePresentationModel(gebKatManager, new CWHeaderInfo("Kategorien verwalten", "Übersicht aller Gebühren Kategorien"));
             final GebuehrenKategorieView editView = new GebuehrenKategorieView(model);
             model.addButtonListener(new ButtonListener() {
 
                 public void buttonPressed(ButtonEvent evt) {
                     if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                        //gebuehrenManager.saveGebuehr(g);
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                        model.removeButtonListener(this);
-//                        getGebuehrenSelection().setList(gebuehrenManager.getGebuehr());
-//                        GUIManager.changeToLastView();
-//                        GUIManager.getStatusbar().setTextAndFadeOut("Gebuehr wurde erstellt.");
                     }
                 }
             });
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
 
 
         }
@@ -211,7 +181,7 @@ public class GebuehrenPresentationModel implements Disposable{
 
     private void showTarif() {
         Gebuehr g = gebuehrenSelection.getSelection();
-        final TarifPresentationModel model = new TarifPresentationModel(g, new HeaderInfo("Tarif Übersicht: " + g.getName(),"Übersicht aller Tarife für eine bestimmte Gebühr."));
+        final TarifPresentationModel model = new TarifPresentationModel(g, new CWHeaderInfo("Tarif Übersicht: " + g.getName(), "Übersicht aller Tarife für eine bestimmte Gebühr."));
         final TarifView editView = new TarifView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -220,14 +190,14 @@ public class GebuehrenPresentationModel implements Disposable{
                     //gebuehrenManager.saveGebuehr(g);
                     }
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                        model.removeButtonListener(this);
+                    model.removeButtonListener(this);
 //                        getGebuehrenSelection().setList(gebuehrenManager.getGebuehr());
 //                        GUIManager.changeToLastView();
 //                        GUIManager.getStatusbar().setTextAndFadeOut("Gebuehr wurde erstellt.");
-                    }
+                }
             }
         });
-        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.changeView(editView, true);
 
     }
 
@@ -285,7 +255,7 @@ public class GebuehrenPresentationModel implements Disposable{
 
     private void editSelectedItem(EventObject e) {
         final Gebuehr g = getGebuehrenSelection().getSelection();
-        final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new HeaderInfo("Gebühr bearbeiten","Hier können Sie eine vorhandene Gebühr bearbeiten"));
+        final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new CWHeaderInfo("Gebühr bearbeiten", "Hier können Sie eine vorhandene Gebühr bearbeiten"));
         final EditGebuehrenView editView = new EditGebuehrenView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -301,7 +271,7 @@ public class GebuehrenPresentationModel implements Disposable{
                 }
             }
         });
-        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.changeView(editView, true);
     }
 
     public TableModel createGebuehrenTableModel(ListModel listModel) {
