@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
@@ -15,8 +12,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -28,6 +24,7 @@ import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
 import cw.roommanagementmodul.pojo.manager.GebuehrenManager;
 import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.GebuehrZuordnung;
+import cw.boardingschoolmanagement.gui.component.CWDateChooser;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -37,7 +34,7 @@ import java.util.GregorianCalendar;
  * @author Dominik
  */
 public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuordnung>
-                implements Disposable{
+                {
 
     private GebuehrZuordnung gebuehrZuordnung;
     private ButtonListenerSupport support;
@@ -49,9 +46,9 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
     private Action saveCancelButtonAction;
     private SelectionInList<Bereich> gebuehrList;
     private ValueModel unsaved;
-    private JDateChooser dcVon;
-    private JDateChooser dcBis;
-    private HeaderInfo headerInfo;
+    private CWDateChooser dcVon;
+    private CWDateChooser dcBis;
+    private CWHeaderInfo headerInfo;
     private SaveListener saveListener;
     private ButtonEnable buttonEnable;
 
@@ -66,10 +63,9 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         initEventHandling();
     }
 
-    GebBewohnerPresentationModel(GebuehrZuordnung gb, HeaderInfo header) {
+    GebBewohnerPresentationModel(GebuehrZuordnung gb, CWHeaderInfo header) {
         super(gb);
         saveListener= new  SaveListener();
-        this.headerText = header.getHeaderText();
         this.headerInfo = header;
         this.gebuehrZuordnung = gb;
         gebZuordnungManager = GebuehrZuordnungManager.getInstance();

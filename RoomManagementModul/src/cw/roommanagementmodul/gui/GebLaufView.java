@@ -4,6 +4,7 @@
  */
 package cw.roommanagementmodul.gui;
 
+import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -15,6 +16,7 @@ import cw.boardingschoolmanagement.gui.component.CWRadioButton;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -22,11 +24,6 @@ import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.ButtonGroup;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
 
 /**
  *
@@ -55,6 +52,8 @@ public class GebLaufView extends CWView implements ItemListener{
 
     public GebLaufView(GebLaufPresentationModel model) {
         this.model = model;
+        initComponents();
+
     }
 
     public void initComponents() {
@@ -88,18 +87,18 @@ public class GebLaufView extends CWView implements ItemListener{
         betriebsartGroup.add(rEchtlauf);
         rTestlauf.setSelected(true);
 
-        lJahr = new JLabel("Jahr: ");
+        lJahr = CWComponentFactory.createLabel("Jahr: ");
         NumberFormat format = NumberFormat.getNumberInstance();
         format.setGroupingUsed(false);
         format.setMaximumIntegerDigits(4);
 
-        jahrField = new JTextField();
-        jahrField.setDocument(model.getYearDocument());
+        jahrField = CWComponentFactory.createTextField(new ValueHolder(model.getYear()));
+
         GregorianCalendar gc = new GregorianCalendar();
         jahrField.setText("" + gc.get(Calendar.YEAR));
 
 
-        monatComboBox = new JComboBox(model.getMonatCbModel());
+        monatComboBox = CWComponentFactory.createComboBox(model.getMonatCbModel());
         gebLaufComboBox = CWComponentFactory.createComboBox(model.getGebLaufList());
 
         rNormal.addItemListener(this);
@@ -111,17 +110,14 @@ public class GebLaufView extends CWView implements ItemListener{
         componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(lLaufart).addComponent(lBetiebsart).addComponent(lAbrMonat).addComponent(lGebLauf).addComponent(lMonat).addComponent(lJahr).addComponent(rNormal).addComponent(rStorno).addComponent(startButton).addComponent(rTestlauf).addComponent(rEchtlauf).addComponent(jahrField).addComponent(gebLaufComboBox).addComponent(monatComboBox);
     }
 
-    public JComponent buildPanel() {
-        initComponents();
+    private void buildView() {
 
-        mainPanel = new JViewPanel(model.getHeaderInfo());
-
-
-        CWButtonPanel buttonPanel = mainPanel.getButtonPanel();
+        this.setHeaderInfo(model.getHeaderInfo());
+        CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(startButton);
 
-        JPanel contentPanel = mainPanel.getContentPanel();
+        CWPanel contentPanel = (CWPanel)this.getContentPanel();
 
         /**
          * Boxes
@@ -155,8 +151,6 @@ public class GebLaufView extends CWView implements ItemListener{
         builder.add(lGebLauf, cc.xy(2, 15));
         builder.add(gebLaufComboBox, cc.xy(4, 15));
 
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
     }
 
     public void itemStateChanged(ItemEvent e) {
@@ -189,10 +183,10 @@ public class GebLaufView extends CWView implements ItemListener{
 
     }
 
+    @Override
     public void dispose() {
         rNormal.removeItemListener(this);
         rStorno.removeItemListener(this);
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

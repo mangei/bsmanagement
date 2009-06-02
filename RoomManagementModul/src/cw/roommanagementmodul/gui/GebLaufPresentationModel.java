@@ -1,7 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
@@ -10,8 +7,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CalendarUtil;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Posting;
 import cw.customermanagementmodul.pojo.PostingCategory;
@@ -21,11 +17,8 @@ import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
 import java.awt.event.ActionEvent;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.DefaultComboBoxModel;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
@@ -47,9 +40,8 @@ import javax.swing.JOptionPane;
  * @author Dominik
  */
 public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection>
-                    implements Disposable{
+                    {
 
-    private String headerText;
     private GebLaufSelection gebLauf;
     private Action start;
     private Action normalLauf;
@@ -57,18 +49,19 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
     private Action testLauf;
     private Action echtLauf;
     private Document yearDocument;
-    private DefaultComboBoxModel monatCbModel;
+    private SelectionInList monatList;
+    private List mList;
     private boolean laufart = true;
     private boolean betriebsart = true;
     private SelectionInList<GebLauf> gebLaufList;
     private GebLaufManager gebLaufManager;
     private int stornoInt = 1;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
+    private Integer year;
 
-    public GebLaufPresentationModel(GebLaufSelection gebLauf, HeaderInfo header) {
+    public GebLaufPresentationModel(GebLaufSelection gebLauf, CWHeaderInfo header) {
         super(gebLauf);
         this.gebLauf = gebLauf;
-        this.headerText = header.getHeaderText();
         this.headerInfo = header;
         initModels();
         this.initEventHandling();
@@ -83,40 +76,33 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         stornoLauf = new StornoLaufAction();
         testLauf = new TestLaufAction();
         echtLauf = new EchtLaufAction();
-        monatCbModel = new DefaultComboBoxModel();
+        monatList = new SelectionInList();
         setYearDocument(new YearDocument());
 
         gebLaufManager = GebLaufManager.getInstance();
         gebLaufList = new SelectionInList<GebLauf>(gebLaufManager.getAllOrdered());
+        mList=new ArrayList();
 
-
-        getMonatCbModel().addElement("Jänner");
-        getMonatCbModel().addElement("Februar");
-        getMonatCbModel().addElement("März");
-        getMonatCbModel().addElement("April");
-        getMonatCbModel().addElement("Mai");
-        getMonatCbModel().addElement("Juni");
-        getMonatCbModel().addElement("Juli");
-        getMonatCbModel().addElement("August");
-        getMonatCbModel().addElement("September");
-        getMonatCbModel().addElement("Oktober");
-        getMonatCbModel().addElement("November");
-        getMonatCbModel().addElement("Dezember");
-
-    }
-
-    /**
-     * @return the headerText
-     */
-    public String getHeaderText() {
-        return headerText;
+        mList.add("Jänner");
+        mList.add("Februar");
+        mList.add("März");
+        mList.add("April");
+        mList.add("Mai");
+        mList.add("Juni");
+        mList.add("Juli");
+        mList.add("August");
+        mList.add("September");
+        mList.add("Oktober");
+        mList.add("November");
+        mList.add("Dezember");
+        monatList.setList(mList);
     }
 
     /**
      * @return the monatCbModel
      */
-    public DefaultComboBoxModel getMonatCbModel() {
-        return monatCbModel;
+    public SelectionInList getMonatCbModel() {
+        return monatList;
     }
 
     /**
@@ -185,19 +171,29 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
-    }
 
     public void dispose() {
+        gebLaufList.release();
+        monatList.release();
         release();
+    }
+
+    /**
+     * @return the year
+     */
+    public Integer getYear() {
+        return year;
+    }
+
+    /**
+     * @param year the year to set
+     */
+    public void setYear(Integer year) {
+        this.year = year;
     }
 
     private class StartAction
@@ -275,7 +271,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                 }
 
 
-                final StornoResultPresentationModel model = new StornoResultPresentationModel(newPostingList, new HeaderInfo(laufString,"Ergebnis des Storno Lauf"));
+                final StornoResultPresentationModel model = new StornoResultPresentationModel(newPostingList, new CWHeaderInfo(laufString,"Ergebnis des Storno Lauf"));
                 final StornoResultView laufResultView = new StornoResultView(model);
                 model.addButtonListener(new ButtonListener() {
 
@@ -283,7 +279,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                         GUIManager.changeToLastView();
                     }
                 });
-                GUIManager.changeView(laufResultView.buildPanel(), true);
+                GUIManager.changeView(laufResultView, true);
 
             } else {
                 JOptionPane.showMessageDialog(null, "Für den Storno-Lauf muss ein Gebührenlauf ausgewählt sein!");
@@ -301,15 +297,14 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         if (checkGO == JOptionPane.YES_OPTION) {
 
             int month = findMonth();
-            int year = 0;
-            try {
-                year = Integer.parseInt(yearDocument.getText(0, yearDocument.getLength()));
-            } catch (BadLocationException ex) {
-                Logger.getLogger(GebLaufPresentationModel.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//
+//            try {
+//                year = Integer.parseInt(yearDocument.getText(0, yearDocument.getLength()));
+//            } catch (BadLocationException ex) {
+//                Logger.getLogger(GebLaufPresentationModel.class.getName()).log(Level.SEVERE, null, ex);
+//            }
 
             GregorianCalendar gc = new GregorianCalendar(year, month - 1, 1);
-            System.out.println(gc.getTimeInMillis());
             GebLauf gebLauf = new GebLauf(gc.getTime().getTime(), new Date(), betriebsart);
 
             GebLaufSelection gebLaufSelection = new GebLaufSelection();
@@ -334,7 +329,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                     laufString = new String("Test Lauf - " + monthStr + " " + yearInt);
                 }
 
-                final LaufResultPresentationModel model = new LaufResultPresentationModel(selection, new HeaderInfo(laufString,"Ergebnis des Gebühren Lauf"));
+                final LaufResultPresentationModel model = new LaufResultPresentationModel(selection, new CWHeaderInfo(laufString,"Ergebnis des Gebühren Lauf"));
                 final LaufResultView laufResultView = new LaufResultView(model);
                 model.addButtonListener(new ButtonListener() {
 
@@ -342,7 +337,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                         GUIManager.changeToLastView();
                     }
                 });
-                GUIManager.changeView(laufResultView.buildPanel(), true);
+                GUIManager.changeView(laufResultView, true);
 
             }
         }
@@ -419,7 +414,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
     private int findMonth() {
 
-        String month = monatCbModel.getSelectedItem().toString();
+        String month = monatList.getSelection().toString();
 
         if (month.equals("Jänner")) {
             return 1;
