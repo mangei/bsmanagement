@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
@@ -10,11 +6,9 @@ import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Customer;
 import java.awt.event.ActionEvent;
@@ -39,8 +33,7 @@ import javax.swing.JOptionPane;
  * @author Dominik
  */
 public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bewohner>
-                                implements Disposable{
-
+                                {
     private GebuehrZuordnungManager gebuehrZuordnungManager;
     private Action newAction;
     private Action editAction;
@@ -50,7 +43,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
     private String headerText;
     private ButtonListenerSupport support;
     private SelectionInList<GebuehrZuordnung> gebuehrZuordnungSelection;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private SelectionEmptyHandler selectionEmptyHandler;
     private DoubleClickHandler doubleClickHandler;
 
@@ -66,7 +59,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
 
     }
 
-    GebZuordnungBewohnerPresentationModel(Bewohner bewohner, HeaderInfo header) {
+    GebZuordnungBewohnerPresentationModel(Bewohner bewohner, CWHeaderInfo header) {
         super(bewohner);
         doubleClickHandler= new DoubleClickHandler();
         selectionEmptyHandler = new SelectionEmptyHandler();
@@ -75,13 +68,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
         this.bewohner = bewohner;
         this.gebuehrZuordnungManager = GebuehrZuordnungManager.getInstance();
         initModels();
-        this.initEventHandling();
-    }
-
-    private void initEventHandling() {
-        getGebuehrZuordnungSelection().addPropertyChangeListener(
-                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
-                selectionEmptyHandler);
+        initEventHandling();
     }
 
     private void initModels() {
@@ -94,9 +81,12 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
         //nur vom bestimmten Bewohner!!!
         gebuehrZuordnungSelection = new SelectionInList<GebuehrZuordnung>(gebuehrZuordnungManager.getGebuehrZuordnung(getBewohner()));
         updateActionEnablement();
+    }
 
-
-
+    private void initEventHandling() {
+        getGebuehrZuordnungSelection().addPropertyChangeListener(
+                SelectionInList.PROPERTYNAME_SELECTION_EMPTY,
+                selectionEmptyHandler);
     }
 
     private void updateActionEnablement() {
@@ -144,15 +134,8 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
     }
 
     public void dispose() {
@@ -220,7 +203,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
         final GebuehrZuordnung gb = new GebuehrZuordnung();
         Customer c = bewohner.getCustomer();
         gb.setBewohner(bewohner);
-        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new HeaderInfo("Bewohner: "+c.getSurname() + " " + c.getForename(),"Hier können Sie einem Bewohner eine Gebühr zuordnen."));
+        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: "+c.getSurname() + " " + c.getForename(),"Hier können Sie einem Bewohner eine Gebühr zuordnen."));
         final GebBewohnerView gebView = new GebBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -236,13 +219,13 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
                 }
             }
         });
-        GUIManager.changeView(gebView.buildPanel(), true);
+        GUIManager.changeView(gebView, true);
     }
 
     private void editSelectedItem(EventObject e) {
         final GebuehrZuordnung gb = gebuehrZuordnungSelection.getSelection();
         Customer c = bewohner.getCustomer();
-        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new HeaderInfo("Bewohner: "+c.getSurname() + " " + c.getForename(),"Hier können Sie alle Gebühren verwalten, die zu einem Bewohner zugeordnet sind."));
+        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: "+c.getSurname() + " " + c.getForename(),"Hier können Sie alle Gebühren verwalten, die zu einem Bewohner zugeordnet sind."));
         final GebBewohnerView editView = new GebBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -258,7 +241,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
                 }
             }
         });
-        GUIManager.changeView(editView.buildPanel(), true);
+        GUIManager.changeView(editView, true);
     }
 
     public TableModel createZuordnungTableModel(ListModel listModel) {

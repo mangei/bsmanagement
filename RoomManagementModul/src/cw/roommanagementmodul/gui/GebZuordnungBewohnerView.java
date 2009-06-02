@@ -1,40 +1,33 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.roommanagementmodul.component.DateTimeTableCellRenderer;
-import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import org.jdesktop.swingx.JXTable;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWTable;
 
 /**
  *
  * @author Dominik
  */
-public class GebZuordnunglBewohnerView implements Disposable{
+public class GebZuordnungBewohnerView extends CWView{
 
     private GebZuordnungBewohnerPresentationModel model;
-    private JButton bNew;
-    private JButton bDelete;
-    private JButton bEdit;
-    private JButton bBack;
-    private JXTable tZuordnung;
-      private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
+    private CWButton bNew;
+    private CWButton bDelete;
+    private CWButton bEdit;
+    private CWButton bBack;
+    private CWTable tZuordnung;
+    private CWComponentFactory.CWComponentContainer componentContainer;
 
-    public GebZuordnunglBewohnerView(GebZuordnungBewohnerPresentationModel m) {
+    public GebZuordnungBewohnerView(GebZuordnungBewohnerPresentationModel m) {
         this.model = m;
+        initComponents();
+        buildView();
+        initEventHandling();
+
     }
 
     private void initComponents() {
@@ -72,35 +65,18 @@ public class GebZuordnunglBewohnerView implements Disposable{
         tZuordnung.addMouseListener(model.getDoubleClickHandler());
     }
 
-    public JPanel buildPanel() {
-        initComponents();
-        initEventHandling();
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
 
-        mainPanel = new JViewPanel(model.getHeaderInfo());
-
-        mainPanel.getButtonPanel().add(bNew);
-        mainPanel.getButtonPanel().add(bEdit);
-        mainPanel.getButtonPanel().add(bDelete);
-        mainPanel.getButtonPanel().add(bBack);
-
-
-        FormLayout layout = new FormLayout("pref, 2dlu, 50dlu:grow, 2dlu, pref", "pref");
-        mainPanel.getTopPanel().setLayout(layout);
-        CellConstraints cc = new CellConstraints();
-
-//        ArrayListModel list = new ArrayListModel();
-//        Object sel = new Object();
-//        list.add(sel);
-//
-//        panel.getTopPanel().add(new JObjectChooser(list, null), cc.xy(1, 1));
-        mainPanel.getContentPanel().add(new JScrollPane(tZuordnung), BorderLayout.CENTER);
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
+        this.getButtonPanel().add(bNew);
+        this.getButtonPanel().add(bEdit);
+        this.getButtonPanel().add(bDelete);
+        this.getButtonPanel().add(bBack);
     }
 
+    @Override
     public void dispose() {
         tZuordnung.removeMouseListener(model.getDoubleClickHandler());
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

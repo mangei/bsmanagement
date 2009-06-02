@@ -58,6 +58,7 @@ public class GebuehrenKategorieView extends CWView {
         this.getContentPanel().add(lGebuehrenKat, BorderLayout.CENTER);
     }
 
+    @Override
     public void dispose() {
         lGebuehrenKat.removeMouseListener(model.getDoubleClickHandler());
         componentContainer.dispose();

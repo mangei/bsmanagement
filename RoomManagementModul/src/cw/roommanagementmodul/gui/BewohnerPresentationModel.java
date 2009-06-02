@@ -380,7 +380,7 @@ public class BewohnerPresentationModel
     private void gebZuordnungSelectedItem(EventObject e) {
         Customer c = bewohnerSelection.getSelection().getCustomer();
         final GebZuordnungBewohnerPresentationModel model = new GebZuordnungBewohnerPresentationModel(this.getBewohnerSelection().getSelection(), new CWHeaderInfo("Gebühren Übersicht: " + c.getSurname() + " " + c.getForename(), "Übersicht aller Gebühren die diesem Bewohner zugeordnet sind."));
-        final GebZuordnunglBewohnerView detailView = new GebZuordnunglBewohnerView(model);
+        final GebZuordnungBewohnerView detailView = new GebZuordnungBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 
             public void buttonPressed(ButtonEvent evt) {

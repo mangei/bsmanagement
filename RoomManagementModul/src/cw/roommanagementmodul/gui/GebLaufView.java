@@ -9,8 +9,12 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWRadioButton;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
+import cw.boardingschoolmanagement.gui.component.CWComboBox;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -18,39 +22,36 @@ import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 
 /**
  *
  * @author Dominik
  */
-public class GebLaufView implements ItemListener, Disposable {
+public class GebLaufView extends CWView implements ItemListener{
 
     private GebLaufPresentationModel model;
-    private JLabel lLaufart;
-    private JLabel lBetiebsart;
-    private JLabel lAbrMonat;
-    private JLabel lMonat;
-    private JLabel lJahr;
-    private JLabel lGebLauf;
-    private JRadioButton rNormal;
-    private JRadioButton rStorno;
-    private JRadioButton rTestlauf;
-    private JRadioButton rEchtlauf;
-    private JButton startButton;
-    private JTextField jahrField;
-    private JComboBox monatComboBox;
-    private JComboBox gebLaufComboBox;
+    private CWLabel lLaufart;
+    private CWLabel lBetiebsart;
+    private CWLabel lAbrMonat;
+    private CWLabel lMonat;
+    private CWLabel lJahr;
+    private CWLabel lGebLauf;
+    private CWRadioButton rNormal;
+    private CWRadioButton rStorno;
+    private CWRadioButton rTestlauf;
+    private CWRadioButton rEchtlauf;
+    private CWButton startButton;
+    private CWTextField jahrField;
+    private CWComboBox monatComboBox;
+    private CWComboBox gebLaufComboBox;
     private ButtonGroup laufartGroup;
     private ButtonGroup betriebsartGroup;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
 
     public GebLaufView(GebLaufPresentationModel model) {
         this.model = model;
