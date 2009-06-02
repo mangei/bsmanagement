@@ -75,27 +75,8 @@ public class EditBewohnerZimmerView extends CWView
 
         });
 
-        cbKautionStatus = CWComponentFactory.createComboBox(selectionInList);
-        cbKautionStatus.addItem("Keine Kaution");
-        cbKautionStatus.addItem("Nicht eingezahlt");
-        cbKautionStatus.addItem("Eingezahlt");
-        cbKautionStatus.addItem("Zurück gezahlt");
-        
-        if(model.getBewohner().getKaution()==null){
-            cbKautionStatus.setEnabled(false);
-        }else{
-            switch(model.getBewohner().getKautionStatus()){
-                case Bewohner.EINGEZAHLT: cbKautionStatus.setSelectedIndex(2);
-                break;
-                case Bewohner.EINGEZOGEN: cbKautionStatus.setSelectedIndex(0);
-                break;
-                case Bewohner.NICHT_EINGEZAHLT: cbKautionStatus.setSelectedIndex(1);
-                break;
-                case Bewohner.ZURUECK_GEZAHLT: cbKautionStatus.setSelectedIndex(3);
-                break;
-            }
-        }
-        cbKautionStatus.addItemListener(model.getKautionListener());
+        cbKautionStatus = CWComponentFactory.createComboBox(model.getKautionStatusSelection());
+
         //cbBereich = new JComboBox(model.createParentBereichComboModel(model.getBereichList()));
         cbBereich = CWComponentFactory.createComboBox(model.getBereichList());
         cbZimmer = CWComponentFactory.createComboBox(model.getZimmerList());
@@ -105,6 +86,9 @@ public class EditBewohnerZimmerView extends CWView
     }
 
     private void initEventHandling() {
+        if(model.getBewohner().getKaution()==null){
+            cbKautionStatus.setEnabled(false);
+        }
     }
 
     private void buildView() {

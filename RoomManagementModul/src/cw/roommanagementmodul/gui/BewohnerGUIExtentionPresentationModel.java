@@ -50,7 +50,7 @@ public class BewohnerGUIExtentionPresentationModel
     private SelectionInList<String> kautionStadi;
     private KautionStatusItemListener kautionListener;
 
-    BewohnerGUIExtentionPresentationModel(BewohnerManager bewohnerManager, Bewohner b, ValueModel unsaved) {
+    public BewohnerGUIExtentionPresentationModel(BewohnerManager bewohnerManager, Bewohner b, ValueModel unsaved) {
         super(b);
         this.bewohner = b;
         checkBoxState = ItemEvent.DESELECTED;

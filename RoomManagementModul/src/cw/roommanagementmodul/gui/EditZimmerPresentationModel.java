@@ -13,8 +13,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -36,7 +35,9 @@ import javax.swing.text.PlainDocument;
  *
  * @author Dominik
  */
-public class EditZimmerPresentationModel extends PresentationModel<Zimmer> implements Disposable{
+public class EditZimmerPresentationModel 
+        extends PresentationModel<Zimmer>
+{
 
     private Zimmer zimmer;
     private ButtonListenerSupport support;
@@ -46,41 +47,34 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> imple
     private Action saveCancelButtonAction;
     private SelectionInList<Bereich> bereichList;
     private ValueModel unsaved;
-    private String headerText;
     private Bereich selectedBereich;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private Document digitDocument;
     private ButtonEnable buttonEnable;
+    private SaveListener saveListener;
 
-    EditZimmerPresentationModel(Zimmer zimmer, HeaderInfo header) {
+    EditZimmerPresentationModel(Zimmer zimmer, CWHeaderInfo header) {
         super(zimmer);
         buttonEnable= new ButtonEnable();
         this.zimmer = zimmer;
         bereichManager = BereichManager.getInstance();
-        this.headerText = header.getHeaderText();
         this.digitDocument=new DigitDocument();
         this.headerInfo = header;
         initModels();
         initEventHandling();
     }
 
-    EditZimmerPresentationModel(Zimmer zimmer, HeaderInfo header, Bereich selectedBereich) {
+    public EditZimmerPresentationModel(Zimmer zimmer, CWHeaderInfo header, Bereich selectedBereich) {
         super(zimmer);
         buttonEnable= new ButtonEnable();
         this.selectedBereich = selectedBereich;
         this.zimmer = zimmer;
         bereichManager = BereichManager.getInstance();
-        this.headerText = header.getHeaderText();
         this.headerInfo = header;
         this.digitDocument=new DigitDocument();
+        
         initModels();
         initEventHandling();
-    }
-
-    private void initEventHandling() {
-        setUnsaved(new ValueHolder());
-        getUnsaved().addValueChangeListener(buttonEnable);
-        getUnsaved().setValue(false);
     }
 
     private void initModels() {
@@ -94,16 +88,25 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> imple
             bereichList.setSelection(selectedBereich);
         }
 
+
+    }
+
+    private void initEventHandling() {
+        
         support = new ButtonListenerSupport();
-        bereichList.addValueChangeListener(new SaveListener());
-        getBufferedModel(Zimmer.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());
-        getBufferedModel(Zimmer.PROPERTYNAME_NAME).addValueChangeListener(new PropertyChangeListener() {
+        saveListener = new SaveListener();
+        bereichList.addValueChangeListener(saveListener);
+        getBufferedModel(Zimmer.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
+        getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN).addValueChangeListener(saveListener);
 
-            public void propertyChange(PropertyChangeEvent evt) {
-            }
-        });
-        getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN).addValueChangeListener(new SaveListener());
+        unsaved = new ValueHolder();
+        unsaved.addValueChangeListener(buttonEnable);
+        unsaved.setValue(false);
+    }
 
+    public void dispose() {
+        unsaved.removeValueChangeListener(buttonEnable);
+        release();
     }
 
     private List<Bereich> extractLeafBereich(List<Bereich> l) {
@@ -152,22 +155,11 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> imple
         support.addButtonListener(listener);
     }
 
-    public String getHeaderText() {
-        return headerText;
-    }
-
     /**
      * @return the zimmer
      */
     public Zimmer getZimmer() {
         return zimmer;
-    }
-
-    /**
-     * @param zimmer the zimmer to set
-     */
-    public void setZimmer(Zimmer zimmer) {
-        this.zimmer = zimmer;
     }
 
     /**
@@ -178,13 +170,6 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> imple
     }
 
     /**
-     * @param unsaved the unsaved to set
-     */
-    public void setUnsaved(ValueModel unsaved) {
-        this.unsaved = unsaved;
-    }
-
-    /**
      * @return the bereichManager
      */
     public BereichManager getBereichManager() {
@@ -192,24 +177,10 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> imple
     }
 
     /**
-     * @param bereichManager the bereichManager to set
-     */
-    public void setBereichManager(BereichManager bereichManager) {
-        this.bereichManager = bereichManager;
-    }
-
-    /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
     }
 
     /**
@@ -217,18 +188,6 @@ public class EditZimmerPresentationModel extends PresentationModel<Zimmer> imple
      */
     public Document getDigitDocument() {
         return digitDocument;
-    }
-
-    /**
-     * @param digitDocument the digitDocument to set
-     */
-    public void setDigitDocument(Document digitDocument) {
-        this.digitDocument = digitDocument;
-    }
-
-    public void dispose() {
-        getUnsaved().removeValueChangeListener(buttonEnable);
-        release();
     }
 
     private class SaveAction

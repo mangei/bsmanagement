@@ -74,13 +74,6 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         initEventHandling();
     }
 
-    private void initEventHandling() {
-        buttonEnable= new ButtonEnable();
-        unsaved = new ValueHolder();
-        unsaved.addValueChangeListener(buttonEnable);
-        unsaved.setValue(false);
-    }
-
     private void initModels() {
         saveButtonAction = new SaveAction();
         cancelButtonAction = new CancelAction();
@@ -89,12 +82,30 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         dcVon = CWComponentFactory.createDateChooser(getBufferedModel(GebuehrZuordnung.PROPERTYNAME_VON));
 
         dcBis = CWComponentFactory.createDateChooser(getBufferedModel(GebuehrZuordnung.PROPERTYNAME_BIS));
-        setGebuehrList((SelectionInList<Bereich>) new SelectionInList(gebuehrManager.getAll(), getModel(GebuehrZuordnung.PROPERTYNAME_GEBUEHR)));
+        gebuehrList = (SelectionInList<Bereich>) new SelectionInList(gebuehrManager.getAll(), getModel(GebuehrZuordnung.PROPERTYNAME_GEBUEHR));
         support = new ButtonListenerSupport();
+
+    }
+
+    private void initEventHandling() {
+        saveListener= new  SaveListener();
         getGebuehrList().addValueChangeListener(saveListener);
         getBufferedModel(GebuehrZuordnung.PROPERTYNAME_VON).addValueChangeListener(saveListener);
         getBufferedModel(GebuehrZuordnung.PROPERTYNAME_BIS).addValueChangeListener(saveListener);
         getBufferedModel(GebuehrZuordnung.PROPERTYNAME_ANMERKUNG).addValueChangeListener(saveListener);
+        buttonEnable= new ButtonEnable();
+        unsaved = new ValueHolder();
+        unsaved.addValueChangeListener(buttonEnable);
+        unsaved.setValue(false);
+    }
+
+    public void dispose() {
+        getGebuehrList().removeValueChangeListener(saveListener);
+        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_VON).removeValueChangeListener(saveListener);
+        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_BIS).removeValueChangeListener(saveListener);
+        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_ANMERKUNG).removeValueChangeListener(saveListener);
+        unsaved.removeValueChangeListener(buttonEnable);
+        release();
     }
 
     public ComboBoxModel createGebuehrComboModel(SelectionInList gebuehrList) {
@@ -125,10 +136,6 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         return gebuehrList;
     }
 
-    public void setGebuehrList(SelectionInList<Bereich> gebuehrList) {
-        this.gebuehrList = gebuehrList;
-    }
-
     public String getHeaderText() {
         return headerText;
     }
@@ -141,13 +148,6 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
     }
 
     /**
-     * @param dcVon the dcVon to set
-     */
-    public void setDcVon(JDateChooser dcVon) {
-        this.dcVon = dcVon;
-    }
-
-    /**
      * @return the dcBis
      */
     public JDateChooser getDcBis() {
@@ -155,33 +155,10 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
     }
 
     /**
-     * @param dcBis the dcBis to set
-     */
-    public void setDcBis(JDateChooser dcBis) {
-        this.dcBis = dcBis;
-    }
-
-    /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
-    }
-
-    public void dispose() {
-        getGebuehrList().removeValueChangeListener(saveListener);
-        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_VON).removeValueChangeListener(saveListener);
-        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_BIS).removeValueChangeListener(saveListener);
-        getBufferedModel(GebuehrZuordnung.PROPERTYNAME_ANMERKUNG).removeValueChangeListener(saveListener);
-        unsaved.removeValueChangeListener(buttonEnable);
-        release();
     }
 
     private class SaveAction

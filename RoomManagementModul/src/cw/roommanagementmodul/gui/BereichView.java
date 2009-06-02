@@ -5,11 +5,9 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.Zimmer;
-import gui.component.JViewPanel;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import javax.swing.JButton;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -23,7 +21,7 @@ import javax.swing.tree.TreeSelectionModel;
 public class BereichView extends CWView
 {
 
-    BereichPresentationModel model;
+    private BereichPresentationModel model;
     private JButton bNew;
     private JButton bEdit;
     private JButton bDelete;

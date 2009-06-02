@@ -97,7 +97,7 @@ public class ZimmerModul implements Modul {
 
                 bewohnerManager = BewohnerManager.getInstance();
 
-                GUIManager.changeView(new BewohnerView(new BewohnerPresentationModel(bewohnerManager, new HeaderInfo("Bewohner Verwaltung", "Übersicht aller Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png")))));
+                GUIManager.changeView(new BewohnerView(new BewohnerPresentationModel(bewohnerManager, new CWHeaderInfo("Bewohner Verwaltung", "Übersicht aller Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
             }
@@ -149,7 +149,7 @@ public class ZimmerModul implements Modul {
 
                 gebuehrenManager = GebuehrenManager.getInstance();
 
-                GUIManager.changeView(new GebuehrenView(new GebuehrenPresentationModel(gebuehrenManager, new CWHeaderInfo("Gebühren Verwaltung", "Hier können Sie die Gebühren, Kategorien und Tarife verwalten", CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/money.png")))).buildPanel());
+                GUIManager.changeView(new GebuehrenView(new GebuehrenPresentationModel(gebuehrenManager, new CWHeaderInfo("Gebühren Verwaltung", "Hier können Sie die Gebühren, Kategorien und Tarife verwalten", CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/money.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
 

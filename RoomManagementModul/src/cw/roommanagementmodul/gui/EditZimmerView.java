@@ -1,23 +1,16 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.roommanagementmodul.pojo.Bereich;
-import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import cw.roommanagementmodul.pojo.Zimmer;
 import java.util.List;
 
@@ -25,23 +18,27 @@ import java.util.List;
  *
  * @author Dominik
  */
-public class EditZimmerView implements Disposable{
+public class EditZimmerView extends CWView
+{
 
     private EditZimmerPresentationModel model;
-    public JLabel lZimmerName;
-    public JLabel lBettenAnzahl;
-    public JLabel lBereich;
-    public JTextField tfZimmerName;
-    public JTextField tfBettenAnzahl;
-    public JComboBox cbBereich;
-    public JButton bSave;
-    public JButton bCancel;
-    public JButton bSaveCancel;
+    private CWLabel lZimmerName;
+    private CWLabel lBettenAnzahl;
+    private CWLabel lBereich;
+    private CWTextField tfZimmerName;
+    private CWTextField tfBettenAnzahl;
+    private CWComboBox cbBereich;
+    private CWButton bSave;
+    private CWButton bCancel;
+    private CWButton bSaveCancel;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
 
     public EditZimmerView(EditZimmerPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -86,18 +83,18 @@ public class EditZimmerView implements Disposable{
                 .addComponent(tfBettenAnzahl);
     }
 
-    public JComponent buildPanel() {
-        initComponents();
+    private void initEventHandling() {
+    }
 
-        mainPanel = new JViewPanel(model.getHeaderInfo());
-        CWButtonPanel buttonPanel = mainPanel.getButtonPanel();
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
+        CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
-        JViewPanel panel = new JViewPanel();
-        JPanel contentPanel = panel.getContentPanel();
+        JPanel contentPanel = this.getContentPanel();
 
         /**
          * Boxes
@@ -118,16 +115,10 @@ public class EditZimmerView implements Disposable{
         contentPanel.add(cbBereich, cc.xy(3, 7));
 
 //        builder.addSeparator(lBemerkung.getText(), cc.xyw(1, 29, 7));
-
-
-        mainPanel.getContentPanel().add(panel, BorderLayout.CENTER);
-
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
     }
 
+    @Override
     public void dispose(){
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

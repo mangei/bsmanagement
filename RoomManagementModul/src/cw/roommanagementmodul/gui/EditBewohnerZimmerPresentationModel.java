@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 
@@ -14,8 +10,6 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import java.awt.event.ActionEvent;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -52,22 +46,12 @@ public class EditBewohnerZimmerPresentationModel
     private SelectionInList<Bereich> bereichList;
     private String headerText;
     private SelectionInList<Kaution> kautionList;
+    private SelectionInList kautionStatusSelection;
     private KautionStatusItemListener kautionListener;
     private SaveListener saveListener;
     private PropertyChangeListener unsavedChangeListener;
 
-    EditBewohnerZimmerPresentationModel(Bewohner b) {
-        super(b);
-        this.bewohner = b;
-        zimmerManager = ZimmerManager.getInstance();
-        bereichManager = BereichManager.getInstance();
-        kautionManager = KautionManager.getInstance();
-        initModels();
-        initEventHandling();
-
-    }
-
-    EditBewohnerZimmerPresentationModel(Bewohner b, String header) {
+    public EditBewohnerZimmerPresentationModel(Bewohner b, String header) {
         super(b);
         this.bewohner = b;
         zimmerManager = ZimmerManager.getInstance();
@@ -99,9 +83,33 @@ public class EditBewohnerZimmerPresentationModel
                 getZimmerList().setList(zimmerManager.getAll());
             }
         }
+
+
+        kautionStatusSelection = new SelectionInList();
+        kautionStatusSelection.getList().add("Keine Kaution");
+        kautionStatusSelection.getList().add("Nicht eingezahlt");
+        kautionStatusSelection.getList().add("Eingezahlt");
+        kautionStatusSelection.getList().add("Zurück gezahlt");
+
+        if(getBewohner().getKaution()==null){
+            
+        }else{
+            switch(getBewohner().getKautionStatus()){
+                case Bewohner.EINGEZAHLT: kautionStatusSelection.setSelectionIndex(2);
+                break;
+                case Bewohner.EINGEZOGEN: kautionStatusSelection.setSelectionIndex(0);
+                break;
+                case Bewohner.NICHT_EINGEZAHLT: kautionStatusSelection.setSelectionIndex(1);
+                break;
+                case Bewohner.ZURUECK_GEZAHLT: kautionStatusSelection.setSelectionIndex(3);
+                break;
+            }
+        }
     }
 
     private void initEventHandling() {
+
+        kautionStatusSelection.addValueChangeListener(getKautionListener());
 
         saveListener = new SaveListener();
         getBufferedModel(Bewohner.PROPERTYNAME_ZIMMER).addValueChangeListener(saveListener);
@@ -138,6 +146,8 @@ public class EditBewohnerZimmerPresentationModel
         getBufferedModel(Bewohner.PROPERTYNAME_KAUTIONSTATUS).removeValueChangeListener(saveListener);
         getZimmerList().removeValueChangeListener(saveListener);
         getKautionList().removeValueChangeListener(saveListener);
+
+        kautionStatusSelection.release();
 
         unsaved.removeValueChangeListener(unsavedChangeListener);
 
@@ -194,6 +204,10 @@ public class EditBewohnerZimmerPresentationModel
      */
     public Bewohner getBewohner() {
         return bewohner;
+    }
+
+    public SelectionInList getKautionStatusSelection() {
+        return kautionStatusSelection;
     }
 
     /**
@@ -310,29 +324,30 @@ public class EditBewohnerZimmerPresentationModel
             }
         }
     }
- public class KautionStatusItemListener implements ItemListener{
+ public class KautionStatusItemListener implements PropertyChangeListener{
 
-        public void itemStateChanged(ItemEvent e) {
+        public void propertyChange(PropertyChangeEvent e) {
 
-            if(e.getItem().equals("Eingezogen")){
+            if(e.getNewValue().equals("Eingezogen")){
                 getBewohner().setKautionStatus(Bewohner.EINGEZOGEN);
                unsaved.setValue(true);
 
             }
-            if(e.getItem().equals("Nicht eingezahlt")){
+            if(e.getNewValue().equals("Nicht eingezahlt")){
                 getBewohner().setKautionStatus(Bewohner.NICHT_EINGEZAHLT);
                 unsaved.setValue(true);
             }
-            if(e.getItem().equals("Eingezahlt")){
+            if(e.getNewValue().equals("Eingezahlt")){
                 getBewohner().setKautionStatus(Bewohner.EINGEZAHLT);
                 unsaved.setValue(true);
 
             }
-            if(e.getItem().equals("Zurück gezahlt")){
+            if(e.getNewValue().equals("Zurück gezahlt")){
                 getBewohner().setKautionStatus(Bewohner.ZURUECK_GEZAHLT);
                 unsaved.setValue(true);
             }
         }
+
     }
 
 }

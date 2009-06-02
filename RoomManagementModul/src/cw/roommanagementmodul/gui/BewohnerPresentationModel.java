@@ -51,8 +51,6 @@ public class BewohnerPresentationModel
     private Action gebuehrZuordnungAction;
     private Action gebAction;
     private Action deleteAction;
-    private Action historyAction;
-    private Action inaktiveAction;
     private Action detailAction;
     private Action kautionAction;
     private SelectionInList<Bewohner> bewohnerSelection;
@@ -87,8 +85,6 @@ public class BewohnerPresentationModel
         gebAction = new GebAction();
         deleteAction = new DeleteAction();
         gebuehrZuordnungAction = new GebuehrZuordnungAction();
-        historyAction = new HistoryAction();
-        inaktiveAction = new InaktiveAction();
         kautionAction = new KautionAction();
         detailAction = new AbstractAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")) {
 
@@ -138,7 +134,6 @@ public class BewohnerPresentationModel
         getDeleteAction().setEnabled(hasSelection);
         gebAction.setEnabled(hasSelection);
         getGebuehrZuordnungAction().setEnabled(hasSelection);
-        historyAction.setEnabled(hasSelection);
         detailAction.setEnabled(hasSelection);
     }
 
@@ -152,10 +147,6 @@ public class BewohnerPresentationModel
 
     public Action getDeleteAction() {
         return deleteAction;
-    }
-
-    public Action getHistoryAction() {
-        return historyAction;
     }
 
     public String getHeaderText() {
@@ -174,13 +165,6 @@ public class BewohnerPresentationModel
      */
     public void setBewohnerManager(BewohnerManager bewohnerManager) {
         this.bewohnerManager = bewohnerManager;
-    }
-
-    /**
-     * @return the inaktiveAction
-     */
-    public Action getInaktiveAction() {
-        return inaktiveAction;
     }
 
     /**
@@ -266,23 +250,6 @@ public class BewohnerPresentationModel
         }
     }
 
-    private class InaktiveAction
-            extends AbstractAction {
-
-        {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange_remove.png"));
-        }
-
-        public void actionPerformed(ActionEvent e) {
-
-            final InaktiveBewohnerPresentationModel model = new InaktiveBewohnerPresentationModel(getBewohnerManager(), "Inaktive Bewohner");
-            final InaktiveBewohnerView inaktiveBewohnerView = new InaktiveBewohnerView(model);
-
-            GUIManager.changeView(inaktiveBewohnerView, true);
-
-        }
-    }
-
     private class KautionAction
             extends AbstractAction {
 
@@ -292,38 +259,10 @@ public class BewohnerPresentationModel
 
         public void actionPerformed(ActionEvent e) {
 
-            final KautionPresentationModel model = new KautionPresentationModel(KautionManager.getInstance(), new HeaderInfo("Kautionen Verwalten", "Übersicht aller vorhandenen Kautionen"));
+            final KautionPresentationModel model = new KautionPresentationModel(KautionManager.getInstance(), new CWHeaderInfo("Kautionen Verwalten", "Übersicht aller vorhandenen Kautionen"));
             final KautionView kautionView = new KautionView(model);
 
             GUIManager.changeView(kautionView, true);
-
-        }
-    }
-
-    private class HistoryAction
-            extends AbstractAction {
-
-        {
-            putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/date.png"));
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            final Bewohner b = bewohnerSelection.getSelection();
-            Customer c = b.getCustomer();
-            final HistoryPresentationModel model = new HistoryPresentationModel(b, c.getSurname() + " " + c.getForename());
-            final HistoryView editBewohnerView = new HistoryView(model);
-            model.addButtonListener(new ButtonListener() {
-
-                public void buttonPressed(ButtonEvent evt) {
-
-                    if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-
-                        model.removeButtonListener(this);
-                        GUIManager.changeToLastView();
-                    }
-                }
-            });
-            GUIManager.changeView(editBewohnerView, true);
 
         }
     }

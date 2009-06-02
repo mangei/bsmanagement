@@ -1,46 +1,44 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
+import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import cw.roommanagementmodul.pojo.GebuehrZuordnung;
 
 /**
  *
  * @author Dominik
  */
-public class GebBewohnerView implements Disposable{
+public class GebBewohnerView extends CWView
+{
 
     private GebBewohnerPresentationModel model;
-    private JLabel lGebuehr;
-    private JLabel lVon;
-    private JLabel lBis;
-    private JLabel lAnmerkung;
-    private JComboBox cbGebuehr;
-    private JTextField tfAnmerkung;
+    private CWLabel lGebuehr;
+    private CWLabel lVon;
+    private CWLabel lBis;
+    private CWLabel lAnmerkung;
+    private CWComboBox cbGebuehr;
+    private CWTextField tfAnmerkung;
 
-    private JButton bSave;
-    private JButton bCancel;
-    private JButton bSaveCancel;
+    private CWButton bSave;
+    private CWButton bCancel;
+    private CWButton bSaveCancel;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
 
     public GebBewohnerView(GebBewohnerPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -74,19 +72,16 @@ public class GebBewohnerView implements Disposable{
                 .addComponent(cbGebuehr);
     }
 
-    public JComponent buildPanel() {
-        initComponents();
-        initEventHandling();
-
-        mainPanel = new JViewPanel(model.getHeaderInfo());
-        //panel.setName("Zimmer");
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
+        //this.setName("Zimmer");
         
-        CWButtonPanel buttonPanel = mainPanel.getButtonPanel();
+        CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
-        JPanel contentPanel = mainPanel.getContentPanel();
+        JPanel contentPanel = this.getContentPanel();
 
 
         FormLayout layout = new FormLayout("right:pref, 4dlu, 50dlu:grow, 4dlu, right:pref, 4dlu, 50dlu:grow",
@@ -105,16 +100,13 @@ public class GebBewohnerView implements Disposable{
         contentPanel.add(model.getDcVon(), cc.xy(3, 7));
         contentPanel.add(model.getDcBis(), cc.xy(3, 9));
         contentPanel.add(tfAnmerkung, cc.xy(3, 11));
-
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
     }
 
     private void initEventHandling() {
     }
 
+    @Override
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

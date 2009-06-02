@@ -1,5 +1,6 @@
 package cw.roommanagementmodul.extention;
 
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.roommanagementmodul.gui.*;
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
@@ -31,9 +32,9 @@ public class BewohnerCostumerGUIExtention implements EditCustomerTabExtention {
     private Customer c;
     private Zimmer tempZimmer;
 
-    public JComponent getView() {
+    public CWPanel getView() {
         view=new BewohnerGUIExtentionView(model);
-        return view.buildPanel();
+        return view;
     }
 
     public void save() {

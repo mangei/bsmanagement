@@ -24,8 +24,6 @@ public class BewohnerView extends CWView
     private CWButton bDelete;
     private CWButton bGebZuordnung;
     private CWButton bEditBewohner;
-    private CWButton bHistory;
-    private CWButton bInaktive;
     private CWButton bDetail;
     private CWButton bKaution;
     private CWTable tBewohner;
@@ -47,10 +45,6 @@ public class BewohnerView extends CWView
         bDelete.setText("Löschen");
         bGebZuordnung = CWComponentFactory.createButton(model.getGebuehrZuordnungAction());
         bGebZuordnung.setText("Übersicht");
-        bHistory = CWComponentFactory.createButton(model.getHistoryAction());
-        bHistory.setText("History");
-        bInaktive = CWComponentFactory.createButton(model.getInaktiveAction());
-        bInaktive.setText("Inaktive");
         bDetail = CWComponentFactory.createButton(model.getDetailAction());
         bDetail.setText("Bearbeiten");
         bKaution = CWComponentFactory.createButton(model.getKautionAction());
@@ -68,7 +62,13 @@ public class BewohnerView extends CWView
         tBewohner.getColumnModel().getColumn(5).setCellRenderer(new DateTimeTableCellRenderer(true));
 
 
-        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bGeb).addComponent(bDelete).addComponent(bGebZuordnung).addComponent(bHistory).addComponent(bInaktive).addComponent(bDetail).addComponent(bInaktive).addComponent(bKaution).addComponent(tBewohner);
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(bGeb)
+                .addComponent(bDelete)
+                .addComponent(bGebZuordnung)
+                .addComponent(bDetail)
+                .addComponent(bKaution)
+                .addComponent(tBewohner);
 
     }
 
