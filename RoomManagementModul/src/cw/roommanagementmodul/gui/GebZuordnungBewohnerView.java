@@ -7,6 +7,8 @@ import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.roommanagementmodul.component.DateTimeTableCellRenderer;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWTable;
+import java.awt.BorderLayout;
+import javax.swing.JScrollPane;
 
 /**
  *
@@ -72,6 +74,8 @@ public class GebZuordnungBewohnerView extends CWView{
         this.getButtonPanel().add(bEdit);
         this.getButtonPanel().add(bDelete);
         this.getButtonPanel().add(bBack);
+
+        this.getContentPanel().add(new JScrollPane(tZuordnung), BorderLayout.CENTER);
     }
 
     @Override

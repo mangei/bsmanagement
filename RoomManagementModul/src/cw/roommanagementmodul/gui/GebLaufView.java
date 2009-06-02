@@ -16,7 +16,6 @@ import cw.boardingschoolmanagement.gui.component.CWRadioButton;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWIntegerTextField;
 import cw.boardingschoolmanagement.gui.component.CWComboBox;
-import cw.boardingschoolmanagement.gui.component.CWPanel;
 import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -24,6 +23,7 @@ import java.text.NumberFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.ButtonGroup;
+import javax.swing.JPanel;
 
 /**
  *
@@ -53,7 +53,7 @@ public class GebLaufView extends CWView implements ItemListener{
     public GebLaufView(GebLaufPresentationModel model) {
         this.model = model;
         initComponents();
-
+        buildView();
     }
 
     public void initComponents() {
@@ -117,7 +117,7 @@ public class GebLaufView extends CWView implements ItemListener{
 
         buttonPanel.add(startButton);
 
-        CWPanel contentPanel = (CWPanel)this.getContentPanel();
+        JPanel contentPanel = this.getContentPanel();
 
         /**
          * Boxes

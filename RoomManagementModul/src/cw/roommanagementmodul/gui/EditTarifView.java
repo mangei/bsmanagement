@@ -57,7 +57,7 @@ public class EditTarifView extends CWView
 
         tfTarif = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Tarif.PROPERTYNAME_TARIF));
 
-        if (model.getHeaderText().equals("Tarif erstellen")) {
+        if (model.getTarif().getId()==null) {
             Date vonDate = model.getVonDate();
             if (vonDate != null) {
                 model.getDcVon().setDate(vonDate);

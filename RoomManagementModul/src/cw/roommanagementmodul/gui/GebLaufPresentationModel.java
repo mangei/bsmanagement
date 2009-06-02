@@ -78,6 +78,8 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         echtLauf = new EchtLaufAction();
         monatList = new SelectionInList();
         setYearDocument(new YearDocument());
+        GregorianCalendar gc = new GregorianCalendar();
+        year= new Integer(gc.get(Calendar.YEAR));
 
         gebLaufManager = GebLaufManager.getInstance();
         gebLaufList = new SelectionInList<GebLauf>(gebLaufManager.getAllOrdered());
