@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 
@@ -14,8 +10,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -31,8 +26,9 @@ import cw.roommanagementmodul.pojo.GebuehrenKategorie;
  *
  * @author Dominik
  */
-public class EditGebuehrenPresentationModel extends PresentationModel<Gebuehr>
-                            implements Disposable{
+public class EditGebuehrenPresentationModel
+        extends PresentationModel<Gebuehr>
+{
 
     private Gebuehr gebuehr;
     private ButtonListenerSupport support;
@@ -40,38 +36,18 @@ public class EditGebuehrenPresentationModel extends PresentationModel<Gebuehr>
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
     private ValueModel unsaved;
-    private GebuehrenKatManager gebKatManager;
     private SelectionInList<GebuehrenKategorie> gebKatList;
-    private String headerText;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private SaveListener saveListener;
     private ButtonEnable buttonEnable;
 
-    public EditGebuehrenPresentationModel(Gebuehr gebuehr) {
+    public EditGebuehrenPresentationModel(Gebuehr gebuehr, CWHeaderInfo header) {
         super(gebuehr);
-        saveListener= new SaveListener();
         this.gebuehr = gebuehr;
-        gebKatManager= GebuehrenKatManager.getInstance();
-        initModels();
-        initEventHandling();
-    }
-
-    EditGebuehrenPresentationModel(Gebuehr gebuehr, HeaderInfo header) {
-        super(gebuehr);
-        saveListener=new SaveListener();
-        this.gebuehr = gebuehr;
-        gebKatManager= GebuehrenKatManager.getInstance();
-        this.headerText=header.getHeaderText();
         this.headerInfo=header;
+        
         initModels();
         initEventHandling();
-    }
-
-    private void initEventHandling() {
-        unsaved = new ValueHolder();
-        buttonEnable = new ButtonEnable();
-        unsaved.addValueChangeListener(buttonEnable);
-        unsaved.setValue(false);
     }
 
     private void initModels() {
@@ -80,9 +56,27 @@ public class EditGebuehrenPresentationModel extends PresentationModel<Gebuehr>
         saveCancelButtonAction = new SaveCancelAction();
 
         support = new ButtonListenerSupport();
-        gebKatList = new SelectionInList(gebKatManager.getAll(), getModel(Gebuehr.PROPERTYNAME_GEBKAT));
+        gebKatList = new SelectionInList(GebuehrenKatManager.getInstance().getAll(), getModel(Gebuehr.PROPERTYNAME_GEBKAT));
+    }
+
+    private void initEventHandling() {
+
+        saveListener=new SaveListener();
+
+        unsaved = new ValueHolder();
+        unsaved.addValueChangeListener(buttonEnable = new ButtonEnable());
+        unsaved.setValue(false);
+
         getGebKatList().addValueChangeListener(saveListener);
         getBufferedModel(Gebuehr.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
+    }
+
+    public void dispose() {
+        getGebKatList().removeValueChangeListener(saveListener);
+        getBufferedModel(Gebuehr.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
+        unsaved.removeValueChangeListener(buttonEnable);
+        gebKatList.release();
+        release();
     }
 
     public Action getSaveButtonAction() {
@@ -113,29 +107,11 @@ public class EditGebuehrenPresentationModel extends PresentationModel<Gebuehr>
         return new ComboBoxAdapter(this.gebKatList);
     }
 
-    public String getHeaderText() {
-        return headerText;
-    }
-
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
-    }
-
-    public void dispose() {
-
-        getGebKatList().removeValueChangeListener(saveListener);
-        getBufferedModel(Gebuehr.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
-        release();
     }
 
     private class SaveAction

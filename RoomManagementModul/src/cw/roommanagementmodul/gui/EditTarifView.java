@@ -1,20 +1,13 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -25,25 +18,29 @@ import java.util.Date;
  *
  * @author Dominik
  */
-public class EditTarifView implements Disposable{
+public class EditTarifView extends CWView
+{
 
     private EditTarifPresentationModel model;
-    private JButton bSave;
-    private JButton bCancel;
-    private JButton bSaveCancel;
-    private JLabel lAb;
-    private JLabel lBis;
-    private JLabel lTarif;
+    private CWButton bSave;
+    private CWButton bCancel;
+    private CWButton bSaveCancel;
+    private CWLabel lAb;
+    private CWLabel lBis;
+    private CWLabel lTarif;
     private CWCurrencyTextField tfTarif;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
 
     public EditTarifView(EditTarifPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
-    public void initComponents() {
+    private void initComponents() {
 
         bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
         bSave.setText("Speichern");
@@ -53,7 +50,6 @@ public class EditTarifView implements Disposable{
 
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schließen");
-
 
         lAb = CWComponentFactory.createLabel("Von: ");
         lBis = CWComponentFactory.createLabel("Bis: ");
@@ -88,18 +84,16 @@ public class EditTarifView implements Disposable{
 
     }
 
-    public JComponent buildPanel() {
-        initComponents();
-
-        mainPanel = new JViewPanel(model.getHeaderInfo());
-        CWButtonPanel buttonPanel = mainPanel.getButtonPanel();
+    private void buildView() {
+        
+        this.setHeaderInfo(model.getHeaderInfo());
+        CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
-        JViewPanel panel = new JViewPanel();
-        JPanel contentPanel = panel.getContentPanel();
+        JPanel contentPanel = this.getContentPanel();
 
         /**
          * Boxes
@@ -117,19 +111,14 @@ public class EditTarifView implements Disposable{
         contentPanel.add(model.getDcVon(), cc.xy(3, 3));
         contentPanel.add(model.getDcBis(), cc.xy(3, 5));
         contentPanel.add(tfTarif, cc.xy(3, 7));
-
-        mainPanel.getContentPanel().add(panel, BorderLayout.CENTER);
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
-
     }
 
     private void initEventHandling() {
-        // throw new UnsupportedOperationException("Not yet implemented");
+        
     }
 
+    @Override
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

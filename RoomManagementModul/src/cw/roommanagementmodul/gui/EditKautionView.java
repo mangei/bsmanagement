@@ -1,51 +1,44 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import java.awt.BorderLayout;
-import java.text.NumberFormat;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import cw.roommanagementmodul.pojo.Kaution;
 
 /**
  *
  * @author Dominik
  */
-public class EditKautionView implements Disposable{
-
+public class EditKautionView extends CWView
+{
 
     private EditKautionPresentationModel model;
-    private JButton bSave;
-    private JButton bCancel;
-    private JButton bSaveCancel;
-    private JLabel lName;
-    private JLabel lBetrag;
-    private JTextField tfName;
+    private CWButton bSave;
+    private CWButton bCancel;
+    private CWButton bSaveCancel;
+    private CWLabel lName;
+    private CWLabel lBetrag;
+    private CWTextField tfName;
     private CWCurrencyTextField tfBetrag;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
 
     public EditKautionView(EditKautionPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
-     private void initComponents() {
+    private void initComponents() {
         lName = CWComponentFactory.createLabel("Name: ");
         lBetrag = CWComponentFactory.createLabel("Betrag");
 
@@ -71,18 +64,19 @@ public class EditKautionView implements Disposable{
                 .addComponent(bSaveCancel);
     }
 
-    public JComponent buildPanel() {
-        initComponents();
+    private void initEventHandling() {
+    }
 
-        mainPanel = new JViewPanel(model.getHeaderInfo());
-        CWButtonPanel buttonPanel = mainPanel.getButtonPanel();
+    private void buildView() {
+
+        this.setHeaderInfo(model.getHeaderInfo());
+        CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
-        JViewPanel panel = new JViewPanel();
-        JPanel contentPanel = panel.getContentPanel();
+        JPanel contentPanel = this.getContentPanel();
 
         /**
          * Boxes
@@ -97,17 +91,10 @@ public class EditKautionView implements Disposable{
         contentPanel.add(tfName, cc.xy(3, 3));
         contentPanel.add(lBetrag, cc.xy(1, 5));
         contentPanel.add(tfBetrag, cc.xy(3, 5));
-
-
-        mainPanel.getContentPanel().add(panel, BorderLayout.CENTER);
-        mainPanel.addDisposableListener(this);
-        return mainPanel;
     }
 
-
-
+    @Override
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

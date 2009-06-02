@@ -13,7 +13,6 @@ import java.awt.BorderLayout;
 import javax.swing.JPanel;
 import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.manager.BereichManager;
-import gui.component.JViewPanel;
 import javax.swing.JOptionPane;
 
 /**
@@ -104,7 +103,7 @@ public class EditBereichView extends CWView
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
-        JViewPanel panel = new JViewPanel();
+        CWView panel = CWComponentFactory.createView();
         JPanel contentPanel = panel.getContentPanel();
 
         /**

@@ -1,9 +1,7 @@
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.toedter.calendar.JDateChooser;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComboBox;
@@ -14,9 +12,6 @@ import cw.boardingschoolmanagement.gui.component.CWView;
 import java.awt.BorderLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import cw.roommanagementmodul.pojo.Bewohner;
 
@@ -43,6 +38,7 @@ public class EditBewohnerZimmerView extends CWView
     private CWComboBox cbKautionStatus;
     private CWDateChooser dcEinzugsdatum;
     private CWDateChooser dcAuszugsdatum;
+    // CWTODO create an ComponentContainer
 
     public EditBewohnerZimmerView(EditBewohnerZimmerPresentationModel model) {
         this.model = model;
@@ -54,21 +50,21 @@ public class EditBewohnerZimmerView extends CWView
 
     public void initComponents() {
 
-        bSave = new JButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = new JButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = new JButton(model.getSaveCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schließen");
 
-        lbBereich = new JLabel("Bereich: ");
-        lbZimmer = new JLabel("Zimmer");
-        lbEinzDat = new JLabel("Einzugsdatum: ");
-        lbAuszDat = new JLabel("Auszugsdatum: ");
-        lbKaution = new JLabel("Kaution: ");
-        lbKautionStatus = new JLabel("Kaution Status: ");
+        lbBereich = CWComponentFactory.createLabel("Bereich: ");
+        lbZimmer = CWComponentFactory.createLabel("Zimmer");
+        lbEinzDat = CWComponentFactory.createLabel("Einzugsdatum: ");
+        lbAuszDat = CWComponentFactory.createLabel("Auszugsdatum: ");
+        lbKaution = CWComponentFactory.createLabel("Kaution: ");
+        lbKautionStatus = CWComponentFactory.createLabel("Kaution Status: ");
 
         cbKaution = CWComponentFactory.createComboBox(model.getKautionList());
         cbKaution.addItemListener(new ItemListener(){
@@ -101,20 +97,11 @@ public class EditBewohnerZimmerView extends CWView
         }
         cbKautionStatus.addItemListener(model.getKautionListener());
         //cbBereich = new JComboBox(model.createParentBereichComboModel(model.getBereichList()));
-        cbBereich = new JComboBox(model.createBereichComboModel(model.getBereichList()));
-        cbZimmer = new JComboBox(model.createZimmerComboModel(model.getZimmerList()));
+        cbBereich = CWComponentFactory.createComboBox(model.getBereichList());
+        cbZimmer = CWComponentFactory.createComboBox(model.getZimmerList());
 
-        dcEinzugsdatum = new JDateChooser();
-        dcEinzugsdatum.getJCalendar().setDecorationBordersVisible(false);
-        dcEinzugsdatum.getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
-        dcEinzugsdatum.getJCalendar().getDayChooser().setWeekOfYearVisible(false);
-        PropertyConnector.connectAndUpdate(model.getBufferedModel(Bewohner.PROPERTYNAME_VON), dcEinzugsdatum, "date");
-
-        dcAuszugsdatum = new JDateChooser();
-        dcAuszugsdatum.getJCalendar().setDecorationBordersVisible(false);
-        dcAuszugsdatum.getJCalendar().getDayChooser().setDecorationBackgroundVisible(false);
-        dcAuszugsdatum.getJCalendar().getDayChooser().setWeekOfYearVisible(false);
-        PropertyConnector.connectAndUpdate(model.getBufferedModel(Bewohner.PROPERTYNAME_BIS), dcAuszugsdatum, "date");
+        dcEinzugsdatum = CWComponentFactory.createDateChooser(model.getBufferedModel(Bewohner.PROPERTYNAME_VON));
+        dcAuszugsdatum = CWComponentFactory.createDateChooser(model.getBufferedModel(Bewohner.PROPERTYNAME_BIS));
     }
 
     private void initEventHandling() {
@@ -154,6 +141,13 @@ public class EditBewohnerZimmerView extends CWView
         panel.add(cbKautionStatus, cc.xy(3, 15));
 
         this.getContentPanel().add(panel, BorderLayout.CENTER);
+    }
+
+    @Override
+    public void dispose() {
+
+        
+        model.dispose();
     }
 
 }

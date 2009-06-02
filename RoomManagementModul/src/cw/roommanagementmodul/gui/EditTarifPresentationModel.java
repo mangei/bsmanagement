@@ -13,6 +13,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Disposable;
 import java.awt.event.ActionEvent;
@@ -32,8 +33,9 @@ import java.util.List;
  *
  * @author Dominik
  */
-public class EditTarifPresentationModel extends PresentationModel<Tarif>
-                                implements Disposable{
+public class EditTarifPresentationModel
+        extends PresentationModel<Tarif>
+{
 
     private Tarif tarif;
     private ButtonListenerSupport support;
@@ -47,36 +49,19 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif>
     private JDateChooser dcBis;
     private Date recommendedDate;
     private Date oldVon,  oldBis,  newVon,  newBis;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private SaveListener saveListener;
     private ButtonEnable buttonEnable;
 
-    public EditTarifPresentationModel(Tarif tarif) {
-        super(tarif);
-        buttonEnable=new ButtonEnable();
-        saveListener= new SaveListener();
-        this.tarif = tarif;
-        tarifManager = TarifManager.getInstance();
-        initModels();
-        initEventHandling();
-    }
-
-    EditTarifPresentationModel(Tarif tarif, HeaderInfo header) {
+    public EditTarifPresentationModel(Tarif tarif, CWHeaderInfo header) {
         super(tarif);
         this.tarif = tarif;
-        buttonEnable=new ButtonEnable();
-        saveListener= new SaveListener();
+        
         tarifManager = TarifManager.getInstance();
-        this.headerText = header.getHeaderText();
         this.headerInfo = header;
+
         initModels();
         initEventHandling();
-    }
-
-    private void initEventHandling() {
-        setUnsaved(new ValueHolder());
-        getUnsaved().addValueChangeListener(buttonEnable);
-        getUnsaved().setValue(false);
     }
 
     private void initModels() {
@@ -84,18 +69,30 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif>
         cancelButtonAction = new CancelAction();
         saveCancelButtonAction = new SaveCancelAction();
 
-
-
         dcVon = CWComponentFactory.createDateChooser(getBufferedModel(Tarif.PROPERTYNAME_AB));
         dcBis = CWComponentFactory.createDateChooser(getBufferedModel(Tarif.PROPERTYNAME_BIS));
 
-
         support = new ButtonListenerSupport();
+    }
+
+    private void initEventHandling() {
+        unsaved = new ValueHolder();
+        unsaved.addValueChangeListener(buttonEnable = new ButtonEnable());
+        unsaved.setValue(false);
+
+        saveListener= new SaveListener();
         getBufferedModel(Tarif.PROPERTYNAME_AB).addValueChangeListener(saveListener);
         getBufferedModel(Tarif.PROPERTYNAME_BIS).addValueChangeListener(saveListener);
         getBufferedModel(Tarif.PROPERTYNAME_TARIF).addValueChangeListener(saveListener);
     }
 
+    public void dispose() {
+        getUnsaved().removeValueChangeListener(buttonEnable);
+        getBufferedModel(Tarif.PROPERTYNAME_AB).removeValueChangeListener(saveListener);
+        getBufferedModel(Tarif.PROPERTYNAME_BIS).removeValueChangeListener(saveListener);
+        getBufferedModel(Tarif.PROPERTYNAME_TARIF).removeValueChangeListener(saveListener);
+        release();
+    }
 
     public Action getSaveButtonAction() {
         return saveButtonAction;
@@ -129,24 +126,10 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif>
     }
 
     /**
-     * @param dcVon the dcVon to set
-     */
-    public void setDcVon(JDateChooser dcVon) {
-        this.dcVon = dcVon;
-    }
-
-    /**
      * @return the dcBis
      */
     public JDateChooser getDcBis() {
         return dcBis;
-    }
-
-    /**
-     * @param dcBis the dcBis to set
-     */
-    public void setDcBis(JDateChooser dcBis) {
-        this.dcBis = dcBis;
     }
 
     /**
@@ -157,24 +140,10 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif>
     }
 
     /**
-     * @param unsaved the unsaved to set
-     */
-    public void setUnsaved(ValueModel unsaved) {
-        this.unsaved = unsaved;
-    }
-
-    /**
      * @return the oldVon
      */
     public Date getOldVon() {
         return oldVon;
-    }
-
-    /**
-     * @param oldVon the oldVon to set
-     */
-    public void setOldVon(Date oldVon) {
-        this.oldVon = oldVon;
     }
 
     /**
@@ -185,24 +154,10 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif>
     }
 
     /**
-     * @param oldBis the oldBis to set
-     */
-    public void setOldBis(Date oldBis) {
-        this.oldBis = oldBis;
-    }
-
-    /**
      * @return the newVon
      */
     public Date getNewVon() {
         return newVon;
-    }
-
-    /**
-     * @param newVon the newVon to set
-     */
-    public void setNewVon(Date newVon) {
-        this.newVon = newVon;
     }
 
     /**
@@ -213,32 +168,10 @@ public class EditTarifPresentationModel extends PresentationModel<Tarif>
     }
 
     /**
-     * @param newBis the newBis to set
-     */
-    public void setNewBis(Date newBis) {
-        this.newBis = newBis;
-    }
-
-    /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
-    }
-
-    public void dispose() {
-        getUnsaved().removeValueChangeListener(buttonEnable);
-        getBufferedModel(Tarif.PROPERTYNAME_AB).removeValueChangeListener(saveListener);
-        getBufferedModel(Tarif.PROPERTYNAME_BIS).removeValueChangeListener(saveListener);
-        getBufferedModel(Tarif.PROPERTYNAME_TARIF).removeValueChangeListener(saveListener);
-        release();
     }
 
     private class SaveAction

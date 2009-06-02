@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 
@@ -12,8 +8,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -26,8 +21,9 @@ import cw.roommanagementmodul.pojo.GebuehrenKategorie;
  *
  * @author Dominik
  */
-public class EditGebuehrenKategoriePresentationModel extends PresentationModel<GebuehrenKategorie>
-                    implements Disposable{
+public class EditGebuehrenKategoriePresentationModel
+        extends PresentationModel<GebuehrenKategorie>
+{
 
     private GebuehrenKategorie gebKat;
     private ButtonListenerSupport support;
@@ -35,29 +31,30 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
     private ValueModel unsaved;
-    private String headerText;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private SaveListener saveListener;
 
-    public EditGebuehrenKategoriePresentationModel(GebuehrenKategorie gebKat) {
+    EditGebuehrenKategoriePresentationModel(GebuehrenKategorie gebKat, CWHeaderInfo header) {
         super(gebKat);
         this.gebKat = gebKat;
-        saveListener= new SaveListener();
+        this.headerInfo=header;
+        
         initModels();
         initEventHandling();
     }
 
-    EditGebuehrenKategoriePresentationModel(GebuehrenKategorie gebKat, HeaderInfo header) {
-        super(gebKat);
-        this.gebKat = gebKat;
-        this.headerText=header.getHeaderText();
-        this.headerInfo=header;
-        saveListener= new SaveListener();
-        initModels();
-        initEventHandling();
+    private void initModels() {
+        saveButtonAction = new SaveAction();
+        cancelButtonAction = new CancelAction();
+        saveCancelButtonAction = new SaveCancelAction();
+
+        support = new ButtonListenerSupport();
     }
 
     private void initEventHandling() {
+        saveListener= new SaveListener();
+        getBufferedModel(GebuehrenKategorie.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
+
         unsaved = new ValueHolder();
         unsaved.addValueChangeListener(new PropertyChangeListener() {
 
@@ -75,17 +72,7 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
         unsaved.setValue(false);
     }
 
-    private void initModels() {
-        saveButtonAction = new SaveAction();
-        cancelButtonAction = new CancelAction();
-        saveCancelButtonAction = new SaveCancelAction();
-
-        support = new ButtonListenerSupport();
-        getBufferedModel(GebuehrenKategorie.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());
-    }
-
      public void dispose() {
-
         getBufferedModel(GebuehrenKategorie.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
         release();
     }
@@ -111,22 +98,11 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
         return saveCancelButtonAction;
     }
 
-    public String getHeaderText() {
-        return headerText;
-    }
-
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
     }
 
     private class SaveAction
@@ -146,8 +122,6 @@ public class EditGebuehrenKategoriePresentationModel extends PresentationModel<G
     private void saveGebuehrenKat() {
         triggerCommit();
     }
-
- 
 
     private class CancelAction
             extends AbstractAction {

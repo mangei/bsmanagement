@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.roommanagementmodul.gui;
 
 
@@ -13,8 +8,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -27,9 +21,9 @@ import cw.roommanagementmodul.pojo.Kaution;
  *
  * @author Dominik
  */
-public class EditKautionPresentationModel  extends PresentationModel<Kaution>
-            implements Disposable{
-
+public class EditKautionPresentationModel
+        extends PresentationModel<Kaution>
+{
 
     private Kaution kaution;
     private ButtonListenerSupport support;
@@ -37,28 +31,30 @@ public class EditKautionPresentationModel  extends PresentationModel<Kaution>
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
     private ValueModel unsaved;
-    private String headerText;
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
+    private SaveListener saveListener;
+    private PropertyChangeListener unsavedListener;
 
-
-    EditKautionPresentationModel(Kaution kaution, String header) {
-        super(kaution);
-        this.kaution = kaution;
-        this.headerText=header;
-        initModels();
-        initEventHandling();
-    }
-    EditKautionPresentationModel(Kaution kaution, HeaderInfo header) {
+    public EditKautionPresentationModel(Kaution kaution, CWHeaderInfo header) {
         super(kaution);
         this.kaution = kaution;
         this.headerInfo=header;
+
         initModels();
         initEventHandling();
+    }
+
+    private void initModels() {
+        saveButtonAction = new SaveAction();
+        cancelButtonAction = new CancelAction();
+        saveCancelButtonAction = new SaveCancelAction();
+
+        support = new ButtonListenerSupport();
     }
 
     private void initEventHandling() {
         unsaved = new ValueHolder();
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
+        unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
 
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
@@ -71,16 +67,19 @@ public class EditKautionPresentationModel  extends PresentationModel<Kaution>
             }
         });
         unsaved.setValue(false);
+
+        saveListener = new SaveListener();
+        getBufferedModel(Kaution.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
+        getBufferedModel(Kaution.PROPERTYNAME_BETRAG).addValueChangeListener(saveListener);
     }
 
-    private void initModels() {
-        saveButtonAction = new SaveAction();
-        cancelButtonAction = new CancelAction();
-        saveCancelButtonAction = new SaveCancelAction();
+    public void dispose() {
+        unsaved.removeValueChangeListener(unsavedListener);
 
-        support = new ButtonListenerSupport();
-        getBufferedModel(Kaution.PROPERTYNAME_NAME).addValueChangeListener(new SaveListener());
-        getBufferedModel(Kaution.PROPERTYNAME_BETRAG).addValueChangeListener(new SaveListener());
+        getBufferedModel(Kaution.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
+        getBufferedModel(Kaution.PROPERTYNAME_BETRAG).removeValueChangeListener(saveListener);
+
+        release();
     }
 
     public void removeButtonListener(ButtonListener listener) {
@@ -113,22 +112,11 @@ public class EditKautionPresentationModel  extends PresentationModel<Kaution>
         return saveCancelButtonAction;
     }
 
-    public void dispose() {
-        this.release();
-    }
-
     /**
      * @return the headerInfo
      */
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
-    }
-
-    /**
-     * @param headerInfo the headerInfo to set
-     */
-    public void setHeaderInfo(HeaderInfo headerInfo) {
-        this.headerInfo = headerInfo;
     }
 
     public class SaveListener implements PropertyChangeListener {
@@ -140,10 +128,6 @@ public class EditKautionPresentationModel  extends PresentationModel<Kaution>
         public void updateState() {
             unsaved.setValue(true);
         }
-    }
-
-    public String getHeaderText() {
-        return headerText;
     }
 
     private class SaveAction

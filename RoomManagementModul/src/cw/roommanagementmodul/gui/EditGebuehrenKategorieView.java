@@ -1,74 +1,75 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.adapter.BasicComponentFactory;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import java.awt.BorderLayout;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JLabel;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import cw.roommanagementmodul.pojo.GebuehrenKategorie;
 
 /**
  *
  * @author Dominik
  */
-public class EditGebuehrenKategorieView implements Disposable{
+public class EditGebuehrenKategorieView extends CWView
+{
 
     private EditGebuehrenKategoriePresentationModel model;
-    private JButton bSave;
-    private JButton bCancel;
-    private JButton bSaveCancel;
-    private JLabel lKatName;
-    private JTextField tfKatName;
+    private CWButton bSave;
+    private CWButton bCancel;
+    private CWButton bSaveCancel;
+    private CWLabel lKatName;
+    private CWTextField tfKatName;
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel mainPanel;
 
     public EditGebuehrenKategorieView(EditGebuehrenKategoriePresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
-        lKatName = new JLabel("Bezeichnung: ");
+        lKatName = CWComponentFactory.createLabel("Bezeichnung: ");
 
-        tfKatName = BasicComponentFactory.createTextField(model.getBufferedModel(GebuehrenKategorie.PROPERTYNAME_NAME), false);
+        tfKatName = CWComponentFactory.createTextField(model.getBufferedModel(GebuehrenKategorie.PROPERTYNAME_NAME), false);
 
-        bSave = new JButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = new JButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = new JButton(model.getSaveCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schließen");
 
-        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(lKatName).addComponent(tfKatName).addComponent(bSave).addComponent(bCancel).addComponent(bSaveCancel);
-
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(lKatName)
+                .addComponent(tfKatName)
+                .addComponent(bSave)
+                .addComponent(bCancel)
+                .addComponent(bSaveCancel);
 
     }
 
-    public JComponent buildPanel() {
-        initComponents();
+    private void initEventHandling() {
+    }
 
-        JViewPanel mainPanel = new JViewPanel(model.getHeaderInfo());
-        CWButtonPanel buttonPanel = mainPanel.getButtonPanel();
+    private void buildView() {
+
+        this.setHeaderInfo(model.getHeaderInfo());
+        CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
-        JViewPanel panel = new JViewPanel();
-        JPanel contentPanel = panel.getContentPanel();
+        JPanel contentPanel = this.getContentPanel();
 
         /**
          * Boxes
@@ -81,15 +82,10 @@ public class EditGebuehrenKategorieView implements Disposable{
         CellConstraints cc = new CellConstraints();
         contentPanel.add(lKatName, cc.xy(1, 3));
         contentPanel.add(tfKatName, cc.xy(3, 3));
-
-
-        mainPanel.getContentPanel().add(panel, BorderLayout.CENTER);
-
-        return mainPanel;
     }
 
+    @Override
     public void dispose() {
-        mainPanel.removeDisposableListener(this);
         componentContainer.dispose();
         model.dispose();
     }

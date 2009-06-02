@@ -6,7 +6,6 @@ package cw.roommanagementmodul.gui;
 
 
 import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
@@ -23,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
 import cw.roommanagementmodul.pojo.Bereich;
 import cw.roommanagementmodul.pojo.Bewohner;
@@ -37,7 +35,9 @@ import cw.roommanagementmodul.pojo.manager.ZimmerManager;
  *
  * @author Dominik
  */
-public class EditBewohnerZimmerPresentationModel extends PresentationModel<Bewohner> {
+public class EditBewohnerZimmerPresentationModel
+        extends PresentationModel<Bewohner>
+{
 
     private Bewohner bewohner;
     private ButtonListenerSupport support;
@@ -53,6 +53,8 @@ public class EditBewohnerZimmerPresentationModel extends PresentationModel<Bewoh
     private String headerText;
     private SelectionInList<Kaution> kautionList;
     private KautionStatusItemListener kautionListener;
+    private SaveListener saveListener;
+    private PropertyChangeListener unsavedChangeListener;
 
     EditBewohnerZimmerPresentationModel(Bewohner b) {
         super(b);
@@ -72,6 +74,7 @@ public class EditBewohnerZimmerPresentationModel extends PresentationModel<Bewoh
         bereichManager = BereichManager.getInstance();
         kautionManager = KautionManager.getInstance();
         this.headerText = header;
+        
         initModels();
         initEventHandling();
     }
@@ -96,29 +99,23 @@ public class EditBewohnerZimmerPresentationModel extends PresentationModel<Bewoh
                 getZimmerList().setList(zimmerManager.getAll());
             }
         }
-
-        getBufferedModel(Bewohner.PROPERTYNAME_ZIMMER).addValueChangeListener(new SaveListener());
-        getBufferedModel(Bewohner.PROPERTYNAME_VON).addValueChangeListener(new SaveListener());
-        getBufferedModel(Bewohner.PROPERTYNAME_BIS).addValueChangeListener(new SaveListener());
-        getBufferedModel(Bewohner.PROPERTYNAME_KAUTION).addValueChangeListener(new SaveListener());
-        getBufferedModel(Bewohner.PROPERTYNAME_KAUTIONSTATUS).addValueChangeListener(new SaveListener());
-        getZimmerList().addValueChangeListener(new SaveListener());
-        getKautionList().addValueChangeListener(new SaveListener());
-
-        updateActionEnablement();
-    }
-
-    public void removeButtonListener(ButtonListener listener) {
-        support.removeButtonListener(listener);
-    }
-
-    public void addButtonListener(ButtonListener listener) {
-        support.addButtonListener(listener);
     }
 
     private void initEventHandling() {
+
+        saveListener = new SaveListener();
+        getBufferedModel(Bewohner.PROPERTYNAME_ZIMMER).addValueChangeListener(saveListener);
+        getBufferedModel(Bewohner.PROPERTYNAME_VON).addValueChangeListener(saveListener);
+        getBufferedModel(Bewohner.PROPERTYNAME_BIS).addValueChangeListener(saveListener);
+        getBufferedModel(Bewohner.PROPERTYNAME_KAUTION).addValueChangeListener(saveListener);
+        getBufferedModel(Bewohner.PROPERTYNAME_KAUTIONSTATUS).addValueChangeListener(saveListener);
+        getZimmerList().addValueChangeListener(saveListener);
+        getKautionList().addValueChangeListener(saveListener);
+
+        updateActionEnablement();
+
         unsaved = new ValueHolder();
-        unsaved.addValueChangeListener(new PropertyChangeListener() {
+        unsaved.addValueChangeListener(unsavedChangeListener = new PropertyChangeListener() {
 
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
@@ -133,12 +130,26 @@ public class EditBewohnerZimmerPresentationModel extends PresentationModel<Bewoh
         unsaved.setValue(false);
     }
 
-    public ComboBoxModel createBereichComboModel(SelectionInList bereichList) {
-        return new ComboBoxAdapter(bereichList);
+    public void dispose() {
+        getBufferedModel(Bewohner.PROPERTYNAME_ZIMMER).removeValueChangeListener(saveListener);
+        getBufferedModel(Bewohner.PROPERTYNAME_VON).removeValueChangeListener(saveListener);
+        getBufferedModel(Bewohner.PROPERTYNAME_BIS).removeValueChangeListener(saveListener);
+        getBufferedModel(Bewohner.PROPERTYNAME_KAUTION).removeValueChangeListener(saveListener);
+        getBufferedModel(Bewohner.PROPERTYNAME_KAUTIONSTATUS).removeValueChangeListener(saveListener);
+        getZimmerList().removeValueChangeListener(saveListener);
+        getKautionList().removeValueChangeListener(saveListener);
+
+        unsaved.removeValueChangeListener(unsavedChangeListener);
+
+        release();
     }
 
-    public ComboBoxModel createZimmerComboModel(SelectionInList zimmerList) {
-        return new ComboBoxAdapter(zimmerList);
+    public void removeButtonListener(ButtonListener listener) {
+        support.removeButtonListener(listener);
+    }
+
+    public void addButtonListener(ButtonListener listener) {
+        support.addButtonListener(listener);
     }
 
     private List<Bereich> extractLeafBereich(List<Bereich> l) {
