@@ -1,42 +1,42 @@
 package cw.studentmanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWTextField;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.studentmanagementmodul.pojo.OrganisationUnit;
 
 /**
  *
  * @author ManuelG
  */
-public class EditOrganisationUnitView
-    implements Disposable
+public class EditOrganisationUnitView extends CWView
 {
 
     private EditOrganisationUnitPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
-    private JTextField tfName;
-    private JComboBox cbOrganisationUnitParent;
+    private CWTextField tfName;
+    private CWComboBox cbOrganisationUnitParent;
 
-    private JButton bSave;
-    private JButton bCancel;
-    private JButton bSaveCancel;
+    private CWButton bSave;
+    private CWButton bCancel;
+    private CWButton bSaveCancel;
 
     public EditOrganisationUnitView(EditOrganisationUnitPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
-    public void initModels() {
+    private void initComponents() {
         bSave       = CWComponentFactory.createButton(model.getSaveButtonAction());
         bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
@@ -56,35 +56,26 @@ public class EditOrganisationUnitView
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
-        initModels();
-        
-        panel = new JViewPanel(model.getHeaderText());
+    private void buildView() {
+        this.setHeaderInfo(model.getHeaderInfo());
 
-        JButtonPanel buttonPanel = panel.getButtonPanel();
+        CWButtonPanel buttonPanel = this.getButtonPanel();
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout("right:pref, 4dlu, pref:grow", "pref, 4dlu, pref");
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         CellConstraints cc = new CellConstraints();
         
         builder.addLabel("Name:", cc.xy(1, 1));
         builder.add(tfName, cc.xy(3, 1));
         builder.addLabel("Überbereich:", cc.xy(1, 3));
         builder.add(cbOrganisationUnitParent, cc.xy(3, 3));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-        
-        return panel;
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         componentContainer.dispose();
 
         model.dispose();

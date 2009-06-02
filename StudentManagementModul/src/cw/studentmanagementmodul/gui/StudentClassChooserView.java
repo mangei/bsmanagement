@@ -1,43 +1,43 @@
 package cw.studentmanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWTree;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.studentmanagementmodul.gui.renderer.StudentClassTreeCellRenderer;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import org.jdesktop.swingx.JXTree;
 
 /**
  *
  * @author ManuelG
  */
-public class StudentClassChooserView
-    implements Disposable
+public class StudentClassChooserView extends CWView
 {
 
     private StudentClassChooserPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
-    private JXTree trStudentClass;
-    private JButton bOk;
-    private JButton bNoClass;
-    private JButton bCancel;
-    private JButton bTreeExpand;
-    private JButton bTreeCollapse;
+    private CWTree trStudentClass;
+    private CWButton bOk;
+    private CWButton bNoClass;
+    private CWButton bCancel;
+    private CWButton bTreeExpand;
+    private CWButton bTreeCollapse;
 
     public StudentClassChooserView(StudentClassChooserPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
-    public void initModels() {
+    private void initComponents() {
         bOk             = CWComponentFactory.createButton(model.getOkAction());
         bNoClass        = CWComponentFactory.createButton(model.getNoClassAction());
         bCancel         = CWComponentFactory.createButton(model.getCancelAction());
@@ -65,41 +65,33 @@ public class StudentClassChooserView
                 .addComponent(bTreeExpand);
     }
 
-    public void initEventHandling() {
+    private void initEventHandling() {
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
-        initModels();
+    private void buildView() {
 
-        panel = new JViewPanel(model.getHeaderText());
+        this.setHeaderInfo(model.getHeaderInfo());
 
-        panel.getButtonPanel().add(bOk);
-        panel.getButtonPanel().add(bCancel);
-        panel.getButtonPanel().add(bNoClass);
+        this.getButtonPanel().add(bOk);
+        this.getButtonPanel().add(bCancel);
+        this.getButtonPanel().add(bNoClass);
 
         FormLayout layout = new FormLayout(
                 "pref:grow, 1dlu, pref",
                 "pref, 1dlu, top:pref:grow"
         );
 
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         CellConstraints cc = new CellConstraints();
 
         builder.add(trStudentClass, cc.xywh(1, 1, 1, 3));
         builder.add(bTreeExpand, cc.xy(3, 1));
         builder.add(bTreeCollapse, cc.xy(3, 3));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return panel;
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         componentContainer.dispose();
 
         model.dispose();

@@ -4,7 +4,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.List;
@@ -29,10 +29,9 @@ import javax.swing.Icon;
  * @author ManuelG
  */
 public class StudentClassChooserPresentationModel
-    implements Disposable
 {
 
-    private String headerText;
+    private CWHeaderInfo headerInfo;
     private StudentClass selectedStudentClass;
     private Action okAction;
     private Action noClassAction;
@@ -46,19 +45,15 @@ public class StudentClassChooserPresentationModel
 
     private TreeSelectionListener treeSelectionListener;
 
-    public StudentClassChooserPresentationModel(String headerText) {
-        this(null, headerText);
-    }
-
-    public StudentClassChooserPresentationModel(StudentClass selectedStudentClass, String headerText) {
-        this.headerText = headerText;
+    public StudentClassChooserPresentationModel(StudentClass selectedStudentClass, CWHeaderInfo headerInfo) {
+        this.headerInfo = headerInfo;
         this.selectedStudentClass = selectedStudentClass;
 
         initModels();
         initEventHandling();
     }
 
-    public void initModels() {
+    private void initModels() {
         studentClassTreeNodeMap = new HashMap<Object, DefaultMutableTreeNode>();
         okAction = new OkAction("Auswählen", CWUtils.loadIcon("cw/studentmanagementmodul/images/accept.png"));
         noClassAction = new NoClassAction("Keine Klasse", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_no.png"));
@@ -73,7 +68,7 @@ public class StudentClassChooserPresentationModel
         buttonListenerSupport = new ButtonListenerSupport();
     }
 
-    public void initEventHandling() {
+    private void initEventHandling() {
         studentClassTreeSelectionModel.addTreeSelectionListener(treeSelectionListener = new TreeSelectionListener() {
 
             public void valueChanged(TreeSelectionEvent e) {
@@ -216,8 +211,8 @@ public class StudentClassChooserPresentationModel
         return cancelAction;
     }
 
-    public String getHeaderText() {
-        return headerText;
+    public CWHeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
     public Action getOkAction() {

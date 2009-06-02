@@ -52,7 +52,7 @@ public class StudentManager extends AbstractPOJOManager<Student> {
     public Student get(Customer customer) {
         Student student = null;
         try {
-            student = (Student) HibernateUtil.getEntityManager().createQuery("FROM Student WHERE id=" + customer.getId()).getSingleResult();
+            student = (Student) HibernateUtil.getEntityManager().createQuery("FROM Student WHERE customer.id=" + customer.getId()).getSingleResult();
         } catch (NoResultException ex) {
         }
         return student;

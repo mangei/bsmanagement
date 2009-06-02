@@ -1,43 +1,43 @@
 package cw.studentmanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.JButtonPanel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWButtonGroup;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWRadioButton;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
 import javax.swing.JComboBox;
-import javax.swing.JPanel;
-import javax.swing.JRadioButton;
 
 /**
  *
  * @author ManuelG
  */
-public class DeleteOrganisationUnitView
-    implements Disposable
+public class DeleteOrganisationUnitView extends CWView
 {
 
     private DeleteOrganisationUnitPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
-    private JButton bOk;
-    private JButton bCancel;
-    private JRadioButton rbDeleteAll;
-    private JRadioButton rbMoveAll;
-    private ButtonGroup bg;
+    private CWButton bOk;
+    private CWButton bCancel;
+    private CWRadioButton rbDeleteAll;
+    private CWRadioButton rbMoveAll;
+    private CWButtonGroup bg;
     private JComboBox cbOrganisationUnits;
 
     private ItemListener itemListener;
 
     public DeleteOrganisationUnitView(DeleteOrganisationUnitPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -68,12 +68,11 @@ public class DeleteOrganisationUnitView
         cbOrganisationUnits.setEnabled(false);
     }
 
-    public JPanel buildPanel() {
-        initComponents();
+    private void buildView() {
 
-        panel = new JViewPanel("Bereich löschen");
+        this.setHeaderInfo(new CWHeaderInfo("Bereich löschen"));
 
-        JButtonPanel buttonPanel = panel.getButtonPanel();
+        CWButtonPanel buttonPanel = this.getButtonPanel();
         buttonPanel.add(bOk);
         buttonPanel.add(bCancel);
 
@@ -81,7 +80,7 @@ public class DeleteOrganisationUnitView
                 "0dlu, pref, 4dlu, pref:grow",
                 "pref, 4dlu, pref, 4dlu, pref"
         );
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         CellConstraints cc = new CellConstraints();
 
         builder.add(rbDeleteAll, cc.xy(2, 1));
@@ -89,17 +88,10 @@ public class DeleteOrganisationUnitView
         builder.add(rbMoveAll, cc.xy(2, 3));
         builder.addLabel("Unterbereiche/Klassen in anderen Bereich verschieben:", cc.xy(4, 3));
         builder.add(cbOrganisationUnits, cc.xy(4, 5));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-
-        return panel;
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         rbMoveAll.removeItemListener(itemListener);
 
         componentContainer.dispose();

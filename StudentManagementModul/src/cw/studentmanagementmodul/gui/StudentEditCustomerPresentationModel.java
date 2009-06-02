@@ -6,8 +6,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -24,13 +23,12 @@ import javax.swing.Icon;
  */
 public class StudentEditCustomerPresentationModel
         extends PresentationModel<Student>
-        implements Disposable
 {
     
     private Action studentClassChooserAction;
     private ValueModel studentClassName;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
     private ValueModel unsaved;
 
     private PropertyChangeListener classChangeListener;
@@ -43,7 +41,7 @@ public class StudentEditCustomerPresentationModel
         initEventHandling();
     }
 
-    public void initModels() {
+    private void initModels() {
         studentClassChooserAction = new StudentClassChooserAction("Klasse auswählen", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_go.png"));
         studentClassName = new ValueHolder();
     }
@@ -60,8 +58,6 @@ public class StudentEditCustomerPresentationModel
 
     public void dispose() {
         getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS).removePropertyChangeListener(classChangeListener);
-        studentClassName = null;
-        unsaved = null;
         release();
     }
 
@@ -88,7 +84,7 @@ public class StudentEditCustomerPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            final StudentClassChooserPresentationModel model = new StudentClassChooserPresentationModel((StudentClass)getBufferedValue(Student.PROPERTYNAME_STUDENTCLASS), "Klasse auswählen");
+            final StudentClassChooserPresentationModel model = new StudentClassChooserPresentationModel((StudentClass)getBufferedValue(Student.PROPERTYNAME_STUDENTCLASS), new CWHeaderInfo("Klasse auswählen"));
             StudentClassChooserView view = new StudentClassChooserView(model);
 
             model.addButtonListener(new ButtonListener() {
@@ -104,7 +100,7 @@ public class StudentEditCustomerPresentationModel
                 }
             });
 
-            GUIManager.changeView(view.buildPanel(), true);
+            GUIManager.changeView(view, true);
         }
     }
 
@@ -129,7 +125,7 @@ public class StudentEditCustomerPresentationModel
         return studentClassName;
     }
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

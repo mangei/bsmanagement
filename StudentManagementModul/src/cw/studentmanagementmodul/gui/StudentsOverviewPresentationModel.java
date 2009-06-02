@@ -2,8 +2,7 @@ package cw.studentmanagementmodul.gui;
 
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.studentmanagementmodul.pojo.Student;
 import cw.studentmanagementmodul.pojo.StudentClass;
 import cw.studentmanagementmodul.pojo.manager.StudentManager;
@@ -15,14 +14,13 @@ import javax.swing.table.TableModel;
  * @author CreativeWorkers.at
  */
 public class StudentsOverviewPresentationModel
-    implements Disposable
 {
 
     private SelectionInList<Student> studentSelection;
 
     private StudentClass studentClass;
 
-    private HeaderInfo headerInfo;
+    private CWHeaderInfo headerInfo;
 
     public StudentsOverviewPresentationModel(StudentClass studentClass) {
         this.studentClass = studentClass;
@@ -31,10 +29,10 @@ public class StudentsOverviewPresentationModel
         initEventHandling();
     }
 
-    public void initModels() {
+    private void initModels() {
         studentSelection = new SelectionInList<Student>(StudentManager.getInstance().getAllActive(studentClass));
 
-        headerInfo = new HeaderInfo(
+        headerInfo = new CWHeaderInfo(
                 "Schüler anzeigen",
                 "<html>Hier haben Sie einen Überblick über alle Schüler der Klasse '<b>" + studentClass + "</b>'.<br>Anzahl: <b>" + studentSelection.getSize() + " Schüler</b></html>",
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/student.png"),
@@ -58,7 +56,7 @@ public class StudentsOverviewPresentationModel
     // Getter methods for the model
     ////////////////////////////////////////////////////////////////////////////
 
-    public HeaderInfo getHeaderInfo() {
+    public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
 

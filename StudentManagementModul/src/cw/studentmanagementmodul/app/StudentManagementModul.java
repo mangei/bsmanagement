@@ -12,14 +12,12 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
-import cw.customermanagementmodul.app.CustomerManagementModul;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import cw.studentmanagementmodul.pojo.Student;
 import cw.studentmanagementmodul.pojo.StudentClass;
 import cw.studentmanagementmodul.pojo.manager.StudentClassManager;
 import cw.studentmanagementmodul.pojo.manager.StudentManager;
-import java.util.ArrayList;
 
 /**
  * Das Schülermodul
@@ -35,7 +33,7 @@ implements Modul
         MenuManager.getSideMenu().addItem(new JButton(new AbstractAction("Klassen", CWUtils.loadIcon("cw/studentmanagementmodul/images/image.png")) {
 
             public void actionPerformed(ActionEvent e) {
-                GUIManager.changeView(new StudentClassManagementView(new StudentClassManagementPresentationModel("Klassenverwaltung")).buildPanel());
+                GUIManager.changeView(new StudentClassManagementView(new StudentClassManagementPresentationModel()));
             }
         }), "school");
 
@@ -61,11 +59,4 @@ implements Modul
         });
 
     }
-
-    public List<Class> getDependencies() {
-        List<Class> dependencies = new ArrayList<Class>();
-        dependencies.add(CustomerManagementModul.class);
-        return dependencies;
-    }
-
 }

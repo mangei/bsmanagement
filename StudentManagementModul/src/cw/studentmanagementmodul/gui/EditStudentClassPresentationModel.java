@@ -9,7 +9,7 @@ import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -29,12 +29,11 @@ import javax.swing.Icon;
  */
 public class EditStudentClassPresentationModel 
         extends PresentationModel<StudentClass>
-        implements Disposable
 {
 
     private ButtonListenerSupport buttonListenerSupport;
     private ValueModel unsaved;
-    private String headerText;
+    private CWHeaderInfo headerInfo;
 
     private SelectionInList<OrganisationUnit> selectionOrganisationUnit;
     private SelectionInList<StudentClass> selectionStudentClass;
@@ -49,20 +48,16 @@ public class EditStudentClassPresentationModel
     private PropertyConnector organisationUnitPropertyConnector;
     private PropertyConnector nextStudentClassPropertyConnector;
     
-    public EditStudentClassPresentationModel(StudentClass studentClass) {
-        this(studentClass, "");
-    }
-
-    public EditStudentClassPresentationModel(StudentClass studentClass, String headerText) {
+    public EditStudentClassPresentationModel(StudentClass studentClass, CWHeaderInfo headerInfo) {
         super(studentClass);
         
-        this.headerText = headerText;
+        this.headerInfo = headerInfo;
         
         initModels();
         initEventHandling();
     }
 
-    public void initModels() {
+    private void initModels() {
         unsaved = new ValueHolder();
         buttonListenerSupport = new ButtonListenerSupport();
 
@@ -83,7 +78,7 @@ public class EditStudentClassPresentationModel
         selectionStudentClass.setSelection(getBean().getNextStudentClass());
     }
 
-    public void initEventHandling() {
+    private void initEventHandling() {
         organisationUnitPropertyConnector = PropertyConnector.connect(getBufferedModel(StudentClass.PROPERTYNAME_ORGANISATIONUNIT), "value",  selectionOrganisationUnit, "selection");
 //        organisationUnitPropertyConnector.updateProperty2();
         nextStudentClassPropertyConnector = PropertyConnector.connect(getBufferedModel(StudentClass.PROPERTYNAME_NEXTSTUDENTCLASS), "value",  selectionStudentClass, "selection");
@@ -269,8 +264,8 @@ public class EditStudentClassPresentationModel
         return selectionStudentClass;
     }
 
-    public String getHeaderText() {
-        return headerText;
+    public CWHeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
 }

@@ -2,7 +2,6 @@ package cw.studentmanagementmodul.gui;
 
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
 import cw.studentmanagementmodul.pojo.manager.StudentManager;
 
 /**
@@ -10,7 +9,6 @@ import cw.studentmanagementmodul.pojo.manager.StudentManager;
  * @author ManuelG
  */
 public class StudentHomeExtentionPresentationModel
-    implements Disposable
 {
 
     private ValueModel sizeStudentsValueModel;

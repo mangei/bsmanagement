@@ -3,28 +3,28 @@ package cw.studentmanagementmodul.gui;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWView;
 
 /**
  *
  * @author ManuelG
  */
-public class StudentHomeExtentionView
-    implements Disposable
+public class StudentHomeExtentionView extends CWView
 {
 
     private StudentHomeExtentionPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
-    private JLabel lSizeStudents;
+    private CWLabel lSizeStudents;
 
     public StudentHomeExtentionView(StudentHomeExtentionPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
     
     private void initComponents() {
@@ -38,28 +38,21 @@ public class StudentHomeExtentionView
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
-        initComponents();
-
-        panel  = new JViewPanel("Schülerinformationen");
+    private void buildView() {
+        this.setHeaderInfo(new CWHeaderInfo("Schülerinformationen"));
 
         FormLayout layout = new FormLayout(
                 "pref",
                 "pref"
         );
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
 
         CellConstraints cc = new CellConstraints();
         builder.add(lSizeStudents, cc.xy(1, 1));
-
-        initEventHandling();
-
-        return panel;
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         componentContainer.dispose();
 
         model.dispose();

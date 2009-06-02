@@ -1,11 +1,11 @@
 package cw.studentmanagementmodul.extentions;
 
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.studentmanagementmodul.gui.StudentEditCustomerPresentationModel;
 import cw.studentmanagementmodul.gui.StudentEditCustomerView;
 import java.util.List;
-import javax.swing.JComponent;
 import cw.studentmanagementmodul.pojo.Student;
 import cw.studentmanagementmodul.pojo.manager.StudentManager;
 
@@ -33,8 +33,8 @@ implements EditCustomerTabExtention
         view = new StudentEditCustomerView(model);
     }
 
-    public JComponent getView() {
-        return view.buildPanel();
+    public CWPanel getView() {
+        return view;
     }
 
     public void save() {

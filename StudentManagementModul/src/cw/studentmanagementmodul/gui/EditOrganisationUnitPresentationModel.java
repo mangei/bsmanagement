@@ -9,7 +9,7 @@ import com.jgoodies.binding.beans.PropertyConnector;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -27,12 +27,11 @@ import javax.swing.Icon;
  */
 public class EditOrganisationUnitPresentationModel 
         extends PresentationModel<OrganisationUnit>
-        implements Disposable
 {
 
     private ButtonListenerSupport buttonListenerSupport;
     private ValueModel unsaved;
-    private String headerText;
+    private CWHeaderInfo headerInfo;
 
 //    private Action resetButtonAction;
     private Action saveButtonAction;
@@ -45,20 +44,16 @@ public class EditOrganisationUnitPresentationModel
     private SaveListener saveListener;
     private PropertyConnector organisationUnitPropertyConnector;
     
-    public EditOrganisationUnitPresentationModel(OrganisationUnit organisationUnit) {
-        this(organisationUnit, "");
-    }
-
-    public EditOrganisationUnitPresentationModel(OrganisationUnit organisationUnit, String headerText) {
+    public EditOrganisationUnitPresentationModel(OrganisationUnit organisationUnit, CWHeaderInfo headerInfo) {
         super(organisationUnit);
         
-        this.headerText = headerText;
+        this.headerInfo = headerInfo;
         
         initModels();
         initEventHandling();
     }
 
-    public void initModels() {
+    private void initModels() {
         unsaved = new ValueHolder();
         buttonListenerSupport = new ButtonListenerSupport();
 
@@ -80,7 +75,7 @@ public class EditOrganisationUnitPresentationModel
         selectionOrganisationUnit.setSelection(getBean().getParent());
     }
 
-    public void initEventHandling() {
+    private void initEventHandling() {
 
         organisationUnitPropertyConnector = PropertyConnector.connect(getBufferedModel(OrganisationUnit.PROPERTYNAME_PARENT), "value",  selectionOrganisationUnit, "selection");
 //        organisationUnitPropertyConnector.updateProperty2();
@@ -281,8 +276,8 @@ public class EditOrganisationUnitPresentationModel
         return selectionOrganisationUnit;
     }
 
-    public String getHeaderText() {
-        return headerText;
+    public CWHeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
 }

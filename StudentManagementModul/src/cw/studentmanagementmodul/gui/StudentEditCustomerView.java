@@ -1,38 +1,38 @@
 package cw.studentmanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWCheckBox;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.studentmanagementmodul.pojo.Student;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  *
  * @author Manuel Geier
  */
-public class StudentEditCustomerView
-        implements Disposable
+public class StudentEditCustomerView extends CWView
 {
     private StudentEditCustomerPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
-    private JCheckBox cIsStudent;
-    private JButton bStudentClassChooser;
-    private JLabel lStudentClassName;
+    private CWCheckBox cIsStudent;
+    private CWButton bStudentClassChooser;
+    private CWLabel lStudentClassName;
 
     private PropertyChangeListener activeChangeListener;
     
     public StudentEditCustomerView(StudentEditCustomerPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -60,17 +60,16 @@ public class StudentEditCustomerView
         bStudentClassChooser.setEnabled((Boolean)model.getBufferedModel(Student.PROPERTYNAME_ACTIVE).getValue());
     }
 
-    public JPanel buildPanel() {
-        initComponents();
+    private void buildView() {
         
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
-        panel.setName("Schüler");
+        this.setHeaderInfo(model.getHeaderInfo());
+        this.setName("Schüler");
         
         FormLayout layout = new FormLayout(
                 "pref, 4dlu, pref, 4dlu, right:pref:grow",
                 "pref, 4dlu, pref"
         );
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         
         CellConstraints cc = new CellConstraints();
         
@@ -78,17 +77,10 @@ public class StudentEditCustomerView
         builder.addLabel("Klasse:", cc.xy(1, 3));
         builder.add(lStudentClassName, cc.xy(3, 3));
         builder.add(bStudentClassChooser, cc.xy(5, 3));
-        
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-        
-        return panel;
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         model.getBufferedModel(Student.PROPERTYNAME_ACTIVE).removePropertyChangeListener(activeChangeListener);
 
         componentContainer.dispose();

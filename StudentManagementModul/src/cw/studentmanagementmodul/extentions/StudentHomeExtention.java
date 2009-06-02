@@ -4,7 +4,7 @@ import cw.boardingschoolmanagement.gui.HomePresentationModel;
 import cw.studentmanagementmodul.gui.StudentHomeExtentionPresentationModel;
 import cw.studentmanagementmodul.gui.StudentHomeExtentionView;
 import cw.boardingschoolmanagement.extentions.interfaces.HomeExtention;
-import javax.swing.JPanel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 
 /**
  *
@@ -20,8 +20,8 @@ public class StudentHomeExtention implements HomeExtention {
         view = new StudentHomeExtentionView(model);
     }
 
-    public JPanel getPanel() {
-        return view.buildPanel();
+    public CWPanel getView() {
+        return view;
     }
 
     public void dispose() {

@@ -1,28 +1,28 @@
 package cw.studentmanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.CWJXTable;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.gui.helper.JXTableSelectionConverter;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import java.awt.BorderLayout;
-import javax.swing.JPanel;
 
 /**
  * @author CreativeWorkers.at
  */
-public class StudentsOverviewView
-    implements Disposable
+public class StudentsOverviewView extends CWView
 {
 
     private StudentsOverviewPresentationModel model;
-
-    private JViewPanel panel;
-    private CWJXTable tStudents;
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private CWTable tStudents;
 
     public StudentsOverviewView(StudentsOverviewPresentationModel m) {
         model = m;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
     private void initComponents() {
@@ -33,34 +33,30 @@ public class StudentsOverviewView
                 );
         tStudents.setSelectionModel(
                 new SingleListSelectionAdapter(
-                    new JXTableSelectionConverter(
+                    new CWTableSelectionConverter(
                         model.getStudentSelection().getSelectionIndexHolder(),
                         tStudents)));
-        
+
+        componentContainer = CWComponentFactory.createCWComponentContainer()
+                .addComponent(tStudents);
     }
 
     private void initEventHandling() {
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
-        initComponents();
+    private void buildView() {
 
-        panel = CWComponentFactory.createViewPanel(model.getHeaderInfo());
+        this.setHeaderInfo(model.getHeaderInfo());
 
-        panel.getContentPanel().setLayout(new BorderLayout());
-        panel.getContentPanel().add(CWComponentFactory.createScrollPane(tStudents), BorderLayout.CENTER);
-
-        panel.addDisposableListener(this);
-        
-        initEventHandling();
-
-        return panel;
+        this.getContentPanel().setLayout(new BorderLayout());
+        this.getContentPanel().add(CWComponentFactory.createScrollPane(tStudents), BorderLayout.CENTER);
     }
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
-        
+        componentContainer.dispose();
+
         model.dispose();
     }
 

@@ -1,24 +1,22 @@
 package cw.studentmanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.JViewPanel;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWPopupMenu;
+import cw.boardingschoolmanagement.gui.component.CWTree;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.studentmanagementmodul.gui.renderer.StudentClassTreeCellRenderer;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.TreePath;
-import org.jdesktop.swingx.JXTree;
 import cw.studentmanagementmodul.pojo.OrganisationUnit;
 import cw.studentmanagementmodul.pojo.StudentClass;
 import javax.swing.JMenuItem;
@@ -27,36 +25,38 @@ import javax.swing.JMenuItem;
  *
  * @author ManuelG
  */
-public class StudentClassManagementView
-    implements Disposable
+public class StudentClassManagementView extends CWView
 {
 
     private StudentClassManagementPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JViewPanel panel;
-    private JXTree trStudentClass;
-    private JButton bNewOrganisationUnt;
-    private JButton bEditOrganisationUnt;
-    private JButton bRemoveOrganisationUnt;
-    private JButton bNewStudentClass;
-    private JButton bEditStudentClass;
-    private JButton bRemoveStudentClass;
-    private JButton bViewStudents;
-    private JButton bMoveUpStudentClasses;
-    private JPopupMenu popupStudentClassTreeRoot;
-    private JPopupMenu popupStudentClassTreeOrganisationUnit;
-    private JPopupMenu popupStudentClassTreeStudentClass;
-    private JButton bTreeExpand;
-    private JButton bTreeCollapse;
+    private CWTree trStudentClass;
+    private CWButton bNewOrganisationUnt;
+    private CWButton bEditOrganisationUnt;
+    private CWButton bRemoveOrganisationUnt;
+    private CWButton bNewStudentClass;
+    private CWButton bEditStudentClass;
+    private CWButton bRemoveStudentClass;
+    private CWButton bViewStudents;
+    private CWButton bMoveUpStudentClasses;
+    private CWPopupMenu popupStudentClassTreeRoot;
+    private CWPopupMenu popupStudentClassTreeOrganisationUnit;
+    private CWPopupMenu popupStudentClassTreeStudentClass;
+    private CWButton bTreeExpand;
+    private CWButton bTreeCollapse;
 
     private MouseAdapter reMouseListener;
 
     public StudentClassManagementView(StudentClassManagementPresentationModel model) {
         this.model = model;
+
+        initComponents();
+        buildView();
+        initEventHandling();
     }
 
-    public void initModels() {
+    public void initComponents() {
         componentContainer = CWComponentFactory.createCWComponentContainer();
 
         bNewOrganisationUnt     = CWComponentFactory.createButton(model.getNewOrganisationUnitAction());
@@ -141,47 +141,39 @@ public class StudentClassManagementView
                 .addComponent(bViewStudents);
     }
 
-    public void initEventHandling() {
+    private void initEventHandling() {
         // Nothing to do
     }
 
-    public JPanel buildPanel() {
-        initModels();
+    private void buildView() {
         
-        panel = new JViewPanel(model.getHeaderText());
+        this.setHeaderInfo(model.getHeaderInfo());
 
-        panel.getButtonPanel().add(bNewOrganisationUnt);
-        panel.getButtonPanel().add(bEditOrganisationUnt);
-        panel.getButtonPanel().add(bRemoveOrganisationUnt);
-        panel.getButtonPanel().add(bNewStudentClass);
-        panel.getButtonPanel().add(bEditStudentClass);
-        panel.getButtonPanel().add(bRemoveStudentClass);
-        panel.getButtonPanel().add(bViewStudents);
-        panel.getButtonPanel().add(bMoveUpStudentClasses);
+        this.getButtonPanel().add(bNewOrganisationUnt);
+        this.getButtonPanel().add(bEditOrganisationUnt);
+        this.getButtonPanel().add(bRemoveOrganisationUnt);
+        this.getButtonPanel().add(bNewStudentClass);
+        this.getButtonPanel().add(bEditStudentClass);
+        this.getButtonPanel().add(bRemoveStudentClass);
+        this.getButtonPanel().add(bViewStudents);
+        this.getButtonPanel().add(bMoveUpStudentClasses);
 
         FormLayout layout = new FormLayout(
                 "pref:grow, 1dlu, pref",
                 "pref, 1dlu, top:pref:grow"
         );
 
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         CellConstraints cc = new CellConstraints();
 
         builder.add(CWComponentFactory.createScrollPane(trStudentClass), cc.xywh(1, 1, 1, 3));
         builder.add(bTreeExpand, cc.xy(3, 1));
         builder.add(bTreeCollapse, cc.xy(3, 3));
-
-        panel.addDisposableListener(this);
-
-        initEventHandling();
-        
-        return panel;
     }
 
 
+    @Override
     public void dispose() {
-        panel.removeDisposableListener(this);
-
         trStudentClass.removeMouseListener(reMouseListener);
 
         componentContainer.dispose();

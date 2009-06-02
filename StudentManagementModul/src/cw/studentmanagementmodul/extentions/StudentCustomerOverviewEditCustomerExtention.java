@@ -3,13 +3,12 @@ package cw.studentmanagementmodul.extentions;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.app.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.CWJLabel;
-import cw.boardingschoolmanagement.gui.component.CWJPanel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extentions.interfaces.CustomerOverviewEditCustomerExtention;
 import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationModel;
 import cw.studentmanagementmodul.gui.StudentEditCustomerPresentationModel;
-import javax.swing.JComponent;
 
 /**
  *
@@ -19,15 +18,16 @@ public class StudentCustomerOverviewEditCustomerExtention
         implements CustomerOverviewEditCustomerExtention {
 
     private CustomerOverviewEditCustomerPresentationModel customerOverviewEditCustomerPresentationModel;
-
-    private CWJLabel lStudentClass;
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    private CWLabel lStudentClass;
 
     public void initPresentationModel(CustomerOverviewEditCustomerPresentationModel customerOverviewEditCustomerPresentationModel) {
         this.customerOverviewEditCustomerPresentationModel = customerOverviewEditCustomerPresentationModel;
+        componentContainer = new CWComponentFactory.CWComponentContainer();
     }
     
-    public JComponent getView() {
-        CWJPanel panel = CWComponentFactory.createPanel();
+    public CWPanel getView() {
+        CWPanel panel = CWComponentFactory.createPanel();
 
         lStudentClass = CWComponentFactory.createLabel(
                 ((StudentEditCustomerPresentationModel)
@@ -36,6 +36,8 @@ public class StudentCustomerOverviewEditCustomerExtention
                         .getExtention(StudentEditCustomerTabExtention.class))
                         .getModel()).getStudentClassNameModel()
                     );
+
+        componentContainer.addComponent(lStudentClass);
 
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, pref:grow",
@@ -53,7 +55,7 @@ public class StudentCustomerOverviewEditCustomerExtention
     }
 
     public void dispose() {
-        
+        componentContainer.dispose();
     }
 
     public int priority() {

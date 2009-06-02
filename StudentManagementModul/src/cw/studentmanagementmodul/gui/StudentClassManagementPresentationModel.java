@@ -3,7 +3,7 @@ package cw.studentmanagementmodul.gui;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.interfaces.Disposable;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
@@ -41,10 +41,9 @@ import javax.swing.event.TreeModelListener;
  * @author ManuelG
  */
 public class StudentClassManagementPresentationModel
-    implements Disposable
 {
 
-    private String headerText;
+    private CWHeaderInfo headerInfo;
     private Action newOrganisationUnitAction;
     private Action editOrganisationUnitAction;
     private Action removeOrganisationUnitAction;
@@ -60,14 +59,15 @@ public class StudentClassManagementPresentationModel
 
     private ActionTreeChangeListener actionTreeChangeListener;
 
-    public StudentClassManagementPresentationModel(String headerText) {
-        this.headerText = headerText;
-
+    public StudentClassManagementPresentationModel() {
         initModels();
         initEventHandling();
     }
 
-    public void initModels() {
+    private void initModels() {
+
+        headerInfo = new CWHeaderInfo("Klassenverwaltung");
+
         studentClassTreeNodeMap = new HashMap<Object, MutableTreeNode>();
         newOrganisationUnitAction = new NewOrganisationUnitAction("Bereich erstellen", CWUtils.loadIcon("cw/studentmanagementmodul/images/box_add.png"));
         editOrganisationUnitAction = new EditOrganisationUnitAction("Bereich bearbeiten", CWUtils.loadIcon("cw/studentmanagementmodul/images/box_edit.png"));
@@ -190,7 +190,7 @@ public class StudentClassManagementPresentationModel
                 }
             }
 
-            final EditOrganisationUnitPresentationModel model = new EditOrganisationUnitPresentationModel(organisationUnit, "Bereich erstellen");
+            final EditOrganisationUnitPresentationModel model = new EditOrganisationUnitPresentationModel(organisationUnit, new CWHeaderInfo("Bereich erstellen"));
             final EditOrganisationUnitView editView = new EditOrganisationUnitView(model);
 
             model.addButtonListener(new ButtonListener() {
@@ -231,7 +231,7 @@ public class StudentClassManagementPresentationModel
                 }
             });
 
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
             GUIManager.setLoadingScreenVisible(false);
 
         }
@@ -261,7 +261,7 @@ public class StudentClassManagementPresentationModel
                 }
             });
 
-            final EditOrganisationUnitPresentationModel model = new EditOrganisationUnitPresentationModel(organisationUnit, "Bereich erstellen");
+            final EditOrganisationUnitPresentationModel model = new EditOrganisationUnitPresentationModel(organisationUnit, new CWHeaderInfo("Bereich erstellen"));
             final EditOrganisationUnitView editView = new EditOrganisationUnitView(model);
 
             model.addButtonListener(new ButtonListener() {
@@ -281,7 +281,7 @@ public class StudentClassManagementPresentationModel
                 }
             });
 
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
             GUIManager.setLoadingScreenVisible(false);
         }
     }
@@ -301,11 +301,10 @@ public class StudentClassManagementPresentationModel
                     final DeleteOrganisationUnitPresentationModel model = new DeleteOrganisationUnitPresentationModel(organisationUnit);
                     final DeleteOrganisationUnitView view = new DeleteOrganisationUnitView(model);
 
-                    JPanel panel = view.buildPanel();
                     final JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
                     d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-                    d.setTitle(panel.getName());
-                    d.add(panel);
+                    d.setTitle(view.getName());
+                    d.add(view);
                     d.pack();
                     d.setResizable(false);
                     CWUtils.centerWindow(d, GUIManager.getInstance().getMainFrame());
@@ -420,7 +419,7 @@ public class StudentClassManagementPresentationModel
                 studentClass.setOrganisationUnit(OrganisationUnitManager.getInstance().getAll(0,1).get(0));
             }
 
-            final EditStudentClassPresentationModel model = new EditStudentClassPresentationModel(studentClass, "Klasse erstellen");
+            final EditStudentClassPresentationModel model = new EditStudentClassPresentationModel(studentClass, new CWHeaderInfo("Klasse erstellen"));
             final EditStudentClassView editView = new EditStudentClassView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -460,7 +459,7 @@ public class StudentClassManagementPresentationModel
                 }
             });
 
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
             GUIManager.setLoadingScreenVisible(false);
 
         }
@@ -498,7 +497,7 @@ public class StudentClassManagementPresentationModel
                 }
             });
 
-            final EditStudentClassPresentationModel model = new EditStudentClassPresentationModel(studentClass, "Klasse erstellen");
+            final EditStudentClassPresentationModel model = new EditStudentClassPresentationModel(studentClass, new CWHeaderInfo("Klasse erstellen"));
             final EditStudentClassView editView = new EditStudentClassView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -517,7 +516,7 @@ public class StudentClassManagementPresentationModel
                 }
             });
 
-            GUIManager.changeView(editView.buildPanel(), true);
+            GUIManager.changeView(editView, true);
             GUIManager.setLoadingScreenVisible(false);
 
         }
@@ -568,11 +567,10 @@ public class StudentClassManagementPresentationModel
             final StudentsOverviewPresentationModel model = new StudentsOverviewPresentationModel(studentClass);
             StudentsOverviewView view = new StudentsOverviewView(model);
 
-            JPanel panel = view.buildPanel();
             JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
             d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-            d.setTitle(panel.getName());
-            d.add(panel);
+            d.setTitle(view.getName());
+            d.add(view);
             d.pack();
             CWUtils.centerWindow(d, GUIManager.getInstance().getMainFrame());
             d.setVisible(true);
@@ -593,7 +591,7 @@ public class StudentClassManagementPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.setLoadingScreenText("Schüler sollen in die nächste Klasse aufsteigen...");
+            GUIManager.setLoadingScreenText("Schüler in die nächste Klasse aufsteigen lassen...");
             GUIManager.setLoadingScreenVisible(true);
 
             int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich alle Schüler aufsteigen lassen? Einige Schüler verlassen dabei die Klasse.", "Schüler aufsteigen lassen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
@@ -601,17 +599,20 @@ public class StudentClassManagementPresentationModel
                 GUIManager.setLoadingScreenText("Schüler steigen in die nächste Klasse auf...");
 
                 List<Student> list = StudentManager.getInstance().getAll();
-                Student tmp;
+                Student student;
                 for (int j = 0, l = list.size(); j < l; j++) {
-                    tmp = list.get(j);
-                    if (tmp.getStudentClass() != null) {
-                        if (tmp.getStudentClass().getNextStudentClass() != null) {
-                            tmp.setStudentClass(tmp.getStudentClass().getNextStudentClass());
+                    student = list.get(j);
+                    if (student.getStudentClass() != null) {
+                        if (student.getStudentClass().getNextStudentClass() != null) {
+                            student.setStudentClass(student.getStudentClass().getNextStudentClass());
                         } else {
-                            tmp.setStudentClass(null);
+                            student.setStudentClass(null);
                         }
+                        StudentManager.getInstance().save(student);
                     }
                 }
+
+                
             }
 
             GUIManager.setLoadingScreenVisible(false);
@@ -719,8 +720,8 @@ public class StudentClassManagementPresentationModel
         return moveUpStudentClassAction;
     }
 
-    public String getHeaderText() {
-        return headerText;
+    public CWHeaderInfo getHeaderInfo() {
+        return headerInfo;
     }
 
     public TreeModel getStudentClassTreeModel() {
