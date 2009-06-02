@@ -129,7 +129,6 @@ public class EditBewohnerZimmerView extends CWView
 
     @Override
     public void dispose() {
-
         
         model.dispose();
     }

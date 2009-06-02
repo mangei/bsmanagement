@@ -14,7 +14,7 @@ import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWRadioButton;
 import cw.boardingschoolmanagement.gui.component.CWButton;
-import cw.boardingschoolmanagement.gui.component.CWTextField;
+import cw.boardingschoolmanagement.gui.component.CWIntegerTextField;
 import cw.boardingschoolmanagement.gui.component.CWComboBox;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import java.awt.Dimension;
@@ -43,7 +43,7 @@ public class GebLaufView extends CWView implements ItemListener{
     private CWRadioButton rTestlauf;
     private CWRadioButton rEchtlauf;
     private CWButton startButton;
-    private CWTextField jahrField;
+    private CWIntegerTextField jahrField;
     private CWComboBox monatComboBox;
     private CWComboBox gebLaufComboBox;
     private ButtonGroup laufartGroup;
@@ -92,7 +92,7 @@ public class GebLaufView extends CWView implements ItemListener{
         format.setGroupingUsed(false);
         format.setMaximumIntegerDigits(4);
 
-        jahrField = CWComponentFactory.createTextField(new ValueHolder(model.getYear()));
+        jahrField = CWComponentFactory.createIntegerTextField(new ValueHolder(model.getYear()),4);
 
         GregorianCalendar gc = new GregorianCalendar();
         jahrField.setText("" + gc.get(Calendar.YEAR));

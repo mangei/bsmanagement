@@ -64,7 +64,7 @@ public class EditTarifView extends CWView
                 model.getUnsaved().setValue(false);
             }
         }
-        if(model.getHeaderText().equals("Tarif bearbeiten")){
+        if(model.getTarif().getId()!=null){
             model.setOldVon(model.getDcVon().getDate());
             model.setOldBis(model.getDcBis().getDate());
 

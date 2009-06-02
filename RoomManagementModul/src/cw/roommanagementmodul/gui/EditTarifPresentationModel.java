@@ -63,8 +63,8 @@ public class EditTarifPresentationModel
         cancelButtonAction = new CancelAction();
         saveCancelButtonAction = new SaveCancelAction();
 
-        dcVon = CWComponentFactory.createDateChooser(getBufferedModel(Tarif.PROPERTYNAME_AB));
-        dcBis = CWComponentFactory.createDateChooser(getBufferedModel(Tarif.PROPERTYNAME_BIS));
+        setDcVon(CWComponentFactory.createDateChooser(getBufferedModel(Tarif.PROPERTYNAME_AB)));
+        setDcBis(CWComponentFactory.createDateChooser(getBufferedModel(Tarif.PROPERTYNAME_BIS)));
 
         support = new ButtonListenerSupport();
     }
@@ -168,6 +168,48 @@ public class EditTarifPresentationModel
         return headerInfo;
     }
 
+    /**
+     * @return the tarif
+     */
+    public Tarif getTarif() {
+        return tarif;
+    }
+
+    /**
+     * @param tarif the tarif to set
+     */
+    public void setTarif(Tarif tarif) {
+        this.tarif = tarif;
+    }
+
+    /**
+     * @param dcVon the dcVon to set
+     */
+    public void setDcVon(JDateChooser dcVon) {
+        this.dcVon = dcVon;
+    }
+
+    /**
+     * @param dcBis the dcBis to set
+     */
+    public void setDcBis(JDateChooser dcBis) {
+        this.dcBis = dcBis;
+    }
+
+    /**
+     * @param oldVon the oldVon to set
+     */
+    public void setOldVon(Date oldVon) {
+        this.oldVon = oldVon;
+    }
+
+    /**
+     * @param oldBis the oldBis to set
+     */
+    public void setOldBis(Date oldBis) {
+        this.oldBis = oldBis;
+    }
+
     private class SaveAction
             extends AbstractAction {
 
@@ -231,7 +273,7 @@ public class EditTarifPresentationModel
 
     private boolean checkNoTarifError() {
 
-        List<Tarif> sortedTarif = tarifManager.getAllOrderd(tarif.getGebuehr());
+        List<Tarif> sortedTarif = tarifManager.getAllOrderd(getTarif().getGebuehr());
         if (sortedTarif.size() > 1) {
             long von = dcVon.getDate().getTime();
             long bis = dcBis.getDate().getTime();
@@ -249,7 +291,7 @@ public class EditTarifPresentationModel
 
             boolean check = false;
             for (int i = 0; i < sortedTarif.size(); i++) {
-                if (tarif == null || tarif.getId() != sortedTarif.get(i).getId()) {
+                if (getTarif() == null || getTarif().getId() != sortedTarif.get(i).getId()) {
                     if (von >= sortedTarif.get(i).getAb().getTime() && von <= sortedTarif.get(i).getBis().getTime()) {
                         check = true;
                     }
@@ -257,7 +299,7 @@ public class EditTarifPresentationModel
             }
 
             for (int i = 0; i < sortedTarif.size(); i++) {
-                if (tarif == null || tarif.getId() != sortedTarif.get(i).getId()) {
+                if (getTarif() == null || getTarif().getId() != sortedTarif.get(i).getId()) {
                     if (bis >= sortedTarif.get(i).getAb().getTime() && bis <= sortedTarif.get(i).getBis().getTime()) {
                         check = true;
                     }
@@ -271,13 +313,13 @@ public class EditTarifPresentationModel
 
     private boolean checkMoreTarifError() {
 
-        List<Tarif> sortedTarif = tarifManager.getAllOrderd(tarif.getGebuehr());
+        List<Tarif> sortedTarif = tarifManager.getAllOrderd(getTarif().getGebuehr());
         long von = dcVon.getDate().getTime();
         long bis = dcBis.getDate().getTime();
 
         boolean check = true;
         for (int i = 0; i < sortedTarif.size(); i++) {
-            if (tarif == null || tarif.getId() != sortedTarif.get(i).getId()) {
+            if (getTarif() == null || getTarif().getId() != sortedTarif.get(i).getId()) {
                 if (von >= sortedTarif.get(i).getAb().getTime() && von <= sortedTarif.get(i).getBis().getTime()) {
                     check = false;
                     break;
@@ -287,7 +329,7 @@ public class EditTarifPresentationModel
         }
 
         for (int i = 0; i < sortedTarif.size(); i++) {
-            if (tarif == null || tarif.getId() != sortedTarif.get(i).getId()) {
+            if (getTarif() == null || getTarif().getId() != sortedTarif.get(i).getId()) {
                 if (bis >= sortedTarif.get(i).getAb().getTime() && bis <= sortedTarif.get(i).getBis().getTime()) {
                     check = false;
                     break;

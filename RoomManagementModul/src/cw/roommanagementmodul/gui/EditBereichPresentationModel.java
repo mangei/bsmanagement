@@ -43,7 +43,6 @@ public class EditBereichPresentationModel
     private ValueModel unsaved;
     private Bereich bereich;
     private ButtonListenerSupport support;
-    private String headerText;
     private List<Bereich> editBereichList;
     private Bereich vaterBereich;
     private CWHeaderInfo headerInfo;
@@ -83,7 +82,7 @@ public class EditBereichPresentationModel
         saveCancelButtonAction = new SaveCancelAction();
         editBereichList = getBereichManager().getBereich();
         checkZimmerBereich(getBereich());
-        if (this.headerText.equals("Bereich bearbeiten")) {
+        if (bereich.getId()!=null) {
             getBereichManager().refreshBereich(getBereich());
             checkBereichList(getBereich().getChildBereichList());
             editBereichList.remove(getBereich());
@@ -198,6 +197,13 @@ public class EditBereichPresentationModel
      */
     public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
+    }
+
+    /**
+     * @param bereich the bereich to set
+     */
+    public void setBereich(Bereich bereich) {
+        this.bereich = bereich;
     }
 
 

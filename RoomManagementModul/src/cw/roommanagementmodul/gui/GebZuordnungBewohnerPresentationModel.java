@@ -8,7 +8,6 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.gui.component.JViewPanel.HeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Customer;
 import java.awt.event.ActionEvent;

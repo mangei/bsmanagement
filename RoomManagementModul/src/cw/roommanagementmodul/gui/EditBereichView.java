@@ -49,7 +49,7 @@ public class EditBereichView extends CWView
 
         BereichManager bManager= BereichManager.getInstance();
         //bManager.refreshBereich(model.getVaterBereich());
-        if (model.getVaterBereich() != null && model.getHeaderText().equals("Bereich erstellen")) {
+        if (model.getVaterBereich() != null && model.getBereich().getId()==null) {
             if (model.getVaterBereich().getZimmerList() == null || model.getVaterBereich().getZimmerList().size() == 0) {
                 parentComboBox.setSelectedItem(model.getVaterBereich());
                 model.getUnsaved().setValue(false);
@@ -61,11 +61,11 @@ public class EditBereichView extends CWView
             }
         }
 
-        if (model.getBereichList().getList().size() == 1 && model.getHeaderText().equals("Bereich erstellen")) {
+        if (model.getBereichList().getList().size() == 1 && model.getBereich().getId()==null) {
             parentComboBox.setSelectedItem(model.getBereichManager().getRoot());
             model.getUnsaved().setValue(false);
         }
-        if(model.getVaterBereich()==null && model.getHeaderText().equals("Bereich erstellen")&& model.getBereichList().getList().size() > 1){
+        if(model.getVaterBereich()==null && model.getBereich().getId()==null&& model.getBereichList().getList().size() > 1){
             parentComboBox.setSelectedItem(model.getBereichManager().getRoot());
             model.getUnsaved().setValue(false);
         }
