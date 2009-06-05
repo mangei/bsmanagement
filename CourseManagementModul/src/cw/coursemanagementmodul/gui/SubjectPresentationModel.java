@@ -285,10 +285,6 @@ public class SubjectPresentationModel
         GUIManager.setLoadingScreenText("Kunde wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
 
-        new Thread(new Runnable() {
-
-            public void run() {
-
                 final Subject subject = subjectSelection.getSelection();
                 final EditSubjectPresentationModel model = new EditSubjectPresentationModel(subject);
                 final EditSubjectView editView = new EditSubjectView(model);
@@ -302,15 +298,11 @@ public class SubjectPresentationModel
                         if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                             GUIManager.getInstance().unlockMenu();
                             model.removeButtonListener(this);
-                            GUIManager.changeToLastView();
                         }
                     }
                 });
                 GUIManager.changeView(editView, true);
                 GUIManager.setLoadingScreenVisible(false);
-
-            }
-        }).start();
     }
 
     public CWHeaderInfo getHeaderInfo() {

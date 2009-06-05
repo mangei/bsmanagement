@@ -1,6 +1,7 @@
 package cw.coursemanagementmodul.gui;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
+import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -12,6 +13,7 @@ import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
+import cw.coursemanagementmodul.pojo.manager.CourseManager;
 import java.awt.Font;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
@@ -88,7 +90,7 @@ public class CourseChooserView extends CWView
                 "cw/coursemanagementmodul/images/cancel.png"));
 
         courseTable = CWComponentFactory.createTable("Keine Kurse angelegt!");
-        courseTable.setModel(model.createCourseTableModel(model.getCourseSelection()));
+        courseTable.setModel(model.createCourseTableModel(new SelectionInList(CourseManager.getInstance().getAll())));
         courseTable.setSelectionModel(
                 new SingleListSelectionAdapter(
                     new CWTableSelectionConverter(

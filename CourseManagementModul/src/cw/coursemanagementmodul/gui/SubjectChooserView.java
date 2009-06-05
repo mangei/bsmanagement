@@ -99,7 +99,7 @@ public class SubjectChooserView extends CWView
     @Override
     public void dispose() {
         componentContainer.dispose();
-        model.dispose();
+        //model.dispose();
     }
     //********************************************
 }

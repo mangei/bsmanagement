@@ -299,6 +299,7 @@ public class ActivityPresentationModel
     //(Doppelclick oder Ändern-Button)
     //**************************************************************************
     private void editSelectedItem(EventObject e) {
+        GUIManager.getInstance().lockMenu();
         GUIManager.setLoadingScreenText("Kunde wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
         final Activity activity = activitySelection.getSelection();
@@ -312,6 +313,7 @@ public class ActivityPresentationModel
                     GUIManager.getStatusbar().setTextAndFadeOut("Aktivität wurde aktualisiert.");
                 }
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+                    GUIManager.getInstance().unlockMenu();
                     model.removeButtonListener(this);
                     GUIManager.changeToLastView();
                 }

@@ -134,8 +134,8 @@ public class CourseChooserPresentationModel
     }
 
     public void dispose() {
-        courseSelection.removeValueChangeListener(selectionHandler);
-        courseSelection.release();
+        //courseSelection.removeValueChangeListener(selectionHandler);
+        //courseSelection.release();
     }
     
     //**************************************************************************

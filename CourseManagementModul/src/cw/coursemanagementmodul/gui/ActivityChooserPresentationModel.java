@@ -76,9 +76,9 @@ public class ActivityChooserPresentationModel
     }
 
     public void dispose() {
-        activitySelection.removeValueChangeListener(selectionHandler);
-        activitySelection.release();
-        release();
+//        activitySelection.removeValueChangeListener(selectionHandler);
+//        activitySelection.release();
+//        release();
     }
 
     //**************************************************************************

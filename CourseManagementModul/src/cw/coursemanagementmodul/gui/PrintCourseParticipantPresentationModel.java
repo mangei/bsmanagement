@@ -147,7 +147,7 @@ public class PrintCourseParticipantPresentationModel {
         for(int i = 0; i < coursePartList.size(); i++){
             CourseParticipant cP = new CourseParticipant(coursePartList.get(i).getCustomer());
             List<CourseAddition> courseList = new ArrayList<CourseAddition>();
-            for(int j = 0; j < coursePartList.get(j).getCourseList().size(); j++){
+            for(int j = 0; j < coursePartList.get(i).getCourseList().size(); j++){
                 if(coursePartList.get(i).getCourseList().get(j).getCourse().getId() == course.getId()){
                     courseList.add(coursePartList.get(i).getCourseList().get(j));
                 }

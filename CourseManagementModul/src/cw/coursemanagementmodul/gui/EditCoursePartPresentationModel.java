@@ -25,9 +25,11 @@ import cw.coursemanagementmodul.pojo.Activity;
 import cw.coursemanagementmodul.pojo.Course;
 import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
+import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.Subject;
 import cw.coursemanagementmodul.pojo.manager.CourseAdditionManager;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
+import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
 import cw.coursemanagementmodul.pojo.manager.ValueManager;
 import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
@@ -96,6 +98,8 @@ public class EditCoursePartPresentationModel
 
     public void initEventHandling() {
         courseAdditionSelection.addValueChangeListener(selectionHandler = new CourseHandler());
+        activitySelection.addValueChangeListener(selectionHandler);
+        subjectSelection.addValueChangeListener(selectionHandler);
         updateCourseModels();
         updateActionEnablement();
 
@@ -121,9 +125,9 @@ public class EditCoursePartPresentationModel
        activitySelection.release();
        subjectSelection.release();
 
-       courseChooserModel.dispose();
-       activityChooserModel.dispose();
-       subjectChooserModel.dispose();
+//       courseChooserModel.dispose();
+//       activityChooserModel.dispose();
+//       subjectChooserModel.dispose();
 
        release();
     }
@@ -230,12 +234,16 @@ public class EditCoursePartPresentationModel
     //**************************************************************************
     
     private void updateActionEnablement() {
-        boolean hasSelection = courseAdditionSelection.hasSelection();
-        activityButtonAction.setEnabled(hasSelection);
-        subjectButtonAction.setEnabled(hasSelection);
-        removeActivityButtonAction.setEnabled(hasSelection);
-        removeSubjectButtonAction.setEnabled(hasSelection);
-        removeCourseButtonAction.setEnabled(hasSelection);
+        boolean courseSelection = courseAdditionSelection.hasSelection();
+        activityButtonAction.setEnabled(courseSelection);
+        subjectButtonAction.setEnabled(courseSelection);
+        removeCourseButtonAction.setEnabled(courseSelection);
+
+        boolean activSelection = activitySelection.hasSelection();
+        removeActivityButtonAction.setEnabled(activSelection);
+
+        boolean subjSelection = subjectSelection.hasSelection();
+        removeSubjectButtonAction.setEnabled(subjSelection);
     }
 
     //**************************************************************************
@@ -388,6 +396,7 @@ public class EditCoursePartPresentationModel
                             System.out.println("COURSE_SELECTION = " + courseAdditionSelection.getSelection().getCourse().getName());
                             GUIManager.changeToLastView();
                             activityChooserModel.removeButtonListener(this);
+                            updateActionEnablement();
                         }
                         else {
                             JOptionPane.showMessageDialog(null,
@@ -423,6 +432,7 @@ public class EditCoursePartPresentationModel
                             System.out.println("COURSE_SELECTION = " + courseAdditionSelection.getSelection().getCourse().getName());
                             GUIManager.changeToLastView();
                             subjectChooserModel.removeButtonListener(this);
+                            updateActionEnablement();
                         }
                         else {
                             JOptionPane.showMessageDialog(null,
@@ -446,15 +456,20 @@ public class EditCoursePartPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Kurs ("
-                    + courseAdditionSelection.getSelection().getCourse().getName() + ") "
-                    + " des Kursteilnehmers " + coursePart.getCustomer().getForename()
-                    + " " + coursePart.getCustomer().getSurname() + " wirklich löschen?");
-            if(check == JOptionPane.OK_OPTION){
-                CourseAddition cA = courseAdditionSelection.getSelection();
-                courseAdditionSelection.getList().remove(cA);
-                courseAdditionSelection.fireIntervalRemoved(courseAdditionSelection.getList().size(), courseAdditionSelection.getList().size()-1);
-                CourseAdditionManager.getInstance().delete(cA);
+            if(!isCourseAlreadyPosted()){
+                int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Kurs ("
+                        + courseAdditionSelection.getSelection().getCourse().getName() + ") "
+                        + " des Kursteilnehmers " + coursePart.getCustomer().getForename()
+                        + " " + coursePart.getCustomer().getSurname() + " wirklich löschen?");
+                if(check == JOptionPane.OK_OPTION){
+                    CourseAddition cA = courseAdditionSelection.getSelection();
+                    courseAdditionSelection.getList().remove(cA);
+                    courseAdditionSelection.fireIntervalRemoved(courseAdditionSelection.getList().size(), courseAdditionSelection.getList().size()-1);
+                    CourseAdditionManager.getInstance().delete(cA);
+                }
+            }
+            else{
+                JOptionPane.showMessageDialog(null, "Der Kurs wurde bereits gebucht und kann somit nicht mehr gelöscht werden!");
             }
         }
     }
@@ -751,11 +766,10 @@ public class EditCoursePartPresentationModel
 
     public boolean activityAlreadyExists(){
         boolean doActivityExist = false;
-        for(int i = 0; i < coursePart.getCourseList().size(); i++){
-
-            if(coursePart.getCourseList().get(i).getActivities().contains(
-                    activityChooserModel.getActivityItem())){
-                doActivityExist = true;
+        for(int i = 0; i < courseAdditionSelection.getSelection().getActivities().size(); i++){
+            if(courseAdditionSelection.getSelection().getActivities().get(i).getId()
+                    == activityChooserModel.getActivityItem().getId()){
+                return true;
             }
         }
         return doActivityExist;
@@ -763,11 +777,11 @@ public class EditCoursePartPresentationModel
 
     public boolean subjectAlreadyExists(){
         boolean doSubjectExist = false;
-        for(int i = 0; i < coursePart.getCourseList().size(); i++){
+        for(int i = 0; i < courseAdditionSelection.getSelection().getSubjects().size(); i++){
 
-            if(coursePart.getCourseList().get(i).getSubjects().contains(
-                    subjectChooserModel.getSubjectItem())){
-                doSubjectExist = true;
+            if(courseAdditionSelection.getSelection().getSubjects().get(i).getId()
+                    == subjectChooserModel.getSubjectItem().getId()){
+                return true;
             }
         }
         return doSubjectExist;
@@ -783,5 +797,16 @@ public class EditCoursePartPresentationModel
 
     public Action getRemoveActivityButtonAction() {
         return removeActivityButtonAction;
+    }
+
+    public boolean isCourseAlreadyPosted(){
+        CourseAddition selectedCourseAddition = courseAdditionSelection.getSelection();
+        List<CoursePosting> allPostings = CoursePostingManager.getInstance().getAll();
+        for(int i = 0; i < allPostings.size(); i++){
+            if(allPostings.get(i).getCourseAddition().getId() == selectedCourseAddition.getId()){
+                return true;
+            }
+        }
+        return false;
     }
 }
