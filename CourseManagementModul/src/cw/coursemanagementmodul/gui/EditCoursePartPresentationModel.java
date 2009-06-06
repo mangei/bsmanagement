@@ -465,6 +465,7 @@ public class EditCoursePartPresentationModel
                     CourseAddition cA = courseAdditionSelection.getSelection();
                     courseAdditionSelection.getList().remove(cA);
                     courseAdditionSelection.fireIntervalRemoved(courseAdditionSelection.getList().size(), courseAdditionSelection.getList().size()-1);
+                    coursePart.getCourseList().remove(cA);
                     CourseAdditionManager.getInstance().delete(cA);
                 }
             }
@@ -758,7 +759,7 @@ public class EditCoursePartPresentationModel
 
             if(coursePart.getCourseList().get(i).getCourse().getId()
                     == courseChooserModel.getCourseItem().getId()){
-                doCourseExist = true;
+                return true;
             }
         }
         return doCourseExist;
