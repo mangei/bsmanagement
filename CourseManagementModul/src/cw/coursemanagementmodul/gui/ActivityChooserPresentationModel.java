@@ -133,6 +133,7 @@ public class ActivityChooserPresentationModel
 
         public void actionPerformed(ActionEvent e){
             GUIManager.changeToLastView();
+
         }
 
         private CancelButtonAction(String string){

@@ -327,14 +327,10 @@ public class EditCoursePartPresentationModel
                             int min = courseChooserModel.getActivitySelectionModel().getMinSelectionIndex();
                             int max = courseChooserModel.getActivitySelectionModel().getMaxSelectionIndex();
 
-                            System.out.println("*********MIN = " + min);
-                            System.out.println("*********MAX = " + max);
-
                             List activityTempList = new ArrayList();
                             for(int i = min; i < max+1; i++){
                                 if(courseChooserModel.getActivitySelectionModel().isSelectedIndex(i)){
                                     activityTempList.add(courseChooserModel.getActivityModel().get(i));
-                                    System.out.println("*******SELECTED***********");
                                 }
                             }
                             activitySelection.setList(activityTempList);
@@ -343,25 +339,18 @@ public class EditCoursePartPresentationModel
                             min = courseChooserModel.getSubjectSelection().getMinSelectionIndex();
                             max = courseChooserModel.getSubjectSelection().getMaxSelectionIndex();
 
-                            System.out.println("*********MIN = " + min);
-                            System.out.println("*********MAX = " + max);
-
                             List subjectTempList = new ArrayList();
                             for(int i = min; i < max+1; i++){
                                 if(courseChooserModel.getSubjectSelection().isSelectedIndex(i)){
                                     subjectTempList.add(courseChooserModel.getSubjectModel().get(i));
-                                    System.out.println("*******SELECTED_SUBJECT***********");
                                 }
                             }
                             subjectSelection.setList(subjectTempList);
                             courseAddition.setSubjects(subjectTempList);
-                            courseChooserModel.removeButtonListener(this);
+                            
                             CourseAdditionManager.getInstance().save(courseAddition);
+                            courseChooserModel.removeButtonListener(this);
                             GUIManager.changeToLastView();
-                        }
-                        else {
-                            JOptionPane.showMessageDialog(null,
-                                    "Dieser Kurs wurde dem Kursteilnehmer bereits zugewiesen!");
                         }
                     }
                     //***********************************
@@ -385,7 +374,6 @@ public class EditCoursePartPresentationModel
 
         public void actionPerformed(ActionEvent e) {
             final ActivityChooserView view = new ActivityChooserView(activityChooserModel);
-            
             activityChooserModel.addButtonListener(new ButtonListener() {
 
                 public void buttonPressed(ButtonEvent evt) {
@@ -393,14 +381,10 @@ public class EditCoursePartPresentationModel
                         if(!activityAlreadyExists()){
                             activitySelection.getList().add(activityChooserModel.getActivityItem());
                             courseAdditionSelection.getSelection().setActivities(activitySelection.getList());
-                            System.out.println("COURSE_SELECTION = " + courseAdditionSelection.getSelection().getCourse().getName());
-                            GUIManager.changeToLastView();
+                            
                             activityChooserModel.removeButtonListener(this);
                             updateActionEnablement();
-                        }
-                        else {
-                            JOptionPane.showMessageDialog(null,
-                                    "Diese Aktivität wurde dem Kurs des Kursteilnehmers bereits zugewiesen!");
+                            GUIManager.changeToLastView();
                         }
                     }
                 }
@@ -429,14 +413,9 @@ public class EditCoursePartPresentationModel
                         if(!subjectAlreadyExists()){
                             subjectSelection.getList().add(subjectChooserModel.getSubjectItem());
                             courseAdditionSelection.getSelection().setSubjects(subjectSelection.getList());
-                            System.out.println("COURSE_SELECTION = " + courseAdditionSelection.getSelection().getCourse().getName());
                             GUIManager.changeToLastView();
                             subjectChooserModel.removeButtonListener(this);
                             updateActionEnablement();
-                        }
-                        else {
-                            JOptionPane.showMessageDialog(null,
-                                    "Dieser Kursgegenstand wurde dem Kurs des Kursteilnehmers bereits zugewiesen!");
                         }
                     }
                 }
@@ -754,18 +733,18 @@ public class EditCoursePartPresentationModel
     }
 
     public boolean courseAlreadyExists(){
-        boolean doCourseExist = false;
-        for(int i = 0; i < coursePart.getCourseList().size(); i++){
+        for(int i = 0; i < courseAdditionSelection.getList().size(); i++){
 
-            if(coursePart.getCourseList().get(i).getCourse().getId()
+            if(courseAdditionSelection.getList().get(i).getCourse().getId()
                     == courseChooserModel.getCourseItem().getId()){
                 return true;
             }
         }
-        return doCourseExist;
+        return false;
     }
 
     public boolean activityAlreadyExists(){
+        System.out.println("IN ACTIVITYA already exists ..............");
         boolean doActivityExist = false;
         for(int i = 0; i < courseAdditionSelection.getSelection().getActivities().size(); i++){
             if(courseAdditionSelection.getSelection().getActivities().get(i).getId()
