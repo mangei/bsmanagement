@@ -60,10 +60,6 @@ public class EditCoursePartPresentationModel
 
     private ButtonListenerSupport support;
     
-    private CourseChooserPresentationModel courseChooserModel;
-    private ActivityChooserPresentationModel activityChooserModel;
-    private SubjectChooserPresentationModel subjectChooserModel;
-
     private ValueModel nameVM;
     private ValueModel vonVM;
     private ValueModel bisVM;
@@ -209,10 +205,6 @@ public class EditCoursePartPresentationModel
         removeCourseButtonAction = new RemoveButtonAction("Kurs löschen");
         removeActivityButtonAction = new RemoveActivityButtonAction("Aktivität löschen");
 
-        courseChooserModel = new CourseChooserPresentationModel(new Course());
-        activityChooserModel = new ActivityChooserPresentationModel(new Activity());
-        subjectChooserModel = new SubjectChooserPresentationModel(new Subject());
-
         support = new ButtonListenerSupport();
 
         courseAdditionSelection = new SelectionInList<CourseAddition>(coursePart.getCourseList());
@@ -309,6 +301,7 @@ public class EditCoursePartPresentationModel
         public void actionPerformed(ActionEvent e) {
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
+            final CourseChooserPresentationModel courseChooserModel = new CourseChooserPresentationModel();
             final CourseChooserView view = new CourseChooserView(courseChooserModel);
             final CourseAddition courseAddition = new CourseAddition();
             courseAddition.setCourse(courseChooserModel.getCourseItem());
@@ -318,7 +311,7 @@ public class EditCoursePartPresentationModel
                 public void buttonPressed(ButtonEvent evt) {
                     if (evt.getType() == ButtonEvent.OK_BUTTON) {
                         //Hinzufügen des Kurses in eine CourseAddition
-                        if(!courseAlreadyExists()){
+                        if(!courseAlreadyExists(courseChooserModel)){
                             courseAddition.setCourse(courseChooserModel.getCourseItem());
                             courseAdditionSelection.getList().add(courseAddition);
                             int index = courseAdditionSelection.getList().indexOf(courseAddition);
@@ -373,12 +366,13 @@ public class EditCoursePartPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
+            final ActivityChooserPresentationModel activityChooserModel = new ActivityChooserPresentationModel();
             final ActivityChooserView view = new ActivityChooserView(activityChooserModel);
             activityChooserModel.addButtonListener(new ButtonListener() {
 
                 public void buttonPressed(ButtonEvent evt) {
                     if (evt.getType() == ButtonEvent.OK_BUTTON) {
-                        if(!activityAlreadyExists()){
+                        if(!activityAlreadyExists(activityChooserModel)){
                             activitySelection.getList().add(activityChooserModel.getActivityItem());
                             courseAdditionSelection.getSelection().setActivities(activitySelection.getList());
                             
@@ -404,13 +398,14 @@ public class EditCoursePartPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
+            final SubjectChooserPresentationModel subjectChooserModel = new SubjectChooserPresentationModel();
             final SubjectChooserView view = new SubjectChooserView(subjectChooserModel);
 
             subjectChooserModel.addButtonListener(new ButtonListener() {
 
                 public void buttonPressed(ButtonEvent evt) {
                     if (evt.getType() == ButtonEvent.OK_BUTTON) {
-                        if(!subjectAlreadyExists()){
+                        if(!subjectAlreadyExists(subjectChooserModel)){
                             subjectSelection.getList().add(subjectChooserModel.getSubjectItem());
                             courseAdditionSelection.getSelection().setSubjects(subjectSelection.getList());
                             GUIManager.changeToLastView();
@@ -732,7 +727,7 @@ public class EditCoursePartPresentationModel
         return headerInfo;
     }
 
-    public boolean courseAlreadyExists(){
+    public boolean courseAlreadyExists(CourseChooserPresentationModel courseChooserModel){
         for(int i = 0; i < courseAdditionSelection.getList().size(); i++){
 
             if(courseAdditionSelection.getList().get(i).getCourse().getId()
@@ -743,7 +738,7 @@ public class EditCoursePartPresentationModel
         return false;
     }
 
-    public boolean activityAlreadyExists(){
+    public boolean activityAlreadyExists(ActivityChooserPresentationModel activityChooserModel){
         System.out.println("IN ACTIVITYA already exists ..............");
         boolean doActivityExist = false;
         for(int i = 0; i < courseAdditionSelection.getSelection().getActivities().size(); i++){
@@ -755,7 +750,7 @@ public class EditCoursePartPresentationModel
         return doActivityExist;
     }
 
-    public boolean subjectAlreadyExists(){
+    public boolean subjectAlreadyExists(SubjectChooserPresentationModel subjectChooserModel){
         boolean doSubjectExist = false;
         for(int i = 0; i < courseAdditionSelection.getSelection().getSubjects().size(); i++){
 

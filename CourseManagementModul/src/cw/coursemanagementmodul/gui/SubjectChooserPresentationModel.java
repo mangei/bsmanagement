@@ -1,6 +1,5 @@
 package cw.coursemanagementmodul.gui;
 
-import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
@@ -24,7 +23,6 @@ import cw.coursemanagementmodul.pojo.manager.SubjectManager;
  * @author André Salmhofer
  */
 public class SubjectChooserPresentationModel
-        extends PresentationModel<Subject>
 {
 
     //Definieren der Objekte in der oberen Leiste
@@ -45,8 +43,7 @@ public class SubjectChooserPresentationModel
 
     private SelectionHandler selectionHandler;
 
-    public SubjectChooserPresentationModel(Subject subject) {
-        super(subject);
+    public SubjectChooserPresentationModel() {
         initModels();
         initEventHandling();
     }
@@ -75,7 +72,6 @@ public class SubjectChooserPresentationModel
     public void dispose() {
         subjectSelection.removeValueChangeListener(selectionHandler);
         subjectSelection.release();
-        release();
     }
 
     //**************************************************************************

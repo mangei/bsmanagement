@@ -25,7 +25,6 @@ import java.text.DecimalFormat;
  * @author André Salmhofer (CreativeWorkers)
  */
 public class ActivityChooserPresentationModel
-        extends PresentationModel<Activity>
 {
 
     //Definieren der Objekte in der oberen Leiste
@@ -46,8 +45,7 @@ public class ActivityChooserPresentationModel
 
     private SelectionHandler selectionHandler;
 
-    public ActivityChooserPresentationModel(Activity activity) {
-        super(activity);
+    public ActivityChooserPresentationModel() {
         initModels();
         initEventHandling();
     }
@@ -76,9 +74,8 @@ public class ActivityChooserPresentationModel
     }
 
     public void dispose() {
-//        activitySelection.removeValueChangeListener(selectionHandler);
-//        activitySelection.release();
-//        release();
+        activitySelection.removeValueChangeListener(selectionHandler);
+        activitySelection.release();
     }
 
     //**************************************************************************

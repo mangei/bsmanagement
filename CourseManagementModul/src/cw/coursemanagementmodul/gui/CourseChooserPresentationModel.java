@@ -14,7 +14,6 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.Component;
-import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -75,7 +74,7 @@ public class CourseChooserPresentationModel
 
     private SelectionHandler selectionHandler;
     
-    public CourseChooserPresentationModel(Course course) {
+    public CourseChooserPresentationModel() {
         initModels();
         initEventHandling();
     }
@@ -134,16 +133,16 @@ public class CourseChooserPresentationModel
     }
 
     public void dispose() {
-        //courseSelection.removeValueChangeListener(selectionHandler);
-        //courseSelection.release();
+        courseSelection.removeValueChangeListener(selectionHandler);
+        courseSelection.release();
     }
     
     //**************************************************************************
     //Methode, die ein CourseTableModel erzeugt.
     //Die private Klasse befindet sich in der gleichen Datei
     //**************************************************************************
-    TableModel createCourseTableModel(SelectionInList<Course> courseSelection) {
-        return new CourseTableModel(courseSelection);
+    TableModel createCourseTableModel(ListModel listModel) {
+        return new CourseTableModel(listModel);
     }
     //**************************************************************************
      
@@ -335,20 +334,21 @@ public class CourseChooserPresentationModel
         public ActivityListCellRenderer(){
             panel = new JPanel();
             name = new JLabel();
+            name.setFont(name.getFont().deriveFont(15f));
             desc = new JLabel();
             layout = new FormLayout("pref", "pref, pref, 2dlu, pref");
             cc = new CellConstraints();
             sep = new JSeparator();
-        }
 
-        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-            name.setFont(new Font(((Activity)value).getName(), 1, 15));
-            name.setText(((Activity)value).getName());
-            desc.setText(((Activity)value).getDescription());
             panel.setLayout(layout);
             panel.add(name, cc.xy(1, 1));
             panel.add(desc, cc.xy(1, 4));
             panel.add(sep, cc.xyw(1, 2, 1));
+        }
+
+        public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+            name.setText(((Activity)value).getName());
+            desc.setText(((Activity)value).getDescription());
             return panel;
         }
     }
@@ -368,13 +368,13 @@ public class CourseChooserPresentationModel
             name = new JLabel();
             layout = new FormLayout("pref", "pref");
             cc = new CellConstraints();
+
+            panel.setLayout(layout);
+            panel.add(name, cc.xy(1, 1));
         }
 
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             name.setText(((Subject)value).getName());
-            panel.setLayout(layout);
-            panel.add(name, cc.xy(1, 1));
-
             return panel;
         }
     }
