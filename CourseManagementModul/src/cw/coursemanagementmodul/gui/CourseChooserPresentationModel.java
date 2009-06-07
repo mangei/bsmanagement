@@ -6,7 +6,6 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import com.jidesoft.swing.CheckBoxListSelectionModel;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
@@ -37,6 +36,7 @@ import cw.coursemanagementmodul.pojo.manager.CourseManager;
 import cw.coursemanagementmodul.pojo.manager.SubjectManager;
 import java.text.DecimalFormat;
 import java.util.Date;
+import javax.swing.DefaultListSelectionModel;
 
 /**
  *
@@ -54,10 +54,12 @@ public class CourseChooserPresentationModel
     private SelectionInList<Course> courseSelection;
     //**********************************************
 
-    private CheckBoxListSelectionModel activitySelectionModel;
+//    private CheckBoxListSelectionModel activitySelectionModel;
+    private ListSelectionModel activitySelectionModel;
     private DefaultListModel activityModel;
 
-    private CheckBoxListSelectionModel subjectSelectionModel;
+//    private CheckBoxListSelectionModel subjectSelectionModel;
+    private ListSelectionModel subjectSelectionModel;
     private DefaultListModel subjectModel;
     
     private Course courseItem;
@@ -105,7 +107,8 @@ public class CourseChooserPresentationModel
         priceVM = new ValueHolder();
         //----------------------------------------------------------------------
 
-        activitySelectionModel = new CheckBoxListSelectionModel();
+//        activitySelectionModel = new CheckBoxListSelectionModel();
+        activitySelectionModel = new DefaultListSelectionModel();
         activitySelectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         activityModel = new DefaultListModel();
@@ -114,7 +117,8 @@ public class CourseChooserPresentationModel
             activityModel.addElement(activityList.get(i));
         }
 
-        subjectSelectionModel = new CheckBoxListSelectionModel();
+//        subjectSelectionModel = new CheckBoxListSelectionModel();
+        subjectSelectionModel = new DefaultListSelectionModel();
         subjectSelectionModel.setSelectionMode(ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
 
         subjectModel = new DefaultListModel();
@@ -342,8 +346,8 @@ public class CourseChooserPresentationModel
 
             panel.setLayout(layout);
             panel.add(name, cc.xy(1, 1));
+            panel.add(sep,  cc.xy(1, 2));
             panel.add(desc, cc.xy(1, 4));
-            panel.add(sep, cc.xyw(1, 2, 1));
         }
 
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
@@ -383,7 +387,7 @@ public class CourseChooserPresentationModel
         return new SubjectListCellRenderer();
     }
 
-    public CheckBoxListSelectionModel getActivitySelectionModel() {
+    public ListSelectionModel getActivitySelectionModel() {
         return activitySelectionModel;
     }
 
@@ -391,7 +395,7 @@ public class CourseChooserPresentationModel
         return activityModel;
     }
 
-    public CheckBoxListSelectionModel getSubjectSelection() {
+    public ListSelectionModel getSubjectSelection() {
         return subjectSelectionModel;
     }
 

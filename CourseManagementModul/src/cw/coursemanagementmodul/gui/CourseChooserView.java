@@ -6,8 +6,8 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWButton;
-import cw.boardingschoolmanagement.gui.component.CWCheckBoxList;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWList;
 import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
@@ -49,8 +49,10 @@ public class CourseChooserView extends CWView
     //Tabelle zur Darstellung der angelegten Kurse
     private CWTable courseTable;
 
-    private CWCheckBoxList activityList;
-    private CWCheckBoxList subjectList;
+//    private CWCheckBoxList activityList;
+//    private CWCheckBoxList subjectList;
+    private CWList activityList;
+    private CWList subjectList;
     //********************************************
 
     private Format dateFormat;
@@ -113,14 +115,18 @@ public class CourseChooserView extends CWView
         vBeginDate.setFont(new Font(null, Font.BOLD, 11));
         vEndDate.setFont(new Font(null, Font.BOLD, 11));
         vPrice.setFont(new Font(null, Font.BOLD, 11));
-        
-        activityList = CWComponentFactory.createCheckBoxList(model.getActivityModel());
-        activityList.setCheckBoxListSelectionModel(model.getActivitySelectionModel());
+
+
+//        activityList = CWComponentFactory.createCheckBoxList(model.getActivityModel());
+//        activityList.setCheckBoxListSelectionModel(model.getActivitySelectionModel());
+        activityList = CWComponentFactory.createList(model.getActivityModel());
+        activityList.setSelectionModel(model.getActivitySelectionModel());
         activityList.setCellRenderer(model.createActivityListCellRenderer());
 
-
-        subjectList = CWComponentFactory.createCheckBoxList(model.getSubjectModel());
-        subjectList.setCheckBoxListSelectionModel(model.getSubjectSelection());
+//        subjectList = CWComponentFactory.createCheckBoxList(model.getSubjectModel());
+//        subjectList.setCheckBoxListSelectionModel(model.getSubjectSelection());
+        subjectList = CWComponentFactory.createList(model.getSubjectModel());
+        subjectList.setSelectionModel(model.getSubjectSelection());
         subjectList.setCellRenderer(model.createSubjectListCellRenderer());
         
         componentContainer = CWComponentFactory.createCWComponentContainer()

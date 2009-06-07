@@ -345,6 +345,9 @@ public class EditCoursePartPresentationModel
                             courseChooserModel.removeButtonListener(this);
                             GUIManager.changeToLastView();
                         }
+                        else {
+                            JOptionPane.showMessageDialog(view, "Der Kurs wurde bereits hinzugefügt.");
+                        }
                     }
                     //***********************************
                 }
@@ -380,6 +383,9 @@ public class EditCoursePartPresentationModel
                             updateActionEnablement();
                             GUIManager.changeToLastView();
                         }
+                        else {
+                            JOptionPane.showMessageDialog(view, "Diese Aktivität wurde bereits hinzugefügt.");
+                        }
                     }
                 }
             });
@@ -411,6 +417,9 @@ public class EditCoursePartPresentationModel
                             GUIManager.changeToLastView();
                             subjectChooserModel.removeButtonListener(this);
                             updateActionEnablement();
+                        }
+                        else {
+                            JOptionPane.showMessageDialog(view, "Der Gegenstand wurde bereits hinzugefügt.");
                         }
                     }
                 }
