@@ -137,6 +137,7 @@ public class DetailHistoryView extends CWView
         this.getButtonPanel().add(back);
         builder.add(new JScrollPane(accountingTable), cc.xyw(1, 1, 5));
         builder.addSeparator("Gesamtübersicht", cc.xyw(1, 3, 3));
+        builder.add(accountingPanel, cc.xy(1, 5));
 
     }
 
