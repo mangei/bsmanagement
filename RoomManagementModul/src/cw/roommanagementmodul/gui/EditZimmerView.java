@@ -6,6 +6,7 @@ import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWIntegerTextField;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.boardingschoolmanagement.gui.component.CWView;
@@ -26,7 +27,9 @@ public class EditZimmerView extends CWView
     private CWLabel lBettenAnzahl;
     private CWLabel lBereich;
     private CWTextField tfZimmerName;
-    private CWTextField tfBettenAnzahl;
+//    private CWTextField tfBettenAnzahl;
+//    private CWIntegerTextField tfBettenAnzahl;
+    private CWIntegerTextField tfBettenAnzahl;
     private CWComboBox cbBereich;
     private CWButton bSave;
     private CWButton bCancel;
@@ -49,8 +52,10 @@ public class EditZimmerView extends CWView
         //tfZimmerName = new JTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_NAME));
         //tfBettenAnzahl = new JTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN));
         tfZimmerName = CWComponentFactory.createTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_NAME), false);
-        tfBettenAnzahl = CWComponentFactory.createTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN), false);
-        tfBettenAnzahl.setDocument(model.getDigitDocument());
+//        tfBettenAnzahl = CWComponentFactory.createTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN), false);
+//        tfBettenAnzahl.setDocument(model.getDigitDocument());
+          tfBettenAnzahl = CWComponentFactory.createIntegerTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN));
+
 
         bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
         bSave.setText("Speichern");

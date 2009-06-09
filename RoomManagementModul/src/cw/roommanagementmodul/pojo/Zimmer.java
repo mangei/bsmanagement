@@ -21,7 +21,7 @@ public class Zimmer extends Model implements AnnotatedClass{
     private Long id;
     private String name;
     private Bereich bereich;
-    private String anzbetten;
+    private int anzbetten;
     private boolean activ;
     private List<Bewohner> bewohnerList = new ArrayList<Bewohner>();
     
@@ -32,7 +32,7 @@ public class Zimmer extends Model implements AnnotatedClass{
     public final static String PROPERTYNAME_ACTIV = "activ";
     public final static String PROPERTYNAME_BEWOHNERLIST = "bewohnerList";
 
-    public Zimmer(Long id, String name, Bereich bereich, String anzBetten, boolean activ) {
+    public Zimmer(Long id, String name, Bereich bereich, int anzBetten, boolean activ) {
         this.id = id;
         this.name = name;
         this.bereich = bereich;
@@ -52,12 +52,11 @@ public class Zimmer extends Model implements AnnotatedClass{
         this.activ = activ;
     }
 
-    @Column(nullable = true)
-    public String getAnzbetten() {
+    public int getAnzbetten() {
         return anzbetten;
     }
 
-    public void setAnzbetten(String anzBetten) {
+    public void setAnzbetten(int anzBetten) {
         this.anzbetten = anzBetten;
     }
 

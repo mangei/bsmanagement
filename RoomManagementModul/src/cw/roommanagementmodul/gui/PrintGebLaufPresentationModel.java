@@ -66,10 +66,19 @@ public class PrintGebLaufPresentationModel{
 //        setReportSource("./cw/boardingschoolmanagement/jasper/templates/bewohner.jrxml");
 
         List<Bewohner> bewohnerList = getBewohnerSelection(bewohnerTarifSelection);
-        
+
+       for(int i=0;i<bewohnerList.size();i++){
+           System.out.println(bewohnerList.get(i).getCustomer().getSurname());
+       }
+
+        System.out.println("--------------------------------------------------");
         List<BewohnerGeb> bewohnerGebList= new ArrayList<BewohnerGeb>();
         for(int i=0;i<bewohnerList.size();i++){
             bewohnerGebList.add(new BewohnerGeb(bewohnerList.get(i),bewohnerTarifSelection.get(bewohnerList.get(i))));
+        }
+
+        for(int i=0;i<bewohnerGebList.size();i++){
+            System.out.println(bewohnerGebList.get(i).getCustomer().getSurname());
         }
 
         Map<String, Object> main = new HashMap();
@@ -95,7 +104,7 @@ public class PrintGebLaufPresentationModel{
 //            setJasperReport(JasperCompileManager.compileReport(ClassLoader.getSystemResourceAsStream(getReportSource())));
 
 //
-            ds = new JRBeanCollectionDataSource(bewohnerList);
+//            ds = new JRBeanCollectionDataSource(bewohnerList);
               ds= new JRBeanCollectionDataSource(bewohnerGebList);
 //
               setJasperPrint(JasperFillManager.fillReport(getJasperReport(), main, ds));

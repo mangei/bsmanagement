@@ -207,7 +207,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
         public void actionPerformed(ActionEvent e) {
 
-            if (laufart == true) {
+            if (laufart == true && !monatList.isSelectionEmpty()) {
                 startGebLauf();
             }
             if (laufart == false) {
