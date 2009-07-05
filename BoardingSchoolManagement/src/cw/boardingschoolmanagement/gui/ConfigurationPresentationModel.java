@@ -82,7 +82,7 @@ public class ConfigurationPresentationModel extends PresentationModel
     public List<JComponent> getExtentionComponents() {
         List<JComponent> comps = new ArrayList<JComponent>();
         for (ConfigurationExtention ex : configurationExtentions) {
-            comps.add((ex).getView());
+            comps.add(ex.getView());
         }
         return comps;
     }

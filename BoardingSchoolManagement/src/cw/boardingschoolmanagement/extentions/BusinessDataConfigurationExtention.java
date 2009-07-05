@@ -1,8 +1,8 @@
 package cw.boardingschoolmanagement.extentions;
 
 import cw.boardingschoolmanagement.extentions.interfaces.ConfigurationExtention;
-import cw.boardingschoolmanagement.gui.BusinessDataPresentationModel;
-import cw.boardingschoolmanagement.gui.BusinessDataView;
+import cw.boardingschoolmanagement.gui.BusinessDataConfigurationPresentationModel;
+import cw.boardingschoolmanagement.gui.BusinessDataConfigurationView;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.manager.PropertiesManager;
@@ -17,23 +17,23 @@ import javax.swing.Icon;
 public class BusinessDataConfigurationExtention implements ConfigurationExtention {
 
     private BusinessData businessData;
-    private BusinessDataPresentationModel model;
-    private BusinessDataView view;
+    private BusinessDataConfigurationPresentationModel model;
+    private BusinessDataConfigurationView view;
 
     public void initPresentationModel(ConfigurationPresentationModel configurationModel) {
         businessData = new BusinessData();
 
-        businessData.setName(               PropertiesManager.getProperty("businessData.name",""));
-        businessData.setPostOfficeNumber(   PropertiesManager.getProperty("businessData.postOfficeNumber",""));
-        businessData.setCity(               PropertiesManager.getProperty("businessData.city",""));
-        businessData.setLandlinephone(      PropertiesManager.getProperty("businessData.landlinephone",""));
-        businessData.setMobilephone(        PropertiesManager.getProperty("businessData.mobilephone",""));
-        businessData.setFax(                PropertiesManager.getProperty("businessData.fax",""));
-        businessData.setEmail(              PropertiesManager.getProperty("businessData.email",""));
-        businessData.setDvrNumber(          PropertiesManager.getProperty("businessData.dvrNumber",""));
+        businessData.setName(               PropertiesManager.getProperty("configuration.businessData.name",""));
+        businessData.setPostOfficeNumber(   PropertiesManager.getProperty("configuration.businessData.postOfficeNumber",""));
+        businessData.setCity(               PropertiesManager.getProperty("configuration.businessData.city",""));
+        businessData.setLandlinephone(      PropertiesManager.getProperty("configuration.businessData.landlinephone",""));
+        businessData.setMobilephone(        PropertiesManager.getProperty("configuration.businessData.mobilephone",""));
+        businessData.setFax(                PropertiesManager.getProperty("configuration.businessData.fax",""));
+        businessData.setEmail(              PropertiesManager.getProperty("configuration.businessData.email",""));
+        businessData.setDvrNumber(          PropertiesManager.getProperty("configuration.businessData.dvrNumber",""));
 
-        model = new BusinessDataPresentationModel(businessData, configurationModel);
-        view = new BusinessDataView(model);
+        model = new BusinessDataConfigurationPresentationModel(businessData, configurationModel);
+        view = new BusinessDataConfigurationView(model);
     }
 
     public CWPanel getView() {
@@ -47,14 +47,14 @@ public class BusinessDataConfigurationExtention implements ConfigurationExtentio
     public void save() {
         model.save();
 
-        PropertiesManager.setProperty("businessData.name",              businessData.getName());
-        PropertiesManager.setProperty("businessData.postOfficeNumber",  businessData.getPostOfficeNumber());
-        PropertiesManager.setProperty("businessData.city",              businessData.getCity());
-        PropertiesManager.setProperty("businessData.landlinephone",     businessData.getLandlinephone());
-        PropertiesManager.setProperty("businessData.mobilephone",       businessData.getMobilephone());
-        PropertiesManager.setProperty("businessData.fax",               businessData.getFax());
-        PropertiesManager.setProperty("businessData.email",             businessData.getEmail());
-        PropertiesManager.setProperty("businessData.dvrNumber",         businessData.getDvrNumber());
+        PropertiesManager.setProperty("configuration.businessData.name",              businessData.getName());
+        PropertiesManager.setProperty("configuration.businessData.postOfficeNumber",  businessData.getPostOfficeNumber());
+        PropertiesManager.setProperty("configuration.businessData.city",              businessData.getCity());
+        PropertiesManager.setProperty("configuration.businessData.landlinephone",     businessData.getLandlinephone());
+        PropertiesManager.setProperty("configuration.businessData.mobilephone",       businessData.getMobilephone());
+        PropertiesManager.setProperty("configuration.businessData.fax",               businessData.getFax());
+        PropertiesManager.setProperty("configuration.businessData.email",             businessData.getEmail());
+        PropertiesManager.setProperty("configuration.businessData.dvrNumber",         businessData.getDvrNumber());
     }
 
     public List<String> validate() {

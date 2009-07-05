@@ -1,17 +1,21 @@
 package cw.boardingschoolmanagement.gui.component;
 
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.PropertiesManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 
 /**
  *
@@ -32,12 +36,23 @@ public class CWPathPanel extends JPanel {
         pathPanel.setOpaque(false);
         pathPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         add(pathPanel, BorderLayout.CENTER);
-        
-        add(new JButton(new AbstractAction("   X   ") {
+
+        final JPopupMenu pop = new JPopupMenu();
+        pop.add(new AbstractAction("Pfadanzeige schließen") {
             public void actionPerformed(ActionEvent e) {
                 CWPathPanel.this.setVisible(false);
+                PropertiesManager.setProperty("configuration.general.pathPanelActive", "false");
             }
-        }), BorderLayout.EAST);
+        });
+
+        addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getButton() == MouseEvent.BUTTON3) {
+                    pop.show(CWPathPanel.this, e.getX(), e.getY());
+                }
+            }
+        });
     }
 
     public void reloadPath(LinkedList<CWView> lastViews, CWView shownView) {

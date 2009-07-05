@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @author ManuelG
  */
-public class BusinessDataPresentationModel
+public class BusinessDataConfigurationPresentationModel
     extends PresentationModel<BusinessData>
 {
 
@@ -21,7 +21,7 @@ public class BusinessDataPresentationModel
     private CWHeaderInfo headerInfo;
     private SaveListener saveListener;
 
-    public BusinessDataPresentationModel(BusinessData businessData, ConfigurationPresentationModel configurationPresentationModel) {
+    public BusinessDataConfigurationPresentationModel(BusinessData businessData, ConfigurationPresentationModel configurationPresentationModel) {
         super(businessData);
         this.businessData = businessData;
         this.configurationPresentationModel = configurationPresentationModel;
@@ -33,8 +33,8 @@ public class BusinessDataPresentationModel
         headerInfo = new CWHeaderInfo(
                 "Unternehmensinformationen",
                 "Geben Sie hier alle Informationen über Ihr Unternehmen ein.",
-                CWUtils.loadIcon("cw/boardingschoolmanagement/images/information.png"),
-                CWUtils.loadIcon("cw/boardingschoolmanagement/images/information.png")
+                CWUtils.loadIcon("cw/boardingschoolmanagement/images/businessdata_info.png"),
+                CWUtils.loadIcon("cw/boardingschoolmanagement/images/businessdata_info.png")
         );
     }
 

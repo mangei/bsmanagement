@@ -11,13 +11,13 @@ import java.util.TimerTask;
  *
  * @author ManuelG
  */
-public class WelcomeHomeGUIExtentionPresentationModel {
+public class WelcomeHomeExtentionPresentationModel {
     
     private ValueModel welcomeMessageValueModel;
     private ValueModel timeMessageValueModel;
     private Timer timer;
 
-    public WelcomeHomeGUIExtentionPresentationModel() {
+    public WelcomeHomeExtentionPresentationModel() {
         initModels();
         initEventHandling();
     }

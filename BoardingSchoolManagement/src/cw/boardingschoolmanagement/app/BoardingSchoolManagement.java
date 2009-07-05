@@ -273,6 +273,17 @@ public class BoardingSchoolManagement {
                 GUIManager.setLoadingScreenVisible(false);
             }
         });
+
+        // Add an About-Button to the HeaderMenu
+        GUIManager.getInstance().getHeader().addHeaderMenuItem(new AbstractAction(
+                "Über",
+                CWUtils.loadIcon("cw/boardingschoolmanagement/images/about.png")
+                ) {
+
+            public void actionPerformed(ActionEvent e) {
+                BoardingSchoolManagement.getInstance().close();
+            }
+        });
     }
 
     /**

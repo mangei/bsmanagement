@@ -612,7 +612,12 @@ public class CWComponentFactory {
     }
 
     public static CWLabel createLabel(String text, Icon icon) {
-        return createLabel(new ValueHolder(text), icon, null);
+        CWLabel label = new CWLabel(text);
+        if(icon != null) {
+            label.setIcon(icon);
+        }
+        label.setOpaque(false);
+        return label;
     }
 
     public static CWLabel createLabel(ValueModel valueModel, Icon icon) {

@@ -17,8 +17,6 @@ public interface ConfigurationExtention
 
     public CWPanel getView();
 
-    public Object getModel();
-    
     public void save();
 
     public List<String> validate();

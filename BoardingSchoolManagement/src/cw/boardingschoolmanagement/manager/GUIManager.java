@@ -26,6 +26,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.border.EmptyBorder;
 import org.jdesktop.application.SingleFrameApplication;
@@ -50,10 +51,15 @@ public class GUIManager {
     private CWHeader header;
     private CWStatusBar statusbar;
     private JSplitPane splitPane;
+    private JPanel viewPanel;
     private JPanel componentView;
     private CWPathPanel pathPanel;
     private JFrame frame;
 
+    public enum PathPanelPositions {
+        NORTH, SOUTH
+    }
+    private PathPanelPositions pathPanelPosition;
 
     // Colors
     public static final Color BORDER_COLOR = new Color(215, 220, 228);
@@ -141,6 +147,8 @@ public class GUIManager {
             }
         });
 
+        pathPanelPosition = PathPanelPositions.valueOf(PropertiesManager.getProperty("configuration.general.pathPanelPosition"));
+
 
         generateGUI();
 
@@ -205,12 +213,21 @@ public class GUIManager {
         frame.setLayout(new BorderLayout());
         frame.add(header = new CWHeader(), BorderLayout.NORTH);
 
-        JPanel rightPanel = new JPanel(new BorderLayout());
-        rightPanel.add(pathPanel, BorderLayout.SOUTH);
-        rightPanel.add(componentView, BorderLayout.CENTER);
+
+        // Init ViewPanel
+        viewPanel = new JPanel(new BorderLayout());
+
+        // Init PathPanel
+        switch(pathPanelPosition) {
+            case NORTH: viewPanel.add(pathPanel, BorderLayout.NORTH); break;
+            case SOUTH: viewPanel.add(pathPanel, BorderLayout.SOUTH); break;
+        }
+        viewPanel.setVisible(Boolean.parseBoolean(PropertiesManager.getProperty("configuration.general.pathPanelActive")));
+
+        viewPanel.add(componentView, BorderLayout.CENTER);
 
         splitPane.add(createSidePanel(), JSplitPane.LEFT);
-        splitPane.add(rightPanel, JSplitPane.RIGHT);
+        splitPane.add(viewPanel, JSplitPane.RIGHT);
 
 //        componentView.add(shownView, BorderLayout.CENTER);
 //        splitPane.add(shownComponentScrollPane = createScrollPane(shownComponent), JSplitPane.RIGHT);
@@ -223,46 +240,53 @@ public class GUIManager {
 //        add(MenuManager.getToolBar(),BorderLayout.PAGE_START);
         frame.add(statusbar = new CWStatusBar(), BorderLayout.SOUTH);
     }
-//
-//    /**
-//     * Generiert die Oberfläche
-//     */
-//    private void generateGUI() {
-//        setLayout(new BorderLayout());
-//        add(header = new JHeader(), BorderLayout.NORTH);
-//
-//        splitPane.add(createSidePanel(), JSplitPane.LEFT);
-////        splitPane.add(mainView, JSplitPane.RIGHT);
-//
-////        mainView.add(pathPanel, BorderLayout.NORTH);
-////        mainView.add(shownComponentScrollPane = createScrollPane(shownComponent), BorderLayout.CENTER);
-//        splitPane.add(shownComponentScrollPane = createScrollPane(shownComponent), JSplitPane.RIGHT);
-//
-//        add(splitPane, BorderLayout.CENTER);
-//
-////        add(createSidePanel(), BorderLayout.WEST);
-////        add(shownComponentScrollPane = createScrollPane(shownComponent), BorderLayout.CENTER);
-//
-////        add(MenuManager.getToolBar(),BorderLayout.PAGE_START);
-//        add(statusbar = new StatusBar(), BorderLayout.SOUTH);
-//    }
 
     /**
-     * Liefert das SidePanel -> ButtonBar
+     * Creates the SidePanel
      * @return JComponent
      */
     private JComponent createSidePanel() {
         CWMenuPanel sideBar = MenuManager.getSideMenu();
 
         sideBar.setPreferredSize(new Dimension(115, 80));
-        sideBar.addComponentListener(new ComponentAdapter() {
+//        sideBar.addComponentListener(new ComponentAdapter() {
+//
+//            @Override
+//            public void componentResized(ComponentEvent e) {
+//                e.getComponent().setPreferredSize(e.getComponent().getSize());
+//            }
+//        });
 
-            @Override
-            public void componentResized(ComponentEvent e) {
-                e.getComponent().setPreferredSize(e.getComponent().getSize());
+        JScrollPane scrollPane = new JScrollPane(sideBar);
+        scrollPane.setBorder(null);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+
+        return scrollPane;
+    }
+
+    public void setPathPanelPosition(PathPanelPositions position) {
+        if(position != pathPanelPosition) {
+
+            // Remove from the old position
+            switch(pathPanelPosition) {
+                case NORTH: viewPanel.remove(pathPanel); break;
+                case SOUTH: viewPanel.remove(pathPanel); break;
             }
-        });
-        return sideBar;
+
+            // Add to the new position
+            switch(position) {
+                case NORTH: viewPanel.add(pathPanel, BorderLayout.NORTH); break;
+                case SOUTH: viewPanel.add(pathPanel, BorderLayout.SOUTH); break;
+            }
+
+            pathPanelPosition = position;
+
+            viewPanel.repaint();
+        }
+    }
+
+    public void setPathPanelVisible(boolean visible) {
+        pathPanel.setVisible(visible);
     }
 
     /**

@@ -12,10 +12,10 @@ import javax.swing.JTextField;
  *
  * @author ManuelG
  */
-public class BusinessDataView extends CWView
+public class BusinessDataConfigurationView extends CWView
 {
 
-    private BusinessDataPresentationModel model;
+    private BusinessDataConfigurationPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     private JTextField tfName;
     private JTextField tfPostOfficeNumber;
@@ -27,7 +27,7 @@ public class BusinessDataView extends CWView
     private JTextField tfEmail;
     private JTextField tfDvrNumber;
 
-    public BusinessDataView(BusinessDataPresentationModel model) {
+    public BusinessDataConfigurationView(BusinessDataConfigurationPresentationModel model) {
         this.model = model;
 
         initComponents();

@@ -4,23 +4,23 @@ import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import javax.swing.JLabel;
 
 /**
  *
  * @author ManuelG
  */
-public class WelcomeHomeGUIExtentionView extends CWView
+public class WelcomeHomeExtentionView extends CWView
 {
 
-    private WelcomeHomeGUIExtentionPresentationModel model;
+    private WelcomeHomeExtentionPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JLabel lWelcomeMessage;
-    private JLabel lTimeMessage;
+    private CWLabel lWelcomeMessage;
+    private CWLabel lTimeMessage;
 
-    public WelcomeHomeGUIExtentionView(WelcomeHomeGUIExtentionPresentationModel model) {
+    public WelcomeHomeExtentionView(WelcomeHomeExtentionPresentationModel model) {
         this.model = model;
 
         initComponents();
