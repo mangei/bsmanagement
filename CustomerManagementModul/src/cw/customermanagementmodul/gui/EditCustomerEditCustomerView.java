@@ -66,6 +66,7 @@ public class EditCustomerEditCustomerView extends CWView
     private AutoCompletion countryAutoCompletion;
 
     public EditCustomerEditCustomerView(EditCustomerEditCustomerPresentationModel model) {
+        super(true);
         this.model = model;
 
         initComponents();

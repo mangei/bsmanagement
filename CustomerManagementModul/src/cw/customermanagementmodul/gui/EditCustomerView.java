@@ -30,6 +30,7 @@ public class EditCustomerView extends CWView
     private PropertyChangeListener tabsEnableListener;
 
     public EditCustomerView(EditCustomerPresentationModel model) {
+        super(false);
         this.model = model;
 
         initComponents();
