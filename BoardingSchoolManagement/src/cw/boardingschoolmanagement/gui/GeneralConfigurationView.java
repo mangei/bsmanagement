@@ -32,7 +32,7 @@ public class GeneralConfigurationView extends CWView
     }
 
     public void initComponents() {
-        cPathActive = CWComponentFactory.createCheckBox(model.getPathPanelActiveModel(), "Anzeigepfad anzeigen?");
+        cPathActive = CWComponentFactory.createCheckBox(model.getPathPanelActiveModel(), "Anzeigepfad aktivieren");
         cbPathPosition = CWComponentFactory.createComboBox(model.getPathPanelPositionSelection());
 
         componentContainer = CWComponentFactory.createCWComponentContainer()
@@ -58,13 +58,14 @@ public class GeneralConfigurationView extends CWView
 
         FormLayout layout = new FormLayout(
                 "20dlu, pref, pref, 1dlu:grow",
-                "pref, 2dlu, pref"
+                "pref, 2dlu, pref, 2dlu, pref"
         );
         CellConstraints cc = new CellConstraints();
         PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
-        builder.add(cPathActive, cc.xyw(1, 1, 4));
-        builder.addLabel("Position: ", cc.xy(2, 3));
-        builder.add(cbPathPosition, cc.xy(3, 3));
+        builder.addSeparator("Benutzeroberfläche", cc.xyw(1, 1, 4));
+        builder.add(cPathActive, cc.xyw(1, 3, 4));
+        builder.addLabel("Position: ", cc.xy(2, 5));
+        builder.add(cbPathPosition, cc.xy(3, 5));
     }
 
     @Override

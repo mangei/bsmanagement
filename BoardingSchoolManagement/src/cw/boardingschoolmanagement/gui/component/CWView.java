@@ -45,11 +45,19 @@ public class CWView extends CWPanel {
         this(new CWHeaderInfo());
     }
 
+    public CWView(boolean contentScrolls) {
+        this(new CWHeaderInfo(), contentScrolls);
+    }
+
     public CWView(String headerText) {
         this(new CWHeaderInfo(headerText));
     }
 
     public CWView(CWHeaderInfo headerInfo) {
+        this(headerInfo, true);
+    }
+
+    public CWView(CWHeaderInfo headerInfo, boolean contentScrolls) {
         if(headerInfo == null) {
             throw new NullPointerException("headerInfo is null");
         }
@@ -90,8 +98,13 @@ public class CWView extends CWPanel {
         contentScrollPane.setOpaque(false);
 //        contentScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 //        contentScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        mainPanel.add(contentScrollPane, BorderLayout.CENTER);
 
+        if(contentScrolls) {
+            mainPanel.add(contentScrollPane, BorderLayout.CENTER);
+        } else {
+            mainPanel.add(contentPanel, BorderLayout.CENTER);
+        }
+        
         add(mainPanel, BorderLayout.CENTER);
 
         // Borderline

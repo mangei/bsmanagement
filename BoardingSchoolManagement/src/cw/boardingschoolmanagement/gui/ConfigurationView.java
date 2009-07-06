@@ -31,6 +31,7 @@ public class ConfigurationView extends CWView
     private static final String CARD_KEY = "cardKey";
 
     public ConfigurationView(ConfigurationPresentationModel model) {
+        super(false);
         this.model = model;
 
         initComponents();
