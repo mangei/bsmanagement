@@ -5,14 +5,14 @@ package cw.boardingschoolmanagement.exception;
  *
  * @author Manuel Geier (CreativeWorkers)
  */
-public class ManifestAttributeMissingException
+public class ManifestException
 extends RuntimeException
 {
 
-    public ManifestAttributeMissingException() {
+    public ManifestException() {
     }
 
-    public ManifestAttributeMissingException(String message) {
+    public ManifestException(String message) {
         super(message);
     }
 

@@ -122,6 +122,7 @@ public class CWComponentFactory {
                         ((JTextFieldDateEditor)((CWDateChooser)comp).getDateEditor()).getUiComponent().removeFocusListener(fl);
                         comp.putClientProperty(DATECHOOSER_FOCUS_LISTENER_KEY, null);
                     }
+                    ((CWDateChooser)comp).cleanup();
                 }
 
                 if(comp instanceof CWButton) {
@@ -131,14 +132,6 @@ public class CWComponentFactory {
                 if(comp instanceof CWMenuItem) {
                     ((CWMenuItem)comp).setAction(null);
                 }
-
-                if(comp instanceof CWDateChooser) {
-                    ((CWDateChooser)comp).cleanup();
-                }
-
-//                if(comp instanceof JViewPanel) {
-//                    ((JViewPanel)comp).dispose();
-//                }
 
                 if(comp instanceof CWPanel) {
                     ((CWPanel)comp).removeAll();
@@ -169,7 +162,6 @@ public class CWComponentFactory {
                     ItemListener itemListener = (ItemListener) comp.getClientProperty(RADIO_BUTTON_ITEM_LISTENER_KEY);
                     if(itemListener != null) {
                         button.removeItemListener(itemListener);
-                        System.out.println("removeitemlistener");
                         comp.putClientProperty(RADIO_BUTTON_ITEM_LISTENER_KEY, null);
                     }
                     comp.putClientProperty(RADIO_BUTTON_KEY, null);

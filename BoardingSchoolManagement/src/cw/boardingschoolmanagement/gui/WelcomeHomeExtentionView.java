@@ -4,6 +4,7 @@ import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.boardingschoolmanagement.gui.component.CWCheckBox;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWView;
 
@@ -38,7 +39,7 @@ public class WelcomeHomeExtentionView extends CWView
     }
 
     private void initEventHandling() {
-
+        
     }
 
     private void buildView() {

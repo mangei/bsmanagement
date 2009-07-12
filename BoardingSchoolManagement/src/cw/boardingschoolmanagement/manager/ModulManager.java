@@ -1,6 +1,7 @@
 package cw.boardingschoolmanagement.manager;
 
 import cw.boardingschoolmanagement.app.ClassPathHacker;
+import cw.boardingschoolmanagement.exception.ManifestException;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import cw.boardingschoolmanagement.extentions.interfaces.Extention;
 import cw.boardingschoolmanagement.interfaces.Modul;
@@ -72,7 +73,11 @@ public class ModulManager {
                     jarFile = new JarFile(modulDirFile.toString());
 
                     // Read Modul-Name
-                    modulName = jarFile.getManifest().getMainAttributes().getValue("Modul-Name").trim();
+                    modulName = jarFile.getManifest().getMainAttributes().getValue("Modul-Name");
+                    if(modulName == null) {
+                        throw new ManifestException("Attribute 'Modul-Name' in Manifest of " + modulDirFile + " is missing.");
+                    }
+                    modulName = modulName.trim();
 
                     System.out.println("Modul: " + modulName);
 
