@@ -81,7 +81,7 @@ public class StudentEditCustomerView extends CWView
 
     @Override
     public void dispose() {
-        model.getBufferedModel(Student.PROPERTYNAME_ACTIVE).removePropertyChangeListener(activeChangeListener);
+        model.getBufferedModel(Student.PROPERTYNAME_ACTIVE).removeValueChangeListener(activeChangeListener);
 
         componentContainer.dispose();
 

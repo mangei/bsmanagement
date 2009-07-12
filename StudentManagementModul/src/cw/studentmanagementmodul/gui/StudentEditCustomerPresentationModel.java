@@ -42,6 +42,8 @@ public class StudentEditCustomerPresentationModel
     }
 
     private void initModels() {
+        headerInfo = new CWHeaderInfo("Schüler");
+
         studentClassChooserAction = new StudentClassChooserAction("Klasse auswählen", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_go.png"));
         studentClassName = new ValueHolder();
     }

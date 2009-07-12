@@ -16,9 +16,9 @@ import cw.studentmanagementmodul.pojo.manager.StudentManager;
 public class StudentEditCustomerTabExtention
 implements EditCustomerTabExtention
 {
-    private static StudentEditCustomerView view;
-    private static StudentEditCustomerPresentationModel model;
-    private static Student student;
+    private StudentEditCustomerView view;
+    private StudentEditCustomerPresentationModel model;
+    private Student student;
     
         public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
 
