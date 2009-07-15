@@ -39,7 +39,7 @@ public class GroupManagementView extends CWView
         bRemoveGroup =  CWComponentFactory.createButton(model.getRemoveGroupAction());
         liGroups =      CWComponentFactory.createList(model.getGroupSelection(), "Keine Gruppen vorhanden");
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bNewGroup)
                 .addComponent(bEditGroup)
                 .addComponent(bRemoveGroup);

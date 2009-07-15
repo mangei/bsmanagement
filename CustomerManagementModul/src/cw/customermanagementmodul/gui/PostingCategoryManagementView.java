@@ -56,7 +56,7 @@ public class PostingCategoryManagementView extends CWView
 
         lLocked = CWComponentFactory.createLabel("Geperrt: Dies sind systeminterne Kategorien.", CWUtils.loadIcon("cw/customermanagementmodul/images/lock.png"));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bNew)
                 .addComponent(bEdit)
                 .addComponent(bDelete)

@@ -33,7 +33,7 @@ public class GroupCustomerSelectorFilterExtentionView extends CWPanel
         liGroup.setSelectionModel(model.getGroupSelectionModel());
         liGroup.setPreferredSize(new Dimension(200, 0));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(liGroup);
     }
 

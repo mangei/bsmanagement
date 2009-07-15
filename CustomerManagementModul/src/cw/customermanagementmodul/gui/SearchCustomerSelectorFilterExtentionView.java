@@ -39,7 +39,7 @@ public class SearchCustomerSelectorFilterExtentionView extends CWPanel
         bClear.setFocusPainted(false);
         bClear.setBorderPainted(false);
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(tfSearch)
                 .addComponent(bClear);
     }

@@ -41,7 +41,7 @@ public class EditGroupView extends CWView
         bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(tfName)
                 .addComponent(bSave)
                 .addComponent(bCancel)

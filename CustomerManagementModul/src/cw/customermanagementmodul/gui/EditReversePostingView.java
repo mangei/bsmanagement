@@ -84,7 +84,7 @@ public class EditReversePostingView extends CWView
 
         cbReversePostingCategory.setEnabled(false);
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(lPostingDescription)
                 .addComponent(lPostingCategory)
                 .addComponent(lPostingAmount)

@@ -29,7 +29,7 @@ public class CustomerInactiveView extends CWView
         bActivate   = CWComponentFactory.createButton(model.getActivateAction());
         bDelete     = CWComponentFactory.createButton(model.getDeleteAction());
         
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bActivate)
                 .addComponent(bDelete);
 

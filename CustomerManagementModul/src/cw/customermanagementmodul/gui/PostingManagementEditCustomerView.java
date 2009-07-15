@@ -89,7 +89,7 @@ public class PostingManagementEditCustomerView extends CWView
         lTotalAssets = CWComponentFactory.createLabel(model.getTotalAssetsValue(), NumberFormat.getCurrencyInstance());
         lTotalSaldo = CWComponentFactory.createLabel(model.getTotalSaldoValue(), NumberFormat.getCurrencyInstance());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bNew)
                 .addComponent(bReversePosting)
                 .addComponent(bBalancePosting)

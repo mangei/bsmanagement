@@ -37,7 +37,7 @@ public class GroupEditCustomerView extends CWView
         bAdd                = CWComponentFactory.createButton(model.getAddGroupAction());
         bRemove             = CWComponentFactory.createButton(model.getRemoveGroupAction());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bAdd)
                 .addComponent(bRemove)
                 .addComponent(liCustomerGroups)

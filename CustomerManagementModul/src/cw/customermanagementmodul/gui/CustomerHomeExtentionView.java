@@ -30,7 +30,7 @@ public class CustomerHomeExtentionView extends CWView
     private void initComponents() {
         lSizeCustomers = CWComponentFactory.createLabel(model.getSizeCustomersValueModel());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(lSizeCustomers);
     }
 

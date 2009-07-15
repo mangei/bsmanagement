@@ -110,7 +110,7 @@ public class EditCustomerEditCustomerView extends CWView
         bClearLocationData.setBorderPainted(false);
 
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(pActive)
                 .addComponent(pGender)
                 .addComponent(tfTitle)

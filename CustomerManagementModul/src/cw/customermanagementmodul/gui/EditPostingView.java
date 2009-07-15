@@ -63,7 +63,7 @@ public class EditPostingView extends CWView
         bCancel     = CWComponentFactory.createButton(model.getCancelAction());
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelAction());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(tfDescription)
                 .addComponent(cbPostingCategory)
                 .addComponent(tfAmount)

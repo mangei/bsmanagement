@@ -97,7 +97,7 @@ public class GeneralCustomerOverviewEditCustomerView extends CWPanel
         lEmail.setFont(font);
         lComment.setFont(font);
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(lActive)
                 .addComponent(lGender)
                 .addComponent(lTitle)

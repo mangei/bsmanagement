@@ -36,7 +36,7 @@ public class CustomerManagementView extends CWView
         bInactive   = CWComponentFactory.createButton(model.getInactiveAction());
         bViewInactives   = CWComponentFactory.createButton(model.getViewInactivesAction());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bNew)
                 .addComponent(bEdit)
                 .addComponent(bDelete)

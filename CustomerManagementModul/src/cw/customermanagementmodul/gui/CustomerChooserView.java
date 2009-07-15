@@ -32,7 +32,7 @@ public class CustomerChooserView extends CWView
         bOk                 = CWComponentFactory.createButton(model.getOkAction());
         bCancel             = CWComponentFactory.createButton(model.getCancelAction());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bOk)
                 .addComponent(bCancel);
 

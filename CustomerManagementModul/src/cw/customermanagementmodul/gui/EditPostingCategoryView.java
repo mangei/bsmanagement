@@ -41,7 +41,7 @@ public class EditPostingCategoryView extends CWView
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(tfName)
                 .addComponent(bSave)
                 .addComponent(bSaveCancel)
