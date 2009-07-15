@@ -57,7 +57,7 @@ public class StudentClassChooserView extends CWView
             }
         });
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bOk)
                 .addComponent(bNoClass)
                 .addComponent(bCancel)

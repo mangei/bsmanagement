@@ -50,7 +50,7 @@ public class DeleteOrganisationUnitView extends CWView
 
         bg = CWComponentFactory.createButtonGroup(rbDeleteAll, rbMoveAll);
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bOk)
                 .addComponent(bCancel)
                 .addComponent(rbDeleteAll)

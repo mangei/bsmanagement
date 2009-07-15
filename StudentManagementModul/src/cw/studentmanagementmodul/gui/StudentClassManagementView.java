@@ -57,7 +57,7 @@ public class StudentClassManagementView extends CWView
     }
 
     public void initComponents() {
-        componentContainer = CWComponentFactory.createCWComponentContainer();
+        componentContainer = CWComponentFactory.createComponentContainer();
 
         bNewOrganisationUnt     = CWComponentFactory.createButton(model.getNewOrganisationUnitAction());
         bEditOrganisationUnt    = CWComponentFactory.createButton(model.getEditOrganisationUnitAction());

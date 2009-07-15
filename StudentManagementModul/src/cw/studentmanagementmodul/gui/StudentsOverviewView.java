@@ -37,7 +37,7 @@ public class StudentsOverviewView extends CWView
                         model.getStudentSelection().getSelectionIndexHolder(),
                         tStudents)));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(tStudents);
     }
 

@@ -44,7 +44,7 @@ public class EditOrganisationUnitView extends CWView
         tfName                      = CWComponentFactory.createTextField(model.getBufferedModel(OrganisationUnit.PROPERTYNAME_NAME), false);
         cbOrganisationUnitParent    = CWComponentFactory.createComboBox(model.getSelectionOrganisationUnit());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bCancel)
                 .addComponent(bSave)
                 .addComponent(bSaveCancel)

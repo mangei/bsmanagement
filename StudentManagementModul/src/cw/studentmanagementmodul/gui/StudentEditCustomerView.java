@@ -40,7 +40,7 @@ public class StudentEditCustomerView extends CWView
         bStudentClassChooser    = CWComponentFactory.createButton(model.getStudentClassChooserAction());
         lStudentClassName       = CWComponentFactory.createLabel(model.getStudentClassNameModel());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(cIsStudent)
                 .addComponent(bStudentClassChooser)
                 .addComponent(lStudentClassName);

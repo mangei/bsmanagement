@@ -48,7 +48,7 @@ public class EditStudentClassView extends CWView
         cbOrganisationUnit  = CWComponentFactory.createComboBox(model.getSelectionOrganisationUnit());
         cbNextStudentClass  = CWComponentFactory.createComboBox(model.getSelectionStudentClass());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bCancel)
 //                .addComponent(bReset)
                 .addComponent(bSave)
