@@ -1,6 +1,5 @@
 package cw.boardingschoolmanagement.manager;
 
-import cw.boardingschoolmanagement.exception.PropertyElementDoesNotExistException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

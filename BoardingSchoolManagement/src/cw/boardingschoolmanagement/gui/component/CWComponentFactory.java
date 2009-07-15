@@ -73,7 +73,7 @@ public class CWComponentFactory {
     private CWComponentFactory() {
     }
 
-    public static CWComponentContainer createCWComponentContainer() {
+    public static CWComponentContainer createComponentContainer() {
         return new CWComponentContainer();
     }
 

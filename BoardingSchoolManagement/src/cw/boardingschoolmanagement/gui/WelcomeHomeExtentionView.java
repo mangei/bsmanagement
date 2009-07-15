@@ -33,7 +33,7 @@ public class WelcomeHomeExtentionView extends CWView
         lWelcomeMessage = CWComponentFactory.createLabel(model.getWelcomeMessageValueModel());
         lTimeMessage = CWComponentFactory.createLabel(model.getTimeMessageValueModel());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(lWelcomeMessage)
                 .addComponent(lTimeMessage);
     }

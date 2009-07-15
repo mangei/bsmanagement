@@ -46,7 +46,7 @@ public class BusinessDataConfigurationView extends CWView
         tfEmail             = CWComponentFactory.createTextField(model.getBufferedModel(BusinessData.PROPERTYNAME_EMAIL));
         tfDvrNumber         = CWComponentFactory.createTextField(model.getBufferedModel(BusinessData.PROPERTYNAME_DVRNUMBER));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(tfName)
                 .addComponent(tfPostOfficeNumber)
                 .addComponent(tfCity)

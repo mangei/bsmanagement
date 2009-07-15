@@ -43,7 +43,7 @@ public class ConfigurationView extends CWView
         bSave               = CWComponentFactory.createButton(model.getSaveAction());
         bCancel             = CWComponentFactory.createButton(model.getCancelAction());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bSave)
                 .addComponent(bCancel);
     }

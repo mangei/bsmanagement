@@ -35,7 +35,7 @@ public class GeneralConfigurationView extends CWView
         cPathActive = CWComponentFactory.createCheckBox(model.getPathPanelActiveModel(), "Anzeigepfad aktivieren");
         cbPathPosition = CWComponentFactory.createComboBox(model.getPathPanelPositionSelection());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(cPathActive)
                 .addComponent(cbPathPosition);
     }
