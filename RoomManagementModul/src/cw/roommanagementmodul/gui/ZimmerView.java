@@ -55,7 +55,7 @@ public class ZimmerView extends CWView{
                 model.getZimmerSelection().getSelectionIndexHolder(),
                 tZimmer)));
 
-        componentContainer= CWComponentFactory.createCWComponentContainer();
+        componentContainer= CWComponentFactory.createComponentContainer();
         componentContainer.addComponent(bNew)
                 .addComponent(bEdit)
                 .addComponent(bDelete)

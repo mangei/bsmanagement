@@ -76,7 +76,7 @@ public class EditZimmerView extends CWView
             model.getUnsaved().setValue(false);
         }
 
-        componentContainer= CWComponentFactory.createCWComponentContainer()
+        componentContainer= CWComponentFactory.createComponentContainer()
                 .addComponent(bSave)
                 .addComponent(bCancel)
                 .addComponent(bSaveCancel)

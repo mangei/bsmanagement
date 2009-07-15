@@ -48,7 +48,7 @@ public class EditGebuehrenKategorieView extends CWView
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schließen");
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(lKatName)
                 .addComponent(tfKatName)
                 .addComponent(bSave)

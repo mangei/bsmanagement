@@ -55,7 +55,7 @@ public class GebZuordnungBewohnerView extends CWView{
         tZuordnung.getColumnModel().getColumn(1).setCellRenderer(new DateTimeTableCellRenderer(true));
         tZuordnung.getColumnModel().getColumn(2).setCellRenderer(new DateTimeTableCellRenderer(true));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bNew)
                 .addComponent(bDelete)
                 .addComponent(bEdit)

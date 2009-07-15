@@ -22,18 +22,18 @@ import javax.swing.JOptionPane;
  *
  * @author Dominik
  */
-public class BewohnerCostumerGUIExtention implements EditCustomerTabExtention {
+public class BewohnerEditCustomerTabExtention implements EditCustomerTabExtention {
 
     private BewohnerManager bewohnerManager;
-    private BewohnerGUIExtentionView view;
+    private BewohnerEditCustomerTabExtentionView view;
     private BewohnerHistoryManager historyManager;
-    private BewohnerGUIExtentionPresentationModel model;
+    private BewohnerEditCustomerTabExtentionPresentationModel model;
     private Bewohner b;
     private Customer c;
     private Zimmer tempZimmer;
 
     public CWPanel getView() {
-        view=new BewohnerGUIExtentionView(model);
+        view=new BewohnerEditCustomerTabExtentionView(model);
         return view;
     }
 
@@ -133,7 +133,7 @@ public class BewohnerCostumerGUIExtention implements EditCustomerTabExtention {
         }
 
 
-        model = new BewohnerGUIExtentionPresentationModel(bewohnerManager, b, editCustomerModel.getUnsaved());
+        model = new BewohnerEditCustomerTabExtentionPresentationModel(bewohnerManager, b, editCustomerModel.getUnsaved());
     }
 
       public void dispose() {

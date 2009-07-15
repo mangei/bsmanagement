@@ -54,7 +54,7 @@ public class TarifView extends CWView {
         tTarif.getColumnModel().getColumn(0).setCellRenderer(new DateTimeTableCellRenderer(true));
         tTarif.getColumnModel().getColumn(1).setCellRenderer(new DateTimeTableCellRenderer(true));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bNew).addComponent(bDelete).addComponent(bEdit).addComponent(bBack).addComponent(tTarif);
+        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bNew).addComponent(bDelete).addComponent(bEdit).addComponent(bBack).addComponent(tTarif);
     }
 
     private void initEventHandling() {

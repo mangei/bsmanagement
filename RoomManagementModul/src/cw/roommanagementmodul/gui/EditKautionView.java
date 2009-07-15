@@ -54,7 +54,7 @@ public class EditKautionView extends CWView
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern&Schließen");
 
-        componentContainer=CWComponentFactory.createCWComponentContainer()
+        componentContainer=CWComponentFactory.createComponentContainer()
                 .addComponent(lName)
                 .addComponent(lBetrag)
                 .addComponent(tfName)

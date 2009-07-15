@@ -69,7 +69,7 @@ public class EditTarifView extends CWView
             model.setOldBis(model.getDcBis().getDate());
 
         }
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(lAb)
                 .addComponent(lBis)
                 .addComponent(lTarif)

@@ -46,7 +46,7 @@ public class LaufResultView extends CWView {
         bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
 
-        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bPrint).addComponent(bBack);
+        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bPrint).addComponent(bBack);
 
     }
 

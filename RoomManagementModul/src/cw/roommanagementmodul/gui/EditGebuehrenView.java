@@ -55,7 +55,7 @@ public class EditGebuehrenView extends CWView
 
         cbKategorie = CWComponentFactory.createComboBox(model.getGebKatList());
 
-        componentContainer= CWComponentFactory.createCWComponentContainer()
+        componentContainer= CWComponentFactory.createComponentContainer()
                 .addComponent(bSave)
                 .addComponent(bCancel)
                 .addComponent(bSaveCancel)

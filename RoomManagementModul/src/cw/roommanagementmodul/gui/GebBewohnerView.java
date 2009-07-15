@@ -60,7 +60,7 @@ public class GebBewohnerView extends CWView
 
 
         cbGebuehr = CWComponentFactory.createComboBox(model.getGebuehrList());
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(lGebuehr)
                 .addComponent(lVon)
                 .addComponent(lBis)

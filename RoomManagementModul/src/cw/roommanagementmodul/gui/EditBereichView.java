@@ -82,7 +82,7 @@ public class EditBereichView extends CWView
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schließen");
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(lName)
                 .addComponent(lParentBereich)
                 .addComponent(parentComboBox)

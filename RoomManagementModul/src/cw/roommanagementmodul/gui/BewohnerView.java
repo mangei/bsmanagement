@@ -62,7 +62,7 @@ public class BewohnerView extends CWView
         tBewohner.getColumnModel().getColumn(5).setCellRenderer(new DateTimeTableCellRenderer(true));
 
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bGeb)
                 .addComponent(bDelete)
                 .addComponent(bGebZuordnung)

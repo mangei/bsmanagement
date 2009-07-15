@@ -17,10 +17,10 @@ import javax.swing.JPanel;
  *
  * @author Dominik
  */
-public class BewohnerGUIExtentionView extends CWView
+public class BewohnerEditCustomerTabExtentionView extends CWView
 {
 
-    BewohnerGUIExtentionPresentationModel model;
+    BewohnerEditCustomerTabExtentionPresentationModel model;
     private CWLabel lbBereich;
     private CWLabel lbZimmer;
     private CWLabel lbEinzDat;
@@ -39,7 +39,7 @@ public class BewohnerGUIExtentionView extends CWView
     private CWComboBox cbKautionStatus;
 
 
-    public BewohnerGUIExtentionView(BewohnerGUIExtentionPresentationModel model) {
+    public BewohnerEditCustomerTabExtentionView(BewohnerEditCustomerTabExtentionPresentationModel model) {
         this.model = model;
 
         initComponents();
@@ -98,7 +98,7 @@ public class BewohnerGUIExtentionView extends CWView
         cbKautionStatus.addItemListener(model.getKautionListener());
 
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(lbBereich)
                 .addComponent(lbZimmer)
                 .addComponent(lbEinzDat)

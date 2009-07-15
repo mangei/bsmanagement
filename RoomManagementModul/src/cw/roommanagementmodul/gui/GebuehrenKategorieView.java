@@ -39,7 +39,7 @@ public class GebuehrenKategorieView extends CWView {
 
         lGebuehrenKat = CWComponentFactory.createList(model.getGebuehrenKatSelection());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bNew).addComponent(bEdit).addComponent(bDelete).addComponent(bBack).addComponent(lGebuehrenKat);
+        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bNew).addComponent(bEdit).addComponent(bDelete).addComponent(bBack).addComponent(lGebuehrenKat);
 
     }
 

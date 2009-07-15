@@ -53,7 +53,7 @@ public class GebuehrenView extends CWView {
                 model.getGebuehrenSelection().getSelectionIndexHolder(),
                 tGebuehr)));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bNew).addComponent(bEdit).addComponent(bDelete).addComponent(bKategorie).addComponent(bTarif).addComponent(tGebuehr);
+        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bNew).addComponent(bEdit).addComponent(bDelete).addComponent(bKategorie).addComponent(bTarif).addComponent(tGebuehr);
     }
 
     private void initEventHandling() {

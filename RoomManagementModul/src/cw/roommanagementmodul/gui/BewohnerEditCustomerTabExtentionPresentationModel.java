@@ -27,7 +27,7 @@ import java.awt.event.ItemEvent;
  *
  * @author Dominik
  */
-public class BewohnerGUIExtentionPresentationModel 
+public class BewohnerEditCustomerTabExtentionPresentationModel
         extends PresentationModel<Bewohner>
 {
 
@@ -50,7 +50,7 @@ public class BewohnerGUIExtentionPresentationModel
     private SelectionInList<String> kautionStadi;
     private KautionStatusItemListener kautionListener;
 
-    public BewohnerGUIExtentionPresentationModel(BewohnerManager bewohnerManager, Bewohner b, ValueModel unsaved) {
+    public BewohnerEditCustomerTabExtentionPresentationModel(BewohnerManager bewohnerManager, Bewohner b, ValueModel unsaved) {
         super(b);
         this.bewohner = b;
         checkBoxState = ItemEvent.DESELECTED;

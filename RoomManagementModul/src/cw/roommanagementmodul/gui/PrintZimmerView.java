@@ -29,7 +29,7 @@ public class PrintZimmerView extends CWView {
         bBack.setText("Zurück");
         viewer = new JRViewer(model.getJasperPrint());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bBack);
+        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bBack);
     }
 
     private void initEventHandling() {

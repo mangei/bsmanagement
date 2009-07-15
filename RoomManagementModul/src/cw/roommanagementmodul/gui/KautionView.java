@@ -49,7 +49,7 @@ public class KautionView extends CWView {
         lKautionen.setSelectionModel(
                 new SingleListSelectionAdapter(
                 model.getKautionSelection().getSelectionIndexHolder()));
-        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bNew).addComponent(bEdit).addComponent(bDelete).addComponent(bBack).addComponent(lKautionen);
+        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bNew).addComponent(bEdit).addComponent(bDelete).addComponent(bBack).addComponent(lKautionen);
     }
 
     private void initEventHandling() {

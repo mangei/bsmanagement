@@ -43,7 +43,7 @@ public class StornoResultView extends CWView {
         bBack.setText("Zurück");
         bPrint = CWComponentFactory.createButton(model.getPrintAction());
         bPrint.setText("Drucken");
-        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bBack).addComponent(bPrint);
+        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bBack).addComponent(bPrint);
     }
 
     private void initEventHandling() {
@@ -95,9 +95,6 @@ public class StornoResultView extends CWView {
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setPreferredSize(new Dimension(10, 10));
         this.getContentPanel().add(scroll);
-
-        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bBack);
-
     }
 
     public CWView createBewohnerPanel(Bewohner b, List<Posting> postingList) {

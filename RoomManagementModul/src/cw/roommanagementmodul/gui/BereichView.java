@@ -74,7 +74,7 @@ public class BereichView extends CWView
         renderer.setLeafIcon(CWUtils.loadIcon("cw/roommanagementmodul/images/box.png"));
         bereichTree.setCellRenderer(renderer);
 
-        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(bNew).addComponent(bEdit).addComponent(bDelete).addComponent(bZimmerNew).addComponent(bZimmerEdit).addComponent(bZimmerDelete).addComponent(viewZimmerTabelle).addComponent(bereichTree);
+        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bNew).addComponent(bEdit).addComponent(bDelete).addComponent(bZimmerNew).addComponent(bZimmerEdit).addComponent(bZimmerDelete).addComponent(viewZimmerTabelle).addComponent(bereichTree);
 
 
     }

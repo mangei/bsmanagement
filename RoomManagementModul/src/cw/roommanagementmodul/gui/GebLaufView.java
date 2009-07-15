@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.value.ValueHolder;
@@ -107,7 +103,7 @@ public class GebLaufView extends CWView implements ItemListener{
         lGebLauf.setEnabled(false);
         gebLaufComboBox.setEnabled(false);
 
-        componentContainer = CWComponentFactory.createCWComponentContainer().addComponent(lLaufart).addComponent(lBetiebsart).addComponent(lAbrMonat).addComponent(lGebLauf).addComponent(lMonat).addComponent(lJahr).addComponent(rNormal).addComponent(rStorno).addComponent(startButton).addComponent(rTestlauf).addComponent(rEchtlauf).addComponent(jahrField).addComponent(gebLaufComboBox).addComponent(monatComboBox);
+        componentContainer = CWComponentFactory.createComponentContainer().addComponent(lLaufart).addComponent(lBetiebsart).addComponent(lAbrMonat).addComponent(lGebLauf).addComponent(lMonat).addComponent(lJahr).addComponent(rNormal).addComponent(rStorno).addComponent(startButton).addComponent(rTestlauf).addComponent(rEchtlauf).addComponent(jahrField).addComponent(gebLaufComboBox).addComponent(monatComboBox);
     }
 
     private void buildView() {
