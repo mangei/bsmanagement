@@ -136,7 +136,7 @@ public class HistoryView extends CWView
         detailPanel = CWComponentFactory.createPanel();
         detailPanel.setVisible(false);
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(courseComboBox)
                 .addComponent(courseLabel)
                 .addComponent(coursePartTable)

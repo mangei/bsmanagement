@@ -65,7 +65,7 @@ public class SubjectView extends CWView
                         model.getSubjectSelection().getSelectionIndexHolder(),
                         subjectTable)));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(deleteButton)
                 .addComponent(editButton)
                 .addComponent(newButton)

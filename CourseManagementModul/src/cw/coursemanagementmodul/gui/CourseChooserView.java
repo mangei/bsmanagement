@@ -129,7 +129,7 @@ public class CourseChooserView extends CWView
         subjectList.setSelectionModel(model.getSubjectSelection());
         subjectList.setCellRenderer(model.createSubjectListCellRenderer());
         
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(addButton)
                 .addComponent(cancelButton)
                 .addComponent(courseTable)

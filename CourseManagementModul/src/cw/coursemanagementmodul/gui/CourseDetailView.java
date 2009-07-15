@@ -102,7 +102,7 @@ public class CourseDetailView extends CWView
         vEndDate.setFont(new Font(null, Font.BOLD, 11));
         vPrice.setFont(new Font(null, Font.BOLD, 11));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(cancelButton)
                 .addComponent(printButton)
                 .addComponent(coursePartTable)

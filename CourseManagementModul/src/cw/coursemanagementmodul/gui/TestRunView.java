@@ -46,7 +46,7 @@ public class TestRunView extends CWView
                 "Druckt den Gebührenlauf!",
                 "cw/coursemanagementmodul/images/print.png"));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(backButton);
 
         

@@ -72,7 +72,7 @@ public class ActivityChooserView extends CWView
                         model.getActivitySelection().getSelectionIndexHolder(),
                         activityTable)));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(addButton)
                 .addComponent(cancelButton)
                 .addComponent(activityTable);

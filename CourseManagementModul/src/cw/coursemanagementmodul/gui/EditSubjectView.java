@@ -69,7 +69,7 @@ public class EditSubjectView extends CWView
             }
         });
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(cancelButton)
                 .addComponent(nameLabel)
                 .addComponent(nameTextField)

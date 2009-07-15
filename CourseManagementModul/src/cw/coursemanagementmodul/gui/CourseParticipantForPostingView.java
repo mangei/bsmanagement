@@ -74,7 +74,7 @@ public class CourseParticipantForPostingView extends CWPanel
 
         vorschlagButton = CWComponentFactory.createButton(model.getVorschlagAction());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(courseTable)
                 .addComponent(activityTable)
                 .addComponent(subjectTable)

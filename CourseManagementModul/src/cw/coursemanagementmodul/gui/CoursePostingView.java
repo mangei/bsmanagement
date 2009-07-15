@@ -143,7 +143,7 @@ public class CoursePostingView extends CWView
                 "Hier sehen Sie alle bereits gebuchten Gebührenläufe!",
                 "cw/coursemanagementmodul/images/postingRuns.png"));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer();
+        componentContainer = CWComponentFactory.createComponentContainer();
                 componentContainer.addComponent(courseComboBox);
                 componentContainer.addComponent(accountingButton);
                 componentContainer.addComponent(accountingDate);

@@ -79,7 +79,7 @@ public class EditCourseView extends CWView
         
         endDate = CWComponentFactory.createDateChooser(model.getBufferedModel(Course.PROPERTYNAME_ENDDATE));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(beginDate)
                 .addComponent(beginLabel)
                 .addComponent(cancelButton)

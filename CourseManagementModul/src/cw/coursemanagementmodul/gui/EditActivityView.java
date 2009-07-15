@@ -79,7 +79,7 @@ public class EditActivityView extends CWView
             }
         });
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(amountTextField)
                 .addComponent(cancelButton)
                 .addComponent(descLabel)

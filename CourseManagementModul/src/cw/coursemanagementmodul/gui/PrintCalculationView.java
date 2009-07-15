@@ -3,7 +3,6 @@ package cw.coursemanagementmodul.gui;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import javax.swing.JPanel;
 import net.sf.jasperreports.view.JRViewer;
 
 /**
@@ -27,7 +26,7 @@ public class PrintCalculationView extends CWView
     }
 
     private void initComponents() {
-        componentContainer = CWComponentFactory.createCWComponentContainer();
+        componentContainer = CWComponentFactory.createComponentContainer();
 
         bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");

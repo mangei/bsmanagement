@@ -87,7 +87,7 @@ public class DetailHistoryView extends CWView
         vHaben.setFont(new Font(null, Font.BOLD, 11));
         vSaldo.setFont(new Font(null, Font.BOLD, 11));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(accountingTable)
                 .addComponent(back)
                 .addComponent(haben)

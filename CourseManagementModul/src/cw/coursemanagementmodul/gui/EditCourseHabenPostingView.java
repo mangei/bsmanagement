@@ -92,7 +92,7 @@ public class EditCourseHabenPostingView extends CWView
                 + " " + model.getCoursePart().getCustomer().getCity());
         customerPLZLabel.setFont(new Font(null, Font.BOLD, 11));
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(activityTable)
                 .addComponent(bCancel)
                 .addComponent(bSave)

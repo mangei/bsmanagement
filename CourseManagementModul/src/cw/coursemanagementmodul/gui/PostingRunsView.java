@@ -68,7 +68,7 @@ public class PostingRunsView extends CWView
 
         runTable.getColumns(true).get(2).setCellRenderer(new DateTimeTableCellRenderer());
 
-        componentContainer = CWComponentFactory.createCWComponentContainer()
+        componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(backButton)
                 .addComponent(runTable)
                 .addComponent(stornoButton)

@@ -26,7 +26,7 @@ public class PrintCourseParticipantView extends CWView
     }
 
     private void initComponents() {
-        componentContainer = CWComponentFactory.createCWComponentContainer();
+        componentContainer = CWComponentFactory.createComponentContainer();
 
         bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurück");
