@@ -2,7 +2,7 @@ package cw.roommanagementmodul.extention;
 
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.roommanagementmodul.gui.*;
-import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
+import cw.customermanagementmodul.extention.point.EditCustomerTabExtention;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.pojo.Customer;
 import java.util.List;
