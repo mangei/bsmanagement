@@ -1,8 +1,8 @@
-package cw.coursemanagementmodul.extentions;
+package cw.coursemanagementmodul.extention;
 
 import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
-import cw.customermanagementmodul.extentions.interfaces.EditReversePostingPostingCategoryExtention;
+import cw.customermanagementmodul.extention.point.EditReversePostingPostingCategoryExtention;
 import cw.customermanagementmodul.gui.EditReversePostingPresentationModel;
 import cw.customermanagementmodul.pojo.Posting;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package cw.coursemanagementmodul.extentions;
+package cw.coursemanagementmodul.extention;
 
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.coursemanagementmodul.gui.CourseParticipantForPostingPresentationModel;
@@ -12,7 +12,7 @@ import cw.customermanagementmodul.gui.EditPostingPresentationModel;
 import cw.customermanagementmodul.gui.EditReversePostingPresentationModel;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Posting;
-import cw.customermanagementmodul.extentions.interfaces.EditPostingPostingCategoryExtention;
+import cw.customermanagementmodul.extention.point.EditPostingPostingCategoryExtention;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package cw.coursemanagementmodul.extentions;
+package cw.coursemanagementmodul.extention;
 
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
@@ -7,7 +7,7 @@ import cw.coursemanagementmodul.gui.EditCoursePartPresentationModel;
 import cw.coursemanagementmodul.gui.EditCoursePartView;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
-import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
+import cw.customermanagementmodul.extention.point.EditCustomerTabExtention;
 
 /**
  *
