@@ -1,5 +1,6 @@
 package cw.boardingschoolmanagement.extention.point;
 
+import cw.boardingschoolmanagement.interfaces.Extention;
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 
@@ -7,7 +8,7 @@ import cw.boardingschoolmanagement.gui.component.CWPanel;
  *
  * @author Manuel Geier (CreativeWorkers)
  */
-public interface HomeExtention extends Extention {
+public interface HomeExtentionPoint extends Extention {
 
     public void initPresentationModel(HomePresentationModel homePresentationModel);
 

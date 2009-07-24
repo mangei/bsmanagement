@@ -1,4 +1,4 @@
-package cw.boardingschoolmanagement.extention.point;
+package cw.boardingschoolmanagement.interfaces;
 
 /**
  *

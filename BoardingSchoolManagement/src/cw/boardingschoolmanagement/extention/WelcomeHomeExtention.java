@@ -3,7 +3,7 @@ package cw.boardingschoolmanagement.extention;
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
 import cw.boardingschoolmanagement.gui.WelcomeHomeExtentionPresentationModel;
 import cw.boardingschoolmanagement.gui.WelcomeHomeExtentionView;
-import cw.boardingschoolmanagement.extention.point.HomeExtention;
+import cw.boardingschoolmanagement.extention.point.HomeExtentionPoint;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 
@@ -12,7 +12,7 @@ import cw.boardingschoolmanagement.gui.component.CWPanel;
  * @author ManuelG
  */
 public class WelcomeHomeExtention
-    implements HomeExtention {
+    implements HomeExtentionPoint {
 
     private WelcomeHomeExtentionPresentationModel model;
     private WelcomeHomeExtentionView view;

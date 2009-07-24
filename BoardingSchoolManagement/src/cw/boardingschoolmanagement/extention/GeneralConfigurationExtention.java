@@ -1,6 +1,6 @@
 package cw.boardingschoolmanagement.extention;
 
-import cw.boardingschoolmanagement.extention.point.ConfigurationExtention;
+import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.GeneralConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.GeneralConfigurationView;
@@ -16,7 +16,7 @@ import javax.swing.Icon;
  * @author ManuelG
  */
 public class GeneralConfigurationExtention
-        implements ConfigurationExtention {
+        implements ConfigurationExtentionPoint {
 
     private GeneralConfigurationPresentationModel model;
     private GeneralConfigurationView view;

@@ -7,7 +7,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.comparator.PriorityComparator;
-import cw.boardingschoolmanagement.extention.point.ConfigurationExtention;
+import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import java.awt.event.ActionEvent;
@@ -30,7 +30,7 @@ public class ConfigurationPresentationModel extends PresentationModel
 {
 
     private CWHeaderInfo headerInfo;
-    private List<ConfigurationExtention> configurationExtentions;
+    private List<ConfigurationExtentionPoint> configurationExtentions;
     private ButtonListenerSupport support;
     private Action saveAction;
     private Action cancelAction;
@@ -49,7 +49,7 @@ public class ConfigurationPresentationModel extends PresentationModel
         support = new ButtonListenerSupport();
 
         configurationExtentions = getExtentions();
-        for (ConfigurationExtention extention : configurationExtentions) {
+        for (ConfigurationExtentionPoint extention : configurationExtentions) {
             extention.initPresentationModel(this);
         }
 
@@ -74,22 +74,22 @@ public class ConfigurationPresentationModel extends PresentationModel
     public void dispose() {
         getTriggerChannel().removeValueChangeListener(actionButtonListener);
 
-        for (ConfigurationExtention ex : configurationExtentions) {
+        for (ConfigurationExtentionPoint ex : configurationExtentions) {
             ex.dispose();
         }
     }
 
     public List<JComponent> getExtentionComponents() {
         List<JComponent> comps = new ArrayList<JComponent>();
-        for (ConfigurationExtention ex : configurationExtentions) {
+        for (ConfigurationExtentionPoint ex : configurationExtentions) {
             comps.add(ex.getView());
         }
         return comps;
     }
 
-    public List<ConfigurationExtention> getExtentions() {
+    public List<ConfigurationExtentionPoint> getExtentions() {
         if (configurationExtentions == null) {
-            configurationExtentions = (List<ConfigurationExtention>) ModulManager.getExtentions(ConfigurationExtention.class);
+            configurationExtentions = (List<ConfigurationExtentionPoint>) ModulManager.getExtentions(ConfigurationExtentionPoint.class);
 
             Collections.sort(configurationExtentions, new PriorityComparator());
 
@@ -97,9 +97,9 @@ public class ConfigurationPresentationModel extends PresentationModel
         return configurationExtentions;
     }
 
-    public ConfigurationExtention getExtention(Class extentionClass) {
+    public ConfigurationExtentionPoint getExtention(Class extentionClass) {
 
-        for (ConfigurationExtention ex : configurationExtentions) {
+        for (ConfigurationExtentionPoint ex : configurationExtentions) {
             if (extentionClass.isInstance(ex)) {
                 return ex;
             }
@@ -157,9 +157,9 @@ public class ConfigurationPresentationModel extends PresentationModel
     public boolean save() {
         boolean valid = true;
 
-        List<ConfigurationExtention> extentions = getExtentions();
+        List<ConfigurationExtentionPoint> extentions = getExtentions();
         List<String> errorMessages = new ArrayList<String>();
-        for (ConfigurationExtention extention : extentions) {
+        for (ConfigurationExtentionPoint extention : extentions) {
             List<String> errorList = extention.validate();
             if (errorList != null) {
                 if (errorList.size() > 0) {
@@ -187,7 +187,7 @@ public class ConfigurationPresentationModel extends PresentationModel
 
         triggerCommit();
 
-        for (ConfigurationExtention extention : extentions) {
+        for (ConfigurationExtentionPoint extention : extentions) {
             extention.save();
         }
 

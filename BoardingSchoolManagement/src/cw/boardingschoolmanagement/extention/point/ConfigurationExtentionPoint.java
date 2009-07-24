@@ -1,5 +1,6 @@
 package cw.boardingschoolmanagement.extention.point;
 
+import cw.boardingschoolmanagement.interfaces.Extention;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.interfaces.Priority;
@@ -10,7 +11,7 @@ import javax.swing.Icon;
  *
  * @author Manuel Geier
  */
-public interface ConfigurationExtention
+public interface ConfigurationExtentionPoint
         extends Extention, Priority{
 
     public void initPresentationModel(ConfigurationPresentationModel configurationModel);

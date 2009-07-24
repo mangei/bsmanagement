@@ -1,6 +1,6 @@
 package cw.boardingschoolmanagement.extention;
 
-import cw.boardingschoolmanagement.extention.point.ConfigurationExtention;
+import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.BusinessDataConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.BusinessDataConfigurationView;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
@@ -14,7 +14,7 @@ import javax.swing.Icon;
  *
  * @author ManuelG
  */
-public class BusinessDataConfigurationExtention implements ConfigurationExtention {
+public class BusinessDataConfigurationExtention implements ConfigurationExtentionPoint {
 
     private BusinessData businessData;
     private BusinessDataConfigurationPresentationModel model;

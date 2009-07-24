@@ -1,7 +1,7 @@
 package cw.boardingschoolmanagement.gui;
 
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.extention.point.ConfigurationExtention;
+import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.manager.GUIManager;
@@ -71,10 +71,10 @@ public class ConfigurationView extends CWView
         final CardLayout cardLayout = new CardLayout();
         final JPanel cardPanel = CWComponentFactory.createPanel(cardLayout);
 
-        List<ConfigurationExtention> extentions = model.getExtentions();
+        List<ConfigurationExtentionPoint> extentions = model.getExtentions();
         for(int i=0, l=extentions.size(); i<l; i++) {
             // Get the component
-            ConfigurationExtention ex = extentions.get(i);
+            ConfigurationExtentionPoint ex = extentions.get(i);
 
             // Create the button
             JButton button = new JButton(ex.getButtonName());

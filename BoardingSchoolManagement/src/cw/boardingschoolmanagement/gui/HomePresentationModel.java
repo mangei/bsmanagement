@@ -1,6 +1,6 @@
 package cw.boardingschoolmanagement.gui;
 
-import cw.boardingschoolmanagement.extention.point.HomeExtention;
+import cw.boardingschoolmanagement.extention.point.HomeExtentionPoint;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;
@@ -13,7 +13,7 @@ import cw.boardingschoolmanagement.manager.ModulManager;
 public class HomePresentationModel
 {
 
-    private List<HomeExtention> homeExtentions;
+    private List<HomeExtentionPoint> homeExtentions;
 
     public HomePresentationModel() {
         initModels();
@@ -21,8 +21,8 @@ public class HomePresentationModel
     }
 
     public void initModels() {
-        List<HomeExtention> aList = getExtentions();
-        for (HomeExtention ex : aList) {
+        List<HomeExtentionPoint> aList = getExtentions();
+        for (HomeExtentionPoint ex : aList) {
             ex.initPresentationModel(this);
         }
     }
@@ -31,15 +31,15 @@ public class HomePresentationModel
     }
 
     public void dispose() {
-        List<HomeExtention> aList = getExtentions();
-        for (HomeExtention ex : aList) {
+        List<HomeExtentionPoint> aList = getExtentions();
+        for (HomeExtentionPoint ex : aList) {
             ex.dispose();
         }
     }
 
-    public List<HomeExtention> getExtentions() {
+    public List<HomeExtentionPoint> getExtentions() {
         if(homeExtentions == null) {
-            homeExtentions = (List<HomeExtention>) ModulManager.getExtentions(HomeExtention.class);
+            homeExtentions = (List<HomeExtentionPoint>) ModulManager.getExtentions(HomeExtentionPoint.class);
         }
         return homeExtentions;
     }
@@ -47,8 +47,8 @@ public class HomePresentationModel
     public List<JPanel> getExtentionPanels() {
         List<JPanel> panels = new ArrayList<JPanel>();
 
-        List<HomeExtention> aList = getExtentions();
-        for (HomeExtention ex : aList) {
+        List<HomeExtentionPoint> aList = getExtentions();
+        for (HomeExtentionPoint ex : aList) {
             panels.add(ex.getView());
         }
 
