@@ -2,7 +2,7 @@ package cw.roommanagementmodul.extention;
 
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.roommanagementmodul.gui.*;
-import cw.customermanagementmodul.extention.point.EditCustomerTabExtention;
+import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.pojo.Customer;
 import java.util.List;
@@ -22,7 +22,7 @@ import javax.swing.JOptionPane;
  *
  * @author Dominik
  */
-public class BewohnerEditCustomerTabExtention implements EditCustomerTabExtention {
+public class BewohnerEditCustomerTabExtention implements EditCustomerTabExtentionPoint {
 
     private BewohnerManager bewohnerManager;
     private BewohnerEditCustomerTabExtentionView view;
