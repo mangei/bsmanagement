@@ -1,7 +1,7 @@
 package cw.boardingschoolmanagement.gui;
 
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.extentions.interfaces.ConfigurationExtention;
+import cw.boardingschoolmanagement.extention.point.ConfigurationExtention;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.manager.GUIManager;

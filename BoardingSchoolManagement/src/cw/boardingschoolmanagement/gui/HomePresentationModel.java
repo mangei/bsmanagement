@@ -1,6 +1,6 @@
 package cw.boardingschoolmanagement.gui;
 
-import cw.boardingschoolmanagement.extentions.interfaces.HomeExtention;
+import cw.boardingschoolmanagement.extention.point.HomeExtention;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JPanel;

@@ -1,9 +1,9 @@
-package cw.boardingschoolmanagement.extentions;
+package cw.boardingschoolmanagement.extention;
 
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
 import cw.boardingschoolmanagement.gui.WelcomeHomeExtentionPresentationModel;
 import cw.boardingschoolmanagement.gui.WelcomeHomeExtentionView;
-import cw.boardingschoolmanagement.extentions.interfaces.HomeExtention;
+import cw.boardingschoolmanagement.extention.point.HomeExtention;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 

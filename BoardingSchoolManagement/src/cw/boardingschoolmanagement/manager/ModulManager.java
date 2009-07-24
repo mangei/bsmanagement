@@ -3,7 +3,7 @@ package cw.boardingschoolmanagement.manager;
 import cw.boardingschoolmanagement.app.ClassPathHacker;
 import cw.boardingschoolmanagement.exception.ManifestException;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
-import cw.boardingschoolmanagement.extentions.interfaces.Extention;
+import cw.boardingschoolmanagement.extention.point.Extention;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import java.io.File;
 import java.io.IOException;

@@ -7,7 +7,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.comparator.PriorityComparator;
-import cw.boardingschoolmanagement.extentions.interfaces.ConfigurationExtention;
+import cw.boardingschoolmanagement.extention.point.ConfigurationExtention;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import java.awt.event.ActionEvent;

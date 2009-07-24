@@ -1,6 +1,6 @@
-package cw.boardingschoolmanagement.extentions;
+package cw.boardingschoolmanagement.extention;
 
-import cw.boardingschoolmanagement.extentions.interfaces.ConfigurationExtention;
+import cw.boardingschoolmanagement.extention.point.ConfigurationExtention;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.GeneralConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.GeneralConfigurationView;

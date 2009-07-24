@@ -1,4 +1,4 @@
-package cw.boardingschoolmanagement.extentions.interfaces;
+package cw.boardingschoolmanagement.extention.point;
 
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
