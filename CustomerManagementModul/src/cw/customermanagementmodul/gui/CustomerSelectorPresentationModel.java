@@ -4,7 +4,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.manager.ModulManager;
-import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtention;
+import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtentionPoint;
 import java.beans.PropertyChangeEvent;
 import java.util.Date;
 import java.util.List;
@@ -26,7 +26,7 @@ public class CustomerSelectorPresentationModel
 
     private CustomerTableModel customerTableModel;
     private SelectionInList<Customer> customerSelection;
-    private List<CustomerSelectorFilterExtention> filterExtentions;
+    private List<CustomerSelectorFilterExtentionPoint> filterExtentions;
     private ValueModel filterChange;
     private JPanel northPanel;
     private JPanel southPanel;
@@ -96,7 +96,7 @@ public class CustomerSelectorPresentationModel
                 }
             });
 
-            for (CustomerSelectorFilterExtention ex : filterExtentions) {
+            for (CustomerSelectorFilterExtentionPoint ex : filterExtentions) {
                 ex.initEventHandling();
             }
             
@@ -108,9 +108,9 @@ public class CustomerSelectorPresentationModel
         if(filtering) {
 
             // Load extentions
-            filterExtentions = (List<CustomerSelectorFilterExtention>) ModulManager.getExtentions(CustomerSelectorFilterExtention.class);
+            filterExtentions = (List<CustomerSelectorFilterExtentionPoint>) ModulManager.getExtentions(CustomerSelectorFilterExtentionPoint.class);
 
-            for (CustomerSelectorFilterExtention ex : filterExtentions) {
+            for (CustomerSelectorFilterExtentionPoint ex : filterExtentions) {
 
                 ex.init(filterChange);
 
@@ -140,7 +140,7 @@ public class CustomerSelectorPresentationModel
         }
         customerSelection.release();
 
-        for (CustomerSelectorFilterExtention ex : filterExtentions) {
+        for (CustomerSelectorFilterExtentionPoint ex : filterExtentions) {
             ex.dispose();
         }
         filterExtentions.clear();
@@ -153,7 +153,7 @@ public class CustomerSelectorPresentationModel
             filteredCustomers.addAll((ArrayList)customers.clone());
 
             // Filter the elements
-            for (CustomerSelectorFilterExtention ex : filterExtentions) {
+            for (CustomerSelectorFilterExtentionPoint ex : filterExtentions) {
                 filteredCustomers = ex.filter(filteredCustomers);
             }
 

@@ -1,7 +1,7 @@
 package cw.customermanagementmodul.extention;
 
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.customermanagementmodul.extention.point.EditCustomerTabExtention;
+import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.PostingManagementEditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.PostingManagementEditCustomerView;
@@ -13,7 +13,7 @@ import java.util.List;
  * @author Manuel Geier
  */
 public class PostingEditCustomerTabExtention
-        implements EditCustomerTabExtention {
+        implements EditCustomerTabExtentionPoint {
 
     private PostingManagementEditCustomerPresentationModel model;
     private PostingManagementEditCustomerView view;

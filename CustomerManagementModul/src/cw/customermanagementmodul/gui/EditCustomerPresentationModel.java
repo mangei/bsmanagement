@@ -20,7 +20,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-import cw.customermanagementmodul.extention.point.EditCustomerTabExtention;
+import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Guardian;
 import java.util.Collections;
@@ -43,7 +43,7 @@ public class EditCustomerPresentationModel
     private Action saveCancelAction;
     private ButtonListenerSupport support;
     private PresentationModel<Guardian> guardianPresentationModel;
-    private List<EditCustomerTabExtention> editCustomerGUITabExtentions;
+    private List<EditCustomerTabExtentionPoint> editCustomerGUITabExtentions;
     private PropertyChangeListener actionButtonListener;
     private SaveListener saveListener;
 
@@ -64,7 +64,7 @@ public class EditCustomerPresentationModel
 
         // Init Extentions
         editCustomerGUITabExtentions = getExtentions();
-        for (EditCustomerTabExtention extention : editCustomerGUITabExtentions) {
+        for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
             extention.initPresentationModel(this);
         }
 
@@ -116,7 +116,7 @@ public class EditCustomerPresentationModel
 
     public void dispose() {
 
-        for (EditCustomerTabExtention extention : editCustomerGUITabExtentions) {
+        for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
             extention.dispose();
         }
         editCustomerGUITabExtentions.clear();
@@ -213,15 +213,15 @@ public class EditCustomerPresentationModel
 
     public List<JComponent> getExtentionComponents() {
         List<JComponent> comps = new ArrayList<JComponent>();
-        for (EditCustomerTabExtention ex : editCustomerGUITabExtentions) {
+        for (EditCustomerTabExtentionPoint ex : editCustomerGUITabExtentions) {
             comps.add((ex).getView());
         }
         return comps;
     }
 
-    public List<EditCustomerTabExtention> getExtentions() {
+    public List<EditCustomerTabExtentionPoint> getExtentions() {
         if (editCustomerGUITabExtentions == null) {
-            editCustomerGUITabExtentions = (List<EditCustomerTabExtention>) ModulManager.getExtentions(EditCustomerTabExtention.class);
+            editCustomerGUITabExtentions = (List<EditCustomerTabExtentionPoint>) ModulManager.getExtentions(EditCustomerTabExtentionPoint.class);
 
             Collections.sort(editCustomerGUITabExtentions, new PriorityComparator());
 
@@ -257,9 +257,9 @@ public class EditCustomerPresentationModel
         return editCustomerGUITabExtentions;
     }
 
-    public EditCustomerTabExtention getExtention(Class extentionClass) {
+    public EditCustomerTabExtentionPoint getExtention(Class extentionClass) {
 
-        for (EditCustomerTabExtention ex : editCustomerGUITabExtentions) {
+        for (EditCustomerTabExtentionPoint ex : editCustomerGUITabExtentions) {
             if (extentionClass.isInstance(ex)) {
                 return ex;
             }
@@ -365,9 +365,9 @@ public class EditCustomerPresentationModel
     public boolean save() {
         boolean valid = true;
 
-        List<EditCustomerTabExtention> extentions = getExtentions();
+        List<EditCustomerTabExtentionPoint> extentions = getExtentions();
         List<String> errorMessages = new ArrayList<String>();
-        for (EditCustomerTabExtention extention : extentions) {
+        for (EditCustomerTabExtentionPoint extention : extentions) {
             List<String> errorList = extention.validate();
             if (errorList != null) {
                 if (errorList.size() > 0) {
@@ -396,7 +396,7 @@ public class EditCustomerPresentationModel
         triggerCommit();
         guardianPresentationModel.triggerCommit();
 
-        for (EditCustomerTabExtention extention : extentions) {
+        for (EditCustomerTabExtentionPoint extention : extentions) {
             extention.save();
         }
 

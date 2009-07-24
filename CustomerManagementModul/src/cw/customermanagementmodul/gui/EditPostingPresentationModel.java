@@ -11,7 +11,7 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
-import cw.customermanagementmodul.extention.point.EditPostingPostingCategoryExtention;
+import cw.customermanagementmodul.extention.point.EditPostingPostingCategoryExtentionPoint;
 import java.awt.event.ActionEvent;
 import java.util.Date;
 import java.util.List;
@@ -44,8 +44,8 @@ public class EditPostingPresentationModel
     private Action cancelAction;
     private Action saveCancelAction;
 
-    private List<EditPostingPostingCategoryExtention> editPostingPostingCategoryExtentions;
-    private HashMap<String,EditPostingPostingCategoryExtention> editPostingPostingCategoryExtentionsKeyMap;
+    private List<EditPostingPostingCategoryExtentionPoint> editPostingPostingCategoryExtentions;
+    private HashMap<String,EditPostingPostingCategoryExtentionPoint> editPostingPostingCategoryExtentionsKeyMap;
     
     private ButtonListenerSupport buttonListenerSupport;
 
@@ -78,10 +78,10 @@ public class EditPostingPresentationModel
         postingCategorySelection.setSelectionIndex(0);
 
         editPostingPostingCategoryExtentions = getExtentions();
-        editPostingPostingCategoryExtentionsKeyMap = new HashMap<String, EditPostingPostingCategoryExtention>();
+        editPostingPostingCategoryExtentionsKeyMap = new HashMap<String, EditPostingPostingCategoryExtentionPoint>();
 
         // Initialize the extentions
-        for(EditPostingPostingCategoryExtention ex : editPostingPostingCategoryExtentions) {
+        for(EditPostingPostingCategoryExtentionPoint ex : editPostingPostingCategoryExtentions) {
             ex.initPresentationModel(this);
             editPostingPostingCategoryExtentionsKeyMap.put(ex.getKey(), ex);
         }
@@ -120,7 +120,7 @@ public class EditPostingPresentationModel
         getBufferedModel(Posting.PROPERTYNAME_CATEGORY).removeValueChangeListener(saveListener);
 
         // Initialize the extentions
-        for(EditPostingPostingCategoryExtention ex : editPostingPostingCategoryExtentions) {
+        for(EditPostingPostingCategoryExtentionPoint ex : editPostingPostingCategoryExtentions) {
             ex.dispose();
         }
 
@@ -130,9 +130,9 @@ public class EditPostingPresentationModel
         release();
     }
 
-    private List<EditPostingPostingCategoryExtention> getExtentions() {
+    private List<EditPostingPostingCategoryExtentionPoint> getExtentions() {
         if(editPostingPostingCategoryExtentions == null) {
-            editPostingPostingCategoryExtentions = (List<EditPostingPostingCategoryExtention>) ModulManager.getExtentions(EditPostingPostingCategoryExtention.class);
+            editPostingPostingCategoryExtentions = (List<EditPostingPostingCategoryExtentionPoint>) ModulManager.getExtentions(EditPostingPostingCategoryExtentionPoint.class);
         }
         return editPostingPostingCategoryExtentions;
     }
@@ -185,7 +185,7 @@ public class EditPostingPresentationModel
         if(postingCategorySelection.hasSelection()
                 && selection.getKey() != null 
                 && !selection.getKey().isEmpty()) {
-            EditPostingPostingCategoryExtention get = editPostingPostingCategoryExtentionsKeyMap.get(selection.getKey());
+            EditPostingPostingCategoryExtentionPoint get = editPostingPostingCategoryExtentionsKeyMap.get(selection.getKey());
             if(get != null) {
                 return get.getView();
             }

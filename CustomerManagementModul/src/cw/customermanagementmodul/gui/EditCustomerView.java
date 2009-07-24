@@ -4,7 +4,7 @@ import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
-import cw.customermanagementmodul.extention.point.EditCustomerTabExtention;
+import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import java.awt.BorderLayout;
 import java.util.List;
 import javax.swing.JTabbedPane;
@@ -85,8 +85,8 @@ public class EditCustomerView extends CWView
         buttonPanel.add(bCancel);
         
         // Load dynamic components in tabs
-        List<EditCustomerTabExtention> lEx = model.getExtentions();
-        EditCustomerTabExtention ex;
+        List<EditCustomerTabExtentionPoint> lEx = model.getExtentions();
+        EditCustomerTabExtentionPoint ex;
         Class activeEx = (Class) model.getProperties().get("activeExtention");
         for(int i=0, l=lEx.size(); i<l; i++) {
             ex = lEx.get(i);

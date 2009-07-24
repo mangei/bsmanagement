@@ -2,7 +2,7 @@ package cw.customermanagementmodul.extention;
 
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtention;
+import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtentionPoint;
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionPresentationModel;
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionView;
 import cw.customermanagementmodul.pojo.Customer;
@@ -21,7 +21,7 @@ import javax.swing.event.ListSelectionListener;
  * @author ManuelG
  */
 public class GroupCustomerSelectorFilterExtention
-        implements CustomerSelectorFilterExtention {
+        implements CustomerSelectorFilterExtentionPoint {
 
     private GroupCustomerSelectorFilterExtentionPresentationModel model;
     private GroupCustomerSelectorFilterExtentionView view;

@@ -5,7 +5,7 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
-import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtention;
+import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtentionPoint;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class CustomerOverviewEditCustomerPresentationModel
     private ValueModel unsaved;
     private CWHeaderInfo headerInfo;
 
-    private List<CustomerOverviewEditCustomerExtention> customerOverviewEditCustomerExtentions;
+    private List<CustomerOverviewEditCustomerExtentionPoint> customerOverviewEditCustomerExtentions;
 
     public CustomerOverviewEditCustomerPresentationModel(EditCustomerPresentationModel editCustomerPresentationModel) {
         this.editCustomerPresentationModel = editCustomerPresentationModel;
@@ -37,7 +37,7 @@ public class CustomerOverviewEditCustomerPresentationModel
 
         // Addons initialisieren
         customerOverviewEditCustomerExtentions = getExtentions();
-        for (CustomerOverviewEditCustomerExtention extention : customerOverviewEditCustomerExtentions) {
+        for (CustomerOverviewEditCustomerExtentionPoint extention : customerOverviewEditCustomerExtentions) {
             extention.initPresentationModel(this);
         }
 
@@ -55,7 +55,7 @@ public class CustomerOverviewEditCustomerPresentationModel
 
     public void dispose() {
         customerOverviewEditCustomerExtentions = getExtentions();
-        for (CustomerOverviewEditCustomerExtention extention : customerOverviewEditCustomerExtentions) {
+        for (CustomerOverviewEditCustomerExtentionPoint extention : customerOverviewEditCustomerExtentions) {
             extention.dispose();
         }
         customerOverviewEditCustomerExtentions.clear();
@@ -82,15 +82,15 @@ public class CustomerOverviewEditCustomerPresentationModel
 
     public List<JComponent> getExtentionComponents() {
         List<JComponent> comps = new ArrayList<JComponent>();
-        for (CustomerOverviewEditCustomerExtention ex : customerOverviewEditCustomerExtentions) {
+        for (CustomerOverviewEditCustomerExtentionPoint ex : customerOverviewEditCustomerExtentions) {
             comps.add((ex).getView());
         }
         return comps;
     }
 
-    public List<CustomerOverviewEditCustomerExtention> getExtentions() {
+    public List<CustomerOverviewEditCustomerExtentionPoint> getExtentions() {
         if(customerOverviewEditCustomerExtentions == null) {
-            customerOverviewEditCustomerExtentions = (List<CustomerOverviewEditCustomerExtention>) ModulManager.getExtentions(CustomerOverviewEditCustomerExtention.class);
+            customerOverviewEditCustomerExtentions = (List<CustomerOverviewEditCustomerExtentionPoint>) ModulManager.getExtentions(CustomerOverviewEditCustomerExtentionPoint.class);
         }
         return customerOverviewEditCustomerExtentions;
     }

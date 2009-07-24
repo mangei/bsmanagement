@@ -1,6 +1,6 @@
 package cw.customermanagementmodul.extention.point;
 
-import cw.boardingschoolmanagement.extention.point.Extention;
+import cw.boardingschoolmanagement.interfaces.Extention;
 import cw.customermanagementmodul.gui.EditReversePostingPresentationModel;
 import javax.swing.JComponent;
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author Manuel Geier
  */
-public interface EditReversePostingPostingCategoryExtention extends Extention {
+public interface EditReversePostingPostingCategoryExtentionPoint extends Extention {
 
     public void initPresentationModel(EditReversePostingPresentationModel editReversePostingModel);
 

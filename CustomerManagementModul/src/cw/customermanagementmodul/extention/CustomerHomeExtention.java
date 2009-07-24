@@ -3,14 +3,14 @@ package cw.customermanagementmodul.extention;
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
 import cw.customermanagementmodul.gui.CustomerHomeExtentionPresentationModel;
 import cw.customermanagementmodul.gui.CustomerHomeExtentionView;
-import cw.boardingschoolmanagement.extention.point.HomeExtention;
+import cw.boardingschoolmanagement.extention.point.HomeExtentionPoint;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 
 /**
  *
  * @author ManuelG
  */
-public class CustomerHomeExtention implements HomeExtention {
+public class CustomerHomeExtention implements HomeExtentionPoint {
 
     private CustomerHomeExtentionPresentationModel model;
     private CustomerHomeExtentionView view;

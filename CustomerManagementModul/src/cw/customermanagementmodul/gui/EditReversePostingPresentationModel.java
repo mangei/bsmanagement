@@ -10,7 +10,7 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
-import cw.customermanagementmodul.extention.point.EditReversePostingPostingCategoryExtention;
+import cw.customermanagementmodul.extention.point.EditReversePostingPostingCategoryExtentionPoint;
 import java.awt.event.ActionEvent;
 import java.util.Date;
 import java.util.List;
@@ -46,8 +46,8 @@ public class EditReversePostingPresentationModel
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
 
-    private List<EditReversePostingPostingCategoryExtention> editReversePostingPostingCategoryExtentions;
-    private HashMap<String,EditReversePostingPostingCategoryExtention> editPostingPostingCategoryExtentionsKeyMap;
+    private List<EditReversePostingPostingCategoryExtentionPoint> editReversePostingPostingCategoryExtentions;
+    private HashMap<String,EditReversePostingPostingCategoryExtentionPoint> editPostingPostingCategoryExtentionsKeyMap;
 
     private ButtonListenerSupport support;
 
@@ -89,16 +89,16 @@ public class EditReversePostingPresentationModel
         reversePostingPresentationModel.getBufferedModel(Posting.PROPERTYNAME_CATEGORY).addValueChangeListener(saveListener);
 
         editReversePostingPostingCategoryExtentions = getExtentions();
-        editPostingPostingCategoryExtentionsKeyMap = new HashMap<String, EditReversePostingPostingCategoryExtention>();
+        editPostingPostingCategoryExtentionsKeyMap = new HashMap<String, EditReversePostingPostingCategoryExtentionPoint>();
 
         // Load the extentions
-        for(EditReversePostingPostingCategoryExtention ex : editReversePostingPostingCategoryExtentions) {
+        for(EditReversePostingPostingCategoryExtentionPoint ex : editReversePostingPostingCategoryExtentions) {
 //            ex.initPresentationModel(this);
             editPostingPostingCategoryExtentionsKeyMap.put(ex.getKey(), ex);
         }
         // Initialize the selected Extention
         if(oldPosting.getPostingCategory() != null) {
-            EditReversePostingPostingCategoryExtention ex = editPostingPostingCategoryExtentionsKeyMap.get(oldPosting.getPostingCategory().getKey());
+            EditReversePostingPostingCategoryExtentionPoint ex = editPostingPostingCategoryExtentionsKeyMap.get(oldPosting.getPostingCategory().getKey());
             if(ex != null) {
                 ex.initPresentationModel(this);
             }
@@ -134,7 +134,7 @@ public class EditReversePostingPresentationModel
 
 
         if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
-            EditReversePostingPostingCategoryExtention ex = editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey());
+            EditReversePostingPostingCategoryExtentionPoint ex = editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey());
             if(ex != null) {
                 ex.dispose();
             }
@@ -143,9 +143,9 @@ public class EditReversePostingPresentationModel
 //        unsaved.removeValueChangeListener(unsavedListener);
     }
 
-    private List<EditReversePostingPostingCategoryExtention> getExtentions() {
+    private List<EditReversePostingPostingCategoryExtentionPoint> getExtentions() {
         if(editReversePostingPostingCategoryExtentions == null) {
-            editReversePostingPostingCategoryExtentions = (List<EditReversePostingPostingCategoryExtention>) ModulManager.getExtentions(EditReversePostingPostingCategoryExtention.class);
+            editReversePostingPostingCategoryExtentions = (List<EditReversePostingPostingCategoryExtentionPoint>) ModulManager.getExtentions(EditReversePostingPostingCategoryExtentionPoint.class);
         }
         return editReversePostingPostingCategoryExtentions;
     }
@@ -202,7 +202,7 @@ public class EditReversePostingPresentationModel
                 && selection != null
                 && selection.getKey() != null
                 && !selection.getKey().isEmpty()) {
-            EditReversePostingPostingCategoryExtention get = editPostingPostingCategoryExtentionsKeyMap.get(selection.getKey());
+            EditReversePostingPostingCategoryExtentionPoint get = editPostingPostingCategoryExtentionsKeyMap.get(selection.getKey());
             if(get != null) {
                 return get.getView();
             }
@@ -257,7 +257,7 @@ public class EditReversePostingPresentationModel
 //            }
             
             if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
-                EditReversePostingPostingCategoryExtention ex = editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey());
+                EditReversePostingPostingCategoryExtentionPoint ex = editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey());
                 if(ex != null) {
                     List<String> validate = ex.validate();
                     if(validate != null && validate.size() > 0) {
@@ -290,7 +290,7 @@ public class EditReversePostingPresentationModel
 
         // Save the selected extention
         if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
-            EditReversePostingPostingCategoryExtention ex = editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey());
+            EditReversePostingPostingCategoryExtentionPoint ex = editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey());
             if(ex != null) {
                 ex.save();
             }

@@ -13,7 +13,7 @@ import javax.swing.Action;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import cw.customermanagementmodul.extention.EditCustomerEditCustomerTabExtention;
-import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtention;
+import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtentionPoint;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import javax.swing.event.ListSelectionListener;
@@ -343,7 +343,7 @@ public class CustomerManagementPresentationModel
                     CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"),
                     CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")
         ));
-        p.put("activeExtention", CustomerOverviewEditCustomerExtention.class);
+        p.put("activeExtention", CustomerOverviewEditCustomerExtentionPoint.class);
         final EditCustomerPresentationModel model = new EditCustomerPresentationModel(p);
         final EditCustomerView editView = new EditCustomerView(model);
 
