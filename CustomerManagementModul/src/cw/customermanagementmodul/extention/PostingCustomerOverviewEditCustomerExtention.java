@@ -1,4 +1,4 @@
-package cw.customermanagementmodul.extentions;
+package cw.customermanagementmodul.extention;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -6,7 +6,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.customermanagementmodul.extentions.interfaces.CustomerOverviewEditCustomerExtention;
+import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtention;
 import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.PostingManagementEditCustomerPresentationModel;

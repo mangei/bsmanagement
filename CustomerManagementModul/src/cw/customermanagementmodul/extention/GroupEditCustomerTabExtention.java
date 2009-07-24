@@ -1,7 +1,7 @@
-package cw.customermanagementmodul.extentions;
+package cw.customermanagementmodul.extention;
 
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
+import cw.customermanagementmodul.extention.point.EditCustomerTabExtention;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.GroupEditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.GroupEditCustomerView;

@@ -4,7 +4,7 @@ import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.manager.ModulManager;
-import cw.customermanagementmodul.extentions.interfaces.CustomerSelectorFilterExtention;
+import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtention;
 import java.beans.PropertyChangeEvent;
 import java.util.Date;
 import java.util.List;

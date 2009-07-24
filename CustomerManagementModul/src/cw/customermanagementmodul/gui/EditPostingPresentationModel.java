@@ -11,7 +11,7 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
-import cw.customermanagementmodul.extentions.interfaces.EditPostingPostingCategoryExtention;
+import cw.customermanagementmodul.extention.point.EditPostingPostingCategoryExtention;
 import java.awt.event.ActionEvent;
 import java.util.Date;
 import java.util.List;

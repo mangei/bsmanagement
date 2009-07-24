@@ -1,8 +1,8 @@
-package cw.customermanagementmodul.extentions;
+package cw.customermanagementmodul.extention;
 
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.customermanagementmodul.extentions.interfaces.CustomerSelectorFilterExtention;
+import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtention;
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionPresentationModel;
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionView;
 import cw.customermanagementmodul.pojo.Customer;

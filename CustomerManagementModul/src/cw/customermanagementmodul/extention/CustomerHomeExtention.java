@@ -1,9 +1,9 @@
-package cw.customermanagementmodul.extentions;
+package cw.customermanagementmodul.extention;
 
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
 import cw.customermanagementmodul.gui.CustomerHomeExtentionPresentationModel;
 import cw.customermanagementmodul.gui.CustomerHomeExtentionView;
-import cw.boardingschoolmanagement.extentions.interfaces.HomeExtention;
+import cw.boardingschoolmanagement.extention.point.HomeExtention;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 
 /**

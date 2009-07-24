@@ -1,32 +1,31 @@
-package cw.customermanagementmodul.extentions;
+package cw.customermanagementmodul.extention;
 
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
-import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationModel;
-import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerView;
+import cw.customermanagementmodul.extention.point.EditCustomerTabExtention;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
+import cw.customermanagementmodul.gui.PostingManagementEditCustomerPresentationModel;
+import cw.customermanagementmodul.gui.PostingManagementEditCustomerView;
+import cw.customermanagementmodul.pojo.Posting;
 import java.util.List;
 
 /**
  *
  * @author Manuel Geier
  */
-public class CustomerOverviewEditCustomerTabExtention
+public class PostingEditCustomerTabExtention
         implements EditCustomerTabExtention {
 
-    private CustomerOverviewEditCustomerPresentationModel model;
-    private CustomerOverviewEditCustomerView view;
+    private PostingManagementEditCustomerPresentationModel model;
+    private PostingManagementEditCustomerView view;
     private EditCustomerPresentationModel editCustomerModel;
-
+    
     public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
         this.editCustomerModel = editCustomerModel;
-        model = new CustomerOverviewEditCustomerPresentationModel(editCustomerModel);
+        model = new PostingManagementEditCustomerPresentationModel(editCustomerModel.getBean());
+        view = new PostingManagementEditCustomerView(model);
     }
     
     public CWPanel getView() {
-        if(view == null) {
-            view = new CustomerOverviewEditCustomerView(model);
-        }
         return view;
     }
 
@@ -42,17 +41,15 @@ public class CustomerOverviewEditCustomerTabExtention
         return null;
     }
 
+    public void addPosting(Posting posting) {
+        model.getPostingSelection().getList().add(posting);
+    }
+
     public void dispose() {
         view.dispose();
-        
-        // Kill references
-        view = null;
-        model = null;
-        editCustomerModel = null;
     }
 
     public int priority() {
-        return 100;
+        return 0;
     }
-
 }

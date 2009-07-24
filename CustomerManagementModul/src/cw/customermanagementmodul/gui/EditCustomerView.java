@@ -4,7 +4,7 @@ import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
-import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
+import cw.customermanagementmodul.extention.point.EditCustomerTabExtention;
 import java.awt.BorderLayout;
 import java.util.List;
 import javax.swing.JTabbedPane;

@@ -1,7 +1,7 @@
-package cw.customermanagementmodul.extentions.interfaces;
+package cw.customermanagementmodul.extention.point;
 
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.extentions.interfaces.Extention;
+import cw.boardingschoolmanagement.extention.point.Extention;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.pojo.Customer;
 import java.util.List;

@@ -20,7 +20,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
-import cw.customermanagementmodul.extentions.interfaces.EditCustomerTabExtention;
+import cw.customermanagementmodul.extention.point.EditCustomerTabExtention;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Guardian;
 import java.util.Collections;

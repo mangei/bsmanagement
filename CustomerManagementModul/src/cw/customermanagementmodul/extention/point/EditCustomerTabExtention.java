@@ -1,6 +1,6 @@
-package cw.customermanagementmodul.extentions.interfaces;
+package cw.customermanagementmodul.extention.point;
 
-import cw.boardingschoolmanagement.extentions.interfaces.Extention;
+import cw.boardingschoolmanagement.extention.point.Extention;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.interfaces.Priority;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;

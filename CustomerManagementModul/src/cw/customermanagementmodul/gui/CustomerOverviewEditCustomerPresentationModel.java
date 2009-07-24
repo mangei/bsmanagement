@@ -5,7 +5,7 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
-import cw.customermanagementmodul.extentions.interfaces.CustomerOverviewEditCustomerExtention;
+import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtention;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
