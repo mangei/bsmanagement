@@ -12,7 +12,7 @@ import cw.customermanagementmodul.gui.EditPostingPresentationModel;
 import cw.customermanagementmodul.gui.EditReversePostingPresentationModel;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Posting;
-import cw.customermanagementmodul.extention.point.EditPostingPostingCategoryExtention;
+import cw.customermanagementmodul.extention.point.EditPostingPostingCategoryExtentionPoint;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +20,7 @@ import java.util.List;
  *
  * @author André Salmhofer (CreativeWorkers)
  */
-public class CoursePostingEditPostingPostingCategoryExtention implements EditPostingPostingCategoryExtention {
+public class CoursePostingEditPostingPostingCategoryExtention implements EditPostingPostingCategoryExtentionPoint {
     private CourseParticipantForPostingPresentationModel model;
     private EditPostingPresentationModel postingModel;
     private CourseParticipantForPostingView view;

@@ -7,13 +7,13 @@ import cw.coursemanagementmodul.gui.EditCoursePartPresentationModel;
 import cw.coursemanagementmodul.gui.EditCoursePartView;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
-import cw.customermanagementmodul.extention.point.EditCustomerTabExtention;
+import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 
 /**
  *
  * @author André Salmhofer (CreativeWorkers)
  */
-public class CourseEditCustomerTabExtention implements EditCustomerTabExtention {
+public class CourseEditCustomerTabExtention implements EditCustomerTabExtentionPoint {
 
     private static EditCoursePartPresentationModel model;
     private static EditCoursePartView view;

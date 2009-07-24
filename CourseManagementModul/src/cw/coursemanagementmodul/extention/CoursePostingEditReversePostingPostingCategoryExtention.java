@@ -2,7 +2,7 @@ package cw.coursemanagementmodul.extention;
 
 import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
-import cw.customermanagementmodul.extention.point.EditReversePostingPostingCategoryExtention;
+import cw.customermanagementmodul.extention.point.EditReversePostingPostingCategoryExtentionPoint;
 import cw.customermanagementmodul.gui.EditReversePostingPresentationModel;
 import cw.customermanagementmodul.pojo.Posting;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import javax.swing.JLabel;
  *
  * @author André Salmhofer (CreativeWorkers)
  */
-public class CoursePostingEditReversePostingPostingCategoryExtention implements EditReversePostingPostingCategoryExtention{
+public class CoursePostingEditReversePostingPostingCategoryExtention implements EditReversePostingPostingCategoryExtentionPoint{
     private EditReversePostingPresentationModel reversePostingModel;
     private CoursePosting coursePosting;
     public void initPresentationModel(EditReversePostingPresentationModel editReversePostingModel) {
