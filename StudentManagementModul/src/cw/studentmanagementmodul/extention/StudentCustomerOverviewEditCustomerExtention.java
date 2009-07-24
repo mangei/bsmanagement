@@ -6,7 +6,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtention;
+import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtentionPoint;
 import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationModel;
 import cw.studentmanagementmodul.gui.StudentEditCustomerPresentationModel;
 
@@ -15,7 +15,7 @@ import cw.studentmanagementmodul.gui.StudentEditCustomerPresentationModel;
  * @author Manuel Geier
  */
 public class StudentCustomerOverviewEditCustomerExtention
-        implements CustomerOverviewEditCustomerExtention {
+        implements CustomerOverviewEditCustomerExtentionPoint {
 
     private CustomerOverviewEditCustomerPresentationModel customerOverviewEditCustomerPresentationModel;
     private CWComponentFactory.CWComponentContainer componentContainer;

@@ -1,7 +1,7 @@
 package cw.studentmanagementmodul.extention;
 
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.customermanagementmodul.extention.point.EditCustomerTabExtention;
+import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.studentmanagementmodul.gui.StudentEditCustomerPresentationModel;
 import cw.studentmanagementmodul.gui.StudentEditCustomerView;
@@ -14,7 +14,7 @@ import cw.studentmanagementmodul.pojo.manager.StudentManager;
  * @author Manuel Geier
  */
 public class StudentEditCustomerTabExtention
-implements EditCustomerTabExtention
+implements EditCustomerTabExtentionPoint
 {
     private StudentEditCustomerView view;
     private StudentEditCustomerPresentationModel model;
