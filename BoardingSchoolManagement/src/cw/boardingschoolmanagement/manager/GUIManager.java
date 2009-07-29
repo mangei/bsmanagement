@@ -10,10 +10,18 @@ import cw.boardingschoolmanagement.gui.component.CWHeader;
 import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import cw.boardingschoolmanagement.gui.component.CWPathPanel;
 import cw.boardingschoolmanagement.gui.component.CWStatusBar;
+import cw.boardingschoolmanagement.gui.component.CWTray;
+import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Frame;
 import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.SystemTray;
+import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.event.WindowAdapter;
@@ -21,8 +29,10 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
+import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -55,6 +65,7 @@ public class GUIManager {
     private JPanel componentView;
     private CWPathPanel pathPanel;
     private JFrame frame;
+    private CWTray tray;
 
     public enum PathPanelPositions {
         NORTH, SOUTH
@@ -181,6 +192,8 @@ public class GUIManager {
 
         // Center the window
         CWUtils.centerWindow(frame);
+
+        initSystemTray();
     }
 
     public static GUIManager getInstance() {
@@ -264,6 +277,59 @@ public class GUIManager {
         return scrollPane;
     }
 
+    private void initSystemTray() {
+        final TrayIcon trayIcon;
+
+        if (SystemTray.isSupported()) {
+
+            SystemTray systemTray = SystemTray.getSystemTray();
+
+            Image image = CWUtils.loadImage("cw/boardingschoolmanagement/images/building.png");
+            trayIcon = new TrayIcon(image, "Internatsverwaltung");
+            trayIcon.setImageAutoSize(true);
+            
+            tray = new CWTray(trayIcon);
+
+            tray.getPopupMenu().add(new JMenuItem(new AbstractAction(
+                    "Öffnen",
+                    CWUtils.loadIcon("cw/boardingschoolmanagement/images/application_view_list.png")) {
+
+                    public void actionPerformed(ActionEvent e) {
+                        GUIManager.getInstance().showMainFrame();
+                    }
+            }));
+
+            tray.getPopupMenu().add(new JMenuItem(new AbstractAction(
+                    "Beenden",
+                    CWUtils.loadIcon("cw/boardingschoolmanagement/images/exit.png")) {
+ 
+                    public void actionPerformed(ActionEvent e) {
+                        BoardingSchoolManagement.getInstance().close();
+                    }
+            }));
+
+            ActionListener actionListener = new ActionListener() {
+                public void actionPerformed(ActionEvent e) {
+                    GUIManager.getInstance().showMainFrame();
+                }
+            };
+
+            tray.setLeftDoubleClickListener(actionListener);
+
+            try {
+                systemTray.add(trayIcon);
+            } catch (AWTException e) {
+                System.err.println("TrayIcon could not be added.");
+            }
+
+        } else {
+
+            //  System Tray is not supported
+
+        }
+
+    }
+
     public void setPathPanelPosition(PathPanelPositions position) {
         if(position != pathPanelPosition) {
 
@@ -297,16 +363,7 @@ public class GUIManager {
         changeView(view, false);
     }
 
-    /**
-     * Changes the shown view
-     * @param view New View
-     * @param saveOldView Whether the old view will be saved or not
-     */
-    public static void changeView(CWView view, boolean saveOldView) {
-//        changeView(comp, saveOldView, true);
-        changeView2(view, saveOldView);
-    }
-
+    
     /**
      * Reloads the pathview
      */
@@ -314,7 +371,12 @@ public class GUIManager {
         pathPanel.reloadPath(lastViews, shownView);
     }
 
-    private static void changeView2(CWView view, boolean saveOldView) {
+    /**
+     * Changes the shown view
+     * @param view New View
+     * @param saveOldView Whether the old view will be saved or not
+     */
+    public static void changeView(CWView view, boolean saveOldView) {
         GUIManager gM = getInstance();
 
         // Prüfen ob es nicht leer ist.. zb beim 1. Mal
@@ -361,55 +423,6 @@ public class GUIManager {
 
         gM.reloadPath();
     }
-
-//    /**
-//     * Changes the shown component
-//     * @param comp New View
-//     * @param saveOldView Whether the old view will be saved or not
-//     * @param deleteOldOnes Whether the old ones will be deleted or not
-//     */
-//    private static void changeView(JComponent comp, boolean saveOldView, boolean deleteOldOnes) {
-//        GUIManager gM = getInstance();
-//
-//        // Wenn die alten nicht gespeichert werden sollen, diese löschen
-//        if (!saveOldView && deleteOldOnes) {
-//            removeAllLastViews();
-//        }
-//
-//        // Nur ändern, wenn es nicht schon angezeigt wird
-//        if (gM.shownView == null || !gM.shownView.equals(comp)) {
-//            // Entfernen der alten Komponente
-//
-//            if (gM.shownView != null && gM.shownComponentScrollPane != null) {
-//                gM.componentView.remove(gM.shownComponentScrollPane);
-////                gM.splitPane.remove(gM.shownComponentScrollPane);
-//            }
-//
-//            // Save old component?
-//            if (saveOldView/* && gM.shownComponent != null*/) {
-//                gM.lastViews.push(gM.shownView);
-//            } else {
-//                // TODO manage Views in GUIManager
-////                removeAllLastViews();
-//            }
-//
-//            // Zuweisen der neuen Komponente
-//            gM.shownView = comp;
-//
-//            // Rahmen geben
-//            gM.shownView.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 1, new Color(178, 187, 200)));
-//
-//            // Neue Komponente einfügen
-//            gM.componentView.add(gM.shownComponentScrollPane = createScrollPane(gM.shownView), BorderLayout.CENTER);
-////            gM.splitPane.add(gM.shownComponentScrollPane = createScrollPane(gM.shownComponent), JSplitPane.RIGHT);
-//
-////            gM.pathPanel.reloadPath(gM.lastComponents, gM.shownComponent);
-//
-//            // Neu zeichnen
-//            gM.componentView.validate();
-//            gM.componentView.repaint();
-//        }
-//    }
 
     /**
      * Shows the last compontent
@@ -512,6 +525,22 @@ public class GUIManager {
 
     public final JFrame getMainFrame() {
         return application.getMainFrame();
+    }
+
+    public void showMainFrame() {
+        frame.setVisible(true);
+        if(frame.getState() == Frame.ICONIFIED) {
+            frame.setState(Frame.NORMAL);
+        }
+        frame.toFront();
+    }
+
+    public void hideMainFrameToTray() {
+        frame.setVisible(false);
+    }
+
+    public CWTray getTray() {
+        return tray;
     }
 
 }

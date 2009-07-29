@@ -296,19 +296,33 @@ public class BoardingSchoolManagement {
         }
 
         // Check if the user really wants to close the application
-        int opt = JOptionPane.showConfirmDialog(
+        String[] options = {
+            "Minimieren", "Beenden", "Abbrechen"
+        };
+
+        int opt = JOptionPane.showOptionDialog(
                 GUIManager.getInstance().getMainFrame(),
-                "Internatsverwaltung wirklich beenden?",
+                "Wollen Sie die Internatsverwaltung wirklich beenden?",
                 "Beenden",
-                JOptionPane.YES_NO_OPTION,
-                JOptionPane.QUESTION_MESSAGE
+                JOptionPane.DEFAULT_OPTION,
+                JOptionPane.WARNING_MESSAGE,
+                null,
+                options,
+                "Beenden"
         );
 
         // If he doesn't want, do nothing
-        if(opt != JOptionPane.OK_OPTION) {
+        if(opt == 0) {
+            // Hide the application
+            GUIManager.getInstance().hideMainFrameToTray();
+            GUIManager.getInstance().getTray().showDisplayInfoMessage("Minimiert", "Die Internatsverwaltung wurde minimiert.");
+            return;
+        } else if(opt == 1) {
+            // Do nothing and continue closing the application
+        } else {
             return;
         }
-
+        
         // Fire the Listeners
         applicationListenerSupport.fireApplicationClosing();
 
