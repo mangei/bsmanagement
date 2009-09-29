@@ -19,7 +19,7 @@ public class ButtonEvent{
     public static final int YES_BUTTON          = 7;
     public static final int NO_BUTTON           = 8;
     public static final int DELETE_BUTTON       = 9;
-    public static final int CUSTOM_BUTTON          = 10;
+    public static final int CUSTOM_BUTTON       = 10;
     
     private int type;
     private String customButtonText;

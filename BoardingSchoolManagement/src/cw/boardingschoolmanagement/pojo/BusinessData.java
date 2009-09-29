@@ -4,8 +4,11 @@ import com.jgoodies.binding.beans.Model;
 
 /**
  * @author ManuelG
+ * @version 1.0
+ *
+ * Speicherung der Daten der Unternehmensdaten
  */
-public class BusinessData extends Model {
+public class BusinessData extends Model{
 
     private String name;
     private String postOfficeNumber;

@@ -29,18 +29,18 @@ public class HibernateUtil {
 //            setProperty("hibernate.connection.password", "").
 
             // MYSQL
-//            setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect").
-//            setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver").
-//            setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/internat").
-//            setProperty("hibernate.connection.username", "scott").
-//            setProperty("hibernate.connection.password", "tiger").
+            setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect").
+            setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver").
+            setProperty("hibernate.connection.url", "jdbc:mysql://localhost:3306/internat").
+            setProperty("hibernate.connection.username", "root").
+            setProperty("hibernate.connection.password", "").
 
             // H2
-            setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect").
-            setProperty("hibernate.connection.driver_class", "org.h2.Driver").
-            setProperty("hibernate.connection.url", "jdbc:h2:internat").
-            setProperty("hibernate.connection.username", "sa").
-            setProperty("hibernate.connection.password", "").
+//            setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect").
+//            setProperty("hibernate.connection.driver_class", "org.h2.Driver").
+//            setProperty("hibernate.connection.url", "jdbc:h2:internat").
+//            setProperty("hibernate.connection.username", "sa").
+//            setProperty("hibernate.connection.password", "").
 
 //            setProperty("hibernate.connection.pool_size", "1").
             setProperty("hibernate.connection.autocommit", "true").

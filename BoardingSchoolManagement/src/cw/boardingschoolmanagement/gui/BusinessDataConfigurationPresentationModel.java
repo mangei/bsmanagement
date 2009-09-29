@@ -11,6 +11,8 @@ import java.util.List;
 /**
  *
  * @author ManuelG
+ * @version 1.0
+ *
  */
 public class BusinessDataConfigurationPresentationModel
     extends PresentationModel<BusinessData>
@@ -20,6 +22,12 @@ public class BusinessDataConfigurationPresentationModel
     private ConfigurationPresentationModel configurationPresentationModel;
     private CWHeaderInfo headerInfo;
     private SaveListener saveListener;
+
+    /**
+     *
+     * @param businessData
+     * @param configurationPresentationModel
+     */
 
     public BusinessDataConfigurationPresentationModel(BusinessData businessData, ConfigurationPresentationModel configurationPresentationModel) {
         super(businessData);

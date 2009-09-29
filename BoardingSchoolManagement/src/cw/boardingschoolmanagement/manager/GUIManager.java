@@ -148,7 +148,7 @@ public class GUIManager {
         // GlassPane for the loading screen
         frame.setGlassPane(glassPane = new CWLoadingGlass(frame.getRootPane(), false));
 
-        // Um den richtigen Mauszeiger anzuzeigen, da beim Look'n&Feel nach dem 
+        // Um den richtigen Mauszeiger anzuzeigen, da beim Look'n&Feel nach dem
         // ändern der Größe ein falscher Cursor angezeigt wird.
         frame.addComponentListener(new ComponentAdapter() {
 
@@ -287,7 +287,7 @@ public class GUIManager {
             Image image = CWUtils.loadImage("cw/boardingschoolmanagement/images/building.png");
             trayIcon = new TrayIcon(image, "Internatsverwaltung");
             trayIcon.setImageAutoSize(true);
-            
+
             tray = new CWTray(trayIcon);
 
             tray.getPopupMenu().add(new JMenuItem(new AbstractAction(
@@ -302,7 +302,7 @@ public class GUIManager {
             tray.getPopupMenu().add(new JMenuItem(new AbstractAction(
                     "Beenden",
                     CWUtils.loadIcon("cw/boardingschoolmanagement/images/exit.png")) {
- 
+
                     public void actionPerformed(ActionEvent e) {
                         BoardingSchoolManagement.getInstance().close();
                     }
@@ -363,7 +363,7 @@ public class GUIManager {
         changeView(view, false);
     }
 
-    
+
     /**
      * Reloads the pathview
      */
@@ -402,7 +402,7 @@ public class GUIManager {
 
                 // Dispose the current view
                 gM.shownView.dispose();
-                
+
 //              not necessary
 //                gM.lastComponents.clear();
             }

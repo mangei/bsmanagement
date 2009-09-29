@@ -34,7 +34,10 @@ import org.jvnet.substance.utils.SubstanceConstants;
 
 /**
  * BoardingSchoolManagement - Mainprogramm. <br />
- * (Implementiert als Singleton)
+ * Hauptklasse des Programmes welches das Programm systematisch aufbaut, die
+ * grafischen Elemente initalisiert, einzelne Module initalisiert und die
+ * Konfiguration läd.
+ * Implementiert als Singleton
  * 
  * @author Manuel Geier (CreativeWorkers)
  */
@@ -51,7 +54,8 @@ public class BoardingSchoolManagement {
     }
 
     /**
-     * Get an instance of the BoardingSchoolManagement
+     * Liefert die Instanz der Klasse BoardingShcoolManagement zurück, bzw.
+     * initalisiert sie.
      * @return BoardingSchoolManagement
      */
     public static BoardingSchoolManagement getInstance() {
@@ -61,9 +65,17 @@ public class BoardingSchoolManagement {
         return instance;
     }
 
+    /**
+     * Constructor
+     */
     private BoardingSchoolManagement() {
     }
 
+    /**
+     * Startet die Application, läd das look'n Feel, die Konfiguration , läd und initalisiert die Module
+     * , läd und initalisiert die grafische Oberfläche, stellt die Verbindung zur Datenbank her.
+     *
+     */
     private void start() {
         // Start the application, if it hadn't been started yet
         if(applicationStarted == true) {
@@ -101,7 +113,6 @@ public class BoardingSchoolManagement {
 
 //            UIManager.setLookAndFeel(new SyntheticaStandardLookAndFeel());
 //            UIManager.setLookAndFeel(new SyntheticaSimple2DLookAndFeel());
-
 //            UIManager.setLookAndFeel(new MetalLookAndFeel());
             
             UIManager.setLookAndFeel(new SubstanceOfficeSilver2007LookAndFeel());
@@ -204,6 +215,11 @@ public class BoardingSchoolManagement {
         }
     }
 
+/**
+ * Läd die grundlegenten Komponenten der GUI(Sidebar mit Startseite,
+ * Topmenü mit den Mennüpunkten: Beenden, Konfiguration.
+ *
+ */
     private void initGUI() {
         CWMenuPanel sideMenu = MenuManager.getSideMenu();
 
@@ -273,21 +289,22 @@ public class BoardingSchoolManagement {
                 GUIManager.setLoadingScreenVisible(false);
             }
         });
-
-        // Add an About-Button to the HeaderMenu
-        GUIManager.getInstance().getHeader().addHeaderMenuItem(new AbstractAction(
-                "Über",
-                CWUtils.loadIcon("cw/boardingschoolmanagement/images/about.png")
-                ) {
-
-            public void actionPerformed(ActionEvent e) {
-                BoardingSchoolManagement.getInstance().close();
-            }
-        });
+//
+//        // Add an About-Button to the HeaderMenu
+//        GUIManager.getInstance().getHeader().addHeaderMenuItem(new AbstractAction(
+//                "Über",
+//                CWUtils.loadIcon("cw/boardingschoolmanagement/images/about.png")
+//                ) {
+//
+//            public void actionPerformed(ActionEvent e) {
+//                BoardingSchoolManagement.getInstance().close();
+//            }
+//        });
     }
 
     /**
-     * Close the application
+     * Schießt die Anwendung, speichert die Einstellung und trennt die
+     * Datenbankverbindung.
      */
     public void close() {
         // Close only, if the application has started
@@ -339,10 +356,17 @@ public class BoardingSchoolManagement {
         System.exit(0);
     }
 
+    /**
+     * Entfernen der ApplicationListener
+     * @param applicationListener Aktionlistern eines bestimmten Swing-Objekt
+     */
     public void removeApplicationListener(ApplicationListener applicationListener) {
         applicationListenerSupport.removeApplicationListener(applicationListener);
     }
-
+    /**
+     * Hinzufügen der ApplicationListener
+     * @param applicationListener Aktionlistern eines bestimmten Swing-Objekt
+     */
     public void addApplicationListener(ApplicationListener applicationListener) {
         applicationListenerSupport.addApplicationListener(applicationListener);
     }

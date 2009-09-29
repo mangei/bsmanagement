@@ -34,9 +34,9 @@ public class CascadeListenerSupport {
     }
 
     public void fireCascadeDelete(CascadeEvent evt) {
-        for(int i=0, l=listeners.size(); i<l; i++) {
-            (listeners.get(i)).deleteAction(evt);
-        }
+//        for(int i=0, l=listeners.size(); i<l; i++) {
+//            (listeners.get(i)).deleteAction(evt);
+//        }
     }
 
 //    public void fireCascadeUpdate(CascadeEvent evt) {

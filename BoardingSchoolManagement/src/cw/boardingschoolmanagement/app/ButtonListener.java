@@ -1,5 +1,7 @@
 package cw.boardingschoolmanagement.app;
 
+import java.util.EventListener;
+
 /**
  * This is used, when a button on an panel or something
  * else is pressed and you want to inform others about this.
@@ -9,6 +11,6 @@ package cw.boardingschoolmanagement.app;
  *
  * @author Manuel Geier (CreativeWorkers)
  */
-public interface ButtonListener extends java.util.EventListener {
+public interface ButtonListener extends EventListener {
     void buttonPressed(ButtonEvent evt);
 }
