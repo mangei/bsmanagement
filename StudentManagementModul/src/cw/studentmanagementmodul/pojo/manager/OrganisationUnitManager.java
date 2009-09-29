@@ -4,6 +4,7 @@ import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
 import cw.studentmanagementmodul.pojo.OrganisationUnit;
+import cw.studentmanagementmodul.pojo.StudentClass;
 import java.util.logging.Logger;
 
 /**
@@ -46,4 +47,33 @@ public class OrganisationUnitManager extends AbstractPOJOManager<OrganisationUni
         return HibernateUtil.getEntityManager().createQuery("FROM OrganisationUnit WHERE parent=" + organisationUnit.getId()).getResultList();
 
     }
+
+    @Override
+    public void delete(OrganisationUnit o) {
+
+        System.out.println("Delete OrganisationUnit");
+
+        // Löschen der darunterliegenden Bereiche
+        List<OrganisationUnit> children = o.getChildren();
+        for(int i=0, l=children.size(); i<l; i++) {
+            delete(children.get(i));
+        }
+
+        // Löschen der darin befindlichen Klassen
+        List<StudentClass> studentClasses = o.getStudentClasses();
+        for(int i=0, l=studentClasses.size(); i<l; i++) {
+            StudentClassManager.getInstance().delete(studentClasses.get(i));
+        }
+
+        // Den Bereich selbst löschen
+        super.delete(o);
+    }
+
+    @Override
+    public void delete(List<OrganisationUnit> list) {
+        for(OrganisationUnit o: list) {
+            delete(o);
+        }
+    }
+
 }

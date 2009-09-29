@@ -37,6 +37,7 @@ implements Modul
             }
         }), "school");
 
+        // Wenn ein Kunde gelöscht wird, wird der Student mitgelöscht
         CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
                 Customer customer = (Customer) evt.getSource();
@@ -47,6 +48,8 @@ implements Modul
             }
         });
 
+        // Wenn eine Klasse gelöscht wird, wird die Klasse der Studenten auf null gesetzt
+        // und der Student inaktiv gesetzt
         StudentClassManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
                 StudentClass studentClass = (StudentClass) evt.getSource();
