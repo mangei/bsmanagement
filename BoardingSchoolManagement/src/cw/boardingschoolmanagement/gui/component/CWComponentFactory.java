@@ -210,7 +210,7 @@ public class CWComponentFactory {
     }
 
     public static CWTable createTable(String emptyText) {
-        return createTable(null, emptyText);
+        return createTable(null, emptyText, null);
     }
 
     public static CWTable createTable(TableModel tableModel, final String emptyText) {

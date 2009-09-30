@@ -23,27 +23,33 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 /**
+ *Bildschirmmaske des Konfigurationsfensters
  *
  * @author ManuelG
  */
 public class ConfigurationPresentationModel extends PresentationModel
 {
-
     private CWHeaderInfo headerInfo;
     private List<ConfigurationExtentionPoint> configurationExtentions;
     private ButtonListenerSupport support;
     private Action saveAction;
     private Action cancelAction;
     private PropertyChangeListener actionButtonListener;
-
+/**
+ *Konstruktor
+ */
     public ConfigurationPresentationModel() {
         super(new Model() {});
         initModels();
         initEventHandling();
     }
 
+    /**
+     * Baut die grafische Oberfläche des Einstellungsfesterns auf
+     */
     public void initModels() {
-        saveAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/boardingschoolmanagement/images/save.png"));
+        // Buttons erzueugt, WIE???
+        saveAction = new SaveAction("Speicher", CWUtils.loadIcon("cw/boardingschoolmanagement/images/save.png"));
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/cancel.png"));
 
         support = new ButtonListenerSupport();

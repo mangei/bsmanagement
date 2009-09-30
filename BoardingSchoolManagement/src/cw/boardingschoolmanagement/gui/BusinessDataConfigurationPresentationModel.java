@@ -24,8 +24,9 @@ public class BusinessDataConfigurationPresentationModel
     private SaveListener saveListener;
 
     /**
+     *Konstruktor
      *
-     * @param businessData
+     * @param businessData POJO
      * @param configurationPresentationModel
      */
 

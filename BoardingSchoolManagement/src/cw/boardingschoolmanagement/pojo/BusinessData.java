@@ -6,7 +6,7 @@ import com.jgoodies.binding.beans.Model;
  * @author ManuelG
  * @version 1.0
  *
- * Speicherung der Daten der Unternehmensdaten
+ * POJO zur Speicherung der Unternehmensdaten
  */
 public class BusinessData extends Model{
 

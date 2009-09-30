@@ -28,6 +28,7 @@ public class CWButton extends JButton {
     }
 
     CWButton() {
+        super();
     }
 
     @Override
