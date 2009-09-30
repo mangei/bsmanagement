@@ -26,7 +26,11 @@ public abstract class AbstractPOJOManager<T>{
         cascadeListenerSupport.addCascadeListener(listener);
     }
 
-    public void save(T obj) {
+    public boolean save(T obj) {
+        if(obj == null) {
+            return false;
+        }
+
         try {
             EntityManager em = HibernateUtil.getEntityManager();
             if (!em.contains(obj)) {
@@ -35,16 +39,20 @@ public abstract class AbstractPOJOManager<T>{
             em.getTransaction().begin();
             em.getTransaction().commit();
         } catch (Exception e) {
+            e.printStackTrace();
+
+            // Something went wrong
+            return false;
         }
+
+        // Everythink worked
+        return true;
     }
 
-    public void save(List<T> list) {
-        for(int i=0, l=list.size(); i<l; i++) {
-            save(list.get(i));
+    public boolean delete(T obj) {
+        if(obj == null) {
+            return false;
         }
-    }
-
-    public void delete(T obj) {
 
         cascadeListenerSupport.fireCascadeDelete(obj);
 
@@ -56,17 +64,14 @@ public abstract class AbstractPOJOManager<T>{
                 em.getTransaction().commit();
             }
         } catch (Exception e) {
-        }
-    }
+            e.printStackTrace();
 
-    public void delete(List<T> list) {
-        if(list == null) {
-            return;
+            // Something went wrong
+            return false;
         }
 
-        for(int i=0, l=list.size(); i<l; i++) {
-            delete(list.get(i));
-        }
+        // Everything worked
+        return true;
     }
 
     public abstract List<T> getAll();
