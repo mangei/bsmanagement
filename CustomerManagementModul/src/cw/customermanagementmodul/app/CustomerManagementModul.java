@@ -141,7 +141,11 @@ public class CustomerManagementModul
             public void deleteAction(CascadeEvent evt) {
                 Customer customer = (Customer) evt.getSource();
                 List<Posting> postings = PostingManager.getInstance().getAll(customer);
-                PostingManager.getInstance().delete(postings);
+                
+                for(Posting posting : postings) {
+                    PostingManager.getInstance().delete(posting);
+                }
+                
             }
         });
 
