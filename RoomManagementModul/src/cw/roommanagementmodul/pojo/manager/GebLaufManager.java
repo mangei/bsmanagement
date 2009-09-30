@@ -43,7 +43,7 @@ public class GebLaufManager extends AbstractPOJOManager<GebLauf> {
     }
 
     @Override
-    public void delete(GebLauf gebLauf) {
+    public boolean delete(GebLauf gebLauf) {
 
         BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
         List<BuchungsLaufZuordnung> list = blzManager.getBuchungsLaufZuordnung(gebLauf);
@@ -51,15 +51,7 @@ public class GebLaufManager extends AbstractPOJOManager<GebLauf> {
             list.get(i).setGebLauf(null);
         }
 
-        try {
-            EntityManager em = HibernateUtil.getEntityManager();
-            if (em.contains(gebLauf)) {
-                em.getTransaction().begin();
-                em.remove(gebLauf);
-                em.getTransaction().commit();
-            }
-        } catch (Exception e) {
-        }
+        return super.delete(gebLauf);
     }
 
     @Override

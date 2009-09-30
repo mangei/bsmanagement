@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
@@ -35,8 +31,9 @@ public class GebuehrZuordnungManager extends AbstractPOJOManager<GebuehrZuordnun
 
     public void removeGebuehrZuordnung(Bewohner b) {
         List<GebuehrZuordnung> l = this.getGebuehrZuordnung(b);
-        super.delete(l);
-
+        for(GebuehrZuordnung gz: l) {
+            super.delete(gz);
+        }
     }
 
     public void removeGebuehrZuordnung(Gebuehr g) {

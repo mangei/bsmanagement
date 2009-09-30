@@ -32,22 +32,6 @@ public class GebuehrenManager extends AbstractPOJOManager<Gebuehr> {
     }
 
     @Override
-    public void delete(Gebuehr obj) {
-
-        cascadeListenerSupport.fireCascadeDelete(obj);
-
-
-        EntityManager em = HibernateUtil.getEntityManager();
-        if (em.contains(obj)) {
-
-            em.getTransaction().begin();
-            em.remove(obj);
-            em.getTransaction().commit();
-        }
-
-    }
-
-    @Override
     public List<Gebuehr> getAll() {
         return HibernateUtil.getEntityManager().createQuery("FROM Gebuehr").getResultList();
     }

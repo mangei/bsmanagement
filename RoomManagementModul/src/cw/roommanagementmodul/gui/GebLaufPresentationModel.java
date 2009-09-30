@@ -256,7 +256,9 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
                 if (betriebsart == false) {
                     gebLaufManager.delete(stornoGebLauf);
-                    blzManager.delete(blzList);
+                    for(BuchungsLaufZuordnung blz: blzList) {
+                        blzManager.delete(blz);
+                    }
                     gebLaufList.setList(gebLaufManager.getAllOrdered());
 
                 }
