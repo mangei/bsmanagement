@@ -49,9 +49,7 @@ public class OrganisationUnitManager extends AbstractPOJOManager<OrganisationUni
     }
 
     @Override
-    public void delete(OrganisationUnit o) {
-
-        System.out.println("Delete OrganisationUnit");
+    public boolean delete(OrganisationUnit o) {
 
         // Löschen der darunterliegenden Bereiche
         List<OrganisationUnit> children = o.getChildren();
@@ -66,14 +64,7 @@ public class OrganisationUnitManager extends AbstractPOJOManager<OrganisationUni
         }
 
         // Den Bereich selbst löschen
-        super.delete(o);
-    }
-
-    @Override
-    public void delete(List<OrganisationUnit> list) {
-        for(OrganisationUnit o: list) {
-            delete(o);
-        }
+        return super.delete(o);
     }
 
 }
