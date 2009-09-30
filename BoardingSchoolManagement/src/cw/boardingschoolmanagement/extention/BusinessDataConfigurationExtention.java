@@ -11,6 +11,8 @@ import java.util.List;
 import javax.swing.Icon;
 
 /**
+ *  
+ *
  *
  * @author ManuelG
  */
@@ -20,10 +22,18 @@ public class BusinessDataConfigurationExtention implements ConfigurationExtentio
     private BusinessDataConfigurationPresentationModel model;
     private BusinessDataConfigurationView view;
 
+
+    /**
+     * Läd die Unternehmensdaten aus der Configdatei und speichert diese in
+     * das zuständige POJO(BusinessData).
+     *
+     * @param configurationModel
+     */
     public void initPresentationModel(ConfigurationPresentationModel configurationModel) {
         businessData = new BusinessData();
 
         businessData.setName(               PropertiesManager.getProperty("configuration.businessData.name",""));
+        businessData.setStreet(             PropertiesManager.getProperty("configuration.businessData.street",""));
         businessData.setPostOfficeNumber(   PropertiesManager.getProperty("configuration.businessData.postOfficeNumber",""));
         businessData.setCity(               PropertiesManager.getProperty("configuration.businessData.city",""));
         businessData.setLandlinephone(      PropertiesManager.getProperty("configuration.businessData.landlinephone",""));
@@ -44,10 +54,15 @@ public class BusinessDataConfigurationExtention implements ConfigurationExtentio
         return model;
     }
 
+    /**
+     *  Speichert die Unternehmensdaten des BusinessData-POJOs ind die Config-Datei
+     *
+     */
     public void save() {
         model.save();
 
         PropertiesManager.setProperty("configuration.businessData.name",              businessData.getName());
+        PropertiesManager.setProperty("configuration.businessData.street",            businessData.getStreet());
         PropertiesManager.setProperty("configuration.businessData.postOfficeNumber",  businessData.getPostOfficeNumber());
         PropertiesManager.setProperty("configuration.businessData.city",              businessData.getCity());
         PropertiesManager.setProperty("configuration.businessData.landlinephone",     businessData.getLandlinephone());
