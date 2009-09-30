@@ -284,7 +284,10 @@ public class PostingRunsPresentationModel
             postingRunList.getList().remove(run);
             postingRunList.fireIntervalRemoved(0, postingRunList.getSize());
 
-            PostingRunManager.getInstance().save(postingRunList.getList());
+            for(PostingRun pr: postingRunList.getList()) {
+                PostingRunManager.getInstance().save(pr);
+            }
+
         }
     }
 

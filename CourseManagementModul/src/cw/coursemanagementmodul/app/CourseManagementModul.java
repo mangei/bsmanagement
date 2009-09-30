@@ -87,7 +87,10 @@ public class CourseManagementModul implements Modul{
             public void deleteAction(CascadeEvent evt) {
                 Customer customer = new Customer();// = (Customer) evt.getObject();
                 List<CourseParticipant> courseParticipants = CourseParticipantManager.getInstance().getAll(customer);
-                CourseParticipantManager.getInstance().delete(courseParticipants);
+
+                for(CourseParticipant cp: courseParticipants) {
+                    CourseParticipantManager.getInstance().delete(cp);
+                }
             }
         });
 
