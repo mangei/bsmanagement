@@ -217,7 +217,7 @@ public class BoardingSchoolManagement {
 
 /**
  * Läd die grundlegenten Komponenten der GUI(Sidebar mit Startseite,
- * Topmenü mit den Mennüpunkten: Beenden, Konfiguration.
+ * Topmenü mit den Mennüpunkten: Beenden, Konfiguration).
  *
  */
     private void initGUI() {

@@ -12,7 +12,6 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;

@@ -37,7 +37,7 @@ public class CWMenuPanel
     public CWMenuPanel() {
         categories = new ArrayList<Category>();
         jListList = new ArrayList();
-        
+
         setOpaque(false);
         setFocusable(false);
 
@@ -61,15 +61,15 @@ public class CWMenuPanel
 //                list.removeFocusListener(focusListener);
 //            }
 //        });
-        setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1,new Color(178,187,200)));
-        
+        setBorder(BorderFactory.createMatteBorder(1, 1, 0, 1, new Color(178, 187, 200)));
+
         setSelectionModel(new DefaultListSelectionModel() {
 
             @Override
             public void setSelectionInterval(int index0, int index1) {
 
                 Object o = jListList.get(index0);
-                if(o instanceof Category) {
+                if (o instanceof Category) {
                 } else {
                     super.setSelectionInterval(index0, index1);
                 }
@@ -81,13 +81,13 @@ public class CWMenuPanel
 
             public void valueChanged(ListSelectionEvent e) {
                 // If the selection is empty, set to the last item
-                if(getSelectionModel().isSelectionEmpty()) {
+                if (getSelectionModel().isSelectionEmpty()) {
                     getSelectionModel().setSelectionInterval(e.getLastIndex(), e.getLastIndex());
                 } else {
                     int index = getSelectedIndex();
-                    if(index != -1) {
+                    if (index != -1) {
                         Item item = (Item) jListList.get(index);
-                        if(!item.equals(currentItem)) {
+                        if (!item.equals(currentItem)) {
                             currentItem = item;
                             item.getItem().doClick();
                         }
@@ -144,11 +144,11 @@ public class CWMenuPanel
      */
     public CWMenuPanel addItem(AbstractButton item, String category_key, int priority, boolean startpage) {
         Category c = getCategoryByKey(category_key);
-        if(c != null) {
+        if (c != null) {
             Item item2 = new Item(item, priority);
 
             // If the item wants to be the startpage and there is no startpage than it is the startpage
-            if(startpage && startItem == null) {
+            if (startpage && startItem == null) {
                 startItem = item2;
             }
             c.getItems().add(item2);
@@ -182,7 +182,7 @@ public class CWMenuPanel
     }
 
     public void loadStartItem() {
-        if(startItem != null) {
+        if (startItem != null) {
             setSelectedIndex(startItem.getIndex());
             startItem.getItem().doClick();
         }
@@ -196,8 +196,8 @@ public class CWMenuPanel
     private Category getCategoryByKey(String key) {
         Category cat = null;
 
-        for(Category c : categories) {
-            if(c.getKey().equals(key)) {
+        for (Category c : categories) {
+            if (c.getKey().equals(key)) {
                 cat = c;
                 break;
             }
@@ -209,10 +209,13 @@ public class CWMenuPanel
     private void positionElements() {
         jListList.clear();
 
-        Category c; List<Item> itemlist; Item item; int index = 0;
+        Category c;
+        List<Item> itemlist;
+        Item item;
+        int index = 0;
 
         Collections.sort(categories);
-        for(int i=0,l=categories.size(); i<l; i++) {
+        for (int i = 0, l = categories.size(); i < l; i++) {
             c = categories.get(i);
             c.setIndex(index++);
 
@@ -220,49 +223,47 @@ public class CWMenuPanel
 
             Collections.sort(c.getItems());
             itemlist = c.getItems();
-            for(int j=0,k=itemlist.size(); j<k; j++) {
+            for (int j = 0, k = itemlist.size(); j < k; j++) {
                 item = itemlist.get(j);
                 item.setIndex(index++);
-                
+
                 jListList.add(item);
             }
         }
 
         setListData(jListList.toArray());
     }
-
-
-    private static final Color LIGHT_VIOLET_COLOR = new Color(201,208,218);
-    private static final Color BLACK_LOW_OPACITY_COLOR =new Color(0, 0, 0, 20);
+    private static final Color LIGHT_VIOLET_COLOR = new Color(201, 208, 218);
+    private static final Color BLACK_LOW_OPACITY_COLOR = new Color(0, 0, 0, 20);
 
     @Override
     protected void paintComponent(Graphics g) {
 //        Rectangle rect = new Rectangle(0, 0, getWidth(), getHeight());
 //        JideSwingUtilities.fillGradient((Graphics2D) g, rect, new Color(201,208,218).getRGB());
-        
-        
+
+
         // Eine Farbe
         g.setColor(LIGHT_VIOLET_COLOR);
         g.fillRect(0, 0, getWidth(), getHeight());
-        
+
         // Verlauf
 //        JideSwingUtilities.fillGradient((Graphics2D) g, rect, new Color(201,208,218), new Color(168, 177, 189), true);
-        
-        
+
+
 //        // Top Line
 //        g.setColor(new Color(178,187,200));
 //        g.drawLine(0, 0, getWidth(), 0);
         setOpaque(false);
         super.paintComponent(g);
 
-        if(!isEnabled()) {
+        if (!isEnabled()) {
             g.setColor(BLACK_LOW_OPACITY_COLOR);
             g.fillRect(0, 0, getWidth(), getHeight());
 
             int abs = 5;
 
-            for(int i=abs, h=getHeight(); i<h; i++) {
-                if(i%abs == 0) {
+            for (int i = abs, h = getHeight(); i < h; i++) {
+                if (i % abs == 0) {
                     g.drawLine(0, i, h, i);
                 }
             }
@@ -270,7 +271,7 @@ public class CWMenuPanel
     }
 
     private class Renderer
-        implements ListCellRenderer {
+            implements ListCellRenderer {
 
         private JLabel lCategory;
         private JLabel lSelectedItem;
@@ -312,7 +313,7 @@ public class CWMenuPanel
             lSelectedItem.setFont(getFont().deriveFont(Font.PLAIN));
             lSelectedItem.setBorder(EMPTYBORDER1);
             lSelectedItem.setOpaque(false);
-            
+
             lNotSelectedItem = new JLabel();
             lNotSelectedItem.setFont(getFont().deriveFont(Font.PLAIN));
             lNotSelectedItem.setBorder(EMPTYBORDER1);
@@ -325,17 +326,17 @@ public class CWMenuPanel
             lCategory.setBorder(EMPTYBORDER2);
             lCategory.setBackground(COLOR4);
         }
-        
+
         public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
             String str = (value == null) ? "" : value.toString();
-            
-            if(value instanceof Category) {
+
+            if (value instanceof Category) {
                 lCategory.setText(str.toUpperCase());
                 return lCategory;
             } else {
                 Item item = (Item) value;
-                
-                if(isSelected) {
+
+                if (isSelected) {
                     lSelectedItem.setText(str);
                     lSelectedItem.setIcon(item.getItem().getIcon());
                     return lSelectedItem;
@@ -396,9 +397,9 @@ public class CWMenuPanel
 
         public int compareTo(Object o) {
             Category c2 = (Category) o;
-            if(this.priority < c2.priority) {
+            if (this.priority < c2.priority) {
                 return 1;
-            } else if(this.priority > c2.priority) {
+            } else if (this.priority > c2.priority) {
                 return -1;
             } else {
                 return 0;
@@ -449,9 +450,9 @@ public class CWMenuPanel
 
         public int compareTo(Object o) {
             Item i2 = (Item) o;
-            if(this.priority < i2.priority) {
+            if (this.priority < i2.priority) {
                 return 1;
-            } else if(this.priority > i2.priority) {
+            } else if (this.priority > i2.priority) {
                 return -1;
             } else {
                 return 0;
@@ -465,14 +466,14 @@ public class CWMenuPanel
     }
 
     public void lock() {
-        if(isEnabled()) {
+        if (isEnabled()) {
             this.setEnabled(false);
             this.repaint();
         }
     }
 
     public void unlock() {
-        if(!isEnabled()) {
+        if (!isEnabled()) {
             this.setEnabled(true);
             this.repaint();
         }

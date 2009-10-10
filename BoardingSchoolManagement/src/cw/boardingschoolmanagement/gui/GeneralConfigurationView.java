@@ -30,7 +30,10 @@ public class GeneralConfigurationView extends CWView
         buildView();
         initEventHandling();
     }
-
+/**
+ * Initalisiert die grafischen Elemente der Konfigurationsmaske
+ *
+ */
     public void initComponents() {
         cPathActive = CWComponentFactory.createCheckBox(model.getPathPanelActiveModel(), "Anzeigepfad aktivieren");
         cbPathPosition = CWComponentFactory.createComboBox(model.getPathPanelPositionSelection());
@@ -43,14 +46,16 @@ public class GeneralConfigurationView extends CWView
     public void initEventHandling() {
         cPathActive.addItemListener(cbPathActiveListener = new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
-                if(e.getStateChange() == ItemEvent.SELECTED) {
-                    cbPathPosition.setEnabled(true);
-                } else {
-                    cbPathPosition.setEnabled(false);
-                }
+//                if(e.getStateChange() == ItemEvent.SELECTED) {
+//                    cbPathPosition.setEnabled(true);
+//                } else {
+//                    cbPathPosition.setEnabled(false);
+//                }
+                cbPathPosition.setEnabled(cPathActive.isSelected());
             }
         });
         cbPathPosition.setEnabled(cPathActive.isSelected());
+        
     }
 
     private void buildView() {
