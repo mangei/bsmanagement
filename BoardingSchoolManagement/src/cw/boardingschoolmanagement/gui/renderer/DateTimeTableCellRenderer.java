@@ -52,7 +52,7 @@ public class DateTimeTableCellRenderer extends DefaultTableCellRenderer {
 //                builder.append(", ");
                 builder.append(gc.get(Calendar.DAY_OF_MONTH));
                 builder.append(".");
-                builder.append(CalendarUtil.getMonth(gc.get(Calendar.MONTH)));
+                builder.append(CalendarUtil.getMonth(gc.get(Calendar.MONTH)+1));
                 builder.append(".");
                 builder.append(gc.get(Calendar.YEAR));
                 if(!dateOnly) {
