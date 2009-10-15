@@ -49,9 +49,7 @@ import org.jdesktop.application.SingleFrameApplication;
 public class GUIManager {
 
     private static GUIManager instance;
-
     private static SingleFrameApplication application;
-
     /**
      * Eine Referenz auf die Haupt-Kompenente die angezeigt wird
      */
@@ -68,6 +66,7 @@ public class GUIManager {
     private CWTray tray;
 
     public enum PathPanelPositions {
+
         NORTH, SOUTH
     }
     private PathPanelPositions pathPanelPosition;
@@ -82,6 +81,7 @@ public class GUIManager {
     private GUIManager(String title) {
 
         application = new SingleFrameApplication() {
+
             @Override
             protected void startup() {
                 // Do nothing
@@ -231,11 +231,17 @@ public class GUIManager {
         viewPanel = new JPanel(new BorderLayout());
 
         // Init PathPanel
-        switch(pathPanelPosition) {
-            case NORTH: viewPanel.add(pathPanel, BorderLayout.NORTH); break;
-            case SOUTH: viewPanel.add(pathPanel, BorderLayout.SOUTH); break;
+        switch (pathPanelPosition) {
+            case NORTH:
+                viewPanel.add(pathPanel, BorderLayout.NORTH);
+                break;
+            case SOUTH:
+                viewPanel.add(pathPanel, BorderLayout.SOUTH);
+                break;
         }
-        viewPanel.setVisible(Boolean.parseBoolean(PropertiesManager.getProperty("configuration.general.pathPanelActive")));
+        //Setzt das Pfadpanel sichtbar(true) oder unsichtbar(false)
+        //True oder Flase wird aus der Configurationsdatei gelesen
+        pathPanel.setVisible(Boolean.parseBoolean(PropertiesManager.getProperty("configuration.general.pathPanelActive")));
 
         viewPanel.add(componentView, BorderLayout.CENTER);
 
@@ -294,21 +300,22 @@ public class GUIManager {
                     "Öffnen",
                     CWUtils.loadIcon("cw/boardingschoolmanagement/images/application_view_list.png")) {
 
-                    public void actionPerformed(ActionEvent e) {
-                        GUIManager.getInstance().showMainFrame();
-                    }
+                public void actionPerformed(ActionEvent e) {
+                    GUIManager.getInstance().showMainFrame();
+                }
             }));
 
             tray.getPopupMenu().add(new JMenuItem(new AbstractAction(
                     "Beenden",
                     CWUtils.loadIcon("cw/boardingschoolmanagement/images/exit.png")) {
 
-                    public void actionPerformed(ActionEvent e) {
-                        BoardingSchoolManagement.getInstance().close();
-                    }
+                public void actionPerformed(ActionEvent e) {
+                    BoardingSchoolManagement.getInstance().close();
+                }
             }));
 
             ActionListener actionListener = new ActionListener() {
+
                 public void actionPerformed(ActionEvent e) {
                     GUIManager.getInstance().showMainFrame();
                 }
@@ -325,24 +332,31 @@ public class GUIManager {
         } else {
 
             //  System Tray is not supported
-
         }
 
     }
 
     public void setPathPanelPosition(PathPanelPositions position) {
-        if(position != pathPanelPosition) {
+        if (position != pathPanelPosition) {
 
             // Remove from the old position
-            switch(pathPanelPosition) {
-                case NORTH: viewPanel.remove(pathPanel); break;
-                case SOUTH: viewPanel.remove(pathPanel); break;
+            switch (pathPanelPosition) {
+                case NORTH:
+                    viewPanel.remove(pathPanel);
+                    break;
+                case SOUTH:
+                    viewPanel.remove(pathPanel);
+                    break;
             }
 
             // Add to the new position
-            switch(position) {
-                case NORTH: viewPanel.add(pathPanel, BorderLayout.NORTH); break;
-                case SOUTH: viewPanel.add(pathPanel, BorderLayout.SOUTH); break;
+            switch (position) {
+                case NORTH:
+                    viewPanel.add(pathPanel, BorderLayout.NORTH);
+                    break;
+                case SOUTH:
+                    viewPanel.add(pathPanel, BorderLayout.SOUTH);
+                    break;
             }
 
             pathPanelPosition = position;
@@ -362,7 +376,6 @@ public class GUIManager {
     public static void changeView(CWView view) {
         changeView(view, false);
     }
-
 
     /**
      * Reloads the pathview
@@ -395,7 +408,7 @@ public class GUIManager {
                 // Die alten löschen, wenn sie nicht gespeichert werden sollen
 
                 // Pop the old ones and dispose them if they are Disposable
-                for(int i=0, l=gM.lastViews.size(); i<l; i++) {
+                for (int i = 0, l = gM.lastViews.size(); i < l; i++) {
                     CWView oldView = gM.lastViews.pop();
                     oldView.dispose();
                 }
@@ -477,7 +490,7 @@ public class GUIManager {
     public static void removeAllLastViews() {
         LinkedList<CWView> views = getInstance().lastViews;
 
-        for(CWView view : views) {
+        for (CWView view : views) {
             view.dispose();
         }
         System.gc();
@@ -504,21 +517,20 @@ public class GUIManager {
     public CWHeader getHeader() {
         return header;
     }
-
     private int lockCount = 0;
 
     public void lockMenu() {
-        if(lockCount == 0) {
+        if (lockCount == 0) {
             MenuManager.getSideMenu().lock();
         }
         lockCount++;
     }
 
     public void unlockMenu() {
-        if(lockCount == 1) {
+        if (lockCount == 1) {
             MenuManager.getSideMenu().unlock();
         }
-        if(lockCount > 0) {
+        if (lockCount > 0) {
             lockCount--;
         }
     }
@@ -529,7 +541,7 @@ public class GUIManager {
 
     public void showMainFrame() {
         frame.setVisible(true);
-        if(frame.getState() == Frame.ICONIFIED) {
+        if (frame.getState() == Frame.ICONIFIED) {
             frame.setState(Frame.NORMAL);
         }
         frame.toFront();
@@ -542,5 +554,4 @@ public class GUIManager {
     public CWTray getTray() {
         return tray;
     }
-
 }
