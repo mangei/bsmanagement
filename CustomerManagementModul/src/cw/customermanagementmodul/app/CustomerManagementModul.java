@@ -133,11 +133,8 @@ public class CustomerManagementModul
         GroupManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
                 Group group = (Group) evt.getSource();
-                System.out.println("delete group: " + group.getName());
                 List<Customer> customers = CustomerManager.getInstance().getAll(group);
-                System.out.println("count customers of group ('"+group.getName()+"'): " + customers.size());
                 for(int i=0, l=customers.size(); i<l; i++) {
-                    System.out.println("customer: " + customers.get(i).getForename());
                     customers.get(i).getGroups().remove(group);
                 }
             }

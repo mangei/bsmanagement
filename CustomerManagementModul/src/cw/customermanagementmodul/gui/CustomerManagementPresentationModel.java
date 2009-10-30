@@ -127,7 +127,7 @@ public class CustomerManagementPresentationModel
 
                 public void buttonPressed(ButtonEvent evt) {
                     if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                        CustomerManager.getInstance().save(c);
+                        
                         if (customerAlreadyCreated) {
                             GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde aktualisiert.");
 
@@ -351,7 +351,6 @@ public class CustomerManagementPresentationModel
 
             public void buttonPressed(ButtonEvent evt) {
                 if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                    CustomerManager.getInstance().save(c);
                     GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde aktualisiert.");
                 }
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {

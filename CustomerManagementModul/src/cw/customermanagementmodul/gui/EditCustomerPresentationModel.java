@@ -23,6 +23,7 @@ import javax.swing.JOptionPane;
 import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Guardian;
+import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import java.util.Collections;
 import javax.swing.Icon;
 
@@ -393,9 +394,14 @@ public class EditCustomerPresentationModel
             return false;
         }
 
+        // Alle Werte in das Objekt schreiben
         triggerCommit();
         guardianPresentationModel.triggerCommit();
 
+        // Den Kunden speichern (Guardian wird automatisch mittels Hibernate-Cascade mitgespeichert)
+        CustomerManager.getInstance().save(getBean());
+
+        // Die Erweiterungen speichern lassen
         for (EditCustomerTabExtentionPoint extention : extentions) {
             extention.save();
         }
