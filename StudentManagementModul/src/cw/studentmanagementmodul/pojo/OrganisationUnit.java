@@ -4,7 +4,6 @@ import com.jgoodies.binding.beans.Model;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,48 +21,20 @@ public class OrganisationUnit
         implements AnnotatedClass
 {
 
-    private Long id;
-    private String name;
-    private OrganisationUnit parent;
-    private List<OrganisationUnit> children;
-    private List<StudentClass> studentClasses;
+    private Long id                             = null;
+    private String name                         = "";
+    private OrganisationUnit parent             = null;
+    private List<OrganisationUnit> children     = new ArrayList<OrganisationUnit>();
+    private List<StudentClass> studentClasses   = new ArrayList<StudentClass>();
     
     // Properties - Constants
-    public final static String PROPERTYNAME_ID = "id";
-    public final static String PROPERTYNAME_NAME = "name";
-    public final static String PROPERTYNAME_PARENT = "parent";
-    public final static String PROPERTYNAME_CHILDREN = "children";
-    public final static String PROPERTYNAME_STUDENTCLASSES = "studentClasses";
+    public final static String PROPERTYNAME_ID              = "id";
+    public final static String PROPERTYNAME_NAME            = "name";
+    public final static String PROPERTYNAME_PARENT          = "parent";
+    public final static String PROPERTYNAME_CHILDREN        = "children";
+    public final static String PROPERTYNAME_STUDENTCLASSES  = "studentClasses";
     
     public OrganisationUnit() {
-        children = new ArrayList<OrganisationUnit>() {
-//
-//            @Override
-//            public boolean add(OrganisationUnit e) {
-//                e.setParent(OrganisationUnit.this);
-//                return super.add(e);
-//            }
-//
-//            @Override
-//            public void add(int index, OrganisationUnit element) {
-//                element.setParent(OrganisationUnit.this);
-//                super.add(index, element);
-//            }
-//
-//            @Override
-//            public boolean remove(Object o) {
-//                ((OrganisationUnit)o).setParent(null);
-//                return super.remove(o);
-//            }
-//
-//            @Override
-//            public OrganisationUnit remove(int index) {
-//                get(index).setParent(null);
-//                return super.remove(index);
-//            }
-//
-        };
-        studentClasses = new ArrayList<StudentClass>();
     }
 
     @Override
@@ -98,7 +69,7 @@ public class OrganisationUnit
         firePropertyChange(PROPERTYNAME_NAME, old, name);
     }
 
-    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne
     public OrganisationUnit getParent() {
         return parent;
     }
@@ -106,13 +77,6 @@ public class OrganisationUnit
     public void setParent(OrganisationUnit parent) {
         OrganisationUnit old = this.parent;
         this.parent = parent;
-
-//        // TODO
-//        // Set the child of the new parent if it isn't already in the list
-//        if(parent != null && !parent.getChildren().contains(this)) {
-//            parent.getChildren().add(this);
-//        }
-
         firePropertyChange(PROPERTYNAME_PARENT, old, parent);
     }
 
@@ -128,7 +92,7 @@ public class OrganisationUnit
         firePropertyChange(PROPERTYNAME_ID, old, id);
     }
 
-    @OneToMany(mappedBy = "parent", cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToMany(mappedBy = "parent")
     @OrderBy("name")
     public List<OrganisationUnit> getChildren() {
         return children;
@@ -137,11 +101,6 @@ public class OrganisationUnit
     public void setChildren(List<OrganisationUnit> children) {
         List<OrganisationUnit> old = this.children;
         this.children = children;
-
-//        // set the new Parent
-//        for(int i=0, l=children.size(); i<l; i++) {
-//            children.get(i).setParent(this);
-//        }
         firePropertyChange(PROPERTYNAME_CHILDREN, old, children);
     }
 

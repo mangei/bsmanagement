@@ -20,16 +20,16 @@ public class StudentClass
         implements AnnotatedClass
 {
 
-    private Long id;
-    private String name;
-    private StudentClass nextStudentClass;
-    private OrganisationUnit organisationUnit;
+    private Long id                             = null;
+    private String name                         = "";
+    private StudentClass nextStudentClass       = null;
+    private OrganisationUnit organisationUnit   = null;
     
     // Properties - Constants
-    public final static String PROPERTYNAME_ID = "id";
-    public final static String PROPERTYNAME_NAME = "name";
-    public final static String PROPERTYNAME_NEXTSTUDENTCLASS = "nextStudentClass";
-    public final static String PROPERTYNAME_ORGANISATIONUNIT = "organisationUnit";
+    public final static String PROPERTYNAME_ID                  = "id";
+    public final static String PROPERTYNAME_NAME                = "name";
+    public final static String PROPERTYNAME_NEXTSTUDENTCLASS    = "nextStudentClass";
+    public final static String PROPERTYNAME_ORGANISATIONUNIT    = "organisationUnit";
     
     public StudentClass() {
     }
@@ -67,7 +67,7 @@ public class StudentClass
         firePropertyChange(PROPERTYNAME_NAME, old, name);
     }
 
-    @OneToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToOne
     public StudentClass getNextStudentClass() {
         return nextStudentClass;
     }
@@ -78,7 +78,7 @@ public class StudentClass
         firePropertyChange(PROPERTYNAME_NEXTSTUDENTCLASS, old, nextKlasse);
     }
 
-    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToOne
     public OrganisationUnit getOrganisationUnit() {
         return organisationUnit;
     }

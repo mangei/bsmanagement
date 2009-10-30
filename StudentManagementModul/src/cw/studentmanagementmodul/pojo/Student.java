@@ -20,16 +20,16 @@ public class Student
         extends Model
         implements AnnotatedClass
 {
-    private Long id;
-    private StudentClass studentClass;
-    private Customer customer;
-    private boolean active;
+    private Long id                     = null;
+    private StudentClass studentClass   = null;
+    private Customer customer           = null;
+    private boolean active              = true;
     
     // Properties - Constants
-    public final static String PROPERTYNAME_ID = "id";
-    public final static String PROPERTYNAME_STUDENTCLASS = "studentClass";
-    public final static String PROPERTYNAME_CustoMER = "customer";
-    public final static String PROPERTYNAME_ACTIVE = "active";
+    public final static String PROPERTYNAME_ID              = "id";
+    public final static String PROPERTYNAME_STUDENTCLASS    = "studentClass";
+    public final static String PROPERTYNAME_CUSTOMER        = "customer";
+    public final static String PROPERTYNAME_ACTIVE          = "active";
     
     public Student() {
     }
@@ -58,7 +58,7 @@ public class Student
         return builder.toString();
     }
 
-    @OneToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToOne
     public StudentClass getStudentClass() {
         return studentClass;
     }
@@ -81,8 +81,7 @@ public class Student
         firePropertyChange(PROPERTYNAME_ID, old, id);
     }
 
-    @OneToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-//    @Cascade({org.hibernate.annotations.CascadeType.DELETE, org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
+    @OneToOne
     public Customer getCustomer() {
         return customer;
     }
@@ -90,7 +89,7 @@ public class Student
     public void setCustomer(Customer customer) {
         Customer old = this.customer;
         this.customer = customer;
-        firePropertyChange(PROPERTYNAME_CustoMER, old, customer);
+        firePropertyChange(PROPERTYNAME_CUSTOMER, old, customer);
     }
 
     public boolean isActive() {
