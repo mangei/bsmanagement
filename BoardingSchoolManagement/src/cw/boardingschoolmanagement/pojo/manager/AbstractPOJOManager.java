@@ -45,7 +45,7 @@ public abstract class AbstractPOJOManager<T>{
             return false;
         }
 
-        // Everythink worked
+        // Everything worked
         return true;
     }
 
@@ -53,7 +53,7 @@ public abstract class AbstractPOJOManager<T>{
         if(obj == null) {
             return false;
         }
-
+        
         cascadeListenerSupport.fireCascadeDelete(obj);
 
         try {

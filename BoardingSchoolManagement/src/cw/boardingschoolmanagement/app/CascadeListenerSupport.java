@@ -1,6 +1,7 @@
 package cw.boardingschoolmanagement.app;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -34,9 +35,10 @@ public class CascadeListenerSupport {
     }
 
     public void fireCascadeDelete(CascadeEvent evt) {
-//        for(int i=0, l=listeners.size(); i<l; i++) {
-//            (listeners.get(i)).deleteAction(evt);
-//        }
+        List<CascadeListener> copy = new ArrayList<CascadeListener>(listeners);
+        for(int i=0, l=copy.size(); i<l; i++) {
+            copy.get(i).deleteAction(evt);
+        }
     }
 
 //    public void fireCascadeUpdate(CascadeEvent evt) {
