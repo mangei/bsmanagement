@@ -48,7 +48,7 @@ public class ConfigurationPresentationModel extends PresentationModel
      * Baut die grafische Oberfläche des Einstellungsfesterns auf
      */
     public void initModels() {
-        saveAction = new SaveAction("Speicher", CWUtils.loadIcon("cw/boardingschoolmanagement/images/save.png"));
+        saveAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/boardingschoolmanagement/images/save.png"));
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/cancel.png"));
 
         support = new ButtonListenerSupport();
