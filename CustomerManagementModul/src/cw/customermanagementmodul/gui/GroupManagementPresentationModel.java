@@ -29,7 +29,6 @@ public class GroupManagementPresentationModel
     private Action editGroupAction;
     private Action removeGroupAction;
     private SelectionInList<Group> groupSelection;
-    private SelectionInList<Customer> customerSelection;
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
 
     private CWHeaderInfo headerInfo;
@@ -48,7 +47,6 @@ public class GroupManagementPresentationModel
         removeGroupAction = new RemoveGroupAction("Gruppe löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/group_remove.png"));
 
         groupSelection = new SelectionInList<Group>(GroupManager.getInstance().getAll());
-        customerSelection = new SelectionInList<Customer>();
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
                 new ArrayList(),
@@ -211,6 +209,7 @@ public class GroupManagementPresentationModel
                 String name = group.getName();
 
                 groupSelection.getList().remove(group);
+                customerSelectorPresentationModel.getCustomerSelection().getList().clear();
                 GroupManager.getInstance().delete(group);
 
 
@@ -253,10 +252,6 @@ public class GroupManagementPresentationModel
 
     public SelectionInList<Group> getGroupSelection() {
         return groupSelection;
-    }
-
-    public SelectionInList<Customer> getCustomerSelection() {
-        return customerSelection;
     }
 
     public CWHeaderInfo getHeaderInfo() {

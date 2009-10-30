@@ -26,36 +26,8 @@ public class Group
     private Long id;
     private String name;
     private boolean deletable;
-    // Properties - Constants
-    public final static String PROPERTYNAME_ID = "id";
-    public final static String PROPERTYNAME_NAME = "name";
-    public final static String PROPERTYNAME_DELETABLE = "deletable";
-    public final static String PROPERTYNAME_CUSTOMERS = "customers";
-    public final static String PROPERTYNAME_PARENT = "parent";
-    public final static String PROPERTYNAME_CHILDREN = "children";
     private Group parent;
-    private List<Customer> customers = new ArrayList<Customer>() {
-//        @Override
-//        public boolean add(Costumer c) {
-//            c.getGroups().add(Group.this);
-//            return super.add(c);
-//        }
-//
-//        @Override
-//        public boolean remove(Object o) {
-//            if (o instanceof Costumer) {
-//                ((Costumer) o).getGroups().remove(Group.this);
-//            }
-//            return super.remove(o);
-//        }
-//
-//        @Override
-//        public Costumer remove(int index) {
-//            Costumer c = super.remove(index);
-//            c.getGroups().remove(Group.this);
-//            return c;
-//        }
-    };
+    private List<Customer> customers = new ArrayList<Customer>();
     private List<Group> children = new ArrayList<Group>() {
 
         @Override
@@ -79,6 +51,14 @@ public class Group
             return g;
         }
     };
+
+    // Properties - Constants
+    public final static String PROPERTYNAME_ID = "id";
+    public final static String PROPERTYNAME_NAME = "name";
+    public final static String PROPERTYNAME_DELETABLE = "deletable";
+    public final static String PROPERTYNAME_CUSTOMERS = "customers";
+    public final static String PROPERTYNAME_PARENT = "parent";
+    public final static String PROPERTYNAME_CHILDREN = "children";
 
     public Group() {
     }
@@ -109,9 +89,6 @@ public class Group
     }
 
     @ManyToMany(mappedBy = "groups")
-//    @JoinTable(name="groups_costumers",
-//        joinColumns=        @JoinColumn(name="group_id", referencedColumnName="id"),
-//        inverseJoinColumns= @JoinColumn(name="costumer_id",referencedColumnName="id"))
     public List<Customer> getCustomers() {
         return customers;
     }
@@ -162,9 +139,6 @@ public class Group
     public void setChildren(List<Group> children) {
         List<Group> old = children;
         this.children = children;
-//        for(Group child: children) {
-//            child.setParent(this);
-//        }
         firePropertyChange(PROPERTYNAME_CHILDREN, old, children);
     }
 
@@ -175,9 +149,7 @@ public class Group
 
     public void setParent(Group parent) {
         Group old = this.parent;
-//        this.getChildren().remove(this);
         this.parent = parent;
-//        parent.getChildren().add(this);
         firePropertyChange(PROPERTYNAME_PARENT, old, parent);
     }
 }

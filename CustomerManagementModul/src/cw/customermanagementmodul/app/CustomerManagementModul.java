@@ -117,6 +117,8 @@ public class CustomerManagementModul
         }), "posting");
 
 
+        // Wenn eine Buchungskategorie gelöscht wird, die Buchungskategorie der Buchungen
+        // die diese Buchungskategorie hatten auf null setzen.
         PostingCategoryManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
                 PostingCategory accountingCategory = (PostingCategory) evt.getSource();
@@ -127,16 +129,21 @@ public class CustomerManagementModul
             }
         });
 
+        // Wenn eine Gruppe gelöscht wird, diese Gruppe aus der Gruppenliste der Kunden löschen.
         GroupManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
                 Group group = (Group) evt.getSource();
+                System.out.println("delete group: " + group.getName());
                 List<Customer> customers = CustomerManager.getInstance().getAll(group);
+                System.out.println("count customers of group ('"+group.getName()+"'): " + customers.size());
                 for(int i=0, l=customers.size(); i<l; i++) {
+                    System.out.println("customer: " + customers.get(i).getForename());
                     customers.get(i).getGroups().remove(group);
                 }
             }
         });
 
+        // Wenn ein Kunden gelöscht wird, alle dazugehörigen Buchungen löschen.
         CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
                 Customer customer = (Customer) evt.getSource();
@@ -146,6 +153,19 @@ public class CustomerManagementModul
                     PostingManager.getInstance().delete(posting);
                 }
                 
+            }
+        });
+
+        // Wenn ein Kunde gelöscht wird, diesen Kunden aus den Kundenlisten der Gruppen löschen.
+        CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
+            public void deleteAction(CascadeEvent evt) {
+                Customer customer = (Customer) evt.getSource();
+                List<Group> groups = customer.getGroups();
+
+                for(Group group : groups) {
+                    group.getCustomers().remove(customer);
+                }
+
             }
         });
 
