@@ -16,7 +16,7 @@ import javax.swing.tree.DefaultTreeCellRenderer;
 public class StudentClassTreeCellRenderer extends DefaultTreeCellRenderer {
 
     private Icon studentClassIcon = CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png");
-    private Icon organisationUnitIcon = CWUtils.loadIcon("cw/studentmanagementmodul/images/box.png");
+    private Icon organisationUnitIcon = CWUtils.loadIcon("cw/studentmanagementmodul/images/organisationUnit.png");
     private Icon worldIcon = CWUtils.loadIcon("cw/studentmanagementmodul/images/world.png");
     private Icon noClassIcon = CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_inactive.png");
 

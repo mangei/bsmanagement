@@ -1,7 +1,5 @@
 package cw.studentmanagementmodul.gui;
 
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
@@ -36,7 +34,7 @@ public class StudentClassChooserPresentationModel
     private CWHeaderInfo headerInfo;
     private StudentClass selectedStudentClass;
     private Action okAction;
-    private Action noClassAction;
+//    private Action noClassAction;
     private Action cancelAction;
     private DefaultTreeModel studentClassTreeModel;
     private DefaultTreeSelectionModel studentClassTreeSelectionModel;
@@ -59,9 +57,9 @@ public class StudentClassChooserPresentationModel
 
     private void initModels() {
         studentClassTreeNodeMap = new HashMap<Object, DefaultMutableTreeNode>();
-        okAction = new OkAction("Auswählen", CWUtils.loadIcon("cw/studentmanagementmodul/images/accept.png"));
-        noClassAction = new NoClassAction("Keine Klasse", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_inactive.png"));
-        cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/studentmanagementmodul/images/cancel.png"));
+        okAction = new OkAction("Auswählen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/accept.png"));
+//        noClassAction = new NoClassAction("Keine Klasse", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_inactive.png"));
+        cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/cancel.png"));
 
         studentClassRootTreeNode = new DefaultMutableTreeNode("root", true);
         studentClassNoClassTreeNode = new DefaultMutableTreeNode("noClass", false);
@@ -174,16 +172,17 @@ public class StudentClassChooserPresentationModel
     ////////////////////////////////////////////////////////////////////////////
     // Action classes
     ////////////////////////////////////////////////////////////////////////////
-    private class NoClassAction extends AbstractAction {
-
-        public NoClassAction(String name, Icon icon) {
-            super(name, icon);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.CUSTOM_BUTTON, "noClassButton"));
-        }
-    }
+    
+//    private class NoClassAction extends AbstractAction {
+//
+//        public NoClassAction(String name, Icon icon) {
+//            super(name, icon);
+//        }
+//
+//        public void actionPerformed(ActionEvent e) {
+//            buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.CUSTOM_BUTTON, "noClassButton"));
+//        }
+//    }
 
     private class OkAction extends AbstractAction {
 
@@ -234,9 +233,9 @@ public class StudentClassChooserPresentationModel
         return okAction;
     }
 
-    public Action getNoClassAction() {
-        return noClassAction;
-    }
+//    public Action getNoClassAction() {
+//        return noClassAction;
+//    }
 
     public DefaultTreeCellRenderer getStudentClassTreeCellRenderer() {
         return studentClassTreeCellRenderer;

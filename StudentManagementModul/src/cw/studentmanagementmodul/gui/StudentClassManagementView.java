@@ -117,12 +117,12 @@ public class StudentClassManagementView extends CWView
                 }
             }
         });
-        bTreeExpand = CWComponentFactory.createButton(new AbstractAction("", CWUtils.loadIcon("cw/studentmanagementmodul/images/tree_expand.png")) {
+        bTreeExpand = CWComponentFactory.createButton(new AbstractAction("", CWUtils.loadIcon("cw/boardingschoolmanagement/images/tree_expand.png")) {
             public void actionPerformed(ActionEvent e) {
                 trStudentClass.expandAll();
             }
         });
-        bTreeCollapse = CWComponentFactory.createButton(new AbstractAction("", CWUtils.loadIcon("cw/studentmanagementmodul/images/tree_collapse.png")) {
+        bTreeCollapse = CWComponentFactory.createButton(new AbstractAction("", CWUtils.loadIcon("cw/boardingschoolmanagement/images/tree_collapse.png")) {
             public void actionPerformed(ActionEvent e) {
                 trStudentClass.collapseAll();
             }

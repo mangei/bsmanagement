@@ -24,7 +24,7 @@ public class StudentClassChooserView extends CWView
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWTree trStudentClass;
     private CWButton bOk;
-    private CWButton bNoClass;
+//    private CWButton bNoClass;
     private CWButton bCancel;
     private CWButton bTreeExpand;
     private CWButton bTreeCollapse;
@@ -39,7 +39,7 @@ public class StudentClassChooserView extends CWView
 
     private void initComponents() {
         bOk             = CWComponentFactory.createButton(model.getOkAction());
-        bNoClass        = CWComponentFactory.createButton(model.getNoClassAction());
+//        bNoClass        = CWComponentFactory.createButton(model.getNoClassAction());
         bCancel         = CWComponentFactory.createButton(model.getCancelAction());
         trStudentClass  = CWComponentFactory.createTree(model.getStudentClassTreeModel());
         trStudentClass.setSelectionModel(model.getStudentClassTreeSelectionModel());
@@ -47,12 +47,12 @@ public class StudentClassChooserView extends CWView
         trStudentClass.setCellRenderer(new StudentClassTreeCellRenderer());
         trStudentClass.setRootVisible(false);
         
-        bTreeExpand = CWComponentFactory.createButton(new AbstractAction("", CWUtils.loadIcon("cw/studentmanagementmodul/images/tree_expand.png")) {
+        bTreeExpand = CWComponentFactory.createButton(new AbstractAction("", CWUtils.loadIcon("cw/boardingschoolmanagement/images/tree_expand.png")) {
             public void actionPerformed(ActionEvent e) {
                 trStudentClass.expandAll();
             }
         });
-        bTreeCollapse = CWComponentFactory.createButton(new AbstractAction("", CWUtils.loadIcon("cw/studentmanagementmodul/images/tree_collapse.png")) {
+        bTreeCollapse = CWComponentFactory.createButton(new AbstractAction("", CWUtils.loadIcon("cw/boardingschoolmanagement/images/tree_collapse.png")) {
             public void actionPerformed(ActionEvent e) {
                 trStudentClass.collapseAll();
             }
@@ -60,7 +60,7 @@ public class StudentClassChooserView extends CWView
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bOk)
-                .addComponent(bNoClass)
+//                .addComponent(bNoClass)
                 .addComponent(bCancel)
                 .addComponent(bTreeCollapse)
                 .addComponent(bTreeExpand);
@@ -76,7 +76,7 @@ public class StudentClassChooserView extends CWView
 
         this.getButtonPanel().add(bOk);
         this.getButtonPanel().add(bCancel);
-        this.getButtonPanel().add(bNoClass);
+//        this.getButtonPanel().add(bNoClass);
 
         FormLayout layout = new FormLayout(
                 "pref:grow, 1dlu, pref",

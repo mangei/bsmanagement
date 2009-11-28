@@ -66,12 +66,17 @@ public class StudentClassManagementPresentationModel
 
     private void initModels() {
 
-        headerInfo = new CWHeaderInfo("Klassenverwaltung");
+        headerInfo = new CWHeaderInfo(
+                "Klassenverwaltung",
+                "<html><p>Verwalten Sie ihre Klassen in einer beliebigen Struktur mit Hilfe von Bereichen. Lassen Sie sich die Schüler ein Klasse anzeigen und Schüler automatisch in die nächste Klasse aufsteigen lassen.</p></html>",
+                CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png"),
+                CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png")
+        );
 
         studentClassTreeNodeMap = new HashMap<Object, MutableTreeNode>();
-        newOrganisationUnitAction = new NewOrganisationUnitAction("Bereich erstellen", CWUtils.loadIcon("cw/studentmanagementmodul/images/box_add.png"));
-        editOrganisationUnitAction = new EditOrganisationUnitAction("Bereich bearbeiten", CWUtils.loadIcon("cw/studentmanagementmodul/images/box_edit.png"));
-        removeOrganisationUnitAction = new RemoveOrganisationUnitAction("Bereich löschen", CWUtils.loadIcon("cw/studentmanagementmodul/images/box_remove.png"));
+        newOrganisationUnitAction = new NewOrganisationUnitAction("Bereich erstellen", CWUtils.loadIcon("cw/studentmanagementmodul/images/organisationUnit_add.png"));
+        editOrganisationUnitAction = new EditOrganisationUnitAction("Bereich bearbeiten", CWUtils.loadIcon("cw/studentmanagementmodul/images/organisationUnit_edit.png"));
+        removeOrganisationUnitAction = new RemoveOrganisationUnitAction("Bereich löschen", CWUtils.loadIcon("cw/studentmanagementmodul/images/organisationUnit_remove.png"));
         newStudentClassAction = new NewStudentClassAction("Klasse erstellen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_add.png"));
         editStudentClassAction = new EditStudentClassAction("Klasse bearbeiten", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_edit.png"));
         removeStudentClassAction = new RemoveStudentClassAction("Klasse löschen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_remove.png"));

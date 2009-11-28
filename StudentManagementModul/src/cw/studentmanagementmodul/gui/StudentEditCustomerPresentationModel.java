@@ -41,7 +41,12 @@ public class StudentEditCustomerPresentationModel
     }
 
     private void initModels() {
-        headerInfo = new CWHeaderInfo("Schüler");
+        headerInfo = new CWHeaderInfo(
+                "Schüler",
+                "Verwalten Sie Schulinformationen für einen Kunden.",
+                CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png"),
+                CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png")
+        );
 
         studentClassChooserAction = new StudentClassChooserAction("Klasse auswählen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_search.png"));
     }
@@ -71,7 +76,15 @@ public class StudentEditCustomerPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            final StudentClassChooserPresentationModel model = new StudentClassChooserPresentationModel((StudentClass)getBufferedValue(Student.PROPERTYNAME_STUDENTCLASS), new CWHeaderInfo("Klasse auswählen"));
+            final StudentClassChooserPresentationModel model = new StudentClassChooserPresentationModel(
+                    (StudentClass)getBufferedValue(Student.PROPERTYNAME_STUDENTCLASS),
+                    new CWHeaderInfo(
+                        "Klasse auswählen",
+                        "Wählen Sie eine Klasse aus, die Sie dem Schüler zuweisen wollen.",
+                        CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_search.png"),
+                        CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_search.png")
+                    )
+            );
             StudentClassChooserView view = new StudentClassChooserView(model);
 
             model.addButtonListener(new ButtonListener() {
