@@ -45,6 +45,7 @@ public class StudentClassChooserView extends CWView
         trStudentClass.setSelectionModel(model.getStudentClassTreeSelectionModel());
         trStudentClass.setCellRenderer(model.getStudentClassTreeCellRenderer());
         trStudentClass.setCellRenderer(new StudentClassTreeCellRenderer());
+        trStudentClass.setRootVisible(false);
         
         bTreeExpand = CWComponentFactory.createButton(new AbstractAction("", CWUtils.loadIcon("cw/studentmanagementmodul/images/tree_expand.png")) {
             public void actionPerformed(ActionEvent e) {

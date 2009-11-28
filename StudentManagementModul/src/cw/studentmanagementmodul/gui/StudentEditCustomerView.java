@@ -23,7 +23,7 @@ public class StudentEditCustomerView extends CWView
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWCheckBox cIsStudent;
     private CWButton bStudentClassChooser;
-    private CWLabel lStudentClassName;
+    private CWLabel lStudentClass;
 
     private PropertyChangeListener activeChangeListener;
     
@@ -38,18 +38,19 @@ public class StudentEditCustomerView extends CWView
     private void initComponents() {
         cIsStudent              = CWComponentFactory.createCheckBox(model.getBufferedModel(Student.PROPERTYNAME_ACTIVE), "Kunde ist ein Schüler?");
         bStudentClassChooser    = CWComponentFactory.createButton(model.getStudentClassChooserAction());
-        lStudentClassName       = CWComponentFactory.createLabel(model.getStudentClassNameModel());
+        lStudentClass           = CWComponentFactory.createLabel(model.getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS));
+
+        CWComponentFactory.createNullLabel(lStudentClass, "keiner Klasse zugeordnet");
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(cIsStudent)
                 .addComponent(bStudentClassChooser)
-                .addComponent(lStudentClassName);
+                .addComponent(lStudentClass);
     }
     
     private void initEventHandling() {
         model.getBufferedModel(Student.PROPERTYNAME_ACTIVE).addValueChangeListener(activeChangeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
-//                model.setValue(true);
                 updateComponentsEnabled();
             }
         });
@@ -66,7 +67,7 @@ public class StudentEditCustomerView extends CWView
         this.setName("Schüler");
         
         FormLayout layout = new FormLayout(
-                "pref, 4dlu, pref, 4dlu, right:pref:grow",
+                "pref, 4dlu, pref, 20dlu, left:pref:grow",
                 "pref, 4dlu, pref"
         );
         PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
@@ -75,7 +76,7 @@ public class StudentEditCustomerView extends CWView
         
         builder.add(cIsStudent, cc.xyw(1, 1, 5));
         builder.addLabel("Klasse:", cc.xy(1, 3));
-        builder.add(lStudentClassName, cc.xy(3, 3));
+        builder.add(lStudentClass, cc.xy(3, 3));
         builder.add(bStudentClassChooser, cc.xy(5, 3));
     }
 

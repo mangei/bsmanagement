@@ -20,7 +20,7 @@ implements EditCustomerTabExtentionPoint
     private StudentEditCustomerPresentationModel model;
     private Student student;
     
-        public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
+    public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
 
         student = StudentManager.getInstance().get(editCustomerModel.getBean());
         if(student == null) {
@@ -29,6 +29,7 @@ implements EditCustomerTabExtentionPoint
             // TODO TEST  'v'
 //            StudentManager.getInstance().save(student);
         }
+        
         model = new StudentEditCustomerPresentationModel(student, editCustomerModel.getUnsaved());
         view = new StudentEditCustomerView(model);
     }

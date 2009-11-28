@@ -1,5 +1,7 @@
 package cw.studentmanagementmodul.gui;
 
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
@@ -40,6 +42,8 @@ public class StudentClassChooserPresentationModel
     private DefaultTreeSelectionModel studentClassTreeSelectionModel;
     private DefaultTreeCellRenderer studentClassTreeCellRenderer;
     private DefaultMutableTreeNode studentClassRootTreeNode;
+    private DefaultMutableTreeNode studentClassNoClassTreeNode;
+    private DefaultMutableTreeNode studentClassWorldTreeNode;
     private HashMap<Object, DefaultMutableTreeNode> studentClassTreeNodeMap;
     private ButtonListenerSupport buttonListenerSupport;
 
@@ -56,13 +60,21 @@ public class StudentClassChooserPresentationModel
     private void initModels() {
         studentClassTreeNodeMap = new HashMap<Object, DefaultMutableTreeNode>();
         okAction = new OkAction("Auswählen", CWUtils.loadIcon("cw/studentmanagementmodul/images/accept.png"));
-        noClassAction = new NoClassAction("Keine Klasse", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_no.png"));
+        noClassAction = new NoClassAction("Keine Klasse", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_inactive.png"));
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/studentmanagementmodul/images/cancel.png"));
 
-        studentClassRootTreeNode = new DefaultMutableTreeNode("Welt", true);
-        studentClassTreeNodeMap.put(null, studentClassRootTreeNode);
+        studentClassRootTreeNode = new DefaultMutableTreeNode("root", true);
+        studentClassNoClassTreeNode = new DefaultMutableTreeNode("noClass", false);
+        studentClassWorldTreeNode = new DefaultMutableTreeNode("world", true);
+        studentClassTreeNodeMap.put("root", studentClassRootTreeNode);
+        studentClassTreeNodeMap.put("noClass", studentClassNoClassTreeNode);
+        studentClassTreeNodeMap.put(null, studentClassNoClassTreeNode);
+        studentClassTreeNodeMap.put("world", studentClassWorldTreeNode);
         studentClassTreeModel = new DefaultTreeModel(studentClassRootTreeNode);
         studentClassTreeSelectionModel = new DefaultTreeSelectionModel();
+
+        studentClassRootTreeNode.add(studentClassNoClassTreeNode);
+        studentClassRootTreeNode.add(studentClassWorldTreeNode);
         buildStudentClassTree();
 
         buttonListenerSupport = new ButtonListenerSupport();
@@ -77,6 +89,9 @@ public class StudentClassChooserPresentationModel
                     Object object = node.getUserObject();
                     if (object instanceof StudentClass) {
                         selectedStudentClass = (StudentClass) object;
+                        okAction.setEnabled(true);
+                    } else if(node == studentClassNoClassTreeNode) {
+                        selectedStudentClass = null;
                         okAction.setEnabled(true);
                     } else {
 //                        studentClassTreeSelectionModel.setSelectionPath(e.getOldLeadSelectionPath());
@@ -101,8 +116,8 @@ public class StudentClassChooserPresentationModel
     private void buildStudentClassTree() {
 
         // Clear the old tree
-        for (int i = 0, l = studentClassRootTreeNode.getChildCount(); i < l; i++) {
-            studentClassRootTreeNode.remove(0);
+        for (int i = 0, l = studentClassWorldTreeNode.getChildCount(); i < l; i++) {
+            studentClassWorldTreeNode.remove(0);
         }
 
         // Load root organisationUnits and studentClasses
@@ -114,7 +129,7 @@ public class StudentClassChooserPresentationModel
         for (int i = 0, l = roots.size(); i < l; i++) {
             organisationUnit = roots.get(i);
             node = createTreeNode(organisationUnit);
-            studentClassRootTreeNode.insert(node, i);
+            studentClassWorldTreeNode.insert(node, i);
             buildStudentClassTree(node, organisationUnit);
         }
     }

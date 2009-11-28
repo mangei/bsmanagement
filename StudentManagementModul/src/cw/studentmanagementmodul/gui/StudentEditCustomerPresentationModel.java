@@ -26,7 +26,6 @@ public class StudentEditCustomerPresentationModel
 {
     
     private Action studentClassChooserAction;
-    private ValueModel studentClassName;
 
     private CWHeaderInfo headerInfo;
     private ValueModel unsaved;
@@ -44,18 +43,15 @@ public class StudentEditCustomerPresentationModel
     private void initModels() {
         headerInfo = new CWHeaderInfo("Schüler");
 
-        studentClassChooserAction = new StudentClassChooserAction("Klasse auswählen", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_go.png"));
-        studentClassName = new ValueHolder();
+        studentClassChooserAction = new StudentClassChooserAction("Klasse auswählen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_search.png"));
     }
 
     private void initEventHandling() {
         getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS).addValueChangeListener(classChangeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
-                updateStudentClassName();
                 unsaved.setValue(true);
             }
         });
-        updateStudentClassName();
     }
 
     public void dispose() {
@@ -63,17 +59,6 @@ public class StudentEditCustomerPresentationModel
         release();
     }
 
-    ////////////////////////////////////////////////////////////////////////////
-    // Useful methods
-    ////////////////////////////////////////////////////////////////////////////
-
-    private void updateStudentClassName() {
-        if(getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS) != null) {
-            studentClassName.setValue(getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS).toString());
-        } else {
-            studentClassName.setValue("Keine Klasse");
-        }
-    }
 
     ////////////////////////////////////////////////////////////////////////////
     // Action classes
@@ -121,10 +106,6 @@ public class StudentEditCustomerPresentationModel
 
     public Action getStudentClassChooserAction() {
         return studentClassChooserAction;
-    }
-
-    public ValueModel getStudentClassNameModel() {
-        return studentClassName;
     }
 
     public CWHeaderInfo getHeaderInfo() {

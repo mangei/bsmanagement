@@ -72,13 +72,13 @@ public class StudentClassManagementPresentationModel
         newOrganisationUnitAction = new NewOrganisationUnitAction("Bereich erstellen", CWUtils.loadIcon("cw/studentmanagementmodul/images/box_add.png"));
         editOrganisationUnitAction = new EditOrganisationUnitAction("Bereich bearbeiten", CWUtils.loadIcon("cw/studentmanagementmodul/images/box_edit.png"));
         removeOrganisationUnitAction = new RemoveOrganisationUnitAction("Bereich löschen", CWUtils.loadIcon("cw/studentmanagementmodul/images/box_remove.png"));
-        newStudentClassAction = new NewStudentClassAction("Klasse erstellen", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_add.png"));
-        editStudentClassAction = new EditStudentClassAction("Klasse bearbeiten", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_edit.png"));
-        removeStudentClassAction = new RemoveStudentClassAction("Klasse löschen", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_remove.png"));
+        newStudentClassAction = new NewStudentClassAction("Klasse erstellen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_add.png"));
+        editStudentClassAction = new EditStudentClassAction("Klasse bearbeiten", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_edit.png"));
+        removeStudentClassAction = new RemoveStudentClassAction("Klasse löschen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_remove.png"));
         viewStudentsAction = new ViewStudentsActionAction("Schüler anzeigen", CWUtils.loadIcon("cw/studentmanagementmodul/images/student.png"));
-        moveUpStudentClassAction = new MoveUpStudentClassAction("Schüler aufsteigen", CWUtils.loadIcon("cw/studentmanagementmodul/images/image_up.png"));
+        moveUpStudentClassAction = new MoveUpStudentClassAction("Schüler aufsteigen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_up.png"));
 
-        studentClassRootTreeNode = new DefaultMutableTreeNode("Welt", true);
+        studentClassRootTreeNode = new DefaultMutableTreeNode("world", true);
         studentClassTreeNodeMap.put(null, studentClassRootTreeNode);
         studentClassTreeModel = new DefaultTreeModel(studentClassRootTreeNode);
         studentClassTreeSelectionModel = new DefaultTreeSelectionModel();

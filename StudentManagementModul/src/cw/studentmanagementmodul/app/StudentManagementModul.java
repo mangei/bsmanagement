@@ -30,7 +30,7 @@ implements Modul
     public void init() {
 
         MenuManager.getSideMenu().addCategory("Schule", "school");
-        MenuManager.getSideMenu().addItem(new JButton(new AbstractAction("Klassen", CWUtils.loadIcon("cw/studentmanagementmodul/images/image.png")) {
+        MenuManager.getSideMenu().addItem(new JButton(new AbstractAction("Klassen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png")) {
 
             public void actionPerformed(ActionEvent e) {
                 GUIManager.changeView(new StudentClassManagementView(new StudentClassManagementPresentationModel()));

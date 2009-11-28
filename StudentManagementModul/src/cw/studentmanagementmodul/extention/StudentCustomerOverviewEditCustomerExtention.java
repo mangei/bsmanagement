@@ -1,5 +1,6 @@
 package cw.studentmanagementmodul.extention;
 
+import com.jgoodies.binding.value.ValueModel;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
@@ -9,6 +10,7 @@ import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtentionPoint;
 import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationModel;
 import cw.studentmanagementmodul.gui.StudentEditCustomerPresentationModel;
+import cw.studentmanagementmodul.pojo.Student;
 
 /**
  *
@@ -29,13 +31,17 @@ public class StudentCustomerOverviewEditCustomerExtention
     public CWPanel getView() {
         CWPanel panel = CWComponentFactory.createPanel();
 
-        lStudentClass = CWComponentFactory.createLabel(
+        ValueModel newValueModel;
+
+        lStudentClass = CWComponentFactory.createLabel( newValueModel =
                 ((StudentEditCustomerPresentationModel)
                     ((StudentEditCustomerTabExtention)customerOverviewEditCustomerPresentationModel
                         .getEditCustomerPresentationModel()
                         .getExtention(StudentEditCustomerTabExtention.class))
-                        .getModel()).getStudentClassNameModel()
+                        .getModel()).getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS)
                     );
+
+        CWComponentFactory.createNullLabel(lStudentClass, "keiner Klasse zugeordnet");
 
         componentContainer.addComponent(lStudentClass);
 
