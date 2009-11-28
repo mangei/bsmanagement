@@ -85,8 +85,8 @@ public class CWUtils {
                 imgURL = Thread.currentThread().getContextClassLoader().getResource("cw/boardingschoolmanagement/images/missing_image.png");
             } else {
             }
-        } catch (Exception e) {
-        }
+        } catch (Exception e) { e.printStackTrace(); }
+        
         Image img = Toolkit.getDefaultToolkit().createImage(imgURL);
         if (img == null) {
             throw new NullPointerException("image is null");
@@ -102,7 +102,7 @@ public class CWUtils {
         URL url = null;
         try {
             url = Thread.currentThread().getContextClassLoader().getResource(path);
-        } catch (Exception e) {}
+        } catch (Exception e) { e.printStackTrace();}
         return url;
     }
 

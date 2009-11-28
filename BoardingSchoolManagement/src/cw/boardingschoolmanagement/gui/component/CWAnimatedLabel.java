@@ -53,7 +53,8 @@ public class CWAnimatedLabel extends JLabel implements Runnable {
             }
             try {
                 Thread.sleep(500);
-            } catch (Exception ex) {
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
             }
         }
     }

@@ -245,6 +245,9 @@ public class CWTray
                 {
                     popup.setVisible(false);
                 }
+
+                // Wenn Exceptions aufgetaucht sind, diese auch ausgeben.
+                ex.printStackTrace();
             }
         }
     }

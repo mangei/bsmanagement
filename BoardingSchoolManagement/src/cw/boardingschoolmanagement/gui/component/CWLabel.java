@@ -37,4 +37,4 @@ public class CWLabel extends JLabel {
     public JToolTip createToolTip() {
         return new CWToolTip();
     }
-}
+    }

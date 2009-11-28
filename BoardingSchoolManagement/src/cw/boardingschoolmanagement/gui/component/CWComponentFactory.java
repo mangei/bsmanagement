@@ -65,10 +65,12 @@ public class CWComponentFactory {
     private static String TEXT_COMPONENT_CONNECTOR_KEY = "textComponentConnectorKey";
     private static String PROPERTY_CONNECTOR_KEY = "propertyConnectorKey";
     private static String PROPERTY_CHANGE_LISTENER_KEY = "propertyChangeListenerKey";
+    private static String PROPERTY_CHANGE_LISTENER2_KEY = "propertyChangeListener2Key";
     private static String RADIO_BUTTON_KEY = "buttonKey";
     private static String RADIO_BUTTON_ITEM_LISTENER_KEY = "buttonItemListenerKey";
-    private static String VALUE_MODEL_KEY = "valueModelKey";
+    public static String VALUE_MODEL_KEY = "valueModelKey";
     private static String VALUE_MODEL_CHANGE_LISTENER_KEY = "valueModelPropertyChangeListenerKey";
+    public static String NULL_LABEL_KEY = "nullLabelKey";
 
     private CWComponentFactory() {
     }
@@ -87,7 +89,7 @@ public class CWComponentFactory {
 
         public CWComponentContainer addComponent(JComponent comp) {
             if(comp == null) {
-                throw new NullPointerException("comp is null");
+                throw new NullPointerException("component is null");
             }
             components.add(comp);
             return this;
@@ -95,7 +97,7 @@ public class CWComponentFactory {
 
         public JComponent addComponentAndReturn(JComponent comp) {
             if(comp == null) {
-                throw new NullPointerException("comp is null");
+                throw new NullPointerException("component is null");
             }
             components.add(comp);
             return comp;
@@ -145,6 +147,12 @@ public class CWComponentFactory {
                     comp.putClientProperty(TEXT_COMPONENT_CONNECTOR_KEY, null);
                 }
 
+                CWNullLabel nullLabelKey = (CWNullLabel) comp.getClientProperty(NULL_LABEL_KEY);
+                if(nullLabelKey != null) {
+                    nullLabelKey.dispose();
+                    comp.putClientProperty(NULL_LABEL_KEY, null);
+                }
+
                 PropertyConnector propertyConnector = (PropertyConnector) comp.getClientProperty(PROPERTY_CONNECTOR_KEY);
                 if(propertyConnector != null) {
                     propertyConnector.release();
@@ -155,6 +163,12 @@ public class CWComponentFactory {
                 if(propertyChangeListener != null) {
                     comp.removePropertyChangeListener(propertyChangeListener);
                     comp.putClientProperty(PROPERTY_CHANGE_LISTENER_KEY, null);
+                }
+
+                PropertyChangeListener propertyChangeListener2 = (PropertyChangeListener) comp.getClientProperty(PROPERTY_CHANGE_LISTENER2_KEY);
+                if(propertyChangeListener2 != null) {
+                    comp.removePropertyChangeListener(propertyChangeListener2);
+                    comp.putClientProperty(PROPERTY_CHANGE_LISTENER2_KEY, null);
                 }
 
                 CWRadioButton button = (CWRadioButton) comp.getClientProperty(RADIO_BUTTON_KEY);
@@ -169,9 +183,9 @@ public class CWComponentFactory {
 
                 ValueModel valueModel = (ValueModel) comp.getClientProperty(VALUE_MODEL_KEY);
                 if(valueModel != null) {
-                    PropertyChangeListener propertyChangeListener2 = (PropertyChangeListener) comp.getClientProperty(VALUE_MODEL_CHANGE_LISTENER_KEY);
-                    if(propertyChangeListener2 != null) {
-                        valueModel.removeValueChangeListener(propertyChangeListener2);
+                    PropertyChangeListener propertyChangeListener_ = (PropertyChangeListener) comp.getClientProperty(VALUE_MODEL_CHANGE_LISTENER_KEY);
+                    if(propertyChangeListener_ != null) {
+                        valueModel.removeValueChangeListener(propertyChangeListener_);
                         comp.putClientProperty(VALUE_MODEL_CHANGE_LISTENER_KEY, null);
                     }
                     comp.putClientProperty(VALUE_MODEL_KEY, null);
@@ -184,6 +198,10 @@ public class CWComponentFactory {
     }
 
     public static CWDateChooser createDateChooser(final ValueModel valueModel) {
+        if(valueModel == null) {
+            throw new NullPointerException("valueModel is null");
+        }
+
         final CWDateChooser dc = new CWDateChooser();
 
         dc.getJCalendar().setDecorationBordersVisible(false);
@@ -240,6 +258,10 @@ public class CWComponentFactory {
     }
 
     public static CWList createList(ListModel listModel) {
+        if(listModel == null) {
+            throw new NullPointerException("listModel is null");
+        }
+
         CWList list = new CWList(listModel);
 
         list.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
@@ -252,6 +274,10 @@ public class CWComponentFactory {
     }
 
     public static CWList createList(SelectionInList selectionInList, final String emptyText) {
+        if(selectionInList == null) {
+            throw new NullPointerException("selectionInList is null");
+        }
+
         CWList list = new CWList();
         list.setEmptyText(emptyText);
 
@@ -273,21 +299,33 @@ public class CWComponentFactory {
         return list;
     }
 
-    public static JScrollPane createScrollPane(JComponent view) {
-        JScrollPane sp = new JScrollPane(view);
+    public static JScrollPane createScrollPane(JComponent component) {
+        if(component == null) {
+            throw new NullPointerException("component is null");
+        }
+
+        JScrollPane sp = new JScrollPane(component);
         sp.setBorder(null);
         sp.setOpaque(false);
         return sp;
     }
 
-    public static CWButton createButton(Action a) {
-        CWButton button = new CWButton(a);
+    public static CWButton createButton(Action action) {
+        if(action == null) {
+            throw new NullPointerException("action is null");
+        }
+
+        CWButton button = new CWButton(action);
         button.setOpaque(false);
         return button;
     }
 
-    public static CWMenuItem createMenuItem(Action a) {
-        CWMenuItem item = new CWMenuItem(a);
+    public static CWMenuItem createMenuItem(Action action) {
+        if(action == null) {
+            throw new NullPointerException("action is null");
+        }
+
+        CWMenuItem item = new CWMenuItem(action);
         return item;
     }
 
@@ -296,8 +334,12 @@ public class CWComponentFactory {
         return popupMenu;
     }
 
-    public static CWRadioButton createRadioButton(Action a) {
-        CWRadioButton rb = new CWRadioButton(a);
+    public static CWRadioButton createRadioButton(Action action) {
+        if(action == null) {
+            throw new NullPointerException("action is null");
+        }
+
+        CWRadioButton rb = new CWRadioButton(action);
         rb.setOpaque(false);
         return rb;
     }
@@ -315,6 +357,10 @@ public class CWComponentFactory {
     }
 
     public static CWButtonGroup createButtonGroup(AbstractButton... buttons) {
+        if(buttons == null) {
+            throw new NullPointerException("buttons are null");
+        }
+
         CWButtonGroup group = new CWButtonGroup();
 
         // Add all buttons to the group
@@ -325,7 +371,11 @@ public class CWComponentFactory {
         return group;
     }
 
-    public static CWPanel createTrueFalsePanel(final ValueModel value, String trueText, String falseText, boolean selected) {
+    public static CWPanel createTrueFalsePanel(final ValueModel valueModel, String trueText, String falseText, boolean selected) {
+        if(valueModel == null) {
+            throw new NullPointerException("valueModel is null");
+        }
+        
         // Create the RadioButtons
         final CWRadioButton bTrue = createRadioButton(trueText);
         final CWRadioButton bFalse = createRadioButton(falseText);
@@ -351,9 +401,9 @@ public class CWComponentFactory {
 
             public void itemStateChanged(ItemEvent e) {
                 if (e.getStateChange() == ItemEvent.SELECTED) {
-                    value.setValue(true);
+                    valueModel.setValue(true);
                 } else if (e.getStateChange() == ItemEvent.DESELECTED) {
-                    value.setValue(false);
+                    valueModel.setValue(false);
                 }
             }
         });
@@ -378,13 +428,16 @@ public class CWComponentFactory {
     }
 
     public static CWIntegerTextField createIntegerTextField(final ValueModel valueModel, int maxDigits) {
+        if(valueModel == null) {
+            throw new NullPointerException("valueModel is null");
+        }
+
         final CWIntegerTextField textField = new CWIntegerTextField(maxDigits);
 
         // Try to set the text
         // Important: We have to set the text, before we add the changeListeners
-        try {
-            textField.setText(Integer.toString((Integer) valueModel.getValue()));
-        } catch (NullPointerException e) {
+        if(valueModel.getValue() != null) {
+            textField.setText( Integer.toString((Integer) valueModel.getValue()) );
         }
 
         // change the textfield if the value changes
@@ -445,14 +498,16 @@ public class CWComponentFactory {
     }
     
     public static CWCurrencyTextField createCurrencyTextField(final ValueModel valueModel) {
+        if(valueModel == null) {
+            throw new NullPointerException("valueModel is null");
+        }
+
         final CWCurrencyTextField textField = new CWCurrencyTextField();
 
         // Try to set the text
         // Important: We have to set the text, before we add the changeListeners
-        try {
-            String text = Double.toString((Double) valueModel.getValue());
-            textField.setText(text);
-        } catch (NullPointerException e) {
+        if(valueModel.getValue() != null) {
+            textField.setText( Double.toString((Double) valueModel.getValue()) );
         }
 
         // change the textfield if the value changes
@@ -515,6 +570,10 @@ public class CWComponentFactory {
     }
 
     public static CWCheckBox createCheckBox(ValueModel valueModel, String text) {
+        if(valueModel == null) {
+            throw new NullPointerException("valueModel is null");
+        }
+
         CWCheckBox checkBox = new CWCheckBox(text);
 
         boolean enabled = checkBox.getModel().isEnabled();
@@ -526,6 +585,10 @@ public class CWComponentFactory {
     }
     
     public static CWTree createTree(TreeModel treeModel) {
+        if(treeModel == null) {
+            throw new NullPointerException("treeModel is null");
+        }
+
         CWTree tree = new CWTree(treeModel);
         tree.setHighlighters(HighlighterFactory.createSimpleStriping());
         tree.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
@@ -534,6 +597,10 @@ public class CWComponentFactory {
     }
 
     public static <E> CWComboBox createComboBox(SelectionInList<E> selectionInList) {
+        if(selectionInList == null) {
+            throw new NullPointerException("selectionInList is null");
+        }
+
         CWComboBox comboBox = new CWComboBox();
 
         comboBox.setModel(new ComboBoxAdapter<E>(selectionInList));
@@ -542,6 +609,13 @@ public class CWComponentFactory {
     }
 
     public static CWFormattedTextField createFormattedTextField(ValueModel valueModel, Format format) {
+        if(valueModel == null) {
+            throw new NullPointerException("valueModel is null");
+        }
+        if(format == null) {
+            throw new NullPointerException("format is null");
+        }
+
         CWFormattedTextField textField = new CWFormattedTextField(format);
 
         PropertyConnector connector = PropertyConnector.connect(valueModel, "value", textField, "value");
@@ -560,6 +634,10 @@ public class CWComponentFactory {
     }
 
     public static CWTextArea createTextArea(ValueModel valueModel, int maxTextLength) {
+        if(valueModel == null) {
+            throw new NullPointerException("valueModel is null");
+        }
+        
         CWTextArea textArea = new CWTextArea(maxTextLength);
 
 //        Bindings.bind(textArea, valueModel);
@@ -580,6 +658,10 @@ public class CWComponentFactory {
     }
 
     public static CWTextField createTextField(ValueModel valueModel, int maxTextLength) {
+        if(valueModel == null) {
+            throw new NullPointerException("valueModel is null");
+        }
+
         CWTextField textField = new CWTextField(maxTextLength);
 
 //        Bindings.bind(textField, valueModel);
@@ -617,7 +699,14 @@ public class CWComponentFactory {
     }
 
     public static CWLabel createLabel(final ValueModel valueModel, Icon icon, final Format format) {
-        CWLabel label = new CWLabel();
+        if(valueModel == null) {
+            System.out.println("va: " + valueModel);
+            new NullPointerException("valueModel is null").printStackTrace();
+            throw new NullPointerException("valueModel is null");
+        }
+
+        final CWLabel label = new CWLabel();
+        label.putClientProperty(CWComponentFactory.VALUE_MODEL_KEY, valueModel);
 
         ValueModel newValueModel = valueModel;
 
@@ -638,9 +727,29 @@ public class CWComponentFactory {
             newValueModel = bufferedValueModel;
         }
 
-        PropertyConnector connector = PropertyConnector.connect(newValueModel, "value", label, "text");
-        connector.updateProperty2();
-        label.putClientProperty(PROPERTY_CONNECTOR_KEY, connector);
+
+        // Wenn sich das Model ändert, auch die Anzeige ändern. Umgekehrt darf es nicht sein, da das Model, den Wert verwaltet und nicht die Anzeige
+        
+        // Eine neue Variable muss erstellt werden, da die alte nicht final sein kann
+        final ValueModel newValueModel2 = newValueModel;
+
+        // die setText Methode muss vom CWLabel aufgerufen werden! nicht vom JLabel!
+        PropertyChangeListener valueChanged = new PropertyChangeListener() {
+            public void propertyChange(PropertyChangeEvent evt) {
+                label.setText((String) newValueModel2.getValue());
+            }
+        };
+        label.putClientProperty(PROPERTY_CHANGE_LISTENER2_KEY, valueChanged);
+
+        // Aktualisiere das Label
+        if(newValueModel.getValue() != null) {
+            label.setText(newValueModel.getValue().toString());
+        } else {
+            label.setText(null);
+        }
+
+
+        System.out.println("newValueModel.getValue(): " + newValueModel.getValue() + ", " + (newValueModel.getValue() == null));
 
         if(icon != null) {
             label.setIcon(icon);
@@ -650,6 +759,9 @@ public class CWComponentFactory {
     }
 
     public static CWLabel createLabelBoolean(final ValueModel valueModel, final String trueString, final String falseString) {
+        if(valueModel == null) {
+            throw new NullPointerException("valueModel is null");
+        }
 
         CWLabel label = new CWLabel();
 
@@ -684,6 +796,9 @@ public class CWComponentFactory {
     }
 
     public static CWLabel createLabelDate(final ValueModel valueModel) {
+        if(valueModel == null) {
+            throw new NullPointerException("valueModel is null");
+        }
 
         CWLabel label = new CWLabel();
         
@@ -720,10 +835,17 @@ public class CWComponentFactory {
     }
 
     public static CWBackView createBackView(CWPanel panel) {
+        if(panel == null) {
+            throw new NullPointerException("panel is null");
+        }
         return createBackView(panel, "Zurück");
     }
 
     public static CWBackView createBackView(CWPanel panel, String backText) {
+        if(panel == null) {
+            throw new NullPointerException("panel is null");
+        }
+
         CWBackView backView = new CWBackView(panel, backText);
         return backView;
     }
@@ -765,8 +887,20 @@ public class CWComponentFactory {
     }
 
     public static CWCheckBoxList createCheckBoxList(ListModel listModel) {
+        if(listModel == null) {
+            throw new NullPointerException("listModel is null");
+        }
+
         CWCheckBoxList cbl = new CWCheckBoxList(listModel);
         cbl.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
         return cbl;
+    }
+
+    public static void createNullLabel(CWLabel label, String nullText) throws NullPointerException {
+        if(label == null) {
+            throw new NullPointerException("label is null");
+        }
+        CWNullLabel nullLabel = new CWNullLabel(label, nullText);
+        label.putClientProperty(CWComponentFactory.NULL_LABEL_KEY, nullLabel);
     }
 }

@@ -139,39 +139,39 @@ public class BoardingSchoolManagement {
         ////////////////////////////////////////////////////////////////////
         // Load logging settings
         ////////////////////////////////////////////////////////////////////
-            ss.setText("Logging wird gestartet...");
-            if(Boolean.parseBoolean(PropertiesManager.getProperty("application.logging", "true")) == true) {
-                try {
-                    String logDirectoryName = PropertiesManager.getProperty("application.logDirectory", "logs");
-                    File logDirectory = new File(logDirectoryName);
-                    if(!logDirectory.exists()) {
-                        logDirectory.mkdir();
-                    }
-
-                    String logFileName = PropertiesManager.getProperty("application.logFile", "log.txt");
-                    File logFile = new File(logFileName);
-                    if(!logFile.exists()) {
-                        try {
-                            logFile.createNewFile();
-                        } catch (IOException ex) {
-                            Logger.getLogger(BoardingSchoolManagement.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    }
-
-                    String completeFileName = "";
-                    if(!logDirectoryName.isEmpty()) {
-                        completeFileName = logDirectoryName + System.getProperty("file.separator");
-                    }
-                    completeFileName = completeFileName + logFileName;
-
-                    FileOutputStream fileOutputStream = new FileOutputStream(logFile);
-                    PrintStream printStream = new PrintStream(fileOutputStream);
-                    System.setOut(printStream);
-                    System.setErr(printStream);
-                } catch (FileNotFoundException ex) {
-                    java.util.logging.Logger.getLogger(BoardingSchoolManagement.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+//            ss.setText("Logging wird gestartet...");
+//            if(Boolean.parseBoolean(PropertiesManager.getProperty("application.logging", "true")) == true) {
+//                try {
+//                    String logDirectoryName = PropertiesManager.getProperty("application.logDirectory", "logs");
+//                    File logDirectory = new File(logDirectoryName);
+//                    if(!logDirectory.exists()) {
+//                        logDirectory.mkdir();
+//                    }
+//
+//                    String logFileName = PropertiesManager.getProperty("application.logFile", "log.txt");
+//                    File logFile = new File(logFileName);
+//                    if(!logFile.exists()) {
+//                        try {
+//                            logFile.createNewFile();
+//                        } catch (IOException ex) {
+//                            Logger.getLogger(BoardingSchoolManagement.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    }
+//
+//                    String completeFileName = "";
+//                    if(!logDirectoryName.isEmpty()) {
+//                        completeFileName = logDirectoryName + System.getProperty("file.separator");
+//                    }
+//                    completeFileName = completeFileName + logFileName;
+//
+//                    FileOutputStream fileOutputStream = new FileOutputStream(logFile);
+//                    PrintStream printStream = new PrintStream(fileOutputStream);
+//                    System.setOut(printStream);
+//                    System.setErr(printStream);
+//                } catch (FileNotFoundException ex) {
+//                    java.util.logging.Logger.getLogger(BoardingSchoolManagement.class.getName()).log(Level.SEVERE, null, ex);
+//                }
+//            }
 
         ////////////////////////////////////////////////////////////////////
         // Load modules
