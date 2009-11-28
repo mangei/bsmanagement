@@ -70,12 +70,22 @@ public class CWUtils {
         return new Date(c.getTimeInMillis());
     }
 
+    /**
+     * Loads an image
+     * @param path absolute packagepath to the image
+     * @return Image
+     */
     public static Image loadImage(String path) {
         URL imgURL = Thread.currentThread().getContextClassLoader().getResource(path);
         Image img = Toolkit.getDefaultToolkit().createImage(imgURL);
         return img;
     }
 
+    /**
+     * Loads an icon
+     * @param path absolute packagepath to the image
+     * @return ImageIcon
+     */
     public static ImageIcon loadIcon(String path) {
         URL imgURL = null;
         try {

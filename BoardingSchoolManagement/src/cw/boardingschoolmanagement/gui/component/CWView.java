@@ -8,6 +8,7 @@ import com.jidesoft.swing.JideSwingUtilities;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -76,7 +77,7 @@ public class CWView extends CWPanel {
         buttonPanel = new CWButtonPanel();
         buttonPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
 
-        JPanel topInfoActionPanel = new JPanel(new BorderLayout());
+        JPanel topInfoActionPanel = CWComponentFactory.createPanel(new BorderLayout());
         topInfoActionPanel.add(headerInfoPanel = new CWHeaderInfoPanel(headerInfo), BorderLayout.NORTH);
         topInfoActionPanel.add(buttonPanel, BorderLayout.SOUTH);
 
@@ -87,15 +88,13 @@ public class CWView extends CWPanel {
         mainPanel.add(topPanel, BorderLayout.NORTH);
 
         // ContentPanel
-        contentPanel = new JPanel();
+        contentPanel = CWComponentFactory.createPanel();
         contentPanel.setLayout(new BorderLayout());
         contentPanel.setBorder(new EmptyBorder(0,0,0,0));
-        contentPanel.setOpaque(false);
 
-        contentScrollPane = new JScrollPane(contentPanel);
+        contentScrollPane = CWComponentFactory.createScrollPane(contentPanel);
         contentScrollPane.setBorder(new EmptyBorder(0,0,0,0));
-        contentScrollPane.getViewport().setOpaque(false);
-        contentScrollPane.setOpaque(false);
+        
 //        contentScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 //        contentScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
 
@@ -112,8 +111,6 @@ public class CWView extends CWPanel {
     }
 
     public void dispose() {
-
-        System.out.println("  headerText: " + headerInfo.getHeaderText());
         buttonPanel.removeAll();
         buttonPanel.setLayout(null);
         buttonPanel.setUI(null);

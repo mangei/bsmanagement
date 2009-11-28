@@ -307,6 +307,9 @@ public class CWComponentFactory {
         JScrollPane sp = new JScrollPane(component);
         sp.setBorder(null);
         sp.setOpaque(false);
+        sp.getViewport().setOpaque(false);
+        sp.getHorizontalScrollBar().setUnitIncrement(20);
+        sp.getVerticalScrollBar().setUnitIncrement(20);
         return sp;
     }
 
@@ -593,6 +596,7 @@ public class CWComponentFactory {
         tree.setHighlighters(HighlighterFactory.createSimpleStriping());
         tree.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
         tree.setShowsRootHandles(true);
+        tree.setExpandsSelectedPaths(true);
         return tree;
     }
 
