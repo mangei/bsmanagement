@@ -84,15 +84,18 @@ public class HeaderButtonUI2 extends BasicButtonUI {
         return focusColor;
     }
 
-    private static final Color ENABLED_BORDER = new Color(215, 220, 228);
-    private static final Color ENABLED_DARK = new Color(234, 237, 241);
-    private static final Color ENABLED_LIGHT = new Color(255, 255, 255);
-    private static final Color DISABLED_BORDER = new Color(215, 220, 228);
-    private static final Color DISABLED_DARK = new Color(158, 158, 158);
-    private static final Color DISABLED_LIGHT = new Color(204, 204, 204);
-    private static final Color ACTIVE_BORDER = new Color(215, 220, 228);
-    private static final Color ACTIVE_DARK = Color.WHITE;
-    private static final Color ACTIVE_LIGHT = new Color(234, 237, 241);
+    private static final Color ENABLED_BORDER   = new Color(215, 220, 228);
+    private static final Color ENABLED_TOP      = Color.WHITE;
+    private static final Color ENABLED_BOTTOM   = new Color(234, 237, 241);
+    private static final Color DISABLED_BORDER  = new Color(215, 220, 228);
+    private static final Color DISABLED_TOP     = new Color(204, 204, 204);
+    private static final Color DISABLED_BOTTOM  = new Color(158, 158, 158);
+    private static final Color PRESSED_BORDER   = new Color(255, 197, 38);
+    private static final Color PRESSED_TOP      = new Color(255, 238, 82);
+    private static final Color PRESSED_BOTTOM   = new Color(255, 181, 8);
+    private static final Color HOVER_BORDER     = new Color(255, 197, 38);
+    private static final Color HOVER_TOP        = Color.WHITE;
+    private static final Color HOVER_BOTTOM     = new Color(234, 237, 241);
 
     // ********************************
     //          Paint
@@ -129,23 +132,41 @@ public class HeaderButtonUI2 extends BasicButtonUI {
         }
 
         // Colors
-        Color cBorder, cDark, cLight;
+        Color cBorder, cBottom, cTop;
 
         if (c.isEnabled()) {
-            if (model.isPressed()) {
-                cBorder = ACTIVE_BORDER;
-                cDark = ACTIVE_DARK;
-                cLight = ACTIVE_LIGHT;
+            if (model.isRollover()) {
+                cBorder = HOVER_BORDER;
+                cTop    = HOVER_TOP;
+                cBottom = HOVER_BOTTOM;
+                
+                if(model.isArmed()) {
+                    cBorder = PRESSED_BORDER;
+                    cTop    = PRESSED_TOP;
+                    cBottom = PRESSED_BOTTOM;
+                }
+
+                System.out.println("---");
+                System.out.println("isArmed:    " + model.isArmed());
+                System.out.println("isRollover: " + model.isRollover());
+                System.out.println("isPressed:  " + model.isPressed());
+                System.out.println("isEnabled:  " + model.isEnabled());
+                System.out.println("isSelected: " + model.isSelected());
+            }
+            else if (model.isPressed()) {
+                cBorder = PRESSED_BORDER;
+                cTop    = PRESSED_TOP;
+                cBottom = PRESSED_BOTTOM;
 
             } else {
                 cBorder = ENABLED_BORDER;
-                cDark = ENABLED_DARK;
-                cLight = ENABLED_LIGHT;
+                cTop    = ENABLED_TOP;
+                cBottom = ENABLED_BOTTOM;
             }
         } else {
             cBorder = DISABLED_BORDER;
-            cDark = DISABLED_DARK;
-            cLight = DISABLED_LIGHT;
+            cTop    = DISABLED_TOP ;
+            cBottom = DISABLED_BOTTOM;
         }
 
         Shape vButtonShapeFill = new RoundRectangle2D.Double((double) x, (double) y, (double) w+1, (double) h, (double) arc, (double) arc);
@@ -159,7 +180,7 @@ public class HeaderButtonUI2 extends BasicButtonUI {
         // Background
         Shape vOldClip = g.getClip();
         g2d.setClip(areaFill);
-        GradientPaint vPaint = new GradientPaint(x, y, cLight, x, y + h, cDark);
+        GradientPaint vPaint = new GradientPaint(x, y, cTop, x, y + h, cBottom);
         g2d.setPaint(vPaint);
         g2d.fillRect(x, y, w, h);
         g2d.setClip(vOldClip);
@@ -200,19 +221,19 @@ public class HeaderButtonUI2 extends BasicButtonUI {
 
         if (b.isEnabled()) {
             if (model.isPressed()) {
-                cBorder = ACTIVE_BORDER;
-                cDark = ACTIVE_DARK;
-                cLight = ACTIVE_LIGHT;
+                cBorder = PRESSED_BORDER;
+                cDark = PRESSED_BOTTOM;
+                cLight = PRESSED_TOP;
 
             } else {
                 cBorder = ENABLED_BORDER;
-                cDark = ENABLED_DARK;
-                cLight = ENABLED_LIGHT;
+                cDark = ENABLED_BOTTOM;
+                cLight = ENABLED_TOP;
             }
         } else {
             cBorder = DISABLED_BORDER;
-            cDark = DISABLED_DARK;
-            cLight = DISABLED_LIGHT;
+            cDark = DISABLED_BOTTOM;
+            cLight = DISABLED_TOP;
         }
 
         Shape vButtonShapeFill = new RoundRectangle2D.Double((double) x, (double) y, (double) w+1, (double) h, (double) arc, (double) arc);
