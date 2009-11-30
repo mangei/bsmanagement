@@ -82,7 +82,6 @@ public class EditCustomerPresentationModel
         getBufferedModel(Customer.PROPERTYNAME_GENDER).addValueChangeListener(saveListener);
         getBufferedModel(Customer.PROPERTYNAME_TITLE).addValueChangeListener(saveListener);
         getBufferedModel(Customer.PROPERTYNAME_FORENAME).addValueChangeListener(saveListener);
-        getBufferedModel(Customer.PROPERTYNAME_FORENAME2).addValueChangeListener(saveListener);
         getBufferedModel(Customer.PROPERTYNAME_SURNAME).addValueChangeListener(saveListener);
         getBufferedModel(Customer.PROPERTYNAME_STREET).addValueChangeListener(saveListener);
         getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).addValueChangeListener(saveListener);
@@ -130,7 +129,6 @@ public class EditCustomerPresentationModel
             getBufferedModel(Customer.PROPERTYNAME_GENDER).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_TITLE).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_FORENAME).removeValueChangeListener(saveListener);
-            getBufferedModel(Customer.PROPERTYNAME_FORENAME2).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_SURNAME).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_STREET).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).removeValueChangeListener(saveListener);
@@ -150,7 +148,6 @@ public class EditCustomerPresentationModel
         getBufferedModel(Customer.PROPERTYNAME_GENDER).release();
         getBufferedModel(Customer.PROPERTYNAME_TITLE).release();
         getBufferedModel(Customer.PROPERTYNAME_FORENAME).release();
-        getBufferedModel(Customer.PROPERTYNAME_FORENAME2).release();
         getBufferedModel(Customer.PROPERTYNAME_SURNAME).release();
         getBufferedModel(Customer.PROPERTYNAME_STREET).release();
         getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).release();

@@ -33,7 +33,6 @@ public class Customer
     private boolean active              = true;
     private String title                = "";
     private String forename             = "";
-    private String forename2            = "";
     private String surname              = "";
     private boolean gender              = true;
     private String street               = "";
@@ -59,7 +58,6 @@ public class Customer
     public final static String PROPERTYNAME_ID = "id";
     public final static String PROPERTYNAME_TITLE = "title";
     public final static String PROPERTYNAME_FORENAME = "forename";
-    public final static String PROPERTYNAME_FORENAME2 = "forename2";
     public final static String PROPERTYNAME_SURNAME = "surname";
     public final static String PROPERTYNAME_GENDER = "gender";
     public final static String PROPERTYNAME_STREET = "street";
@@ -120,8 +118,6 @@ public class Customer
         buf.append(", ");
         buf.append(forename);
         buf.append(", ");
-        buf.append(forename2);
-        buf.append(", ");
         buf.append(surname);
         buf.append(", ");
         buf.append(street);
@@ -173,16 +169,6 @@ public class Customer
         String old = this.forename;
         this.forename = forename;
         firePropertyChange(PROPERTYNAME_FORENAME, old, forename);
-    }
-
-    public String getForename2() {
-        return forename2;
-    }
-
-    public void setForename2(String forename2) {
-        String old = this.forename2;
-        this.forename2 = forename2;
-        firePropertyChange(PROPERTYNAME_FORENAME2, old, forename2);
     }
 
     public String getSurname() {

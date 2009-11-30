@@ -76,8 +76,6 @@ public class SearchCustomerSelectorFilterExtention
             costumerStringBuilder.append(';');
             costumerStringBuilder.append(costumer.getForename());
             costumerStringBuilder.append(';');
-            costumerStringBuilder.append(costumer.getForename2());
-            costumerStringBuilder.append(';');
             costumerStringBuilder.append(costumer.getSurname());
             costumerStringBuilder.append(';');
             costumerStringBuilder.append(costumer.getStreet());

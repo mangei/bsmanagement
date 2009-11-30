@@ -35,7 +35,6 @@ public class EditCustomerEditCustomerView extends CWView
     private CWPanel pGender;
     private CWTextField tfTitle;
     private CWTextField tfForename;
-    private CWTextField tfForename2;
     private CWTextField tfSurname;
     private CWCheckBox cGuardianActive;
     private CWPanel pGuardianGender;
@@ -80,7 +79,6 @@ public class EditCustomerEditCustomerView extends CWView
         pGender             = CWComponentFactory.createTrueFalsePanel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_GENDER), "Herr", "Frau", model.getEditCustomerPresentationModel().getModel(Customer.PROPERTYNAME_GENDER).booleanValue());
         tfTitle             = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_TITLE), false);
         tfForename          = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_FORENAME), false);
-        tfForename2         = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_FORENAME2), false);
         tfSurname           = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_SURNAME), false);
 
         dcBirthday          = CWComponentFactory.createDateChooser(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY));
@@ -115,7 +113,6 @@ public class EditCustomerEditCustomerView extends CWView
                 .addComponent(pGender)
                 .addComponent(tfTitle)
                 .addComponent(tfForename)
-                .addComponent(tfForename2)
                 .addComponent(tfSurname)
                 .addComponent(dcBirthday)
                 .addComponent(cGuardianActive)
@@ -276,12 +273,10 @@ public class EditCustomerEditCustomerView extends CWView
         builder.add(pActive,                cc.xy(7, row));
         builder.addLabel("Titel:",          cc.xy(1, row+=2));
         builder.add(tfTitle,                cc.xy(3, row));
-        builder.addLabel("Vorname:",        cc.xy(1, row+=2));
-        builder.add(tfForename,             cc.xy(3, row));
-        builder.addLabel("2. Vorname:",     cc.xy(5, row));
-        builder.add(tfForename2,            cc.xy(7, row));
         builder.addLabel("Nachname",        cc.xy(1, row+=2));
-        builder.add(tfSurname,              cc.xyw(3, row, 5));
+        builder.add(tfSurname,              cc.xy(3, row));
+        builder.addLabel("Vorname:",        cc.xy(5, row));
+        builder.add(tfForename,             cc.xy(7, row));
         builder.addLabel("Geburtsdatum:",   cc.xy(1, row+=2));
         builder.add(dcBirthday,             cc.xy(3, row));
 

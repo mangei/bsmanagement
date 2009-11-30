@@ -53,9 +53,9 @@ public class CustomerSelectorView extends CWPanel
                         tCustomers)));
 
         tCustomers.getColumns(true).get(0).setCellRenderer(new GenderTableCellRenderer());
-        tCustomers.getColumns(true).get(5).setCellRenderer(new DateTimeTableCellRenderer(CalendarUtil.DATE_FORMAT_STANDARD));
-        tCustomers.getColumns(true).get(16).setCellRenderer(new ActiveCustomerTableCellRenderer());
-        tCustomers.getColumns(true).get(17).setCellRenderer(new DateTimeTableCellRenderer(CalendarUtil.DATETIME_FORMAT_STANDARD));
+        tCustomers.getColumns(true).get(4).setCellRenderer(new DateTimeTableCellRenderer(CalendarUtil.DATE_FORMAT_STANDARD));
+        tCustomers.getColumns(true).get(15).setCellRenderer(new ActiveCustomerTableCellRenderer());
+        tCustomers.getColumns(true).get(16).setCellRenderer(new DateTimeTableCellRenderer(CalendarUtil.DATETIME_FORMAT_STANDARD));
     }
 
     private void initEventHandling() {

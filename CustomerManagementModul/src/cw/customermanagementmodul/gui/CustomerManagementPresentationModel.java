@@ -54,7 +54,7 @@ public class CustomerManagementPresentationModel
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
                 CustomerManager.getInstance().getAllActive(),
                 "cw.customerboardingmanagement.CustomerManangementView.customerTableState"
-                );
+        );
         
         headerInfo = new CWHeaderInfo(
                 "Kunden verwalten",

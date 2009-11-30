@@ -319,34 +319,32 @@ public class CustomerSelectorPresentationModel
                 case 2:
                     return "Vorname";
                 case 3:
-                    return "Vorname2";
-                case 4:
                     return "Nachname";
-                case 5:
+                case 4:
                     return "Geburtsdatum";
-                case 6:
+                case 5:
                     return "Adresse";
-                case 7:
+                case 6:
                     return "PLZ";
-                case 8:
+                case 7:
                     return "Ort";
-                case 9:
+                case 8:
                     return "Bundesland";
-                case 10:
+                case 9:
                     return "Staat";
-                case 11:
+                case 10:
                     return "Mobiltelefon";
-                case 12:
+                case 11:
                     return "Festnetztelefon";
-                case 13:
+                case 12:
                     return "Fax";
-                case 14:
+                case 13:
                     return "eMail";
-                case 15:
+                case 14:
                     return "Bemerkung";
-                case 16:
+                case 15:
                     return "Status";
-                case 17:
+                case 16:
                     return "Inaktiv seit";
                 default:
                     return "";
@@ -384,34 +382,32 @@ public class CustomerSelectorPresentationModel
                 case 2:
                     return c.getForename();
                 case 3:
-                    return c.getForename2();
-                case 4:
                     return c.getSurname();
-                case 5:
+                case 4:
                     return c.getBirthday();
-                case 6:
+                case 5:
                     return c.getStreet();
-                case 7:
+                case 6:
                     return c.getPostOfficeNumber();
-                case 8:
+                case 7:
                     return c.getCity();
-                case 9:
+                case 8:
                     return c.getProvince();
-                case 10:
+                case 9:
                     return c.getCountry();
-                case 11:
+                case 10:
                     return c.getMobilephone();
-                case 12:
+                case 11:
                     return c.getLandlinephone();
-                case 13:
+                case 12:
                     return c.getFax();
-                case 14:
+                case 13:
                     return c.getEmail();
-                case 15:
+                case 14:
                     return c.getComment();
-                case 16:
+                case 15:
                     return c.isActive();
-                case 17:
+                case 16:
                     return c.getInactiveDate();
                 default:
                     return "";
