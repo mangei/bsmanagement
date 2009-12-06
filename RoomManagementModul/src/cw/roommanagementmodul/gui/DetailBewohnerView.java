@@ -24,7 +24,6 @@ public class DetailBewohnerView extends CWView
     private CWButton bBack;
     private CWLabel lAnrede;
     private CWLabel lVorname;
-    private CWLabel lVorname2;
     private CWLabel lNachname;
     private CWLabel lGeburtsdatum;
     private CWLabel lStrasse;
@@ -62,7 +61,6 @@ public class DetailBewohnerView extends CWView
         this.lAnrede = CWComponentFactory.createLabel(c.getTitle());
         this.lNachname = CWComponentFactory.createLabel(c.getSurname());
         this.lVorname = CWComponentFactory.createLabel(c.getForename());
-        this.lVorname2 = CWComponentFactory.createLabel(c.getForename2());
         if (c.getPostOfficeNumber() != null) {
             lGeburtsdatum = CWComponentFactory.createLabel(c.getBirthday().toString());
         } else {
@@ -131,8 +129,6 @@ public class DetailBewohnerView extends CWView
         builder.add(lAnrede, cc.xy(3, 3));
         builder.addLabel("Vorname:", cc.xy(1, 5));
         builder.add(lVorname, cc.xy(3, 5));
-        builder.addLabel("2. Vorname:", cc.xy(5, 5));
-        builder.add(lVorname2, cc.xy(7, 5));
         builder.addLabel("Nachname", cc.xy(1, 7));
         builder.add(lNachname, cc.xyw(3, 7, 5));
         builder.addLabel("Geburtsdatum:", cc.xy(1, 9));

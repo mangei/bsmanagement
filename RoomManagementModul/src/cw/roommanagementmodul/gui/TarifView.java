@@ -4,7 +4,7 @@ import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
-import cw.roommanagementmodul.component.DateTimeTableCellRenderer;
+import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWTable;
 import java.awt.BorderLayout;
