@@ -126,8 +126,6 @@ public class StudentsOverviewPresentationModel
                 case 1:
                     return s.getCustomer().getForename();
                 case 2:
-                    return s.getCustomer().getForename2();
-                case 3:
                     return s.getCustomer().getSurname();
                 default:
                     return "";
