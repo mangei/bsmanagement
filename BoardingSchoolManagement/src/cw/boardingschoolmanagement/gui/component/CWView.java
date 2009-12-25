@@ -90,14 +90,11 @@ public class CWView extends CWPanel {
         // ContentPanel
         contentPanel = CWComponentFactory.createPanel();
         contentPanel.setLayout(new BorderLayout());
-        contentPanel.setBorder(new EmptyBorder(0,0,0,0));
+        contentPanel.setBorder(null);
 
         contentScrollPane = CWComponentFactory.createScrollPane(contentPanel);
-        contentScrollPane.setBorder(new EmptyBorder(0,0,0,0));
+        contentScrollPane.setBorder(null);
         
-//        contentScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
-//        contentScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-
         if(contentScrolls) {
             mainPanel.add(contentScrollPane, BorderLayout.CENTER);
         } else {
@@ -243,8 +240,8 @@ public class CWView extends CWPanel {
         private CWHeaderInfo headerInfo;
 
         public CWHeaderInfoPanel(CWHeaderInfo headerInfo) {
-            this.headerInfo = headerInfo;
 
+            // Build the interface
             setUI(new CWHeaderPanelUI());
             int gab = 3;
             setBorder(new EmptyBorder(gab, gab + 5, gab, gab));
@@ -264,8 +261,8 @@ public class CWView extends CWPanel {
             lImage = new JLabel();
 
             FormLayout layout = new FormLayout(
-                    "2dlu, pref, 10dlu, 2dlu, pref:grow",
-                    "2dlu, pref, pref, 2dlu, "
+                    "2dlu, default, 10dlu, 2dlu, default:grow",
+                    "2dlu, pref, pref, 2dlu"
             );
 
             PanelBuilder builder = new PanelBuilder(layout, this);
@@ -274,7 +271,7 @@ public class CWView extends CWPanel {
             builder.add(lDescription, cc.xy(5, 3));
             builder.add(lImage, cc.xywh(2, 2, 1, 2));
 
-            updateHeaderInfo();
+            setHeaderInfo(headerInfo);
         }
 
         public CWHeaderInfo getHeaderInfo() {
@@ -283,12 +280,19 @@ public class CWView extends CWPanel {
 
         public void setHeaderInfo(CWHeaderInfo headerInfo) {
             this.headerInfo = headerInfo;
+
+            // Entferne das HTML-Markup, denn es wird automatisch hinzugefügt.
+            headerInfo.getDescription().toLowerCase().replace("<html>", "");
+            headerInfo.getDescription().toLowerCase().replace("</html>", "");
+            headerInfo.getDescription().toLowerCase().replace("<body>", "");
+            headerInfo.getDescription().toLowerCase().replace("</body>", "");
+            
             updateHeaderInfo();
         }
 
         private void updateHeaderInfo() {
             lHeaderText.setText(headerInfo.getHeaderText());
-            lDescription.setText(headerInfo.getDescription());
+            lDescription.setText("<html><body>" + headerInfo.getDescription() + "</body></html>");
             lImage.setIcon(headerInfo.getIcon());
 
             if(headerInfo.getDescription().isEmpty()) {

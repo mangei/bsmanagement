@@ -232,7 +232,7 @@ public class CWComponentFactory {
     }
 
     public static CWTable createTable(TableModel tableModel, final String emptyText) {
-        return createTable(null, emptyText, null);
+        return createTable(tableModel, emptyText, null);
     }
 
     public static CWTable createTable(TableModel tableModel, final String emptyText, String tableStateName) {

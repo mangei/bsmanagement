@@ -36,7 +36,7 @@ public class GeneralConfigurationExtention
     }
 
     public void save() {
-        GUIManager.getInstance().setPathPanelPosition(model.getPathPanelPosition());
+        GUIManager.getInstance().getPathPanel().setPosition(model.getPathPanelPosition());
         GUIManager.getInstance().setPathPanelVisible((Boolean)model.getPathPanelActiveModel().getValue());
 
         PropertiesManager.setProperty("configuration.general.pathPanelActive", model.getPathPanelActiveModel().getValue().toString());

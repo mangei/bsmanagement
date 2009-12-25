@@ -9,6 +9,7 @@ import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.component.CWHeader;
 import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import cw.boardingschoolmanagement.gui.component.CWPathPanel;
+import cw.boardingschoolmanagement.gui.component.CWPathPanel.PathPanelPosition;
 import cw.boardingschoolmanagement.gui.component.CWStatusBar;
 import cw.boardingschoolmanagement.gui.component.CWTray;
 import java.awt.AWTException;
@@ -16,7 +17,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Frame;
-import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.SystemTray;
 import java.awt.TrayIcon;
@@ -36,7 +36,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.ToolTipManager;
 import javax.swing.border.EmptyBorder;
 import org.jdesktop.application.SingleFrameApplication;
@@ -64,12 +63,6 @@ public class GUIManager {
     private CWPathPanel pathPanel;
     private JFrame frame;
     private CWTray tray;
-
-    public enum PathPanelPositions {
-
-        NORTH, SOUTH
-    }
-    private PathPanelPositions pathPanelPosition;
 
     // Colors
     public static final Color BORDER_COLOR = new Color(215, 220, 228);
@@ -105,22 +98,7 @@ public class GUIManager {
         // The Panel of the Path
         pathPanel = new CWPathPanel();
 
-        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true) {
-
-            public final Color COLOR1 = new Color(215, 220, 228);
-            public final Color COLOR2 = new Color(178, 187, 200);
-
-            @Override
-            protected void paintComponent(Graphics g) {
-                super.paintComponent(g);
-                int x = getDividerLocation();
-                int size = getDividerSize();
-                g.setColor(COLOR1);
-                g.drawLine(x, 0, x + size, 0);
-                g.drawLine(x + size - 1, 0, x + size - 1, getHeight());
-            }
-        };
-        splitPane.setOpaque(false);
+        splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
         splitPane.setDividerSize(5);
 
         // Set the divider location
@@ -158,9 +136,7 @@ public class GUIManager {
             }
         });
 
-        pathPanelPosition = PathPanelPositions.valueOf(PropertiesManager.getProperty("configuration.general.pathPanelPosition"));
-
-
+        
         generateGUI();
 
 
@@ -229,21 +205,10 @@ public class GUIManager {
 
         // Init ViewPanel
         viewPanel = new JPanel(new BorderLayout());
+        viewPanel.add(componentView, BorderLayout.CENTER);
 
         // Init PathPanel
-        switch (pathPanelPosition) {
-            case NORTH:
-                viewPanel.add(pathPanel, BorderLayout.NORTH);
-                break;
-            case SOUTH:
-                viewPanel.add(pathPanel, BorderLayout.SOUTH);
-                break;
-        }
-        //Setzt das Pfadpanel sichtbar(true) oder unsichtbar(false)
-        //True oder Flase wird aus der Configurationsdatei gelesen
-        pathPanel.setVisible(Boolean.parseBoolean(PropertiesManager.getProperty("configuration.general.pathPanelActive")));
-
-        viewPanel.add(componentView, BorderLayout.CENTER);
+        initPathPanel();
 
         splitPane.add(createSidePanel(), JSplitPane.LEFT);
         splitPane.add(viewPanel, JSplitPane.RIGHT);
@@ -267,7 +232,7 @@ public class GUIManager {
     private JComponent createSidePanel() {
         CWMenuPanel sideBar = MenuManager.getSideMenu();
 
-        sideBar.setPreferredSize(new Dimension(115, 80));
+//        sideBar.setPreferredSize(new Dimension(115, 80));
 //        sideBar.addComponentListener(new ComponentAdapter() {
 //
 //            @Override
@@ -278,7 +243,7 @@ public class GUIManager {
 
         JScrollPane scrollPane = new JScrollPane(sideBar);
         scrollPane.setBorder(null);
-        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+//        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
         return scrollPane;
     }
@@ -336,33 +301,50 @@ public class GUIManager {
 
     }
 
-    public void setPathPanelPosition(PathPanelPositions position) {
-        if (position != pathPanelPosition) {
+    private void initPathPanel() {
+
+        pathPanel.addPropertyChangeListener("position", new PropertyChangeListener() {
+
+            public void propertyChange(PropertyChangeEvent evt) {
+                PathPanelPosition position = (PathPanelPosition) evt.getNewValue();
+                setPathPanelPosition(position);
+            }
+        });
+
+        setPathPanelPosition(null);
+    }
+
+    private void setPathPanelPosition(PathPanelPosition position) {
+        // It is null, when the programm initializes
+        if(position != null) {
 
             // Remove from the old position
-            switch (pathPanelPosition) {
+            switch (pathPanel.getPosition()) {
                 case NORTH:
                     viewPanel.remove(pathPanel);
                     break;
+                default:
                 case SOUTH:
                     viewPanel.remove(pathPanel);
                     break;
             }
 
-            // Add to the new position
-            switch (position) {
-                case NORTH:
-                    viewPanel.add(pathPanel, BorderLayout.NORTH);
-                    break;
-                case SOUTH:
-                    viewPanel.add(pathPanel, BorderLayout.SOUTH);
-                    break;
-            }
-
-            pathPanelPosition = position;
-
-            viewPanel.repaint();
+            // Set the new position
+            pathPanel.setPosition(position);
         }
+
+        // Add to the new position
+        switch (pathPanel.getPosition()) {
+            case NORTH:
+                viewPanel.add(pathPanel, BorderLayout.NORTH);
+                break;
+            case SOUTH:
+                viewPanel.add(pathPanel, BorderLayout.SOUTH);
+                break;
+        }
+
+        viewPanel.validate();
+        viewPanel.repaint();
     }
 
     public void setPathPanelVisible(boolean visible) {
@@ -554,4 +536,9 @@ public class GUIManager {
     public CWTray getTray() {
         return tray;
     }
+
+    public CWPathPanel getPathPanel() {
+        return pathPanel;
+    }
+
 }

@@ -67,7 +67,8 @@ public class ConfigurationView extends CWView
         buttonBar.setBorder(BorderFactory.createEmptyBorder(3, 3, 3, 3));
         buttonBar.setOpaque(false);
         buttonBarPanel.add(buttonBar, BorderLayout.CENTER);
-        buttonBar.setPreferredSize(new Dimension(100,100));
+        buttonBar.setMinimumSize(new Dimension(100,100));
+
         final CardLayout cardLayout = new CardLayout();
         final JPanel cardPanel = CWComponentFactory.createPanel(cardLayout);
 

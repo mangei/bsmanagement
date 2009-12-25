@@ -4,8 +4,8 @@ import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWPathPanel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.GUIManager;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
@@ -44,7 +44,7 @@ public class GeneralConfigurationPresentationModel
         pathPanelPositionSelection = new SelectionInList<String>();
         pathPanelPositionSelection.getList().add("Oben");
         pathPanelPositionSelection.getList().add("Unten");
-        switch(GUIManager.PathPanelPositions.valueOf((String)generalConfigruationMap.get("pathPanelPosition"))) {
+        switch(CWPathPanel.PathPanelPosition.valueOf((String)generalConfigruationMap.get("pathPanelPosition"))) {
             case NORTH: pathPanelPositionSelection.setSelectionIndex(0); break;
             default:
             case SOUTH: pathPanelPositionSelection.setSelectionIndex(1);
@@ -74,11 +74,11 @@ public class GeneralConfigurationPresentationModel
         }
     }
 
-    public GUIManager.PathPanelPositions getPathPanelPosition() {
+    public CWPathPanel.PathPanelPosition getPathPanelPosition() {
         switch(pathPanelPositionSelection.getSelectionIndex()) {
-            case 0: return GUIManager.PathPanelPositions.NORTH;
+            case 0: return CWPathPanel.PathPanelPosition.NORTH;
             default:
-            case 1: return GUIManager.PathPanelPositions.SOUTH;
+            case 1: return CWPathPanel.PathPanelPosition.SOUTH;
         }
     }
 
