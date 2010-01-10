@@ -116,11 +116,10 @@ public class GroupManagementPresentationModel
 
             final EditGroupPresentationModel model = new EditGroupPresentationModel(
                     group,
-                    new CWHeaderInfo("Gruppe erstellen")
-            );
+                    new CWHeaderInfo("Gruppe erstellen"));
             final EditGroupView editView = new EditGroupView(model);
-            model.addButtonListener(new ButtonListener() {
 
+            model.addButtonListener(new ButtonListener() {
                 boolean customerAlreadyCreated = false;
 
                 public void buttonPressed(ButtonEvent evt) {
@@ -173,7 +172,7 @@ public class GroupManagementPresentationModel
 
                 public void buttonPressed(ButtonEvent evt) {
                     if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                        GroupManager.getInstance().save(group);
+                        GroupManager.getInstance().update(group);
                         GUIManager.getStatusbar().setTextAndFadeOut("Gruppe wurde aktualisiert.");
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
