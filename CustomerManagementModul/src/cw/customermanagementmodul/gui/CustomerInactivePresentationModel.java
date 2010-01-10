@@ -21,19 +21,14 @@ import javax.swing.JOptionPane;
 /**
  * @author Manuel Geier (CreativeWorkers)
  */
-public class CustomerInactivePresentationModel
-{
+public class CustomerInactivePresentationModel {
 
     private Action activateAction;
     private Action deleteAction;
-
     public static String BUTTON_OWN_ACTIVE = "activeButton";
-
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
-
     private CWHeaderInfo headerInfo;
     private ButtonListenerSupport buttonListenerSupport;
-
     private SelectionHandler selectionHandler;
 
     public CustomerInactivePresentationModel() {
@@ -49,15 +44,13 @@ public class CustomerInactivePresentationModel
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
                 CustomerManager.getInstance().getAllInactive(),
-                "cw.customerboardingmanagement.CustomerInactiveView.customerTableState"
-                );
-        
+                "cw.customerboardingmanagement.CustomerInactiveView.customerTableState");
+
         headerInfo = new CWHeaderInfo(
                 "Inaktive Kunden",
                 "Hier sehen Sie alle inaktiven Kunden die sich noch im System befinden.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactives.png"),
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactives.png")
-        );
+                CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactives.png"));
     }
 
     private void initEventHandling() {
@@ -80,12 +73,12 @@ public class CustomerInactivePresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            
+
             Customer c = customerSelectorPresentationModel.getSelectedCustomer();
             c.setActive(true);
             c.setInactiveDate(null);
             customerSelectorPresentationModel.remove(c);
-            CustomerManager.getInstance().save(c);
+            CustomerManager.getInstance().update(c);
 
             GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde wieder aktiviert.");
 
@@ -113,7 +106,7 @@ public class CustomerInactivePresentationModel
                 String statusBarText;
                 String forename = customer.getForename();
                 String surname = customer.getSurname();
-                statusBarText = "'" + forename + " " + surname +  "' wurde gelöscht.";
+                statusBarText = "'" + forename + " " + surname + "' wurde gelöscht.";
 
                 customerSelectorPresentationModel.remove(customer);
                 CustomerManager.getInstance().delete(customer);
@@ -128,7 +121,6 @@ public class CustomerInactivePresentationModel
     ////////////////////////////////////////////////////////////////////////////
     // Getter methods for the model
     ////////////////////////////////////////////////////////////////////////////
-
     public Action getActivateAction() {
         return activateAction;
     }
