@@ -333,7 +333,7 @@ public class EditCustomerPresentationModel
             }
             if (i == 0) {
 
-                // If the save-method doesn't worked, because of an error, to nothing
+                // If the save-method doesn't worked, because of an error, do nothing
                 if (!save()) {
                     return;
                 }
@@ -396,7 +396,7 @@ public class EditCustomerPresentationModel
         guardianPresentationModel.triggerCommit();
 
         // Den Kunden speichern (Guardian wird automatisch mittels Hibernate-Cascade mitgespeichert)
-        CustomerManager.getInstance().save(getBean());
+        CustomerManager.getInstance().update(getBean());
 
         // Die Erweiterungen speichern lassen
         for (EditCustomerTabExtentionPoint extention : extentions) {
