@@ -1,4 +1,3 @@
-
 package cw.customermanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;

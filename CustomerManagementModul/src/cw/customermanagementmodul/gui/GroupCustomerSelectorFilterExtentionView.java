@@ -31,7 +31,10 @@ public class GroupCustomerSelectorFilterExtentionView extends CWPanel
     private void initComponents() {
         liGroup = CWComponentFactory.createList(model.getGroupSelection());
         liGroup.setSelectionModel(model.getGroupSelectionModel());
-        liGroup.setPreferredSize(new Dimension(200, 0));
+        liGroup.setLayoutOrientation(CWList.VERTICAL_WRAP);
+//        liGroup.setPreferredSize(new Dimension(200, 20));
+        liGroup.setVisibleRowCount(1);
+
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(liGroup);
@@ -42,17 +45,15 @@ public class GroupCustomerSelectorFilterExtentionView extends CWPanel
     }
 
     private void buildView() {
-        this.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 0));
-
         FormLayout layout = new FormLayout(
-                "pref",
-                "pref, 4dlu, fill:pref:grow");
+                "pref, 4dlu, fill:pref:grow",
+                "pref");
         CellConstraints cc = new CellConstraints();
 
         PanelBuilder builder = new PanelBuilder(layout, this);
 
         builder.addLabel("Gruppen:", cc.xy(1, 1));
-        builder.add(liGroup, cc.xy(1, 3));
+        builder.add(liGroup, cc.xy(3, 1));
     }
 
     public void dispose() {

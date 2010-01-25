@@ -3,18 +3,24 @@ package cw.customermanagementmodul.gui;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtentionPoint;
+import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.ListModel;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Group;
-import java.awt.BorderLayout;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
-import javax.swing.JPanel;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Icon;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
@@ -27,16 +33,17 @@ public class CustomerSelectorPresentationModel
     private CustomerTableModel customerTableModel;
     private SelectionInList<Customer> customerSelection;
     private List<CustomerSelectorFilterExtentionPoint> filterExtentions;
+    private List<CustomerSelectorFilterExtentionPointHelper> filterExtentionsHelper;
     private ValueModel filterChange;
-    private JPanel northPanel;
-    private JPanel southPanel;
-    private JPanel westPanel;
-    private JPanel eastPanel;
-
+    private Action filterSwitcherAction;
+    private ValueModel filterSwitcherModel;
+    private Action filterChooserAction;
     private ArrayList<Customer> customers;
-    private boolean filtering;
+    private ValueModel filterEnabledModel;
+    private ValueModel activeFilterCountModel;
 
     private PropertyChangeListener filterChangeListener;
+    private HashMap<ValueModel, PropertyChangeListener> valueChangeListenerDisposeMap;
 
     private static final String defaultCustomerTableStateName = "cw.customerboardingmanagement.CustomerSelectorView.customerTableState";
     private String customerTableStateName = "cw.customerboardingmanagement.CustomerSelectorView.customerTableState";
@@ -59,7 +66,7 @@ public class CustomerSelectorPresentationModel
 
     public CustomerSelectorPresentationModel(List<Customer> customers, boolean filtering, String customerTableStateName) {
         this.customers = new ArrayList(customers);
-        this.filtering = filtering;
+        this.filterEnabledModel = new ValueHolder(filtering);
         this.customerTableStateName = customerTableStateName;
 
         initModels();
@@ -69,6 +76,8 @@ public class CustomerSelectorPresentationModel
 
     public void initModels() {
         filterChange = new ValueHolder(false);
+        filterExtentionsHelper = new ArrayList<CustomerSelectorFilterExtentionPointHelper>();
+        valueChangeListenerDisposeMap = new HashMap<ValueModel, PropertyChangeListener>();
 
         if(customers != null) {
             customerSelection = new SelectionInList<Customer>((ArrayList)customers.clone());
@@ -78,11 +87,17 @@ public class CustomerSelectorPresentationModel
         }
 
 //        customerTableModel = new CustomerTableModel(customerSelection);
+
+        filterSwitcherAction = new FilterSwitcherAction("Filter ein-/ausblenden");
+        filterChooserAction = new FilterChooserAction("Filter auswählen...");
+
+        filterSwitcherModel = new ValueHolder(false);
+        activeFilterCountModel = new ValueHolder(0);
     }
 
     private void initEventHandling() {
 
-        if(filtering == true) {
+        if(filterEnabledModel.getValue() == Boolean.TRUE) {
         
             // If a filter has changed, reload the table
             filterChange.addValueChangeListener(filterChangeListener = new PropertyChangeListener() {
@@ -105,27 +120,34 @@ public class CustomerSelectorPresentationModel
 
     private void initExtentions() {
 
-        if(filtering) {
+        if((Boolean)filterEnabledModel.getValue()) {
 
             // Load extentions
             filterExtentions = (List<CustomerSelectorFilterExtentionPoint>) ModulManager.getExtentions(CustomerSelectorFilterExtentionPoint.class);
 
             for (CustomerSelectorFilterExtentionPoint ex : filterExtentions) {
 
+                CustomerSelectorFilterExtentionPointHelper helper = new CustomerSelectorFilterExtentionPointHelper(ex);
+                filterExtentionsHelper.add(helper);
+
                 ex.init(filterChange);
 
-                if (ex.getPosition().equals(BorderLayout.NORTH)) {
-                    northPanel = ex.getView();
+                // Init the activeFilterCount
+                PropertyChangeListener activeFilterCountListener;
+                helper.getActiveModel().addValueChangeListener(activeFilterCountListener = new PropertyChangeListener() {
+                    public void propertyChange(PropertyChangeEvent evt) {
+                        if((Boolean)evt.getNewValue() == true) {
+                            activeFilterCountModel.setValue(((Integer)activeFilterCountModel.getValue()) + 1);
+                        } else {
+                            activeFilterCountModel.setValue(((Integer)activeFilterCountModel.getValue()) - 1);
+                        }
+                    }
+                });
+                valueChangeListenerDisposeMap.put(helper.getActiveModel(), activeFilterCountListener);
+                if((Boolean)helper.getActiveModel().getValue() == true) {
+                    activeFilterCountModel.setValue(((Integer)activeFilterCountModel.getValue()) + 1);
                 }
-                if (ex.getPosition().equals(BorderLayout.SOUTH)) {
-                    southPanel = ex.getView();
-                }
-                if (ex.getPosition().equals(BorderLayout.WEST)) {
-                    westPanel = ex.getView();
-                }
-                if (ex.getPosition().equals(BorderLayout.EAST)) {
-                    eastPanel = ex.getView();
-                }
+
             }
         }
         else {
@@ -134,7 +156,6 @@ public class CustomerSelectorPresentationModel
     }
 
     public void dispose() {
-        System.out.println("Dispose CustomerSELECTOR");
         if(filterChange != null) {
             filterChange.removeValueChangeListener(filterChangeListener);
         }
@@ -144,17 +165,25 @@ public class CustomerSelectorPresentationModel
             ex.dispose();
         }
         filterExtentions.clear();
+
+        Iterator<Entry<ValueModel, PropertyChangeListener>> iterator = valueChangeListenerDisposeMap.entrySet().iterator();
+        while(iterator.hasNext()) {
+            Entry<ValueModel, PropertyChangeListener> next = iterator.next();
+            next.getKey().removeValueChangeListener(next.getValue());
+        }
     }
 
     public void updateFilter() {
-        if(filtering) {
+        if((Boolean)filterEnabledModel.getValue()) {
 
             List<Customer> filteredCustomers = new ArrayList<Customer>();
             filteredCustomers.addAll((ArrayList)customers.clone());
 
-            // Filter the elements
-            for (CustomerSelectorFilterExtentionPoint ex : filterExtentions) {
-                filteredCustomers = ex.filter(filteredCustomers);
+            // Filter the elements, if the filter is active
+            for (CustomerSelectorFilterExtentionPointHelper exHelper : filterExtentionsHelper) {
+                if((Boolean) exHelper.getActiveModel().getValue() == true) {
+                    filteredCustomers = exHelper.getExtention().filter(filteredCustomers);
+                }
             }
 
             // Delete
@@ -258,21 +287,30 @@ public class CustomerSelectorPresentationModel
         return customerTableStateName;
     }
 
-    public JPanel getNorthPanel() {
-        return northPanel;
+    public Action getFilterChooserAction() {
+        return filterChooserAction;
     }
 
-    public JPanel getSouthPanel() {
-        return southPanel;
+    public Action getFilterSwitcherAction() {
+        return filterSwitcherAction;
     }
 
-    public JPanel getWestPanel() {
-        return westPanel;
+    public ValueModel getFilterSwitcherModel() {
+        return filterSwitcherModel;
     }
 
-    public JPanel getEastPanel() {
-        return eastPanel;
+    public List<CustomerSelectorFilterExtentionPointHelper> getFilterExtentionsHelper() {
+        return filterExtentionsHelper;
     }
+
+    public ValueModel getFilterEnabledModel() {
+        return filterEnabledModel;
+    }
+
+    public ValueModel getActiveFilterCountModel() {
+        return activeFilterCountModel;
+    }
+
 
     ////////////////////////////////////////////////////////////////////////////
     // Other classes
@@ -412,6 +450,67 @@ public class CustomerSelectorPresentationModel
                 default:
                     return "";
             }
+        }
+
+    }
+
+    public class CustomerSelectorFilterExtentionPointHelper {
+
+        private ValueModel activeModel;
+        private CustomerSelectorFilterExtentionPoint extention;
+        private Action activeAction;
+
+        public CustomerSelectorFilterExtentionPointHelper(CustomerSelectorFilterExtentionPoint extention) {
+            this.extention = extention;
+            this.activeModel = new ValueHolder(false);
+            this.activeAction = new AbstractAction(extention.getFilterName()) {
+                public void actionPerformed(ActionEvent e) {
+                    if((Boolean)activeModel.getValue() == true) {
+                        activeModel.setValue(false);
+                    } else {
+                        activeModel.setValue(true);
+                    }
+                }
+            };
+        }
+
+        public ValueModel getActiveModel() {
+            return activeModel;
+        }
+
+        public Action getActiveAction() {
+            return activeAction;
+        }
+
+        public CustomerSelectorFilterExtentionPoint getExtention() {
+            return extention;
+        }
+
+    }
+
+    private class FilterSwitcherAction extends AbstractAction {
+
+        public FilterSwitcherAction(String name) {
+            super(name);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+            if((Boolean) filterSwitcherModel.getValue() == true) {
+                filterSwitcherModel.setValue(false);
+            } else {
+                filterSwitcherModel.setValue(true);
+            }
+        }
+
+    }
+
+    private class FilterChooserAction extends AbstractAction {
+
+        public FilterChooserAction(String name) {
+            super(name);
+        }
+
+        public void actionPerformed(ActionEvent e) {
         }
 
     }

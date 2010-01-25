@@ -146,4 +146,8 @@ public class SearchCustomerSelectorFilterExtention
         view.dispose();
         changeListener = null;
     }
+
+    public String getFilterName() {
+        return "Kundendaten";
+    }
 }

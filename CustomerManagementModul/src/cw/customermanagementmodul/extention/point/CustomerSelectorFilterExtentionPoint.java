@@ -14,7 +14,7 @@ public interface CustomerSelectorFilterExtentionPoint extends Extention {
     public void init(ValueModel change);
     public void initEventHandling();
     public List<Customer> filter(List<Customer> costumers);
-    public String getPosition();
     public CWPanel getView();
+    public String getFilterName();
     public void dispose();
 }

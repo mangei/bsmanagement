@@ -7,7 +7,6 @@ import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionPresen
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionView;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.Group;
-import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -137,10 +136,6 @@ public class GroupCustomerSelectorFilterExtention
         return newCostumers;
     }
 
-    public String getPosition() {
-        return BorderLayout.EAST;
-    }
-
     public CWPanel getView() {
         return view;
     }
@@ -148,5 +143,9 @@ public class GroupCustomerSelectorFilterExtention
     public void dispose() {
         view.dispose();
         changeListener = null;
+    }
+
+    public String getFilterName() {
+        return "Gruppe(n)";
     }
 }
