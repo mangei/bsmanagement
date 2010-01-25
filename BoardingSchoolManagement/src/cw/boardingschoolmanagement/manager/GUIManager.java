@@ -12,6 +12,7 @@ import cw.boardingschoolmanagement.gui.component.CWPathPanel;
 import cw.boardingschoolmanagement.gui.component.CWPathPanel.PathPanelPosition;
 import cw.boardingschoolmanagement.gui.component.CWStatusBar;
 import cw.boardingschoolmanagement.gui.component.CWTray;
+import cw.boardingschoolmanagement.gui.ui.MainSplitPaneUI;
 import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -99,6 +100,7 @@ public class GUIManager {
         pathPanel = new CWPathPanel();
 
         splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, true);
+        splitPane.setUI(new MainSplitPaneUI());
         splitPane.setDividerSize(5);
 
         // Set the divider location

@@ -19,10 +19,10 @@ import javax.swing.plaf.UIResource;
  * BlueishButtonBarUI. <br>
  *  
  */
-public class JButtonPanelUI extends BasicButtonBarUI {
+public class CWButtonPanelUI extends BasicButtonBarUI {
 
   public static ComponentUI createUI(JComponent c) {
-    return new JButtonPanelUI();
+    return new CWButtonPanelUI();
   }
 
     @Override
@@ -49,7 +49,7 @@ public class JButtonPanelUI extends BasicButtonBarUI {
 
     @Override
   public void installButtonBarUI(AbstractButton button) {
-    button.setUI(new JButtonPanelButtonUI());
+    button.setUI(new CWButtonPanelButtonUI(true));
     button.setHorizontalTextPosition(JButton.CENTER);
     button.setVerticalTextPosition(JButton.BOTTOM);
     button.setBorderPainted(false);

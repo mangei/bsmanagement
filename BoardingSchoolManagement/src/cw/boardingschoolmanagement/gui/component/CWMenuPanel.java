@@ -260,10 +260,10 @@ public class CWMenuPanel
             g.setColor(BLACK_LOW_OPACITY_COLOR);
             g.fillRect(0, 0, getWidth(), getHeight());
 
-            int abs = 5;
+            int gab = 5;
 
-            for (int i = abs, h = getHeight(); i < h; i++) {
-                if (i % abs == 0) {
+            for (int i = gab, h = getHeight(); i < h; i++) {
+                if (i % gab == 0) {
                     g.drawLine(0, i, h, i);
                 }
             }

@@ -20,11 +20,18 @@ import javax.swing.plaf.basic.BasicButtonUI;
  * BlueishButtonUI. <br>
  *  
  */
-public class JButtonPanelButtonUI
+public class CWButtonPanelButtonUI
         extends BasicButtonUI {
 
-    public JButtonPanelButtonUI() {
+    private boolean roundCorners;
+
+    public CWButtonPanelButtonUI() {
+        this(false);
+    }
+
+    public CWButtonPanelButtonUI(boolean roundCorners) {
         super();
+        this.roundCorners = roundCorners;
     }
 
     public void installUI(JComponent c) {
@@ -53,7 +60,8 @@ public class JButtonPanelButtonUI
             int h = c.getHeight()-1;
             int arc = 6;
 
-            if(button.getClientProperty("roundCorners") != null && !(Boolean)button.getClientProperty("roundCorners")) {
+//            if(button.getClientProperty("roundCorners") != null && !(Boolean)button.getClientProperty("roundCorners")) {
+            if(!roundCorners) {
                 arc = 0;
             }
 

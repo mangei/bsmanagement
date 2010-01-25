@@ -337,13 +337,23 @@ public class CWComponentFactory {
         return popupMenu;
     }
 
+    public static CWCheckBoxMenuItem createCheckBoxMenuItem(Action action) {
+        CWCheckBoxMenuItem checkBoxMenuItem = new CWCheckBoxMenuItem(action);
+        return checkBoxMenuItem;
+    }
+
     public static CWRadioButton createRadioButton(Action action) {
+        return createRadioButton(action, false);
+    }
+
+    public static CWRadioButton createRadioButton(Action action, boolean isSelected) {
         if(action == null) {
             throw new NullPointerException("action is null");
         }
 
         CWRadioButton rb = new CWRadioButton(action);
         rb.setOpaque(false);
+        rb.setSelected(isSelected);
         return rb;
     }
 

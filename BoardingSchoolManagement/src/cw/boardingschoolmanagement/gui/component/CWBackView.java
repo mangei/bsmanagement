@@ -2,7 +2,7 @@ package cw.boardingschoolmanagement.gui.component;
 
 import com.jidesoft.swing.JideSwingUtilities;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.ui.JButtonPanelButtonUI;
+import cw.boardingschoolmanagement.gui.ui.CWButtonPanelButtonUI;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
@@ -57,7 +57,7 @@ public class CWBackView
                 GUIManager.changeToLastView();
             }
         });
-        backButton.setUI(new JButtonPanelButtonUI());
+        backButton.setUI(new CWButtonPanelButtonUI());
         backButton.setBorderPainted(false);
         backButton.setContentAreaFilled(false);
         backButton.setOpaque(false);

@@ -1,6 +1,6 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import cw.boardingschoolmanagement.gui.ui.JButtonPanelUI;
+import cw.boardingschoolmanagement.gui.ui.CWButtonPanelUI;
 import com.jidesoft.swing.JideSwingUtilities;
 import com.l2fprod.common.swing.JButtonBar;
 import java.awt.Color;
@@ -17,7 +17,7 @@ import javax.swing.JButton;
 public class CWButtonPanel extends JButtonBar {
 
     public CWButtonPanel() {
-        setUI(new JButtonPanelUI());
+        setUI(new CWButtonPanelUI());
         FlowLayout layout = new FlowLayout();
         layout.setAlignment(FlowLayout.LEFT);
         setLayout(layout);
