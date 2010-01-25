@@ -1,14 +1,10 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
 import com.jgoodies.binding.list.ArrayListModel;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Entity;
@@ -24,25 +20,42 @@ import javax.persistence.Temporal;
  */
 @Entity
 public class Course extends Model
-implements AnnotatedClass
+        implements AnnotatedClass
+
 {
-    private Long id;
-    private String name;
-    private Date beginDate;
-    private Date endDate;
-    private double price;
-    private List<CourseAddition> courseAdditions;
+    private Long id                                 = null;
+    private String name                             = "";
+    private Date beginDate                          = null;
+    private Date endDate                            = null;
+    private double price                            = 0.0;
+    private List<CourseAddition> courseAdditions    = new ArrayList<CourseAddition>();
     
-    
-    public final static String PROPERTYNAME_ID = "id";
-    public final static String PROPERTYNAME_NAME = "name";
-    public final static String PROPERTYNAME_BEGINDATE = "beginDate";
-    public final static String PROPERTYNAME_ENDDATE = "endDate";
-    public final static String PROPERTYNAME_COURSEADDITIONS = "courseAdditions";
-    public final static String PROPERTYNAME_PRICE = "price";
+    public final static String PROPERTYNAME_ID                  = "id";
+    public final static String PROPERTYNAME_NAME                = "name";
+    public final static String PROPERTYNAME_BEGINDATE           = "beginDate";
+    public final static String PROPERTYNAME_ENDDATE             = "endDate";
+    public final static String PROPERTYNAME_COURSEADDITIONS     = "courseAdditions";
+    public final static String PROPERTYNAME_PRICE               = "price";
 
     public Course() {
-        courseAdditions = new ArrayListModel<CourseAddition>();
+    }
+
+    @Override
+    public String toString(){
+        DateFormat format = DateFormat.getDateInstance();
+        return "<html><b>" + name + "</b> " + format.format(beginDate) + "-" + format.format(endDate) + "</html>";
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (this.id != ((Course)obj).getId()) {
+            return false;
+        }
+
+        return true;
     }
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -89,12 +102,6 @@ implements AnnotatedClass
         firePropertyChange(PROPERTYNAME_NAME, old, name);
     }
     
-    @Override
-    public String toString(){
-        DateFormat format = DateFormat.getDateInstance();
-        return "<html><b>" + name + "</b> " + format.format(beginDate) + "-" + format.format(endDate) + "</html>";
-    }
-    
     @ManyToMany
     public List<CourseAddition> getCourseParticipants() {
         return courseAdditions;
@@ -106,18 +113,6 @@ implements AnnotatedClass
         firePropertyChange(PROPERTYNAME_COURSEADDITIONS, old, courseAddition);
     }
     
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) {
-            return false;
-        }
-        if (this.id != ((Course)obj).getId()) {
-            return false;
-        }
-        
-        return true;
-    }
-
     public double getPrice() {
         return price;
     }

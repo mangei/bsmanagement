@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
@@ -21,7 +16,10 @@ import javax.persistence.OneToOne;
  * @author André Salmhofer
  */
 @Entity
-public class CourseAddition extends Model implements AnnotatedClass{
+public class CourseAddition extends Model 
+        implements AnnotatedClass
+{
+
     private Long id;
     //private CourseParticipant courseParticipant;
     private Course course;
@@ -31,14 +29,14 @@ public class CourseAddition extends Model implements AnnotatedClass{
     private Boolean posted;
     private double individualPrice;
     
-    public final static String PROPERTYNAME_ID = "id";
-    public final static String PROPERTYNAME_COURSEPARTICIPANT = "courseParticipant";
-    public final static String PROPERTYNAME_COURSE = "course";
-    public final static String PROPERTYNAME_ACTIVITIES = "activities";
-    public final static String PROPERTYNAME_SUBJECTS = "subjects";
-    public final static String PROPERTYNAME_ALREADYPAYEDAMOUNT = "alreadyPayedAmount";
-    public final static String PROPERTYNAME_ACCOUNTINGS = "accountings";
-    public final static String PROPERTYNAME_INDIVIDUALPRICE = "individualPrice";
+    public final static String PROPERTYNAME_ID                  = "id";
+    public final static String PROPERTYNAME_COURSEPARTICIPANT   = "courseParticipant";
+    public final static String PROPERTYNAME_COURSE              = "course";
+    public final static String PROPERTYNAME_ACTIVITIES          = "activities";
+    public final static String PROPERTYNAME_SUBJECTS            = "subjects";
+    public final static String PROPERTYNAME_ALREADYPAYEDAMOUNT  = "alreadyPayedAmount";
+    public final static String PROPERTYNAME_ACCOUNTINGS         = "accountings";
+    public final static String PROPERTYNAME_INDIVIDUALPRICE     = "individualPrice";
 
     public CourseAddition() {
         course = new Course();

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
@@ -11,22 +6,20 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 /**
  *
  * @author André Salmhofer
  */
-
 @Entity
-@Table(name="Activity")
 public class Activity extends Model
-implements AnnotatedClass
+        implements AnnotatedClass
 {
-    private Long id;
-    private String name;
-    private String description;
-    private double price;
+    
+    private Long id                 = null;
+    private String name             = "";
+    private String description      = "";
+    private double price            = 0.0;
     
     public final static String PROPERTYNAME_ID = "id";
     public final static String PROPERTYNAME_NAME = "name";
@@ -34,6 +27,23 @@ implements AnnotatedClass
     public final static String PROPERTYNAME_PRICE = "price";
 
     public Activity() {
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (this.id != ((Activity)obj).getId()) {
+            return false;
+        }
+
+        return true;
     }
     
     @Id
@@ -63,7 +73,9 @@ implements AnnotatedClass
     }
 
     public void setDescription(String description) {
+        String old = this.description;
         this.description = description;
+        firePropertyChange(PROPERTYNAME_DESCRIPTION, old, description);
     }
 
     public double getPrice() {
@@ -76,8 +88,4 @@ implements AnnotatedClass
         firePropertyChange(PROPERTYNAME_PRICE, old, price);
     }
 
-    @Override
-    public String toString() {
-        return name;
-    }
 }

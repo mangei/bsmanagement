@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
@@ -17,12 +12,15 @@ import javax.persistence.Id;
  * @author André Salmhofer
  */
 @Entity
-public class Subject extends Model implements AnnotatedClass{
-    private Long id;
-    private String name;
+public class Subject extends Model 
+        implements AnnotatedClass
+{
+
+    private Long id         = null;
+    private String name     = "";
     
-    public final static String PROPERTYNAME_ID = "id";
-    public final static String PROPERTYNAME_NAME = "name";
+    public final static String PROPERTYNAME_ID      = "id";
+    public final static String PROPERTYNAME_NAME    = "name";
 
     public Subject() {
     }
@@ -44,7 +42,9 @@ public class Subject extends Model implements AnnotatedClass{
     }
 
     public void setName(String name) {
+        String old = this.name;
         this.name = name;
+        firePropertyChange(PROPERTYNAME_NAME, old, name);
     }
 
 }

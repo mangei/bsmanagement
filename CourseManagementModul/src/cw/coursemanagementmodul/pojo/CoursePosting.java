@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
@@ -19,14 +14,22 @@ import javax.persistence.OneToOne;
  * @author André Salmhofer
  */
 @Entity
-public class CoursePosting extends Model implements AnnotatedClass{
-    private Long id;
-    private Posting posting;
-    private CourseAddition courseAddition;
+public class CoursePosting extends Model 
+        implements AnnotatedClass
+{
 
-    public final static String PROPERTYNAME_ID = "id";
-    public final static String PROPERTYNAME_POSTING = "posting";
-    public final static String PROPERTYNAME_COURSEADDITION = "courseAddition";
+    private Long id                         = null;
+    private Posting posting                 = null;
+    private CourseAddition courseAddition   = null;
+
+    public final static String PROPERTYNAME_ID              = "id";
+    public final static String PROPERTYNAME_POSTING         = "posting";
+    public final static String PROPERTYNAME_COURSEADDITION  = "courseAddition";
+
+    public CoursePosting() {
+        //setPosting(new Posting());
+        //setCourseAddition(new CourseAddition());
+    }
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -39,12 +42,6 @@ public class CoursePosting extends Model implements AnnotatedClass{
         this.id = id;
         firePropertyChange(PROPERTYNAME_ID, old, id);
     }
-
-    public CoursePosting() {
-        //setPosting(new Posting());
-        //setCourseAddition(new CourseAddition());
-    }
-    
 
     @OneToOne
     public Posting getPosting() {

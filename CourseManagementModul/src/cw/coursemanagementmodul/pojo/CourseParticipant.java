@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
@@ -23,21 +18,22 @@ import javax.persistence.OneToOne;
  * @author André Salmhofer
  */
 @Entity
-public class CourseParticipant extends Model implements AnnotatedClass {
-    private Long id;
-    private Customer customer;
-    private List<CourseAddition> courseList;
+public class CourseParticipant extends Model 
+        implements AnnotatedClass
+{
     
-    public final static String PROPERTYNAME_ID = "id";
-    public final static String PROPERTYNAME_COSTUMER = "customer";
-    public final static String PROPERTYNAME_COURSELIST = "courseList";
+    private Long id                             = null;
+    private Customer customer                   = null;
+    private List<CourseAddition> courseList     = new ArrayList<CourseAddition>();;
+    
+    public final static String PROPERTYNAME_ID          = "id";
+    public final static String PROPERTYNAME_COSTUMER    = "customer";
+    public final static String PROPERTYNAME_COURSELIST  = "courseList";
 
     public CourseParticipant() {
-        courseList = new ArrayList<CourseAddition>();
     }
 
     public CourseParticipant(Customer customer) {
-        this();
         this.customer = customer;
     }
 

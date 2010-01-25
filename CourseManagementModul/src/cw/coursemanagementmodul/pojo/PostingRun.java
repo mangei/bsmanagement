@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.coursemanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
@@ -20,15 +15,21 @@ import javax.persistence.OneToMany;
  * @author André Salmhofer
  */
 @Entity
-public class PostingRun extends Model implements AnnotatedClass{
-    private Long id;
-    private List<CoursePosting> coursePostings;
-    private String name;
-    private Boolean alreadyStorniert;
+public class PostingRun extends Model 
+        implements AnnotatedClass
+{
+
+    private Long id                             = null;
+    private List<CoursePosting> coursePostings  = new ArrayList<CoursePosting>();
+    private String name                         = "";
+    private boolean alreadyStorniert            = false;
+
+    public final static String PROPERTYNAME_ID                  = "id";
+    public final static String PROPERTYNAME_NAME                = "name";
+    public final static String PROPERTYNAME_COURSEPOSTINGS      = "coursePostings";
+    public final static String PROPERTYNAME_ALREADYSTORNIERT    = "alreadyStorniert";
 
     public PostingRun() {
-        coursePostings = new ArrayList<CoursePosting>();
-        alreadyStorniert = false;
     }
 
     @Id
@@ -38,7 +39,9 @@ public class PostingRun extends Model implements AnnotatedClass{
     }
 
     public void setId(Long id) {
+        Long old = this.id;
         this.id = id;
+        firePropertyChange(PROPERTYNAME_ID, old, name);
     }
 
     @OneToMany
@@ -47,7 +50,9 @@ public class PostingRun extends Model implements AnnotatedClass{
     }
 
     public void setCoursePostings(List<CoursePosting> coursePostings) {
+        List<CoursePosting> old = this.coursePostings;
         this.coursePostings = coursePostings;
+        firePropertyChange(PROPERTYNAME_COURSEPOSTINGS, old, coursePostings);
     }
 
     public String getName() {
@@ -55,14 +60,18 @@ public class PostingRun extends Model implements AnnotatedClass{
     }
 
     public void setName(String name) {
+        String old = this.name;
         this.name = name;
+        firePropertyChange(PROPERTYNAME_NAME, old, name);
     }
 
-    public Boolean getAlreadyStorniert() {
+    public boolean getAlreadyStorniert() {
         return alreadyStorniert;
     }
 
-    public void setAlreadyStorniert(Boolean alreadyStorniert) {
+    public void setAlreadyStorniert(boolean alreadyStorniert) {
+        boolean old = this.alreadyStorniert;
         this.alreadyStorniert = alreadyStorniert;
+        firePropertyChange(PROPERTYNAME_ALREADYSTORNIERT, old, alreadyStorniert);
     }
 }
