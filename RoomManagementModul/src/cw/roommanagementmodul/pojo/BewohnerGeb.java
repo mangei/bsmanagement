@@ -1,12 +1,8 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.roommanagementmodul.pojo;
 
 import cw.customermanagementmodul.pojo.Customer;
 import cw.roommanagementmodul.geblauf.GebTarifSelection;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -21,9 +17,8 @@ public class BewohnerGeb {
     private Zimmer zimmer;
     private Date von;
     private Date bis;
-    private boolean active;
-
-    private List<GebTarifSelection> gebList;
+    private boolean active                  = true;
+    private List<GebTarifSelection> gebList = new ArrayList<GebTarifSelection>();
 
 
     public BewohnerGeb(){

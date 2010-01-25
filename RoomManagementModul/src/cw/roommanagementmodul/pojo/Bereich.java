@@ -17,33 +17,29 @@ import javax.persistence.OneToMany;
  * @author Jeitler Dominik
  */
 @Entity
-public class Bereich extends Model implements AnnotatedClass {
+public class Bereich
+        extends Model
+        implements AnnotatedClass
+{
 
-    private Long id;
-    private String name;
-    private Bereich parentBereich;
-    private List<Bereich> childBereichList;
-    private List<Zimmer> zimmerList;
-    protected transient PropertyChangeSupport support;
-    public final static String PROPERTYNAME_NAME = "name";
-    public final static String PROPERTYNAME_PARENTBEREICH = "parentBereich";
-    public final static String PROPERTYNAME_CHILDBEREICHLIST = "childBereichList";
-    public final static String PROPERTYNAME_ZIMMERLIST = "zimmerList";
+    private Long id                         = null;
+    private String name                     = "";
+    private Bereich parentBereich           = null;
+    private List<Bereich> childBereichList  = new ArrayList<Bereich>();
+    private List<Zimmer> zimmerList         = new ArrayList<Zimmer>();
 
-    public Bereich(Long id, String name, Bereich parentBereich) {
-        this.id = id;
-        this.name = name;
-        this.parentBereich = parentBereich;
-        this.childBereichList = new ArrayList<Bereich>();
-        this.zimmerList = new ArrayList<Zimmer>();
+    public final static String PROPERTYNAME_ID                  = "id";
+    public final static String PROPERTYNAME_NAME                = "name";
+    public final static String PROPERTYNAME_PARENTBEREICH       = "parentBereich";
+    public final static String PROPERTYNAME_CHILDBEREICHLIST    = "childBereichList";
+    public final static String PROPERTYNAME_ZIMMERLIST          = "zimmerList";
+
+    public Bereich() {
     }
 
     public Bereich(String name, Bereich parentBereich) {
         this.name = name;
         this.parentBereich = parentBereich;
-    }
-
-    public Bereich() {
     }
 
     @Id
@@ -53,7 +49,9 @@ public class Bereich extends Model implements AnnotatedClass {
     }
 
     public void setId(Long id) {
+        Long old = this.id;
         this.id = id;
+        firePropertyChange(PROPERTYNAME_ID, old, id);
     }
 
     public String getName() {
@@ -61,7 +59,9 @@ public class Bereich extends Model implements AnnotatedClass {
     }
 
     public void setName(String name) {
+        String old = this.name;
         this.name = name;
+        firePropertyChange(PROPERTYNAME_NAME, old, name);
     }
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.REFRESH})
@@ -70,7 +70,7 @@ public class Bereich extends Model implements AnnotatedClass {
     }
 
     public void setParentBereich(Bereich bereich) {
-        Bereich oldBereich = getParentBereich();
+        Bereich oldBereich = this.parentBereich;
         this.parentBereich = bereich;
         firePropertyChange(PROPERTYNAME_PARENTBEREICH, oldBereich, bereich);
     }
@@ -81,7 +81,9 @@ public class Bereich extends Model implements AnnotatedClass {
     }
 
     public void setChildBereichList(List<Bereich> childBereichList) {
+        List<Bereich> old = this.childBereichList;
         this.childBereichList = childBereichList;
+        firePropertyChange(PROPERTYNAME_CHILDBEREICHLIST, old, childBereichList);
     }
 
     @OneToMany(mappedBy = "bereich")
@@ -90,7 +92,9 @@ public class Bereich extends Model implements AnnotatedClass {
     }
 
     public void setZimmerList(List<Zimmer> zimmerList) {
+        List<Zimmer> old = this.zimmerList;
         this.zimmerList = zimmerList;
+        firePropertyChange(PROPERTYNAME_ZIMMERLIST, old, zimmerList);
     }
 
     @Override

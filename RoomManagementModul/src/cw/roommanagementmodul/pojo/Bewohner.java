@@ -1,22 +1,14 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.roommanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import cw.customermanagementmodul.pojo.Customer;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -29,34 +21,45 @@ import javax.persistence.TemporalType;
  */
 
 @Entity
-@Table(name="Bewohner")
-public class Bewohner extends Model implements AnnotatedClass{
+public class Bewohner
+        extends Model
+        implements AnnotatedClass
+{
     
-    private Long id;
-    private Customer customer;
-    private Zimmer zimmer;
-    private Kaution kaution;
-    private int kautionStatus;
-    private Date von;
-    private Date bis;
-    private boolean active;
+    private Long id             = null;
+    private Customer customer   = null;
+    private Zimmer zimmer       = null;
+    private Kaution kaution     = null;
+    private int kautionStatus   = 0;
+    private Date von            = null;
+    private Date bis            = null;
+    private boolean active      = true;
 
-    
-    public final static int NICHT_EINGEZAHLT =0;
-    public final static int EINGEZAHLT = 1;
-    public final static int ZURUECK_GEZAHLT = 2;
-    public final static int EINGEZOGEN = 3;
+    public final static int NICHT_EINGEZAHLT    = 0;
+    public final static int EINGEZAHLT          = 1;
+    public final static int ZURUECK_GEZAHLT     = 2;
+    public final static int EINGEZOGEN          = 3;
 
-    public final static String PROPERTYNAME_COSTUMER = "costumer";
-    public final static String PROPERTYNAME_ZIMMER = "zimmer";
-    public final static String PROPERTYNAME_VON = "von";
-    public final static String PROPERTYNAME_BIS = "bis";
-    public final static String PROPERTYNAME_KAUTION = "kaution";
-    public final static String PROPERTYNAME_KAUTIONSTATUS = "kautionStatus";
+    public final static String PROPERTYNAME_ID              = "id";
+    public final static String PROPERTYNAME_COSTUMER        = "costumer";
+    public final static String PROPERTYNAME_ZIMMER          = "zimmer";
+    public final static String PROPERTYNAME_VON             = "von";
+    public final static String PROPERTYNAME_BIS             = "bis";
+    public final static String PROPERTYNAME_KAUTION         = "kaution";
+    public final static String PROPERTYNAME_KAUTIONSTATUS   = "kautionStatus";
+    public final static String PROPERTYNAME_ACTIVE          = "active";
     
     
     public Bewohner(){
-        
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this.getId() == ((Bewohner)obj).getId()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Temporal(TemporalType.DATE)
@@ -67,15 +70,6 @@ public class Bewohner extends Model implements AnnotatedClass{
     public void setBis(Date bis) {
         this.bis = bis;
     }
-
-//    @OneToOne
-//    public Customer getEinzahler() {
-//        return einzahler;
-//    }
-//
-//    public void setEinzahler(Customer einzahler) {
-//        this.einzahler = einzahler;
-//    }
 
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -124,18 +118,6 @@ public class Bewohner extends Model implements AnnotatedClass{
         this.zimmer = zimmer;
     }
    
-
-     
-    @Override
-    public boolean equals(Object obj) {
-        if (this.getId() == ((Bewohner)obj).getId()) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
     /**
      * @return the kaution
      */
