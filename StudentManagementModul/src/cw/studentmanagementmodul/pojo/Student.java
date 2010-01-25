@@ -23,7 +23,7 @@ public class Student
     private Long id                     = null;
     private StudentClass studentClass   = null;
     private Customer customer           = null;
-    private boolean active              = true;
+    private boolean active              = false;
     
     // Properties - Constants
     public final static String PROPERTYNAME_ID              = "id";
@@ -41,6 +41,9 @@ public class Student
     @Override
     public boolean equals(Object obj) {
         if(obj == null) {
+            return false;
+        }
+        if(!(obj instanceof Student)) {
             return false;
         }
         if (this.getId() != ((Student)obj).getId()) {

@@ -68,7 +68,7 @@ public class StudentClassManagementPresentationModel
 
         headerInfo = new CWHeaderInfo(
                 "Klassenverwaltung",
-                "<html><p>Verwalten Sie ihre Klassen in einer beliebigen Struktur mit Hilfe von Bereichen. Lassen Sie sich die Schüler ein Klasse anzeigen und Schüler automatisch in die nächste Klasse aufsteigen lassen.</p></html>",
+                "Verwalten Sie ihre Klassen in einer beliebigen Struktur mit Hilfe von Bereichen. Lassen Sie sich die Schüler ein Klasse anzeigen und Schüler automatisch in die nächste Klasse aufsteigen lassen.",
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png"),
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png")
         );

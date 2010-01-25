@@ -39,6 +39,9 @@ public class StudentClass
         if(obj == null) {
             return false;
         }
+        if(!(obj instanceof StudentClass)) {
+            return false;
+        }
         if (this.getId() != ((StudentClass)obj).getId()) {
             return false;
         }

@@ -30,7 +30,7 @@ public class StudentEditCustomerPresentationModel
     private CWHeaderInfo headerInfo;
     private ValueModel unsaved;
 
-    private PropertyChangeListener classChangeListener;
+    private PropertyChangeListener changeListener;
     
     public StudentEditCustomerPresentationModel(Student student, final ValueModel unsaved) {
         super(student);
@@ -52,15 +52,18 @@ public class StudentEditCustomerPresentationModel
     }
 
     private void initEventHandling() {
-        getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS).addValueChangeListener(classChangeListener = new PropertyChangeListener() {
+        changeListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
                 unsaved.setValue(true);
             }
-        });
+        };
+        getBufferedModel(Student.PROPERTYNAME_ACTIVE).addValueChangeListener(changeListener);
+        getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS).addValueChangeListener(changeListener);
     }
 
     public void dispose() {
-        getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS).removePropertyChangeListener(classChangeListener);
+        getBufferedModel(Student.PROPERTYNAME_ACTIVE).removeValueChangeListener(changeListener);
+        getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS).removePropertyChangeListener(changeListener);
         release();
     }
 

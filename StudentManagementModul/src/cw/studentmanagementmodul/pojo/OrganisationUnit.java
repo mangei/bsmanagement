@@ -42,6 +42,9 @@ public class OrganisationUnit
         if(obj == null) {
             return false;
         }
+        if(!(obj instanceof OrganisationUnit)) {
+            return false;
+        }
         if (this.getId() != ((OrganisationUnit)obj).getId()) {
             return false;
         }
