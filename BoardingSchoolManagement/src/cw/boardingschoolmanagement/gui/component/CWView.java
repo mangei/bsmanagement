@@ -8,13 +8,14 @@ import com.jidesoft.swing.JideSwingUtilities;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -29,7 +30,9 @@ import javax.swing.plaf.basic.BasicPanelUI;
  */
 public class CWView extends CWPanel {
 
-    private CWButtonPanel buttonPanel;
+    private JPanel buttonPanel;
+    private CWButtonPanel leftButtonPanel;
+    private CWButtonPanel rightButtonPanel;
     private JPanel topPanel;
     private JScrollPane contentScrollPane;
     private JPanel contentPanel;
@@ -74,8 +77,14 @@ public class CWView extends CWPanel {
         mainPanel.setUI(new CWViewUI());
         mainPanel.setBorder(new EmptyBorder(gab, gab, gab, gab));
 
-        buttonPanel = new CWButtonPanel();
-        buttonPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
+        leftButtonPanel = new CWButtonPanel();
+        leftButtonPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
+        rightButtonPanel = new CWButtonPanel(FlowLayout.RIGHT);
+        rightButtonPanel.setBorder(new EmptyBorder(0, 10, 0, 10));
+
+        buttonPanel = new JPanel(new BorderLayout());
+        buttonPanel.add(leftButtonPanel, BorderLayout.WEST);
+        buttonPanel.add(rightButtonPanel, BorderLayout.CENTER);
 
         JPanel topInfoActionPanel = CWComponentFactory.createPanel(new BorderLayout());
         topInfoActionPanel.add(headerInfoPanel = new CWHeaderInfoPanel(headerInfo), BorderLayout.NORTH);
@@ -108,9 +117,13 @@ public class CWView extends CWPanel {
     }
 
     public void dispose() {
-        buttonPanel.removeAll();
-        buttonPanel.setLayout(null);
-        buttonPanel.setUI(null);
+
+        leftButtonPanel.removeAll();
+        leftButtonPanel.setLayout(null);
+        leftButtonPanel.setUI(null);
+        rightButtonPanel.removeAll();
+        rightButtonPanel.setLayout(null);
+        rightButtonPanel.setUI(null);
 
         this.removeAll();
         this.setLayout(null);
@@ -128,8 +141,28 @@ public class CWView extends CWPanel {
 //
 //    }
 
+    /**
+     * returns the left ButtonPanel
+     * @return left ButtonPanel
+     */
     public CWButtonPanel getButtonPanel() {
-        return buttonPanel;
+        return leftButtonPanel;
+    }
+
+    /**
+     * Add a button to the left ButtonPanel
+     * @param button button
+     */
+    public void addToLeftButtonPanel(JButton button) {
+        leftButtonPanel.add(button);
+    }
+
+    /**
+     * Add a button to the right ButtonPanel
+     * @param button button
+     */
+    public void addToRightButtonPanel(JButton button) {
+        rightButtonPanel.add(button);
     }
 
     public JPanel getTopPanel() {
@@ -314,9 +347,8 @@ public class CWView extends CWPanel {
             Rectangle rect = new Rectangle(0, 0, c.getWidth(), c.getHeight());
             CWView view = (CWView) c.getParent();
 
-            // If the topPanel isn't visible, than twist the gradient
-            // > 1: because the topPanel, contains the buttonPanel
-            if (view.buttonPanel.getComponentCount() > 0) {
+            // If there are no buttons, than twist the gradient
+            if (view.leftButtonPanel.getComponentCount() > 0  || view.rightButtonPanel.getComponentCount() > 0) {
                 JideSwingUtilities.fillGradient((Graphics2D) g, rect, lightGrayColor, Color.WHITE, true);
             } else {
                 view.buttonPanel.setVisible(false);
