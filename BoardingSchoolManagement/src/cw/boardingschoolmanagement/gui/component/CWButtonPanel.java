@@ -16,10 +16,21 @@ import javax.swing.JButton;
  */
 public class CWButtonPanel extends JButtonBar {
 
+    /**
+     * Creates a left aligned ButtonPanel.
+     */
     public CWButtonPanel() {
+        this(FlowLayout.LEFT);
+    }
+
+    /**
+     * Creates a BottonPanel with the specified alignment.
+     * @param alignment FlowLayout.LEFT or FlowLayout.RIGHT
+     */
+    public CWButtonPanel(int alignment) {
         setUI(new CWButtonPanelUI());
         FlowLayout layout = new FlowLayout();
-        layout.setAlignment(FlowLayout.LEFT);
+        layout.setAlignment(alignment);
         setLayout(layout);
         setOpaque(true);
     }
