@@ -25,6 +25,8 @@ public class Account
     private Customer        customer        = null;
     private List<Posting>   postings        = new ArrayList<Posting>();
     private List<Bailment>  bailments       = new ArrayList<Bailment>();
+    private List<Invoice>   invoices        = new ArrayList<Invoice>();
+
 
     public final static String PROPERTYNAME_ID          = "id";
     public final static String PROPERTYNAME_CUSTOMER    = "customer";

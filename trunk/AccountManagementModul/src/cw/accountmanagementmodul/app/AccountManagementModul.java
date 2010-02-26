@@ -2,8 +2,10 @@ package cw.accountmanagementmodul.app;
 
 import cw.accountmanagementmodul.gui.PostingCategoryManagementPresentationModel;
 import cw.accountmanagementmodul.gui.PostingCategoryManagementView;
+import cw.accountmanagementmodul.pojo.Account;
 import cw.accountmanagementmodul.pojo.Posting;
 import cw.accountmanagementmodul.pojo.PostingCategory;
+import cw.accountmanagementmodul.pojo.manager.AccountManager;
 import cw.accountmanagementmodul.pojo.manager.PostingCategoryManager;
 import cw.accountmanagementmodul.pojo.manager.PostingManager;
 import cw.boardingschoolmanagement.app.CWUtils;
@@ -79,5 +81,33 @@ public class AccountManagementModul
                 
             }
         });
+
+        // Wenn ein Kunde gelöscht wird, das dazugehörige Konto löschen.
+        CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
+            public void deleteAction(CascadeEvent evt) {
+                Customer customer = (Customer) evt.getSource();
+
+                Account account = AccountManager.getInstance().get(customer);
+
+                AccountManager.getInstance().delete(account);
+            }
+        });
+
+
+        // Wenn das Konto gelöscht wird, alle dazugehörigen Buchungen und
+        // Buchungsgruppen löschen.
+
+        // Wenn das Konto gelöscht wird, alle dazugehörigen Kautionen löschen.
+
+        // Wenn das Konto gelöscht wird, alle dazugehörigen Rechnungen löschen.
+
+        // Wenn eine Rechnug gelöscht wird, alle dazugehörigen RechnungensPosten löschen.
+        // Prüfen ob die Buchung noch vorhanden ist, da sie schon gelöscht worden sein könnte,
+        // wenn ein Konto gelöscht wird.
+
+        // Wenn ein Buchung gelöscht wird, diese aus den Buchungsläufen entfernen.
+
+        
+
     }
 }

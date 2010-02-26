@@ -29,7 +29,7 @@ public class PostingGroup
 
     private Long id                 = null;
     private Date creationDate       = new Date();
-    private Account account       = null;
+    private Account account         = null;
     private String name             = "";
     private List<Posting> postings  = new ArrayList<Posting>();
 
