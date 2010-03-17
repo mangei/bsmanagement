@@ -58,7 +58,7 @@ public class BewohnerManager extends AbstractPOJOManager<Bewohner> {
 
     @Override
     public List<Bewohner> getAll() {
-        return HibernateUtil.getEntityManager().createQuery("FROM Bewohner").getResultList();
+        return HibernateUtil.getEntityManager().createQuery("FROM Bewohner order by b.customer.surname asc, b.customer.forename asc").getResultList();
     }
 
     @Override
