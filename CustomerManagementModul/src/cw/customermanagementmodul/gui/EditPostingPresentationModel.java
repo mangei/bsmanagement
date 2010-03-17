@@ -33,27 +33,22 @@ import javax.swing.JComponent;
  * @author CreativeWorkers.at
  */
 public class EditPostingPresentationModel
-        extends PresentationModel<Posting>
-{
+        extends PresentationModel<Posting> {
 
     private Posting posting;
     private SelectionInList<PostingCategory> postingCategorySelection;
     private ValueModel unsaved;
     private CWHeaderInfo headerInfo;
-    
     private Action cancelAction;
     private Action saveCancelAction;
-
     private List<EditPostingPostingCategoryExtentionPoint> editPostingPostingCategoryExtentions;
-    private HashMap<String,EditPostingPostingCategoryExtentionPoint> editPostingPostingCategoryExtentionsKeyMap;
-    
+    private HashMap<String, EditPostingPostingCategoryExtentionPoint> editPostingPostingCategoryExtentionsKeyMap;
     private ButtonListenerSupport buttonListenerSupport;
-
     private SaveListener saveListener;
     private PropertyChangeListener unsavedListener;
     private PropertyConnector postingCategoryConnector;
-    
-    public EditPostingPresentationModel(Posting posting,  CWHeaderInfo headerInfo) {
+
+    public EditPostingPresentationModel(Posting posting, CWHeaderInfo headerInfo) {
         this(posting, false, headerInfo);
     }
 
@@ -65,10 +60,10 @@ public class EditPostingPresentationModel
         initModels();
         initEventHandling();
     }
-    
+
     public void initModels() {
         buttonListenerSupport = new ButtonListenerSupport();
-        
+
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
         saveCancelAction = new SaveCancelAction("Buchen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_lightning.png"));
 
@@ -81,12 +76,12 @@ public class EditPostingPresentationModel
         editPostingPostingCategoryExtentionsKeyMap = new HashMap<String, EditPostingPostingCategoryExtentionPoint>();
 
         // Initialize the extentions
-        for(EditPostingPostingCategoryExtentionPoint ex : editPostingPostingCategoryExtentions) {
+        for (EditPostingPostingCategoryExtentionPoint ex : editPostingPostingCategoryExtentions) {
             ex.initPresentationModel(this);
             editPostingPostingCategoryExtentionsKeyMap.put(ex.getKey(), ex);
         }
     }
-    
+
     public void initEventHandling() {
         unsaved = new ValueHolder();
 
@@ -96,13 +91,14 @@ public class EditPostingPresentationModel
         getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(saveListener);
         getBufferedModel(Posting.PROPERTYNAME_LIABILITIESASSETS).addValueChangeListener(saveListener);
         getBufferedModel(Posting.PROPERTYNAME_CATEGORY).addValueChangeListener(saveListener);
-        
+
         postingCategoryConnector = PropertyConnector.connect(getBufferedModel(Posting.PROPERTYNAME_CATEGORY), "value", postingCategorySelection, "selection");
         postingCategoryConnector.updateProperty2();
-        
+
         unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
+
             public void propertyChange(PropertyChangeEvent evt) {
-                if((Boolean)evt.getNewValue() == true) {
+                if ((Boolean) evt.getNewValue() == true) {
                     saveCancelAction.setEnabled(true);
                 } else {
                     saveCancelAction.setEnabled(false);
@@ -131,12 +127,11 @@ public class EditPostingPresentationModel
     }
 
     private List<EditPostingPostingCategoryExtentionPoint> getExtentions() {
-        if(editPostingPostingCategoryExtentions == null) {
+        if (editPostingPostingCategoryExtentions == null) {
             editPostingPostingCategoryExtentions = (List<EditPostingPostingCategoryExtentionPoint>) ModulManager.getExtentions(EditPostingPostingCategoryExtentionPoint.class);
         }
         return editPostingPostingCategoryExtentions;
     }
-
 
     /**
      * Wenn sich ein Document ändert, wird saved auf false gesetzt
@@ -163,7 +158,7 @@ public class EditPostingPresentationModel
     public SelectionInList<PostingCategory> getPostingCategorySelection() {
         return postingCategorySelection;
     }
-    
+
     public Action getCancelAction() {
         return cancelAction;
     }
@@ -182,17 +177,15 @@ public class EditPostingPresentationModel
 
     public JComponent getPostingCategoryExtentionComponent() {
         PostingCategory selection = postingCategorySelection.getSelection();
-        if(postingCategorySelection.hasSelection()
-                && selection.getKey() != null 
-                && !selection.getKey().isEmpty()) {
+        if (postingCategorySelection.hasSelection() && selection.getKey() != null && !selection.getKey().isEmpty()) {
             EditPostingPostingCategoryExtentionPoint get = editPostingPostingCategoryExtentionsKeyMap.get(selection.getKey());
-            if(get != null) {
+            if (get != null) {
                 return get.getView();
             }
         }
         return null;
     }
-    
+
     private class CancelAction
             extends AbstractAction {
 
@@ -202,24 +195,25 @@ public class EditPostingPresentationModel
 
         public void actionPerformed(ActionEvent e) {
             int i = JOptionPane.OK_OPTION;
-            if((Boolean)unsaved.getValue() == true) {
-               i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirlich abbrechen?", "Abbrechen", JOptionPane.OK_CANCEL_OPTION);
+            if ((Boolean) unsaved.getValue() == true) {
+                i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirlich abbrechen?", "Abbrechen", JOptionPane.OK_CANCEL_OPTION);
             }
-            if(i == JOptionPane.OK_OPTION) {
+            if (i == JOptionPane.OK_OPTION) {
                 buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
         }
     }
-    
+
     private class SaveCancelAction
             extends AbstractAction {
-        
+
         public SaveCancelAction(String name, Icon icon) {
             super(name, icon);
         }
 
         public void actionPerformed(ActionEvent e) {
-            if(!save()) {
+
+            if (!save()) {
                 return;
             }
             buttonListenerSupport.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
@@ -228,7 +222,7 @@ public class EditPostingPresentationModel
 
     public boolean save() {
         getBufferedModel(Posting.PROPERTYNAME_POSTINGDATE).setValue(new Date());
-        if(postingCategorySelection.getSelectionIndex() == 0) {
+        if (postingCategorySelection.getSelectionIndex() == 0) {
             getBufferedModel(Posting.PROPERTYNAME_CATEGORY).setValue(null);
         }
 
@@ -236,22 +230,27 @@ public class EditPostingPresentationModel
         List<String> errorMessages = new ArrayList<String>();
 
 //        for(EditPostingPostingCategoryExtention ex : getExtentions()) {
-
-            if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
-                List<String> validate = editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).validate();
-                if(validate != null && validate.size() > 0) {
-                    valid = false;
-                    errorMessages.addAll(validate);
-                }
-            }
-
+        if (postingCategorySelection.hasSelection() && (postingCategorySelection.getSelectionIndex() != 0)) {
+//            List<String> validate = null;
+//            try {
+//                validate = editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).validate();
+//            } catch(Exception ex) {
+//                System.out.println(ex.getClass().toString());
+//            }
+//            System.out.println(validate);
+//                if(validate != null && validate.size() > 0) {
+//                    System.out.println("if 2 ok");
+//                    valid = false;
+//                    errorMessages.addAll(validate);
+//                }
+        }
 //        }
 
-        if(!valid) {
+        if (!valid) {
 
             StringBuffer buffer = new StringBuffer("<html>");
 
-            for(String message : errorMessages) {
+            for (String message : errorMessages) {
                 buffer.append(message);
                 buffer.append("<br>");
             }
@@ -264,18 +263,19 @@ public class EditPostingPresentationModel
         }
 
         triggerCommit();
-        unsaved.setValue(false);
 
         // Save the selected extention
-        if(postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
-            editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).save();
+        if (postingCategorySelection.hasSelection() && postingCategorySelection.getSelectionIndex() != 0) {
+        // editPostingPostingCategoryExtentionsKeyMap.get(postingCategorySelection.getSelection().getKey()).save();
+        String s = postingCategorySelection.getSelection().getKey();
+        editPostingPostingCategoryExtentionsKeyMap.get(s);
+
         }
-        
-//        for(EditPostingPostingCategoryExtention ex : getExtentions()) {
+//        for (EditPostingPostingCategoryExtentionPoint ex : getExtentions()) {
 //            ex.save();
 //        }
-
+//
+        unsaved.setValue(false);
         return true;
     }
-    
 }
