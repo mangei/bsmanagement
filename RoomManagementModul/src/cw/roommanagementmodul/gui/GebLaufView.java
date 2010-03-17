@@ -73,10 +73,10 @@ public class GebLaufView extends CWView implements ItemListener{
         laufartGroup.add(rNormal);
         laufartGroup.add(rStorno);
 
-
-        rTestlauf = CWComponentFactory.createRadioButton(model.getEchtLauf());
+        // Test und Echtlauf vertauscht
+        rTestlauf = CWComponentFactory.createRadioButton(model.getTestLauf());
         rTestlauf.setText("Testlauf");
-        rEchtlauf = CWComponentFactory.createRadioButton(model.getTestLauf());
+        rEchtlauf = CWComponentFactory.createRadioButton(model.getEchtLauf());
         rEchtlauf.setText("Echtlauf");
         betriebsartGroup = new ButtonGroup();
         betriebsartGroup.add(rTestlauf);
@@ -88,10 +88,10 @@ public class GebLaufView extends CWView implements ItemListener{
         format.setGroupingUsed(false);
         format.setMaximumIntegerDigits(4);
 
-        jahrField = CWComponentFactory.createIntegerTextField(new ValueHolder(model.getYear()),4);
+        jahrField = CWComponentFactory.createIntegerTextField(model.getYearFocus(),4);
 
-        GregorianCalendar gc = new GregorianCalendar();
-        jahrField.setText("" + gc.get(Calendar.YEAR));
+//        GregorianCalendar gc = new GregorianCalendar();
+//        jahrField.setText("" + gc.get(Calendar.YEAR));
 
 
         monatComboBox = CWComponentFactory.createComboBox(model.getMonatCbModel());
