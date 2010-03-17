@@ -259,7 +259,7 @@ public class PostingRunsPresentationModel
                 posting.setAmount(0-old.getAmount());//Gegenteil
                 posting.setAssets(old.isAssets());
                 posting.setCustomer(old.getCustomer());
-                posting.setDescription(old.getDescription() + " STORO");
+                posting.setDescription(old.getDescription() + " STORNO");
                 posting.setLiabilities(old.isLiabilities());
                 posting.setLiabilitiesAssets(old.isLiabilitiesAssets());
                 posting.setPostingCategory(old.getPostingCategory());
