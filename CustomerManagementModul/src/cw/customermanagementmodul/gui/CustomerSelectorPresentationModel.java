@@ -25,6 +25,9 @@ import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
 
 /**
+ * Diese Klasse beinhaltet alle Funktionen und Methoden die für
+ * die Kundenübersichtstabelle der Kundenverwaltung benötigt werden.
+ *
  * @author CreativeWorkers.at
  */
 public class CustomerSelectorPresentationModel
