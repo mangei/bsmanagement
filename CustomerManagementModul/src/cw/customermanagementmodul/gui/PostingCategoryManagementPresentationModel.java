@@ -231,7 +231,7 @@ public class PostingCategoryManagementPresentationModel
 
             public void buttonPressed(ButtonEvent evt) {
                 if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                    PostingCategoryManager.getInstance().save(pc);
+                    PostingCategoryManager.getInstance().update(pc);
                     GUIManager.getStatusbar().setTextAndFadeOut("Kategorie wurde aktualisiert.");
                 }
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
