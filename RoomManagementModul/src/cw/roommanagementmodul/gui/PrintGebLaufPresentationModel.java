@@ -32,7 +32,7 @@ import net.sf.jasperreports.engine.util.JRSaver;
  *
  * @author Dominik
  */
-public class PrintGebLaufPresentationModel{
+public class PrintGebLaufPresentationModel {
 
     private BewohnerTarifSelection bewohnerTarifSelection;
     private CWHeaderInfo headerInfo;
@@ -44,11 +44,11 @@ public class PrintGebLaufPresentationModel{
     private String reportSource;
     private String printHeader;
 
-    public PrintGebLaufPresentationModel(BewohnerTarifSelection bewohnerTarifSelection, CWHeaderInfo headerInfo,String printHeader) {
+    public PrintGebLaufPresentationModel(BewohnerTarifSelection bewohnerTarifSelection, CWHeaderInfo headerInfo, String printHeader) {
 
         this.bewohnerTarifSelection = bewohnerTarifSelection;
         this.headerInfo = headerInfo;
-        this.printHeader=printHeader;
+        this.printHeader = printHeader;
 
         initModels();
         initEventHandling();
@@ -60,33 +60,33 @@ public class PrintGebLaufPresentationModel{
 
     private void initModels() {
         setSupport(new ButtonListenerSupport());
-        backAction=new BackAction();
+        backAction = new BackAction();
 
         setReportSource("./jasper/bewohner.jrxml");
 //        setReportSource("./cw/boardingschoolmanagement/jasper/templates/bewohner.jrxml");
 
         List<Bewohner> bewohnerList = getBewohnerSelection(bewohnerTarifSelection);
 
-       for(int i=0;i<bewohnerList.size();i++){
-           System.out.println(bewohnerList.get(i).getCustomer().getSurname());
-       }
-
-        System.out.println("--------------------------------------------------");
-        List<BewohnerGeb> bewohnerGebList= new ArrayList<BewohnerGeb>();
-        for(int i=0;i<bewohnerList.size();i++){
-            bewohnerGebList.add(new BewohnerGeb(bewohnerList.get(i),bewohnerTarifSelection.get(bewohnerList.get(i))));
+        for (int i = 0; i < bewohnerList.size(); i++) {
+            System.out.println(bewohnerList.get(i).getCustomer().getSurname());
         }
 
-        for(int i=0;i<bewohnerGebList.size();i++){
+        System.out.println("--------------------------------------------------");
+        List<BewohnerGeb> bewohnerGebList = new ArrayList<BewohnerGeb>();
+        for (int i = 0; i < bewohnerList.size(); i++) {
+            bewohnerGebList.add(new BewohnerGeb(bewohnerList.get(i), bewohnerTarifSelection.get(bewohnerList.get(i))));
+        }
+
+        for (int i = 0; i < bewohnerGebList.size(); i++) {
             System.out.println(bewohnerGebList.get(i).getCustomer().getSurname());
         }
 
         Map<String, Object> main = new HashMap();
 //        JRDataSource tarifDS= new CustomDataSource(bewohnerList, bewohnerTarifSelection.getMap());
-        JasperReport subreport=null;
+        JasperReport subreport = null;
         try {
 //            subreport=JasperCompileManager.compileReport(ClassLoader.getSystemResourceAsStream("./jasper/gebuehren.jrxml"));
-            subreport=JasperCompileManager.compileReport("./jasper/gebuehren.jrxml");
+            subreport = JasperCompileManager.compileReport("./jasper/gebuehren.jrxml");
 //            subreport=JasperCompileManager.compileReport("./cw/boardingschoolmanagement/jasper/templates/gebuehren.jrxml");
 
             JRSaver.saveObject(subreport, "./jasper/gebuehren.jasper");
@@ -96,7 +96,7 @@ public class PrintGebLaufPresentationModel{
         }
 
         main.put("tarifSubreport", subreport);
-        main.put("headerText",printHeader);
+        main.put("headerText", printHeader);
 
 
         try {
@@ -105,9 +105,9 @@ public class PrintGebLaufPresentationModel{
 
 //
 //            ds = new JRBeanCollectionDataSource(bewohnerList);
-              ds= new JRBeanCollectionDataSource(bewohnerGebList);
+            ds = new JRBeanCollectionDataSource(bewohnerGebList);
 //
-              setJasperPrint(JasperFillManager.fillReport(getJasperReport(), main, ds));
+            setJasperPrint(JasperFillManager.fillReport(getJasperReport(), main, ds));
 //            setJasperPrint(JasperFillManager.fillReport(ClassLoader.getSystemResourceAsStream("./cw/boardingschoolmanagement/jasper/templates/bewohner.jasper"), main, ds));
         } catch (JRException ex) {
             Logger.getLogger(PrintZimmerPresentationModel.class.getName()).log(Level.SEVERE, null, ex);
@@ -118,12 +118,22 @@ public class PrintGebLaufPresentationModel{
         List<Bewohner> bewohnerList = new ArrayList<Bewohner>();
         Map map = bewohnerTarifSelection.getMap();
         Set keySet = map.keySet();
+        Bewohner b;
+        int index = 0;
 
         Iterator iterator = keySet.iterator();
 
         while (iterator.hasNext()) {
-            bewohnerList.add((Bewohner) iterator.next());
+            index = bewohnerList.size();
+            b = (Bewohner) iterator.next();
+            for (int i = 0; i < bewohnerList.size(); i++) {
+                if (b.getCustomer().getSurname().compareTo(bewohnerList.get(i).getCustomer().getSurname()) <0 ) {
+                    index--;
+                }
+            }
+            bewohnerList.add(index, b);
         }
+
         return bewohnerList;
     }
 
@@ -148,7 +158,6 @@ public class PrintGebLaufPresentationModel{
     public Action getBackAction() {
         return backAction;
     }
-
 
     /**
      * @return the support
