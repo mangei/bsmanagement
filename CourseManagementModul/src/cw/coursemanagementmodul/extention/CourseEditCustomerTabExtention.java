@@ -19,14 +19,20 @@ public class CourseEditCustomerTabExtention implements EditCustomerTabExtentionP
     private static EditCoursePartView view;
     private static CourseParticipant cp;
 
+    /**
+     *  Initalisiert das PresentationModel für die Übersicht der Kurse im
+     *  Kunden. Dabei wird der Kunde automatisch zu einen Kursteilnehmer egal
+     *  ob er an einem Kurs teilnimmt oder nicht.
+     *
+     * @param editCustomerModel
+     */
     public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
         cp = CourseParticipantManager.getInstance().get(editCustomerModel.getBean());
-        System.out.println("_____________NEW CP: ["+cp+"]: Kunde: " + editCustomerModel.getBean().getSurname());
-        if(cp == null) {
-
-            cp = new CourseParticipant(editCustomerModel.getBean());
+        System.out.println("_____________NEW CP: [" + cp + "]: Kunde: " + editCustomerModel.getBean().getSurname());
+        if (cp == null) {
+            cp = new CourseParticipant();
         }
-        model = new EditCoursePartPresentationModel(cp, editCustomerModel.getUnsaved());
+        model = new EditCoursePartPresentationModel(cp, editCustomerModel.getUnsaved(),editCustomerModel.getBean());
         view = new EditCoursePartView(model);
     }
 
@@ -57,5 +63,4 @@ public class CourseEditCustomerTabExtention implements EditCustomerTabExtentionP
     public Object getModel() {
         return model;
     }
-
 }
