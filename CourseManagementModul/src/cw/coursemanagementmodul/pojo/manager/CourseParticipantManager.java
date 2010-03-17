@@ -32,7 +32,7 @@ public class CourseParticipantManager extends AbstractPOJOManager<CourseParticip
 
     @Override
     public List<CourseParticipant> getAll() {
-        return HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant").getResultList();
+        return HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant c order by c.customer.surname;").getResultList();
     }
 
     public List<CourseParticipant> getAll(Customer customer) {
@@ -40,7 +40,7 @@ public class CourseParticipantManager extends AbstractPOJOManager<CourseParticip
     }
     
     public List<CourseParticipant> getAll(Course course) {
-        List<CourseParticipant> myList =  HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant where customer.active = true").getResultList();
+        List<CourseParticipant> myList =  HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant where customer.active = true order by customer.surname").getResultList();
         
         List<CourseParticipant> list2 = new ArrayList<CourseParticipant>();
         for(CourseParticipant cp : myList) {
@@ -81,6 +81,11 @@ public class CourseParticipantManager extends AbstractPOJOManager<CourseParticip
         return list2;
     }
 
+    /**
+     * Abfrage ob eine Kunde ein Kursteilnehmer ist
+     * @param customer
+     * @return Kursteilnehmer - Kunde ist ein Kursteilnehmer, null - Kunde ist kein Kursteilnehmer
+     */
     public CourseParticipant get(Customer customer) {
         CourseParticipant coursePart = null;
         try {
