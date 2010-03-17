@@ -57,9 +57,7 @@ public class CWComponentFactory {
 
     public static final int MAX_TEXTFIELD_LENGTH = 255;
     public static final int MAX_TEXTAREA_LENGTH = 1023;
-
     public static final Color BORDER_COLOR = new Color(215, 220, 228);
-
     private static String DOCUMENT_LISTENER_KEY = "documentListenerKey";
     private static String DATECHOOSER_FOCUS_LISTENER_KEY = "dateChooserListenerKey";
     private static String TEXT_COMPONENT_CONNECTOR_KEY = "textComponentConnectorKey";
@@ -88,7 +86,7 @@ public class CWComponentFactory {
         }
 
         public CWComponentContainer addComponent(JComponent comp) {
-            if(comp == null) {
+            if (comp == null) {
                 throw new NullPointerException("component is null");
             }
             components.add(comp);
@@ -96,7 +94,7 @@ public class CWComponentFactory {
         }
 
         public JComponent addComponentAndReturn(JComponent comp) {
-            if(comp == null) {
+            if (comp == null) {
                 throw new NullPointerException("component is null");
             }
             components.add(comp);
@@ -105,44 +103,44 @@ public class CWComponentFactory {
 
         public void dispose() {
             JComponent comp;
-            for(int i=0, l=components.size(); i<l; i++) {
+            for (int i = 0, l = components.size(); i < l; i++) {
                 comp = components.get(i);
 
                 Bindings.removeComponentPropertyHandler(comp);
 
-                if(comp instanceof CWTextField) {
+                if (comp instanceof CWTextField) {
                     DocumentListener dl = (DocumentListener) comp.getClientProperty(DOCUMENT_LISTENER_KEY);
-                    if(dl != null) {
-                        ((CWTextField)comp).getDocument().removeDocumentListener(dl);
+                    if (dl != null) {
+                        ((CWTextField) comp).getDocument().removeDocumentListener(dl);
                         comp.putClientProperty(DOCUMENT_LISTENER_KEY, null);
                     }
                 }
 
-                if(comp instanceof CWDateChooser) {
+                if (comp instanceof CWDateChooser) {
                     FocusListener fl = (FocusListener) comp.getClientProperty(DATECHOOSER_FOCUS_LISTENER_KEY);
-                    if(fl != null) {
-                        ((JTextFieldDateEditor)((CWDateChooser)comp).getDateEditor()).getUiComponent().removeFocusListener(fl);
+                    if (fl != null) {
+                        ((JTextFieldDateEditor) ((CWDateChooser) comp).getDateEditor()).getUiComponent().removeFocusListener(fl);
                         comp.putClientProperty(DATECHOOSER_FOCUS_LISTENER_KEY, null);
                     }
-                    ((CWDateChooser)comp).cleanup();
+                    ((CWDateChooser) comp).cleanup();
                 }
 
-                if(comp instanceof CWButton) {
-                    ((CWButton)comp).setAction(null);
+                if (comp instanceof CWButton) {
+                    ((CWButton) comp).setAction(null);
                 }
 
-                if(comp instanceof CWMenuItem) {
-                    ((CWMenuItem)comp).setAction(null);
+                if (comp instanceof CWMenuItem) {
+                    ((CWMenuItem) comp).setAction(null);
                 }
 
-                if(comp instanceof CWPanel) {
-                    ((CWPanel)comp).removeAll();
-                    ((CWPanel)comp).setLayout(null);
-                    ((CWPanel)comp).setUI(null);
+                if (comp instanceof CWPanel) {
+                    ((CWPanel) comp).removeAll();
+                    ((CWPanel) comp).setLayout(null);
+                    ((CWPanel) comp).setUI(null);
                 }
 
                 TextComponentConnector textComponentConnector = (TextComponentConnector) comp.getClientProperty(TEXT_COMPONENT_CONNECTOR_KEY);
-                if(textComponentConnector != null) {
+                if (textComponentConnector != null) {
                     textComponentConnector.release();
                     comp.putClientProperty(TEXT_COMPONENT_CONNECTOR_KEY, null);
                 }
@@ -154,13 +152,13 @@ public class CWComponentFactory {
                 }
 
                 PropertyConnector propertyConnector = (PropertyConnector) comp.getClientProperty(PROPERTY_CONNECTOR_KEY);
-                if(propertyConnector != null) {
+                if (propertyConnector != null) {
                     propertyConnector.release();
                     comp.putClientProperty(PROPERTY_CONNECTOR_KEY, null);
                 }
 
                 PropertyChangeListener propertyChangeListener = (PropertyChangeListener) comp.getClientProperty(PROPERTY_CHANGE_LISTENER_KEY);
-                if(propertyChangeListener != null) {
+                if (propertyChangeListener != null) {
                     comp.removePropertyChangeListener(propertyChangeListener);
                     comp.putClientProperty(PROPERTY_CHANGE_LISTENER_KEY, null);
                 }
@@ -172,9 +170,9 @@ public class CWComponentFactory {
                 }
 
                 CWRadioButton button = (CWRadioButton) comp.getClientProperty(RADIO_BUTTON_KEY);
-                if(button != null) {
+                if (button != null) {
                     ItemListener itemListener = (ItemListener) comp.getClientProperty(RADIO_BUTTON_ITEM_LISTENER_KEY);
-                    if(itemListener != null) {
+                    if (itemListener != null) {
                         button.removeItemListener(itemListener);
                         comp.putClientProperty(RADIO_BUTTON_ITEM_LISTENER_KEY, null);
                     }
@@ -194,7 +192,6 @@ public class CWComponentFactory {
 
             components.clear();
         }
-
     }
 
     public static CWDateChooser createDateChooser(final ValueModel valueModel) {
@@ -213,15 +210,16 @@ public class CWComponentFactory {
         dc.putClientProperty(PROPERTY_CONNECTOR_KEY, connector);
 
         FocusListener fl = new FocusAdapter() {
-             @Override
+
+            @Override
             public void focusLost(FocusEvent e) {
-                if(((JTextFieldDateEditor)dc.getDateEditor()).getText().isEmpty()) {
+                if (((JTextFieldDateEditor) dc.getDateEditor()).getText().isEmpty()) {
                     dc.setDate(null);
                     valueModel.setValue(null);
                 }
             }
         };
-        ((JTextFieldDateEditor)dc.getDateEditor()).getUiComponent().addFocusListener(fl);
+        ((JTextFieldDateEditor) dc.getDateEditor()).getUiComponent().addFocusListener(fl);
         dc.putClientProperty(DATECHOOSER_FOCUS_LISTENER_KEY, fl);
 
         return dc;
@@ -237,7 +235,7 @@ public class CWComponentFactory {
 
     public static CWTable createTable(TableModel tableModel, final String emptyText, String tableStateName) {
         CWTable table;
-        
+
         if (tableModel != null) {
             table = new CWTable(tableModel);
         } else {
@@ -290,11 +288,11 @@ public class CWComponentFactory {
 //        list.addHighlighter(new ColorHighlighter(Color.RED, Color.WHITE));
 
 //        Bindings.bind(list, selectionInList);
-        
+
         list.setModel(selectionInList);
         list.setSelectionModel(
                 new SingleListSelectionAdapter(
-                        selectionInList.getSelectionIndexHolder()));
+                selectionInList.getSelectionIndexHolder()));
 
         return list;
     }
@@ -426,9 +424,10 @@ public class CWComponentFactory {
 
         PropertyChangeListener propertyChangeListener;
         panel.addPropertyChangeListener("enabled", propertyChangeListener = new PropertyChangeListener() {
+
             public void propertyChange(PropertyChangeEvent evt) {
-                bTrue.setEnabled((Boolean)evt.getNewValue());
-                bFalse.setEnabled((Boolean)evt.getNewValue());
+                bTrue.setEnabled((Boolean) evt.getNewValue());
+                bFalse.setEnabled((Boolean) evt.getNewValue());
             }
         });
         panel.putClientProperty(PROPERTY_CHANGE_LISTENER_KEY, propertyChangeListener);
@@ -438,6 +437,12 @@ public class CWComponentFactory {
 
     public static CWIntegerTextField createIntegerTextField(ValueModel valueModel) {
         return createIntegerTextField(valueModel, -1);
+    }
+
+    public static CWIntegerTextField createIntegerTextField(FocusAdapter f , int maxDigits) {
+        final CWIntegerTextField textField = new CWIntegerTextField(maxDigits);
+        textField.addFocusListener(f);
+        return textField;
     }
 
     public static CWIntegerTextField createIntegerTextField(final ValueModel valueModel, int maxDigits) {
@@ -509,7 +514,7 @@ public class CWComponentFactory {
 
         return textField;
     }
-    
+
     public static CWCurrencyTextField createCurrencyTextField(final ValueModel valueModel) {
         if(valueModel == null) {
             throw new NullPointerException("valueModel is null");
@@ -596,7 +601,7 @@ public class CWComponentFactory {
         checkBox.setOpaque(false);
         return checkBox;
     }
-    
+
     public static CWTree createTree(TreeModel treeModel) {
         if(treeModel == null) {
             throw new NullPointerException("treeModel is null");
@@ -701,7 +706,7 @@ public class CWComponentFactory {
 
     public static CWLabel createLabel(String text, Icon icon) {
         CWLabel label = new CWLabel(text);
-        if(icon != null) {
+        if (icon != null) {
             label.setIcon(icon);
         }
         label.setOpaque(false);
@@ -724,11 +729,12 @@ public class CWComponentFactory {
 
         ValueModel newValueModel = valueModel;
 
-        if(format != null) {
+        if (format != null) {
             final ValueModel bufferedValueModel = new ValueHolder();
-            
+
             PropertyChangeListener propertyChangeListener;
             valueModel.addValueChangeListener(propertyChangeListener = new PropertyChangeListener() {
+
                 public void propertyChange(PropertyChangeEvent evt) {
                     bufferedValueModel.setValue(format.format(valueModel.getValue()));
                 }
@@ -781,7 +787,7 @@ public class CWComponentFactory {
 
         final ValueModel bufferedValueModel = new ValueHolder();
 
-        if(((Boolean)valueModel.getValue()) == true) {
+        if (((Boolean) valueModel.getValue()) == true) {
             bufferedValueModel.setValue(trueString);
         } else {
             bufferedValueModel.setValue(falseString);
@@ -789,8 +795,9 @@ public class CWComponentFactory {
 
         PropertyChangeListener propertyChangeListener;
         valueModel.addValueChangeListener(propertyChangeListener = new PropertyChangeListener() {
+
             public void propertyChange(PropertyChangeEvent evt) {
-                if(((Boolean)valueModel.getValue()) == true) {
+                if (((Boolean) valueModel.getValue()) == true) {
                     bufferedValueModel.setValue(trueString);
                 } else {
                     bufferedValueModel.setValue(falseString);
@@ -804,7 +811,7 @@ public class CWComponentFactory {
         PropertyConnector connector = PropertyConnector.connect(bufferedValueModel, "value", label, "text");
         connector.updateProperty2();
         label.putClientProperty(PROPERTY_CONNECTOR_KEY, connector);
-        
+
         label.setOpaque(false);
         return label;
     }
@@ -815,20 +822,21 @@ public class CWComponentFactory {
         }
 
         CWLabel label = new CWLabel();
-        
+
         final ValueModel bufferedValueModel = new ValueHolder();
 
-        bufferedValueModel.setValue(CalendarUtil.formatDate((Date)valueModel.getValue()));
+        bufferedValueModel.setValue(CalendarUtil.formatDate((Date) valueModel.getValue()));
 
         PropertyChangeListener propertyChangeListener;
         valueModel.addValueChangeListener(propertyChangeListener = new PropertyChangeListener() {
+
             public void propertyChange(PropertyChangeEvent evt) {
-                bufferedValueModel.setValue(CalendarUtil.formatDate((Date)valueModel.getValue()));
+                bufferedValueModel.setValue(CalendarUtil.formatDate((Date) valueModel.getValue()));
             }
         });
         label.putClientProperty(VALUE_MODEL_KEY, valueModel);
         label.putClientProperty(VALUE_MODEL_CHANGE_LISTENER_KEY, propertyChangeListener);
-        
+
         PropertyConnector connector = PropertyConnector.connect(bufferedValueModel, "value", label, "text");
         connector.updateProperty2();
         label.putClientProperty(PROPERTY_CONNECTOR_KEY, connector);
@@ -876,27 +884,27 @@ public class CWComponentFactory {
         return createView(new CWHeaderInfo(headerText), comp);
     }
 
-    public static CWView createView( JComponent comp) {
+    public static CWView createView(JComponent comp) {
         return createView(new CWHeaderInfo(), comp);
     }
 
     public static CWView createView(CWHeaderInfo headerInfo, JComponent comp) {
-        if(headerInfo == null) {
+        if (headerInfo == null) {
             headerInfo = new CWHeaderInfo();
         }
         CWView view = new CWView(headerInfo);
-        if(comp != null) {
+        if (comp != null) {
             view.getContentPanel().add(comp, BorderLayout.CENTER);
         }
         return view;
     }
 
     public static String createToolTip(String header, String description) {
-        return createToolTip(header,description,null);
+        return createToolTip(header, description, null);
     }
 
     public static String createToolTip(String header, String description, String path) {
-        CWToolTip tt = new CWToolTip(header,description,CWUtils.getURL(path));
+        CWToolTip tt = new CWToolTip(header, description, CWUtils.getURL(path));
         return tt.getToolTip();
     }
 
