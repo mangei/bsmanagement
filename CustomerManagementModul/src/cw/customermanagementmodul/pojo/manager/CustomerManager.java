@@ -33,7 +33,11 @@ public class CustomerManager extends AbstractPOJOManager<Customer> {
         }
 
         return group.getCustomers();
-
+/**
+ * Liefert alle auf aktiv gesetzten Kunden
+ * @param group
+ * @return
+ */
 //        return HibernateUtil.getEntityManager().
 //                createQuery("FROM Customer c WHERE group in elements(c.groups)")
 //                .getResultList();
@@ -53,15 +57,15 @@ public class CustomerManager extends AbstractPOJOManager<Customer> {
 
     @Override
     public List<Customer> getAll() {
-        return HibernateUtil.getEntityManager().createQuery("FROM Customer").getResultList();
+        return HibernateUtil.getEntityManager().createQuery("FROM Customer ORDER BY Surname").getResultList();
     }
 
     public List<Customer> getAllActive() {
-        return HibernateUtil.getEntityManager().createQuery("FROM Customer WHERE active=true").getResultList();
+        return HibernateUtil.getEntityManager().createQuery("FROM Customer WHERE active=true ORDER BY Surname").getResultList();
     }
 
     public List<Customer> getAllInactive() {
-        return HibernateUtil.getEntityManager().createQuery("FROM Customer WHERE active=false").getResultList();
+        return HibernateUtil.getEntityManager().createQuery("FROM Customer WHERE active=false ORDER BY Surname").getResultList();
     }
 
     public List<String> getList(String attribute) {
