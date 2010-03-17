@@ -1,4 +1,3 @@
-
 package cw.roommanagementmodul.gui;
 
 import com.jgoodies.binding.PresentationModel;
@@ -7,6 +6,7 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CalendarUtil;
+import cw.boardingschoolmanagement.gui.component.CWIntegerTextField;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.pojo.Posting;
@@ -15,6 +15,8 @@ import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
 import cw.customermanagementmodul.pojo.manager.PostingManager;
 import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import javax.swing.AbstractAction;
@@ -39,8 +41,7 @@ import javax.swing.JOptionPane;
  *
  * @author Dominik
  */
-public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection>
-                    {
+public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection> {
 
     private GebLaufSelection gebLauf;
     private Action start;
@@ -48,6 +49,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
     private Action stornoLauf;
     private Action testLauf;
     private Action echtLauf;
+    private FocusAdapter yearFocus;
     private Document yearDocument;
     private SelectionInList monatList;
     private List mList;
@@ -77,13 +79,14 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         testLauf = new TestLaufAction();
         echtLauf = new EchtLaufAction();
         monatList = new SelectionInList();
+        yearFocus = new YearFocus();
         setYearDocument(new YearDocument());
         GregorianCalendar gc = new GregorianCalendar();
-        year= new Integer(gc.get(Calendar.YEAR));
+        year = new Integer(gc.get(Calendar.YEAR));
 
         gebLaufManager = GebLaufManager.getInstance();
         gebLaufList = new SelectionInList<GebLauf>(gebLaufManager.getAllOrdered());
-        mList=new ArrayList();
+        mList = new ArrayList();
 
         mList.add("Jänner");
         mList.add("Februar");
@@ -177,7 +180,6 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         return headerInfo;
     }
 
-
     public void dispose() {
         gebLaufList.release();
         monatList.release();
@@ -220,7 +222,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         GebLauf stornoGebLauf = gebLaufList.getSelection();
 
         int checkGO = JOptionPane.YES_OPTION;
-        if (betriebsart == false) {
+        if (betriebsart == true) {
             checkGO = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich im Echtlauf starten?", "ACHTUNG!", JOptionPane.YES_NO_OPTION);
         }
 
@@ -239,7 +241,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
                     newPosting.setCustomer(oldPosting.getCustomer());
                     newPosting.setDescription("Storno " + oldPosting.getDescription());
-                    newPosting.setAmount(oldPosting.getAmount()*(-1));
+                    newPosting.setAmount(oldPosting.getAmount() * (-1));
                     newPosting.setAssets(oldPosting.isAssets());
                     newPosting.setLiabilities(oldPosting.isLiabilities());
                     newPosting.setLiabilitiesAssets(oldPosting.isLiabilitiesAssets());
@@ -247,16 +249,16 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                     newPosting.setPostingDate(new Date());
                     newPosting.setPostingEntryDate(new Date(stornoGebLauf.getAbrMonat()));
 
-                    if (betriebsart == false) {
+                    if (betriebsart == true) {
                         PostingManager postingManager = PostingManager.getInstance();
                         postingManager.save(newPosting);
                     }
                     newPostingList.add(newPosting);
                 }
 
-                if (betriebsart == false) {
+                if (betriebsart == true) {
                     gebLaufManager.delete(stornoGebLauf);
-                    for(BuchungsLaufZuordnung blz: blzList) {
+                    for (BuchungsLaufZuordnung blz : blzList) {
                         blzManager.delete(blz);
                     }
                     gebLaufList.setList(gebLaufManager.getAllOrdered());
@@ -268,14 +270,14 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                 int yearInt = c.get(Calendar.YEAR);
 
                 String laufString;
-                if (betriebsart == false) {
+                if (betriebsart == true) {
                     laufString = new String("Storno Lauf - " + monthStr + " " + yearInt);
                 } else {
                     laufString = new String("Storno Test Lauf - " + monthStr + " " + yearInt);
                 }
 
 
-                final StornoResultPresentationModel model = new StornoResultPresentationModel(newPostingList, new CWHeaderInfo(laufString,"Ergebnis des Storno Lauf"));
+                final StornoResultPresentationModel model = new StornoResultPresentationModel(newPostingList, new CWHeaderInfo(laufString, "Ergebnis des Storno Lauf"));
                 final StornoResultView laufResultView = new StornoResultView(model);
                 model.addButtonListener(new ButtonListener() {
 
@@ -294,7 +296,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
     private void startGebLauf() {
         int checkGO = JOptionPane.YES_OPTION;
-        if (betriebsart == false) {
+        if (betriebsart == true) {
             checkGO = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich im Echtlauf starten?", "ACHTUNG!", JOptionPane.YES_NO_OPTION);
         }
 
@@ -307,7 +309,6 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 //            } catch (BadLocationException ex) {
 //                Logger.getLogger(GebLaufPresentationModel.class.getName()).log(Level.SEVERE, null, ex);
 //            }
-
             GregorianCalendar gc = new GregorianCalendar(year, month - 1, 1);
             GebLauf gebLauf = new GebLauf(gc.getTime().getTime(), new Date(), betriebsart);
 
@@ -315,7 +316,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
             BewohnerTarifSelection selection = gebLaufSelection.startSelection(gebLauf.getAbrMonat());
 
             boolean checkAccounting = true;
-            if (betriebsart == false) {
+            if (betriebsart == true) {
                 checkAccounting = startAccounting(selection, gebLauf);
                 gebLaufList.setList(gebLaufManager.getAllOrdered());
             }
@@ -327,13 +328,13 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                 int yearInt = c.get(Calendar.YEAR);
 
                 String laufString;
-                if (betriebsart == false) {
+                if (betriebsart == true) {
                     laufString = new String("Gebühren Lauf - " + monthStr + " " + yearInt);
                 } else {
                     laufString = new String("Test Lauf - " + monthStr + " " + yearInt);
                 }
 
-                final LaufResultPresentationModel model = new LaufResultPresentationModel(selection, new CWHeaderInfo(laufString,"Ergebnis des Gebühren Lauf"));
+                final LaufResultPresentationModel model = new LaufResultPresentationModel(selection, new CWHeaderInfo(laufString, "Ergebnis des Gebühren Lauf"));
                 final LaufResultView laufResultView = new LaufResultView(model);
                 model.addButtonListener(new ButtonListener() {
 
@@ -552,5 +553,28 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
      */
     public Action getEchtLauf() {
         return echtLauf;
+    }
+    /**
+     *
+     * @return yearFocus
+     */
+    public FocusAdapter getYearFocus(){
+        return yearFocus;
+    }
+
+
+    /**
+     * FocusAdapter der die Eingabe die im Jahresfeld in der GebLaufView
+     * getätigt wurde in eine Variable speichert.
+     * Wird ausgelöst sobald das bearbeitet Feld den Focus verliert.
+     */
+    private class YearFocus
+            extends FocusAdapter {
+
+        @Override
+        public void focusLost(FocusEvent e) {
+            CWIntegerTextField cwITF =(CWIntegerTextField) e.getSource();
+            setYear(Integer.parseInt(cwITF.getText()));
+        }
     }
 }
