@@ -44,8 +44,8 @@ public class PostingManagementEditCustomerPresentationModel {
     private Customer customer;
     private CWHeaderInfo headerInfo;
 
-    private Action newAction;
-    private Action editAction;
+    private Action newPostingAction;
+    private Action editPostingAction;
     private Action reversePostingAction;
     private Action balancePostingAction;
 //    private Action deleteAction;
@@ -80,8 +80,8 @@ public class PostingManagementEditCustomerPresentationModel {
     }
 
     public void initModels() {
-        newAction = new NewAction("Neu", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"));
-        editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_edit.png"));
+        newPostingAction = new NewPostingAction("Neu", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"));
+        editPostingAction = new EditPostingAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_edit.png"));
         reversePostingAction = new ReversePostingAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_delete.png"));
         balancePostingAction = new BalancePostingAction("Ausgleichen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_go.png"));
 //        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_delete.png"));
@@ -348,10 +348,10 @@ public class PostingManagementEditCustomerPresentationModel {
     public void reset() {
     }
 
-    private class NewAction
+    private class NewPostingAction
             extends AbstractAction {
 
-        public NewAction(String name, Icon icon) {
+        public NewPostingAction(String name, Icon icon) {
             super(name, icon);
         }
 
@@ -372,7 +372,6 @@ public class PostingManagementEditCustomerPresentationModel {
             model.addButtonListener(new ButtonListener() {
 
                 public void buttonPressed(ButtonEvent evt) {
-
                     if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         PostingManager.getInstance().save(posting);
                         GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde erstellt.");
@@ -393,10 +392,10 @@ public class PostingManagementEditCustomerPresentationModel {
         }
     }
 
-    private class EditAction
+    private class EditPostingAction
             extends AbstractAction {
 
-        public EditAction(String name, Icon icon) {
+        public EditPostingAction(String name, Icon icon) {
             super(name, icon);
         }
 
@@ -604,7 +603,7 @@ public class PostingManagementEditCustomerPresentationModel {
 //    }
 
     public Action getEditAction() {
-        return editAction;
+        return editPostingAction;
     }
 
     public Action getReversePostingAction() {
@@ -648,7 +647,7 @@ public class PostingManagementEditCustomerPresentationModel {
     }
 
     public Action getNewAction() {
-        return newAction;
+        return newPostingAction;
     }
 
     public Action getBalancePostingAction() {
@@ -735,7 +734,7 @@ public class PostingManagementEditCustomerPresentationModel {
 
     private void updateActionEnablement() {
         boolean hasSelection = postingSelection.hasSelection();
-        editAction.setEnabled(hasSelection);
+        editPostingAction.setEnabled(hasSelection);
         balancePostingAction.setEnabled(hasSelection);
         reversePostingAction.setEnabled(hasSelection);
 //        deleteAction.setEnabled(hasSelection);
