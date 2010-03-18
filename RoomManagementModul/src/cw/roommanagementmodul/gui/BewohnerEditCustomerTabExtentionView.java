@@ -71,6 +71,7 @@ public class BewohnerEditCustomerTabExtentionView extends CWView
             }
         });
         boxBewohner = CWComponentFactory.createCheckBox(model.getCheckBoxModel(), "Bewohner");
+        boxBewohner.setSelected(false);
         bewohnerItemListener=new BewohnerItemListener();
         boxBewohner.addItemListener(bewohnerItemListener);
         dcEinzugsdatum = CWComponentFactory.createDateChooser(model.getBufferedModel(Bewohner.PROPERTYNAME_VON));
