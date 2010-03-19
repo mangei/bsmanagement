@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<java version="1.6.0_12" class="java.beans.XMLDecoder"> 
+ <object class="cw.boardingschoolmanagement.app.XProperties$XTableState"> 
+  <array class="cw.boardingschoolmanagement.app.XProperties$ColumnState" length="15"> 
+   <void index="0"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>47</int> 
+     <int>47</int> 
+     <int>0</int> 
+     <boolean>true</boolean> 
+     <int>0</int> 
+    </object> 
+   </void> 
+   <void index="1"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>54</int> 
+     <int>54</int> 
+     <int>1</int> 
+     <boolean>true</boolean> 
+     <int>1</int> 
+    </object> 
+   </void> 
+   <void index="2"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>60</int> 
+     <int>60</int> 
+     <int>2</int> 
+     <boolean>true</boolean> 
+     <int>2</int> 
+    </object> 
+   </void> 
+   <void index="3"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>62</int> 
+     <int>62</int> 
+     <int>3</int> 
+     <boolean>true</boolean> 
+     <int>3</int> 
+    </object> 
+   </void> 
+   <void index="4"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>65</int> 
+     <int>65</int> 
+     <int>4</int> 
+     <boolean>true</boolean> 
+     <int>4</int> 
+    </object> 
+   </void> 
+   <void index="5"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>51</int> 
+     <int>51</int> 
+     <int>5</int> 
+     <boolean>true</boolean> 
+     <int>5</int> 
+    </object> 
+   </void> 
+   <void index="6"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>29</int> 
+     <int>29</int> 
+     <int>6</int> 
+     <boolean>true</boolean> 
+     <int>6</int> 
+    </object> 
+   </void> 
+   <void index="7"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>28</int> 
+     <int>28</int> 
+     <int>7</int> 
+     <boolean>true</boolean> 
+     <int>7</int> 
+    </object> 
+   </void> 
+   <void index="8"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>67</int> 
+     <int>67</int> 
+     <int>8</int> 
+     <boolean>true</boolean> 
+     <int>8</int> 
+    </object> 
+   </void> 
+   <void index="9"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>38</int> 
+     <int>38</int> 
+     <int>9</int> 
+     <boolean>true</boolean> 
+     <int>9</int> 
+    </object> 
+   </void> 
+   <void index="10"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>70</int> 
+     <int>70</int> 
+     <int>10</int> 
+     <boolean>true</boolean> 
+     <int>10</int> 
+    </object> 
+   </void> 
+   <void index="11"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>88</int> 
+     <int>88</int> 
+     <int>11</int> 
+     <boolean>true</boolean> 
+     <int>11</int> 
+    </object> 
+   </void> 
+   <void index="12"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>30</int> 
+     <int>30</int> 
+     <int>12</int> 
+     <boolean>false</boolean> 
+     <int>-1</int> 
+    </object> 
+   </void> 
+   <void index="13"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>36</int> 
+     <int>36</int> 
+     <int>13</int> 
+     <boolean>false</boolean> 
+     <int>-1</int> 
+    </object> 
+   </void> 
+   <void index="14"> 
+    <object class="cw.boardingschoolmanagement.app.XProperties$ColumnState"> 
+     <int>65</int> 
+     <int>65</int> 
+     <int>14</int> 
+     <boolean>false</boolean> 
+     <int>-1</int> 
+    </object> 
+   </void> 
+  </array> 
+  <null/> 
+  <boolean>true</boolean> 
+ </object> 
+</java> 
