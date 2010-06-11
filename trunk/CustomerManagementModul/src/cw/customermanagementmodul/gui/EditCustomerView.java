@@ -1,5 +1,6 @@
 package cw.customermanagementmodul.gui;
 
+import com.jidesoft.swing.JideTabbedPane;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
@@ -22,10 +23,9 @@ public class EditCustomerView extends CWView
     private EditCustomerPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private JTabbedPane tabs;
+    private JideTabbedPane tabs;
     private CWButton bSave;
     private CWButton bCancel;
-    private CWButton bSaveCancel;
 
     private PropertyChangeListener tabsEnableListener;
 
@@ -41,14 +41,12 @@ public class EditCustomerView extends CWView
     private void initComponents() {
         bSave               = CWComponentFactory.createButton(model.getSaveAction());
         bCancel             = CWComponentFactory.createButton(model.getCancelAction());
-        bSaveCancel         = CWComponentFactory.createButton(model.getSaveCancelAction());
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bSave)
-                .addComponent(bCancel)
-                .addComponent(bSaveCancel);
-        
-        tabs = new JTabbedPane();
+                .addComponent(bCancel);
+
+        tabs = new JideTabbedPane();
     }
 
     private void initEventhandling() {
@@ -81,7 +79,6 @@ public class EditCustomerView extends CWView
         CWButtonPanel buttonPanel = this.getButtonPanel();
         
         buttonPanel.add(bSave);
-        buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
         
         // Load dynamic components in tabs
@@ -93,6 +90,12 @@ public class EditCustomerView extends CWView
 //            ex.getView().setPreferredSize(tabs.getSize());
 //            ex.getView().setMaximumSize(tabs.getSize());
             tabs.addTab(ex.getView().getName(), ex.getView());
+
+            // Set the icon if it an instance of CWView
+            if(ex.getView() instanceof CWView) {
+                tabs.setIconAt(i, ((CWView) ex.getView()).getHeaderInfo().getIcon());
+            }
+            
             if (activeEx != null && ex.getClass().equals(activeEx)) {
                 tabs.setSelectedIndex(i);
             }

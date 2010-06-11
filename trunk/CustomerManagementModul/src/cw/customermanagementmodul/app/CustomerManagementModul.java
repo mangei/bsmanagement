@@ -85,7 +85,8 @@ public class CustomerManagementModul
                 GroupManagementPresentationModel model = new GroupManagementPresentationModel();
                 GroupManagementView view = new GroupManagementView(model);
 
-                GUIManager.changeView(view);
+                CWUtils.showDialog(view);
+//                GUIManager.changeView(view);
                 GUIManager.setLoadingScreenVisible(false);
             }
         }), "manage");

@@ -24,7 +24,6 @@ public class EditGroupView extends CWView
 
     private CWButton bSave;
     private CWButton bCancel;
-    private CWButton bSaveCancel;
 
     public EditGroupView(EditGroupPresentationModel model) {
         this.model = model;
@@ -39,13 +38,11 @@ public class EditGroupView extends CWView
 
         bSave       = CWComponentFactory.createButton(model.getSaveButtonAction());
         bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
-        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(tfName)
                 .addComponent(bSave)
-                .addComponent(bCancel)
-                .addComponent(bSaveCancel);
+                .addComponent(bCancel);
     }
 
     private void initEventHandling() {
@@ -57,7 +54,6 @@ public class EditGroupView extends CWView
 
         CWButtonPanel buttonPanel = getButtonPanel();
         buttonPanel.add(bSave);
-        buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout(

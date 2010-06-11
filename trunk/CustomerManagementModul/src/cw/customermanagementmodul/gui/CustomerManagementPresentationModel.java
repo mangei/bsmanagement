@@ -107,10 +107,8 @@ public class CustomerManagementPresentationModel {
 
                 public void propertyChange(PropertyChangeEvent evt) {
                     if ((Boolean) evt.getNewValue() == true) {
-                        System.out.println("add");
                         customerSelectorPresentationModel.add(c);
                     } else {
-                        System.out.println("remove");
                         customerSelectorPresentationModel.remove(c);
                     }
                 }

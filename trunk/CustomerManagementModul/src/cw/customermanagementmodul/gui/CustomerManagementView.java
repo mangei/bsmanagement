@@ -78,7 +78,8 @@ public class CustomerManagementView extends CWView
         this.getButtonPanel().add(bEdit);
         this.getButtonPanel().add(bDelete);
         this.getButtonPanel().add(bInactive);
-        this.getButtonPanel().add(bViewInactives);
+        this.getButtonPanel(CWView.ButtonPanelPosition.RIGHT).add(bViewInactives);
+
 //        panel.getButtonPanel().add(new JButton(new AbstractAction("Show Postings") {
 //
 //            public void actionPerformed(ActionEvent e) {

@@ -41,7 +41,6 @@ public class EditCustomerPresentationModel
     private CWHeaderInfo headerInfo;
     private Action saveAction;
     private Action cancelAction;
-    private Action saveCancelAction;
     private ButtonListenerSupport support;
     private PresentationModel<Guardian> guardianPresentationModel;
     private List<EditCustomerTabExtentionPoint> editCustomerGUITabExtentions;
@@ -71,7 +70,6 @@ public class EditCustomerPresentationModel
 
         saveAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/customermanagementmodul/images/disk_16.png"));
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
-        saveCancelAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/customermanagementmodul/images/save_cancel.png"));
 
         support = new ButtonListenerSupport();
     }
@@ -104,10 +102,8 @@ public class EditCustomerPresentationModel
             public void propertyChange(PropertyChangeEvent evt) {
                 if ((Boolean) evt.getNewValue() == true) {
                     saveAction.setEnabled(true);
-                    saveCancelAction.setEnabled(true);
                 } else {
                     saveAction.setEnabled(false);
-                    saveCancelAction.setEnabled(false);
                 }
             }
         });
@@ -286,10 +282,6 @@ public class EditCustomerPresentationModel
         return cancelAction;
     }
 
-    public Action getSaveCancelAction() {
-        return saveCancelAction;
-    }
-
     public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
@@ -312,7 +304,7 @@ public class EditCustomerPresentationModel
 
             // Fire only when the save-method worked correct
             if (save()) {
-                support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
+                support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
             }
 
         }
@@ -341,22 +333,6 @@ public class EditCustomerPresentationModel
             if (i == 0 || i == 1) {
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
-        }
-    }
-
-    private class SaveCancelAction
-            extends AbstractAction {
-
-        private SaveCancelAction(String name, Icon icon) {
-            super(name, icon);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            if (!save()) {
-                return;
-            }
-
-            support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
         }
     }
 
