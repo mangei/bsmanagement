@@ -202,7 +202,7 @@ public class ConfigurationPresentationModel extends PresentationModel
     }
 
     @Override
-    protected void setChanged(boolean newValue) {
+    public void setChanged(boolean newValue) {
         super.setChanged(newValue);
     }
 

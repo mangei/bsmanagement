@@ -692,6 +692,30 @@ public class CWComponentFactory {
         return textField;
     }
 
+    public static CWPasswordField createPasswordField(ValueModel valueModel, boolean commitOnFocusLost) {
+        return createPasswordField(valueModel);
+    }
+
+    public static CWPasswordField createPasswordField(ValueModel valueModel) {
+        return createPasswordField(valueModel, MAX_TEXTFIELD_LENGTH);
+    }
+
+    public static CWPasswordField createPasswordField(ValueModel valueModel, int maxTextLength) {
+        if(valueModel == null) {
+            throw new NullPointerException("valueModel is null");
+        }
+
+        CWPasswordField passwordField = new CWPasswordField(maxTextLength);
+
+//        Bindings.bind(textField, valueModel);
+
+        TextComponentConnector connector = new TextComponentConnector(valueModel, passwordField);
+        connector.updateTextComponent();
+        passwordField.putClientProperty(TEXT_COMPONENT_CONNECTOR_KEY, connector);
+
+        return passwordField;
+    }
+
     public static CWLabel createLabel(String text) {
         return createLabel(text, null);
     }
