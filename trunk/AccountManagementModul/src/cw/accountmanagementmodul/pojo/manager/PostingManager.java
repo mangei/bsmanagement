@@ -1,12 +1,11 @@
 package cw.accountmanagementmodul.pojo.manager;
 
+import cw.accountmanagementmodul.pojo.Account;
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.Date;
 import java.util.List;
 import cw.accountmanagementmodul.pojo.Posting;
-import cw.accountmanagementmodul.pojo.PostingCategory;
-import cw.customermanagementmodul.pojo.Customer;
 import java.util.logging.Logger;
 
 /**
@@ -37,12 +36,10 @@ public class PostingManager extends AbstractPOJOManager<Posting>
     public Posting cancelAnAccounting(Posting a) {
         if(a != null && a.getId() != null) {
             Posting cancelA = new Posting();
-            cancelA.setCustomer(a.getCustomer());
-            cancelA.setLiabilities(!a.isLiabilities());
-            cancelA.setAmount(a.getAmount());
-            cancelA.setPostingDate(new Date());
-            cancelA.setPostingCategory(a.getPostingCategory());
-            cancelA.setDescription("STORNO: " + a.getDescription());
+            cancelA.setAccount(a.getAccount());
+            cancelA.setAmount(a.getAmount() * -1);
+            cancelA.setCreationDate(new Date());
+            cancelA.setName("STORNO: " + a.getName());
             save(cancelA);
             return cancelA;
         }
@@ -58,20 +55,16 @@ public class PostingManager extends AbstractPOJOManager<Posting>
         return HibernateUtil.getEntityManager().createQuery("FROM Posting").getResultList();
     }
     
-    public List<Posting> getAll(Customer c) {
-        return HibernateUtil.getEntityManager().createQuery("FROM Posting a WHERE a.customer.id=" + c.getId()).getResultList();
-    }
-
-    public List<Posting> getAll(PostingCategory postingCategory) {
-        return HibernateUtil.getEntityManager().createQuery("FROM Posting a WHERE a.postingCategory.id=" + postingCategory.getId()).getResultList();
+    public List<Posting> getAll(Account a) {
+        return HibernateUtil.getEntityManager().createQuery("FROM Posting p WHERE p.account.id=" + a.getId()).getResultList();
     }
 
     public List<String> getYears() {
         return HibernateUtil.getEntityManager().createQuery("SELECT DISTINCT str(YEAR(p.postingEntryDate)) FROM Posting p WHERE p.postingEntryDate IS NOT NULL").getResultList();
     }
     
-    public List<String> getYears(Customer customer) {
-        return HibernateUtil.getEntityManager().createQuery("SELECT DISTINCT str(YEAR(p.postingEntryDate)) FROM Posting p WHERE p.customer.id="+customer.getId()+" AND p.postingEntryDate IS NOT NULL").getResultList();
+    public List<String> getYears(Account account) {
+        return HibernateUtil.getEntityManager().createQuery("SELECT DISTINCT str(YEAR(p.postingEntryDate)) FROM Posting p WHERE p.account.id="+account.getId()+" AND p.postingEntryDate IS NOT NULL").getResultList();
     }
 
 }

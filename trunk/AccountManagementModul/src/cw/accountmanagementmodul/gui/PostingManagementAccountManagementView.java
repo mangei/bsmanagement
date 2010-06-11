@@ -1,56 +1,49 @@
 package cw.accountmanagementmodul.gui;
 
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import cw.accountmanagementmodul.gui.model.PostingTreeTableModel;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComboBox;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.text.NumberFormat;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import org.jdesktop.swingx.JXTreeTable;
 
 /**
  *
  * @author Manuel Geier
  */
-public class PostingManagementEditCustomerView extends CWView
+public class PostingManagementAccountManagementView extends CWView
 {
-    private PostingManagementEditCustomerPresentationModel model;
+    private PostingManagementAccountManagementPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWButton bNew;
     private CWButton bReversePosting;
     private CWButton bBalancePosting;
-    private CWButton bManagePostingCategories;
 
     private CWComboBox cbFilterYear;
     private CWComboBox cbFilterMonth;
-    private CWComboBox cbFilterPostingCategory;
 
-    private CWTable tPostings;
+    private JXTreeTable ttPostings;
 
-    private CWLabel lLiabilities;
-    private CWLabel lAssets;
     private CWLabel lSaldo;
-    private CWLabel lTotalLiabilities;
-    private CWLabel lTotalAssets;
     private CWLabel lTotalSaldo;
 
     private CWPanel pFilteredValues;
 
     private PropertyChangeListener filterActiveListener;
 
-    public PostingManagementEditCustomerView(PostingManagementEditCustomerPresentationModel model) {
+    public PostingManagementAccountManagementView(PostingManagementAccountManagementPresentationModel model) {
         this.model = model;
 
         initComponents();
@@ -63,45 +56,24 @@ public class PostingManagementEditCustomerView extends CWView
         bReversePosting = CWComponentFactory.createButton(model.getReversePostingAction());
         bBalancePosting = CWComponentFactory.createButton(model.getBalancePostingAction());
 //        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
-        bManagePostingCategories = CWComponentFactory.createButton(model.getManagePostingCategoriesAction());
 
         cbFilterYear    = CWComponentFactory.createComboBox(model.getFilterYearSelection());
         cbFilterMonth   = CWComponentFactory.createComboBox(model.getFilterMonthSelection());
-        cbFilterPostingCategory   = CWComponentFactory.createComboBox(model.getFilterPostingCategorySelection());
 
-        tPostings = CWComponentFactory.createTable(
-                model.createPostingTableModel(model.getPostingSelection()),
-                "Keine Buchungen vorhanden",
-                "cw.customerboardingmanagement.PostingManagementView.postingTableState"
-                );
-        tPostings.setSelectionModel(
-                new SingleListSelectionAdapter(
-                    new CWTableSelectionConverter(
-                        model.getPostingSelection().getSelectionIndexHolder(),
-                        tPostings)));
-        tPostings.getColumns(true).get(4).setCellRenderer(new DateTimeTableCellRenderer(true));
-        tPostings.getColumns(true).get(5).setCellRenderer(new DateTimeTableCellRenderer());
+        ttPostings = new JXTreeTable(model.getPostingTreeTableModel());
+        ttPostings.setShowsRootHandles(false);
+        ttPostings.getColumns(true).get(PostingTreeTableModel.COLUMN_CREATIONDATE).setCellRenderer(new DateTimeTableCellRenderer(true));
 
-        lLiabilities = CWComponentFactory.createLabel(model.getLiabilitiesValue(), NumberFormat.getCurrencyInstance());
-        lAssets = CWComponentFactory.createLabel(model.getAssetsValue(), NumberFormat.getCurrencyInstance());
         lSaldo = CWComponentFactory.createLabel(model.getSaldoValue(), NumberFormat.getCurrencyInstance());
-        lTotalLiabilities = CWComponentFactory.createLabel(model.getTotalLiabilitiesValue(), NumberFormat.getCurrencyInstance());
-        lTotalAssets = CWComponentFactory.createLabel(model.getTotalAssetsValue(), NumberFormat.getCurrencyInstance());
         lTotalSaldo = CWComponentFactory.createLabel(model.getTotalSaldoValue(), NumberFormat.getCurrencyInstance());
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bNew)
                 .addComponent(bReversePosting)
                 .addComponent(bBalancePosting)
-                .addComponent(bManagePostingCategories)
                 .addComponent(cbFilterYear)
                 .addComponent(cbFilterMonth)
-                .addComponent(cbFilterPostingCategory)
-                .addComponent(lLiabilities)
-                .addComponent(lAssets)
                 .addComponent(lSaldo)
-                .addComponent(lTotalLiabilities)
-                .addComponent(lTotalAssets)
                 .addComponent(lTotalSaldo);
     }
     
@@ -122,13 +94,12 @@ public class PostingManagementEditCustomerView extends CWView
         this.getButtonPanel().add(bBalancePosting);
         this.getButtonPanel().add(bReversePosting);
 //        this.getButtonPanel().add(bDelete);
-        this.getButtonPanel().add(bManagePostingCategories);
 
         JPanel pFilter = new JPanel();
         pFilter.setOpaque(false);
 
         FormLayout layout = new FormLayout(
-                "pref, 30, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 30dlu, pref, 4dlu, pref",
+                "pref, 30, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 30dlu, pref",
                 "pref"
         );
         PanelBuilder builder = new PanelBuilder(layout, pFilter);
@@ -139,8 +110,6 @@ public class PostingManagementEditCustomerView extends CWView
         builder.add(cbFilterYear, cc.xy(5, 1));
         builder.addLabel("Monat:", cc.xy(7, 1));
         builder.add(cbFilterMonth, cc.xy(9, 1));
-        builder.addLabel("Kategorie:", cc.xy(11, 1));
-        builder.add(cbFilterPostingCategory, cc.xy(13, 1));
 
         
         // filterValue Layout
@@ -148,19 +117,15 @@ public class PostingManagementEditCustomerView extends CWView
         pFilteredValues.setOpaque(false);
 
         layout = new FormLayout(
-                "4dlu, [100,pref], pref, 4dlu, pref, 10dlu, pref, 4dlu, pref, 10dlu, pref, 4dlu, pref",
+                "4dlu, [100,pref], pref, 4dlu, pref",
                 "4dlu, pref"
         );
         builder = new PanelBuilder(layout, pFilteredValues);
         cc = new CellConstraints();
 
         builder.addLabel("<html><b>Gefiltert:</b></html>",  cc.xy(2, 2));
-        builder.addLabel("<html><b>Soll:</b></html>",       cc.xy(3, 2));
-        builder.add(lLiabilities,                           cc.xy(5, 2));
-        builder.addLabel("<html><b>Haben:</b></html>",      cc.xy(7, 2));
-        builder.add(lAssets,                                cc.xy(9, 2));
-        builder.addLabel("<html><b>Saldo:</b></html>",      cc.xy(11, 2));
-        builder.add(lSaldo,                                 cc.xy(13, 2));
+        builder.addLabel("<html><b>Saldo:</b></html>",      cc.xy(3, 2));
+        builder.add(lSaldo,                                 cc.xy(3, 2));
 
 
         // totalValue Layout
@@ -168,19 +133,15 @@ public class PostingManagementEditCustomerView extends CWView
         pTotalValues.setOpaque(false);
 
         layout = new FormLayout(
-                "4dlu, [100,pref], pref, 4dlu, pref, 10dlu, pref, 4dlu, pref, 10dlu, pref, 4dlu, pref",
+                "4dlu, [100,pref], pref, 4dlu, pref",
                 "pref"
         );
         builder = new PanelBuilder(layout, pTotalValues);
         cc = new CellConstraints();
 
         builder.addLabel("<html><b>Gesamt:</b></html>",     cc.xy(2, 1));
-        builder.addLabel("<html><b>Soll:</b></html>",       cc.xy(3, 1));
-        builder.add(lTotalLiabilities,                      cc.xy(5, 1));
-        builder.addLabel("<html><b>Haben:</b></html>",      cc.xy(7, 1));
-        builder.add(lTotalAssets,                           cc.xy(9, 1));
-        builder.addLabel("<html><b>Saldo:</b></html>",      cc.xy(11, 1));
-        builder.add(lTotalSaldo,                            cc.xy(13, 1));
+        builder.addLabel("<html><b>Saldo:</b></html>",      cc.xy(3, 1));
+        builder.add(lTotalSaldo,                            cc.xy(3, 1));
 
         
         // Main layout
@@ -192,7 +153,7 @@ public class PostingManagementEditCustomerView extends CWView
         cc = new CellConstraints();
         
         builder.add(pFilter,                    cc.xy(1, 1));
-        builder.add(new JScrollPane(tPostings), cc.xy(1, 3));
+        builder.add(new JScrollPane(ttPostings), cc.xy(1, 3));
         builder.add(pFilteredValues,            cc.xy(1, 4));
         builder.add(pTotalValues,               cc.xy(1, 6));
     }

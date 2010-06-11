@@ -1,13 +1,9 @@
 package cw.accountmanagementmodul.app;
 
-import cw.accountmanagementmodul.gui.PostingCategoryManagementPresentationModel;
-import cw.accountmanagementmodul.gui.PostingCategoryManagementView;
+import cw.accountmanagementmodul.gui.PostingOverviewPresentationModel;
+import cw.accountmanagementmodul.gui.PostingOverviewView;
 import cw.accountmanagementmodul.pojo.Account;
-import cw.accountmanagementmodul.pojo.Posting;
-import cw.accountmanagementmodul.pojo.PostingCategory;
 import cw.accountmanagementmodul.pojo.manager.AccountManager;
-import cw.accountmanagementmodul.pojo.manager.PostingCategoryManager;
-import cw.accountmanagementmodul.pojo.manager.PostingManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CascadeEvent;
 import cw.boardingschoolmanagement.app.CascadeListener;
@@ -18,7 +14,6 @@ import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.customermanagementmodul.pojo.Customer;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import java.awt.event.ActionEvent;
-import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
@@ -38,49 +33,107 @@ public class AccountManagementModul
 
         sideMenu.addCategory("Buchungen", "posting", 10);
         sideMenu.addItem(new JButton(new AbstractAction(
-                "Kategorien", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category.png")) {
+                "Buchungen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting.png")) {
 
             {
-                putValue(Action.SHORT_DESCRIPTION, "Buchungskategorien verwalten");
+                putValue(Action.SHORT_DESCRIPTION, "Buchungen einsehen");
             }
 
             public void actionPerformed(ActionEvent e) {
-                GUIManager.setLoadingScreenText("Kategorien werden geladen...");
+                GUIManager.setLoadingScreenText("Buchungen werden geladen...");
                 GUIManager.setLoadingScreenVisible(true);
 
-                PostingCategoryManagementPresentationModel model = new PostingCategoryManagementPresentationModel();
-                PostingCategoryManagementView view = new PostingCategoryManagementView(model);
+                PostingOverviewPresentationModel model = new PostingOverviewPresentationModel();
+                PostingOverviewView view = new PostingOverviewView(model);
 
                 GUIManager.changeView(view);
                 GUIManager.setLoadingScreenVisible(false);
             }
         }), "posting");
 
+        sideMenu.addItem(new JButton(new AbstractAction(
+                "Buchungsläufe", CWUtils.loadIcon("cw/accountmanagementmodul/images/postingcycle.png")) {
 
-        // Wenn eine Buchungskategorie gelöscht wird, die Buchungskategorie der Buchungen
-        // die diese Buchungskategorie hatten auf null setzen.
-        PostingCategoryManager.getInstance().addCascadeListener(new CascadeListener() {
-            public void deleteAction(CascadeEvent evt) {
-                PostingCategory accountingCategory = (PostingCategory) evt.getSource();
-                List<Posting> accountings = PostingManager.getInstance().getAll(accountingCategory);
-                for (int i = 0, l = accountings.size(); i < l; i++) {
-                    accountings.get(i).setPostingCategory(null);
-                }
+            {
+                putValue(Action.SHORT_DESCRIPTION, "Buchungsläufe verwalten");
             }
-        });
 
-        // Wenn ein Kunden gelöscht wird, alle dazugehörigen Buchungen löschen.
-        CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
-            public void deleteAction(CascadeEvent evt) {
-                Customer customer = (Customer) evt.getSource();
-                List<Posting> postings = PostingManager.getInstance().getAll(customer);
-                
-                for(Posting posting : postings) {
-                    PostingManager.getInstance().delete(posting);
-                }
-                
+            public void actionPerformed(ActionEvent e) {
+                GUIManager.setLoadingScreenText("Buchungsläufe werden geladen...");
+                GUIManager.setLoadingScreenVisible(true);
+
+                PostingOverviewPresentationModel model = new PostingOverviewPresentationModel();
+                PostingOverviewView view = new PostingOverviewView(model);
+
+                CWUtils.showDialog(view);
+//                GUIManager.changeView(view);
+                GUIManager.setLoadingScreenVisible(false);
             }
-        });
+        }), "posting");
+
+        sideMenu.addItem(new JButton(new AbstractAction(
+                "Rechnungen", CWUtils.loadIcon("cw/accountmanagementmodul/images/invoice.png")) {
+
+            {
+                putValue(Action.SHORT_DESCRIPTION, "Rechnungen verwalten");
+            }
+
+            public void actionPerformed(ActionEvent e) {
+                GUIManager.setLoadingScreenText("Rechnungen werden geladen...");
+                GUIManager.setLoadingScreenVisible(true);
+//
+//                PostingCategoryManagementPresentationModel model = new PostingCategoryManagementPresentationModel();
+//                PostingCategoryManagementView view = new PostingCategoryManagementView(model);
+//
+//                GUIManager.changeView(view);
+                GUIManager.setLoadingScreenVisible(false);
+            }
+        }), "posting");
+
+        sideMenu.addItem(new JButton(new AbstractAction(
+                "Kautionen", CWUtils.loadIcon("cw/accountmanagementmodul/images/bailment.png")) {
+
+            {
+                putValue(Action.SHORT_DESCRIPTION, "Kautionen verwalten");
+            }
+
+            public void actionPerformed(ActionEvent e) {
+                GUIManager.setLoadingScreenText("Kautionen werden geladen...");
+                GUIManager.setLoadingScreenVisible(true);
+
+//                PostingCategoryManagementPresentationModel model = new PostingCategoryManagementPresentationModel();
+//                PostingCategoryManagementView view = new PostingCategoryManagementView(model);
+//
+//                GUIManager.changeView(view);
+                GUIManager.setLoadingScreenVisible(false);
+            }
+        }), "posting");
+
+        // Nicht mehr notwendig
+//        // Wenn eine Buchungskategorie gelöscht wird, die Buchungskategorie der Buchungen
+//        // die diese Buchungskategorie hatten auf null setzen.
+//        PostingCategoryManager.getInstance().addCascadeListener(new CascadeListener() {
+//            public void deleteAction(CascadeEvent evt) {
+//                PostingCategory accountingCategory = (PostingCategory) evt.getSource();
+//                List<Posting> accountings = PostingManager.getInstance().getAll(accountingCategory);
+//                for (int i = 0, l = accountings.size(); i < l; i++) {
+//                    accountings.get(i).setPostingCategory(null);
+//                }
+//            }
+//        });
+
+//        // Wenn ein Kunden gelöscht wird, alle dazugehörigen Buchungen löschen.
+//        CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
+//            public void deleteAction(CascadeEvent evt) {
+//                Customer customer = (Customer) evt.getSource();
+//                List<Posting> postings = PostingManager.getInstance().getAll(customer);
+//
+//                for(Posting posting : postings) {
+//                    PostingManager.getInstance().delete(posting);
+//                }
+//
+//            }
+//        });
 
         // Wenn ein Kunde gelöscht wird, das dazugehörige Konto löschen.
         CustomerManager.getInstance().addCascadeListener(new CascadeListener() {

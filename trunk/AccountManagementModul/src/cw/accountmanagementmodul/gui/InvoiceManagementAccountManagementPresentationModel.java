@@ -4,18 +4,16 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.accountmanagementmodul.pojo.Account;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
-import java.util.Date;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
-import cw.accountmanagementmodul.pojo.Posting;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -24,11 +22,10 @@ import java.util.ArrayList;
  *
  * @author CreativeWorkers.at
  */
-public class EditPostingPresentationModel
-        extends PresentationModel<Posting>
+public class InvoiceManagementAccountManagementPresentationModel
 {
 
-    private Posting posting;
+    private Account account;
     private ValueModel unsaved;
     private CWHeaderInfo headerInfo;
     
@@ -40,33 +37,33 @@ public class EditPostingPresentationModel
     private SaveListener saveListener;
     private PropertyChangeListener unsavedListener;
     
-    public EditPostingPresentationModel(Posting posting,  CWHeaderInfo headerInfo) {
-        this(posting, false, headerInfo);
-    }
-
-    public EditPostingPresentationModel(Posting posting, boolean editMode, CWHeaderInfo headerInfo) {
-        super(posting);
-        this.posting = posting;
-        this.headerInfo = headerInfo;
+    public InvoiceManagementAccountManagementPresentationModel(Account account) {
+        this.account = account;
 
         initModels();
         initEventHandling();
     }
     
     public void initModels() {
+        headerInfo = new CWHeaderInfo(
+                "Rechnungen",
+                "Rechnungsübersicht",
+                CWUtils.loadIcon("cw/accountmanagementmodul/images/invoice.png"),
+                CWUtils.loadIcon("cw/accountmanagementmodul/images/invoice.png")
+        );
+        
         buttonListenerSupport = new ButtonListenerSupport();
         
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/accountmanagementmodul/images/cancel.png"));
-        saveAction = new SaveAction("Buchen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_lightning.png"));
+        saveAction = new SaveAction("Hinzufügen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_lightning.png"));
+
     }
     
     public void initEventHandling() {
         unsaved = new ValueHolder();
 
         saveListener = new SaveListener();
-        getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(saveListener);
-        getBufferedModel(Posting.PROPERTYNAME_AMOUNT).addValueChangeListener(saveListener);
-        getBufferedModel(Posting.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
+//        getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(saveListener);
         
         unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
@@ -81,13 +78,7 @@ public class EditPostingPresentationModel
     }
 
     public void dispose() {
-        getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).removeValueChangeListener(saveListener);
-        getBufferedModel(Posting.PROPERTYNAME_AMOUNT).removeValueChangeListener(saveListener);
-        getBufferedModel(Posting.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
-
         unsaved.removeValueChangeListener(unsavedListener);
-
-        release();
     }
 
     /**
@@ -162,34 +153,6 @@ public class EditPostingPresentationModel
     }
 
     public boolean save() {
-        getBufferedModel(Posting.PROPERTYNAME_CREATIONDATE).setValue(new Date());
-
-        boolean valid = true;
-        List<String> errorMessages = new ArrayList<String>();
-
-        // Check if everything is valid
-//        valid = false;
-//        errorMessages.addAll(validate);
-
-        if(!valid) {
-
-            StringBuffer buffer = new StringBuffer("<html>");
-
-            for(String message : errorMessages) {
-                buffer.append(message);
-                buffer.append("<br>");
-            }
-
-            buffer.append("</html>");
-
-            JOptionPane.showMessageDialog(null, buffer.toString(), "Fehler und Warnungen", JOptionPane.ERROR_MESSAGE);
-
-            return false;
-        }
-
-        triggerCommit();
-        unsaved.setValue(false);
-
         return true;
     }
     

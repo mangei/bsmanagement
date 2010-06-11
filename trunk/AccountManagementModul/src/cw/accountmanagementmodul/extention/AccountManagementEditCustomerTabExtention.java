@@ -1,28 +1,28 @@
 package cw.accountmanagementmodul.extention;
 
-import cw.accountmanagementmodul.gui.PostingManagementAccountManagementPresentationModel;
-import cw.accountmanagementmodul.gui.PostingManagementAccountManagementView;
-import cw.accountmanagementmodul.pojo.manager.AccountManager;
+import cw.accountmanagementmodul.gui.AccountManagementEditCustomerPresentationModel;
+import cw.accountmanagementmodul.gui.AccountManagementEditCustomerView;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
+import cw.accountmanagementmodul.pojo.Posting;
 import java.util.List;
 
 /**
  *
  * @author Manuel Geier
  */
-public class PostingEditCustomerTabExtention
+public class AccountManagementEditCustomerTabExtention
         implements EditCustomerTabExtentionPoint {
 
-    private PostingManagementAccountManagementPresentationModel model;
-    private PostingManagementAccountManagementView view;
+    private AccountManagementEditCustomerPresentationModel model;
+    private AccountManagementEditCustomerView view;
     private EditCustomerPresentationModel editCustomerModel;
     
     public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
         this.editCustomerModel = editCustomerModel;
-        model = new PostingManagementAccountManagementPresentationModel(AccountManager.getInstance().get(editCustomerModel.getBean()));
-        view = new PostingManagementAccountManagementView(model);
+        model = new AccountManagementEditCustomerPresentationModel(editCustomerModel.getBean());
+        view = new AccountManagementEditCustomerView(model);
     }
     
     public CWPanel getView() {

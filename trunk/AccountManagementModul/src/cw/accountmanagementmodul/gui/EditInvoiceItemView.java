@@ -7,26 +7,22 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
-import cw.boardingschoolmanagement.gui.component.CWTextField;
-import cw.accountmanagementmodul.pojo.PostingCategory;
 
 /**
  *
  * @author CreativeWorkers.at
  */
-public class EditPostingCategoryView extends CWView
+public class EditInvoiceItemView extends CWView
 {
 
-    private EditPostingCategoryPresentationModel model;
-    private CWComponentFactory.CWComponentContainer componentContainer;
-    private CWTextField tfName;
-    
-    private CWButton bSave;
-    private CWButton bSaveCancel;
-    private CWButton bCancel;
-    
+    private EditInvoiceItemPresentationModel model;
 
-    public EditPostingCategoryView(EditPostingCategoryPresentationModel model) {
+    private CWComponentFactory.CWComponentContainer componentContainer;
+    
+    private CWButton bCancel;
+    private CWButton bSave;
+
+    public EditInvoiceItemView(EditInvoiceItemPresentationModel model) {
         this.model = model;
 
         initComponents();
@@ -35,42 +31,32 @@ public class EditPostingCategoryView extends CWView
     }
 
     private void initComponents() {
-        tfName           = CWComponentFactory.createTextField(model.getBufferedModel(PostingCategory.PROPERTYNAME_NAME),false);
-
-        bSave       = CWComponentFactory.createButton(model.getSaveButtonAction());
-        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
-        bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
+        bCancel     = CWComponentFactory.createButton(model.getCancelAction());
+        bSave = CWComponentFactory.createButton(model.getSaveAction());
 
         componentContainer = CWComponentFactory.createComponentContainer()
-                .addComponent(tfName)
-                .addComponent(bSave)
-                .addComponent(bSaveCancel)
-                .addComponent(bCancel);
+                ;
     }
 
     private void initEventHandling() {
-        // Nothing to do
     }
-    
+
     private void buildView() {
         this.setHeaderInfo(model.getHeaderInfo());
-        
         CWButtonPanel buttonPanel = this.getButtonPanel();
+
         buttonPanel.add(bSave);
-        buttonPanel.add(bSaveCancel);
-//        buttonPanel.add(bReset);
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout(
-                "right:pref, 4dlu, pref:grow",
-                "pref");
+                "",
+                "");
         
         PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         builder.setDefaultDialogBorder();
 
         CellConstraints cc = new CellConstraints();
-        builder.addLabel("Name:",        cc.xy(1, 1));
-        builder.add(tfName,              cc.xy(3, 1));
+//        builder.add(dcPostingEntryDate,         cc.xy(3, 10));
     }
 
     @Override

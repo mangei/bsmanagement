@@ -7,9 +7,9 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.accountmanagementmodul.pojo.Invoice;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
-import java.util.Date;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -24,11 +24,11 @@ import java.util.ArrayList;
  *
  * @author CreativeWorkers.at
  */
-public class EditPostingPresentationModel
-        extends PresentationModel<Posting>
+public class EditInvoicePresentationModel
+        extends PresentationModel<Invoice>
 {
 
-    private Posting posting;
+    private Invoice invoice;
     private ValueModel unsaved;
     private CWHeaderInfo headerInfo;
     
@@ -40,13 +40,9 @@ public class EditPostingPresentationModel
     private SaveListener saveListener;
     private PropertyChangeListener unsavedListener;
     
-    public EditPostingPresentationModel(Posting posting,  CWHeaderInfo headerInfo) {
-        this(posting, false, headerInfo);
-    }
-
-    public EditPostingPresentationModel(Posting posting, boolean editMode, CWHeaderInfo headerInfo) {
-        super(posting);
-        this.posting = posting;
+    public EditInvoicePresentationModel(Invoice invoice, CWHeaderInfo headerInfo) {
+        super(invoice);
+        this.invoice = invoice;
         this.headerInfo = headerInfo;
 
         initModels();
@@ -57,16 +53,15 @@ public class EditPostingPresentationModel
         buttonListenerSupport = new ButtonListenerSupport();
         
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/accountmanagementmodul/images/cancel.png"));
-        saveAction = new SaveAction("Buchen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_lightning.png"));
+        saveAction = new SaveAction("Hinzufügen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_lightning.png"));
+
     }
     
     public void initEventHandling() {
         unsaved = new ValueHolder();
 
         saveListener = new SaveListener();
-        getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(saveListener);
-        getBufferedModel(Posting.PROPERTYNAME_AMOUNT).addValueChangeListener(saveListener);
-        getBufferedModel(Posting.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
+//        getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(saveListener);
         
         unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
@@ -83,11 +78,9 @@ public class EditPostingPresentationModel
     public void dispose() {
         getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).removeValueChangeListener(saveListener);
         getBufferedModel(Posting.PROPERTYNAME_AMOUNT).removeValueChangeListener(saveListener);
-        getBufferedModel(Posting.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
 
         unsaved.removeValueChangeListener(unsavedListener);
 
-        release();
     }
 
     /**
@@ -162,7 +155,6 @@ public class EditPostingPresentationModel
     }
 
     public boolean save() {
-        getBufferedModel(Posting.PROPERTYNAME_CREATIONDATE).setValue(new Date());
 
         boolean valid = true;
         List<String> errorMessages = new ArrayList<String>();

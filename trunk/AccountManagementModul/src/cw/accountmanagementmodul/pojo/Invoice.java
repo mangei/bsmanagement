@@ -9,6 +9,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
 
 /**
  *
@@ -62,5 +66,40 @@ public class Invoice
         firePropertyChange(PROPERTYNAME_ID, old, id);
     }
 
+    @ManyToOne
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    @Temporal(javax.persistence.TemporalType.DATE)
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    @OneToMany(mappedBy = "invoice")
+    public List<InvoiceItem> getInvoiceItems() {
+        return invoiceItems;
+    }
+
+    public void setInvoiceItems(List<InvoiceItem> invoiceItems) {
+        this.invoiceItems = invoiceItems;
+    }
+
+    @OneToOne
+    public PostingGroup getPostingGroup() {
+        return postingGroup;
+    }
+
+    public void setPostingGroup(PostingGroup postingGroup) {
+        this.postingGroup = postingGroup;
+    }
 
 }

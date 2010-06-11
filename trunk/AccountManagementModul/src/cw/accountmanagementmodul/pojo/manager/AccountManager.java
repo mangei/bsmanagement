@@ -6,6 +6,7 @@ import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
 import cw.customermanagementmodul.pojo.Customer;
 import java.util.logging.Logger;
+import javax.persistence.NoResultException;
 
 /**
  *
@@ -37,7 +38,14 @@ public class AccountManager extends AbstractPOJOManager<Account>
     }
     
     public Account get(Customer c) {
-        return (Account) HibernateUtil.getEntityManager().createQuery("FROM Account a WHERE a.customer.id=" + c.getId()).getSingleResult();
+        Account account = null;
+        try {
+            account = (Account) HibernateUtil.getEntityManager().createQuery("FROM Account a WHERE a.customer.id=" + c.getId()).getSingleResult();
+        } catch (NoResultException e) {
+            account = new Account();
+            account.setCustomer(c);
+        }
+        return account;
     }
 
 }

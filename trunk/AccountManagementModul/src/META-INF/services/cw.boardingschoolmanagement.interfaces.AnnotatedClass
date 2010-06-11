@@ -2,4 +2,7 @@ cw.accountmanagementmodul.pojo.Account
 cw.accountmanagementmodul.pojo.Bailment
 cw.accountmanagementmodul.pojo.Posting
 cw.accountmanagementmodul.pojo.PostingGroup
-cw.accountmanagementmodul.pojo.PostingCategory
+cw.accountmanagementmodul.pojo.PostingCycle
+cw.accountmanagementmodul.pojo.AbstractPosting
+cw.accountmanagementmodul.pojo.Invoice
+cw.accountmanagementmodul.pojo.InvoiceItem

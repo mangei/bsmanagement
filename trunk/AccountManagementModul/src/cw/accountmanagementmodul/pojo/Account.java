@@ -5,6 +5,7 @@ import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import cw.customermanagementmodul.pojo.Customer;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,11 +22,11 @@ public class Account
         extends Model
         implements AnnotatedClass {
 
-    private Long            id              = null;
-    private Customer        customer        = null;
-    private List<Posting>   postings        = new ArrayList<Posting>();
-    private List<Bailment>  bailments       = new ArrayList<Bailment>();
-    private List<Invoice>   invoices        = new ArrayList<Invoice>();
+    private Long                    id              = null;
+    private Customer                customer        = null;
+    private List<AbstractPosting>   postings        = new ArrayList<AbstractPosting>();
+    private List<Bailment>          bailments       = new ArrayList<Bailment>();
+    private List<Invoice>           invoices        = new ArrayList<Invoice>();
 
 
     public final static String PROPERTYNAME_ID          = "id";
@@ -64,7 +65,7 @@ public class Account
         firePropertyChange(PROPERTYNAME_ID, old, id);
     }
 
-    @OneToOne
+    @OneToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     public Customer getCustomer() {
         return customer;
     }
@@ -85,12 +86,21 @@ public class Account
     }
 
     @OneToMany(mappedBy = "account")
-    public List<Posting> getPostings() {
+    public List<AbstractPosting> getPostings() {
         return postings;
     }
 
-    public void setPostings(List<Posting> postings) {
+    public void setPostings(List<AbstractPosting> postings) {
         this.postings = postings;
+    }
+
+    @OneToMany(mappedBy = "account")
+    public List<Invoice> getInvoices() {
+        return invoices;
+    }
+
+    public void setInvoices(List<Invoice> invoices) {
+        this.invoices = invoices;
     }
 
 }

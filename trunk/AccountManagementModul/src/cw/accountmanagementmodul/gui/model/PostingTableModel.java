@@ -19,7 +19,7 @@ public class PostingTableModel extends AbstractTableAdapter<Posting> {
 
         @Override
         public int getColumnCount() {
-            return 7;
+            return 4;
         }
 
         @Override
@@ -30,15 +30,9 @@ public class PostingTableModel extends AbstractTableAdapter<Posting> {
                 case 1:
                     return "Betrag";
                 case 2:
-                    return "Soll";
-                case 3:
-                    return "Haben";
-                case 4:
                     return "Eingangsdatum";
-                case 5:
+                case 3:
                     return "Buchungsdatum";
-                case 6:
-                    return "Kategorie";
                 default:
                     return "";
             }
@@ -53,23 +47,14 @@ public class PostingTableModel extends AbstractTableAdapter<Posting> {
             Posting a = (Posting) listModel.getElementAt(rowIndex);
             switch (columnIndex) {
                 case 0:
-                    return a.getDescription();
+                    return a.getName();
                 case 1:
                     return a.getAmount();
                 case 2:
-                    return a.isLiabilities() ? a.getAmount() : "";
-                case 3:
-                    return a.isAssets() ? a.getAmount() : "";
-                case 4:
                     return a.getPostingEntryDate();
-                case 5:
-                    return a.getPostingDate();
-                case 6:
-                    if(a.getPostingCategory() != null) {
-                        return a.getPostingCategory();
-                    } else {
-                        return "";
-                    }
+                case 3:
+                    return a.getCreationDate();
+
                 default:
                     return "";
             }

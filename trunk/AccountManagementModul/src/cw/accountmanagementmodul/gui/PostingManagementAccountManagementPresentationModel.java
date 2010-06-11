@@ -1,6 +1,5 @@
 package cw.accountmanagementmodul.gui;
 
-import cw.accountmanagementmodul.gui.model.PostingInterfaceTableModel;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
@@ -8,8 +7,9 @@ import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.accountmanagementmodul.comparator.PostingInterfaceDateComparator;
-import cw.accountmanagementmodul.interfaces.PostingInterface;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.accountmanagementmodul.gui.model.PostingTreeTableModel;
+import cw.accountmanagementmodul.pojo.AbstractPosting;
+import cw.accountmanagementmodul.pojo.Account;
 import cw.boardingschoolmanagement.app.CalendarUtil;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
@@ -21,32 +21,28 @@ import java.beans.PropertyChangeListener;
 import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
-import javax.swing.table.TableModel;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.accountmanagementmodul.pojo.Posting;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.accountmanagementmodul.pojo.PostingCategory;
 import cw.accountmanagementmodul.pojo.PostingGroup;
-import cw.accountmanagementmodul.pojo.manager.PostingCategoryManager;
+import cw.accountmanagementmodul.pojo.manager.AbstractPostingManager;
 import cw.accountmanagementmodul.pojo.manager.PostingGroupManager;
 import cw.accountmanagementmodul.pojo.manager.PostingManager;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.GregorianCalendar;
 import javax.swing.Icon;
 import javax.swing.table.DefaultTableColumnModel;
 import javax.swing.table.TableColumnModel;
+import org.jdesktop.swingx.treetable.TreeTableModel;
 
 /**
  *
  * @author Manuel Geier
  */
-public class PostingManagementEditCustomerPresentationModel {
+public class PostingManagementAccountManagementPresentationModel {
 
-    private Customer customer;
+    private Account account;
     private CWHeaderInfo headerInfo;
 
     private Action newAction;
@@ -54,60 +50,47 @@ public class PostingManagementEditCustomerPresentationModel {
     private Action reversePostingAction;
     private Action balancePostingAction;
 //    private Action deleteAction;
-    private Action managePostingCategoriesAction;
-    private SelectionInList<PostingInterface> postingSelection;
+    private SelectionInList<AbstractPosting> postingSelection;
     private ValueModel filterActive;
     private ValueModel saldoValue;
-    private ValueModel liabilitiesValue;
-    private ValueModel assetsValue;
     private ValueModel totalSaldoValue;
-    private ValueModel totalLiabilitiesValue;
-    private ValueModel totalAssetsValue;
     
     private SelectionInList<String> filterYearSelection;
     private SelectionInList<String> filterMonthSelection;
-    private SelectionInList<PostingCategory> filterPostingCategorySelection;
-
     private SelectionHandler selectionHandler;
     private PropertyChangeListener filterYearSelectionListener;
     private PropertyChangeListener filterMonthSelectionListener;
-    private PropertyChangeListener filterPostingCategorySelectionListener;
 
-    public PostingManagementEditCustomerPresentationModel() {
+    public PostingManagementAccountManagementPresentationModel() {
         this(null);
     }
 
-    public PostingManagementEditCustomerPresentationModel(Customer customer) {
-        this.customer = customer;
+    public PostingManagementAccountManagementPresentationModel(Account account) {
+        this.account = account;
 
         initModels();
         initEventHandling();
     }
 
     public void initModels() {
-        newAction = new NewAction("Neu", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"));
-        editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_edit.png"));
-        reversePostingAction = new ReversePostingAction("Stornieren", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_delete.png"));
-        balancePostingAction = new BalancePostingAction("Ausgleichen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_go.png"));
-//        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_delete.png"));
-        managePostingCategoriesAction = new ManagePostingCategoriesAction("Kategorien", CWUtils.loadIcon("cw/customermanagementmodul/images/posting_category.png"));
+        newAction = new NewAction("Neu", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_add.png"));
+        editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_edit.png"));
+        reversePostingAction = new ReversePostingAction("Stornieren", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_delete.png"));
+        balancePostingAction = new BalancePostingAction("Ausgleichen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_go.png"));
+//        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_delete.png"));
 
-        postingSelection = new SelectionInList<PostingInterface>();
+        postingSelection = new SelectionInList<AbstractPosting>();
         loadPostings();
 
         headerInfo = new CWHeaderInfo(
                 "Buchungsübersicht",
                 "Hier sehen sie eine Übersicht über alle Buchungen für Ihren Kunden.",
-                CWUtils.loadIcon("cw/customermanagementmodul/images/posting.png"),
-                CWUtils.loadIcon("cw/customermanagementmodul/images/posting.png")
+                CWUtils.loadIcon("cw/accountmanagementmodul/images/posting.png"),
+                CWUtils.loadIcon("cw/accountmanagementmodul/images/posting.png")
         );
 
         saldoValue = new ValueHolder();
-        liabilitiesValue = new ValueHolder();
-        assetsValue = new ValueHolder();
         totalSaldoValue = new ValueHolder();
-        totalLiabilitiesValue = new ValueHolder();
-        totalAssetsValue = new ValueHolder();
 
         filterActive = new ValueHolder(false);
 
@@ -117,10 +100,6 @@ public class PostingManagementEditCustomerPresentationModel {
         filterYearSelection = new SelectionInList<String>();
         loadFilterYears();
         filterYearSelection.setSelectionIndex(0);
-        filterPostingCategorySelection = new SelectionInList<PostingCategory>();
-        loadFilterPostingCategory();
-        filterPostingCategorySelection.setSelectionIndex(0);
-
     }
 
     private void initEventHandling() {
@@ -141,13 +120,6 @@ public class PostingManagementEditCustomerPresentationModel {
             }
         });
 
-        filterPostingCategorySelection.addValueChangeListener(filterPostingCategorySelectionListener = new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
-                updateFilters();
-                calculateValues();
-            }
-        });
-        
         updateActionEnablement();
         updateEvents();
     }
@@ -159,12 +131,10 @@ public class PostingManagementEditCustomerPresentationModel {
         filterYearSelectionListener = null;
         filterMonthSelection.removeValueChangeListener(filterMonthSelectionListener);
         filterMonthSelectionListener = null;
-        filterPostingCategorySelection.removeValueChangeListener(filterPostingCategorySelectionListener);
-        filterPostingCategorySelectionListener = null;
     }
 
     private void loadPostings() {
-        List<Posting> postings = PostingManager.getInstance().getAll(customer);
+        List<Posting> postings = PostingManager.getInstance().getAll(account);
         List<PostingGroup> postingGroups = PostingGroupManager.getInstance().getAll();
         System.out.println("Gruppen: " + postingGroups.size());
         // Alle doppelte Buchungen löschen, die bereits in den Buchungsgruppen vorhanden sind
@@ -174,7 +144,7 @@ public class PostingManagementEditCustomerPresentationModel {
         }
 
         // Alles zusammenfügen
-        List<PostingInterface> pIList = new ArrayList<PostingInterface>(postings);
+        List<AbstractPosting> pIList = new ArrayList<AbstractPosting>(postings);
         pIList.addAll(postingGroups);
 
         // Sortieren
@@ -191,67 +161,24 @@ public class PostingManagementEditCustomerPresentationModel {
     }
 
     private void calculateValues() {
-        List<PostingInterface> list = postingSelection.getList();
+        List<AbstractPosting> list = postingSelection.getList();
         double liabilities=0, assets=0, saldo=0;
         for(int i=0,l=list.size(); i<l; i++) {
-            PostingInterface pI = list.get(i);
+            AbstractPosting p = list.get(i);
 
-            if(pI instanceof Posting) {
-                // Wenn es eine normale Buchung ist
-
-                Posting p = (Posting) pI;
-
-                if(p.isAssets()) {
-                    assets = assets + p.getAmount();
-                    saldo = saldo + p.getAmount();
-                } else {
-                    liabilities = liabilities + p.getAmount();
-                    saldo = saldo - p.getAmount();
-                }
-                
-            } else if(pI instanceof PostingGroup) {
-                // Wenn es eine Buchungsgrupppe ist
-                
-                PostingGroup pg = (PostingGroup) pI;
-
-                // Laufe alle Buchungen einzeln durch
-                for(int j=0, k=pg.getPostings().size(); j<k; j++) {
-
-                    Posting p = pg.getPostings().get(j);
-
-                    if(p.isAssets()) {
-                        assets = assets + p.getAmount();
-                        saldo = saldo + p.getAmount();
-                    } else {
-                        liabilities = liabilities + p.getAmount();
-                        saldo = saldo - p.getAmount();
-                    }
-
-                }
-                
-            }
+            saldo = saldo + p.getAmount();
             
         }
-        liabilitiesValue.setValue(liabilities);
-        assetsValue.setValue(assets);
         saldoValue.setValue(saldo);
     }
 
     private void calculateTotalValues() {
-        List<Posting> list = PostingManager.getInstance().getAll(customer);
+        List<AbstractPosting> list = AbstractPostingManager.getInstance().getAll(account);
         double liabilities=0, assets=0, saldo=0;
         for(int i=0,l=list.size(); i<l; i++) {
-            Posting p = list.get(i);
-            if(p.isAssets()) {
-                assets = assets + p.getAmount();
-                saldo = saldo + p.getAmount();
-            } else {
-                liabilities = liabilities + p.getAmount();
-                saldo = saldo - p.getAmount();
-            }
+            AbstractPosting p = list.get(i);
+            saldo = saldo + p.getAmount();
         }
-        totalLiabilitiesValue.setValue(liabilities);
-        totalAssetsValue.setValue(assets);
         totalSaldoValue.setValue(saldo);
     }
 
@@ -264,7 +191,7 @@ public class PostingManagementEditCustomerPresentationModel {
             filterYearSelection.fireIntervalRemoved(0, size-1);
         }
 
-        List<String> years = PostingManager.getInstance().getYears(customer);
+        List<String> years = PostingManager.getInstance().getYears(account);
         years.add(0, "-");
         
         filterYearSelection.getList().addAll(years);
@@ -294,16 +221,6 @@ public class PostingManagementEditCustomerPresentationModel {
         months.add(CalendarUtil.getMonthName(Calendar.DECEMBER));
 
         filterMonthSelection.setList(months);
-    }
-
-    private void loadFilterPostingCategory() {
-        filterPostingCategorySelection.setList(PostingCategoryManager.getInstance().getAll());
-        PostingCategory c = new PostingCategory("-");
-        c.setId(-1l);
-        filterPostingCategorySelection.getList().add(0, c);
-        c = new PostingCategory("Ohne Kategorie");
-        c.setId(-2l);
-        filterPostingCategorySelection.getList().add(1, c);
     }
 
     public void updateFilters() {
@@ -414,12 +331,12 @@ public class PostingManagementEditCustomerPresentationModel {
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            final Posting posting = new Posting(customer);
+            final Posting posting = new Posting(account);
             final EditPostingPresentationModel model = new EditPostingPresentationModel(
                     posting,
                     new CWHeaderInfo(
                         "Buchung hinzufügen",
-                        "<html>Fügen Sie eine neue Buchung für '<b>" + customer.getForename() + " " + customer.getSurname() + "</b>' hinzu.</html>",
+                        "<html>Fügen Sie eine neue Buchung für '<b>" + account.getCustomer().getForename() + " " + account.getCustomer().getSurname() + "</b>' hinzu.</html>",
                         CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"),
                         CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png")
                     ));
@@ -456,7 +373,7 @@ public class PostingManagementEditCustomerPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            PostingInterface pSelection = postingSelection.getSelection();
+            AbstractPosting pSelection = postingSelection.getSelection();
             if(pSelection instanceof Posting) {
                 editPosting((Posting) pSelection);
             }
@@ -487,111 +404,107 @@ public class PostingManagementEditCustomerPresentationModel {
         }
     }
 
-    private void reversePosting(Posting posting) {
-        GUIManager.setLoadingScreenText("Buchung wird storniert...");
-        GUIManager.setLoadingScreenVisible(true);
-        GUIManager.getInstance().lockMenu();
+//    private void reversePosting(Posting posting) {
+//        GUIManager.setLoadingScreenText("Buchung wird storniert...");
+//        GUIManager.setLoadingScreenVisible(true);
+//        GUIManager.getInstance().lockMenu();
+//
+//        final Posting reversePosting = new Posting(posting.getAccount());
+//
+//        reversePosting.setAmount(posting.getAmount() * -1);
+//        reversePosting.setName(posting.getName() + " - Storno");
+//        reversePosting.setPreviousPosting(posting);
+//        reversePosting.setReversePosting(true);
+//
+//        CWHeaderInfo reversePostingHeaderInfo = new CWHeaderInfo(
+//            "Buchung stornieren",
+//            "<html>Stornieren Sie eine Buchung von '<b>" + posting.getAccount().getCustomer().getForename() + " " + posting.getAccount().getCustomer().getSurname() + "</b>'.</html>",
+//            CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"),
+//            CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png")
+//        );
+//
+//        final EditReversePostingPresentationModel model = new EditReversePostingPresentationModel(posting, reversePosting, reversePostingHeaderInfo);
+//        final EditReversePostingView editView = new EditReversePostingView(model);
+//        model.addButtonListener(new ButtonListener() {
+//
+//            boolean postingAlreadyCreated = false;
+//
+//            public void buttonPressed(ButtonEvent evt) {
+//
+//                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+//                    PostingManager.getInstance().save(reversePosting);
+//                    GUIManager.getStatusbar().setTextAndFadeOut("Stornobuchung wurde erstellt.");
+//                    postingAlreadyCreated = true;
+//                    postingSelection.getList().add(reversePosting);
+//                    int idx = postingSelection.getList().indexOf(reversePosting);
+//                    postingSelection.fireIntervalAdded(idx, idx);
+//                    updateEvents();
+//                }
+//                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+//                    model.removeButtonListener(this);
+//                    GUIManager.getInstance().unlockMenu();
+//                    GUIManager.changeToLastView();
+//                }
+//            }
+//        });
+//
+//        GUIManager.changeView(editView, true);
+//        GUIManager.setLoadingScreenVisible(false);
+//    }
 
-        final Posting reversePosting = new Posting(posting.getCustomer());
-
-        reversePosting.setAmount(posting.getAmount() * -1);
-        reversePosting.setLiabilitiesAssets(posting.isLiabilitiesAssets());
-        reversePosting.setDescription(posting.getDescription() + " - Storno");
-        reversePosting.setPostingCategory(posting.getPostingCategory());
-        reversePosting.setPreviousPosting(posting);
-        reversePosting.setReversePosting(true);
-
-        CWHeaderInfo reversePostingHeaderInfo = new CWHeaderInfo(
-            "Buchung stornieren",
-            "<html>Stornieren Sie eine Buchung von '<b>" + posting.getCustomer().getForename() + " " + posting.getCustomer().getSurname() + "</b>'.</html>",
-            CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"),
-            CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png")
-        );
-
-        final EditReversePostingPresentationModel model = new EditReversePostingPresentationModel(posting, reversePosting, reversePostingHeaderInfo);
-        final EditReversePostingView editView = new EditReversePostingView(model);
-        model.addButtonListener(new ButtonListener() {
-
-            boolean postingAlreadyCreated = false;
-
-            public void buttonPressed(ButtonEvent evt) {
-
-                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                    PostingManager.getInstance().save(reversePosting);
-                    GUIManager.getStatusbar().setTextAndFadeOut("Stornobuchung wurde erstellt.");
-                    postingAlreadyCreated = true;
-                    postingSelection.getList().add(reversePosting);
-                    int idx = postingSelection.getList().indexOf(reversePosting);
-                    postingSelection.fireIntervalAdded(idx, idx);
-                    updateEvents();
-                }
-                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                    model.removeButtonListener(this);
-                    GUIManager.getInstance().unlockMenu();
-                    GUIManager.changeToLastView();
-                }
-            }
-        });
-        
-        GUIManager.changeView(editView, true);
-        GUIManager.setLoadingScreenVisible(false);
-    }
-
-    private void balancePosting(Posting posting) {
-        GUIManager.setLoadingScreenText("Buchung wird ausgeglichen...");
-        GUIManager.setLoadingScreenVisible(true);
-        GUIManager.getInstance().lockMenu();
-
-        final Posting reversePosting = new Posting(posting.getCustomer());
-
-        reversePosting.setAmount(posting.getAmount());
-        reversePosting.setLiabilitiesAssets(!posting.isLiabilitiesAssets());
-        reversePosting.setDescription(posting.getDescription() + " - Ausgleich");
-        reversePosting.setPostingCategory(posting.getPostingCategory());
-
-        // Wenn der vorherige ein teil war, dann muss man die Grundbuchung heraussuchen
-        reversePosting.setBalancePosting(true);
-        if(posting.isBalancePosting()) {
-            reversePosting.setPreviousPosting(posting.getPreviousPosting());
-        } else {
-            reversePosting.setPreviousPosting(posting);
-        }
-
-        CWHeaderInfo reversePostingHeaderInfo = new CWHeaderInfo(
-                "Buchung ausgleichen",
-                "<html>Gleichen Sie die Buchung von '<b>" + posting.getCustomer().getForename() + " " + posting.getCustomer().getSurname() + "</b>' aus.</html>",
-                CWUtils.loadIcon("cw/customermanagementmodul/images/posting_go.png"),
-                CWUtils.loadIcon("cw/customermanagementmodul/images/posting_go.png")
-        );
-
-        final EditReversePostingPresentationModel model = new EditReversePostingPresentationModel(posting, reversePosting, reversePostingHeaderInfo);
-        final EditReversePostingView editView = new EditReversePostingView(model);
-        model.addButtonListener(new ButtonListener() {
-
-            boolean postingAlreadyCreated = false;
-
-            public void buttonPressed(ButtonEvent evt) {
-
-                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                    PostingManager.getInstance().save(reversePosting);
-                    GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde ausgeglichen.");
-                    postingAlreadyCreated = true;
-                    postingSelection.getList().add(reversePosting);
-                    int idx = postingSelection.getList().indexOf(reversePosting);
-                    postingSelection.fireIntervalAdded(idx, idx);
-                    updateEvents();
-                }
-                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                    model.removeButtonListener(this);
-                    GUIManager.getInstance().unlockMenu();
-                    GUIManager.changeToLastView();
-                }
-            }
-        });
-        
-        GUIManager.changeView(editView, true);
-        GUIManager.setLoadingScreenVisible(false);
-    }
+//    private void balancePosting(Posting posting) {
+//        GUIManager.setLoadingScreenText("Buchung wird ausgeglichen...");
+//        GUIManager.setLoadingScreenVisible(true);
+//        GUIManager.getInstance().lockMenu();
+//
+//        final Posting reversePosting = new Posting(posting.getAccount());
+//
+//        reversePosting.setAmount(posting.getAmount() * -1);
+//        reversePosting.setName(posting.getName() + " - Ausgleich");
+//
+//        // Wenn der vorherige ein teil war, dann muss man die Grundbuchung heraussuchen
+//        reversePosting.setBalancePosting(true);
+//        if(posting.isBalancePosting()) {
+//            reversePosting.setPreviousPosting(posting.getPreviousPosting());
+//        } else {
+//            reversePosting.setPreviousPosting(posting);
+//        }
+//
+//        CWHeaderInfo reversePostingHeaderInfo = new CWHeaderInfo(
+//                "Buchung ausgleichen",
+//                "<html>Gleichen Sie die Buchung von '<b>" + posting.getAccount().getCustomer().getForename() + " " + posting.getAccount().getCustomer().getSurname() + "</b>' aus.</html>",
+//                CWUtils.loadIcon("cw/customermanagementmodul/images/posting_go.png"),
+//                CWUtils.loadIcon("cw/customermanagementmodul/images/posting_go.png")
+//        );
+//
+//        final EditReversePostingPresentationModel model = new EditReversePostingPresentationModel(posting, reversePosting, reversePostingHeaderInfo);
+//        final EditReversePostingView editView = new EditReversePostingView(model);
+//        model.addButtonListener(new ButtonListener() {
+//
+//            boolean postingAlreadyCreated = false;
+//
+//            public void buttonPressed(ButtonEvent evt) {
+//
+//                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+//                    PostingManager.getInstance().save(reversePosting);
+//                    GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde ausgeglichen.");
+//                    postingAlreadyCreated = true;
+//                    postingSelection.getList().add(reversePosting);
+//                    int idx = postingSelection.getList().indexOf(reversePosting);
+//                    postingSelection.fireIntervalAdded(idx, idx);
+//                    updateEvents();
+//                }
+//                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
+//                    model.removeButtonListener(this);
+//                    GUIManager.getInstance().unlockMenu();
+//                    GUIManager.changeToLastView();
+//                }
+//            }
+//        });
+//
+//        GUIManager.changeView(editView, true);
+//        GUIManager.setLoadingScreenVisible(false);
+//    }
 
 //    private class DeleteAction
 //            extends AbstractAction {
@@ -616,20 +529,6 @@ public class PostingManagementEditCustomerPresentationModel {
 //        }
 //    }
 
-    private class ManagePostingCategoriesAction
-            extends AbstractAction {
-
-        public ManagePostingCategoriesAction(String name, Icon icon) {
-            super(name, icon);
-        }
-
-        public void actionPerformed(ActionEvent e) {
-            GUIManager.setLoadingScreenText("Buchungskategorien verwalten...");
-            GUIManager.setLoadingScreenVisible(true);
-
-            final PostingCategoryManagementPresentationModel model = new PostingCategoryManagementPresentationModel();
-            final PostingCategoryManagementView view = new PostingCategoryManagementView(model);
-
 //                    final JDialog d = new JDialog(GUIManager.getInstance(), "Kategorien verwalten",false);
 //                    d.getContentPane().add(view.buildPanel());
 //
@@ -640,18 +539,8 @@ public class PostingManagementEditCustomerPresentationModel {
 //                            d.dispose();
 //                        }
 //                    });
-//a
+//
 //                    d.setVisible(true);
-
-            GUIManager.changeView(CWComponentFactory.createBackView(view), true);
-            GUIManager.setLoadingScreenVisible(false);
-            
-        }
-    }
-
-    public TableModel createPostingTableModel(ListModel listModel) {
-        return new PostingInterfaceTableModel(listModel);
-    }
 
     public TableColumnModel createPostingTableColumnModel() {
         return new PostingTableColumnModel();
@@ -668,29 +557,9 @@ public class PostingManagementEditCustomerPresentationModel {
     public Action getReversePostingAction() {
         return reversePostingAction;
     }
-    
-    public Action getManagePostingCategoriesAction() {
-        return managePostingCategoriesAction;
-    }
-
-    public ValueModel getAssetsValue() {
-        return assetsValue;
-    }
-
-    public ValueModel getLiabilitiesValue() {
-        return liabilitiesValue;
-    }
 
     public ValueModel getSaldoValue() {
         return saldoValue;
-    }
-
-    public ValueModel getTotalAssetsValue() {
-        return totalAssetsValue;
-    }
-
-    public ValueModel getTotalLiabilitiesValue() {
-        return totalLiabilitiesValue;
     }
 
     public ValueModel getTotalSaldoValue() {
@@ -701,8 +570,8 @@ public class PostingManagementEditCustomerPresentationModel {
         return filterActive;
     }
 
-    public SelectionInList<PostingInterface> getPostingSelection() {
-        return postingSelection;
+    public TreeTableModel getPostingTreeTableModel() {
+        return new PostingTreeTableModel(new PostingGroup());
     }
 
     public Action getNewAction() {
@@ -719,10 +588,6 @@ public class PostingManagementEditCustomerPresentationModel {
 
     public SelectionInList<String> getFilterYearSelection() {
         return filterYearSelection;
-    }
-
-    public SelectionInList<PostingCategory> getFilterPostingCategorySelection() {
-        return filterPostingCategorySelection;
     }
 
     public CWHeaderInfo getHeaderInfo() {
@@ -763,7 +628,7 @@ public class PostingManagementEditCustomerPresentationModel {
                     model.removeButtonListener(this);
                     GUIManager.getInstance().unlockMenu();
                     GUIManager.changeToLastView();
-                    reversePosting(posting);
+//                    reversePosting(posting);
                 }
             }
         });
@@ -786,7 +651,7 @@ public class PostingManagementEditCustomerPresentationModel {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-                PostingInterface pSelection = postingSelection.getSelection();
+                AbstractPosting pSelection = postingSelection.getSelection();
                 if(pSelection instanceof Posting) {
                     editPosting((Posting) pSelection);
                 }
