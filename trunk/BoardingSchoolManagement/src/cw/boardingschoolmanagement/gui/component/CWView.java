@@ -5,14 +5,24 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.JideSwingUtilities;
+import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ContainerAdapter;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
@@ -44,6 +54,10 @@ public class CWView extends CWPanel {
     public static final int LEFT = JLabel.LEFT;
     public static final int CENTER = JLabel.CENTER;
     public static final int RIGHT = JLabel.RIGHT;
+
+    public static enum ButtonPanelPosition {
+        LEFT, RIGHT
+    };
 
     public CWView() {
         this(new CWHeaderInfo());
@@ -86,6 +100,8 @@ public class CWView extends CWPanel {
         buttonPanel.add(leftButtonPanel, BorderLayout.WEST);
         buttonPanel.add(rightButtonPanel, BorderLayout.CENTER);
 
+        initButtonPanelEventHandling();
+
         JPanel topInfoActionPanel = CWComponentFactory.createPanel(new BorderLayout());
         topInfoActionPanel.add(headerInfoPanel = new CWHeaderInfoPanel(headerInfo), BorderLayout.NORTH);
         topInfoActionPanel.add(buttonPanel, BorderLayout.SOUTH);
@@ -117,6 +133,8 @@ public class CWView extends CWPanel {
     }
 
     public void dispose() {
+        disposeButtonPanelEventHandling();
+        headerInfoPanel.dispose();
 
         leftButtonPanel.removeAll();
         leftButtonPanel.setLayout(null);
@@ -130,6 +148,48 @@ public class CWView extends CWPanel {
         this.setUI(null);
     }
 
+
+    private CWButton bMore;
+    private CWPopupMenu popMore;
+
+    private void initButtonPanelEventHandling() {
+        popMore = CWComponentFactory.createPopupMenu();
+        bMore = CWComponentFactory.createButton(new AbstractAction("...", CWUtils.loadIcon("cw/boardingschoolmanagement/images/more.png")) {
+            public void actionPerformed(ActionEvent e) {
+                popMore.add(new JButton("Drucken"));
+                popMore.show(bMore, 0, bMore.getSize().height);
+            }
+        });
+//        rightButtonPanel.add(bMore);
+
+        buttonPanel.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                System.out.println("size: " + e.getComponent().getSize());
+                System.out.println("pref: " + e.getComponent().getPreferredSize());
+                
+                Component comp = e.getComponent();
+                int size = comp.getSize().width;
+                int pref = comp.getPreferredSize().width;
+
+                if(size < pref) {
+                    bMore.setVisible(true);
+                    System.out.println("dooo");
+                } else {
+                    bMore.setVisible(false);
+                }
+            }
+        });
+
+        buttonPanel.addContainerListener(new ContainerAdapter() {
+
+        });
+    }
+
+    private void disposeButtonPanelEventHandling() {
+
+    }
+    
 //    @Override
 //    protected void paintComponent(Graphics g) {
 //        super.paintComponent(g);
@@ -146,6 +206,19 @@ public class CWView extends CWPanel {
      * @return left ButtonPanel
      */
     public CWButtonPanel getButtonPanel() {
+        return getButtonPanel(ButtonPanelPosition.LEFT);
+    }
+
+    /**
+     * returns the left ButtonPanel
+     * @return left ButtonPanel
+     */
+    public CWButtonPanel getButtonPanel(ButtonPanelPosition position) {
+        if(position == ButtonPanelPosition.LEFT) {
+            return leftButtonPanel;
+        } else if(position == ButtonPanelPosition.RIGHT) {
+            return rightButtonPanel;
+        }
         return leftButtonPanel;
     }
 
@@ -239,6 +312,8 @@ public class CWView extends CWPanel {
         }
 
         public void setHeaderText(String headerText) {
+            System.out.println("MUHAHAHAHAHAH: " + headerText);
+
             String old = this.headerText;
             this.headerText = headerText;
             firePropertyChange("headerText", old, headerText);
@@ -272,6 +347,8 @@ public class CWView extends CWPanel {
 
         private CWHeaderInfo headerInfo;
 
+        private PropertyChangeListener headerInfoChangeListener;
+
         public CWHeaderInfoPanel(CWHeaderInfo headerInfo) {
 
             // Build the interface
@@ -295,7 +372,7 @@ public class CWView extends CWPanel {
 
             FormLayout layout = new FormLayout(
                     "2dlu, default, 10dlu, 2dlu, default:grow",
-                    "2dlu, pref, pref, 2dlu"
+                    "2dlu, pref:grow, pref, 2dlu"
             );
 
             PanelBuilder builder = new PanelBuilder(layout, this);
@@ -305,6 +382,25 @@ public class CWView extends CWPanel {
             builder.add(lImage, cc.xywh(2, 2, 1, 2));
 
             setHeaderInfo(headerInfo);
+            
+            initEventHandling();
+        }
+
+        public void dispose() {
+            disposeEventHandling();
+        }
+
+        private void initEventHandling() {
+            // If a info element is changed, update the header panel
+            headerInfo.addPropertyChangeListener(headerInfoChangeListener = new PropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent evt) {
+                    CWHeaderInfoPanel.this.updateHeaderInfo();
+                }
+            });
+        }
+
+        private void disposeEventHandling() {
+            headerInfo.removePropertyChangeListener(headerInfoChangeListener);
         }
 
         public CWHeaderInfo getHeaderInfo() {
@@ -328,11 +424,23 @@ public class CWView extends CWPanel {
             lDescription.setText("<html><body>" + headerInfo.getDescription() + "</body></html>");
             lImage.setIcon(headerInfo.getIcon());
 
-            if(headerInfo.getDescription().isEmpty()) {
+            // If the image is heighter than the headline + the description, stretch the headline
+            // otherwise the image would be cut
+            if( ( lHeaderText.getPreferredSize().getHeight() + lDescription.getPreferredSize().getHeight() ) < lImage.getPreferredSize().getHeight() ) {
+                if(headerInfo.getDescription().isEmpty()) {
+                    lHeaderText.setPreferredSize(new Dimension((int) lHeaderText.getPreferredSize().getWidth(), (int) lImage.getPreferredSize().getHeight()));
+                } else {
+                    lDescription.setPreferredSize(new Dimension((int) lDescription.getPreferredSize().getWidth(), (int) lImage.getPreferredSize().getHeight() - (int) lHeaderText.getPreferredSize().getHeight()));
+                }
+            }
+
+            if(headerInfo.getDescription().isEmpty() && headerInfo.getIcon() == null) {
                 lHeaderText.setHorizontalAlignment(JLabel.CENTER);
             } else {
                 lHeaderText.setHorizontalAlignment(JLabel.LEFT);
             }
+
+            repaint();
         }
     }
 

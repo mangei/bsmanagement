@@ -1,5 +1,7 @@
 package cw.boardingschoolmanagement.app;
 
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -9,6 +11,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 
 /**
  * Helperclass with helpful functions
@@ -116,4 +119,38 @@ public class CWUtils {
         return url;
     }
 
+//    public static JDialog showDialog(String title, CWPanel panel) {
+//        panel.setName(title);
+//        return showDialog(panel);
+//    }
+
+    public static JDialog showDialog(CWView view) {
+        final JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
+        d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        d.setTitle(view.getHeaderInfo().getHeaderText());
+        d.setIconImage(((ImageIcon)view.getHeaderInfo().getSmallIcon()).getImage());
+        d.add(view);
+        d.pack();
+        CWUtils.centerWindow(d, GUIManager.getInstance().getMainFrame());
+
+        d.setVisible(true);
+
+        view.dispose();
+        d.dispose();
+
+
+//        final JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), panel.getName(), false);
+//        d.getContentPane().add(panel);
+//
+//        d.addWindowListener(new WindowAdapter() {
+//            @Override
+//            public void windowClosing(WindowEvent e) {
+//                d.setVisible(false);
+//                d.dispose();
+//            }
+//        });
+//
+//        d.setVisible(true);
+        return d;
+    }
 }

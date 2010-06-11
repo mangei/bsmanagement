@@ -1,5 +1,6 @@
 package cw.boardingschoolmanagement.gui;
 
+import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
@@ -13,6 +14,7 @@ import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
@@ -58,6 +60,11 @@ public class ConfigurationView extends CWView
         CWButtonPanel buttonPanel = this.getButtonPanel();
         buttonPanel.add(bSave);
         buttonPanel.add(bCancel);
+        this.addToRightButtonPanel(new JButton(new AbstractAction("Drucken", CWUtils.loadIcon("cw/boardingschoolmanagement/images/print.png")) {
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(null, "Drucken");
+            }
+        }));
 
         JPanel buttonBarPanel = CWComponentFactory.createPanel();
         buttonBarPanel.setOpaque(false);

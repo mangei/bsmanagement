@@ -7,8 +7,11 @@ import cw.boardingschoolmanagement.interfaces.Extention;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ServiceConfigurationError;
 import java.util.ServiceLoader;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
@@ -186,8 +189,42 @@ public class ModulManager {
      */
     public static void registerAnnotationClasses(Ejb3Configuration configuration) {
         ServiceLoader<AnnotatedClass> annotatedClasses = ServiceLoader.load(AnnotatedClass.class);
-        for (AnnotatedClass a : annotatedClasses) {
-            configuration.addAnnotatedClass(a.getClass());
+        Iterator<AnnotatedClass> iterator = annotatedClasses.iterator();
+        while (iterator.hasNext()) {
+
+            AnnotatedClass next = null;
+            try {
+                next = iterator.next();
+
+                if(next != null) {
+                    System.out.println("registerAnnotatedClasses: " + next.getClass());
+                    configuration.addAnnotatedClass(next.getClass());
+                }
+                
+            } catch (ServiceConfigurationError e) {
+                // If it is an abstract class or an interface
+
+                String classStr = e.getMessage();
+
+                // Get the className
+                int from = classStr.indexOf("Provider ");
+                classStr = classStr.subSequence(from + "Provider ".length(), classStr.length()).toString();
+                int to   = classStr.indexOf(' ');
+                classStr = classStr.subSequence(0, to).toString();
+
+                try {
+                    // Get the class
+                    Class c = Class.forName(classStr);
+
+                    System.out.println("registerAnnotatedClasses: " + c);
+                    System.out.println("interface: " + Modifier.isAbstract(c.getModifiers()));
+                    configuration.addAnnotatedClass(c);
+
+                } catch (ClassNotFoundException classNotFoundException) {
+                    classNotFoundException.printStackTrace();
+                }
+            }
+            
         }
     }
 
