@@ -30,32 +30,7 @@ public class TweetHomeExtention
     implements HomeExtentionPoint
 {
 
-    public static void main(String[] args) {
-        new TweetHomeExtention();
-    }
-
     public TweetHomeExtention() {
-
-//        // Make a Twitter object
-//	Twitter t = new Twitter("mangei","czzA7pZdIVkJY8reM6kA");
-//	// Print Daniel Winterstein's status
-//	System.out.println(t.getStatus("mangei"));
-//        System.out.println(t.getFollowers().size());
-////        printMessages(t.getDirectMessagesSent());
-////        printMessages(t.getFavorites("mangei"));
-//        printMessages(t.getUserTimeline("mangei"));
-////        printMessages(t.getFriendsTimeline());
-////        printMessages(t.getHomeTimeline());
-//	// Set my status
-////	twitter.setStatus("Messing about in Java");
-//
-
-    }
-
-    public void printMessages(List l) {
-        for (int i = 0; i < l.size(); i++) {
-            System.out.println("" + (i+1) + ": " + l.get(i));
-        }
     }
 
     private CWView view;
