@@ -35,8 +35,8 @@ public class AccountOverviewAccountManagementPresentationModel
     
     public void initModels() {
         headerInfo = new CWHeaderInfo(
-                "Kontoübersicht",
-                "Kontoübersicht",
+                "Übersicht",
+                "Übersicht",
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/account.png"),
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/account.png")
         );

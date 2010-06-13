@@ -56,6 +56,10 @@ public class PostingManager extends AbstractPOJOManager<Posting>
     }
     
     public List<Posting> getAll(Account a) {
+        if(a == null) {
+            throw new NullPointerException("account is null");
+        }
+
         return HibernateUtil.getEntityManager().createQuery("FROM Posting p WHERE p.account.id=" + a.getId()).getResultList();
     }
 
@@ -64,6 +68,10 @@ public class PostingManager extends AbstractPOJOManager<Posting>
     }
     
     public List<String> getYears(Account account) {
+        if(account == null) {
+            throw new NullPointerException("account is null");
+        }
+        
         return HibernateUtil.getEntityManager().createQuery("SELECT DISTINCT str(YEAR(p.postingEntryDate)) FROM Posting p WHERE p.account.id="+account.getId()+" AND p.postingEntryDate IS NOT NULL").getResultList();
     }
 

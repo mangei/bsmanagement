@@ -42,8 +42,6 @@ public class AccountManager extends AbstractPOJOManager<Account>
         try {
             account = (Account) HibernateUtil.getEntityManager().createQuery("FROM Account a WHERE a.customer.id=" + c.getId()).getSingleResult();
         } catch (NoResultException e) {
-            account = new Account();
-            account.setCustomer(c);
         }
         return account;
     }

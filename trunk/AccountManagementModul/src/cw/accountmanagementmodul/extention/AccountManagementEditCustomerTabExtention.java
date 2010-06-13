@@ -2,10 +2,12 @@ package cw.accountmanagementmodul.extention;
 
 import cw.accountmanagementmodul.gui.AccountManagementEditCustomerPresentationModel;
 import cw.accountmanagementmodul.gui.AccountManagementEditCustomerView;
+import cw.accountmanagementmodul.pojo.Account;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
-import cw.accountmanagementmodul.pojo.Posting;
+import cw.accountmanagementmodul.pojo.manager.AccountManager;
+import cw.customermanagementmodul.pojo.Customer;
 import java.util.List;
 
 /**
@@ -18,10 +20,19 @@ public class AccountManagementEditCustomerTabExtention
     private AccountManagementEditCustomerPresentationModel model;
     private AccountManagementEditCustomerView view;
     private EditCustomerPresentationModel editCustomerModel;
+    private Account account;
     
     public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
         this.editCustomerModel = editCustomerModel;
-        model = new AccountManagementEditCustomerPresentationModel(editCustomerModel.getBean());
+
+        Customer customer = editCustomerModel.getBean();
+        account = AccountManager.getInstance().get(customer);
+
+        if(account == null) {
+            account = new Account(customer);
+        }
+
+        model = new AccountManagementEditCustomerPresentationModel(account);
         view = new AccountManagementEditCustomerView(model);
     }
     
@@ -34,7 +45,7 @@ public class AccountManagementEditCustomerTabExtention
     }
 
     public void save() {
-        // Not necessary for this Extention
+        AccountManager.getInstance().save(account);
     }
 
     public List<String> validate() {

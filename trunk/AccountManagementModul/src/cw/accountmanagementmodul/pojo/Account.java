@@ -36,6 +36,10 @@ public class Account
     public Account() {
     }
 
+    public Account(Customer customer) {
+        this.customer = customer;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {

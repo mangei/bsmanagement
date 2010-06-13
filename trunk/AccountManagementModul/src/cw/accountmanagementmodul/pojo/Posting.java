@@ -17,7 +17,7 @@ public class Posting
         implements AnnotatedClass {
 
     private Date postingEntryDate;
-
+    private double amount;
     private boolean reversePosting = false;
     private boolean balancePosting = false;
     private Posting previousPosting;
@@ -27,6 +27,7 @@ public class Posting
     public final static String PROPERTYNAME_REVERSEPOSTING = "reversePosting";
     public final static String PROPERTYNAME_BALANCEPOSTING = "balancePosting";
     public final static String PROPERTYNAME_PREVIOUSPOSTING = "previousPosting";
+    public final static String PROPERTYNAME_AMOUNT = "amount";
 //    public final static String PROPERTYNAME_SOURCE = "source";
 
     /**

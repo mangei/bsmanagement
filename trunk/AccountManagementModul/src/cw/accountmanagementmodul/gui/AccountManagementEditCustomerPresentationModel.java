@@ -3,8 +3,6 @@ package cw.accountmanagementmodul.gui;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.accountmanagementmodul.pojo.Account;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.accountmanagementmodul.pojo.manager.AccountManager;
 
 /**
  *
@@ -12,7 +10,6 @@ import cw.accountmanagementmodul.pojo.manager.AccountManager;
  */
 public class AccountManagementEditCustomerPresentationModel {
 
-    private Customer customer;
     private Account account;
     private CWHeaderInfo headerInfo;
 
@@ -21,13 +18,8 @@ public class AccountManagementEditCustomerPresentationModel {
     public InvoiceManagementAccountManagementPresentationModel invoiceManagementAccountManagementPresentationModel;
     public BailmentManagementAccountManagementPresentationModel bailmentManagementAccountManagementPresentationModel;
 
-    public AccountManagementEditCustomerPresentationModel() {
-        this(null);
-    }
-
-    public AccountManagementEditCustomerPresentationModel(Customer customer) {
-        this.customer = customer;
-        this.account = AccountManager.getInstance().get(customer);
+    public AccountManagementEditCustomerPresentationModel(Account account) {
+        this.account = account;
 
         initModels();
         initEventHandling();

@@ -6,7 +6,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
-import cw.accountmanagementmodul.comparator.PostingInterfaceDateComparator;
+import cw.accountmanagementmodul.comparator.AbstractPostingDateComparator;
 import cw.accountmanagementmodul.gui.model.PostingTreeTableModel;
 import cw.accountmanagementmodul.pojo.AbstractPosting;
 import cw.accountmanagementmodul.pojo.Account;
@@ -83,7 +83,7 @@ public class PostingManagementAccountManagementPresentationModel {
         loadPostings();
 
         headerInfo = new CWHeaderInfo(
-                "Buchungsübersicht",
+                "Buchungen",
                 "Hier sehen sie eine Übersicht über alle Buchungen für Ihren Kunden.",
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/posting.png"),
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/posting.png")
@@ -148,7 +148,7 @@ public class PostingManagementAccountManagementPresentationModel {
         pIList.addAll(postingGroups);
 
         // Sortieren
-        Collections.sort(pIList, new PostingInterfaceDateComparator());
+        Collections.sort(pIList, new AbstractPostingDateComparator());
 
         postingSelection.setList(pIList);
     }

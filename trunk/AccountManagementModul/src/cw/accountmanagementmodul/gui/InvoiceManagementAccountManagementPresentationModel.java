@@ -1,22 +1,25 @@
 package cw.accountmanagementmodul.gui;
 
+import com.jgoodies.binding.list.SelectionInList;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import cw.accountmanagementmodul.gui.model.InvoiceTreeTableModel;
 import cw.accountmanagementmodul.pojo.Account;
+import cw.accountmanagementmodul.pojo.Invoice;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
-import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
+import javax.swing.table.TableModel;
+import org.jdesktop.swingx.treetable.TreeTableModel;
 
 /**
  *
@@ -28,9 +31,12 @@ public class InvoiceManagementAccountManagementPresentationModel
     private Account account;
     private ValueModel unsaved;
     private CWHeaderInfo headerInfo;
+    private SelectionInList<Invoice> invoiceSelection;
     
     private Action cancelAction;
     private Action saveAction;
+
+    private TreeTableModel invoiceTreeTableModel;
 
     private ButtonListenerSupport buttonListenerSupport;
 
@@ -57,6 +63,7 @@ public class InvoiceManagementAccountManagementPresentationModel
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/accountmanagementmodul/images/cancel.png"));
         saveAction = new SaveAction("Hinzufügen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_lightning.png"));
 
+        invoiceSelection = new SelectionInList<Invoice>(account.getInvoices());
     }
     
     public void initEventHandling() {
@@ -156,4 +163,11 @@ public class InvoiceManagementAccountManagementPresentationModel
         return true;
     }
     
+    public TreeTableModel getInvoiceTreeTableModel() {
+        if(invoiceTreeTableModel == null) {
+            invoiceTreeTableModel = new InvoiceTreeTableModel(invoiceSelection);
+        }
+        return invoiceTreeTableModel;
+    }
+
 }

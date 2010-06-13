@@ -20,8 +20,8 @@ public class AccountManagementEditCustomerView extends CWView
 
     private JideTabbedPane tabs;
     private AccountOverviewAccountManagementView accountOverviewAccountManagementView;
-    private PostingManagementAccountManagementView postingManagementAccountManagementView;
     private InvoiceManagementAccountManagementView invoiceManagementAccountManagementView;
+    private PostingManagementAccountManagementView postingManagementAccountManagementView;
     private BailmentManagementAccountManagementView bailmentManagementAccountManagementView;
 
     public AccountManagementEditCustomerView(AccountManagementEditCustomerPresentationModel model) {
@@ -36,8 +36,8 @@ public class AccountManagementEditCustomerView extends CWView
         tabs = new JideTabbedPane();
 
         accountOverviewAccountManagementView = new AccountOverviewAccountManagementView(model.getAccountOverviewAccountManagementPresentationModel());
-        postingManagementAccountManagementView = new PostingManagementAccountManagementView(model.getPostingManagementAccountManagementPresentationModel());
         invoiceManagementAccountManagementView = new InvoiceManagementAccountManagementView(model.getInvoiceManagementAccountManagementPresentationModel());
+        postingManagementAccountManagementView = new PostingManagementAccountManagementView(model.getPostingManagementAccountManagementPresentationModel());
         bailmentManagementAccountManagementView = new BailmentManagementAccountManagementView(model.getBailmentManagementAccountManagementPresentationModel());
 
         componentContainer = CWComponentFactory.createComponentContainer()
@@ -57,14 +57,14 @@ public class AccountManagementEditCustomerView extends CWView
                 accountOverviewAccountManagementView
         );
         tabs.addTab(
-                postingManagementAccountManagementView.getHeaderInfo().getHeaderText(),
-                postingManagementAccountManagementView.getHeaderInfo().getSmallIcon(),
-                postingManagementAccountManagementView
-        );
-        tabs.addTab(
                 invoiceManagementAccountManagementView.getHeaderInfo().getHeaderText(),
                 invoiceManagementAccountManagementView.getHeaderInfo().getSmallIcon(),
                 invoiceManagementAccountManagementView
+        );
+        tabs.addTab(
+                postingManagementAccountManagementView.getHeaderInfo().getHeaderText(),
+                postingManagementAccountManagementView.getHeaderInfo().getSmallIcon(),
+                postingManagementAccountManagementView
         );
         tabs.addTab(
                 bailmentManagementAccountManagementView.getHeaderInfo().getHeaderText(),

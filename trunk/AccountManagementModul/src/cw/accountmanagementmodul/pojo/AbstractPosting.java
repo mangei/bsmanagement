@@ -11,6 +11,7 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
+import javax.persistence.Transient;
 
 /**
  *
@@ -25,16 +26,14 @@ public abstract class AbstractPosting
     protected Long id;
     protected Account account;
     protected String name;
-    protected double amount;
     protected Date creationDate;
 
     public final static String PROPERTYNAME_ID              = "id";
     public final static String PROPERTYNAME_ACCOUNT         = "account";
     public final static String PROPERTYNAME_NAME            = "name";
     public final static String PROPERTYNAME_CREATIONDATE    = "creationDate";
-    public final static String PROPERTYNAME_AMOUNT          = "amount";
 
-
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public Long getId() {
@@ -79,14 +78,7 @@ public abstract class AbstractPosting
         firePropertyChange(PROPERTYNAME_CREATIONDATE, old, creationDate);
     }
 
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        double old = this.amount;
-        this.amount = amount;
-        firePropertyChange(PROPERTYNAME_AMOUNT, old, amount);
-    }
+    @Transient
+    public abstract double getAmount();
 
 }

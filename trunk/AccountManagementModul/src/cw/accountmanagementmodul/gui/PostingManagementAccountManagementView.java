@@ -28,6 +28,7 @@ public class PostingManagementAccountManagementView extends CWView
 
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWButton bNew;
+    private CWButton bEdit;
     private CWButton bReversePosting;
     private CWButton bBalancePosting;
 
@@ -53,6 +54,7 @@ public class PostingManagementAccountManagementView extends CWView
     
     private void initComponents() {
         bNew    = CWComponentFactory.createButton(model.getNewAction());
+        bEdit    = CWComponentFactory.createButton(model.getEditAction());
         bReversePosting = CWComponentFactory.createButton(model.getReversePostingAction());
         bBalancePosting = CWComponentFactory.createButton(model.getBalancePostingAction());
 //        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
@@ -91,6 +93,7 @@ public class PostingManagementAccountManagementView extends CWView
         this.setName("Buchungen");
 
         this.getButtonPanel().add(bNew);
+        this.getButtonPanel().add(bEdit);
         this.getButtonPanel().add(bBalancePosting);
         this.getButtonPanel().add(bReversePosting);
 //        this.getButtonPanel().add(bDelete);

@@ -24,7 +24,7 @@ public class InvoiceItem
     private Invoice         invoice         = null;
     private String          name            = "";
     private String          description     = "";
-    private int             amount          = 0;
+    private int             units           = 0;
     private double          pricePerUnit    = 0.0;
     private Posting         posting         = null;
     private Date            creationDate    = new Date();
@@ -74,12 +74,12 @@ public class InvoiceItem
         this.invoice = invoice;
     }
 
-    public int getAmount() {
-        return amount;
+    public int getUnits() {
+        return units;
     }
 
-    public void setAmount(int amount) {
-        this.amount = amount;
+    public void setUnits(int units) {
+        this.units = units;
     }
 
     @Temporal(javax.persistence.TemporalType.DATE)

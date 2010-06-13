@@ -25,13 +25,18 @@ public class Invoice
 
     private Long                id              = null;
     private Account             account         = null;
+    private String              name            = "";
     private List<InvoiceItem>   invoiceItems    = new ArrayList<InvoiceItem>();
     private PostingGroup        postingGroup    = null;
     private Date                creationDate    = new Date();
     
 
-    public final static String PROPERTYNAME_ID          = "id";
-    public final static String PROPERTYNAME_ACCOUNT     = "account";
+    public final static String PROPERTYNAME_ID              = "id";
+    public final static String PROPERTYNAME_ACCOUNT         = "account";
+    public final static String PROPERTYNAME_NAME            = "name";
+    public final static String PROPERTYNAME_INVOICEITEMS    = "invoiceItems";
+    public final static String PROPERTYNAME_POSTINGGROUP    = "postingGroups";
+    public final static String PROPERTYNAME_CREATIONDATE    = "creationDate";
 
 
     public Invoice() {
@@ -72,7 +77,9 @@ public class Invoice
     }
 
     public void setAccount(Account account) {
+        Account old = this.account;
         this.account = account;
+        firePropertyChange(PROPERTYNAME_ACCOUNT, old, account);
     }
 
     @Temporal(javax.persistence.TemporalType.DATE)
@@ -81,7 +88,9 @@ public class Invoice
     }
 
     public void setCreationDate(Date creationDate) {
+        Date old = this.creationDate;
         this.creationDate = creationDate;
+        firePropertyChange(PROPERTYNAME_CREATIONDATE, old, creationDate);
     }
 
     @OneToMany(mappedBy = "invoice")
@@ -90,7 +99,9 @@ public class Invoice
     }
 
     public void setInvoiceItems(List<InvoiceItem> invoiceItems) {
+        List<InvoiceItem> old = this.invoiceItems;
         this.invoiceItems = invoiceItems;
+        firePropertyChange(PROPERTYNAME_INVOICEITEMS, old, invoiceItems);
     }
 
     @OneToOne
@@ -99,7 +110,19 @@ public class Invoice
     }
 
     public void setPostingGroup(PostingGroup postingGroup) {
+        PostingGroup old = this.postingGroup;
         this.postingGroup = postingGroup;
+        firePropertyChange(PROPERTYNAME_POSTINGGROUP, old, postingGroup);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        String old = this.name;
+        this.name = name;
+        firePropertyChange(PROPERTYNAME_NAME, old, name);
     }
 
 }

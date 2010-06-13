@@ -42,20 +42,18 @@ public class PostingCustomerOverviewEditCustomerExtention
                     editCustomerPresentationModel
                         .getExtention(PostingEditCustomerTabExtention.class);
 
-        PostingManagementAccountManagementPresentationModel postingManagementModel =
-                (PostingManagementAccountManagementPresentationModel)
-                    postingExtention
-                        .getModel();
+//        PostingManagementAccountManagementPresentationModel postingManagementModel =
+//                (PostingManagementAccountManagementPresentationModel)
+//                    postingExtention
+//                        .getModel();
 
-        System.out.println("postingManagementModel: " + postingManagementModel);
+//        lSaldo = CWComponentFactory.createLabel(
+//                postingManagementModel.getTotalSaldoValue(),
+//                        NumberFormat.getCurrencyInstance()
+//                    );
 
-        lSaldo = CWComponentFactory.createLabel(
-                postingManagementModel.getTotalSaldoValue(),
-                        NumberFormat.getCurrencyInstance()
-                    );
-
-        componentContainer
-                .addComponent(lSaldo);
+//        componentContainer
+//                .addComponent(lSaldo);
 
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, pref:grow",
@@ -67,7 +65,7 @@ public class PostingCustomerOverviewEditCustomerExtention
 
         builder.addSeparator("Buchungen",                   cc.xyw(1, 1, 3));
         builder.addLabel("<html><b>Saldo:</b></html>",      cc.xy(1, 3));
-        builder.add(lSaldo,                                 cc.xy(3, 3));
+//        builder.add(lSaldo,                                 cc.xy(3, 3));
 
         return panel;
     }

@@ -7,6 +7,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWTreeTable;
 
 /**
  *
@@ -21,6 +22,7 @@ public class InvoiceManagementAccountManagementView extends CWView
     
     private CWButton bCancel;
     private CWButton bSave;
+    private CWTreeTable ttInvoices;
 
     public InvoiceManagementAccountManagementView(InvoiceManagementAccountManagementPresentationModel model) {
         this.model = model;
@@ -34,8 +36,11 @@ public class InvoiceManagementAccountManagementView extends CWView
         bCancel     = CWComponentFactory.createButton(model.getCancelAction());
         bSave = CWComponentFactory.createButton(model.getSaveAction());
 
+        ttInvoices = CWComponentFactory.createTreeTable(model.getInvoiceTreeTableModel());
+        ttInvoices.setRootVisible(false);
+
         componentContainer = CWComponentFactory.createComponentContainer()
-                ;
+                .addComponent(ttInvoices);
     }
 
     private void initEventHandling() {
@@ -49,14 +54,14 @@ public class InvoiceManagementAccountManagementView extends CWView
         buttonPanel.add(bCancel);
 
         FormLayout layout = new FormLayout(
-                "",
-                "");
+                "fill:pref:grow",
+                "pref:grow");
         
         PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
         builder.setDefaultDialogBorder();
 
         CellConstraints cc = new CellConstraints();
-//        builder.add(dcPostingEntryDate,         cc.xy(3, 10));
+        builder.add(CWComponentFactory.createScrollPane(ttInvoices), cc.xy(1, 1));
     }
 
     @Override

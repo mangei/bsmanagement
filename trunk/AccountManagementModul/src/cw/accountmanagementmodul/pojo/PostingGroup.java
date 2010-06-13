@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
 /**
  * Eine PostingGroup (zD Buchungsgruppe) ist eine Gruppierung mehrerer Buchungen
@@ -40,6 +41,16 @@ public class PostingGroup
 
     public void setPostings(List<AbstractPosting> postings) {
         this.postings = postings;
+    }
+
+    @Override
+    @Transient
+    public double getAmount() {
+        double amount = 0;
+        for(int i=0, l=postings.size(); i<l; i++) {
+            amount += postings.get(i).getAmount();
+        }
+        return amount;
     }
 
 }

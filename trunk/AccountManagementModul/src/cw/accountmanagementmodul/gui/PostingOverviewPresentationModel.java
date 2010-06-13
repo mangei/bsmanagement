@@ -2,7 +2,7 @@ package cw.accountmanagementmodul.gui;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.list.SelectionInList;
-import cw.accountmanagementmodul.comparator.PostingInterfaceDateComparator;
+import cw.accountmanagementmodul.comparator.AbstractPostingDateComparator;
 import cw.accountmanagementmodul.gui.model.PostingTreeTableModel;
 import cw.accountmanagementmodul.pojo.AbstractPosting;
 import cw.accountmanagementmodul.pojo.Posting;
@@ -66,7 +66,7 @@ public class PostingOverviewPresentationModel {
         pIList.addAll(postingGroups);
 
         // Sortieren
-        Collections.sort(pIList, new PostingInterfaceDateComparator());
+        Collections.sort(pIList, new AbstractPostingDateComparator());
 
         postingSelection.setList(pIList);
     }
