@@ -44,6 +44,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.tree.TreeModel;
 import org.jdesktop.swingx.decorator.HighlighterFactory;
+import org.jdesktop.swingx.treetable.TreeTableModel;
 
 /**
  * The factory contains all necessary components we have in our application.
@@ -253,6 +254,22 @@ public class CWComponentFactory {
         table.loadTableState();
 
         return table;
+    }
+
+    public static CWTreeTable createTreeTable(TreeTableModel tableModel) {
+        CWTreeTable treetable;
+
+        if (tableModel != null) {
+            treetable = new CWTreeTable(tableModel);
+        } else {
+            treetable = new CWTreeTable();
+        }
+
+        treetable.setColumnControlVisible(true);
+        treetable.setPreferredScrollableViewportSize(new Dimension(10, 10));
+        treetable.setHighlighters(HighlighterFactory.createSimpleStriping());
+
+        return treetable;
     }
 
     public static CWList createList(ListModel listModel) {
