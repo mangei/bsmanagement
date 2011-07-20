@@ -1,0 +1,2 @@
+Manifest-Version: 1.0
+Modul-Name: cw.customermanagementmodul.CustomerManagementModul
