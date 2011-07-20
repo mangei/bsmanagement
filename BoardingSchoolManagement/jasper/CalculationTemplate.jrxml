@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF8"?>
+<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+
+<jasperReport name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="courseName" class="java.lang.String"/>
+	<parameter name="begin" class="java.lang.String"/>
+	<parameter name="end" class="java.lang.String"/>
+	<parameter name="price" class="java.lang.Double"/>
+	<parameter name="currentDate" class="java.lang.String"/>
+	<parameter name="headerText" class="java.lang.String"/>
+	<parameter name="courseReport" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="activityReport" class="net.sf.jasperreports.engine.JasperReport"/>
+	<parameter name="sollList" class="java.util.Collection"/>
+	<parameter name="habenList" class="java.util.Collection"/>
+	<parameter name="saldoList" class="java.util.Collection"/>
+	<parameter name="coursePriceList" class="java.util.Collection"/>
+	<parameter name="totalSoll" class="java.lang.Double"/>
+	<parameter name="totalHaben" class="java.lang.Double"/>
+	<parameter name="totalSaldo" class="java.lang.Double"/>
+	<parameter name="sizeOfCourseParts" class="java.lang.Integer"/>
+	<parameter name="courseAdditionList" class="java.util.Collection"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:/Dokumente und Einstellungen/André Salmhofer/Eigene Dateien/NetBeansProjects/project/BoardingSchoolManagement/jasper\\"]]></defaultValueExpression>
+	</parameter>
+	<field name="customer.forename" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.forename]]></fieldDescription>
+	</field>
+	<field name="customer.postOfficeNumber" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.postOfficeNumber]]></fieldDescription>
+	</field>
+	<field name="customer.guardian.surname" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.guardian.surname]]></fieldDescription>
+	</field>
+	<field name="customer.surname" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.surname]]></fieldDescription>
+	</field>
+	<field name="customer.street" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.street]]></fieldDescription>
+	</field>
+	<field name="customer.city" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.city]]></fieldDescription>
+	</field>
+	<field name="customer.landlinephone" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.landlinephone]]></fieldDescription>
+	</field>
+	<field name="customer.mobilephone" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.mobilephone]]></fieldDescription>
+	</field>
+	<field name="customer.birthday" class="java.util.Date">
+		<fieldDescription><![CDATA[customer.birthday]]></fieldDescription>
+	</field>
+	<field name="courseList" class="java.util.Collection"/>
+	<background>
+		<band/>
+	</background>
+	<pageHeader>
+		<band height="136">
+			<textField hyperlinkType="None">
+				<reportElement x="15" y="113" width="265" height="20"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{courseName} + " (" + $P{begin} + " - " + $P{end} + ") "]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" hyperlinkType="None">
+				<reportElement x="490" y="113" width="45" height="20"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{price}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="369" y="113" width="121" height="20"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Standardpreis pro Kurs: ]]></text>
+			</staticText>
+			<textField hyperlinkType="None">
+				<reportElement x="0" y="75" width="555" height="32"/>
+				<textElement textAlignment="Center">
+					<font size="20"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{headerText}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="32" width="555" height="32"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ 7423 Pinkafeld, Steinamanagerstraße 2,  0333 57 / 462 16,
+ 033 57 / 462 74-9,  office@internat-pinkafeld.com
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="2" width="555" height="31"/>
+				<textElement textAlignment="Center">
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[Internat an der HTBLuVA Pinkafeld]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23">
+			<staticText>
+				<reportElement mode="Opaque" x="18" y="3" width="121" height="16" backcolor="#DCDCDC"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Anschrift]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="138" y="3" width="105" height="16" backcolor="#DCDCDC"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Pers. Daten]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="229" y="3" width="157" height="16" backcolor="#DCDCDC"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kontaktdaten]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="332" y="3" width="150" height="16" backcolor="#DCDCDC"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Gegenstände]]></text>
+			</staticText>
+			<staticText>
+				<reportElement mode="Opaque" x="434" y="3" width="104" height="16" backcolor="#DCDCDC"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kalkulation]]></text>
+			</staticText>
+			<line>
+				<reportElement x="18" y="19" width="520" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="103" isSplitAllowed="false">
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement x="229" y="34" width="103" height="15" isRemoveLineWhenBlank="true"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.guardian.surname}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement stretchType="RelativeToBandHeight" mode="Transparent" x="20" y="2" width="109" height="15" backcolor="#FFFFFF"/>
+				<textElement>
+					<font fontName="sansserif" isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.forename} + " " + $F{customer.surname}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement mode="Transparent" x="20" y="18" width="95" height="15" backcolor="#FFFFFF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.street}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement mode="Transparent" x="20" y="34" width="109" height="15" backcolor="#FFFFFF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.postOfficeNumber} + " " + $F{customer.city}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement mode="Transparent" x="229" y="3" width="88" height="15" backcolor="#FFFFFF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.landlinephone}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement mode="Transparent" x="229" y="18" width="88" height="15" backcolor="#FFFFFF"/>
+				<textElement/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.mobilephone}]]></textFieldExpression>
+			</textField>
+			<textField pattern="dd.MM.yyyy" isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement mode="Transparent" x="139" y="1" width="88" height="15" backcolor="#FFFFFF"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$F{customer.birthday}]]></textFieldExpression>
+			</textField>
+			<subreport>
+				<reportElement stretchType="RelativeToTallestObject" mode="Transparent" x="332" y="2" width="206" height="0" isRemoveLineWhenBlank="true" backcolor="#FFFFFF"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{courseList})]]></dataSourceExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{courseReport}]]></subreportExpression>
+			</subreport>
+			<textField hyperlinkType="None">
+				<reportElement stretchType="RelativeToTallestObject" mode="Opaque" x="20" y="83" width="130" height="15" backcolor="#CCCCCC"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Soll: " + $P{sollList}.toArray()[$V{REPORT_COUNT}.intValue()-1]]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="None">
+				<reportElement stretchType="RelativeToTallestObject" mode="Opaque" x="138" y="83" width="124" height="15" backcolor="#CCCCCC"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Haben: " + $P{habenList}.toArray()[$V{REPORT_COUNT}.intValue()-1]]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="None">
+				<reportElement stretchType="RelativeToTallestObject" mode="Opaque" x="243" y="83" width="295" height="15" backcolor="#CCCCCC"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Saldo: " + $P{saldoList}.toArray()[$V{REPORT_COUNT}.intValue()-1]]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement stretchType="RelativeToTallestObject" x="20" y="98" width="518" height="1"/>
+			</line>
+			<textField pattern="¤ #,##0.00" hyperlinkType="None">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="490" y="21" width="48" height="15">
+					<printWhenExpression><![CDATA[new java.lang.Boolean(!$P{coursePriceList}.toArray()[$V{REPORT_COUNT}.intValue()-1].equals($P{price}))]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{sollList}.toArray()[$V{REPORT_COUNT}.intValue()-1]]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="436" y="3" width="53" height="16">
+					<printWhenExpression><![CDATA[new java.lang.Boolean(!$P{coursePriceList}.toArray()[$V{REPORT_COUNT}.intValue()-1].equals($P{price}))]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Left" verticalAlignment="Top">
+					<font size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Ind. P.*]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="436" y="21" width="54" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Gesamt:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="436" y="3" width="28" height="15">
+					<printWhenExpression><![CDATA[new java.lang.Boolean($P{coursePriceList}.toArray()[$V{REPORT_COUNT}.intValue()-1].equals($P{price}))]]></printWhenExpression>
+				</reportElement>
+				<textElement/>
+				<text><![CDATA[Kurs: ]]></text>
+			</staticText>
+			<textField pattern="¤ #,##0.00" hyperlinkType="None">
+				<reportElement positionType="Float" stretchType="RelativeToTallestObject" x="490" y="21" width="48" height="15">
+					<printWhenExpression><![CDATA[new java.lang.Boolean($P{coursePriceList}.toArray()[$V{REPORT_COUNT}.intValue()-1].equals($P{price}))]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right">
+					<font isBold="true" isUnderline="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{sollList}.toArray()[$V{REPORT_COUNT}.intValue()-1]]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" hyperlinkType="None">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="490" y="3" width="48" height="15">
+					<printWhenExpression><![CDATA[new java.lang.Boolean($P{coursePriceList}.toArray()[$V{REPORT_COUNT}.intValue()-1].equals($P{price}))]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{coursePriceList}.toArray()[$V{REPORT_COUNT}.intValue()-1]]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" hyperlinkType="None">
+				<reportElement positionType="FixRelativeToBottom" stretchType="RelativeToTallestObject" x="490" y="3" width="48" height="15">
+					<printWhenExpression><![CDATA[new java.lang.Boolean(!$P{coursePriceList}.toArray()[$V{REPORT_COUNT}.intValue()-1].equals($P{price}))]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{sollList}.toArray()[$V{REPORT_COUNT}.intValue()-1]]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="55">
+			<line>
+				<reportElement x="0" y="3" width="553" height="1"/>
+			</line>
+			<textField isBlankWhenNull="false" hyperlinkType="None">
+				<reportElement x="150" y="35" width="255" height="15"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{currentDate}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="35" width="150" height="15"/>
+				<textElement/>
+				<text><![CDATA[DVR.: 056072]]></text>
+			</staticText>
+			<textField hyperlinkType="None">
+				<reportElement x="490" y="35" width="53" height="15"/>
+				<textElement textAlignment="Right">
+					<font isItalic="false"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA["Seite " + $V{PAGE_NUMBER}.intValue() + " von "]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="None">
+				<reportElement x="543" y="35" width="12" height="15"/>
+				<textElement textAlignment="Left"/>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="2" y="4" width="531" height="28"/>
+				<textElement/>
+				<text><![CDATA[*) Dies bedeutet, dass es für diesen Kursteilnehmer aus verschiedensten Gründen einen individuellen Preis gibt,
+der sich durch eine Buchung ergeben hat! In diesen Fällen sind die Aktivitätspreise nicht zu berücksichtigen!]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="240" isSplitAllowed="false">
+			<textField hyperlinkType="None">
+				<reportElement x="162" y="70" width="100" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{courseName}]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="None">
+				<reportElement x="162" y="88" width="167" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{begin} + " - " + $P{end}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" hyperlinkType="None">
+				<reportElement x="162" y="106" width="100" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{price}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="27" y="106" width="129" height="15"/>
+				<textElement/>
+				<text><![CDATA[Preis ohne Abweichungen:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="70" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Name:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="88" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Zeitraum:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="11" width="555" height="28"/>
+				<textElement textAlignment="Center">
+					<font size="20"/>
+				</textElement>
+				<text><![CDATA[Gesamtkalkulation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="175" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Gesamt-Soll:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="193" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Gesamt-Haben:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="27" y="211" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Gesamt-Saldo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="17" y="53" width="105" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Generelle Information]]></text>
+			</staticText>
+			<line>
+				<reportElement x="122" y="60" width="416" height="1"/>
+			</line>
+			<staticText>
+				<reportElement x="17" y="158" width="121" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Abrechnung des Kurses]]></text>
+			</staticText>
+			<line>
+				<reportElement x="138" y="165" width="399" height="1"/>
+			</line>
+			<textField pattern="¤ #,##0.00" hyperlinkType="None">
+				<reportElement x="162" y="175" width="100" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{totalSoll}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" hyperlinkType="None">
+				<reportElement x="162" y="193" width="100" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{totalHaben}]]></textFieldExpression>
+			</textField>
+			<textField pattern="¤ #,##0.00" hyperlinkType="None">
+				<reportElement x="162" y="211" width="100" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Double"><![CDATA[$P{totalSaldo}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="27" y="124" width="100" height="15"/>
+				<textElement/>
+				<text><![CDATA[Teilnehmerzahl:]]></text>
+			</staticText>
+			<textField hyperlinkType="None">
+				<reportElement x="162" y="124" width="118" height="15"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$P{sizeOfCourseParts}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

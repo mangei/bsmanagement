@@ -1,0 +1,2 @@
+copy "C:\Dokumente und Einstellungen\ManuelG\Eigene Dateien\NetBeansProjects\Internatsverwaltungsprojekt\CustomerManagementModul\dist\CustomerManagementModul.jar" "C:\Dokumente und Einstellungen\ManuelG\Eigene Dateien\NetBeansProjects\Internatsverwaltungsprojekt\BoardingSchoolManagement\modules\CustomerManagementModul.jar"
+pause

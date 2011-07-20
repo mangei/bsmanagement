@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF8"?>
+<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+
+<jasperReport name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<import value="java.util.*" />
+    <parameter name="tarifSubreport" class="net.sf.jasperreports.engine.JasperReport"/>
+	<field name="customer.forename" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.forename]]></fieldDescription>
+	</field>
+    <field name="gebList" class="java.util.Collection"/>
+	<field name="customer.surname" class="java.lang.String">
+		<fieldDescription><![CDATA[customer.surname]]></fieldDescription>
+	</field>
+	<field name="zimmer.name" class="java.lang.String">
+		<fieldDescription><![CDATA[zimmer.name]]></fieldDescription>
+	</field>
+	<field name="zimmer.bereich.name" class="java.lang.String">
+		<fieldDescription><![CDATA[zimmer.bereich.name]]></fieldDescription>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="79"/>
+	</title>
+	<pageHeader>
+		<band height="35"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61"/>
+	</columnHeader>
+	<detail>
+		<band height="83">
+			<textField hyperlinkType="None">
+				<reportElement x="338" y="37" width="153" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{zimmer.bereich.name}]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="None">
+				<reportElement x="97" y="36" width="126" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.surname}]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="None">
+				<reportElement x="341" y="16" width="97" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{zimmer.name}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="18" y="15" width="58" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Vorname:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="283" y="36" width="45" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Bereich:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="283" y="15" width="45" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Zimmer:]]></text>
+			</staticText>
+			<textField hyperlinkType="None">
+				<reportElement x="93" y="15" width="130" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{customer.forename}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="18" y="35" width="73" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[Nachname:]]></text>
+			</staticText>
+			<subreport>
+				<reportElement positionType="Float" x="6" y="57" width="175" height="20" isRemoveLineWhenBlank="true" backcolor="#99CCFF"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{gebList})]]></dataSourceExpression>
+				<subreportExpression class="net.sf.jasperreports.engine.JasperReport"><![CDATA[$P{tarifSubreport}]]></subreportExpression>
+			</subreport>
+			<line>
+				<reportElement x="19" y="6" width="489" height="1"/>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54"/>
+	</pageFooter>
+	<summary>
+		<band height="42"/>
+	</summary>
+</jasperReport>
