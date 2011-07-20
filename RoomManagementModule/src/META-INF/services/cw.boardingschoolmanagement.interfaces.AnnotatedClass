@@ -1,0 +1,12 @@
+cw.roommanagementmodul.pojo.Bereich
+cw.roommanagementmodul.pojo.Bewohner
+cw.roommanagementmodul.pojo.BewohnerHistory
+cw.roommanagementmodul.pojo.GebLauf
+cw.roommanagementmodul.pojo.Gebuehr
+cw.roommanagementmodul.pojo.GebuehrZuordnung
+cw.roommanagementmodul.pojo.GebuehrenKategorie
+cw.roommanagementmodul.pojo.GebuehrenLauf
+cw.roommanagementmodul.pojo.Kaution
+cw.roommanagementmodul.pojo.Tarif
+cw.roommanagementmodul.pojo.Zimmer
+cw.roommanagementmodul.pojo.BuchungsLaufZuordnung
