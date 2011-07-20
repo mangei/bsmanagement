@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF8"?>
+<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+
+<jasperReport name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+	<parameter name="headerText" class="java.lang.String"/>
+	<parameter name="MyDate" class="java.util.Date">
+		<defaultValueExpression><![CDATA[new java.util.Date()]]></defaultValueExpression>
+	</parameter>
+	<field name="name" class="java.lang.String">
+		<fieldDescription><![CDATA[name]]></fieldDescription>
+	</field>
+	<field name="bereich.name" class="java.lang.String">
+		<fieldDescription><![CDATA[bereich.name]]></fieldDescription>
+	</field>
+	<field name="anzbetten" class="java.lang.String">
+		<fieldDescription><![CDATA[anzbetten]]></fieldDescription>
+	</field>
+	<background>
+		<band height="2"/>
+	</background>
+	<pageHeader>
+		<band height="102">
+			<staticText>
+				<reportElement x="0" y="4" width="555" height="31"/>
+				<textElement textAlignment="Center">
+					<font size="24"/>
+				</textElement>
+				<text><![CDATA[Internat an der HTBLuVA Pinkafeld
+                ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="35" width="555" height="32"/>
+				<textElement textAlignment="Center">
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[ 7423 Pinkafeld, Steinamanagerstraße 2,  0333 57 / 462 16,
+ 033 57 / 462 74-9,  office@internat-pinkafeld.com
+
+                ]]></text>
+			</staticText>
+			<textField hyperlinkType="None">
+				<reportElement x="113" y="70" width="317" height="28"/>
+				<textElement textAlignment="Center">
+					<font size="18"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$P{headerText}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="31">
+			<staticText>
+				<reportElement x="78" y="4" width="49" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Zimmer
+                ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="225" y="4" width="56" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bereich
+                ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="385" y="4" width="100" height="20"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Betten Anzahl
+                ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="50" y="28" width="448" height="1"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25">
+			<textField hyperlinkType="None">
+				<reportElement x="77" y="3" width="100" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="None">
+				<reportElement x="213" y="4" width="100" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{bereich.name}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true" hyperlinkType="None">
+				<reportElement x="388" y="3" width="85" height="20"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$F{anzbetten}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="38">
+			<textField evaluationTime="Report" hyperlinkType="None">
+				<reportElement x="527" y="9" width="20" height="20"/>
+				<textElement textAlignment="Left">
+					<font fontName="Helvetica" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<textField hyperlinkType="None">
+				<reportElement x="505" y="9" width="22" height="20"/>
+				<textElement textAlignment="Right">
+					<font fontName="Helvetica" size="10"/>
+				</textElement>
+				<textFieldExpression class="java.lang.String"><![CDATA[$V{PAGE_NUMBER}.intValue()+"/"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="22" y="9" width="100" height="20"/>
+				<textElement/>
+				<textFieldExpression class="java.util.Date"><![CDATA[$P{MyDate}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42"/>
+	</summary>
+</jasperReport>
