@@ -1,15 +1,6 @@
 
 package cw.roommanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Posting;
-import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.BewohnerStorno;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,8 +10,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -29,6 +22,15 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRSaver;
+import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.customermanagementmodul.pojo.Customer;
+import cw.roommanagementmodul.pojo.Bewohner;
+import cw.roommanagementmodul.pojo.BewohnerStorno;
 
 /**
  *
@@ -39,8 +41,8 @@ public class PrintStornoPresentationModel{
     private ButtonListenerSupport support;
     private CWHeaderInfo headerInfo;
     private Action backAction;
-    private Map<Bewohner, List<Posting>> bewohnerPostingMap;
-    private Map<Customer, List<Posting>> customerNoBewohnerMap;
+    private Map<Bewohner, List<AccountPosting>> bewohnerPostingMap;
+    private Map<Customer, List<AccountPosting>> customerNoBewohnerMap;
     private List<BewohnerStorno> printDataList;
     private JasperReport jasperReport;
     private JRDataSource ds;
@@ -48,8 +50,8 @@ public class PrintStornoPresentationModel{
     private String reportSource;
     private String printHeader;
 
-    public PrintStornoPresentationModel(Map<Bewohner, List<Posting>> bewohnerPostingMap,
-            Map<Customer, List<Posting>> customerNoBewohnerMap, CWHeaderInfo headerInfo, String printHeader) {
+    public PrintStornoPresentationModel(Map<Bewohner, List<AccountPosting>> bewohnerPostingMap,
+            Map<Customer, List<AccountPosting>> customerNoBewohnerMap, CWHeaderInfo headerInfo, String printHeader) {
 
         this.printHeader=printHeader;
         this.bewohnerPostingMap = bewohnerPostingMap;
@@ -106,7 +108,7 @@ public class PrintStornoPresentationModel{
         printDataList = new ArrayList<BewohnerStorno>();
         List<Bewohner> bewohnerList = getBewohnerSelection();
         List<Customer> customerList = getCustomerSelection();
-        List<Posting> postingList;
+        List<AccountPosting> postingList;
         Bewohner bewohner;
         Customer customer;
 

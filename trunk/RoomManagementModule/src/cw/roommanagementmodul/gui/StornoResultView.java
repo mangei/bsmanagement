@@ -1,22 +1,25 @@
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Posting;
-import cw.boardingschoolmanagement.gui.component.CWButton;
-import cw.roommanagementmodul.pojo.Bewohner;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.text.DecimalFormat;
 import java.util.List;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
+import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.customermanagementmodul.pojo.Customer;
+import cw.roommanagementmodul.pojo.Bewohner;
 
 /**
  *
@@ -97,7 +100,7 @@ public class StornoResultView extends CWView {
         this.getContentPanel().add(scroll);
     }
 
-    public CWView createBewohnerPanel(Bewohner b, List<Posting> postingList) {
+    public CWView createBewohnerPanel(Bewohner b, List<AccountPosting> postingList) {
 
         CWView panel = CWComponentFactory.createView();
         panel.setHeaderInfo(new CWHeaderInfo("" + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + "     Zimmer: " + b.getZimmer().getName() + "     Bereich: " + b.getZimmer().getBereich()));
@@ -170,7 +173,7 @@ public class StornoResultView extends CWView {
         return panel;
     }
 
-    public CWView createKundePanel(Customer c, List<Posting> postingList) {
+    public CWView createKundePanel(Customer c, List<AccountPosting> postingList) {
 
 
         CWView panel = CWComponentFactory.createView();

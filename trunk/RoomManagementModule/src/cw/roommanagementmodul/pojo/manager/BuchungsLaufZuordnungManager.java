@@ -4,15 +4,17 @@
  */
 package cw.roommanagementmodul.pojo.manager;
 
+import java.util.List;
+import java.util.logging.Logger;
+
+import javax.persistence.EntityManager;
+
+import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
-import cw.customermanagementmodul.pojo.Posting;
 import cw.roommanagementmodul.pojo.BuchungsLaufZuordnung;
 import cw.roommanagementmodul.pojo.GebLauf;
 import cw.roommanagementmodul.pojo.Gebuehr;
-import java.util.List;
-import java.util.logging.Logger;
-import javax.persistence.EntityManager;
 
 /**
  *
@@ -45,7 +47,7 @@ public class BuchungsLaufZuordnungManager extends AbstractPOJOManager<BuchungsLa
         return list;
     }
 
-    public BuchungsLaufZuordnung getBuchungsLaufZuordnung(Posting p) {
+    public BuchungsLaufZuordnung getBuchungsLaufZuordnung(AccountPosting p) {
         EntityManager entityManager = HibernateUtil.getEntityManager();
         BuchungsLaufZuordnung blz=null;
         try {

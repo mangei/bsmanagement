@@ -1,5 +1,14 @@
 package cw.roommanagementmodul.app;
 
+import java.awt.event.ActionEvent;
+import java.util.List;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
+
+import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.accountmanagementmodul.pojo.manager.PostingManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CascadeEvent;
 import cw.boardingschoolmanagement.app.CascadeListener;
@@ -8,20 +17,9 @@ import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
 import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Posting;
-import cw.customermanagementmodul.pojo.PostingCategory;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
-import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
-import cw.customermanagementmodul.pojo.manager.PostingManager;
 import cw.roommanagementmodul.gui.BereichPresentationModel;
 import cw.roommanagementmodul.gui.BereichView;
-import java.awt.event.ActionEvent;
-import java.util.List;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JButton;
-import cw.roommanagementmodul.pojo.manager.BewohnerManager;
-import cw.roommanagementmodul.pojo.manager.GebuehrenManager;
 import cw.roommanagementmodul.gui.BewohnerPresentationModel;
 import cw.roommanagementmodul.gui.BewohnerView;
 import cw.roommanagementmodul.gui.GebLaufPresentationModel;
@@ -33,9 +31,11 @@ import cw.roommanagementmodul.pojo.BuchungsLaufZuordnung;
 import cw.roommanagementmodul.pojo.Gebuehr;
 import cw.roommanagementmodul.pojo.GebuehrenKategorie;
 import cw.roommanagementmodul.pojo.manager.BereichManager;
+import cw.roommanagementmodul.pojo.manager.BewohnerManager;
 import cw.roommanagementmodul.pojo.manager.BuchungsLaufZuordnungManager;
 import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
 import cw.roommanagementmodul.pojo.manager.GebuehrenKatManager;
+import cw.roommanagementmodul.pojo.manager.GebuehrenManager;
 
 /**
  * @author Jeitler Dominik
@@ -197,7 +197,7 @@ public class ZimmerModul implements Modul {
         PostingManager.getInstance().addCascadeListener(new CascadeListener() {
 
             public void deleteAction(CascadeEvent evt) {
-                Posting p = (Posting) evt.getSource();
+                AccountPosting p = (AccountPosting) evt.getSource();
                 BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
 
 

@@ -5,13 +5,14 @@
 
 package cw.roommanagementmodul.pojo;
 
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
-import cw.customermanagementmodul.pojo.Posting;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+
+import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 
 /**
  *
@@ -22,16 +23,16 @@ public class BuchungsLaufZuordnung implements AnnotatedClass{
 
     private Long id;
     private GebLauf gebLauf;
-    private Posting posting;
+    private AccountPosting accountPosting;
     private Gebuehr gebuehr;
 
     public BuchungsLaufZuordnung(){
         
     }
 
-    public BuchungsLaufZuordnung(GebLauf gebLauf, Posting posting, Gebuehr gebuehr) {
+    public BuchungsLaufZuordnung(GebLauf gebLauf, AccountPosting accountPosting, Gebuehr gebuehr) {
         this.gebLauf = gebLauf;
-        this.posting = posting;
+        this.accountPosting = accountPosting;
         this.gebuehr = gebuehr;
     }
 
@@ -72,15 +73,15 @@ public class BuchungsLaufZuordnung implements AnnotatedClass{
      * @return the account
      */
     @ManyToOne
-    public Posting getPosting() {
-        return posting;
+    public AccountPosting getPosting() {
+        return accountPosting;
     }
 
     /**
      * @param account the account to set
      */
-    public void setPosting(Posting posting) {
-        this.posting = posting;
+    public void setPosting(AccountPosting accountPosting) {
+        this.accountPosting = accountPosting;
     }
 
     /**

@@ -1,7 +1,27 @@
 package cw.roommanagementmodul.gui;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JOptionPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
+import javax.swing.text.PlainDocument;
+
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.list.SelectionInList;
+
+import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.accountmanagementmodul.pojo.manager.PostingManager;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
@@ -9,33 +29,14 @@ import cw.boardingschoolmanagement.app.CalendarUtil;
 import cw.boardingschoolmanagement.gui.component.CWIntegerTextField;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.customermanagementmodul.pojo.Posting;
-import cw.customermanagementmodul.pojo.PostingCategory;
-import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
-import cw.customermanagementmodul.pojo.manager.PostingManager;
-import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
-import java.awt.event.ActionEvent;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.Document;
-import javax.swing.text.PlainDocument;
 import cw.roommanagementmodul.app.GebLaufSelection;
+import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
 import cw.roommanagementmodul.geblauf.GebTarifSelection;
-import cw.roommanagementmodul.pojo.manager.BuchungsLaufZuordnungManager;
-import cw.roommanagementmodul.pojo.manager.GebLaufManager;
 import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.BuchungsLaufZuordnung;
 import cw.roommanagementmodul.pojo.GebLauf;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import javax.swing.JOptionPane;
+import cw.roommanagementmodul.pojo.manager.BuchungsLaufZuordnungManager;
+import cw.roommanagementmodul.pojo.manager.GebLaufManager;
 
 /**
  *
@@ -232,12 +233,12 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                 BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
                 List<BuchungsLaufZuordnung> blzList = blzManager.getBuchungsLaufZuordnung(stornoGebLauf);
 
-                List<Posting> newPostingList = new ArrayList<Posting>();
+                List<AccountPosting> newPostingList = new ArrayList<AccountPosting>();
 
                 for (int i = 0; i < blzList.size(); i++) {
 
-                    Posting oldPosting = blzList.get(i).getPosting();
-                    Posting newPosting = new Posting();
+                    AccountPosting oldPosting = blzList.get(i).getPosting();
+                    AccountPosting newPosting = new AccountPosting();
 
                     newPosting.setCustomer(oldPosting.getCustomer());
                     newPosting.setDescription("Storno " + oldPosting.getDescription());
@@ -371,19 +372,19 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
                         if (!gebTarifSelection.get(j).isWarning()) {
                             BuchungsLaufZuordnung blz = new BuchungsLaufZuordnung();
-                            Posting posting = new Posting();
+                            AccountPosting accountPosting = new AccountPosting();
                             PostingCategory category = PostingCategoryManager.getInstance().get("zimmer");
 
-                            posting.setCustomer(bewList.get(i).getCustomer());
-                            posting.setPostingDate(gebLauf.getCpuDate());
-                            posting.setPostingEntryDate(new Date(gebLauf.getAbrMonat()));
-                            posting.setAmount(gebTarifSelection.get(j).getTarif().getTarif());
-                            posting.setLiabilities(true);
-                            posting.setDescription(gebTarifSelection.get(j).getGebuehr().getGebuehr().getName());
-                            posting.setPostingCategory(category);
+                            accountPosting.setCustomer(bewList.get(i).getCustomer());
+                            accountPosting.setPostingDate(gebLauf.getCpuDate());
+                            accountPosting.setPostingEntryDate(new Date(gebLauf.getAbrMonat()));
+                            accountPosting.setAmount(gebTarifSelection.get(j).getTarif().getTarif());
+                            accountPosting.setLiabilities(true);
+                            accountPosting.setDescription(gebTarifSelection.get(j).getGebuehr().getGebuehr().getName());
+                            accountPosting.setPostingCategory(category);
 
-                            postingManager.save(posting);
-                            blz.setPosting(posting);
+                            postingManager.save(accountPosting);
+                            blz.setPosting(accountPosting);
                             blz.setGebLauf(gebLauf);
                             blz.setGebuehr(gebTarifSelection.get(j).getGebuehr().getGebuehr());
                             blzManager.save(blz);
