@@ -5,11 +5,14 @@
 
 package cw.coursemanagementmodul.gui.model;
 
-import com.jgoodies.binding.list.SelectionInList;
-import cw.customermanagementmodul.pojo.Customer;
 import java.util.List;
+
 import javax.swing.ComboBoxModel;
 import javax.swing.event.ListDataListener;
+
+import com.jgoodies.binding.list.SelectionInList;
+
+import cw.customermanagementmodul.pojo.Customer;
 
 /**
  *

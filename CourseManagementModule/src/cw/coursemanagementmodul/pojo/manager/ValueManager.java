@@ -6,10 +6,11 @@
 package cw.coursemanagementmodul.pojo.manager;
 
 import com.jgoodies.binding.list.SelectionInList;
+
 import cw.coursemanagementmodul.pojo.Course;
 import cw.coursemanagementmodul.pojo.CourseAddition;
-import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
+import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.customermanagementmodul.pojo.Customer;
 
 /**

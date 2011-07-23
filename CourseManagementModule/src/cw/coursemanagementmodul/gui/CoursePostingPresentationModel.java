@@ -1,37 +1,38 @@
 package cw.coursemanagementmodul.gui;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
+import javax.swing.table.TableModel;
+
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+
+import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.accountmanagementmodul.pojo.manager.PostingManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.List;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ListModel;
-import javax.swing.table.TableModel;
-import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.Course;
 import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
+import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.PostingRun;
-import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
 import cw.coursemanagementmodul.pojo.manager.CourseManager;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
+import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
 import cw.coursemanagementmodul.pojo.manager.PostingRunManager;
-import cw.customermanagementmodul.pojo.Posting;
-import cw.customermanagementmodul.pojo.PostingCategory;
-import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
-import cw.customermanagementmodul.pojo.manager.PostingManager;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import javax.swing.JOptionPane;
 
 /**
  *
@@ -53,7 +54,7 @@ public class CoursePostingPresentationModel
     private SelectionInList<Course> courseSelection;
     //**********************************************
 
-    private PresentationModel<Posting> postingPresentationModel;
+    private PresentationModel<AccountPosting> postingPresentationModel;
 
     private CWHeaderInfo headerInfo;
 
@@ -94,7 +95,7 @@ public class CoursePostingPresentationModel
 
         courseSelection.addValueChangeListener(intervallHandler = new IntervallHandler());
 
-        postingPresentationModel = new PresentationModel<Posting>(getBufferedModel(CoursePosting.PROPERTYNAME_POSTING));
+        postingPresentationModel = new PresentationModel<AccountPosting>(getBufferedModel(CoursePosting.PROPERTYNAME_POSTING));
 
         //----------------------------------------------------------------------
         nameVM = new ValueHolder();
@@ -344,17 +345,17 @@ public class CoursePostingPresentationModel
             for(int j = 0; j < coursePartSelection.getList().get(i).getCourseList().size(); j++){
                 if(coursePartSelection.getList().get(i).getCourseList().get(j).getCourse().getId()
                         == selectedCourse.getId()){
-                    Posting posting = new Posting();
-                    posting.setAmount(getPrice(coursePartSelection.getList().get(i).getCourseList().get(j)));
-                    posting.setCustomer(coursePartSelection.getList().get(i).getCustomer());
-                    posting.setDescription(coursePartSelection.getList().get(i).getCourseList().get(j).getCourse().getName());
-                    posting.setPostingDate(new Date());
-                    posting.setLiabilitiesAssets(true);
-                    posting.setPostingCategory(cat);
-                    PostingManager.getInstance().save(posting);
+                    AccountPosting accountPosting = new AccountPosting();
+                    accountPosting.setAmount(getPrice(coursePartSelection.getList().get(i).getCourseList().get(j)));
+                    accountPosting.setCustomer(coursePartSelection.getList().get(i).getCustomer());
+                    accountPosting.setDescription(coursePartSelection.getList().get(i).getCourseList().get(j).getCourse().getName());
+                    accountPosting.setPostingDate(new Date());
+                    accountPosting.setLiabilitiesAssets(true);
+                    accountPosting.setPostingCategory(cat);
+                    PostingManager.getInstance().save(accountPosting);
 
                     CoursePosting coursePosting = new CoursePosting();
-                    coursePosting.setPosting(posting);
+                    coursePosting.setPosting(accountPosting);
                     coursePosting.setCourseAddition(coursePartSelection.getList().get(i).getCourseList().get(j));
                     CoursePostingManager.getInstance().save(coursePosting);
 
@@ -401,7 +402,7 @@ public class CoursePostingPresentationModel
         triggerFlush();
     }
 
-    public PresentationModel<Posting> getPostingPresentationModel() {
+    public PresentationModel<AccountPosting> getPostingPresentationModel() {
         return postingPresentationModel;
     }
     

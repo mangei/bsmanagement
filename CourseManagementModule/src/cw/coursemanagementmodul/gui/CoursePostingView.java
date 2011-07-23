@@ -1,21 +1,5 @@
 package cw.coursemanagementmodul.gui;
 
-import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.CWButton;
-import cw.boardingschoolmanagement.gui.component.CWButtonGroup;
-import cw.boardingschoolmanagement.gui.component.CWComboBox;
-import cw.boardingschoolmanagement.gui.component.CWDateChooser;
-import cw.boardingschoolmanagement.gui.component.CWLabel;
-import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.boardingschoolmanagement.gui.component.CWRadioButton;
-import cw.boardingschoolmanagement.gui.component.CWTable;
-import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
-import cw.customermanagementmodul.pojo.Posting;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.beans.PropertyChangeEvent;
@@ -24,9 +8,29 @@ import java.text.DateFormat;
 import java.text.Format;
 import java.text.NumberFormat;
 import java.util.Date;
+
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+
 import org.jdesktop.swingx.decorator.HighlighterFactory;
+
+import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
+import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWButtonGroup;
+import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWDateChooser;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.boardingschoolmanagement.gui.component.CWRadioButton;
+import cw.boardingschoolmanagement.gui.component.CWTable;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 /**
  *
  * @author André Salmhofer
@@ -111,7 +115,7 @@ public class CoursePostingView extends CWView
 
         accountingButton = CWComponentFactory.createButton(model.getPostingAction());
 
-        accountingDate = CWComponentFactory.createDateChooser(model.getPostingPresentationModel().getBufferedModel(Posting.PROPERTYNAME_POSTINGDATE));
+        accountingDate = CWComponentFactory.createDateChooser(model.getPostingPresentationModel().getBufferedModel(AccountPosting.PROPERTYNAME_POSTINGDATE));
 
         accountingDateLabel = CWComponentFactory.createLabel("Buchungsdatum:");
 

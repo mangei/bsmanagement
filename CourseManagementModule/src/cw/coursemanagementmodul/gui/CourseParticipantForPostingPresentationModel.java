@@ -4,30 +4,31 @@
  */
 package cw.coursemanagementmodul.gui;
 
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ListModel;
+
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+
+import cw.accountmanagementmodul.gui.EditPostingPresentationModel;
+import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.List;
-import javax.swing.ListModel;
 import cw.coursemanagementmodul.pojo.Activity;
 import cw.coursemanagementmodul.pojo.Course;
-import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
+import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.Subject;
-import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
-import cw.customermanagementmodul.gui.EditPostingPresentationModel;
-import cw.customermanagementmodul.pojo.Posting;
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
 
 /**
  *
@@ -48,7 +49,7 @@ public class CourseParticipantForPostingPresentationModel
 
     private ButtonListenerSupport support;
 
-    private Posting posting;
+    private AccountPosting accountPosting;
     private SelectionInList<CoursePosting> coursePostingList;
 
     private EditPostingPresentationModel postingModel;
@@ -74,8 +75,8 @@ public class CourseParticipantForPostingPresentationModel
     //Initialisieren der Objekte
     //**************************************************************************
     public void initModels() {
-        posting = new Posting();
-        posting.setCustomer(coursePart.getCustomer());
+        accountPosting = new AccountPosting();
+        accountPosting.setCustomer(coursePart.getCustomer());
 
         support = new ButtonListenerSupport();
 
@@ -321,7 +322,7 @@ public class CourseParticipantForPostingPresentationModel
     }
     
     private void setVoreinstellungen(){
-        postingModel.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).setValue("Buchung für "
+        postingModel.getBufferedModel(AccountPosting.PROPERTYNAME_DESCRIPTION).setValue("Buchung für "
                 + courseAdditionSelection.getSelection().getCourse().getName());
     }
 

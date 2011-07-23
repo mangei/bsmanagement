@@ -1,14 +1,29 @@
 package cw.coursemanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Date;
+import java.util.List;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
+
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+
+import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.accountmanagementmodul.pojo.manager.PostingManager;
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.coursemanagementmodul.pojo.Activity;
 import cw.coursemanagementmodul.pojo.CourseAddition;
@@ -16,20 +31,6 @@ import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.Subject;
 import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.Date;
-import java.util.List;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.JOptionPane;
-import cw.customermanagementmodul.pojo.Posting;
-import cw.customermanagementmodul.pojo.PostingCategory;
-import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
-import cw.customermanagementmodul.pojo.manager.PostingManager;
-import javax.swing.ListModel;
 
 /**
  *
@@ -72,9 +73,9 @@ public class EditCourseHabenPostingPresentationModel {
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/posting.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/posting.png"));
 
-        Posting posting = new Posting();
-        posting.setCustomer(coursePart.getCustomer());
-        postingModel = new PresentationModel<Posting>(posting);
+        AccountPosting accountPosting = new AccountPosting();
+        accountPosting.setCustomer(coursePart.getCustomer());
+        postingModel = new PresentationModel<AccountPosting>(accountPosting);
 
         saveButtonAction = new SaveAction("Buchen", CWUtils.loadIcon("cw/customermanagementmodul/images/posting.png"));
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
@@ -82,13 +83,13 @@ public class EditCourseHabenPostingPresentationModel {
         List<PostingCategory> postingCategories = PostingCategoryManager.getInstance().getAll();
         postingCategories.add(0, null);
         postingCategorySelection = new SelectionInList<PostingCategory>(postingCategories);
-        postingCategorySelection.setSelection(((Posting)postingModel.getBean()).getPostingCategory());
+        postingCategorySelection.setSelection(((AccountPosting)postingModel.getBean()).getPostingCategory());
 
         //Setzen der Voreinstellungen
-        postingModel.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).setValue(courseAddition.getCourse().getName() + " für "
+        postingModel.getBufferedModel(AccountPosting.PROPERTYNAME_DESCRIPTION).setValue(courseAddition.getCourse().getName() + " für "
                 + coursePart.getCustomer().getForename() + " "
                 + coursePart.getCustomer().getSurname());
-        postingModel.setBufferedValue(Posting.PROPERTYNAME_AMOUNT, courseAddition.getCourse().getPrice()
+        postingModel.setBufferedValue(AccountPosting.PROPERTYNAME_AMOUNT, courseAddition.getCourse().getPrice()
                 + getActivitiesAmount(courseAddition));
         //****************************
 
@@ -96,11 +97,11 @@ public class EditCourseHabenPostingPresentationModel {
     }
     
     public void initEventHandling() {
-        postingModel.getBufferedModel(Posting.PROPERTYNAME_AMOUNT).addValueChangeListener(new SaveListener());
-        postingModel.getBufferedModel(Posting.PROPERTYNAME_CATEGORY).addValueChangeListener(new SaveListener());
-        postingModel.getBufferedModel(Posting.PROPERTYNAME_CUSTOMER).addValueChangeListener(new SaveListener());
-        postingModel.getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(new SaveListener());
-        postingModel.getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(new SaveListener());
+        postingModel.getBufferedModel(AccountPosting.PROPERTYNAME_AMOUNT).addValueChangeListener(new SaveListener());
+        postingModel.getBufferedModel(AccountPosting.PROPERTYNAME_CATEGORY).addValueChangeListener(new SaveListener());
+        postingModel.getBufferedModel(AccountPosting.PROPERTYNAME_CUSTOMER).addValueChangeListener(new SaveListener());
+        postingModel.getBufferedModel(AccountPosting.PROPERTYNAME_DESCRIPTION).addValueChangeListener(new SaveListener());
+        postingModel.getBufferedModel(AccountPosting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(new SaveListener());
 
 
         unsaved.addValueChangeListener(selectionHandler = new SelectionHandler());
@@ -196,13 +197,13 @@ public class EditCourseHabenPostingPresentationModel {
     public void save() {
         PostingCategory cat = PostingCategoryManager.getInstance().get("Kurs-Buchung");
         
-        postingModel.getBufferedModel(Posting.PROPERTYNAME_POSTINGDATE).setValue(new Date());
-        postingModel.getBufferedModel(Posting.PROPERTYNAME_CATEGORY).setValue(cat);
+        postingModel.getBufferedModel(AccountPosting.PROPERTYNAME_POSTINGDATE).setValue(new Date());
+        postingModel.getBufferedModel(AccountPosting.PROPERTYNAME_CATEGORY).setValue(cat);
         postingModel.triggerCommit();
-        PostingManager.getInstance().save(((Posting)postingModel.getBean()));
+        PostingManager.getInstance().save(((AccountPosting)postingModel.getBean()));
         
         CoursePosting coursePosting = new CoursePosting();
-        coursePosting.setPosting(((Posting)postingModel.getBean()));
+        coursePosting.setPosting(((AccountPosting)postingModel.getBean()));
         coursePosting.setCourseAddition(courseAddition);
 
         CoursePostingManager.getInstance().save(coursePosting);

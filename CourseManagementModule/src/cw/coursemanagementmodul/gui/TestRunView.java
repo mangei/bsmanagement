@@ -1,15 +1,18 @@
 package cw.coursemanagementmodul.gui;
 
+import java.text.DecimalFormat;
+
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.coursemanagementmodul.pojo.CourseAddition;
-import java.text.DecimalFormat;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 /**
  *

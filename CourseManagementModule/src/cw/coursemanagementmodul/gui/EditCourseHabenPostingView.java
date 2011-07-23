@@ -1,21 +1,24 @@
 package cw.coursemanagementmodul.gui;
 
+import java.awt.Font;
+
+import javax.swing.JScrollPane;
+
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.CWDateChooser;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.customermanagementmodul.pojo.Posting;
-import java.awt.Font;
-import javax.swing.JScrollPane;
 
 /**
  *
@@ -51,9 +54,9 @@ public class EditCourseHabenPostingView extends CWView
     }
 
     private void initComponents() {
-        tfDescription           = CWComponentFactory.createTextField(model.getPostingModel().getBufferedModel(Posting.PROPERTYNAME_DESCRIPTION),false);
-        tfValue                 = CWComponentFactory.createCurrencyTextField(model.getPostingModel().getBufferedModel(Posting.PROPERTYNAME_AMOUNT));
-        dcPostingEntryDate      = CWComponentFactory.createDateChooser(model.getPostingModel().getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE));
+        tfDescription           = CWComponentFactory.createTextField(model.getPostingModel().getBufferedModel(AccountPosting.PROPERTYNAME_DESCRIPTION),false);
+        tfValue                 = CWComponentFactory.createCurrencyTextField(model.getPostingModel().getBufferedModel(AccountPosting.PROPERTYNAME_AMOUNT));
+        dcPostingEntryDate      = CWComponentFactory.createDateChooser(model.getPostingModel().getBufferedModel(AccountPosting.PROPERTYNAME_POSTINGENTRYDATE));
 
         tfValue.setEditable(false);
 

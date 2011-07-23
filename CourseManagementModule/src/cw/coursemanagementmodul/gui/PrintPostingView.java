@@ -1,9 +1,9 @@
 package cw.coursemanagementmodul.gui;
 
+import net.sf.jasperreports.view.JRViewer;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import net.sf.jasperreports.view.JRViewer;
 
 /**
  *
