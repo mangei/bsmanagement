@@ -7,8 +7,10 @@ package cw.coursemanagementmodul.gui.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
+
 import cw.coursemanagementmodul.pojo.Course;
 
 /**

@@ -1,14 +1,14 @@
 package cw.coursemanagementmodul.extention;
 
-import cw.coursemanagementmodul.pojo.CoursePosting;
-import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
-import cw.customermanagementmodul.extention.point.EditReversePostingPostingCategoryExtentionPoint;
-import cw.customermanagementmodul.gui.EditReversePostingPresentationModel;
-import cw.customermanagementmodul.pojo.Posting;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JComponent;
 import javax.swing.JLabel;
+
+import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.coursemanagementmodul.pojo.CoursePosting;
+import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
 
 /**
  *
@@ -19,7 +19,7 @@ public class CoursePostingEditReversePostingPostingCategoryExtention implements 
     private CoursePosting coursePosting;
     public void initPresentationModel(EditReversePostingPresentationModel editReversePostingModel) {
         reversePostingModel = editReversePostingModel;
-        Posting p = reversePostingModel.getPostingPresentationModel().getBean();
+        AccountPosting p = reversePostingModel.getPostingPresentationModel().getBean();
         if(p.isBalancePosting()) {
             p = p.getPreviousPosting();
         }

@@ -1,7 +1,22 @@
 package cw.coursemanagementmodul.gui;
 
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
+
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
+
+import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.accountmanagementmodul.pojo.manager.PostingManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
@@ -13,20 +28,6 @@ import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
 import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
 import cw.coursemanagementmodul.pojo.manager.PostingRunManager;
 import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Posting;
-import cw.customermanagementmodul.pojo.PostingCategory;
-import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
-import cw.customermanagementmodul.pojo.manager.PostingManager;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JOptionPane;
-import javax.swing.ListModel;
 
 /**
  *
@@ -253,29 +254,29 @@ public class PostingRunsPresentationModel
         }
         else{
             for(int i = 0; i < postingRunList.getSelection().getCoursePostings().size(); i++){
-                Posting old = postingRunList.getSelection().getCoursePostings().get(i).getPosting();
-                Posting posting = new Posting();
+                AccountPosting old = postingRunList.getSelection().getCoursePostings().get(i).getPosting();
+                AccountPosting accountPosting = new AccountPosting();
 
-                posting.setAmount(0-old.getAmount());//Gegenteil
-                posting.setAssets(old.isAssets());
-                posting.setCustomer(old.getCustomer());
-                posting.setDescription(old.getDescription() + " STORNO");
-                posting.setLiabilities(old.isLiabilities());
-                posting.setLiabilitiesAssets(old.isLiabilitiesAssets());
-                posting.setPostingCategory(old.getPostingCategory());
-                posting.setPostingDate(old.getPostingDate());
-                posting.setPostingEntryDate(old.getPostingEntryDate());
-                posting.setPostingCategory(cat);
+                accountPosting.setAmount(0-old.getAmount());//Gegenteil
+                accountPosting.setAssets(old.isAssets());
+                accountPosting.setCustomer(old.getCustomer());
+                accountPosting.setDescription(old.getDescription() + " STORNO");
+                accountPosting.setLiabilities(old.isLiabilities());
+                accountPosting.setLiabilitiesAssets(old.isLiabilitiesAssets());
+                accountPosting.setPostingCategory(old.getPostingCategory());
+                accountPosting.setPostingDate(old.getPostingDate());
+                accountPosting.setPostingEntryDate(old.getPostingEntryDate());
+                accountPosting.setPostingCategory(cat);
 
                 CoursePosting coursePosting = new CoursePosting();
-                coursePosting.setPosting(posting);
+                coursePosting.setPosting(accountPosting);
 
                 CourseAddition courseAddition = postingRunList.getSelection().
                         getCoursePostings().get(i).getCourseAddition();
                 courseAddition.setPosted(false);
                 coursePosting.setCourseAddition(courseAddition);
                 
-                pM.save(posting);
+                pM.save(accountPosting);
                 cM.save(coursePosting);
             }
             postingRunList.getSelection().setAlreadyStorniert(true);

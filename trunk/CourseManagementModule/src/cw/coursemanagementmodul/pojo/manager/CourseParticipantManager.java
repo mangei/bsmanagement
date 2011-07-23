@@ -1,5 +1,10 @@
 package cw.coursemanagementmodul.pojo.manager;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.persistence.NoResultException;
+
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import cw.coursemanagementmodul.pojo.Activity;
@@ -8,9 +13,6 @@ import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.Subject;
 import cw.customermanagementmodul.pojo.Customer;
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.NoResultException;
 
 /**
  *

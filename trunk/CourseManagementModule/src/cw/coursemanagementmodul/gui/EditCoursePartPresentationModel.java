@@ -1,26 +1,31 @@
 package cw.coursemanagementmodul.gui;
 
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JOptionPane;
+import javax.swing.ListModel;
+import javax.swing.event.ListDataEvent;
+import javax.swing.event.ListDataListener;
+
 import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.List;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ListModel;
-import javax.swing.event.ListDataEvent;
-import javax.swing.event.ListDataListener;
 import cw.coursemanagementmodul.pojo.Activity;
 import cw.coursemanagementmodul.pojo.Course;
 import cw.coursemanagementmodul.pojo.CourseAddition;
@@ -32,8 +37,6 @@ import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
 import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
 import cw.coursemanagementmodul.pojo.manager.ValueManager;
 import cw.customermanagementmodul.pojo.Customer;
-import java.text.DecimalFormat;
-import javax.swing.JOptionPane;
 
 /**
  *

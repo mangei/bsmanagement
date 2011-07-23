@@ -1,5 +1,11 @@
 package cw.coursemanagementmodul.app;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
+
+import javax.swing.JButton;
+
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CascadeEvent;
 import cw.boardingschoolmanagement.app.CascadeListener;
@@ -7,27 +13,21 @@ import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-import javax.swing.JButton;
 import cw.coursemanagementmodul.gui.ActivityPresentationModel;
 import cw.coursemanagementmodul.gui.ActivityView;
-import cw.coursemanagementmodul.gui.HistoryPresentationModel;
-import cw.coursemanagementmodul.gui.HistoryView;
 import cw.coursemanagementmodul.gui.CoursePostingPresentationModel;
 import cw.coursemanagementmodul.gui.CoursePostingView;
 import cw.coursemanagementmodul.gui.CoursePresentationModel;
 import cw.coursemanagementmodul.gui.CourseView;
+import cw.coursemanagementmodul.gui.HistoryPresentationModel;
+import cw.coursemanagementmodul.gui.HistoryView;
 import cw.coursemanagementmodul.gui.SubjectPresentationModel;
 import cw.coursemanagementmodul.gui.SubjectView;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
 import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.PostingCategory;
 import cw.customermanagementmodul.pojo.manager.CustomerManager;
-import cw.customermanagementmodul.pojo.manager.PostingCategoryManager;
 /**
  *
  * @author André Salmhofer (CreativeWorkers)

@@ -1,16 +1,19 @@
 package cw.coursemanagementmodul.gui;
 
+import java.awt.Dimension;
+
+import javax.swing.JScrollPane;
+
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+
 import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
-import java.awt.Dimension;
-import javax.swing.JScrollPane;
 
 /**
  *

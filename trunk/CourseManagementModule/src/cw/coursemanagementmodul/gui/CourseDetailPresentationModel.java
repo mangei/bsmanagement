@@ -1,20 +1,23 @@
 package cw.coursemanagementmodul.gui;
 
-import com.jgoodies.binding.adapter.AbstractTableAdapter;
-import com.jgoodies.binding.list.SelectionInList;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
+import java.text.DecimalFormat;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ListModel;
 import javax.swing.table.TableModel;
+
+import com.jgoodies.binding.adapter.AbstractTableAdapter;
+import com.jgoodies.binding.list.SelectionInList;
+
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.coursemanagementmodul.pojo.Course;
 import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
-import java.text.DecimalFormat;
 
 /**
  *
