@@ -1,8 +1,9 @@
 package cw.roommanagementmodul.pojo;
 
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Posting;
 import java.util.List;
+
+import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.customermanagementmodul.pojo.Customer;
 
 /**
  *
@@ -13,19 +14,19 @@ public class BewohnerStorno {
     private Long id;
     private Customer customer;
     private Zimmer zimmer;
-    private List<Posting> postingList;
+    private List<AccountPosting> postingList;
 
     public BewohnerStorno() {
     }
 
-    public BewohnerStorno(Long id, Customer customer, Zimmer zimmer, List<Posting> postingList) {
+    public BewohnerStorno(Long id, Customer customer, Zimmer zimmer, List<AccountPosting> postingList) {
         this.id = id;
         this.customer = customer;
         this.zimmer = zimmer;
         this.postingList = postingList;
     }
 
-    public BewohnerStorno(Customer customer, Zimmer zimmer, List<Posting> postingList) {
+    public BewohnerStorno(Customer customer, Zimmer zimmer, List<AccountPosting> postingList) {
         this.customer = customer;
         this.zimmer = zimmer;
         this.postingList = postingList;
@@ -78,14 +79,14 @@ public class BewohnerStorno {
     /**
      * @return the postingList
      */
-    public List<Posting> getPostingList() {
+    public List<AccountPosting> getPostingList() {
         return postingList;
     }
 
     /**
      * @param postingList the postingList to set
      */
-    public void setPostingList(List<Posting> postingList) {
+    public void setPostingList(List<AccountPosting> postingList) {
         this.postingList = postingList;
     }
 

@@ -1,15 +1,5 @@
 package cw.roommanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Posting;
-import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.manager.BewohnerManager;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,8 +7,20 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+
+import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.customermanagementmodul.pojo.Customer;
+import cw.roommanagementmodul.pojo.Bewohner;
+import cw.roommanagementmodul.pojo.manager.BewohnerManager;
 
 /**
  *
@@ -30,13 +32,13 @@ public class StornoResultPresentationModel {
     private Action backAction;
     private Action printAction;
     private ButtonListenerSupport support;
-    private List<Posting> postingList;
-    private Map<Customer, List<Posting>> customerPostingMap;
-    private Map<Bewohner, List<Posting>> bewohnerPostingMap;
-    private Map<Customer, List<Posting>> customerNoBewohnerMap;
+    private List<AccountPosting> postingList;
+    private Map<Customer, List<AccountPosting>> customerPostingMap;
+    private Map<Bewohner, List<AccountPosting>> bewohnerPostingMap;
+    private Map<Customer, List<AccountPosting>> customerNoBewohnerMap;
     private CWHeaderInfo headerInfo;
 
-    public StornoResultPresentationModel(List<Posting> postingList, CWHeaderInfo header) {
+    public StornoResultPresentationModel(List<AccountPosting> postingList, CWHeaderInfo header) {
         this.postingList = postingList;
         this.headerInfo = header;
         initModels();
@@ -48,9 +50,9 @@ public class StornoResultPresentationModel {
         backAction = new BackAction();
         printAction = new PrintAction();
 
-        customerPostingMap = new HashMap<Customer, List<Posting>>();
-        customerNoBewohnerMap = new HashMap<Customer, List<Posting>>();
-        setBewohnerPostingMap(new HashMap<Bewohner, List<Posting>>());
+        customerPostingMap = new HashMap<Customer, List<AccountPosting>>();
+        customerNoBewohnerMap = new HashMap<Customer, List<AccountPosting>>();
+        setBewohnerPostingMap(new HashMap<Bewohner, List<AccountPosting>>());
 
         List<Customer> cList = new ArrayList<Customer>();
         for (int i = 0; i < postingList.size(); i++) {
@@ -63,7 +65,7 @@ public class StornoResultPresentationModel {
         for (int i = 0; i < cList.size(); i++) {
 
             Customer c = cList.get(i);
-            List<Posting> pList = new ArrayList<Posting>();
+            List<AccountPosting> pList = new ArrayList<AccountPosting>();
             for (int j = 0; j < postingList.size(); j++) {
 
                 if (c.equals(postingList.get(j).getCustomer())) {
@@ -134,42 +136,42 @@ public class StornoResultPresentationModel {
     /**
      * @return the postingList
      */
-    public List<Posting> getPostingList() {
+    public List<AccountPosting> getPostingList() {
         return postingList;
     }
 
     /**
      * @param postingList the postingList to set
      */
-    public void setPostingList(List<Posting> postingList) {
+    public void setPostingList(List<AccountPosting> postingList) {
         this.postingList = postingList;
     }
 
     /**
      * @return the bewohnerPostingMap
      */
-    public Map<Bewohner, List<Posting>> getBewohnerPostingMap() {
+    public Map<Bewohner, List<AccountPosting>> getBewohnerPostingMap() {
         return bewohnerPostingMap;
     }
 
     /**
      * @param bewohnerPostingMap the bewohnerPostingMap to set
      */
-    public void setBewohnerPostingMap(Map<Bewohner, List<Posting>> bewohnerPostingMap) {
+    public void setBewohnerPostingMap(Map<Bewohner, List<AccountPosting>> bewohnerPostingMap) {
         this.bewohnerPostingMap = bewohnerPostingMap;
     }
 
     /**
      * @return the customerNoBewohnerMap
      */
-    public Map<Customer, List<Posting>> getCustomerNoBewohnerMap() {
+    public Map<Customer, List<AccountPosting>> getCustomerNoBewohnerMap() {
         return customerNoBewohnerMap;
     }
 
     /**
      * @param customerNoBewohnerMap the customerNoBewohnerMap to set
      */
-    public void setCustomerNoBewohnerMap(Map<Customer, List<Posting>> customerNoBewohnerMap) {
+    public void setCustomerNoBewohnerMap(Map<Customer, List<AccountPosting>> customerNoBewohnerMap) {
         this.customerNoBewohnerMap = customerNoBewohnerMap;
     }
 
