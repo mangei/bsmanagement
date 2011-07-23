@@ -26,7 +26,7 @@ public class InvoiceItem
     private String          description     = "";
     private int             units           = 0;
     private double          pricePerUnit    = 0.0;
-    private Posting         posting         = null;
+    private AccountPosting         accountPosting         = null;
     private Date            creationDate    = new Date();
     
 
@@ -108,12 +108,12 @@ public class InvoiceItem
     }
 
     @OneToOne
-    public Posting getPosting() {
-        return posting;
+    public AccountPosting getPosting() {
+        return accountPosting;
     }
 
-    public void setPosting(Posting posting) {
-        this.posting = posting;
+    public void setPosting(AccountPosting accountPosting) {
+        this.accountPosting = accountPosting;
     }
 
     public double getPricePerUnit() {

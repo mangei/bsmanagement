@@ -1,6 +1,6 @@
 package cw.accountmanagementmodul.gui.model;
 
-import cw.accountmanagementmodul.pojo.AbstractPosting;
+import cw.accountmanagementmodul.pojo.Posting;
 import cw.accountmanagementmodul.pojo.PostingGroup;
 import java.util.Date;
 import org.jdesktop.swingx.treetable.AbstractTreeTableModel;
@@ -17,13 +17,13 @@ public class PostingTreeTableModel
     public static final int COLUMN_CREATIONDATE = 1;
     public static final int COLUMN_AMOUNT = 2;
 
-    protected AbstractPosting postings;
+    protected Posting postings;
 
     /**
      * Creates and fills up the TreeTableModel
      * @param postings An implementation of an AbstractPosting, usually a PostingGroup
      */
-    public PostingTreeTableModel(AbstractPosting postings) {
+    public PostingTreeTableModel(Posting postings) {
         super(postings);
     }
 
@@ -60,11 +60,11 @@ public class PostingTreeTableModel
     public Object getValueAt(Object node, int column) {
         switch(column) {
             case COLUMN_NAME:
-                return ((AbstractPosting) node).getName();
+                return ((Posting) node).getName();
             case COLUMN_AMOUNT:
-                return ((AbstractPosting) node).getAmount();
+                return ((Posting) node).getAmount();
             case COLUMN_CREATIONDATE:
-                return ((AbstractPosting) node).getCreationDate();
+                return ((Posting) node).getCreationDate();
         }
         return "";
     }

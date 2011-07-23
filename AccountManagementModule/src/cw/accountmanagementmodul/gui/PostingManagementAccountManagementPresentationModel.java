@@ -8,7 +8,7 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import cw.accountmanagementmodul.comparator.AbstractPostingDateComparator;
 import cw.accountmanagementmodul.gui.model.PostingTreeTableModel;
-import cw.accountmanagementmodul.pojo.AbstractPosting;
+import cw.accountmanagementmodul.pojo.Posting;
 import cw.accountmanagementmodul.pojo.Account;
 import cw.boardingschoolmanagement.app.CalendarUtil;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
@@ -23,7 +23,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.SwingUtilities;
 import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.accountmanagementmodul.pojo.Posting;
+import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.accountmanagementmodul.pojo.PostingGroup;
 import cw.accountmanagementmodul.pojo.manager.AbstractPostingManager;
 import cw.accountmanagementmodul.pojo.manager.PostingGroupManager;
@@ -50,7 +50,7 @@ public class PostingManagementAccountManagementPresentationModel {
     private Action reversePostingAction;
     private Action balancePostingAction;
 //    private Action deleteAction;
-    private SelectionInList<AbstractPosting> postingSelection;
+    private SelectionInList<Posting> postingSelection;
     private ValueModel filterActive;
     private ValueModel saldoValue;
     private ValueModel totalSaldoValue;
@@ -79,7 +79,7 @@ public class PostingManagementAccountManagementPresentationModel {
         balancePostingAction = new BalancePostingAction("Ausgleichen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_go.png"));
 //        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_delete.png"));
 
-        postingSelection = new SelectionInList<AbstractPosting>();
+        postingSelection = new SelectionInList<Posting>();
         loadPostings();
 
         headerInfo = new CWHeaderInfo(
@@ -134,17 +134,17 @@ public class PostingManagementAccountManagementPresentationModel {
     }
 
     private void loadPostings() {
-        List<Posting> postings = PostingManager.getInstance().getAll(account);
+        List<AccountPosting> accountPostings = PostingManager.getInstance().getAll(account);
         List<PostingGroup> postingGroups = PostingGroupManager.getInstance().getAll();
         System.out.println("Gruppen: " + postingGroups.size());
         // Alle doppelte Buchungen löschen, die bereits in den Buchungsgruppen vorhanden sind
         for(int i=0, l=postingGroups.size(); i<l; i++) {
             System.out.println("Gruppe: " + postingGroups.get(i).getName());
-            postings.removeAll(postingGroups.get(i).getPostings());
+            accountPostings.removeAll(postingGroups.get(i).getPostings());
         }
 
         // Alles zusammenfügen
-        List<AbstractPosting> pIList = new ArrayList<AbstractPosting>(postings);
+        List<Posting> pIList = new ArrayList<Posting>(accountPostings);
         pIList.addAll(postingGroups);
 
         // Sortieren
@@ -161,10 +161,10 @@ public class PostingManagementAccountManagementPresentationModel {
     }
 
     private void calculateValues() {
-        List<AbstractPosting> list = postingSelection.getList();
+        List<Posting> list = postingSelection.getList();
         double liabilities=0, assets=0, saldo=0;
         for(int i=0,l=list.size(); i<l; i++) {
-            AbstractPosting p = list.get(i);
+            Posting p = list.get(i);
 
             saldo = saldo + p.getAmount();
             
@@ -173,10 +173,10 @@ public class PostingManagementAccountManagementPresentationModel {
     }
 
     private void calculateTotalValues() {
-        List<AbstractPosting> list = AbstractPostingManager.getInstance().getAll(account);
+        List<Posting> list = AbstractPostingManager.getInstance().getAll(account);
         double liabilities=0, assets=0, saldo=0;
         for(int i=0,l=list.size(); i<l; i++) {
-            AbstractPosting p = list.get(i);
+            Posting p = list.get(i);
             saldo = saldo + p.getAmount();
         }
         totalSaldoValue.setValue(saldo);
@@ -331,9 +331,9 @@ public class PostingManagementAccountManagementPresentationModel {
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            final Posting posting = new Posting(account);
+            final AccountPosting accountPosting = new AccountPosting(account);
             final EditPostingPresentationModel model = new EditPostingPresentationModel(
-                    posting,
+                    accountPosting,
                     new CWHeaderInfo(
                         "Buchung hinzufügen",
                         "<html>Fügen Sie eine neue Buchung für '<b>" + account.getCustomer().getForename() + " " + account.getCustomer().getSurname() + "</b>' hinzu.</html>",
@@ -346,10 +346,10 @@ public class PostingManagementAccountManagementPresentationModel {
                 public void buttonPressed(ButtonEvent evt) {
 
                     if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                        PostingManager.getInstance().save(posting);
+                        PostingManager.getInstance().save(accountPosting);
                         GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde erstellt.");
-                        postingSelection.getList().add(posting);
-                        int idx = postingSelection.getList().indexOf(posting);
+                        postingSelection.getList().add(accountPosting);
+                        int idx = postingSelection.getList().indexOf(accountPosting);
                         postingSelection.fireIntervalAdded(idx, idx);
                         updateEvents();
                     }
@@ -373,9 +373,9 @@ public class PostingManagementAccountManagementPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            AbstractPosting pSelection = postingSelection.getSelection();
-            if(pSelection instanceof Posting) {
-                editPosting((Posting) pSelection);
+            Posting pSelection = postingSelection.getSelection();
+            if(pSelection instanceof AccountPosting) {
+                editPosting((AccountPosting) pSelection);
             }
         }
     }
@@ -594,13 +594,13 @@ public class PostingManagementAccountManagementPresentationModel {
         return headerInfo;
     }
 
-    public void editPosting(final Posting posting) {
+    public void editPosting(final AccountPosting accountPosting) {
         GUIManager.setLoadingScreenText("Buchung wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
         GUIManager.getInstance().lockMenu();
 
         final EditPostingPresentationModel model = new EditPostingPresentationModel(
-                posting,
+                accountPosting,
                 true,
                 new CWHeaderInfo(
                         "Buchung bearbeiten",
@@ -613,8 +613,8 @@ public class PostingManagementAccountManagementPresentationModel {
 
             public void buttonPressed(ButtonEvent evt) {
                 if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                    PostingManager.getInstance().save(posting);
-                    int idx = postingSelection.getList().indexOf(posting);
+                    PostingManager.getInstance().save(accountPosting);
+                    int idx = postingSelection.getList().indexOf(accountPosting);
                     postingSelection.fireContentsChanged(idx, idx);
                     GUIManager.getStatusbar().setTextAndFadeOut("Buchung wurde aktualisiert.");
                     updateEvents();
@@ -651,9 +651,9 @@ public class PostingManagementAccountManagementPresentationModel {
         @Override
         public void mouseClicked(MouseEvent e) {
             if (SwingUtilities.isLeftMouseButton(e) && e.getClickCount() == 2) {
-                AbstractPosting pSelection = postingSelection.getSelection();
-                if(pSelection instanceof Posting) {
-                    editPosting((Posting) pSelection);
+                Posting pSelection = postingSelection.getSelection();
+                if(pSelection instanceof AccountPosting) {
+                    editPosting((AccountPosting) pSelection);
                 }
             }
         }

@@ -1,14 +1,14 @@
 package cw.accountmanagementmodul.gui.model;
 
 import com.jgoodies.binding.adapter.AbstractTableAdapter;
-import cw.accountmanagementmodul.pojo.Posting;
+import cw.accountmanagementmodul.pojo.AccountPosting;
 import javax.swing.ListModel;
 
 /**
  *
  * @author ManuelG
  */
-public class PostingTableModel extends AbstractTableAdapter<Posting> {
+public class PostingTableModel extends AbstractTableAdapter<AccountPosting> {
 
         private ListModel listModel;
 
@@ -44,7 +44,7 @@ public class PostingTableModel extends AbstractTableAdapter<Posting> {
         }
 
         public Object getValueAt(int rowIndex, int columnIndex) {
-            Posting a = (Posting) listModel.getElementAt(rowIndex);
+            AccountPosting a = (AccountPosting) listModel.getElementAt(rowIndex);
             switch (columnIndex) {
                 case 0:
                     return a.getName();

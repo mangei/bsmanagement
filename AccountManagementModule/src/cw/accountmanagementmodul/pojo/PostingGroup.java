@@ -15,10 +15,10 @@ import javax.persistence.Transient;
  */
 @Entity
 public class PostingGroup
-        extends AbstractPosting
+        extends Posting
         implements AnnotatedClass  {
 
-    private List<AbstractPosting> postings  = new ArrayList<AbstractPosting>();
+    private List<Posting> postings  = new ArrayList<Posting>();
 
     public PostingGroup() {
     }
@@ -35,18 +35,18 @@ public class PostingGroup
     }
 
     @OneToMany
-    public List<AbstractPosting> getPostings() {
+    public List<Posting> getPostings() {
         return postings;
     }
 
-    public void setPostings(List<AbstractPosting> postings) {
+    public void setPostings(List<Posting> postings) {
         this.postings = postings;
     }
 
     @Override
     @Transient
-    public double getAmount() {
-        double amount = 0;
+    public long getAmount() {
+        long amount = 0;
         for(int i=0, l=postings.size(); i<l; i++) {
             amount += postings.get(i).getAmount();
         }

@@ -1,7 +1,7 @@
 package cw.accountmanagementmodul.gui.renderer;
 
-import cw.accountmanagementmodul.pojo.AbstractPosting;
 import cw.accountmanagementmodul.pojo.Posting;
+import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.accountmanagementmodul.pojo.PostingGroup;
 import cw.boardingschoolmanagement.app.CWUtils;
 import java.awt.Component;
@@ -35,13 +35,13 @@ public class PostingTreeTableRenderer
             int row,
             boolean hasFocus) {
 
-        if(value instanceof AbstractPosting) {
-            label.setText(((AbstractPosting)value).getName());
+        if(value instanceof Posting) {
+            label.setText(((Posting)value).getName());
         } else {
             label.setText("");
         }
 
-        if(value instanceof Posting) {
+        if(value instanceof AccountPosting) {
             label.setIcon(postingIcon);
         } else if(value instanceof PostingGroup) {
             label.setIcon(postingGroupIcon);

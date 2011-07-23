@@ -18,7 +18,7 @@ public class PostingCycle
 
     private Long id                 = null;
     private String name             = "";
-    private List<Posting> postings  = new ArrayList<Posting>();
+    private List<AccountPosting> accountPostings  = new ArrayList<AccountPosting>();
 
     public final static String PROPERTYNAME_ID          = "id";
     public final static String PROPERTYNAME_NAME        = "name";

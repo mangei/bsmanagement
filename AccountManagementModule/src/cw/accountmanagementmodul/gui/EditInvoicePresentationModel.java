@@ -15,7 +15,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
-import cw.accountmanagementmodul.pojo.Posting;
+import cw.accountmanagementmodul.pojo.AccountPosting;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -76,8 +76,8 @@ public class EditInvoicePresentationModel
     }
 
     public void dispose() {
-        getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).removeValueChangeListener(saveListener);
-        getBufferedModel(Posting.PROPERTYNAME_AMOUNT).removeValueChangeListener(saveListener);
+        getBufferedModel(AccountPosting.PROPERTYNAME_POSTINGENTRYDATE).removeValueChangeListener(saveListener);
+        getBufferedModel(AccountPosting.PROPERTYNAME_AMOUNT).removeValueChangeListener(saveListener);
 
         unsaved.removeValueChangeListener(unsavedListener);
 
