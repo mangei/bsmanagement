@@ -10,7 +10,7 @@ import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.CWDateChooser;
 import cw.boardingschoolmanagement.gui.component.CWTextField;
-import cw.accountmanagementmodul.pojo.Posting;
+import cw.accountmanagementmodul.pojo.AccountPosting;
 import java.beans.PropertyChangeListener;
 
 /**
@@ -41,9 +41,9 @@ public class EditPostingView extends CWView
     }
 
     private void initComponents() {
-        tfName                  = CWComponentFactory.createTextField(model.getBufferedModel(Posting.PROPERTYNAME_NAME),false);
-        tfAmount                = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Posting.PROPERTYNAME_AMOUNT));
-        dcPostingEntryDate      = CWComponentFactory.createDateChooser(model.getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE));
+        tfName                  = CWComponentFactory.createTextField(model.getBufferedModel(AccountPosting.PROPERTYNAME_NAME),false);
+        tfAmount                = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(AccountPosting.PROPERTYNAME_AMOUNT));
+        dcPostingEntryDate      = CWComponentFactory.createDateChooser(model.getBufferedModel(AccountPosting.PROPERTYNAME_POSTINGENTRYDATE));
 
         bCancel     = CWComponentFactory.createButton(model.getCancelAction());
         bSave       = CWComponentFactory.createButton(model.getSaveAction());

@@ -4,8 +4,8 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import com.jgoodies.binding.list.SelectionInList;
 import cw.accountmanagementmodul.comparator.AbstractPostingDateComparator;
 import cw.accountmanagementmodul.gui.model.PostingTreeTableModel;
-import cw.accountmanagementmodul.pojo.AbstractPosting;
 import cw.accountmanagementmodul.pojo.Posting;
+import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.util.List;
 import cw.customermanagementmodul.pojo.Customer;
@@ -24,14 +24,14 @@ public class PostingOverviewPresentationModel {
     private Customer customer;
     private CWHeaderInfo headerInfo;
 
-    private SelectionInList<AbstractPosting> postingSelection;
+    private SelectionInList<Posting> postingSelection;
 
     public PostingOverviewPresentationModel() {
     }
 
     public void initModels() {
 
-        postingSelection = new SelectionInList<AbstractPosting>();
+        postingSelection = new SelectionInList<Posting>();
 //        loadPostings();
 
         headerInfo = new CWHeaderInfo(
@@ -62,7 +62,7 @@ public class PostingOverviewPresentationModel {
 
         // Alles zusammenfügen
 //        List<PostingInterface> pIList = new ArrayList<PostingInterface>(postings);
-        List<AbstractPosting> pIList = new ArrayList<AbstractPosting>(postingGroups);
+        List<Posting> pIList = new ArrayList<Posting>(postingGroups);
         pIList.addAll(postingGroups);
 
         // Sortieren
@@ -77,13 +77,13 @@ public class PostingOverviewPresentationModel {
     public void reset() {
     }
 
-    public SelectionInList<AbstractPosting> getPostingSelection() {
+    public SelectionInList<Posting> getPostingSelection() {
         return postingSelection;
     }
 
     public TreeTableModel getPostingTreeTableModel() {
         PostingGroup p = new PostingGroup();
-        Posting p2 = new Posting();
+        AccountPosting p2 = new AccountPosting();
         p2.setName("Teeksksk");
         p.getPostings().add(p2);
         p.setName("TestGruppe");

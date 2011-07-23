@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="lib/binding-2.0.2.jar"/>
+	<classpathentry kind="lib" path="lib/ejb3-persistence.jar"/>
+	<classpathentry kind="lib" path="lib/forms-1.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-commons-annotations.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate-core.jar"/>
+	<classpathentry kind="lib" path="lib/hibernate3.jar"/>
+	<classpathentry kind="lib" path="lib/javassist-3.4.GA.jar"/>
+	<classpathentry kind="lib" path="lib/jcalendar-1.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/jide-oss-2.2.8.01.jar"/>
+	<classpathentry kind="lib" path="lib/jta-1.1.jar"/>
+	<classpathentry kind="lib" path="lib/jta.jar"/>
+	<classpathentry kind="lib" path="lib/l2fprod-common-buttonbar.jar"/>
+	<classpathentry kind="lib" path="lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-api-1.4.2.jar"/>
+	<classpathentry kind="lib" path="lib/slf4j-jdk14-1.5.2.jar"/>
+	<classpathentry kind="lib" path="lib/swingx-0.9.3.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/BoardingSchoolManagement"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/CustomerManagementModule"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

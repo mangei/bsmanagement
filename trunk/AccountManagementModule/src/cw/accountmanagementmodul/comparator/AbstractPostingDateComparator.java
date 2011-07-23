@@ -1,6 +1,6 @@
 package cw.accountmanagementmodul.comparator;
 
-import cw.accountmanagementmodul.pojo.AbstractPosting;
+import cw.accountmanagementmodul.pojo.Posting;
 import java.util.Comparator;
 
 /**
@@ -10,8 +10,8 @@ import java.util.Comparator;
 public class AbstractPostingDateComparator implements Comparator {
 
     public int compare(Object o1, Object o2) {
-        AbstractPosting p1 = (AbstractPosting) o1;
-        AbstractPosting p2 = (AbstractPosting) o2;
+        Posting p1 = (Posting) o1;
+        Posting p2 = (Posting) o2;
         
         return p1.getCreationDate().compareTo(p2.getCreationDate());
     }

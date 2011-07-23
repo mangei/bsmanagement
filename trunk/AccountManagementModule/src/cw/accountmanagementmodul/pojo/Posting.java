@@ -1,122 +1,84 @@
 package cw.accountmanagementmodul.pojo;
 
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 import java.util.Date;
+
 import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.Temporal;
 
-/**rivate Long id;
- * This is an Posting-Class which representes one Posting.<br>
- * All needed informations are saved. Also the the posting-category.
- * @author CreativeWorkers.at
+import com.jgoodies.binding.beans.Model;
+
+import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+
+/**
+ * Simple posting. It has a name, an amount and a creationDate. <br>
+ * Specific posting classes need to extends this class. 
+ * 
+ * @author Manuel Geier
  */
 @Entity
+@Inheritance(strategy=InheritanceType.JOINED)
 public class Posting
-        extends AbstractPosting
+        extends Model
         implements AnnotatedClass {
 
-    private Date postingEntryDate;
-    private double amount;
-    private boolean reversePosting = false;
-    private boolean balancePosting = false;
-    private Posting previousPosting;
+    protected Long id;
+    protected String name;
+    private long amount;
+    protected Date creationDate;
 
-    // Properties - Constants
-    public final static String PROPERTYNAME_POSTINGENTRYDATE = "postingEntryDate";
-    public final static String PROPERTYNAME_REVERSEPOSTING = "reversePosting";
-    public final static String PROPERTYNAME_BALANCEPOSTING = "balancePosting";
-    public final static String PROPERTYNAME_PREVIOUSPOSTING = "previousPosting";
-    public final static String PROPERTYNAME_AMOUNT = "amount";
-//    public final static String PROPERTYNAME_SOURCE = "source";
+    public final static String PROPERTYNAME_ID              = "id";
+    public final static String PROPERTYNAME_NAME            = "name";
+    public final static String PROPERTYNAME_AMOUNT 			= "amount";
+    public final static String PROPERTYNAME_CREATIONDATE    = "creationDate";
 
-    /**
-     * Empty accounting. You need to set the costumer!
-     */
-    public Posting() {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    public Long getId() {
+        return id;
     }
 
-    /**
-     * Posting with an account predefined
-     * @param account
-     */
-    public Posting(Account account) {
-        this.account = account;
+    public void setId(Long id) {
+        Long old = this.id;
+        this.id = id;
+        firePropertyChange(PROPERTYNAME_ID, old, id);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if(obj == null) return false;
-        if(!(obj instanceof Posting)) return false;
-        if (this.getId() == ((Posting) obj).getId()) {
-            return true;
-        } else {
-            return false;
-        }
+    public String getName() {
+        return name;
     }
 
-    public double getAmount() {
-        return amount;
-    }
-
-    public void setAmount(double amount) {
-        double old = this.amount;
-        this.amount = amount;
-        firePropertyChange(PROPERTYNAME_AMOUNT, old, amount);
+    public void setName(String name) {
+        String old = this.name;
+        this.name = name;
+        firePropertyChange(PROPERTYNAME_NAME, old, name);
     }
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    public Date getPostingEntryDate() {
-        return postingEntryDate;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    public void setPostingEntryDate(Date postingEntryDate) {
-        Date old = this.postingEntryDate;
-        this.postingEntryDate = postingEntryDate;
-        firePropertyChange(PROPERTYNAME_POSTINGENTRYDATE, old, postingEntryDate);
+    public void setCreationDate(Date creationDate) {
+        Date old = this.creationDate;
+        this.creationDate = creationDate;
+        firePropertyChange(PROPERTYNAME_CREATIONDATE, old, creationDate);
+    }
+    
+
+    public long getAmount() {
+        return amount;
     }
 
-//    @ManyToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
-//    @Cascade(org.hibernate.annotations.CascadeType.DELETE)
-//    public Customer getCustomer() {
-//        return account;
-//    }
-//
-//    public void setCustomer(Customer customer) {
-//        Customer old = this.account;
-//        this.account = customer;
-//        firePropertyChange(PROPERTYNAME_CUSTOMER, old, customer);
-//    }
-
-    public boolean isReversePosting() {
-        return reversePosting;
-    }
-
-    public void setReversePosting(boolean reversePosting) {
-        boolean old = this.reversePosting;
-        this.reversePosting = reversePosting;
-        firePropertyChange(PROPERTYNAME_REVERSEPOSTING, old, reversePosting);
-    }
-
-    public boolean isBalancePosting() {
-        return balancePosting;
-    }
-
-    public void setBalancePosting(boolean balancePosting) {
-        boolean old = this.balancePosting;
-        this.balancePosting = balancePosting;
-        firePropertyChange(PROPERTYNAME_BALANCEPOSTING, old, balancePosting);
-    }
-
-    @ManyToOne
-    public Posting getPreviousPosting() {
-        return previousPosting;
-    }
-
-    public void setPreviousPosting(Posting previousPosting) {
-        Posting old = this.previousPosting;
-        this.previousPosting = previousPosting;
-        firePropertyChange(PROPERTYNAME_PREVIOUSPOSTING, old, previousPosting);
+    public void setAmount(long amount) {
+        long old = this.amount;
+        this.amount = amount;
+        firePropertyChange(PROPERTYNAME_AMOUNT, old, amount);
     }
 
 }

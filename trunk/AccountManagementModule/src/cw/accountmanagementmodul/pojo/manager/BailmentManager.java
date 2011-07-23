@@ -5,7 +5,7 @@ import cw.accountmanagementmodul.pojo.Bailment;
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.List;
-import cw.accountmanagementmodul.pojo.Posting;
+import cw.accountmanagementmodul.pojo.AccountPosting;
 import java.util.logging.Logger;
 
 /**
@@ -37,7 +37,7 @@ public class BailmentManager extends AbstractPOJOManager<Bailment>
         return HibernateUtil.getEntityManager().createQuery("FROM Bailment").getResultList();
     }
     
-    public List<Posting> getAll(Account a) {
+    public List<AccountPosting> getAll(Account a) {
         return HibernateUtil.getEntityManager().createQuery("FROM Bailment b WHERE b.account.id=" + a.getId()).getResultList();
     }
 

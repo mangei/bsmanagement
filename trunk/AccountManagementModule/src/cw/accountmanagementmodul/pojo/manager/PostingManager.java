@@ -5,14 +5,14 @@ import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
 import java.util.Date;
 import java.util.List;
-import cw.accountmanagementmodul.pojo.Posting;
+import cw.accountmanagementmodul.pojo.AccountPosting;
 import java.util.logging.Logger;
 
 /**
  *
  * @author CreativeWorkers.at
  */
-public class PostingManager extends AbstractPOJOManager<Posting>
+public class PostingManager extends AbstractPOJOManager<AccountPosting>
 {
 
     private static PostingManager instance;
@@ -33,9 +33,9 @@ public class PostingManager extends AbstractPOJOManager<Posting>
      * @param a Accounting
      * @return the new Accounting
      */
-    public Posting cancelAnAccounting(Posting a) {
+    public AccountPosting cancelAnAccounting(AccountPosting a) {
         if(a != null && a.getId() != null) {
-            Posting cancelA = new Posting();
+            AccountPosting cancelA = new AccountPosting();
             cancelA.setAccount(a.getAccount());
             cancelA.setAmount(a.getAmount() * -1);
             cancelA.setCreationDate(new Date());
@@ -51,11 +51,11 @@ public class PostingManager extends AbstractPOJOManager<Posting>
     }
 
     @Override
-    public List<Posting> getAll() {
+    public List<AccountPosting> getAll() {
         return HibernateUtil.getEntityManager().createQuery("FROM Posting").getResultList();
     }
     
-    public List<Posting> getAll(Account a) {
+    public List<AccountPosting> getAll(Account a) {
         if(a == null) {
             throw new NullPointerException("account is null");
         }

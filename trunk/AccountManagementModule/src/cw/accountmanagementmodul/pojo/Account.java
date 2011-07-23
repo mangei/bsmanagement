@@ -24,7 +24,7 @@ public class Account
 
     private Long                    id              = null;
     private Customer                customer        = null;
-    private List<AbstractPosting>   postings        = new ArrayList<AbstractPosting>();
+    private List<Posting>   postings        = new ArrayList<Posting>();
     private List<Bailment>          bailments       = new ArrayList<Bailment>();
     private List<Invoice>           invoices        = new ArrayList<Invoice>();
 
@@ -90,11 +90,11 @@ public class Account
     }
 
     @OneToMany(mappedBy = "account")
-    public List<AbstractPosting> getPostings() {
+    public List<Posting> getPostings() {
         return postings;
     }
 
-    public void setPostings(List<AbstractPosting> postings) {
+    public void setPostings(List<Posting> postings) {
         this.postings = postings;
     }
 

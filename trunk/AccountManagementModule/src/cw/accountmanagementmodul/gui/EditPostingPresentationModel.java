@@ -15,7 +15,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
-import cw.accountmanagementmodul.pojo.Posting;
+import cw.accountmanagementmodul.pojo.AccountPosting;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -25,10 +25,10 @@ import java.util.ArrayList;
  * @author CreativeWorkers.at
  */
 public class EditPostingPresentationModel
-        extends PresentationModel<Posting>
+        extends PresentationModel<AccountPosting>
 {
 
-    private Posting posting;
+    private AccountPosting accountPosting;
     private ValueModel unsaved;
     private CWHeaderInfo headerInfo;
     
@@ -40,13 +40,13 @@ public class EditPostingPresentationModel
     private SaveListener saveListener;
     private PropertyChangeListener unsavedListener;
     
-    public EditPostingPresentationModel(Posting posting,  CWHeaderInfo headerInfo) {
-        this(posting, false, headerInfo);
+    public EditPostingPresentationModel(AccountPosting accountPosting,  CWHeaderInfo headerInfo) {
+        this(accountPosting, false, headerInfo);
     }
 
-    public EditPostingPresentationModel(Posting posting, boolean editMode, CWHeaderInfo headerInfo) {
-        super(posting);
-        this.posting = posting;
+    public EditPostingPresentationModel(AccountPosting accountPosting, boolean editMode, CWHeaderInfo headerInfo) {
+        super(accountPosting);
+        this.accountPosting = accountPosting;
         this.headerInfo = headerInfo;
 
         initModels();
@@ -64,9 +64,9 @@ public class EditPostingPresentationModel
         unsaved = new ValueHolder();
 
         saveListener = new SaveListener();
-        getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(saveListener);
-        getBufferedModel(Posting.PROPERTYNAME_AMOUNT).addValueChangeListener(saveListener);
-        getBufferedModel(Posting.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
+        getBufferedModel(AccountPosting.PROPERTYNAME_POSTINGENTRYDATE).addValueChangeListener(saveListener);
+        getBufferedModel(AccountPosting.PROPERTYNAME_AMOUNT).addValueChangeListener(saveListener);
+        getBufferedModel(AccountPosting.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
         
         unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
@@ -81,9 +81,9 @@ public class EditPostingPresentationModel
     }
 
     public void dispose() {
-        getBufferedModel(Posting.PROPERTYNAME_POSTINGENTRYDATE).removeValueChangeListener(saveListener);
-        getBufferedModel(Posting.PROPERTYNAME_AMOUNT).removeValueChangeListener(saveListener);
-        getBufferedModel(Posting.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
+        getBufferedModel(AccountPosting.PROPERTYNAME_POSTINGENTRYDATE).removeValueChangeListener(saveListener);
+        getBufferedModel(AccountPosting.PROPERTYNAME_AMOUNT).removeValueChangeListener(saveListener);
+        getBufferedModel(AccountPosting.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
 
         unsaved.removeValueChangeListener(unsavedListener);
 
@@ -162,7 +162,7 @@ public class EditPostingPresentationModel
     }
 
     public boolean save() {
-        getBufferedModel(Posting.PROPERTYNAME_CREATIONDATE).setValue(new Date());
+        getBufferedModel(AccountPosting.PROPERTYNAME_CREATIONDATE).setValue(new Date());
 
         boolean valid = true;
         List<String> errorMessages = new ArrayList<String>();

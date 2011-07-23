@@ -1,6 +1,6 @@
 package cw.accountmanagementmodul.pojo.manager;
 
-import cw.accountmanagementmodul.pojo.AbstractPosting;
+import cw.accountmanagementmodul.pojo.Posting;
 import cw.accountmanagementmodul.pojo.Account;
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  *
  * @author CreativeWorkers.at
  */
-public class AbstractPostingManager extends AbstractPOJOManager<AbstractPosting>
+public class AbstractPostingManager extends AbstractPOJOManager<Posting>
 {
 
     private static AbstractPostingManager instance;
@@ -32,11 +32,11 @@ public class AbstractPostingManager extends AbstractPOJOManager<AbstractPosting>
     }
 
     @Override
-    public List<AbstractPosting> getAll() {
+    public List<Posting> getAll() {
         return HibernateUtil.getEntityManager().createQuery("FROM AbstractPosting").getResultList();
     }
     
-    public List<AbstractPosting> getAll(Account a) {
+    public List<Posting> getAll(Account a) {
         return HibernateUtil.getEntityManager().createQuery("FROM AbstractPosting p WHERE p.account.id=" + a.getId()).getResultList();
     }
 
