@@ -1,28 +1,29 @@
 package cw.boardingschoolmanagement.pojo;
 
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
+import cw.boardingschoolmanagement.app.CWModel;
 
 /**
  * A Property
  * 
  * @author Manuel Geier (CreativeWorkers)
  */
-public class Property
+public class Property extends CWModel
 {
 
     private String name;
     private String value;
-    protected transient PropertyChangeSupport support;
 
     public Property() {
         this("","");
     }
 
+    public Property(Property property) {
+        this(property.name, property.value);
+    }
+    
     public Property(String name, String value) {
         this.name = name;
-        this.value = value;
-        support = new PropertyChangeSupport(this);
+        this.value = value + "" + System.currentTimeMillis();
     }
 
     @Override
@@ -36,35 +37,7 @@ public class Property
 
     @Override
     public String toString() {
-        return name + ": " + value;
-    }
-    
-    public synchronized void removePropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        support.removePropertyChangeListener(propertyName, listener);
-    }
-
-    public synchronized void removePropertyChangeListener(PropertyChangeListener listener) {
-        support.removePropertyChangeListener(listener);
-    }
-
-    public synchronized boolean hasListeners(String propertyName) {
-        return support.hasListeners(propertyName);
-    }
-
-    public synchronized PropertyChangeListener[] getPropertyChangeListeners(String propertyName) {
-        return support.getPropertyChangeListeners(propertyName);
-    }
-
-    public synchronized PropertyChangeListener[] getPropertyChangeListeners() {
-        return support.getPropertyChangeListeners();
-    }
-
-    public synchronized void addPropertyChangeListener(String propertyName, PropertyChangeListener listener) {
-        support.addPropertyChangeListener(propertyName, listener);
-    }
-
-    public synchronized void addPropertyChangeListener(PropertyChangeListener listener) {
-        support.addPropertyChangeListener(listener);
+        return "\"" + name + "\": \"" + value + "\"";
     }
     
     public String getName() {
@@ -74,7 +47,7 @@ public class Property
     public void setName(String name) {
         String old = this.name;
         this.name = name;
-        support.firePropertyChange("name", old, name);
+        super.firePropertyChange("name", old, name);
     }
 
     public String getValue() {
@@ -84,6 +57,6 @@ public class Property
     public void setValue(String value) {
         String old = this.value;
         this.value = value;
-        support.firePropertyChange("value", old, value);
+        super.firePropertyChange("value", old, value);
     }
 }

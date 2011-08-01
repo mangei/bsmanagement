@@ -1,6 +1,6 @@
 package cw.boardingschoolmanagement.pojo;
 
-import com.jgoodies.binding.beans.Model;
+import cw.boardingschoolmanagement.app.CWModel;
 
 /**
  * @author ManuelG
@@ -8,7 +8,7 @@ import com.jgoodies.binding.beans.Model;
  *
  * POJO zur Speicherung der Unternehmensdaten
  */
-public class BusinessData extends Model{
+public class BusinessData extends CWModel {
 
     private String name;
     private String postOfficeNumber;
