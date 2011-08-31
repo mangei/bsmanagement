@@ -1,12 +1,5 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import com.jgoodies.binding.beans.Model;
-import com.jgoodies.forms.builder.PanelBuilder;
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jidesoft.swing.JideSwingUtilities;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
@@ -22,6 +15,8 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ContainerAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
+
 import javax.swing.AbstractAction;
 import javax.swing.BorderFactory;
 import javax.swing.Icon;
@@ -33,6 +28,17 @@ import javax.swing.JScrollPane;
 import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.plaf.basic.BasicPanelUI;
+
+import com.jgoodies.binding.beans.Model;
+import com.jgoodies.forms.builder.PanelBuilder;
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+import com.jidesoft.swing.JideSwingUtilities;
+
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.extention.point.CWViewExtentionPoint;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.boardingschoolmanagement.manager.ModulManager;
 
 /**
  *
@@ -268,6 +274,32 @@ public class CWView extends CWPanel {
     public void setInnerPanelBorder(Border border) {
         mainPanel.setBorder(border);
     }
+    
+    protected void loadExtentions() {
+    	//super.loadExtentions();
+    	
+    	loadExtentions(this);
+    }
+    
+    protected final void loadExtentions(CWView view) {
+    	
+    	// Load extentions with view.getClass()
+    	// and call with view object as parameter
+    	
+    	List<CWViewExtentionPoint> viewExtentions = (List<CWViewExtentionPoint>) 
+    		ModulManager.getExtentions(CWViewExtentionPoint.class);
+    	
+    	for(CWViewExtentionPoint ex: viewExtentions) {
+    		
+    		// Check base class
+    		if(ex.getExtentionViewClass().equals(view.getClass())) {
+    			
+    			// Execute extention
+    			ex.execute(view);
+    		}
+    	}
+    	
+    }
 
     public static class CWHeaderInfo
             extends Model
@@ -312,8 +344,6 @@ public class CWView extends CWPanel {
         }
 
         public void setHeaderText(String headerText) {
-            System.out.println("MUHAHAHAHAHAH: " + headerText);
-
             String old = this.headerText;
             this.headerText = headerText;
             firePropertyChange("headerText", old, headerText);

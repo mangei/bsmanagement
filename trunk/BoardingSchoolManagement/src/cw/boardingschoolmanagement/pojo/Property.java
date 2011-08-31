@@ -23,7 +23,7 @@ public class Property extends CWModel
     
     public Property(String name, String value) {
         this.name = name;
-        this.value = value + "" + System.currentTimeMillis();
+        this.value = value;
     }
 
     @Override
