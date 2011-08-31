@@ -1,5 +1,6 @@
 package cw.boardingschoolmanagement.pojo.manager;
 
+import cw.boardingschoolmanagement.app.CWModel;
 import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.app.CascadeListener;
 import cw.boardingschoolmanagement.app.CascadeListenerSupport;
@@ -32,7 +33,10 @@ public abstract class AbstractPOJOManager<T> {
      * @param obj Zu speicherntes Objekt
      * @return false - Speicherung fehlgeschlagen, true - Speicherung erfolgreich
      */
-    public boolean save(T obj) {
+    public boolean save(CWModel obj) {
+    	
+    	
+    	
         System.out.println(obj);
         if (obj == null) {
             return false;
