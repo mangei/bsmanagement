@@ -1,18 +1,23 @@
 package cw.roommanagementmodul.pojo;
 
-import com.jgoodies.binding.beans.Model;
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
-import cw.customermanagementmodul.pojo.Customer;
 import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.jgoodies.binding.beans.Model;
+
+import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+import cw.customermanagementmodul.pojo.Customer;
 
 
 /**
@@ -90,6 +95,7 @@ public class Bewohner
     }
 
     @OneToOne(cascade=javax.persistence.CascadeType.ALL)
+    @OnDelete(action=OnDeleteAction.CASCADE)
     public Customer getCustomer() {
         return customer;
     }
