@@ -1,2 +1,3 @@
 Manifest-Version: 1.0
+Modul-Class: cw.Customermanagementmodul.app.CustomerManagementModul
 Modul-Name: cw.customermanagementmodul.CustomerManagementModul

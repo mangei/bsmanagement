@@ -1,25 +1,27 @@
 package cw.customermanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import javax.swing.event.ListSelectionEvent;
-import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JOptionPane;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import cw.customermanagementmodul.extention.EditCustomerEditCustomerTabExtention;
 import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtentionPoint;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import javax.swing.event.ListSelectionListener;
 import cw.customermanagementmodul.pojo.Customer;
-import javax.swing.Icon;
-import javax.swing.JOptionPane;
+import cw.customermanagementmodul.pojo.manager.CustomerManager;
 
 /**
  * @author CreativeWorkers.at
@@ -31,6 +33,7 @@ public class CustomerManagementPresentationModel {
     private Action deleteAction;
     private Action inactiveAction;
     private Action viewInactivesAction;
+    private Action printAction;
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
     private CWHeaderInfo headerInfo;
     private SelectionHandler selectionHandler;
@@ -46,6 +49,7 @@ public class CustomerManagementPresentationModel {
         deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
         inactiveAction = new InactivesAction("Inaktiv setzen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactive_go.png"));
         viewInactivesAction = new ViewInactivesAction("Inaktive anzeigen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactives.png"));
+        printAction = new PrintAction("Drucken", CWUtils.loadIcon("cw/coursemanagementmodul/images/print.png"));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
                 CustomerManager.getInstance().getAllActive(),
@@ -300,6 +304,23 @@ public class CustomerManagementPresentationModel {
 
         }
     }
+    
+    private class PrintAction extends AbstractAction {
+        {
+            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/print.png") );
+        }
+
+        private PrintAction(String name, Icon icon) {
+            super(name, icon);
+        }
+
+        public void actionPerformed(ActionEvent e) {
+
+            GUIManager.getInstance().lockMenu();
+            GUIManager.changeView(new CustomerPrintView(
+                    new CustomerPrintPresentationModel(CustomerManager.getInstance().getAllActive(), null)),true);
+        }
+    }
 
     ////////////////////////////////////////////////////////////////////////////
     // Getter methods for the model
@@ -326,6 +347,10 @@ public class CustomerManagementPresentationModel {
 
     public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
+    }
+    
+    public Action getPrintAction() {
+        return printAction;
     }
 
     public CustomerSelectorPresentationModel getCustomerSelectorPresentationModel() {

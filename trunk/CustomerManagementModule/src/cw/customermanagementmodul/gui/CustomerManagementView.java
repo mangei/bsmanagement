@@ -1,9 +1,10 @@
 package cw.customermanagementmodul.gui;
 
+import java.awt.BorderLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import java.awt.BorderLayout;
 
 /**
  * @author CreativeWorkers.at
@@ -19,6 +20,7 @@ public class CustomerManagementView extends CWView
     private CWButton bDelete;
     private CWButton bInactive;
     private CWButton bViewInactives;
+    private CWButton bPrint;
     private CustomerSelectorView customerSelectorView;
 
     public CustomerManagementView(CustomerManagementPresentationModel m) {
@@ -35,13 +37,15 @@ public class CustomerManagementView extends CWView
         bDelete     = CWComponentFactory.createButton(model.getDeleteAction());
         bInactive   = CWComponentFactory.createButton(model.getInactiveAction());
         bViewInactives   = CWComponentFactory.createButton(model.getViewInactivesAction());
+        bPrint = CWComponentFactory.createButton(model.getPrintAction());
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bNew)
                 .addComponent(bEdit)
                 .addComponent(bDelete)
                 .addComponent(bInactive)
-                .addComponent(bViewInactives);
+                .addComponent(bViewInactives)
+                .addComponent(bPrint);
 
         customerSelectorView = new CustomerSelectorView(model.getCustomerSelectorPresentationModel());
 
@@ -79,6 +83,7 @@ public class CustomerManagementView extends CWView
         this.getButtonPanel().add(bDelete);
         this.getButtonPanel().add(bInactive);
         this.getButtonPanel(CWView.ButtonPanelPosition.RIGHT).add(bViewInactives);
+        this.getButtonPanel(CWView.ButtonPanelPosition.RIGHT).add(bPrint);
 
 //        panel.getButtonPanel().add(new JButton(new AbstractAction("Show Postings") {
 //
