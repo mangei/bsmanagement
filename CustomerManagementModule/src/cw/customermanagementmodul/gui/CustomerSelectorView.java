@@ -43,7 +43,10 @@ import javax.swing.Icon;
 import javax.swing.SwingConstants;
 
 /**
- * @author CreativeWorkers.at
+ * Diese Klasse ist die grafsiche Darstellung der Kundenübersichtstabelle in
+ * Kundenverwaltung.
+ *
+ * @author Manuel Geier
  */
 public class CustomerSelectorView extends CWPanel
 {

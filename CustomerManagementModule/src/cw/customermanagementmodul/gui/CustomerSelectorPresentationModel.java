@@ -399,9 +399,9 @@ public class CustomerSelectorPresentationModel
                     return Boolean.class;
                 case 5:
                     return Date.class;
-                case 16:
+                case 15:
                     return Boolean.class;
-                case 17:
+                case 16:
                     return Date.class;
                 default:
                     return String.class;
