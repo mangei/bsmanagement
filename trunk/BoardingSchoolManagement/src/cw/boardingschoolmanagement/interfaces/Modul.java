@@ -1,5 +1,6 @@
 package cw.boardingschoolmanagement.interfaces;
 
+
 /**
  * Every Modul has to implement this Modul-Interface.
  * 

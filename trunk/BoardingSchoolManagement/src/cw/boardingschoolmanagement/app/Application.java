@@ -1,5 +1,23 @@
 package cw.boardingschoolmanagement.app;
 
+import java.awt.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import org.jvnet.substance.SubstanceLookAndFeel;
+import org.jvnet.substance.button.StandardButtonShaper;
+import org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel;
+import org.jvnet.substance.utils.SubstanceConstants;
+
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.ConfigurationView;
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
@@ -10,21 +28,6 @@ import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.boardingschoolmanagement.manager.PropertiesManager;
-import java.awt.event.ActionEvent;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JButton;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import org.jvnet.substance.SubstanceLookAndFeel;
-import org.jvnet.substance.button.StandardButtonShaper;
-import org.jvnet.substance.skin.SubstanceOfficeSilver2007LookAndFeel;
-import org.jvnet.substance.utils.SubstanceConstants;
 
 
 /**
@@ -173,13 +176,13 @@ public class Application {
         ////////////////////////////////////////////////////////////////////
             ss.setText("Module werden geladen...");
             ModulManager.loadModules();
-            ModulManager.registerAnnotationClasses(HibernateUtil.getConfiguration());
+            ModulManager.registerAnnotationClasses(CWEntityManager.getConfiguration());
 
         ////////////////////////////////////////////////////////////////////
         // Connect to database
         ////////////////////////////////////////////////////////////////////
             ss.setText("Datenbankverbindung herstellen...");
-            HibernateUtil.configure();
+            CWEntityManager.init();
 
         ////////////////////////////////////////////////////////////////////
         // Load the GUI
@@ -229,7 +232,7 @@ public class Application {
             public void actionPerformed(ActionEvent e) {
 //                GUIManager.setLoadingScreenText("Startseite werden geladen...");
 //                GUIManager.setLoadingScreenVisible(true);
-                GUIManager.changeView(new HomeView(new HomePresentationModel()));
+                GUIManager.changeView(new HomeView(new HomePresentationModel(CWEntityManager.getEntityManager())));
 //                GUIManager.setLoadingScreenVisible(false);
             }
         }), "home", true);
@@ -342,7 +345,7 @@ public class Application {
         PropertiesManager.saveProperties();
 
         // Close hibernate
-        HibernateUtil.close();
+        CWEntityManager.close();
 
         // Dispose the GUI
         GUIManager.getInstance().getMainFrame().dispose();

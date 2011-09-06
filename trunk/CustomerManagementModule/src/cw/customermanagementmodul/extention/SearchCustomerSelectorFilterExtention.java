@@ -1,18 +1,21 @@
 package cw.customermanagementmodul.extention;
 
-import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtentionPoint;
-import cw.customermanagementmodul.gui.SearchCustomerSelectorFilterExtentionPresentationModel;
-import cw.customermanagementmodul.gui.SearchCustomerSelectorFilterExtentionView;
-import cw.customermanagementmodul.persistence.model.CustomerModel;
-
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+
+import com.jgoodies.binding.value.ValueModel;
+
+import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtentionPoint;
+import cw.customermanagementmodul.gui.SearchCustomerSelectorFilterExtentionPresentationModel;
+import cw.customermanagementmodul.gui.SearchCustomerSelectorFilterExtentionView;
+import cw.customermanagementmodul.persistence.Customer;
 
 /**
  *
@@ -27,10 +30,10 @@ public class SearchCustomerSelectorFilterExtention
 
     private PropertyChangeListener changeListener;
 
-    public void init(final ValueModel change) {
+    public void init(final ValueModel change, EntityManager entityManager) {
         this.change = change;
 
-        model = new SearchCustomerSelectorFilterExtentionPresentationModel();
+        model = new SearchCustomerSelectorFilterExtentionPresentationModel(entityManager);
         view = new SearchCustomerSelectorFilterExtentionView(model);
     }
 
@@ -42,7 +45,7 @@ public class SearchCustomerSelectorFilterExtention
         });
     }
 
-    public List<CustomerModel> filter(List<CustomerModel> costumers) {
+    public List<Customer> filter(List<Customer> costumers) {
 
         // Get the input
         String searchString = ((String) model.getSearchModel().getValue()).toLowerCase();
@@ -52,7 +55,7 @@ public class SearchCustomerSelectorFilterExtention
             return costumers;
         }
 
-        List<CustomerModel> newCostumers = new ArrayList<CustomerModel>();
+        List<Customer> newCostumers = new ArrayList<Customer>();
 
         // Split the searchString
         String[] searchStrings = searchString.split(" ");
@@ -61,8 +64,8 @@ public class SearchCustomerSelectorFilterExtention
             System.out.println(" - " + i + " '" + searchStrings[i] + "'");
         }
 
-        Iterator<CustomerModel> it = costumers.iterator();
-        CustomerModel costumer;
+        Iterator<Customer> it = costumers.iterator();
+        Customer costumer;
         StringBuilder costumerStringBuilder;
         String costumerString;
         while(it.hasNext()) {

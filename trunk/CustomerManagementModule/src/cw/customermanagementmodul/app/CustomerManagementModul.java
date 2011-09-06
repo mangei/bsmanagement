@@ -1,25 +1,29 @@
 package cw.customermanagementmodul.app;
 
+import java.awt.event.ActionEvent;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JButton;
+
+import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CascadeEvent;
 import cw.boardingschoolmanagement.app.CascadeListener;
 import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
+import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
 import cw.customermanagementmodul.gui.CustomerManagementPresentationModel;
 import cw.customermanagementmodul.gui.CustomerManagementView;
 import cw.customermanagementmodul.gui.GroupManagementPresentationModel;
 import cw.customermanagementmodul.gui.GroupManagementView;
-import cw.boardingschoolmanagement.interfaces.Modul;
-import cw.customermanagementmodul.persistence.CustomerManager;
-import cw.customermanagementmodul.persistence.GroupManager;
-import cw.customermanagementmodul.persistence.model.CustomerModel;
-import cw.customermanagementmodul.persistence.model.GroupModel;
-import java.awt.event.ActionEvent;
-import java.util.List;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JButton;
+import cw.customermanagementmodul.persistence.Customer;
+import cw.customermanagementmodul.persistence.CustomerPM;
+import cw.customermanagementmodul.persistence.Group;
+import cw.customermanagementmodul.persistence.GroupPM;
 
 /**
  * The CostumerManagement Modul
@@ -47,7 +51,7 @@ public class CustomerManagementModul
                 GUIManager.setLoadingScreenText("Kunden werden geladen...");
                 GUIManager.setLoadingScreenVisible(true);
 
-                CustomerManagementPresentationModel model = new CustomerManagementPresentationModel();
+                CustomerManagementPresentationModel model = new CustomerManagementPresentationModel(CWEntityManager.getEntityManager());
                 CustomerManagementView view = new CustomerManagementView(model);
 
                 GUIManager.changeView(view);
@@ -82,7 +86,7 @@ public class CustomerManagementModul
                 GUIManager.setLoadingScreenText("Gruppen werden geladen...");
                 GUIManager.setLoadingScreenVisible(true);
 
-                GroupManagementPresentationModel model = new GroupManagementPresentationModel();
+                GroupManagementPresentationModel model = new GroupManagementPresentationModel(CWEntityManager.getEntityManager());
                 GroupManagementView view = new GroupManagementView(model);
 
                 CWUtils.showDialog(view);
@@ -91,24 +95,25 @@ public class CustomerManagementModul
             }
         }), "manage");
 
-        // Wenn eine Gruppe gelöscht wird, diese Gruppe aus der Gruppenliste der Kunden löschen.
-        GroupManager.getInstance().addCascadeListener(new CascadeListener() {
-            public void deleteAction(CascadeEvent evt) {
-                GroupModel group = (GroupModel) evt.getSource();
-                List<CustomerModel> customers = CustomerManager.getInstance().getAll(group);
-                for(int i=0, l=customers.size(); i<l; i++) {
-                    customers.get(i).getGroups().remove(group);
-                }
-            }
-        });
+//        // Wenn eine Gruppe gelöscht wird, diese Gruppe aus der Gruppenliste der Kunden löschen.
+//        GroupPM.getInstance().addCascadeListener(new CascadeListener() {
+//            public void deleteAction(CascadeEvent evt) {
+//                Group group = (Group) evt.getSource();
+//                List<Customer> customers = CustomerPM.getInstance().getAll(group);
+//                for(int i=0, l=customers.size(); i<l; i++) {
+//                    customers.get(i).getGroups().remove(group);
+//                }
+//            }
+//        });
 
         // Wenn ein Kunde gelöscht wird, diesen Kunden aus den Kundenlisten der Gruppen löschen.
-        CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
+        CustomerPM.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
-                CustomerModel customer = (CustomerModel) evt.getSource();
-                List<GroupModel> groups = customer.getGroups();
+                Customer customer = (Customer) evt.getSource();
+                
+                List<Group> groups = GroupPM.getInstance().getAllGroupsByCustomer(customer, evt.getEntityManager());
 
-                for(GroupModel group : groups) {
+                for(Group group : groups) {
                     group.getCustomers().remove(customer);
                 }
 

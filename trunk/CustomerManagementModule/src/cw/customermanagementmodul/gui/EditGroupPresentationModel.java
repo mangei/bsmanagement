@@ -1,30 +1,34 @@
 package cw.customermanagementmodul.gui;
 
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JOptionPane;
+
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
-import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JOptionPane;
-
-import cw.customermanagementmodul.persistence.model.GroupModel;
-
-import javax.swing.Icon;
+import cw.customermanagementmodul.persistence.Group;
 
 /**
  *
  * @author ManuelG
  */
 public class EditGroupPresentationModel
-    extends PresentationModel<GroupModel>
+    extends CWEditPresentationModel<Group>
 {
 
     private Action saveButtonAction;
@@ -37,8 +41,8 @@ public class EditGroupPresentationModel
     private SaveListener saveListener;
     private PropertyChangeListener unsavedListener;
 
-    public EditGroupPresentationModel(GroupModel group, CWHeaderInfo headerInfo) {
-        super(group);
+    public EditGroupPresentationModel(Group group, CWHeaderInfo headerInfo, EntityManager entityManager) {
+    	super(group, entityManager);
         this.headerInfo = headerInfo;
 
         initModels();
@@ -56,7 +60,7 @@ public class EditGroupPresentationModel
     private void initEventHandling() {
 
         saveListener = new SaveListener();
-        getBufferedModel(GroupModel.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
+        getBufferedModel(Group.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
 
         unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
@@ -71,7 +75,7 @@ public class EditGroupPresentationModel
     }
 
     public void dispose() {
-        getBufferedModel(GroupModel.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
+        getBufferedModel(Group.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
         
         unsaved.removeValueChangeListener(unsavedListener);
 
@@ -162,5 +166,17 @@ public class EditGroupPresentationModel
     public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
+
+	public boolean validate(List<CWErrorMessage> errorMessages) {
+		return true;
+	}
+
+	public boolean save() {
+		return true;
+	}
+
+	public void cancel() {
+		
+	}
 
 }

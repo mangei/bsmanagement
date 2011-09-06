@@ -1,11 +1,15 @@
 package cw.customermanagementmodul.extention;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
+import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerView;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
-import java.util.List;
 
 /**
  *
@@ -18,9 +22,9 @@ public class CustomerOverviewEditCustomerTabExtention
     private CustomerOverviewEditCustomerView view;
     private EditCustomerPresentationModel editCustomerModel;
 
-    public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
+    public void initPresentationModel(EditCustomerPresentationModel editCustomerModel, EntityManager entityManager) {
         this.editCustomerModel = editCustomerModel;
-        model = new CustomerOverviewEditCustomerPresentationModel(editCustomerModel);
+        model = new CustomerOverviewEditCustomerPresentationModel(editCustomerModel, entityManager);
     }
     
     public CWPanel getView() {
@@ -54,5 +58,12 @@ public class CustomerOverviewEditCustomerTabExtention
     public int priority() {
         return 100;
     }
+
+	public boolean validate(List<CWErrorMessage> errorMessages) {
+		return false;
+	}
+
+	public void cancel() {
+	}
 
 }

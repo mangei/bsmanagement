@@ -38,7 +38,7 @@ public abstract class CWEditPresentationModel<T>
 		errorMessages.clear();
 	}
 	
-	public abstract boolean validate();
+	public abstract boolean validate(List<CWErrorMessage> errorMessages);
 	public abstract boolean save();
 	public abstract void cancel();
 	

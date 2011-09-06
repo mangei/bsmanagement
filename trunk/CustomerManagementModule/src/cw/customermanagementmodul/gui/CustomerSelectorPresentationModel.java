@@ -137,7 +137,7 @@ public class CustomerSelectorPresentationModel
                 CustomerSelectorFilterExtentionPointHelper helper = new CustomerSelectorFilterExtentionPointHelper(ex);
                 filterExtentionsHelper.add(helper);
 
-                ex.init(filterChange);
+                ex.init(filterChange, getEntityManager());
 
                 // Init the activeFilterCount
                 PropertyChangeListener activeFilterCountListener;

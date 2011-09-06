@@ -26,7 +26,7 @@ import cw.coursemanagementmodul.gui.SubjectView;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
-import cw.customermanagementmodul.persistence.CustomerManager;
+import cw.customermanagementmodul.persistence.CustomerPM;
 import cw.customermanagementmodul.persistence.model.CustomerModel;
 /**
  *
@@ -83,7 +83,7 @@ public class CourseManagementModul implements Modul{
             }
         });
 
-        CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
+        CustomerPM.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
                 CustomerModel customer = new CustomerModel();// = (Customer) evt.getObject();
                 List<CourseParticipant> courseParticipants = CourseParticipantManager.getInstance().getAll(customer);

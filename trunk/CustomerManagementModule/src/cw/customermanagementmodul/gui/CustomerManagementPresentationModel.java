@@ -23,7 +23,7 @@ import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import cw.customermanagementmodul.extention.EditCustomerEditCustomerTabExtention;
 import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtentionPoint;
 import cw.customermanagementmodul.persistence.Customer;
-import cw.customermanagementmodul.persistence.CustomerManager;
+import cw.customermanagementmodul.persistence.CustomerPM;
 
 /**
  * @author CreativeWorkers.at
@@ -56,7 +56,7 @@ public class CustomerManagementPresentationModel
         printAction = new PrintAction("Drucken", CWUtils.loadIcon("cw/coursemanagementmodul/images/print.png"));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
-                CustomerManager.getInstance().getAllActive(getEntityManager()),
+                CustomerPM.getInstance().getAllActive(getEntityManager()),
                 "cw.customerboardingmanagement.CustomerManangementView.customerTableState",
                 getEntityManager()
         );
@@ -100,7 +100,7 @@ public class CustomerManagementPresentationModel
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            final Customer c = CustomerManager.getInstance().create(getEntityManager());
+            final Customer c = CustomerPM.getInstance().create(getEntityManager());
             PresentationModelProperties p = new PresentationModelProperties();
             p.put("customer", c);
             p.put(PresentationModelProperties.HEADERINFO,
@@ -240,7 +240,7 @@ public class CustomerManagementPresentationModel
             	
             	// Remove entity
                 getEntityManager().getTransaction().begin();
-                CustomerManager.getInstance().remove(customer, getEntityManager());
+                CustomerPM.getInstance().remove(customer, getEntityManager());
                 getEntityManager().getTransaction().commit();
             	
                 String statusBarText;
@@ -313,7 +313,7 @@ public class CustomerManagementPresentationModel
             model.addButtonListener(new ButtonListener() {
 
                 public void buttonPressed(ButtonEvent evt) {
-                    customerSelectorPresentationModel.setCustomers(CustomerManager.getInstance().getAllActive(getEntityManager()));
+                    customerSelectorPresentationModel.setCustomers(CustomerPM.getInstance().getAllActive(getEntityManager()));
                 }
             });
 
@@ -338,7 +338,7 @@ public class CustomerManagementPresentationModel
             GUIManager.getInstance().lockMenu();
             GUIManager.changeView(new CustomerPrintView(
                     new CustomerPrintPresentationModel(
-                    		CustomerManager.getInstance().getAllActive(getEntityManager()), 
+                    		CustomerPM.getInstance().getAllActive(getEntityManager()), 
                     		null, 
                     		getEntityManager())
                     ),

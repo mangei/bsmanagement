@@ -3,6 +3,8 @@ package cw.boardingschoolmanagement.app;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 /**
  * Supports the management of CascadeListeners.
  *
@@ -29,8 +31,8 @@ public class CascadeListenerSupport {
 	listeners.remove(listener);
     }
 
-    public void fireCascadeDelete(Object obj) {
-        fireCascadeDelete(new CascadeEvent(obj, CascadeEvent.TYPE_DELETE));
+    public void fireCascadeDelete(Object obj, EntityManager entityManager) {
+        fireCascadeDelete(new CascadeEvent(obj, CascadeEvent.TYPE_DELETE, entityManager));
     }
 
     public void fireCascadeDelete(CascadeEvent evt) {

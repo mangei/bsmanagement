@@ -17,10 +17,11 @@ import com.jgoodies.binding.value.ValueModel;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.Group;
-import cw.customermanagementmodul.persistence.GroupManager;
+import cw.customermanagementmodul.persistence.GroupPM;
 
 /**
  *
@@ -52,9 +53,9 @@ public class GroupEditCustomerPresentationModel
     }
 
     private void initModels() {
-        selectionCustomerGroups = new SelectionInList<Group>(customer.getGroups());
+        selectionCustomerGroups = new SelectionInList<Group>(GroupPM.getInstance().getAllGroupsByCustomer(customer, getEntityManager()));
         
-        List<Group> otherGroups = GroupManager.getInstance().getAll(getEntityManager());
+        List<Group> otherGroups = GroupPM.getInstance().getAll(getEntityManager());
         otherGroups.removeAll(selectionCustomerGroups.getList());
         selectionGroups = new SelectionInList<Group>(otherGroups);
 
@@ -201,7 +202,7 @@ public class GroupEditCustomerPresentationModel
         return headerInfo;
     }
 
-	public boolean validate() {
+	public boolean validate(List<CWErrorMessage> errorMessages) {
 		return true;
 	}
 

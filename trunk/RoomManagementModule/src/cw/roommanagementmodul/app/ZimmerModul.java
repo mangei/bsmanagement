@@ -16,7 +16,7 @@ import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
-import cw.customermanagementmodul.persistence.CustomerManager;
+import cw.customermanagementmodul.persistence.CustomerPM;
 import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.roommanagementmodul.gui.BereichPresentationModel;
 import cw.roommanagementmodul.gui.BereichView;
@@ -179,7 +179,7 @@ public class ZimmerModul implements Modul {
             }
         }), "bewohner");
 
-        CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
+        CustomerPM.getInstance().addCascadeListener(new CascadeListener() {
 
             public void deleteAction(CascadeEvent evt) {
                 CustomerModel c = (CustomerModel) evt.getSource();

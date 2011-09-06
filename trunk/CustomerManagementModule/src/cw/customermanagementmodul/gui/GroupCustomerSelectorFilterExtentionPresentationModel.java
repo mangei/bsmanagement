@@ -1,35 +1,39 @@
 package cw.customermanagementmodul.gui;
 
 import java.util.List;
+
+import javax.persistence.EntityManager;
 import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
-
-import cw.customermanagementmodul.persistence.GroupManager;
-import cw.customermanagementmodul.persistence.model.GroupModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
+import cw.customermanagementmodul.persistence.Group;
+import cw.customermanagementmodul.persistence.GroupPM;
 
 /**
  * @author CreativeWorkers.at
  */
 public class GroupCustomerSelectorFilterExtentionPresentationModel
-{
+ 	extends CWPresentationModel {
 
     private DefaultListModel groupSelection;
     private DefaultListSelectionModel groupSelectionModel;
 
     private ListSelectionListener groupSelectionListener;
 
-    public GroupCustomerSelectorFilterExtentionPresentationModel() {
+    public GroupCustomerSelectorFilterExtentionPresentationModel(EntityManager entityManager) {
+    	super(entityManager);
         initModels();
         initEventHandling();
     }
 
     public void initModels() {
         groupSelection = new DefaultListModel();
-        List<GroupModel> groupList = GroupManager.getInstance().getAll();
+        List<Group> groupList = GroupPM.getInstance().getAll(getEntityManager());
         for (int i = 0, l = groupList.size(); i < l; i++) {
             groupSelection.addElement(groupList.get(i));
         }
@@ -135,7 +139,7 @@ public class GroupCustomerSelectorFilterExtentionPresentationModel
     ////////////////////////////////////////////////////////////////////////////
     // Other classes
     ////////////////////////////////////////////////////////////////////////////
-    public class NoGroup extends GroupModel {
+    public class NoGroup extends Group {
 
         private String name;
 

@@ -1,8 +1,10 @@
 package cw.boardingschoolmanagement.extention.point;
 
-import cw.boardingschoolmanagement.interfaces.Extention;
+import javax.persistence.EntityManager;
+
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.boardingschoolmanagement.interfaces.Extention;
 
 /**
  *
@@ -10,7 +12,7 @@ import cw.boardingschoolmanagement.gui.component.CWPanel;
  */
 public interface HomeExtentionPoint extends Extention {
 
-    public void initPresentationModel(HomePresentationModel homePresentationModel);
+    public void initPresentationModel(HomePresentationModel homePresentationModel, EntityManager entityManager);
 
     public Object getModel();
 

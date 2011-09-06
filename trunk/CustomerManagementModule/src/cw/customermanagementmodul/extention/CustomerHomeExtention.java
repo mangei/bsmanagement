@@ -1,10 +1,12 @@
 package cw.customermanagementmodul.extention;
 
+import javax.persistence.EntityManager;
+
+import cw.boardingschoolmanagement.extention.point.HomeExtentionPoint;
 import cw.boardingschoolmanagement.gui.HomePresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.gui.CustomerHomeExtentionPresentationModel;
 import cw.customermanagementmodul.gui.CustomerHomeExtentionView;
-import cw.boardingschoolmanagement.extention.point.HomeExtentionPoint;
-import cw.boardingschoolmanagement.gui.component.CWPanel;
 
 /**
  *
@@ -15,8 +17,8 @@ public class CustomerHomeExtention implements HomeExtentionPoint {
     private CustomerHomeExtentionPresentationModel model;
     private CustomerHomeExtentionView view;
 
-    public void initPresentationModel(HomePresentationModel homePresentationModel) {
-        model = new CustomerHomeExtentionPresentationModel();
+    public void initPresentationModel(HomePresentationModel homePresentationModel, EntityManager entityManager) {
+        model = new CustomerHomeExtentionPresentationModel(entityManager);
         view = new CustomerHomeExtentionView(model);
     }
 

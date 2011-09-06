@@ -1,11 +1,15 @@
 package cw.customermanagementmodul.extention;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+
+import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.GroupEditCustomerPresentationModel;
 import cw.customermanagementmodul.gui.GroupEditCustomerView;
-import java.util.List;
 
 /**
  *
@@ -18,9 +22,9 @@ public class GroupEditCustomerTabExtention
     private GroupEditCustomerView view;
     private EditCustomerPresentationModel editCustomerModel;
 
-    public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
+    public void initPresentationModel(EditCustomerPresentationModel editCustomerModel, EntityManager entityManager) {
         this.editCustomerModel = editCustomerModel;
-        model = new GroupEditCustomerPresentationModel(editCustomerModel.getBean(), editCustomerModel.getUnsaved());
+        model = new GroupEditCustomerPresentationModel(editCustomerModel.getBean(), editCustomerModel.getUnsaved(), entityManager);
         view = new GroupEditCustomerView(model);
     }
     
@@ -47,5 +51,13 @@ public class GroupEditCustomerTabExtention
     public int priority() {
         return 0;
     }
+
+	public boolean validate(List<CWErrorMessage> errorMessages) {
+		return false;
+	}
+
+	public void cancel() {
+		
+	}
 
 }
