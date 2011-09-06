@@ -2,7 +2,7 @@ package cw.boardingschoolmanagement.manager;
 
 import cw.boardingschoolmanagement.app.ApplicationListener;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.app.BoardingSchoolManagement;
+import cw.boardingschoolmanagement.app.Application;
 import cw.boardingschoolmanagement.gui.component.CWLoadingGlass;
 import cw.boardingschoolmanagement.exception.NotInitializedException;
 import cw.boardingschoolmanagement.gui.component.CWView;
@@ -92,7 +92,7 @@ public class GUIManager {
 
             @Override
             public void windowClosing(WindowEvent e) {
-                BoardingSchoolManagement.getInstance().close();
+                Application.getInstance().close();
             }
         });
 
@@ -151,7 +151,7 @@ public class GUIManager {
         frame.setExtendedState(Integer.parseInt(PropertiesManager.getProperty("application.gui.extendedState", Integer.toString(JFrame.NORMAL))));
 
         // Save the size if the application closes and the window is not maximized
-        BoardingSchoolManagement.getInstance().addApplicationListener(new ApplicationListener() {
+        Application.getInstance().addApplicationListener(new ApplicationListener() {
 
             public void applicationClosing() {
                 if (frame.getExtendedState() == JFrame.MAXIMIZED_BOTH || frame.getExtendedState() != JFrame.ICONIFIED) {
@@ -277,7 +277,7 @@ public class GUIManager {
                     CWUtils.loadIcon("cw/boardingschoolmanagement/images/exit.png")) {
 
                 public void actionPerformed(ActionEvent e) {
-                    BoardingSchoolManagement.getInstance().close();
+                    Application.getInstance().close();
                 }
             }));
 

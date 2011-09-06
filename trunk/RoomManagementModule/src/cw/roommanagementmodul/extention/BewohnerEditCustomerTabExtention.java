@@ -4,7 +4,8 @@ import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.roommanagementmodul.gui.*;
 import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
+
 import java.util.List;
 import javax.swing.JComponent;
 import cw.roommanagementmodul.pojo.manager.BewohnerManager;
@@ -29,7 +30,7 @@ public class BewohnerEditCustomerTabExtention implements EditCustomerTabExtentio
     private BewohnerHistoryManager historyManager;
     private BewohnerEditCustomerTabExtentionPresentationModel model;
     private Bewohner b;
-    private Customer c;
+    private CustomerModel c;
     private Zimmer tempZimmer;
 
     public CWPanel getView() {

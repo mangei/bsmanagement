@@ -12,22 +12,22 @@ import javax.swing.event.ListDataListener;
 
 import com.jgoodies.binding.list.SelectionInList;
 
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 
 /**
  *
  * @author André Salmhofer
  */
 public class CostumerComboBoxModel implements ComboBoxModel {
-    private Customer selectedItem;
-    private List<Customer> customerList;
+    private CustomerModel selectedItem;
+    private List<CustomerModel> customerList;
     
-    public CostumerComboBoxModel(List<Customer> customerList){
+    public CostumerComboBoxModel(List<CustomerModel> customerList){
         this.customerList = customerList;
     }
     
     public void setSelectedItem(Object anItem) {
-        selectedItem = (Customer)anItem;
+        selectedItem = (CustomerModel)anItem;
     }
 
     public Object getSelectedItem() {
@@ -50,7 +50,7 @@ public class CostumerComboBoxModel implements ComboBoxModel {
         //throw new UnsupportedOperationException("Not supported yet.");
     }
     
-    public SelectionInList<Customer> getSelectionInList(){
+    public SelectionInList<CustomerModel> getSelectionInList(){
         return new SelectionInList(customerList);
     }
 }

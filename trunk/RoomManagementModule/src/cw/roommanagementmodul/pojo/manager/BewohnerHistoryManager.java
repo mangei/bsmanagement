@@ -5,7 +5,7 @@
 package cw.roommanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +19,7 @@ import javax.persistence.EntityTransaction;
  *
  * @author Dominik
  */
-public class BewohnerHistoryManager extends AbstractPOJOManager<BewohnerHistory> {
+public class BewohnerHistoryManager extends AbstractPersistenceManager<BewohnerHistory> {
 
     private static BewohnerHistoryManager instance;
     private static Logger logger = Logger.getLogger(BewohnerHistoryManager.class.getName());

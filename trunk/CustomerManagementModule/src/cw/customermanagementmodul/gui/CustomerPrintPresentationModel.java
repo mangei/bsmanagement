@@ -4,19 +4,17 @@
  */
 package cw.customermanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Group;
-import cw.customermanagementmodul.pojo.manager.CustomerManager;
 import java.awt.event.ActionEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javax.persistence.EntityManager;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -24,6 +22,11 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.customermanagementmodul.persistence.Customer;
+import cw.customermanagementmodul.persistence.Group;
 
 /**
  * PresentationModel zu CustomerPrintView
@@ -31,7 +34,8 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
  *
  * @author tom
  */
-public class CustomerPrintPresentationModel {
+public class CustomerPrintPresentationModel
+	extends CWPresentationModel {
 
     private BackAction backAction;
     private JasperReport jasperReport;
@@ -41,7 +45,8 @@ public class CustomerPrintPresentationModel {
     private List<Customer> customerList;
     private Group group;
 
-    public CustomerPrintPresentationModel(List<Customer> l, Group g) {
+    public CustomerPrintPresentationModel(List<Customer> l, Group g, EntityManager entityManager) {
+    	super(entityManager);
         this.customerList = l;
         this.group = g;
 

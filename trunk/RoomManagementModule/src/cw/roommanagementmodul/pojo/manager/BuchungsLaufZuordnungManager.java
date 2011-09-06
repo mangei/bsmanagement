@@ -11,7 +11,7 @@ import javax.persistence.EntityManager;
 
 import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import cw.roommanagementmodul.pojo.BuchungsLaufZuordnung;
 import cw.roommanagementmodul.pojo.GebLauf;
 import cw.roommanagementmodul.pojo.Gebuehr;
@@ -20,7 +20,7 @@ import cw.roommanagementmodul.pojo.Gebuehr;
  *
  * @author Dominik
  */
-public class BuchungsLaufZuordnungManager extends AbstractPOJOManager<BuchungsLaufZuordnung> {
+public class BuchungsLaufZuordnungManager extends AbstractPersistenceManager<BuchungsLaufZuordnung> {
 
     private static BuchungsLaufZuordnungManager instance;
     private static Logger logger = Logger.getLogger(BuchungsLaufZuordnungManager.class.getName());

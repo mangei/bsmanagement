@@ -27,7 +27,7 @@ import cw.coursemanagementmodul.pojo.PostingRun;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
 import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
 import cw.coursemanagementmodul.pojo.manager.PostingRunManager;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 
 /**
  *
@@ -142,7 +142,7 @@ public class PostingRunsPresentationModel
             List<CourseAddition> courseAdditions = new ArrayList<CourseAddition>();
             
             for(int i = 0; i < postingRunList.getSelection().getCoursePostings().size(); i++){
-                Customer customer = postingRunList.getSelection().getCoursePostings().get(i).getPosting().getCustomer();
+                CustomerModel customer = postingRunList.getSelection().getCoursePostings().get(i).getPosting().getCustomer();
                 courseAdditions = new ArrayList<CourseAddition>();
                 courseAdditions.add(postingRunList.getSelection().getCoursePostings().get(i).getCourseAddition());
                 

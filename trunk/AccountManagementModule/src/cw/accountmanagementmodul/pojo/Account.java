@@ -2,7 +2,8 @@ package cw.accountmanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -23,7 +24,7 @@ public class Account
         implements AnnotatedClass {
 
     private Long                    id              = null;
-    private Customer                customer        = null;
+    private CustomerModel                customer        = null;
     private List<Posting>   postings        = new ArrayList<Posting>();
     private List<Bailment>          bailments       = new ArrayList<Bailment>();
     private List<Invoice>           invoices        = new ArrayList<Invoice>();
@@ -36,7 +37,7 @@ public class Account
     public Account() {
     }
 
-    public Account(Customer customer) {
+    public Account(CustomerModel customer) {
         this.customer = customer;
     }
 
@@ -70,12 +71,12 @@ public class Account
     }
 
     @OneToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
-    public Customer getCustomer() {
+    public CustomerModel getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
-        Customer old = this.customer;
+    public void setCustomer(CustomerModel customer) {
+        CustomerModel old = this.customer;
         this.customer = customer;
         firePropertyChange(PROPERTYNAME_CUSTOMER, old, customer);
     }

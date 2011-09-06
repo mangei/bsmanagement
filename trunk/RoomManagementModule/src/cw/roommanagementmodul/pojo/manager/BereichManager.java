@@ -5,7 +5,7 @@
 package cw.roommanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import java.util.List;
 import cw.roommanagementmodul.pojo.Bereich;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import javax.persistence.Query;
  *
  * @author Dominik
  */
-public class BereichManager extends AbstractPOJOManager<Bereich> {
+public class BereichManager extends AbstractPersistenceManager<Bereich> {
 
     private static BereichManager instance;
     private static Logger logger = Logger.getLogger(BereichManager.class.getName());

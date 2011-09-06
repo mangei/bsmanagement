@@ -11,7 +11,7 @@ import cw.coursemanagementmodul.pojo.Course;
 import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.CoursePosting;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 
 /**
  *
@@ -30,7 +30,7 @@ public class ValueManager {
         return instance;
     }
 
-    public double getTotalSoll(Customer customer){
+    public double getTotalSoll(CustomerModel customer){
         SelectionInList<CoursePosting> coursePostingList =
             new SelectionInList<CoursePosting>(CoursePostingManager.getInstance().getAll());
         double totalValue = 0.0;
@@ -44,7 +44,7 @@ public class ValueManager {
         return totalValue;
     }
     
-    public double getTotalHaben(Customer customer){
+    public double getTotalHaben(CustomerModel customer){
         SelectionInList<CoursePosting> coursePostingList =
             new SelectionInList<CoursePosting>(CoursePostingManager.getInstance().getAll());
         double totalValue = 0.0;
@@ -58,7 +58,7 @@ public class ValueManager {
         return totalValue;
     }
     
-    public double getTotalSaldo(Customer customer){
+    public double getTotalSaldo(CustomerModel customer){
         return getTotalSoll(customer)-getTotalHaben(customer);
     }
 

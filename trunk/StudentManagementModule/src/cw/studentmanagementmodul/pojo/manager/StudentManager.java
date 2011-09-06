@@ -1,9 +1,10 @@
 package cw.studentmanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import java.util.List;
-import cw.customermanagementmodul.pojo.Customer;
+
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.studentmanagementmodul.pojo.Student;
 import cw.studentmanagementmodul.pojo.StudentClass;
 import java.util.logging.Logger;
@@ -13,7 +14,7 @@ import javax.persistence.NoResultException;
  * Manages Students
  * @author CreativeWorkers.at
  */
-public class StudentManager extends AbstractPOJOManager<Student> {
+public class StudentManager extends AbstractPersistenceManager<Student> {
 
     private static StudentManager instance;
     private static Logger logger = Logger.getLogger(StudentManager.class.getName());
@@ -49,7 +50,7 @@ public class StudentManager extends AbstractPOJOManager<Student> {
         return HibernateUtil.getEntityManager().createQuery("FROM Student WHERE studentClass.id=" + studentClass.getId() + " AND customer.active=true").getResultList();
     }
 
-    public Student get(Customer customer) {
+    public Student get(CustomerModel customer) {
         Student student = null;
         try {
             student = (Student) HibernateUtil.getEntityManager().createQuery("FROM Student WHERE customer.id=" + customer.getId()).getSingleResult();

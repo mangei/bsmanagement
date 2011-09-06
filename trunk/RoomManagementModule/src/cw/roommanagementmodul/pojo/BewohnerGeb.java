@@ -1,6 +1,6 @@
 package cw.roommanagementmodul.pojo;
 
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.roommanagementmodul.geblauf.GebTarifSelection;
 import java.util.ArrayList;
 import java.util.Date;
@@ -13,7 +13,7 @@ import java.util.List;
 public class BewohnerGeb {
 
     private Long id;
-    private Customer customer;
+    private CustomerModel customer;
     private Zimmer zimmer;
     private Date von;
     private Date bis;
@@ -37,14 +37,14 @@ public class BewohnerGeb {
     /**
      * @return the customer
      */
-    public Customer getCustomer() {
+    public CustomerModel getCustomer() {
         return customer;
     }
 
     /**
      * @param customer the customer to set
      */
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerModel customer) {
         this.customer = customer;
     }
 

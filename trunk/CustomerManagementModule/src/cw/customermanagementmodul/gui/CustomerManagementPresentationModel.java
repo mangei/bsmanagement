@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
+import javax.persistence.EntityManager;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -14,19 +15,21 @@ import javax.swing.event.ListSelectionListener;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import cw.customermanagementmodul.extention.EditCustomerEditCustomerTabExtention;
 import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtentionPoint;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.manager.CustomerManager;
+import cw.customermanagementmodul.persistence.Customer;
+import cw.customermanagementmodul.persistence.CustomerManager;
 
 /**
  * @author CreativeWorkers.at
  */
-public class CustomerManagementPresentationModel {
+public class CustomerManagementPresentationModel
+	extends CWPresentationModel {
 
     private Action newAction;
     private Action editAction;
@@ -38,7 +41,8 @@ public class CustomerManagementPresentationModel {
     private CWHeaderInfo headerInfo;
     private SelectionHandler selectionHandler;
 
-    public CustomerManagementPresentationModel() {
+    public CustomerManagementPresentationModel(EntityManager entityManager) {
+    	super(entityManager);
         initModels();
         initEventHandling();
     }
@@ -52,14 +56,17 @@ public class CustomerManagementPresentationModel {
         printAction = new PrintAction("Drucken", CWUtils.loadIcon("cw/coursemanagementmodul/images/print.png"));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
-                CustomerManager.getInstance().getAllActive(),
-                "cw.customerboardingmanagement.CustomerManangementView.customerTableState");
+                CustomerManager.getInstance().getAllActive(getEntityManager()),
+                "cw.customerboardingmanagement.CustomerManangementView.customerTableState",
+                getEntityManager()
+        );
 
         headerInfo = new CWHeaderInfo(
                 "Kunden verwalten",
                 "Sie befinden sich Kundenverwaltungsbereich. Hier haben Sie einen Überblick über alle Kunden.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"));
+                CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
+        );
     }
 
     private void initEventHandling() {
@@ -93,7 +100,7 @@ public class CustomerManagementPresentationModel {
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            final Customer c = new Customer();
+            final Customer c = CustomerManager.getInstance().create(getEntityManager());
             PresentationModelProperties p = new PresentationModelProperties();
             p.put("customer", c);
             p.put(PresentationModelProperties.HEADERINFO,
@@ -104,7 +111,7 @@ public class CustomerManagementPresentationModel {
                     CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png")));
             p.put("activeExtention", EditCustomerEditCustomerTabExtention.class);
 
-            final EditCustomerPresentationModel model = new EditCustomerPresentationModel(p);
+            final EditCustomerPresentationModel model = new EditCustomerPresentationModel(p, getEntityManager());
             final EditCustomerView editView = new EditCustomerView(model);
 
             final PropertyChangeListener activeListener = new PropertyChangeListener() {
@@ -173,7 +180,7 @@ public class CustomerManagementPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final Customer c = customerSelectorPresentationModel.getSelectedCustomer();
-            final EditCustomerPresentationModel model = editCustomer(c);
+            final EditCustomerPresentationModel model = editCustomer(c, getEntityManager());
 
             final PropertyChangeListener activeListener = new PropertyChangeListener() {
 
@@ -229,19 +236,27 @@ public class CustomerManagementPresentationModel {
 
             if (i == 1) {
 
+            	customerSelectorPresentationModel.remove(customer);
+            	
+            	// Remove entity
+                getEntityManager().getTransaction().begin();
+                CustomerManager.getInstance().remove(customer, getEntityManager());
+                getEntityManager().getTransaction().commit();
+            	
                 String statusBarText;
                 String forename = customer.getForename();
                 String surname = customer.getSurname();
                 statusBarText = "'" + forename + " " + surname + "' wurde gelöscht.";
 
-                customerSelectorPresentationModel.remove(customer);
-                CustomerManager.getInstance().delete(customer);
-
                 GUIManager.getStatusbar().setTextAndFadeOut(statusBarText);
             } else if (i == 0) {
+
+                getEntityManager().getTransaction().begin();
+                
                 customer.setActive(false);
                 customerSelectorPresentationModel.remove(customer);
-                CustomerManager.getInstance().save(customer);
+                
+                getEntityManager().getTransaction().commit();
             }
 
             GUIManager.setLoadingScreenVisible(false);
@@ -268,9 +283,13 @@ public class CustomerManagementPresentationModel {
         public void actionPerformed(ActionEvent e) {
 
             Customer c = customerSelectorPresentationModel.getSelectedCustomer();
+            
+            getEntityManager().getTransaction().begin();
+            
             c.setActive(false);
             customerSelectorPresentationModel.remove(c);
-            CustomerManager.getInstance().update(c);
+
+            getEntityManager().getTransaction().commit();
 
             GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde deaktiviert.");
         }
@@ -288,13 +307,13 @@ public class CustomerManagementPresentationModel {
             GUIManager.setLoadingScreenText("Inaktive Kunden werden geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            final CustomerInactivePresentationModel model = new CustomerInactivePresentationModel();
+            final CustomerInactivePresentationModel model = new CustomerInactivePresentationModel(getEntityManager());
             final CustomerInactiveView view = new CustomerInactiveView(model);
 
             model.addButtonListener(new ButtonListener() {
 
                 public void buttonPressed(ButtonEvent evt) {
-                    customerSelectorPresentationModel.setCustomers(CustomerManager.getInstance().getAllActive());
+                    customerSelectorPresentationModel.setCustomers(CustomerManager.getInstance().getAllActive(getEntityManager()));
                 }
             });
 
@@ -318,7 +337,13 @@ public class CustomerManagementPresentationModel {
 
             GUIManager.getInstance().lockMenu();
             GUIManager.changeView(new CustomerPrintView(
-                    new CustomerPrintPresentationModel(CustomerManager.getInstance().getAllActive(), null)),true);
+                    new CustomerPrintPresentationModel(
+                    		CustomerManager.getInstance().getAllActive(getEntityManager()), 
+                    		null, 
+                    		getEntityManager())
+                    ),
+                    true
+            );
         }
     }
 
@@ -363,7 +388,7 @@ public class CustomerManagementPresentationModel {
      * @param c
      * @return
      */
-    public static EditCustomerPresentationModel editCustomer(final Customer c) {
+    public static EditCustomerPresentationModel editCustomer(final Customer c, EntityManager entityManager) {
         GUIManager.getInstance().lockMenu();
         GUIManager.setLoadingScreenText("Kunde wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
@@ -378,7 +403,7 @@ public class CustomerManagementPresentationModel {
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"),
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")));
         p.put("activeExtention", CustomerOverviewEditCustomerExtentionPoint.class);
-        final EditCustomerPresentationModel model = new EditCustomerPresentationModel(p);
+        final EditCustomerPresentationModel model = new EditCustomerPresentationModel(p, entityManager);
         final EditCustomerView editView = new EditCustomerView(model);
 
         model.addButtonListener(new ButtonListener() {
@@ -422,4 +447,5 @@ public class CustomerManagementPresentationModel {
             updateActionEnablement();
         }
     }
+
 }

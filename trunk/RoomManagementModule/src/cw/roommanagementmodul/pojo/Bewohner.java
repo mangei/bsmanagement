@@ -17,7 +17,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import com.jgoodies.binding.beans.Model;
 
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 
 
 /**
@@ -32,7 +32,7 @@ public class Bewohner
 {
     
     private Long id             = null;
-    private Customer customer   = null;
+    private CustomerModel customer   = null;
     private Zimmer zimmer       = null;
     private Kaution kaution     = null;
     private int kautionStatus   = 0;
@@ -96,11 +96,11 @@ public class Bewohner
 
     @OneToOne(cascade=javax.persistence.CascadeType.ALL)
     @OnDelete(action=OnDeleteAction.CASCADE)
-    public Customer getCustomer() {
+    public CustomerModel getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerModel customer) {
         this.customer = customer;
     }
 

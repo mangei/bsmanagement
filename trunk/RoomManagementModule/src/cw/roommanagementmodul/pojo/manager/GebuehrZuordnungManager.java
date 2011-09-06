@@ -1,7 +1,7 @@
 package cw.roommanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import java.util.List;
 import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.Gebuehr;
@@ -14,7 +14,7 @@ import javax.persistence.EntityTransaction;
  *
  * @author Dominik
  */
-public class GebuehrZuordnungManager extends AbstractPOJOManager<GebuehrZuordnung> {
+public class GebuehrZuordnungManager extends AbstractPersistenceManager<GebuehrZuordnung> {
 
     private static GebuehrZuordnungManager instance;
     private static Logger logger = Logger.getLogger(GebuehrZuordnungManager.class.getName());

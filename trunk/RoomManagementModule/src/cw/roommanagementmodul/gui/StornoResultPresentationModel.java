@@ -18,7 +18,7 @@ import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.manager.BewohnerManager;
 
@@ -33,9 +33,9 @@ public class StornoResultPresentationModel {
     private Action printAction;
     private ButtonListenerSupport support;
     private List<AccountPosting> postingList;
-    private Map<Customer, List<AccountPosting>> customerPostingMap;
+    private Map<CustomerModel, List<AccountPosting>> customerPostingMap;
     private Map<Bewohner, List<AccountPosting>> bewohnerPostingMap;
-    private Map<Customer, List<AccountPosting>> customerNoBewohnerMap;
+    private Map<CustomerModel, List<AccountPosting>> customerNoBewohnerMap;
     private CWHeaderInfo headerInfo;
 
     public StornoResultPresentationModel(List<AccountPosting> postingList, CWHeaderInfo header) {
@@ -50,11 +50,11 @@ public class StornoResultPresentationModel {
         backAction = new BackAction();
         printAction = new PrintAction();
 
-        customerPostingMap = new HashMap<Customer, List<AccountPosting>>();
-        customerNoBewohnerMap = new HashMap<Customer, List<AccountPosting>>();
+        customerPostingMap = new HashMap<CustomerModel, List<AccountPosting>>();
+        customerNoBewohnerMap = new HashMap<CustomerModel, List<AccountPosting>>();
         setBewohnerPostingMap(new HashMap<Bewohner, List<AccountPosting>>());
 
-        List<Customer> cList = new ArrayList<Customer>();
+        List<CustomerModel> cList = new ArrayList<CustomerModel>();
         for (int i = 0; i < postingList.size(); i++) {
             if (!cList.contains(postingList.get(i).getCustomer())) {
                 cList.add(postingList.get(i).getCustomer());
@@ -64,7 +64,7 @@ public class StornoResultPresentationModel {
         BewohnerManager bewManager = BewohnerManager.getInstance();
         for (int i = 0; i < cList.size(); i++) {
 
-            Customer c = cList.get(i);
+            CustomerModel c = cList.get(i);
             List<AccountPosting> pList = new ArrayList<AccountPosting>();
             for (int j = 0; j < postingList.size(); j++) {
 
@@ -98,14 +98,14 @@ public class StornoResultPresentationModel {
         return bewohnerList;
     }
 
-    public List<Customer> getCustomerNoBewohner() {
+    public List<CustomerModel> getCustomerNoBewohner() {
 
-        List<Customer> customerList = new ArrayList<Customer>();
+        List<CustomerModel> customerList = new ArrayList<CustomerModel>();
         Set keySet = customerNoBewohnerMap.keySet();
         Iterator iterator = keySet.iterator();
 
         while (iterator.hasNext()) {
-            customerList.add((Customer) iterator.next());
+            customerList.add((CustomerModel) iterator.next());
         }
         return customerList;
     }
@@ -164,14 +164,14 @@ public class StornoResultPresentationModel {
     /**
      * @return the customerNoBewohnerMap
      */
-    public Map<Customer, List<AccountPosting>> getCustomerNoBewohnerMap() {
+    public Map<CustomerModel, List<AccountPosting>> getCustomerNoBewohnerMap() {
         return customerNoBewohnerMap;
     }
 
     /**
      * @param customerNoBewohnerMap the customerNoBewohnerMap to set
      */
-    public void setCustomerNoBewohnerMap(Map<Customer, List<AccountPosting>> customerNoBewohnerMap) {
+    public void setCustomerNoBewohnerMap(Map<CustomerModel, List<AccountPosting>> customerNoBewohnerMap) {
         this.customerNoBewohnerMap = customerNoBewohnerMap;
     }
 

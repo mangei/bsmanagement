@@ -14,7 +14,9 @@ import java.beans.PropertyChangeListener;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
-import cw.customermanagementmodul.pojo.Group;
+
+import cw.customermanagementmodul.persistence.model.GroupModel;
+
 import javax.swing.Icon;
 
 /**
@@ -22,7 +24,7 @@ import javax.swing.Icon;
  * @author ManuelG
  */
 public class EditGroupPresentationModel
-    extends PresentationModel<Group>
+    extends PresentationModel<GroupModel>
 {
 
     private Action saveButtonAction;
@@ -35,7 +37,7 @@ public class EditGroupPresentationModel
     private SaveListener saveListener;
     private PropertyChangeListener unsavedListener;
 
-    public EditGroupPresentationModel(Group group, CWHeaderInfo headerInfo) {
+    public EditGroupPresentationModel(GroupModel group, CWHeaderInfo headerInfo) {
         super(group);
         this.headerInfo = headerInfo;
 
@@ -54,7 +56,7 @@ public class EditGroupPresentationModel
     private void initEventHandling() {
 
         saveListener = new SaveListener();
-        getBufferedModel(Group.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
+        getBufferedModel(GroupModel.PROPERTYNAME_NAME).addValueChangeListener(saveListener);
 
         unsaved.addValueChangeListener(unsavedListener = new PropertyChangeListener() {
             public void propertyChange(PropertyChangeEvent evt) {
@@ -69,7 +71,7 @@ public class EditGroupPresentationModel
     }
 
     public void dispose() {
-        getBufferedModel(Group.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
+        getBufferedModel(GroupModel.PROPERTYNAME_NAME).removeValueChangeListener(saveListener);
         
         unsaved.removeValueChangeListener(unsavedListener);
 

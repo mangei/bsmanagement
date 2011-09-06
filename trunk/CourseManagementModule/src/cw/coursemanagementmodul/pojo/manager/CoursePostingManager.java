@@ -5,14 +5,14 @@ import java.util.List;
 
 import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import cw.coursemanagementmodul.pojo.CoursePosting;
 
 /**
  *
  * @author André Salmhofer
  */
-public class CoursePostingManager extends AbstractPOJOManager<CoursePosting> {
+public class CoursePostingManager extends AbstractPersistenceManager<CoursePosting> {
 
     private static CoursePostingManager instance;
 

@@ -11,10 +11,10 @@ import cw.customermanagementmodul.gui.CustomerManagementView;
 import cw.customermanagementmodul.gui.GroupManagementPresentationModel;
 import cw.customermanagementmodul.gui.GroupManagementView;
 import cw.boardingschoolmanagement.interfaces.Modul;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Group;
-import cw.customermanagementmodul.pojo.manager.CustomerManager;
-import cw.customermanagementmodul.pojo.manager.GroupManager;
+import cw.customermanagementmodul.persistence.CustomerManager;
+import cw.customermanagementmodul.persistence.GroupManager;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
+import cw.customermanagementmodul.persistence.model.GroupModel;
 import java.awt.event.ActionEvent;
 import java.util.List;
 import javax.swing.AbstractAction;
@@ -94,8 +94,8 @@ public class CustomerManagementModul
         // Wenn eine Gruppe gelöscht wird, diese Gruppe aus der Gruppenliste der Kunden löschen.
         GroupManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
-                Group group = (Group) evt.getSource();
-                List<Customer> customers = CustomerManager.getInstance().getAll(group);
+                GroupModel group = (GroupModel) evt.getSource();
+                List<CustomerModel> customers = CustomerManager.getInstance().getAll(group);
                 for(int i=0, l=customers.size(); i<l; i++) {
                     customers.get(i).getGroups().remove(group);
                 }
@@ -105,10 +105,10 @@ public class CustomerManagementModul
         // Wenn ein Kunde gelöscht wird, diesen Kunden aus den Kundenlisten der Gruppen löschen.
         CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
-                Customer customer = (Customer) evt.getSource();
-                List<Group> groups = customer.getGroups();
+                CustomerModel customer = (CustomerModel) evt.getSource();
+                List<GroupModel> groups = customer.getGroups();
 
-                for(Group group : groups) {
+                for(GroupModel group : groups) {
                     group.getCustomers().remove(customer);
                 }
 

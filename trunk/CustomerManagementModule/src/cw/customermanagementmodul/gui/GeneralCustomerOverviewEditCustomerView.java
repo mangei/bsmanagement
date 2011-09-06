@@ -6,8 +6,9 @@ import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Guardian;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
+import cw.customermanagementmodul.persistence.model.GuardianModel;
+
 import java.awt.Font;
 
 /**
@@ -49,27 +50,27 @@ public class GeneralCustomerOverviewEditCustomerView extends CWPanel
 
     private void initComponents() {
 
-        lActive            = CWComponentFactory.createLabelBoolean(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_ACTIVE), "Aktiv", "Inaktiv");
-        lGender            = CWComponentFactory.createLabelBoolean(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_GENDER), "Herr", "Frau");
-        lTitle             = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_TITLE));
-        lForename          = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_FORENAME));
-        lSurname           = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_SURNAME));
+        lActive            = CWComponentFactory.createLabelBoolean(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_ACTIVE), "Aktiv", "Inaktiv");
+        lGender            = CWComponentFactory.createLabelBoolean(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_GENDER), "Herr", "Frau");
+        lTitle             = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_TITLE));
+        lForename          = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_FORENAME));
+        lSurname           = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_SURNAME));
 
-        lBirthday          = CWComponentFactory.createLabelDate(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY));
+        lBirthday          = CWComponentFactory.createLabelDate(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_BIRTHDAY));
 
-        lGuardianForename  = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_FORENAME));
-        lGuardianSurname   = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_SURNAME));
+        lGuardianForename  = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(GuardianModel.PROPERTYNAME_FORENAME));
+        lGuardianSurname   = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(GuardianModel.PROPERTYNAME_SURNAME));
 
-        lStreet            = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_STREET));
-        lPostOfficeNumber  = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER));
-        lCity              = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_CITY));
-        lCountry           = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_COUNTRY));
-        lProvince          = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_PROVINCE));
-        lMobilphone        = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_MOBILEPHONE));
-        lLandlinephone     = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_LANDLINEPHONE));
-        lFax               = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_FAX));
-        lEmail             = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_EMAIL));
-        lComment           = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_COMMENT));
+        lStreet            = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_STREET));
+        lPostOfficeNumber  = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_POSTOFFICENUMBER));
+        lCity              = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_CITY));
+        lCountry           = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_COUNTRY));
+        lProvince          = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_PROVINCE));
+        lMobilphone        = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_MOBILEPHONE));
+        lLandlinephone     = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_LANDLINEPHONE));
+        lFax               = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_FAX));
+        lEmail             = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_EMAIL));
+        lComment           = CWComponentFactory.createLabel(model.getEditCustomerPresentationModel().getBufferedModel(CustomerModel.PROPERTYNAME_COMMENT));
 
         Font font = lActive.getFont().deriveFont(Font.BOLD);
 

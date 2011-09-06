@@ -5,7 +5,8 @@ import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtentionPoint;
 import cw.customermanagementmodul.gui.SearchCustomerSelectorFilterExtentionPresentationModel;
 import cw.customermanagementmodul.gui.SearchCustomerSelectorFilterExtentionView;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
+
 import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -41,7 +42,7 @@ public class SearchCustomerSelectorFilterExtention
         });
     }
 
-    public List<Customer> filter(List<Customer> costumers) {
+    public List<CustomerModel> filter(List<CustomerModel> costumers) {
 
         // Get the input
         String searchString = ((String) model.getSearchModel().getValue()).toLowerCase();
@@ -51,7 +52,7 @@ public class SearchCustomerSelectorFilterExtention
             return costumers;
         }
 
-        List<Customer> newCostumers = new ArrayList<Customer>();
+        List<CustomerModel> newCostumers = new ArrayList<CustomerModel>();
 
         // Split the searchString
         String[] searchStrings = searchString.split(" ");
@@ -60,8 +61,8 @@ public class SearchCustomerSelectorFilterExtention
             System.out.println(" - " + i + " '" + searchStrings[i] + "'");
         }
 
-        Iterator<Customer> it = costumers.iterator();
-        Customer costumer;
+        Iterator<CustomerModel> it = costumers.iterator();
+        CustomerModel costumer;
         StringBuilder costumerStringBuilder;
         String costumerString;
         while(it.hasNext()) {

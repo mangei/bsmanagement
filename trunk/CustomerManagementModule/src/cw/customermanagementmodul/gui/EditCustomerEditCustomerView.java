@@ -1,26 +1,25 @@
 package cw.customermanagementmodul.gui;
 
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.AutoCompletion;
+
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWButton;
-import cw.boardingschoolmanagement.gui.component.CWCheckBox;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWDateChooser;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWTextArea;
 import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import java.awt.event.FocusEvent;
-import java.beans.PropertyChangeEvent;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Guardian;
-import java.awt.event.FocusListener;
-import java.beans.PropertyChangeListener;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import cw.customermanagementmodul.persistence.Customer;
 
 /**
  *
@@ -36,11 +35,6 @@ public class EditCustomerEditCustomerView extends CWView
     private CWTextField tfTitle;
     private CWTextField tfForename;
     private CWTextField tfSurname;
-    private CWCheckBox cGuardianActive;
-    private CWPanel pGuardianGender;
-    private CWTextField tfGuardianTitle;
-    private CWTextField tfGuardianForename;
-    private CWTextField tfGuardianSurname;
     private CWDateChooser dcBirthday;
     private CWTextField tfStreet;
     private CWTextField tfPostOfficeNumber;
@@ -54,7 +48,6 @@ public class EditCustomerEditCustomerView extends CWView
     private CWTextArea taComment;
     private CWButton bClearLocationData;
 
-    private PropertyChangeListener guardianActiveListener;
     private PostOfficeNumberAutoCompleteFire ponacf;
     private CityAutoCompleteFire cacf;
     private ProvinceAutoCompleteFire pacf;
@@ -83,12 +76,6 @@ public class EditCustomerEditCustomerView extends CWView
 
         dcBirthday          = CWComponentFactory.createDateChooser(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY));
 
-        cGuardianActive     = CWComponentFactory.createCheckBox(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_ACTIVE), "Dieser Kunde hat einen Erziehungsberechtigen:");
-        pGuardianGender     = CWComponentFactory.createTrueFalsePanel(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_GENDER), "Herr", "Frau", model.getEditCustomerPresentationModel().getGuardianPresentationModel().getModel(Guardian.PROPERTYNAME_GENDER).booleanValue());
-        tfGuardianTitle     = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_TITLE), false);
-        tfGuardianForename  = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_FORENAME), false);
-        tfGuardianSurname   = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_SURNAME), false);
-
         tfStreet            = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_STREET), false);
         tfPostOfficeNumber  = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER), false);
         tfCity              = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_CITY), false);
@@ -115,11 +102,6 @@ public class EditCustomerEditCustomerView extends CWView
                 .addComponent(tfForename)
                 .addComponent(tfSurname)
                 .addComponent(dcBirthday)
-                .addComponent(cGuardianActive)
-                .addComponent(pGuardianGender)
-                .addComponent(tfGuardianTitle)
-                .addComponent(tfGuardianForename)
-                .addComponent(tfGuardianSurname)
                 .addComponent(tfStreet)
                 .addComponent(tfPostOfficeNumber)
                 .addComponent(tfCity)
@@ -151,19 +133,6 @@ public class EditCustomerEditCustomerView extends CWView
         tfProvince.addFocusListener(pacf);
         tfProvince.getDocument().addDocumentListener(pacf);
 
-        model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_ACTIVE).addValueChangeListener(guardianActiveListener = new PropertyChangeListener() {
-            public void propertyChange(PropertyChangeEvent evt) {
-                setGuardianComponentsActive((Boolean)evt.getNewValue());
-            }
-        });
-        setGuardianComponentsActive((Boolean)model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_ACTIVE).getValue());
-    }
-
-    private void setGuardianComponentsActive(boolean b) {
-        pGuardianGender.setEnabled(b);
-        tfGuardianTitle.setEnabled(b);
-        tfGuardianForename.setEnabled(b);
-        tfGuardianSurname.setEnabled(b);
     }
 
     private class PostOfficeNumberAutoCompleteFire implements FocusListener, DocumentListener {
@@ -279,17 +248,6 @@ public class EditCustomerEditCustomerView extends CWView
         builder.add(tfForename,             cc.xy(7, row));
         builder.addLabel("Geburtsdatum:",   cc.xy(1, row+=2));
         builder.add(dcBirthday,             cc.xy(3, row));
-
-        builder.addSeparator("<html><b>Erziehungsberechtigter</b></html>",    cc.xyw(1, row+=2, 8));
-        builder.add(cGuardianActive,        cc.xyw(1, row+=2, 8));
-        builder.addLabel("Anrede:",         cc.xy(1, row+=2));
-        builder.add(pGuardianGender,        cc.xy(3, row));
-        builder.addLabel("Titel:",          cc.xy(5, row));
-        builder.add(tfGuardianTitle,        cc.xy(7, row));
-        builder.addLabel("Vorname:",        cc.xy(1, row+=2));
-        builder.add(tfGuardianForename,     cc.xy(3, row));
-        builder.addLabel("Nachname:",       cc.xy(5, row));
-        builder.add(tfGuardianSurname,      cc.xy(7, row));
         
         builder.addSeparator("<html><b>Adresse</b></html>",    cc.xyw(1, row+=2, 8));
         builder.addLabel("Straße:",         cc.xy(1, row+=2));
@@ -332,9 +290,7 @@ public class EditCustomerEditCustomerView extends CWView
         tfProvince.removeFocusListener(pacf);
         tfProvince.getDocument().removeDocumentListener(pacf);
         pacf = null;
-        model.getEditCustomerPresentationModel().getGuardianPresentationModel().getBufferedModel(Guardian.PROPERTYNAME_ACTIVE).removeValueChangeListener(guardianActiveListener);
-        guardianActiveListener = null;
-
+        
         titleAutoCompletion.uninstallListeners();
         postOfficeNumberAutoCompletion.uninstallListeners();
         cityAutoCompletion.uninstallListeners();

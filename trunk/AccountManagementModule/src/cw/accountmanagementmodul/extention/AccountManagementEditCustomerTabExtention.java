@@ -7,7 +7,8 @@ import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 import cw.accountmanagementmodul.pojo.manager.AccountManager;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
+
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class AccountManagementEditCustomerTabExtention
     public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
         this.editCustomerModel = editCustomerModel;
 
-        Customer customer = editCustomerModel.getBean();
+        CustomerModel customer = editCustomerModel.getBean();
         account = AccountManager.getInstance().get(customer);
 
         if(account == null) {

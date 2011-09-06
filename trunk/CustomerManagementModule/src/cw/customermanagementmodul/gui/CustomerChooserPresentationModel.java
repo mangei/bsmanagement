@@ -1,23 +1,27 @@
 package cw.customermanagementmodul.gui;
 
+import java.awt.event.ActionEvent;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Icon;
+
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import java.awt.event.ActionEvent;
-import java.util.List;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.Icon;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.Customer;
 
 /**
  *
  * @author ManuelG
  */
 public class CustomerChooserPresentationModel
-{
+	extends CWPresentationModel {
 
     private List<Customer> customerList;
     private CWHeaderInfo headerInfo;
@@ -30,16 +34,17 @@ public class CustomerChooserPresentationModel
 
     private CustomerSelectorPresentationModel customerSelectorPresentationModel;
 
-    public CustomerChooserPresentationModel(CWHeaderInfo headerInfo) {
-        this(headerInfo, null);
+    public CustomerChooserPresentationModel(CWHeaderInfo headerInfo, EntityManager entityManager) {
+        this(headerInfo, null, entityManager);
     }
 
-    public CustomerChooserPresentationModel(CWHeaderInfo headerInfo, List<Customer> customerList) {
-        this(headerInfo, customerList, null);
+    public CustomerChooserPresentationModel(CWHeaderInfo headerInfo, List<Customer> customerList, EntityManager entityManager) {
+        this(headerInfo, customerList, null, entityManager);
     }
     
-    public CustomerChooserPresentationModel(CWHeaderInfo headerInfo, List<Customer> customerList, Customer selectedCustomer) {
-        this.headerInfo = headerInfo;
+    public CustomerChooserPresentationModel(CWHeaderInfo headerInfo, List<Customer> customerList, Customer selectedCustomer, EntityManager entityManager) {
+        super(entityManager);
+    	this.headerInfo = headerInfo;
         this.customerList = customerList;
         this.selectedCustomer = selectedCustomer;
 
@@ -52,7 +57,7 @@ public class CustomerChooserPresentationModel
         okAction = new OkAction("Auswählen", CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"));
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
 
-        customerSelectorPresentationModel = new CustomerSelectorPresentationModel();
+        customerSelectorPresentationModel = new CustomerSelectorPresentationModel(getEntityManager());
         
         // Select the Customer
         

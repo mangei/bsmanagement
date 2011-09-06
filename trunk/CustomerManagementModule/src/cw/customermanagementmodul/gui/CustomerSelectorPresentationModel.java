@@ -1,28 +1,31 @@
 package cw.customermanagementmodul.gui;
 
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+
+import javax.persistence.EntityManager;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.GroupLayout.Group;
+import javax.swing.ListModel;
+import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableModel;
+
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.app.CWUtils;
+
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtentionPoint;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.util.Date;
-import java.util.List;
-import javax.swing.ListModel;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Group;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
+import cw.customermanagementmodul.persistence.Customer;
 
 /**
  * Diese Klasse beinhaltet alle Funktionen und Methoden die für
@@ -31,7 +34,7 @@ import javax.swing.table.TableModel;
  * @author CreativeWorkers.at
  */
 public class CustomerSelectorPresentationModel
-{
+	extends CWPresentationModel {
 
     private CustomerTableModel customerTableModel;
     private SelectionInList<Customer> customerSelection;
@@ -51,24 +54,25 @@ public class CustomerSelectorPresentationModel
     private static final String defaultCustomerTableStateName = "cw.customerboardingmanagement.CustomerSelectorView.customerTableState";
     private String customerTableStateName = "cw.customerboardingmanagement.CustomerSelectorView.customerTableState";
 
-    public CustomerSelectorPresentationModel() {
-        this(null, true, defaultCustomerTableStateName);
+    public CustomerSelectorPresentationModel(EntityManager entityManager) {
+        this(null, true, defaultCustomerTableStateName, entityManager);
     }
 
-    public CustomerSelectorPresentationModel(List<Customer> customers, String customerTableStateName) {
-        this(customers, true, customerTableStateName);
+    public CustomerSelectorPresentationModel(List<Customer> customers, String customerTableStateName, EntityManager entityManager) {
+        this(customers, true, customerTableStateName, entityManager);
     }
 
-    public CustomerSelectorPresentationModel(List<Customer> customers) {
-        this(customers, true, defaultCustomerTableStateName);
+    public CustomerSelectorPresentationModel(List<Customer> customers, EntityManager entityManager) {
+        this(customers, true, defaultCustomerTableStateName, entityManager);
     }
 
-    public CustomerSelectorPresentationModel(List<Customer> customers, boolean filtering) {
-        this(customers, filtering, defaultCustomerTableStateName);
+    public CustomerSelectorPresentationModel(List<Customer> customers, boolean filtering, EntityManager entityManager) {
+        this(customers, filtering, defaultCustomerTableStateName, entityManager);
     }
 
-    public CustomerSelectorPresentationModel(List<Customer> customers, boolean filtering, String customerTableStateName) {
-        this.customers = new ArrayList(customers);
+    public CustomerSelectorPresentationModel(List<Customer> customers, boolean filtering, String customerTableStateName, EntityManager entityManager) {
+        super(entityManager);
+    	this.customers = new ArrayList(customers);
         this.filterEnabledModel = new ValueHolder(filtering);
         this.customerTableStateName = customerTableStateName;
 

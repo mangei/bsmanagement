@@ -1,55 +1,54 @@
 package cw.customermanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
-import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.comparator.PriorityComparator;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.ModulManager;
-import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import javax.persistence.EntityManager;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.Icon;
 import javax.swing.JComponent;
 import javax.swing.JOptionPane;
+
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.comparator.PriorityComparator;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.ModulManager;
+import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Guardian;
-import cw.customermanagementmodul.pojo.manager.CustomerManager;
-import java.util.Collections;
-import javax.swing.Icon;
+import cw.customermanagementmodul.persistence.Customer;
 
 /**
  *
  * @author CreativeWorkers.at
  */
 public class EditCustomerPresentationModel
-        extends PresentationModel<Customer>
+        extends CWEditPresentationModel<Customer>
 {
 
     private PresentationModelProperties properties;
-    private Customer customer;
     private ValueModel unsaved;
     private CWHeaderInfo headerInfo;
     private Action saveAction;
     private Action cancelAction;
     private ButtonListenerSupport support;
-    private PresentationModel<Guardian> guardianPresentationModel;
     private List<EditCustomerTabExtentionPoint> editCustomerGUITabExtentions;
     private PropertyChangeListener actionButtonListener;
     private SaveListener saveListener;
 
-    public EditCustomerPresentationModel(PresentationModelProperties properties) {
-        super((Customer)properties.get("customer"));
-        this.customer = (Customer)properties.get("customer");
+    public EditCustomerPresentationModel(PresentationModelProperties properties, EntityManager entityManager) {
+        super((Customer)properties.get("customer"), entityManager);
         this.headerInfo = properties.getHeaderInfo();
         this.properties = properties;
 
@@ -60,18 +59,20 @@ public class EditCustomerPresentationModel
     public void initModels() {
         unsaved = new ValueHolder();
 
-        guardianPresentationModel = new PresentationModel<Guardian>(getBean().getGuardian());
-
-        // Init Extentions
+        // initialize extentions
         editCustomerGUITabExtentions = getExtentions();
         for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
             extention.initPresentationModel(this);
         }
 
+        // top button actions
         saveAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/customermanagementmodul/images/disk_16.png"));
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
 
         support = new ButtonListenerSupport();
+        
+        // begin transaction
+        getEntityManager().getTransaction().begin();
     }
 
     public void initEventHandling() {
@@ -90,12 +91,6 @@ public class EditCustomerPresentationModel
         getBufferedModel(Customer.PROPERTYNAME_EMAIL).addValueChangeListener(saveListener);
         getBufferedModel(Customer.PROPERTYNAME_COMMENT).addValueChangeListener(saveListener);
         getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).addValueChangeListener(saveListener);
-
-        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_ACTIVE).addValueChangeListener(saveListener);
-        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_TITLE).addValueChangeListener(saveListener);
-        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_GENDER).addValueChangeListener(saveListener);
-        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_FORENAME).addValueChangeListener(saveListener);
-        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_SURNAME).addValueChangeListener(saveListener);
 
         unsaved.addValueChangeListener(actionButtonListener = new PropertyChangeListener() {
 
@@ -135,9 +130,6 @@ public class EditCustomerPresentationModel
             getBufferedModel(Customer.PROPERTYNAME_EMAIL).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_COMMENT).removeValueChangeListener(saveListener);
             getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).removeValueChangeListener(saveListener);
-
-            guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_FORENAME).removeValueChangeListener(saveListener);
-            guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_SURNAME).removeValueChangeListener(saveListener);
         }
 
         getBufferedModel(Customer.PROPERTYNAME_ACTIVE).release();
@@ -154,9 +146,6 @@ public class EditCustomerPresentationModel
         getBufferedModel(Customer.PROPERTYNAME_EMAIL).release();
         getBufferedModel(Customer.PROPERTYNAME_COMMENT).release();
         getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY).release();
-        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_FORENAME).release();
-        guardianPresentationModel.getBufferedModel(Guardian.PROPERTYNAME_SURNAME).release();
-        guardianPresentationModel.release();
 
 //        PropertyChangeListener[] beanPropertyChangeListeners = super.getBeanPropertyChangeListeners();
 //        for (PropertyChangeListener l : beanPropertyChangeListeners) {
@@ -285,10 +274,7 @@ public class EditCustomerPresentationModel
     public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
-
-    public PresentationModel<Guardian> getGuardianPresentationModel() {
-        return guardianPresentationModel;
-    }
+    
 
     ////////////////////////////////////////////////////////////////////////////
     // Action classes
@@ -303,10 +289,9 @@ public class EditCustomerPresentationModel
         public void actionPerformed(ActionEvent e) {
 
             // Fire only when the save-method worked correct
-            if (save()) {
+            if(save()) {
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
-            }
-
+            }	
         }
     }
 
@@ -326,7 +311,7 @@ public class EditCustomerPresentationModel
             if (i == 0) {
 
                 // If the save-method doesn't worked, because of an error, do nothing
-                if (!save()) {
+                if (save()) {
                     return;
                 }
             }
@@ -335,53 +320,53 @@ public class EditCustomerPresentationModel
             }
         }
     }
+    
+    public boolean validate() {
+    	clearErrorMessages();
+    	
+    	// validate
+    	
+    	
+    	// call validate action for extentions
+        for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
+            extention.validate(getErrorMessages());
+        }
+    	
+    	return hasErrorMessages();
+    }
+    
+    public void cancel() {
+    	
+    	// Die Erweiterungen speichern lassen
+        for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
+            extention.cancel();
+        }
+
+        // revert all changes
+        getEntityManager().getTransaction().rollback();
+    }
 
     public boolean save() {
-        boolean valid = true;
+        
+    	boolean valid = validate();
+    	
+    	if(valid) {
 
-        List<EditCustomerTabExtentionPoint> extentions = getExtentions();
-        List<String> errorMessages = new ArrayList<String>();
-        for (EditCustomerTabExtentionPoint extention : extentions) {
-            List<String> errorList = extention.validate();
-            if (errorList != null) {
-                if (errorList.size() > 0) {
-                    valid = false;
-                    errorMessages.addAll(errorList);
-                }
-            }
-        }
-
-        if (!valid) {
-
-            StringBuffer buffer = new StringBuffer("<html>");
-
-            for (String message : errorMessages) {
-                buffer.append(message);
-                buffer.append("<br>");
-            }
-
-            buffer.append("</html>");
-
-            JOptionPane.showMessageDialog(null, buffer.toString(), "Fehler und Warnungen", JOptionPane.ERROR_MESSAGE);
-
-            return false;
-        }
-
-        // Alle Werte in das Objekt schreiben
-        triggerCommit();
-        guardianPresentationModel.triggerCommit();
-
-        // Den Kunden speichern (Guardian wird automatisch mittels Hibernate-Cascade mitgespeichert)
-        CustomerManager.getInstance().update(getBean());
-
-        // Die Erweiterungen speichern lassen
-        for (EditCustomerTabExtentionPoint extention : extentions) {
-            extention.save();
-        }
-
-        unsaved.setValue(false);
-
-        return true;
+	        // Alle Werte in das Objekt schreiben
+	        triggerCommit();
+	
+	        // Die Erweiterungen speichern lassen
+	        for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
+	            extention.save();
+	        }
+	
+	        // Commit all changes
+	        getEntityManager().getTransaction().commit();
+	        
+	        unsaved.setValue(false);
+    	}
+    	
+    	return valid;
     }
 
     public ValueModel getUnsaved() {

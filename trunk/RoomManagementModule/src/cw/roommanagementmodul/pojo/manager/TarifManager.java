@@ -7,7 +7,7 @@ package cw.roommanagementmodul.pojo.manager;
 
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import java.util.List;
 import cw.roommanagementmodul.pojo.Gebuehr;
 import cw.roommanagementmodul.pojo.Tarif;
@@ -19,7 +19,7 @@ import javax.persistence.EntityManager;
  *
  * @author Dominik
  */
-public class TarifManager extends AbstractPOJOManager<Tarif> {
+public class TarifManager extends AbstractPersistenceManager<Tarif> {
 
     private static TarifManager instance;
     private static Logger logger = Logger.getLogger(TarifManager.class.getName());

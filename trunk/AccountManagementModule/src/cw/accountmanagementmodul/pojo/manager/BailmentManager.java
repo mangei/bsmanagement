@@ -3,7 +3,7 @@ package cw.accountmanagementmodul.pojo.manager;
 import cw.accountmanagementmodul.pojo.Account;
 import cw.accountmanagementmodul.pojo.Bailment;
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import java.util.List;
 import cw.accountmanagementmodul.pojo.AccountPosting;
 import java.util.logging.Logger;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  *
  * @author CreativeWorkers.at
  */
-public class BailmentManager extends AbstractPOJOManager<Bailment>
+public class BailmentManager extends AbstractPersistenceManager<Bailment>
 {
 
     private static BailmentManager instance;

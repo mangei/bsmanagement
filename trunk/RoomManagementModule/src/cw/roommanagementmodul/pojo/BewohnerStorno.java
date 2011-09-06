@@ -3,7 +3,7 @@ package cw.roommanagementmodul.pojo;
 import java.util.List;
 
 import cw.accountmanagementmodul.pojo.AccountPosting;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 
 /**
  *
@@ -12,21 +12,21 @@ import cw.customermanagementmodul.pojo.Customer;
 public class BewohnerStorno {
 
     private Long id;
-    private Customer customer;
+    private CustomerModel customer;
     private Zimmer zimmer;
     private List<AccountPosting> postingList;
 
     public BewohnerStorno() {
     }
 
-    public BewohnerStorno(Long id, Customer customer, Zimmer zimmer, List<AccountPosting> postingList) {
+    public BewohnerStorno(Long id, CustomerModel customer, Zimmer zimmer, List<AccountPosting> postingList) {
         this.id = id;
         this.customer = customer;
         this.zimmer = zimmer;
         this.postingList = postingList;
     }
 
-    public BewohnerStorno(Customer customer, Zimmer zimmer, List<AccountPosting> postingList) {
+    public BewohnerStorno(CustomerModel customer, Zimmer zimmer, List<AccountPosting> postingList) {
         this.customer = customer;
         this.zimmer = zimmer;
         this.postingList = postingList;
@@ -51,14 +51,14 @@ public class BewohnerStorno {
     /**
      * @return the customer
      */
-    public Customer getCustomer() {
+    public CustomerModel getCustomer() {
         return customer;
     }
 
     /**
      * @param customer the customer to set
      */
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerModel customer) {
         this.customer = customer;
     }
 

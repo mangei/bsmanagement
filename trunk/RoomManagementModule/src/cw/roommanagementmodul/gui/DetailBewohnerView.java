@@ -8,7 +8,8 @@ import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
+
 import java.awt.Color;
 import java.awt.Font;
 import cw.roommanagementmodul.pojo.Bewohner;
@@ -56,7 +57,7 @@ public class DetailBewohnerView extends CWView
         bBack.setText("Zurück");
 
         Bewohner b = model.getBewohner();
-        Customer c = b.getCustomer();
+        CustomerModel c = b.getCustomer();
 
         this.lAnrede = CWComponentFactory.createLabel(c.getTitle());
         this.lNachname = CWComponentFactory.createLabel(c.getSurname());

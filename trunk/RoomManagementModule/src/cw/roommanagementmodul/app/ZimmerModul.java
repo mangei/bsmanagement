@@ -16,8 +16,8 @@ import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.manager.CustomerManager;
+import cw.customermanagementmodul.persistence.CustomerManager;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.roommanagementmodul.gui.BereichPresentationModel;
 import cw.roommanagementmodul.gui.BereichView;
 import cw.roommanagementmodul.gui.BewohnerPresentationModel;
@@ -42,7 +42,7 @@ import cw.roommanagementmodul.pojo.manager.GebuehrenManager;
  */
 public class ZimmerModul implements Modul {
 
-    private Customer customer;
+    private CustomerModel customer;
     private Bewohner bewohner;
 
     public String getModulName() {
@@ -59,11 +59,11 @@ public class ZimmerModul implements Modul {
         return null;
     }
 
-    public Customer getCustomer() {
+    public CustomerModel getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
+    public void setCustomer(CustomerModel customer) {
         this.customer = customer;
     }
 
@@ -182,7 +182,7 @@ public class ZimmerModul implements Modul {
         CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
 
             public void deleteAction(CascadeEvent evt) {
-                Customer c = (Customer) evt.getSource();
+                CustomerModel c = (CustomerModel) evt.getSource();
                 BewohnerManager bewManager = BewohnerManager.getInstance();
 
                 Bewohner b = bewManager.getBewohner(c);
@@ -257,7 +257,7 @@ public class ZimmerModul implements Modul {
     }
 
     public Class getBaseClass() {
-        return Customer.class;
+        return CustomerModel.class;
     }
 
     public List<Class> getDependencies() {

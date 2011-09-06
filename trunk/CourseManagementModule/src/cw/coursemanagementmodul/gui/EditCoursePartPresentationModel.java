@@ -36,7 +36,7 @@ import cw.coursemanagementmodul.pojo.manager.CourseAdditionManager;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
 import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
 import cw.coursemanagementmodul.pojo.manager.ValueManager;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 
 /**
  *
@@ -55,7 +55,7 @@ public class EditCoursePartPresentationModel
     //*******************************************
     //Instanz eines Kurses
     private CourseParticipant coursePart;
-    private Customer selCustomer;
+    private CustomerModel selCustomer;
     //Variable, die feststellt ob die Daten gespeichert sind oder nicht
     private ValueModel unsaved;
     private SelectionInList<CourseAddition> courseAdditionSelection;
@@ -76,7 +76,7 @@ public class EditCoursePartPresentationModel
     private SaveListener saveListener;
 
     //Konstruktor
-    public EditCoursePartPresentationModel(CourseParticipant coursePart, ValueModel unsaved, Customer c) {
+    public EditCoursePartPresentationModel(CourseParticipant coursePart, ValueModel unsaved, CustomerModel c) {
         super(coursePart);
         this.coursePart = coursePart;
         this.unsaved = unsaved;

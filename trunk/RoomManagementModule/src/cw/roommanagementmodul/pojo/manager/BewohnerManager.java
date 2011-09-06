@@ -5,8 +5,8 @@
 package cw.roommanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.Kaution;
 import java.util.List;
@@ -18,7 +18,7 @@ import javax.persistence.NoResultException;
  *
  * @author Dominik
  */
-public class BewohnerManager extends AbstractPOJOManager<Bewohner> {
+public class BewohnerManager extends AbstractPersistenceManager<Bewohner> {
 
     private static BewohnerManager instance;
     private static Logger logger = Logger.getLogger(BewohnerManager.class.getName());
@@ -33,7 +33,7 @@ public class BewohnerManager extends AbstractPOJOManager<Bewohner> {
         return instance;
     }
 
-    public Bewohner getBewohner(Customer customer) {
+    public Bewohner getBewohner(CustomerModel customer) {
         EntityManager entityManager = HibernateUtil.getEntityManager();
         Bewohner bewohner=null;
         try {

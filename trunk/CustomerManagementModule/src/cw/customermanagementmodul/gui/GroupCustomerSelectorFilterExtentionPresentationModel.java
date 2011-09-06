@@ -5,8 +5,9 @@ import javax.swing.DefaultListModel;
 import javax.swing.DefaultListSelectionModel;
 import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
-import cw.customermanagementmodul.pojo.Group;
-import cw.customermanagementmodul.pojo.manager.GroupManager;
+
+import cw.customermanagementmodul.persistence.GroupManager;
+import cw.customermanagementmodul.persistence.model.GroupModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -28,7 +29,7 @@ public class GroupCustomerSelectorFilterExtentionPresentationModel
 
     public void initModels() {
         groupSelection = new DefaultListModel();
-        List<Group> groupList = GroupManager.getInstance().getAll();
+        List<GroupModel> groupList = GroupManager.getInstance().getAll();
         for (int i = 0, l = groupList.size(); i < l; i++) {
             groupSelection.addElement(groupList.get(i));
         }
@@ -134,7 +135,7 @@ public class GroupCustomerSelectorFilterExtentionPresentationModel
     ////////////////////////////////////////////////////////////////////////////
     // Other classes
     ////////////////////////////////////////////////////////////////////////////
-    public class NoGroup extends Group {
+    public class NoGroup extends GroupModel {
 
         private String name;
 
