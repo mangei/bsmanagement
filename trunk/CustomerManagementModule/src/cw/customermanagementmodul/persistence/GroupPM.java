@@ -28,7 +28,11 @@ public class GroupPM extends AbstractPersistenceManager<Group> {
     }
 
 	public Group create(EntityManager entityManager) {
-		return new GroupImpl(entityManager);
+		Group group = new GroupImpl(entityManager);
+    	entityManager.getTransaction().begin();
+		entityManager.persist(group);
+    	entityManager.getTransaction().commit();
+		return group;
 	}
     
     public int countAll(EntityManager entityManager) {
