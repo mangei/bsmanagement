@@ -45,7 +45,7 @@ public class DetailHistoryPresentationModel
     public void initModels() {
 
         headerInfo = new CWHeaderInfo(
-                "Buchungsdetailansicht für Ferienkurse",
+                "Buchungsdetailansicht fuer Ferienkurse",
                     new StringBuilder().append("<html>").append(selectedCourseParticipant.getCustomer().getTitle())
                     .append(" ").append(selectedCourseParticipant.getCustomer().getForename())
                     .append(" ").append(selectedCourseParticipant.getCustomer().getSurname()).append("<br/>")
@@ -57,12 +57,12 @@ public class DetailHistoryPresentationModel
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/detail.png"));
 
         headerInfoSaldo = new CWHeaderInfo(
-                "Buchungsübersicht für den Kurs",
+                "Buchungsuebersicht fuer den Kurs",
                 "Sie befinden sich im Kursverwaltungsbereich. Hier können Sie Kurse anlegen",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
 
-        backAction = new BackAction("Zurück");
+        backAction = new BackAction("Zurueck");
         accountings = new SelectionInList<CoursePosting>();
         setPostingsOfOneCourseParticipant();
     }

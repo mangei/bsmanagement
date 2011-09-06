@@ -47,7 +47,7 @@ public class GebuehrenView extends CWView {
 
 
         String gebuehrenTableStateName = "cw.roommanagementmodul.GebuehrenView.gebuehrenTableState";
-        tGebuehr = CWComponentFactory.createTable(model.createGebuehrenTableModel(model.getGebuehrenSelection()), "keine Gebühren vorhanden", gebuehrenTableStateName);
+        tGebuehr = CWComponentFactory.createTable(model.createGebuehrenTableModel(model.getGebuehrenSelection()), "keine Gebuehren vorhanden", gebuehrenTableStateName);
 
         tGebuehr.setSelectionModel(new SingleListSelectionAdapter(new CWTableSelectionConverter(
                 model.getGebuehrenSelection().getSelectionIndexHolder(),

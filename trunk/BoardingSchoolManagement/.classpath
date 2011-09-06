@@ -44,7 +44,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/substance.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/swingx-0.9.5.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/validation-2.0.0.jar"/>
-	<classpathentry exported="true" kind="lib" path="modules/TweetModule.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

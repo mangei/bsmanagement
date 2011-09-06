@@ -107,6 +107,6 @@ public class StudentCustomerSelectorFilterExtention
     }
 
     public String getFilterName() {
-        return "Schüler/Klassen";
+        return "Schueler/Klassen";
     }
 }

@@ -119,7 +119,7 @@ public class GebuehrenPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final Gebuehr g = new Gebuehr();
-            final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new CWHeaderInfo("Gebühr erstellen", "Hier können Sie eine neue Gebühr erstellen"));
+            final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new CWHeaderInfo("Gebuehr erstellen", "Hier können Sie eine neue Gebuehr erstellen"));
             final EditGebuehrenView editView = new EditGebuehrenView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -150,7 +150,7 @@ public class GebuehrenPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final GebuehrenKatManager gebKatManager = GebuehrenKatManager.getInstance();
-            final GebuehrenKategoriePresentationModel model = new GebuehrenKategoriePresentationModel(gebKatManager, new CWHeaderInfo("Kategorien verwalten", "Übersicht aller Gebühren Kategorien"));
+            final GebuehrenKategoriePresentationModel model = new GebuehrenKategoriePresentationModel(gebKatManager, new CWHeaderInfo("Kategorien verwalten", "Uebersicht aller Gebuehren Kategorien"));
             final GebuehrenKategorieView editView = new GebuehrenKategorieView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -181,7 +181,7 @@ public class GebuehrenPresentationModel {
 
     private void showTarif() {
         Gebuehr g = gebuehrenSelection.getSelection();
-        final TarifPresentationModel model = new TarifPresentationModel(g, new CWHeaderInfo("Tarif Übersicht: " + g.getName(), "Übersicht aller Tarife für eine bestimmte Gebühr."));
+        final TarifPresentationModel model = new TarifPresentationModel(g, new CWHeaderInfo("Tarif Uebersicht: " + g.getName(), "Uebersicht aller Tarife fuer eine bestimmte Gebuehr."));
         final TarifView editView = new TarifView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -223,7 +223,7 @@ public class GebuehrenPresentationModel {
         public void actionPerformed(ActionEvent e) {
             Gebuehr g = getGebuehrenSelection().getSelection();
 
-            int i = JOptionPane.showConfirmDialog(null, "Gebühr löschen?", "Löschen", JOptionPane.OK_CANCEL_OPTION);
+            int i = JOptionPane.showConfirmDialog(null, "Gebuehr löschen?", "Löschen", JOptionPane.OK_CANCEL_OPTION);
             if (i == JOptionPane.OK_OPTION) {
                 gebuehrenManager.delete(g);
                 gebuehrenSelection.setList(gebuehrenManager.getAll());
@@ -255,7 +255,7 @@ public class GebuehrenPresentationModel {
 
     private void editSelectedItem(EventObject e) {
         final Gebuehr g = getGebuehrenSelection().getSelection();
-        final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new CWHeaderInfo("Gebühr bearbeiten", "Hier können Sie eine vorhandene Gebühr bearbeiten"));
+        final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new CWHeaderInfo("Gebuehr bearbeiten", "Hier können Sie eine vorhandene Gebuehr bearbeiten"));
         final EditGebuehrenView editView = new EditGebuehrenView(model);
         model.addButtonListener(new ButtonListener() {
 

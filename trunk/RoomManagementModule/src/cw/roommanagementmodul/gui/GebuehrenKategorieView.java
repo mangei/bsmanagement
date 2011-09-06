@@ -35,7 +35,7 @@ public class GebuehrenKategorieView extends CWView {
         bDelete = CWComponentFactory.createButton(model.getDeleteAction());
         bDelete.setText("Löschen");
         bBack = CWComponentFactory.createButton(model.getBackAction());
-        bBack.setText("Zurück");
+        bBack.setText("Zurueck");
 
         lGebuehrenKat = CWComponentFactory.createList(model.getGebuehrenKatSelection());
 

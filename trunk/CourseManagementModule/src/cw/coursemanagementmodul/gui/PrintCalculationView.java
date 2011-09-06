@@ -29,11 +29,11 @@ public class PrintCalculationView extends CWView
         componentContainer = CWComponentFactory.createComponentContainer();
 
         bBack = CWComponentFactory.createButton(model.getBackAction());
-        bBack.setText("Zurück");
+        bBack.setText("Zurueck");
 
         bBack.setToolTipText(CWComponentFactory.createToolTip(
-                "Zurück",
-                "Hier kehren Sie in die Kurshistorie zurück!",
+                "Zurueck",
+                "Hier kehren Sie in die Kurshistorie zurueck!",
                 "cw/coursemanagementmodul/images/back.png"));
 
         viewer = new JRViewer(model.getJasperPrint());

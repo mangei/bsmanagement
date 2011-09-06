@@ -9,7 +9,7 @@ import javax.persistence.Transient;
 
 /**
  * Eine PostingGroup (zD Buchungsgruppe) ist eine Gruppierung mehrerer Buchungen
- * und soll die Übersichtlichkeit und Strukturierbarkeit zum Beispiel bei
+ * und soll die Uebersichtlichkeit und Strukturierbarkeit zum Beispiel bei
  * Rechnungen verbessern.
  * @author ManuelG
  */

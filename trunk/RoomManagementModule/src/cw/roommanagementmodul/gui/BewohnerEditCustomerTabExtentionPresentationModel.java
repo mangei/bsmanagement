@@ -86,7 +86,7 @@ public class BewohnerEditCustomerTabExtentionPresentationModel
         List<String> kList=new ArrayList<String>();
         kList.add("Nicht eingezahlt");
         kList.add("Eingezahlt");
-        kList.add("Zurück gezahlt");
+        kList.add("Zurueck gezahlt");
         kList.add("Eingezogen");
         kautionStadi = (SelectionInList<String>) new SelectionInList(kList);
 
@@ -250,7 +250,7 @@ public class BewohnerEditCustomerTabExtentionPresentationModel
                 unsaved.setValue(true);
 
             }
-            if (e.getItem().equals("Zurück gezahlt")) {
+            if (e.getItem().equals("Zurueck gezahlt")) {
                 getBewohner().setKautionStatus(Bewohner.ZURUECK_GEZAHLT);
                 unsaved.setValue(true);
             }

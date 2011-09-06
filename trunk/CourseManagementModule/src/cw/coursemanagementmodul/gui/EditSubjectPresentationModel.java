@@ -218,7 +218,7 @@ public class EditSubjectPresentationModel
     //**************************************************************************
     //Methoden die in den oben angelegten Klassen zum
     // + Speichern
-    // + Zurücksetzen
+    // + Zuruecksetzen
     // + Speichern & Schließen
     //dienen
     //**************************************************************************

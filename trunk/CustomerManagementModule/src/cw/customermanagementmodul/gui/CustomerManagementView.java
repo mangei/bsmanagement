@@ -51,7 +51,7 @@ public class CustomerManagementView extends CWView
 
         bNew.setToolTipText(CWComponentFactory.createToolTip(
                 "Neu",
-                "Hier können Sie einen neuen Kunden hinzufügen.",
+                "Hier können Sie einen neuen Kunden hinzufuegen.",
                 "cw/customermanagementmodul/images/user_add.png"));
         bEdit.setToolTipText(CWComponentFactory.createToolTip(
                 "Bearbeiten",

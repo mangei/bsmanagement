@@ -35,7 +35,7 @@ public abstract class AbstractPersistenceManager<T extends CWPersistence>
     }
 
 //    /**
-//     * Speichert die mit dem Parameter übergebenen Objekte in die Datenbank.
+//     * Speichert die mit dem Parameter uebergebenen Objekte in die Datenbank.
 //     *
 //     * @param obj Zu speicherntes Objekt
 //     * @return false - Speicherung fehlgeschlagen, true - Speicherung erfolgreich

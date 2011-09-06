@@ -166,7 +166,7 @@ public class EditKautionPresentationModel
                 saveGebuehrenKat();
             }
             if (i == 0 || i == 1) {
-                //         GUIManager.lastView();  // Zur Übersicht wechseln
+                //         GUIManager.lastView();  // Zur Uebersicht wechseln
 //                GUIManager.removeView(); // Diese View nicht merken
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
@@ -182,7 +182,7 @@ public class EditKautionPresentationModel
 
         public void actionPerformed(ActionEvent e) {
             saveGebuehrenKat();
-//            GUIManager.lastView();  // Zur Übersicht wechseln
+//            GUIManager.lastView();  // Zur Uebersicht wechseln
 //            GUIManager.removeView(); // Diese View nicht merken
             support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
         }

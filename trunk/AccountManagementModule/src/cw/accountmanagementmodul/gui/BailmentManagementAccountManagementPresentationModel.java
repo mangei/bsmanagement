@@ -45,7 +45,7 @@ public class BailmentManagementAccountManagementPresentationModel
     public void initModels() {
         headerInfo = new CWHeaderInfo(
                 "Kautionen",
-                "Kautionsübersicht",
+                "Kautionsuebersicht",
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/bailment.png"),
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/bailment.png")
         );
@@ -53,7 +53,7 @@ public class BailmentManagementAccountManagementPresentationModel
         buttonListenerSupport = new ButtonListenerSupport();
         
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/accountmanagementmodul/images/cancel.png"));
-        saveAction = new SaveAction("Hinzufügen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_lightning.png"));
+        saveAction = new SaveAction("Hinzufuegen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_lightning.png"));
 
     }
     

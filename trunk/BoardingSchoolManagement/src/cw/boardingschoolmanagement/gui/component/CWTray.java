@@ -17,7 +17,7 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.event.PopupMenuEvent;
 
 /**
- * Ein Swing TrayIcon welches die regulären AWT-Komponenten überschreibt und
+ * Ein Swing TrayIcon welches die regulären AWT-Komponenten ueberschreibt und
  * durch neue Swing-Komponenten ersetzt.
  */
 public class CWTray
@@ -29,7 +29,7 @@ public class CWTray
 
     /**
      * Konstruktor
-     * Erzeugt eine Dialogbox für das PopupMenu, einPopupMenu, das TrayIcon
+     * Erzeugt eine Dialogbox fuer das PopupMenu, einPopupMenu, das TrayIcon
      * und erstellt das finale SystemTray.
      *
      * @see quark.ui.tray.JTrayMenu
@@ -64,7 +64,7 @@ public class CWTray
     }
 
     /**
-     * Setzt ein PopupMenu in die Dialogbox und überschreibt die aktuellen
+     * Setzt ein PopupMenu in die Dialogbox und ueberschreibt die aktuellen
      * Listenerklassen.
      *
      * @param trayMenu JPopupMenu
@@ -159,7 +159,7 @@ public class CWTray
     }
 
     /**
-     * Berechnet die optimale Position für die Anzeige des PopupMenus.
+     * Berechnet die optimale Position fuer die Anzeige des PopupMenus.
      */
     private Point computeDisplayPoint(int x, int y, Dimension dim)
     {

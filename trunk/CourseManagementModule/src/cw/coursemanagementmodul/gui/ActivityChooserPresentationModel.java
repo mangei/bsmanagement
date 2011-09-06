@@ -58,12 +58,12 @@ public class ActivityChooserPresentationModel
     private void initModels() {
         buttonEvent = new ButtonEvent(ButtonEvent.OK_BUTTON);
 
-        headerInfo = new CWHeaderInfo("Aktivität hinzufügen", "Hier können Sie Aktivitäten " +
-                "zum markierten Kurs hinzufügen!",
+        headerInfo = new CWHeaderInfo("Aktivität hinzufuegen", "Hier können Sie Aktivitäten " +
+                "zum markierten Kurs hinzufuegen!",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
-        //Anlegen der Aktionen, für die Buttons
-        addButtonAction = new AddAction("Hinzufügen");
+        //Anlegen der Aktionen, fuer die Buttons
+        addButtonAction = new AddAction("Hinzufuegen");
         cancelButtonAction = new CancelButtonAction("Schließen");
         activitySelection = new SelectionInList<Activity>(ActivityManager.getInstance().getAll());
         support = new ButtonListenerSupport();

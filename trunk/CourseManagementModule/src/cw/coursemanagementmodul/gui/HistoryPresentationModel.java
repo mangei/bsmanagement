@@ -80,7 +80,7 @@ public class HistoryPresentationModel
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/courseHistory.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/courseHistory.png"));
 
-        //Anlegen der Aktionen, für die Buttons
+        //Anlegen der Aktionen, fuer die Buttons
         detailAction = new DetailAction("Anzeigen");
         printAction = new PrintAction("Drucken");
         chartAction = new ChartAction("Chart");

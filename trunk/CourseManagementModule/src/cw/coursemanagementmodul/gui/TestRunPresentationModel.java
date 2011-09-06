@@ -43,8 +43,8 @@ public class TestRunPresentationModel
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
 
-        //Anlegen der Aktionen, für die Buttons
-        backButtonAction = new BackButtonAction("Zurück");
+        //Anlegen der Aktionen, fuer die Buttons
+        backButtonAction = new BackButtonAction("Zurueck");
         printAction = new PrintAction("Drucken");
     }
 

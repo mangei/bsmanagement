@@ -219,7 +219,7 @@ public class EditTarifPresentationModel
 
         public void actionPerformed(ActionEvent e) {
 
-            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprüft werden kann
+            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprueft werden kann
             Calendar v = dcVon.getCalendar();
             Calendar b = dcBis.getCalendar();
             if (b != null) {
@@ -244,7 +244,7 @@ public class EditTarifPresentationModel
     private boolean validateData() {
 
         if (checkFilledOut() == false) {
-            JOptionPane.showMessageDialog(null, "Es müssen alle Felder ausgefüllt werden.");
+            JOptionPane.showMessageDialog(null, "Es muessen alle Felder ausgefuellt werden.");
             return false;
         }
 
@@ -254,14 +254,14 @@ public class EditTarifPresentationModel
         }
 
         if (checkMoreTarifError() == false) {
-            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten führen zu einer Überschneidung mehrere Tarife! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
+            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten fuehren zu einer Ueberschneidung mehrere Tarife! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
             if (answer == 1) {
                 return false;
             }
         }
 
         if (checkNoTarifError() == false) {
-            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten führen zu einem lückenhaften Tarif Bestand! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
+            int answer = JOptionPane.showConfirmDialog(null, "Diese Daten fuehren zu einem lueckenhaften Tarif Bestand! \nTrotzdem fortfahren?", "Tarif Warnung", JOptionPane.YES_NO_OPTION);
             if (answer == 1) {
                 return false;
             }
@@ -278,7 +278,7 @@ public class EditTarifPresentationModel
             long von = dcVon.getDate().getTime();
             long bis = dcBis.getDate().getTime();
 
-            //Von um einen Tag zurück rechnen
+            //Von um einen Tag zurueck rechnen
             Calendar cd = Calendar.getInstance();
             cd.setTimeInMillis(von);
             cd.add(Calendar.DATE, -1);
@@ -340,7 +340,7 @@ public class EditTarifPresentationModel
         return check;
     }
 
-    //Kontrolliert ob Datumsfelder ausgefüllt sind
+    //Kontrolliert ob Datumsfelder ausgefuellt sind
     private boolean checkFilledOut() {
         if (dcVon.getDate() == null || dcBis.getDate() == null) {
             return false;
@@ -421,7 +421,7 @@ public class EditTarifPresentationModel
                 saveTarif();
             }
             if (i == 0 || i == 1) {
-                //         GUIManager.lastView();  // Zur Übersicht wechseln
+                //         GUIManager.lastView();  // Zur Uebersicht wechseln
 //                GUIManager.removeView(); // Diese View nicht merken
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
@@ -437,7 +437,7 @@ public class EditTarifPresentationModel
 
         public void actionPerformed(ActionEvent e) {
 
-            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprüft werden kann
+            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprueft werden kann
             Calendar v = dcVon.getCalendar();
             Calendar b = dcBis.getCalendar();
 

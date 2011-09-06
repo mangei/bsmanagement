@@ -74,8 +74,8 @@ public class DetailHistoryView extends CWView
         back = CWComponentFactory.createButton(model.getBackAction());
 
         back.setToolTipText(CWComponentFactory.createToolTip(
-                "Zurück",
-                "Hier kehren Sie zur Kurshistorie zurück!",
+                "Zurueck",
+                "Hier kehren Sie zur Kurshistorie zurueck!",
                 "cw/coursemanagementmodul/images/back.png"));
 
         soll =  CWComponentFactory.createLabel("Sollbetrag:");
@@ -108,7 +108,7 @@ public class DetailHistoryView extends CWView
     }
 
     //**************************************************************************
-    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
+    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurueck
     //**************************************************************************
     private void buildView(){
 
@@ -139,7 +139,7 @@ public class DetailHistoryView extends CWView
 
         this.getButtonPanel().add(back);
         builder.add(new JScrollPane(accountingTable), cc.xyw(1, 1, 5));
-        builder.addSeparator("Gesamtübersicht", cc.xyw(1, 3, 3));
+        builder.addSeparator("Gesamtuebersicht", cc.xyw(1, 3, 3));
         builder.add(accountingPanel, cc.xy(1, 5));
 
     }

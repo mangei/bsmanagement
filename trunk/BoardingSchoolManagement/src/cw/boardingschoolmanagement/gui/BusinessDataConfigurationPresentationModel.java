@@ -41,7 +41,7 @@ public class BusinessDataConfigurationPresentationModel
     private void initModels() {
         headerInfo = new CWHeaderInfo(
                 "Unternehmensinformationen",
-                "Geben Sie hier alle Informationen über Ihr Unternehmen ein.",
+                "Geben Sie hier alle Informationen ueber Ihr Unternehmen ein.",
                 CWUtils.loadIcon("cw/boardingschoolmanagement/images/businessdata_info.png"),
                 CWUtils.loadIcon("cw/boardingschoolmanagement/images/businessdata_info.png")
         );

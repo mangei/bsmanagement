@@ -46,7 +46,7 @@ import cw.customermanagementmodul.gui.renderer.GenderTableCellRenderer;
 import cw.customermanagementmodul.persistence.Customer;
 
 /**
- * Diese Klasse ist die grafsiche Darstellung der Kundenübersichtstabelle in
+ * Diese Klasse ist die grafsiche Darstellung der Kundenuebersichtstabelle in
  * Kundenverwaltung.
  *
  * @author Manuel Geier

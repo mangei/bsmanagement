@@ -13,7 +13,7 @@ import javax.persistence.ManyToOne;
  * Gegenstandes.
  *
  * Bsp:
- *  Name: Zimmerschlüsselkaution
+ *  Name: Zimmerschluesselkaution
  *  Beschreibung: D
  * @author ManuelG
  */

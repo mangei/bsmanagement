@@ -89,7 +89,7 @@ public class EditBewohnerZimmerPresentationModel
         kautionStatusSelection.getList().add("Keine Kaution");
         kautionStatusSelection.getList().add("Nicht eingezahlt");
         kautionStatusSelection.getList().add("Eingezahlt");
-        kautionStatusSelection.getList().add("Zurück gezahlt");
+        kautionStatusSelection.getList().add("Zurueck gezahlt");
 
         if(getBewohner().getKaution()==null){
             
@@ -271,7 +271,7 @@ public class EditBewohnerZimmerPresentationModel
                 saveBewohner();
             }
             if (i == 0 || i == 1) {
-                //         GUIManager.lastView();  // Zur Übersicht wechseln
+                //         GUIManager.lastView();  // Zur Uebersicht wechseln
 //                GUIManager.removeView(); // Diese View nicht merken
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
@@ -287,7 +287,7 @@ public class EditBewohnerZimmerPresentationModel
 
         public void actionPerformed(ActionEvent e) {
             saveBewohner();
-//            GUIManager.lastView();  // Zur Übersicht wechseln
+//            GUIManager.lastView();  // Zur Uebersicht wechseln
 //            GUIManager.removeView(); // Diese View nicht merken
             support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
         }
@@ -342,7 +342,7 @@ public class EditBewohnerZimmerPresentationModel
                 unsaved.setValue(true);
 
             }
-            if(e.getNewValue().equals("Zurück gezahlt")){
+            if(e.getNewValue().equals("Zurueck gezahlt")){
                 getBewohner().setKautionStatus(Bewohner.ZURUECK_GEZAHLT);
                 unsaved.setValue(true);
             }

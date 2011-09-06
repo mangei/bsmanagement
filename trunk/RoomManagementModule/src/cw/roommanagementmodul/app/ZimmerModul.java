@@ -97,7 +97,7 @@ public class ZimmerModul implements Modul {
 
                 bewohnerManager = BewohnerManager.getInstance();
 
-                GUIManager.changeView(new BewohnerView(new BewohnerPresentationModel(bewohnerManager, new CWHeaderInfo("Bewohner Verwaltung", "Übersicht aller Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png")))));
+                GUIManager.changeView(new BewohnerView(new BewohnerPresentationModel(bewohnerManager, new CWHeaderInfo("Bewohner Verwaltung", "Uebersicht aller Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
             }
@@ -132,10 +132,10 @@ public class ZimmerModul implements Modul {
 
 
         MenuManager.getSideMenu().addItem(new JButton(new AbstractAction(
-                "Gebühren") {
+                "Gebuehren") {
 
             {
-                putValue(Action.SHORT_DESCRIPTION, "Gebühren verwalten");
+                putValue(Action.SHORT_DESCRIPTION, "Gebuehren verwalten");
                 putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"));
 //                    putValue( Action.LARGE_ICON_KEY, IconManager.getIcon("user", 32) );
             }
@@ -143,13 +143,13 @@ public class ZimmerModul implements Modul {
 
             public void actionPerformed(ActionEvent e) {
 
-                GUIManager.setLoadingScreenText("Gebühren werden geladen...");
+                GUIManager.setLoadingScreenText("Gebuehren werden geladen...");
                 GUIManager.setLoadingScreenVisible(true);
 
 
                 gebuehrenManager = GebuehrenManager.getInstance();
 
-                GUIManager.changeView(new GebuehrenView(new GebuehrenPresentationModel(gebuehrenManager, new CWHeaderInfo("Gebühren Verwaltung", "Hier können Sie die Gebühren, Kategorien und Tarife verwalten", CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/money.png")))));
+                GUIManager.changeView(new GebuehrenView(new GebuehrenPresentationModel(gebuehrenManager, new CWHeaderInfo("Gebuehren Verwaltung", "Hier können Sie die Gebuehren, Kategorien und Tarife verwalten", CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/money.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
 
@@ -160,7 +160,7 @@ public class ZimmerModul implements Modul {
                 "Lauf") {
 
             {
-                putValue(Action.SHORT_DESCRIPTION, "Gebühren Lauf");
+                putValue(Action.SHORT_DESCRIPTION, "Gebuehren Lauf");
                 putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png"));
 //                    putValue( Action.LARGE_ICON_KEY, IconManager.getIcon("user", 32) );
             }
@@ -173,7 +173,7 @@ public class ZimmerModul implements Modul {
 
 
 
-                GUIManager.changeView(new GebLaufView(new GebLaufPresentationModel(gebLauf, new CWHeaderInfo("Gebühren Lauf", "Hier können Sie denn Gebühren oder Storno Lauf durchführen", CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png")))));
+                GUIManager.changeView(new GebLaufView(new GebLaufPresentationModel(gebLauf, new CWHeaderInfo("Gebuehren Lauf", "Hier können Sie denn Gebuehren oder Storno Lauf durchfuehren", CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
             }
@@ -214,7 +214,7 @@ public class ZimmerModul implements Modul {
             public void deleteAction(CascadeEvent evt) {
                 Bewohner b = (Bewohner) evt.getSource();
                 GebuehrZuordnungManager gebZuordnungManager = GebuehrZuordnungManager.getInstance();
-                //TODO überlegen
+                //TODO ueberlegen
                 gebZuordnungManager.removeGebuehrZuordnung(b);
             }
         });

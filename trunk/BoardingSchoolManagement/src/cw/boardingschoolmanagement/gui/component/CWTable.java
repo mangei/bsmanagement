@@ -56,7 +56,7 @@ public class CWTable extends JXTable {
         };
 
         loadTableStateAction = new AbstractAction(
-                "Ansicht zurücksetzen",
+                "Ansicht zuruecksetzen",
                 CWUtils.loadIcon("cw/boardingschoolmanagement/images/table_load.png")
                 ) {
             public void actionPerformed(ActionEvent e) {
@@ -169,7 +169,7 @@ public class CWTable extends JXTable {
 //                }
 //            };
 //
-//            loadTableStateAction = new AbstractAction("Ansicht zurücksetzen") {
+//            loadTableStateAction = new AbstractAction("Ansicht zuruecksetzen") {
 //                public void actionPerformed(ActionEvent e) {
 //                    loadTableState();
 //                }

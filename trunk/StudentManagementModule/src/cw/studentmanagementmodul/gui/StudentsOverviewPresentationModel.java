@@ -33,8 +33,8 @@ public class StudentsOverviewPresentationModel
         studentSelection = new SelectionInList<Student>(StudentManager.getInstance().getAllActive(studentClass));
 
         headerInfo = new CWHeaderInfo(
-                "Schüler anzeigen",
-                "<html>Hier haben Sie einen Überblick über alle Schüler der Klasse '<b>" + studentClass + "</b>'.<br>Anzahl: <b>" + studentSelection.getSize() + " Schüler</b></html>",
+                "Schueler anzeigen",
+                "<html>Hier haben Sie einen Ueberblick ueber alle Schueler der Klasse '<b>" + studentClass + "</b>'.<br>Anzahl: <b>" + studentSelection.getSize() + " Schueler</b></html>",
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/student.png"),
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/student.png")
         );

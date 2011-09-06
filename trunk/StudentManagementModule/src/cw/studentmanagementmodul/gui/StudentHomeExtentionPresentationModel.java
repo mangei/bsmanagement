@@ -19,7 +19,7 @@ public class StudentHomeExtentionPresentationModel
     }
 
     private void initModels() {
-        sizeStudentsValueModel = new ValueHolder("Schüler: " + StudentManager.getInstance().sizeActive());
+        sizeStudentsValueModel = new ValueHolder("Schueler: " + StudentManager.getInstance().sizeActive());
     }
 
     private void initEventHandling() {

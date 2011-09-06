@@ -137,7 +137,7 @@ public class EditActivityPresentationModel
     }
     
     //**************************************************************************
-    //Klasse zum Zurücksetzen eines Kurses
+    //Klasse zum Zuruecksetzen eines Kurses
     //**************************************************************************
     //**************************************************************************
     //Klasse zum Beenden des Eingabeformulars. Wechselt anschließend
@@ -212,7 +212,7 @@ public class EditActivityPresentationModel
     //**************************************************************************
     //Methoden die in den oben angelegten Klassen zum
     // + Speichern
-    // + Zurücksetzen
+    // + Zuruecksetzen
     // + Speichern & Schließen
     //dienen
     //**************************************************************************

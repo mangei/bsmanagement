@@ -376,7 +376,7 @@ public class GUIManager {
     public static void changeView(CWView view, boolean saveOldView) {
         GUIManager gM = getInstance();
 
-        // Prüfen ob es nicht leer ist.. zb beim 1. Mal
+        // Pruefen ob es nicht leer ist.. zb beim 1. Mal
         if (gM.shownView != null) {
 
             // Nur ändern, wenn es nicht schon angezeigt wird
@@ -412,7 +412,7 @@ public class GUIManager {
         // Neue Ansicht
         gM.shownView = view;
 
-        // Hinzufügen
+        // Hinzufuegen
         gM.componentView.add(gM.shownView, BorderLayout.CENTER);
 
         gM.componentView.revalidate();
@@ -437,7 +437,7 @@ public class GUIManager {
             // Neue Ansicht
             gM.shownView = gM.lastViews.pop();
 
-            // Hinzufügen
+            // Hinzufuegen
             gM.componentView.add(gM.shownView, BorderLayout.CENTER);
 
             // Neu zeichnen lassen

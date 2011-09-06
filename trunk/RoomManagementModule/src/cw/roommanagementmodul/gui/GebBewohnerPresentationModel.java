@@ -171,7 +171,7 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         public void actionPerformed(ActionEvent e) {
 
 
-            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprüft werden kann
+            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprueft werden kann
             Calendar v = dcVon.getCalendar();
             Calendar b = dcBis.getCalendar();
 
@@ -187,13 +187,13 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
 
 
             if (checkFilledOut() == false) {
-                JOptionPane.showMessageDialog(null, "Die Attribute Gebühr und Von müssen mindestens ausgefüllt sein!");
+                JOptionPane.showMessageDialog(null, "Die Attribute Gebuehr und Von muessen mindestens ausgefuellt sein!");
             } else {
                 if (checkChrono() == false) {
                     JOptionPane.showMessageDialog(null, "Bis-Datum muss ich chronologisch nach dem Von-Datum befinden.");
                 } else {
                     if (checkEinzugAuszug() == false) {
-                        JOptionPane.showMessageDialog(null, "Von- oder Bis Datum stimmen nicht mit den Einzugs- oder Auszugs Daten des Bewohners überein.");
+                        JOptionPane.showMessageDialog(null, "Von- oder Bis Datum stimmen nicht mit den Einzugs- oder Auszugs Daten des Bewohners ueberein.");
                     } else {
                         saveGebuehrZuordnung();
                         unsaved.setValue(false);
@@ -208,7 +208,7 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         }
     }
 
-    //Kontrolliert ob Datumsfelder ausgefüllt sind
+    //Kontrolliert ob Datumsfelder ausgefuellt sind
     private boolean checkFilledOut() {
         if (this.gebuehrList.getSelection() == null || dcVon.getDate() == null) {
             return false;
@@ -249,7 +249,7 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
                 saveGebuehrZuordnung();
             }
             if (i == 0 || i == 1) {
-                //         GUIManager.lastView();  // Zur Übersicht wechseln
+                //         GUIManager.lastView();  // Zur Uebersicht wechseln
 //                GUIManager.removeView(); // Diese View nicht merken
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
@@ -264,7 +264,7 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         }
 
         public void actionPerformed(ActionEvent e) {
-            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprüft werden kann
+            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprueft werden kann
             Calendar v = dcVon.getCalendar();
             Calendar b = dcBis.getCalendar();
             if (b != null) {
@@ -278,13 +278,13 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
 
 
             if (checkFilledOut() == false) {
-                JOptionPane.showMessageDialog(null, "Die Attribute Gebühr und Von müssen mindestens ausgefüllt sein!");
+                JOptionPane.showMessageDialog(null, "Die Attribute Gebuehr und Von muessen mindestens ausgefuellt sein!");
             } else {
                 if (checkChrono() == false) {
                     JOptionPane.showMessageDialog(null, "Bis-Datum muss ich chronologisch nach dem Von-Datum befinden.");
                 } else {
                     if (checkEinzugAuszug() == false) {
-                        JOptionPane.showMessageDialog(null, "Von- oder Bis Datum stimmen nicht mit dem Einzugs- oder Auszugs Datum des Bewohners überein.");
+                        JOptionPane.showMessageDialog(null, "Von- oder Bis Datum stimmen nicht mit dem Einzugs- oder Auszugs Datum des Bewohners ueberein.");
                     } else {
                         saveGebuehrZuordnung();
                         support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));

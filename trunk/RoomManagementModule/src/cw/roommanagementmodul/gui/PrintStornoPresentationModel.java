@@ -194,7 +194,7 @@ public class PrintStornoPresentationModel{
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.changeToLastView();  // Zur Übersicht wechseln
+            GUIManager.changeToLastView();  // Zur Uebersicht wechseln
         }
     }
 }

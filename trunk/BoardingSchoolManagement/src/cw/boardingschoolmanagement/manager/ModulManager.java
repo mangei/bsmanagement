@@ -158,7 +158,7 @@ public class ModulManager {
             // Load all check modules
             for (int i = 0, l = checkedModulesList.size(); i < l; i++) {
                 try {
-                    // Das Jar in den Class-Path hinzufügen
+                    // Das Jar in den Class-Path hinzufuegen
                     ClassPathHacker.addFile(checkedModulesList.get(i).getFile());
 
                     System.out.println("  " + checkedModulesList.get(i).getName());

@@ -202,11 +202,11 @@ public class EditCoursePartPresentationModel
 //                + coursePart.getCustomer().getForename() + " "
 //                + coursePart.getCustomer().getSurname());
 
-        courseChooserButtonAction = new CourseChooserButtonAction("Kurs hinzufügen");
+        courseChooserButtonAction = new CourseChooserButtonAction("Kurs hinzufuegen");
         activityButtonAction =
-                new ActivityButtonAction("Aktivität hinzufügen");
+                new ActivityButtonAction("Aktivität hinzufuegen");
         subjectButtonAction =
-                new SubjectButtonAction("Gegenstand hinzufügen");
+                new SubjectButtonAction("Gegenstand hinzufuegen");
         removeSubjectButtonAction =
                 new RemoveSubjectButtonAction("Gegenstand löschen");
         removeCourseButtonAction =
@@ -293,7 +293,7 @@ public class EditCoursePartPresentationModel
     }
 
 //**************************************************************************
-//Klasse zum Zurücksetzen eines Kurses
+//Klasse zum Zuruecksetzen eines Kurses
 //**************************************************************************
     public void reset() {
         resetCoursePart();
@@ -329,7 +329,7 @@ public class EditCoursePartPresentationModel
 
                 public void buttonPressed(ButtonEvent evt) {
                     if (evt.getType() == ButtonEvent.OK_BUTTON) {
-                        //Hinzufügen des Kurses in eine CourseAddition
+                        //Hinzufuegen des Kurses in eine CourseAddition
                         if (!courseAlreadyExists(courseChooserModel)) {
                             courseAddition.setCourse(courseChooserModel.getCourseItem());
                             courseAdditionSelection.getList().add(courseAddition);
@@ -364,7 +364,7 @@ public class EditCoursePartPresentationModel
                             courseChooserModel.removeButtonListener(this);
                             GUIManager.changeToLastView();
                         } else {
-                            JOptionPane.showMessageDialog(view, "Der Kurs wurde bereits hinzugefügt.");
+                            JOptionPane.showMessageDialog(view, "Der Kurs wurde bereits hinzugefuegt.");
                         }
                     }
                 //***********************************
@@ -406,7 +406,7 @@ public class EditCoursePartPresentationModel
                             updateActionEnablement();
                             GUIManager.changeToLastView();
                         } else {
-                            JOptionPane.showMessageDialog(view, "Diese Aktivität wurde bereits hinzugefügt.");
+                            JOptionPane.showMessageDialog(view, "Diese Aktivität wurde bereits hinzugefuegt.");
                         }
                     }
                 }
@@ -440,7 +440,7 @@ public class EditCoursePartPresentationModel
                             subjectChooserModel.removeButtonListener(this);
                             updateActionEnablement();
                         } else {
-                            JOptionPane.showMessageDialog(view, "Der Gegenstand wurde bereits hinzugefügt.");
+                            JOptionPane.showMessageDialog(view, "Der Gegenstand wurde bereits hinzugefuegt.");
                         }
                     }
                 }
@@ -486,7 +486,7 @@ public class EditCoursePartPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Gegenstand (" + subjectSelection.getSelection().getName() + ") " + " für den Kurs " + courseAdditionSelection.getSelection().getCourse().getName() + " wirklich löschen?");
+            int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Gegenstand (" + subjectSelection.getSelection().getName() + ") " + " fuer den Kurs " + courseAdditionSelection.getSelection().getCourse().getName() + " wirklich löschen?");
             if (check == JOptionPane.OK_OPTION) {
                 Subject subject = subjectSelection.getSelection();
                 subjectSelection.getList().remove(subject);
@@ -508,7 +508,7 @@ public class EditCoursePartPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diese Aktivität (" + activitySelection.getSelection().getName() + ") " + " für den Kurs " + courseAdditionSelection.getSelection().getCourse().getName() + " wirklich löschen?");
+            int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diese Aktivität (" + activitySelection.getSelection().getName() + ") " + " fuer den Kurs " + courseAdditionSelection.getSelection().getCourse().getName() + " wirklich löschen?");
             if (check == JOptionPane.OK_OPTION) {
                 Activity activity = activitySelection.getSelection();
                 activitySelection.getList().remove(activity);
@@ -521,7 +521,7 @@ public class EditCoursePartPresentationModel
 //**************************************************************************
 //Methoden die in den oben angelegten Klassen zum
 // + Speichern
-// + Zurücksetzen
+// + Zuruecksetzen
 // + Speichern & Schließen
 //dienen
 //**************************************************************************

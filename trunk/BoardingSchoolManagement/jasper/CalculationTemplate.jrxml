@@ -298,8 +298,8 @@
 			<staticText>
 				<reportElement x="2" y="4" width="531" height="28"/>
 				<textElement/>
-				<text><![CDATA[*) Dies bedeutet, dass es für diesen Kursteilnehmer aus verschiedensten Gründen einen individuellen Preis gibt,
-der sich durch eine Buchung ergeben hat! In diesen Fällen sind die Aktivitätspreise nicht zu berücksichtigen!]]></text>
+				<text><![CDATA[*) Dies bedeutet, dass es fuer diesen Kursteilnehmer aus verschiedensten Gruenden einen individuellen Preis gibt,
+der sich durch eine Buchung ergeben hat! In diesen Fällen sind die Aktivitätspreise nicht zu beruecksichtigen!]]></text>
 			</staticText>
 		</band>
 	</pageFooter>

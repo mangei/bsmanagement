@@ -28,7 +28,7 @@ public class AccountManagementEditCustomerPresentationModel {
     public void initModels() {
         headerInfo = new CWHeaderInfo(
                 "Kundenkonto",
-                "Hier sehen sie eine Übersicht über alle Buchungen für Ihren Kunden.",
+                "Hier sehen sie eine Uebersicht ueber alle Buchungen fuer Ihren Kunden.",
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/account.png"),
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/account.png")
         );

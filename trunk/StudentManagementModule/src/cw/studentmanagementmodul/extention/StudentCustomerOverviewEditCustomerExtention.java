@@ -53,7 +53,7 @@ public class StudentCustomerOverviewEditCustomerExtention
         PanelBuilder builder = new PanelBuilder(layout,panel);
         CellConstraints cc = new CellConstraints();
 
-        builder.addSeparator("Schülerinformation",  cc.xyw(1, 1, 3));
+        builder.addSeparator("Schuelerinformation",  cc.xyw(1, 1, 3));
         builder.addLabel("Klasse:",                  cc.xy(1, 3));
         builder.add(lStudentClass,                  cc.xy(3, 3));
 

@@ -21,7 +21,7 @@ public class CourseEditCustomerTabExtention implements EditCustomerTabExtentionP
     private static CourseParticipant cp;
 
     /**
-     *  Initalisiert das PresentationModel für die Übersicht der Kurse im
+     *  Initalisiert das PresentationModel fuer die Uebersicht der Kurse im
      *  Kunden. Dabei wird der Kunde automatisch zu einen Kursteilnehmer egal
      *  ob er an einem Kurs teilnimmt oder nicht.
      *

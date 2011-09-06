@@ -322,7 +322,7 @@ public class CourseParticipantForPostingPresentationModel
     }
     
     private void setVoreinstellungen(){
-        postingModel.getBufferedModel(AccountPosting.PROPERTYNAME_DESCRIPTION).setValue("Buchung für "
+        postingModel.getBufferedModel(AccountPosting.PROPERTYNAME_DESCRIPTION).setValue("Buchung fuer "
                 + courseAdditionSelection.getSelection().getCourse().getName());
     }
 

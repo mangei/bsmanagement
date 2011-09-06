@@ -33,12 +33,12 @@ public class StudentCustomerSelectorFilterExtentionPresentationModel
                 option.setValue(StudentCustomerSelectorFilterExtention.NO_MATTER);
             }
         };
-        inactiveAction = new AbstractAction("ist kein Schüler") {
+        inactiveAction = new AbstractAction("ist kein Schueler") {
             public void actionPerformed(ActionEvent e) {
                 option.setValue(StudentCustomerSelectorFilterExtention.INACTIVE);
             }
         };
-        activeAction = new AbstractAction("ist ein Schüler in ") {
+        activeAction = new AbstractAction("ist ein Schueler in ") {
             public void actionPerformed(ActionEvent e) {
                 option.setValue(StudentCustomerSelectorFilterExtention.ACTIVE);
             }

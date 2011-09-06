@@ -44,7 +44,7 @@ public class LaufResultView extends CWView {
         bPrint = CWComponentFactory.createButton(model.getPrintAction());
         bPrint.setText("Drucken");
         bBack = CWComponentFactory.createButton(model.getBackAction());
-        bBack.setText("Zurück");
+        bBack.setText("Zurueck");
 
         componentContainer = CWComponentFactory.createComponentContainer().addComponent(bPrint).addComponent(bBack);
 
@@ -96,7 +96,7 @@ public class LaufResultView extends CWView {
         this.getContentPanel().add(scroll);
 
         if (warningNoGebuehr) {
-            JOptionPane.showMessageDialog(null, "Es sind Bewohner vorhanden die keine Gebühr für dieses Datum zugewießen bekommen haben.", "Warunung", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Es sind Bewohner vorhanden die keine Gebuehr fuer dieses Datum zugewießen bekommen haben.", "Warunung", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 
@@ -122,7 +122,7 @@ public class LaufResultView extends CWView {
 
         JLabel lTarif = new JLabel("Tarif ");
         lTarif.setFont(new Font("Arial", Font.BOLD, 12));
-        JLabel lGebuehr = new JLabel("Gebühr ");
+        JLabel lGebuehr = new JLabel("Gebuehr ");
         lGebuehr.setFont(new Font("Arial", Font.BOLD, 12));
         JLabel lKategorie = new JLabel("Kategorie ");
         lKategorie.setFont(new Font("Arial", Font.BOLD, 12));
@@ -169,7 +169,7 @@ public class LaufResultView extends CWView {
                 summeCheck = true;
             }
             if (tarifSelectionList.get(i).isWarning()) {
-                error = new JLabel("WARNUNG: keine Gebühr vorhanden");
+                error = new JLabel("WARNUNG: keine Gebuehr vorhanden");
                 summeCheck = true;
                 return null;
             }

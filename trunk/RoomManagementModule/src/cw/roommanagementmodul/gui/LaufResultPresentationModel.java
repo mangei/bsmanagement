@@ -134,7 +134,7 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
         }
 
         public void actionPerformed(ActionEvent e) {
-            final PrintGebLaufPresentationModel model = new PrintGebLaufPresentationModel(tarifSelection, new CWHeaderInfo("Gebühren Lauf", "Gebühren Lauf zum Ausdrucken."), headerInfo.getHeaderText());
+            final PrintGebLaufPresentationModel model = new PrintGebLaufPresentationModel(tarifSelection, new CWHeaderInfo("Gebuehren Lauf", "Gebuehren Lauf zum Ausdrucken."), headerInfo.getHeaderText());
             final PrintGebLaufView printView = new PrintGebLaufView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -160,7 +160,7 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.changeToLastView();  // Zur Übersicht wechseln
+            GUIManager.changeToLastView();  // Zur Uebersicht wechseln
 //                GUIManager.removeView(); // Diese View nicht merken
         //support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
 

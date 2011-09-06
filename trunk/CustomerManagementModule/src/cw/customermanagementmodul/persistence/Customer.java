@@ -4,6 +4,7 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,16 +13,17 @@ import javax.persistence.Temporal;
 
 import org.hibernate.annotations.Type;
 
-import cw.boardingschoolmanagement.app.CWPersistence;
+import cw.boardingschoolmanagement.app.CWPersistenceImpl;
 
 /**
- * Speichert einen Kunden
- *
- * Beinhaltet alle Buchungen die einen Kunden betreffen
+ * Implementation of persistence 'Customer'
+ * 
+ * @author Manuel Geier
  **/
 @Entity(name=Customer.ENTITY_NAME)
 @Table(name=Customer.TABLE_NAME)
-public interface Customer extends CWPersistence {
+public class Customer
+        extends CWPersistenceImpl {
 
     // Properties - Constants
     public final static String ENTITY_NAME = "customer";
@@ -45,79 +47,313 @@ public interface Customer extends CWPersistence {
     public final static String PROPERTYNAME_INACTIVEDATE = "inactiveDate";
     public final static String PROPERTYNAME_COMMENT = "comment";
     public final static String PROPERTYNAME_ACTIVE = "active";
-
-    @Id
-    @GeneratedValue(strategy=GenerationType.AUTO)
-    @Column(name=PROPERTYNAME_ID)
-    public Long getId();
-    public void setId(Long id);
+	
+    private Long id;
+    private boolean active              = true;
+    private String title                = "";
+    private String forename             = "";
+    private String surname              = "";
+    private boolean gender              = true;
+    private String street               = "";
+    private String postOfficeNumber     = "";
+    private String city                 = "";
+    private String province             = "";
+    private String country              = "";
+    private Date birthday;
+    private String landlinephone        = "";
+    private String mobilephone          = "";
+    private String fax                  = "";
+    private String email                = "";
+    private Date creationDate;
+    private Date inactiveDate;
+    private String comment              = "";
     
+    public Customer() {
+    	super(null);
+	}
+    
+    Customer(EntityManager entityManager) {
+    	super(entityManager);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        if(this.id == null || ((Customer)obj).id == null) {
+            return false;
+        }
+        if(this.id!=((Customer)obj).id){
+            return false;
+        }
+        return true;
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+
+        buf.append("\nId: ");
+        buf.append(id);
+        buf.append("\nTitle: ");
+        buf.append(title);
+        buf.append("\nForename: ");
+        buf.append(forename);
+        buf.append("\nSurname: ");
+        buf.append(surname);
+
+        buf.append(id);
+        buf.append(", ");
+        buf.append(title);
+        buf.append(", ");
+        buf.append(forename);
+        buf.append(", ");
+        buf.append(surname);
+        buf.append(", ");
+        buf.append(street);
+        buf.append(", ");
+        buf.append(city);
+        buf.append(", ");
+        buf.append(province);
+        buf.append(", ");
+        buf.append(country);
+        buf.append(", ");
+        buf.append(mobilephone);
+        buf.append(", ");
+        buf.append(landlinephone);
+        buf.append(", ");
+        buf.append(gender);
+        buf.append(", ");
+        buf.append(email);
+        buf.append(", ");
+        buf.append(fax);
+        buf.append(", ");
+        buf.append(comment);
+        buf.append(", ");
+        buf.append(birthday);
+        buf.append(", ");
+        buf.append(creationDate);
+        buf.append(", ");
+        buf.append(inactiveDate);
+
+        return buf.toString();
+    }
+
     @Column(name=PROPERTYNAME_TITLE)
-    public String getTitle();
-    public void setTitle(String title);
+    public String getTitle() {
+        return title;
+    }
 
-    public String getForename();
-    public void setForename(String forename);
+    public void setTitle(String title) {
+    	String old = this.title;
+        this.title = title;
+        firePropertyChange(Customer.PROPERTYNAME_TITLE, old, title);
+    }
 
-    public String getSurname();
-    public void setSurname(String surname);
-    
+	public String getForename() {
+        return forename;
+    }
+
+    public void setForename(String forename) {
+    	String old = this.forename;
+        this.forename = forename;
+        firePropertyChange(Customer.PROPERTYNAME_FORENAME, old, forename);
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+    	String old = this.surname;
+        this.surname = surname;
+        firePropertyChange(Customer.PROPERTYNAME_FORENAME, old, forename);
+    }
+
     /**
      * Returns the gender
      * @return true -> man, false -> woman
      */
-    public boolean getGender();
+    public boolean getGender() {
+        return gender;
+    }
 
     /**
      * Sets the gender
      * @param gender true -> man, false -> woman
      */
-    public void setGender(boolean gender);
+    public void setGender(boolean gender) {
+    	boolean old = this.gender;
+        this.gender = gender;
+        firePropertyChange(Customer.PROPERTYNAME_GENDER, old, gender);
+    }
 
-    public String getStreet();
-    public void setStreet(String street);
-    
-    public String getCity();
-    public void setCity(String city);
+    public String getStreet() {
+        return street;
+    }
 
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    public Date getBirthday();
-    public void setBirthday(Date birthday);
+    public void setStreet(String street) {
+    	String old = this.street;
+        this.street = street;
+        firePropertyChange(Customer.PROPERTYNAME_STREET, old, street);
+    }
 
-    public String getLandlinephone();
-    public void setLandlinephone(String landlinephone);
+    public String getCity() {
+        return city;
+    }
 
-    public String getMobilephone();
-    public void setMobilephone(String mobilephone);
-
-    public String getFax();
-    public void setFax(String fax);
-    
-    public String getEmail();
-    public void setEmail(String email);
-
-    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    public Date getCreationDate();
-    public void setCreationDate(Date creationDate);
+    public void setCity(String city) {
+    	String old = this.city;
+        this.city = city;
+        firePropertyChange(Customer.PROPERTYNAME_CITY, old, city);
+    }
 
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
-    public Date getInactiveDate();
-    public void setInactiveDate(Date inactiveDate);
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+    	Date old = this.birthday;
+        this.birthday = birthday;
+        firePropertyChange(Customer.PROPERTYNAME_BIRTHDAY, old, birthday);
+
+    }
+
+    public String getLandlinephone() {
+        return landlinephone;
+    }
+
+    public void setLandlinephone(String landlinephone) {
+    	String old = this.landlinephone;
+        this.landlinephone = landlinephone;
+        firePropertyChange(Customer.PROPERTYNAME_LANDLINEPHONE, old, landlinephone);
+    }
+
+    public String getMobilephone() {
+        return mobilephone;
+    }
+
+    public void setMobilephone(String mobilephone) {
+    	String old = this.mobilephone;
+        this.mobilephone = mobilephone;
+        firePropertyChange(Customer.PROPERTYNAME_MOBILEPHONE, old, mobilephone);
+    }
+
+    public String getFax() {
+        return fax;
+    }
+
+    public void setFax(String fax) {
+    	String old = this.fax;
+        this.fax = fax;
+        firePropertyChange(Customer.PROPERTYNAME_FAX, old, fax);
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+    	String old = this.email;
+        this.email = email;
+        firePropertyChange(Customer.PROPERTYNAME_EMAIL, old, email);
+    }
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    public Date getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Date creationDate) {
+    	Date old = this.creationDate;
+        this.creationDate = creationDate;
+        firePropertyChange(Customer.PROPERTYNAME_CREATIONDATE, old, creationDate);
+    }
+
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    public Date getInactiveDate() {
+        return inactiveDate;
+    }
+
+    public void setInactiveDate(Date inactiveDate) {
+    	Date old = this.inactiveDate;
+        this.inactiveDate = inactiveDate;
+        firePropertyChange(Customer.PROPERTYNAME_INACTIVEDATE, old, inactiveDate);
+    }
 
     @Type(type="text")
-    public String getComment();
-    public void setComment(String comment);
+    public String getComment() {
+        return comment;
+    }
+
+    public void setComment(String comment) {
+    	String old = this.comment;
+        this.comment = comment;
+        firePropertyChange(Customer.PROPERTYNAME_COMMENT, old, comment);
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+    	boolean old = this.active;
+        this.active = active;
+        firePropertyChange(Customer.PROPERTYNAME_ACTIVE, old, active);
+
+        if(active) {
+            setInactiveDate(null);
+        } else {
+            setInactiveDate(new Date());
+        }
+    }
+
+    public String getPostOfficeNumber() {
+        return postOfficeNumber;
+    }
+
+    public void setPostOfficeNumber(String postOfficeNumber) {
+    	String old = this.postOfficeNumber;
+        this.postOfficeNumber = postOfficeNumber;
+        firePropertyChange(Customer.PROPERTYNAME_POSTOFFICENUMBER, old, postOfficeNumber);
+    }
+
+    public String getProvince() {
+        return province;
+    }
+
+    public void setProvince(String province) {
+    	String old = this.province;
+        this.province = province;
+        firePropertyChange(Customer.PROPERTYNAME_PROVINCE, old, province);
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+    	String old = this.country;
+        this.country = country;
+        firePropertyChange(Customer.PROPERTYNAME_COUNTRY, old, country);
+    }
     
-    public boolean isActive();
-    public void setActive(boolean active);
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    @Column(name=PROPERTYNAME_ID)
+    public Long getId() {
+        return id;
+    }
 
-    public String getPostOfficeNumber();
-    public void setPostOfficeNumber(String postOfficeNumber);
-
-    public String getProvince();
-    public void setProvince(String province);
-
-    public String getCountry();
-    public void setCountry(String country);
+    public void setId(Long id) {
+    	Long old = this.id;
+        this.id = id;
+        firePropertyChange(Customer.PROPERTYNAME_ID, old, id);
+    }
 
 }

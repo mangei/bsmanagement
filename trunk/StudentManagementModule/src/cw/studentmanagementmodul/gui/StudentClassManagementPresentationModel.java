@@ -68,7 +68,7 @@ public class StudentClassManagementPresentationModel
 
         headerInfo = new CWHeaderInfo(
                 "Klassenverwaltung",
-                "Verwalten Sie ihre Klassen in einer beliebigen Struktur mit Hilfe von Bereichen. Lassen Sie sich die Schüler ein Klasse anzeigen und Schüler automatisch in die nächste Klasse aufsteigen lassen.",
+                "Verwalten Sie ihre Klassen in einer beliebigen Struktur mit Hilfe von Bereichen. Lassen Sie sich die Schueler ein Klasse anzeigen und Schueler automatisch in die nächste Klasse aufsteigen lassen.",
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png"),
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png")
         );
@@ -80,8 +80,8 @@ public class StudentClassManagementPresentationModel
         newStudentClassAction = new NewStudentClassAction("Klasse erstellen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_add.png"));
         editStudentClassAction = new EditStudentClassAction("Klasse bearbeiten", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_edit.png"));
         removeStudentClassAction = new RemoveStudentClassAction("Klasse löschen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_remove.png"));
-        viewStudentsAction = new ViewStudentsActionAction("Schüler anzeigen", CWUtils.loadIcon("cw/studentmanagementmodul/images/student.png"));
-        moveUpStudentClassAction = new MoveUpStudentClassAction("Schüler aufsteigen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_up.png"));
+        viewStudentsAction = new ViewStudentsActionAction("Schueler anzeigen", CWUtils.loadIcon("cw/studentmanagementmodul/images/student.png"));
+        moveUpStudentClassAction = new MoveUpStudentClassAction("Schueler aufsteigen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_up.png"));
 
         studentClassRootTreeNode = new DefaultMutableTreeNode("world", true);
         studentClassTreeNodeMap.put(null, studentClassRootTreeNode);
@@ -542,7 +542,7 @@ public class StudentClassManagementPresentationModel
                 Object object = node.getUserObject();
                 if (object instanceof StudentClass) {
 
-                    int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die Klasse löschen, dabei verlassen alle Schüler die Klasse.", "Klasse löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die Klasse löschen, dabei verlassen alle Schueler die Klasse.", "Klasse löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                     if (i == JOptionPane.OK_OPTION) {
                         GUIManager.setLoadingScreenText("Klasse wird gelöscht...");
 
@@ -563,7 +563,7 @@ public class StudentClassManagementPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.setLoadingScreenText("Schüler anzeigen...");
+            GUIManager.setLoadingScreenText("Schueler anzeigen...");
             GUIManager.setLoadingScreenVisible(true);
 
             DefaultMutableTreeNode node = (DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent();
@@ -596,12 +596,12 @@ public class StudentClassManagementPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.setLoadingScreenText("Schüler in die nächste Klasse aufsteigen lassen...");
+            GUIManager.setLoadingScreenText("Schueler in die nächste Klasse aufsteigen lassen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich alle Schüler aufsteigen lassen? Einige Schüler verlassen dabei die Klasse.", "Schüler aufsteigen lassen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich alle Schueler aufsteigen lassen? Einige Schueler verlassen dabei die Klasse.", "Schueler aufsteigen lassen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (i == JOptionPane.OK_OPTION) {
-                GUIManager.setLoadingScreenText("Schüler steigen in die nächste Klasse auf...");
+                GUIManager.setLoadingScreenText("Schueler steigen in die nächste Klasse auf...");
 
                 List<Student> list = StudentManager.getInstance().getAll();
                 Student student;

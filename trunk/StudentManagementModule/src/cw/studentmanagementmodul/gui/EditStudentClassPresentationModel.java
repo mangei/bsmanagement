@@ -62,7 +62,7 @@ public class EditStudentClassPresentationModel
         buttonListenerSupport = new ButtonListenerSupport();
 
         saveButtonAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/boardingschoolmanagement/images/save.png"));
-//        resetButtonAction = new ResetAction("Zurücksetzen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/arrow_rotate_anticlockwise.png"));
+//        resetButtonAction = new ResetAction("Zuruecksetzen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/arrow_rotate_anticlockwise.png"));
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/cancel.png"));
         saveCancelButtonAction = new SaveCancelAction("Speichern u. Schließen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/save_cancel.png"));
 

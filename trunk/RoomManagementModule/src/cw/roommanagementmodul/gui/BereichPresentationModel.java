@@ -314,7 +314,7 @@ public class BereichPresentationModel {
 
                     DefaultMutableTreeNode newNode = new DefaultMutableTreeNode(b);
 
-                    //überlegen...
+                    //ueberlegen...
                     initTree(newNode);
                     treeModel.insertNodeInto(newNode, newParentNode, newParentNode.getChildCount());
 
@@ -545,7 +545,7 @@ public class BereichPresentationModel {
                         treeModel.removeNodeFromParent(zimmerNode);
                     }
 
-                    //Neuen Node hinzufügen:
+                    //Neuen Node hinzufuegen:
                     DefaultMutableTreeNode bereichNode = searchTreeNode(treeModel, z.getBereich());
                     //initTree(zimmerNode);
                     treeModel.insertNodeInto(new DefaultMutableTreeNode(z), bereichNode, bereichNode.getChildCount());
@@ -571,7 +571,7 @@ public class BereichPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            final ZimmerPresentationModel model = new ZimmerPresentationModel(ZimmerManager.getInstance(), new CWHeaderInfo("Zimmer Verwaltung","Übersicht aller Zimmer"),bereichModel);
+            final ZimmerPresentationModel model = new ZimmerPresentationModel(ZimmerManager.getInstance(), new CWHeaderInfo("Zimmer Verwaltung","Uebersicht aller Zimmer"),bereichModel);
             final ZimmerView zimmerView = new ZimmerView(model);
             model.addButtonListener(new ButtonListener() {
 

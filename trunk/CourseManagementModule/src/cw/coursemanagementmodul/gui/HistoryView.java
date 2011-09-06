@@ -177,7 +177,7 @@ public class HistoryView extends CWView
     }
 
     //**************************************************************************
-    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
+    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurueck
     //**************************************************************************
     private void buildView(){
 

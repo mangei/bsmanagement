@@ -68,7 +68,7 @@ public class GebLaufView extends CWView implements ItemListener{
         lBetiebsart = CWComponentFactory.createLabel("Betriebsart:");
         lAbrMonat = CWComponentFactory.createLabel("Abr-Monat: ");
         lMonat = CWComponentFactory.createLabel("Monat: ");
-        lGebLauf = CWComponentFactory.createLabel("Gebühren Lauf: ");
+        lGebLauf = CWComponentFactory.createLabel("Gebuehren Lauf: ");
 
         laufartGroup.add(rNormal);
         laufartGroup.add(rStorno);
@@ -153,7 +153,7 @@ public class GebLaufView extends CWView implements ItemListener{
 
         if (e.getStateChange() == ItemEvent.SELECTED) {
 
-            //Unbedingt Überarbeiten:
+            //Unbedingt Ueberarbeiten:
             //Je nachdem ob Storno aktiviert oder deaktiviert ist sollen die
             //dazu gehörigen Komponenten enabled oder disabled werden
             if ((model.getStornoInt() + 1) % 2 == 0) {

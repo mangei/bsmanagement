@@ -79,7 +79,7 @@ extends JTextField
                     // Wenn das Panel nicht existiert, soll es erstellt werden
                     if(panel==null) {
                         
-                        // Neues Panel für das Icon
+                        // Neues Panel fuer das Icon
                         tf.add(panel = new JPanel() {
 
                             @Override
@@ -141,14 +141,14 @@ extends JTextField
         if(value.length() == 0)
             return true;
         
-        // Auf Integer prüfen
+        // Auf Integer pruefen
         try {
             i = Integer.parseInt(value);
         } catch (NumberFormatException numberFormatException) {
             return false;
         }
 
-        // Größe prüfen
+        // Größe pruefen
         if(i < min || i > max) {
             return false;
         }

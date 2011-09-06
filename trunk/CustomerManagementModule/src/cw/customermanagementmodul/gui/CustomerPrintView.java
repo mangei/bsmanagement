@@ -5,10 +5,10 @@
 
 package cw.customermanagementmodul.gui;
 
+import net.sf.jasperreports.swing.JRViewer;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import net.sf.jasperreports.swing.JRViewer;
 
 /**
  *
@@ -33,10 +33,10 @@ public class CustomerPrintView extends CWView{
         componentContainer = CWComponentFactory.createComponentContainer();
 
         bBack = CWComponentFactory.createButton(model.getBackAction());
-        bBack.setText("Zurück");
+        bBack.setText("Zurueck");
 
         bBack.setToolTipText(CWComponentFactory.createToolTip(
-                "Zurück",
+                "Zurueck",
                 " ",
                 "cw/coursemanagementmodul/images/back.png"));
 

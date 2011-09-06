@@ -70,7 +70,7 @@ public class EditOrganisationUnitView extends CWView
         
         builder.addLabel("Name:", cc.xy(1, 1));
         builder.add(tfName, cc.xy(3, 1));
-        builder.addLabel("Überbereich:", cc.xy(1, 3));
+        builder.addLabel("Ueberbereich:", cc.xy(1, 3));
         builder.add(cbOrganisationUnitParent, cc.xy(3, 3));
     }
 

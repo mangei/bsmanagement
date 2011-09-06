@@ -42,7 +42,7 @@ public class GebBewohnerView extends CWView
     }
 
     private void initComponents() {
-        lGebuehr = CWComponentFactory.createLabel("Gebühr: ");
+        lGebuehr = CWComponentFactory.createLabel("Gebuehr: ");
         lVon = CWComponentFactory.createLabel("Von: ");
         lBis = CWComponentFactory.createLabel("Bis: ");
         lAnmerkung = CWComponentFactory.createLabel("Anmerkung: ");

@@ -54,8 +54,8 @@ public class CourseDetailPresentationModel
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
 
-        //Anlegen der Aktionen, für die Buttons
-        cancelAction = new CancelAction("Zurück");
+        //Anlegen der Aktionen, fuer die Buttons
+        cancelAction = new CancelAction("Zurueck");
         printAction = new PrintAction("Drucken");
         coursePartSelection = new SelectionInList<CourseParticipant>(CourseParticipantManager.getInstance().getAll(selectedCourse));
         

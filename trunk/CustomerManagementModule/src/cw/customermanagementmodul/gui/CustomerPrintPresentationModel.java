@@ -30,7 +30,7 @@ import cw.customermanagementmodul.persistence.Group;
 
 /**
  * PresentationModel zu CustomerPrintView
- * Dient für die logisch Abarbeitung des Druckens von Kunden und Gruppen
+ * Dient fuer die logisch Abarbeitung des Druckens von Kunden und Gruppen
  *
  * @author tom
  */
@@ -70,8 +70,8 @@ public class CustomerPrintPresentationModel
     }
 
     /**
-     * Liefert die Aktion zurück die durchgeführt werden soll wenn man auf den
-     * Zurück-Button drückt.
+     * Liefert die Aktion zurueck die durchgefuehrt werden soll wenn man auf den
+     * Zurueck-Button drueckt.
      * @return the backAction
      *
      */
@@ -80,7 +80,7 @@ public class CustomerPrintPresentationModel
     }
 
     /**
-     * Lifert den druckbereiten JasperReport zurück,
+     * Lifert den druckbereiten JasperReport zurueck,
      *
      * @return the jasperPrint
      */

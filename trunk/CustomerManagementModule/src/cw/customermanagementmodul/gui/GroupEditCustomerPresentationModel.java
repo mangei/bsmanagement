@@ -59,12 +59,12 @@ public class GroupEditCustomerPresentationModel
         otherGroups.removeAll(selectionCustomerGroups.getList());
         selectionGroups = new SelectionInList<Group>(otherGroups);
 
-        addGroupAction = new AddGroupAction("Hinzufügen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_left.png"));
+        addGroupAction = new AddGroupAction("Hinzufuegen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_left.png"));
         removeGroupAction = new RemoveGroupAction("Entfernen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_right.png"));
     
         headerInfo = new CWHeaderInfo(
                 "Gruppenzugehörigkeit",
-                "Hier können Sie die Gruppenzugehörigkeiten für den Kunden einstellen.",
+                "Hier können Sie die Gruppenzugehörigkeiten fuer den Kunden einstellen.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/group.png"),
                 CWUtils.loadIcon("cw/customermanagementmodul/images/group.png")
         );

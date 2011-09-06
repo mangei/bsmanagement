@@ -28,7 +28,7 @@ public class GroupPM extends AbstractPersistenceManager<Group> {
     }
 
 	public Group create(EntityManager entityManager) {
-		Group group = new GroupImpl(entityManager);
+		Group group = new Group(entityManager);
     	entityManager.getTransaction().begin();
 		entityManager.persist(group);
     	entityManager.getTransaction().commit();
@@ -40,16 +40,19 @@ public class GroupPM extends AbstractPersistenceManager<Group> {
     }
 
 	public List<Group> getAll(EntityManager entityManager) {
-		return entityManager.createQuery("FROM Group").getResultList();
+		return entityManager.createQuery(
+				"FROM " + 
+					Group.ENTITY_NAME
+		).getResultList();
 	}
 
 	public List<Group> getAllGroupsByCustomer(Customer customer, EntityManager entityManager) {
 		return entityManager.createQuery(
 				"FROM " +
-					Group.ENTITY_NAME + 
+					Group.ENTITY_NAME /*+ 
 				" WHERE " +
 					Group.PROPERTYNAME_CUSTOMERS
-					// TODO Not finished
+					// TODO Not finished*/
 		).getResultList();
 	}
 }

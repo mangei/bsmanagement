@@ -3,6 +3,7 @@ package cw.customermanagementmodul.persistence;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.EntityManager;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -10,18 +11,19 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import cw.boardingschoolmanagement.app.CWPersistence;
+import cw.boardingschoolmanagement.app.CWPersistenceImpl;
 
 /**
+ * Implementation of persistence 'Group'
  *
- * @author ManuelG
+ * @author Manuel Geier
  */
 @Entity(name=Group.ENTITY_NAME)
 @Table(name=Group.TABLE_NAME)
-public interface Group
-        extends CWPersistence {
+public class Group
+        extends CWPersistenceImpl {
 
-    // Properties - Constants
+	// Properties - Constants
     public final static String ENTITY_NAME = "groups";
     public final static String TABLE_NAME = "groups";
     public final static String PROPERTYNAME_ID = "id";
@@ -29,23 +31,78 @@ public interface Group
     public final static String PROPERTYNAME_DELETABLE = "deletable";
     public final static String PROPERTYNAME_PARENT = "parent";
     public final static String PROPERTYNAME_CUSTOMERS = "customers";
+	
+    private Long id;
+    private String name;
+    private boolean deletable;
+    private Group parent;
+    private List<Customer> customers;
 
-    public boolean isDeletable();
-    public void setDeletable(boolean deletable);
+    public Group() {
+		super(null);
+	}
+    
+    Group(EntityManager entityManager) {
+    	super(entityManager);
+    }
 
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) return false;
+        if(!(obj instanceof Group)) return false;
+        if (this.getId() == ((Group) obj).getId()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
+
+    public boolean isDeletable() {
+        return deletable;
+    }
+
+    public void setDeletable(boolean deletable) {
+        this.deletable = deletable;
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public Long getId();
-    public void setId(Long id);
+    public Long getId() {
+        return id;
+    }
 
-    public String getName();
-    public void setName(String name);
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     @ManyToOne
-    public Group getParent();
-    public void setParent(Group parent);
+    public Group getParent() {
+        return parent;
+    }
+
+    public void setParent(Group parent) {
+        this.parent = parent;
+    }
 
     @OneToMany
-    public List<Customer> getCustomers();
-    public void setCustomers(List<Customer> customers);
+	public List<Customer> getCustomers() {
+		return customers;
+	}
+
+	public void setCustomers(List<Customer> customers) {
+		this.customers = customers;
+	}
 }

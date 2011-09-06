@@ -56,7 +56,7 @@ public class CourseView extends CWView
 
         newButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Neu",
-                "Hier können Sie einen neuen Kurs hinzufügen!",
+                "Hier können Sie einen neuen Kurs hinzufuegen!",
                 "cw/coursemanagementmodul/images/course_add.png"));
         editButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Bearbeiten",
@@ -99,7 +99,7 @@ public class CourseView extends CWView
     }
 
     //**************************************************************************
-    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
+    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurueck
     //**************************************************************************
     private void buildView(){
 

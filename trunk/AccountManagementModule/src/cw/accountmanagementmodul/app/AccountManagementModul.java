@@ -155,7 +155,7 @@ public class AccountManagementModul
         // Wenn das Konto gelöscht wird, alle dazugehörigen Rechnungen löschen.
 
         // Wenn eine Rechnug gelöscht wird, alle dazugehörigen RechnungensPosten löschen.
-        // Prüfen ob die Buchung noch vorhanden ist, da sie schon gelöscht worden sein könnte,
+        // Pruefen ob die Buchung noch vorhanden ist, da sie schon gelöscht worden sein könnte,
         // wenn ein Konto gelöscht wird.
 
         // Wenn ein Buchung gelöscht wird, diese aus den Buchungsläufen entfernen.

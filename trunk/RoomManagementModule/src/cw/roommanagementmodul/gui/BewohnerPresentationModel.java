@@ -260,7 +260,7 @@ public class BewohnerPresentationModel
 
         public void actionPerformed(ActionEvent e) {
 
-            final KautionPresentationModel model = new KautionPresentationModel(KautionManager.getInstance(), new CWHeaderInfo("Kautionen Verwalten", "Übersicht aller vorhandenen Kautionen"));
+            final KautionPresentationModel model = new KautionPresentationModel(KautionManager.getInstance(), new CWHeaderInfo("Kautionen Verwalten", "Uebersicht aller vorhandenen Kautionen"));
             final KautionView kautionView = new KautionView(model);
 
             GUIManager.changeView(kautionView, true);
@@ -296,7 +296,7 @@ public class BewohnerPresentationModel
         final GebuehrZuordnung gb = new GebuehrZuordnung();
         CustomerModel c = bewohnerSelection.getSelection().getCustomer();
         gb.setBewohner(bewohnerSelection.getSelection());
-        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: " + c.getSurname() + " " + c.getForename(), "Hier können Sie alle Gebühren verwalten, die zu einem Bewohner zugeordnet sind."));
+        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: " + c.getSurname() + " " + c.getForename(), "Hier können Sie alle Gebuehren verwalten, die zu einem Bewohner zugeordnet sind."));
         final GebBewohnerView gebView = new GebBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -319,7 +319,7 @@ public class BewohnerPresentationModel
 
     private void gebZuordnungSelectedItem(EventObject e) {
         CustomerModel c = bewohnerSelection.getSelection().getCustomer();
-        final GebZuordnungBewohnerPresentationModel model = new GebZuordnungBewohnerPresentationModel(this.getBewohnerSelection().getSelection(), new CWHeaderInfo("Gebühren Übersicht: " + c.getSurname() + " " + c.getForename(), "Übersicht aller Gebühren die diesem Bewohner zugeordnet sind."));
+        final GebZuordnungBewohnerPresentationModel model = new GebZuordnungBewohnerPresentationModel(this.getBewohnerSelection().getSelection(), new CWHeaderInfo("Gebuehren Uebersicht: " + c.getSurname() + " " + c.getForename(), "Uebersicht aller Gebuehren die diesem Bewohner zugeordnet sind."));
         final GebZuordnungBewohnerView detailView = new GebZuordnungBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -415,7 +415,7 @@ public class BewohnerPresentationModel
                     switch(b.getKautionStatus()){
                         case Bewohner.NICHT_EINGEZAHLT: return "Nicht eingezahlt";
                         case Bewohner.EINGEZAHLT: return "Eingezahlt";
-                        case Bewohner.ZURUECK_GEZAHLT: return "Zurück Gezahlt";
+                        case Bewohner.ZURUECK_GEZAHLT: return "Zurueck Gezahlt";
                         case Bewohner.EINGEZOGEN: return "Eingezogen";
                         default: return "-";
                     }

@@ -36,7 +36,7 @@ public class UpdateConfigurationView extends CWView
     public void initComponents() {
         bCheck = CWComponentFactory.createButton(model.getCheckAction());
         bUpdate = CWComponentFactory.createButton(model.getUpdateAction());
-        tUpdates = CWComponentFactory.createTable(model.getUpdatesTableModel(), "System prüfen!");
+        tUpdates = CWComponentFactory.createTable(model.getUpdatesTableModel(), "System pruefen!");
         tUpdates.getColumns(true).get(2).setCellRenderer(new UpdateStatusTableCellRenderer());
 
         componentContainer = CWComponentFactory.createComponentContainer()

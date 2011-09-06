@@ -41,12 +41,12 @@ public class TestRunView extends CWView
         printButton = CWComponentFactory.createButton(model.getPrintAction());
 
         backButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Zurück",
-                "Hier kehren Sie in die Gebührenlaufübersicht zurück!",
+                "Zurueck",
+                "Hier kehren Sie in die Gebuehrenlaufuebersicht zurueck!",
                 "cw/coursemanagementmodul/images/back.png"));
         printButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Drucken",
-                "Druckt den Gebührenlauf!",
+                "Druckt den Gebuehrenlauf!",
                 "cw/coursemanagementmodul/images/print.png"));
 
         componentContainer = CWComponentFactory.createComponentContainer()

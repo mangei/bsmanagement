@@ -3,11 +3,10 @@ package cw.customermanagementmodul.gui;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWList;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import java.awt.Dimension;
-import javax.swing.BorderFactory;
 
 /**
  * @author CreativeWorkers.at

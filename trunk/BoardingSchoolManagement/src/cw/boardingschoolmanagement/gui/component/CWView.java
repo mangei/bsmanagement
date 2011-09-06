@@ -440,7 +440,7 @@ public class CWView extends CWPanel {
         public void setHeaderInfo(CWHeaderInfo headerInfo) {
             this.headerInfo = headerInfo;
 
-            // Entferne das HTML-Markup, denn es wird automatisch hinzugefügt.
+            // Entferne das HTML-Markup, denn es wird automatisch hinzugefuegt.
             headerInfo.getDescription().toLowerCase().replace("<html>", "");
             headerInfo.getDescription().toLowerCase().replace("</html>", "");
             headerInfo.getDescription().toLowerCase().replace("<body>", "");

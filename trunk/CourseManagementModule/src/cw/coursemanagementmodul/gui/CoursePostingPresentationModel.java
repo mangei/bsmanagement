@@ -84,11 +84,11 @@ public class CoursePostingPresentationModel
                 "Sie befinden sich im Kursbuchungsbereich. Hier können Sie Kursbuchungen tätigen",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/accounting.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/accounting.png"));
-        //Anlegen der Aktionen, für die Buttons
+        //Anlegen der Aktionen, fuer die Buttons
         postingAction = new PostingAction("Buchen");
         normalRadioButtonAction = new NormalRadioButtonAction("Echtlauf");
         testRadioButtonAction = new TestRadioButtonAction("Testlauf");
-        runsAction = new RunsAction("Gebührenläufe");
+        runsAction = new RunsAction("Gebuehrenläufe");
 
         coursePartSelection = new SelectionInList<CourseParticipant>();
         courseSelection = new SelectionInList<Course>(CourseManager.getInstance().getAll());

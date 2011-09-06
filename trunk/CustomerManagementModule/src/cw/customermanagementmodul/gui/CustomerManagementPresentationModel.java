@@ -63,7 +63,7 @@ public class CustomerManagementPresentationModel
 
         headerInfo = new CWHeaderInfo(
                 "Kunden verwalten",
-                "Sie befinden sich Kundenverwaltungsbereich. Hier haben Sie einen Überblick über alle Kunden.",
+                "Sie befinden sich Kundenverwaltungsbereich. Hier haben Sie einen Ueberblick ueber alle Kunden.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
         );
@@ -106,7 +106,7 @@ public class CustomerManagementPresentationModel
             p.put(PresentationModelProperties.HEADERINFO,
                     new CWHeaderInfo(
                     "Kunden erstellen",
-                    "Bearbeiten sie hier alle Informationen über Ihren Kunden.",
+                    "Bearbeiten sie hier alle Informationen ueber Ihren Kunden.",
                     CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png"),
                     CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png")));
             p.put("activeExtention", EditCustomerEditCustomerTabExtention.class);
@@ -275,7 +275,7 @@ public class CustomerManagementPresentationModel
 
         /**
          * Liest den momentan markierten Kunden aus der View, setzt diesen
-         * Inaktiv und entfernt ihn aus der Anzeige für aktive Kunden.
+         * Inaktiv und entfernt ihn aus der Anzeige fuer aktive Kunden.
          * Speicher den inaktiv gesetzten Kunden wieder in die Datenbank;
          *
          * @param e ActionEvent
@@ -399,7 +399,7 @@ public class CustomerManagementPresentationModel
         p.put(PresentationModelProperties.HEADERINFO,
                 new CWHeaderInfo(
                 "Kunden bearbeiten",
-                "Bearbeiten sie hier alle Informationen über Ihren Kunden.",
+                "Bearbeiten sie hier alle Informationen ueber Ihren Kunden.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"),
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")));
         p.put("activeExtention", CustomerOverviewEditCustomerExtentionPoint.class);

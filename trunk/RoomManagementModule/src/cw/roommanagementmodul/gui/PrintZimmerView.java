@@ -26,7 +26,7 @@ public class PrintZimmerView extends CWView {
 
     private void initComponents() {
         bBack = CWComponentFactory.createButton(model.getBackAction());
-        bBack.setText("Zurück");
+        bBack.setText("Zurueck");
         viewer = new JRViewer(model.getJasperPrint());
 
         componentContainer = CWComponentFactory.createComponentContainer().addComponent(bBack);
