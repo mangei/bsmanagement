@@ -3,7 +3,7 @@ package cw.accountmanagementmodul.pojo.manager;
 import cw.accountmanagementmodul.pojo.Posting;
 import cw.accountmanagementmodul.pojo.Account;
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  *
  * @author CreativeWorkers.at
  */
-public class AbstractPostingManager extends AbstractPOJOManager<Posting>
+public class AbstractPostingManager extends AbstractPersistenceManager<Posting>
 {
 
     private static AbstractPostingManager instance;

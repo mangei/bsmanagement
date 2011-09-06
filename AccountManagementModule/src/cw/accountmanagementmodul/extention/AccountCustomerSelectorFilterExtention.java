@@ -6,7 +6,7 @@ import cw.accountmanagementmodul.gui.AccountCustomerSelectorFilterExtentionView;
 import cw.accountmanagementmodul.pojo.Account;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtentionPoint;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.accountmanagementmodul.pojo.manager.AccountManager;
 import cw.accountmanagementmodul.pojo.manager.PostingManager;
@@ -48,14 +48,14 @@ public class AccountCustomerSelectorFilterExtention
         });
     }
 
-    public List<Customer> filter(List<Customer> customers) {
+    public List<CustomerModel> filter(List<CustomerModel> customers) {
 
         if((Integer)model.getOption().getValue() != NO_MATTER) {
             
             Object[] customersArray =  customers.toArray();
 
             for (int i = 0, l=customersArray.length; i < l; i++) {
-                Customer customer = (Customer)customersArray[i];
+                CustomerModel customer = (CustomerModel)customersArray[i];
                 Account account = AccountManager.getInstance().get(customer);
 
                 // Get the all postings

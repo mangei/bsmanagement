@@ -1,17 +1,18 @@
 package cw.customermanagementmodul.gui;
 
-import com.jidesoft.swing.JideTabbedPane;
-import cw.boardingschoolmanagement.gui.component.CWButton;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
-import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import java.awt.BorderLayout;
-import java.util.List;
-import javax.swing.JTabbedPane;
-import cw.customermanagementmodul.pojo.Customer;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.List;
+
+import com.jidesoft.swing.JideTabbedPane;
+
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
+import cw.customermanagementmodul.persistence.Customer;
 
 /**
  *

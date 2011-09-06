@@ -5,8 +5,9 @@ import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtentionPoint;
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionPresentationModel;
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionView;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Group;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
+import cw.customermanagementmodul.persistence.model.GroupModel;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -45,13 +46,13 @@ public class GroupCustomerSelectorFilterExtention
         });
     }
 
-    public List<Customer> filter(List<Customer> costumers) {
+    public List<CustomerModel> filter(List<CustomerModel> costumers) {
 
         // Die Erweiterung die eine Änderung feststellt, meldet dies an die Tabelle
         // diese ruft dann die filter-methode dieser Erweiterungen auf
         // Danach wird die Tabelle aktualisiert
 
-        List<Group> groups = new ArrayList<Group>();
+        List<GroupModel> groups = new ArrayList<GroupModel>();
 
 
         // TODO Prüfen ob das so stimmt mit dem Gruppen auswählen
@@ -80,7 +81,7 @@ public class GroupCustomerSelectorFilterExtention
 
             for (int i = iMin; i <= iMax; i++) {
                 if (model.getGroupSelectionModel().isSelectedIndex(i)) {
-                    groups.add((Group)model.getGroupSelection().getElementAt(i));
+                    groups.add((GroupModel)model.getGroupSelection().getElementAt(i));
                }
             }
         }
@@ -88,11 +89,11 @@ public class GroupCustomerSelectorFilterExtention
 
         // Choose the costumers
 
-        Iterator<Group> itGroups;
-        Iterator<Customer> itCostumers = costumers.iterator();
-        List<Customer> newCostumers = new ArrayList<Customer>();
-        Customer costumer;
-        Group group;
+        Iterator<GroupModel> itGroups;
+        Iterator<CustomerModel> itCostumers = costumers.iterator();
+        List<CustomerModel> newCostumers = new ArrayList<CustomerModel>();
+        CustomerModel costumer;
+        GroupModel group;
 
         System.out.println("anz: " + costumers.size());
 

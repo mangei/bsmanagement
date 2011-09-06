@@ -1,10 +1,12 @@
 package cw.customermanagementmodul.extention.point;
 
-import cw.boardingschoolmanagement.interfaces.Extention;
+import java.util.List;
+
+import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.boardingschoolmanagement.interfaces.Extention;
 import cw.boardingschoolmanagement.interfaces.Priority;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
-import java.util.List;
 
 /**
  *
@@ -32,6 +34,10 @@ public interface EditCustomerTabExtentionPoint
      * If the user presses the save button
      */
     public void save();
+
+    public boolean validate(List<CWErrorMessage> errorMessages);
+
+    public void cancel();
 
     /**
      * checks before the save-method if the content the user entered is validate

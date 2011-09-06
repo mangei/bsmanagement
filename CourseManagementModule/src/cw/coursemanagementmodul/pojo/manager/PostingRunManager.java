@@ -3,14 +3,14 @@ package cw.coursemanagementmodul.pojo.manager;
 import java.util.List;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import cw.coursemanagementmodul.pojo.PostingRun;
 
 /**
  *
  * @author André Salmhofer
  */
-public class PostingRunManager extends AbstractPOJOManager<PostingRun> {
+public class PostingRunManager extends AbstractPersistenceManager<PostingRun> {
 
     private static PostingRunManager instance;
 

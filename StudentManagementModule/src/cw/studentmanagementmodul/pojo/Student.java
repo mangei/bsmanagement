@@ -8,7 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
-import cw.customermanagementmodul.pojo.Customer;
+
+import cw.customermanagementmodul.persistence.model.CustomerModel;
+
 import javax.persistence.CascadeType;
 
 /**
@@ -22,7 +24,7 @@ public class Student
 {
     private Long id                     = null;
     private StudentClass studentClass   = null;
-    private Customer customer           = null;
+    private CustomerModel customer           = null;
     private boolean active              = false;
     
     // Properties - Constants
@@ -34,7 +36,7 @@ public class Student
     public Student() {
     }
 
-    public Student(Customer customer) {
+    public Student(CustomerModel customer) {
         this.customer = customer;
     }
     
@@ -85,12 +87,12 @@ public class Student
     }
 
     @OneToOne
-    public Customer getCustomer() {
+    public CustomerModel getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer customer) {
-        Customer old = this.customer;
+    public void setCustomer(CustomerModel customer) {
+        CustomerModel old = this.customer;
         this.customer = customer;
         firePropertyChange(PROPERTYNAME_CUSTOMER, old, customer);
     }

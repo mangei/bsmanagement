@@ -1,10 +1,12 @@
 package cw.customermanagementmodul.extention.point;
 
-import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.interfaces.Extention;
-import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.customermanagementmodul.pojo.Customer;
 import java.util.List;
+
+import com.jgoodies.binding.value.ValueModel;
+
+import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.boardingschoolmanagement.interfaces.Extention;
+import cw.customermanagementmodul.persistence.Customer;
 
 /**
  * If you want to add an Filter to the Customers, implement this interface

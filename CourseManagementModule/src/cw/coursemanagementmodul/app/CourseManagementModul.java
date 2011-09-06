@@ -26,8 +26,8 @@ import cw.coursemanagementmodul.gui.SubjectView;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.manager.CustomerManager;
+import cw.customermanagementmodul.persistence.CustomerManager;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 /**
  *
  * @author André Salmhofer (CreativeWorkers)
@@ -85,7 +85,7 @@ public class CourseManagementModul implements Modul{
 
         CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
-                Customer customer = new Customer();// = (Customer) evt.getObject();
+                CustomerModel customer = new CustomerModel();// = (Customer) evt.getObject();
                 List<CourseParticipant> courseParticipants = CourseParticipantManager.getInstance().getAll(customer);
 
                 for(CourseParticipant cp: courseParticipants) {

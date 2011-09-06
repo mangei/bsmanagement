@@ -5,7 +5,7 @@
 package cw.roommanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import cw.roommanagementmodul.pojo.Gebuehr;
 import cw.roommanagementmodul.pojo.GebuehrenKategorie;
 import java.util.List;
@@ -16,7 +16,7 @@ import javax.persistence.EntityManager;
  *
  * @author Dominik
  */
-public class GebuehrenManager extends AbstractPOJOManager<Gebuehr> {
+public class GebuehrenManager extends AbstractPersistenceManager<Gebuehr> {
 
     private static GebuehrenManager instance;
     private static Logger logger = Logger.getLogger(GebuehrenManager.class.getName());

@@ -1,29 +1,33 @@
 package cw.customermanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.CWUtils;
-import com.jgoodies.binding.list.SelectionInList;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+
+import javax.persistence.EntityManager;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Group;
-import cw.customermanagementmodul.pojo.manager.GroupManager;
-import java.util.ArrayList;
 import javax.swing.Icon;
 import javax.swing.JOptionPane;
+
+import com.jgoodies.binding.list.SelectionInList;
+
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.customermanagementmodul.persistence.Group;
+import cw.customermanagementmodul.persistence.GroupManager;
 
 /**
  *
  * @author ManuelG
  */
 public class GroupManagementPresentationModel
-{
+	extends CWPresentationModel {
 
     private Action newGroupAction;
     private Action editGroupAction;
@@ -36,7 +40,8 @@ public class GroupManagementPresentationModel
     private SelectionEmptyHandler selectionEmptyHandler;
     private PropertyChangeListener groupChangeListener;
 
-    public GroupManagementPresentationModel() {
+    public GroupManagementPresentationModel(EntityManager entityManager) {
+    	super(entityManager);
         initModels();
         initEventHandling();
     }
@@ -46,12 +51,13 @@ public class GroupManagementPresentationModel
         editGroupAction = new EditGroupAction("Gruppe bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/group_edit.png"));
         removeGroupAction = new RemoveGroupAction("Gruppe löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/group_remove.png"));
 
-        groupSelection = new SelectionInList<Group>(GroupManager.getInstance().getAll());
+        groupSelection = new SelectionInList<Group>(GroupManager.getInstance().getAll(getEntityManager()));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
                 new ArrayList(),
                 false,
-                "cw.customerboardingmanagement.GroupManangementView.customerTableState"
+                "cw.customerboardingmanagement.GroupManangementView.customerTableState",
+                getEntityManager()
                 );
 
         headerInfo = new CWHeaderInfo(
@@ -116,7 +122,8 @@ public class GroupManagementPresentationModel
 
             final EditGroupPresentationModel model = new EditGroupPresentationModel(
                     group,
-                    new CWHeaderInfo("Gruppe erstellen"));
+                    new CWHeaderInfo("Gruppe erstellen"),
+                    getEntityManager());
             final EditGroupView editView = new EditGroupView(model);
 
             model.addButtonListener(new ButtonListener() {
@@ -165,7 +172,8 @@ public class GroupManagementPresentationModel
 
             final EditGroupPresentationModel model = new EditGroupPresentationModel(
                     group,
-                    new CWHeaderInfo("Gruppe bearbeiten")
+                    new CWHeaderInfo("Gruppe bearbeiten"),
+                    getEntityManager()
             );
             final EditGroupView editView = new EditGroupView(model);
             model.addButtonListener(new ButtonListener() {

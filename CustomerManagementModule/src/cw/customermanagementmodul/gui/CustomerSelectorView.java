@@ -1,18 +1,40 @@
 package cw.customermanagementmodul.gui;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
+
+import javax.swing.AbstractAction;
+import javax.swing.Icon;
+import javax.swing.JPanel;
+import javax.swing.JTable;
+import javax.swing.SwingConstants;
+import javax.swing.table.TableCellRenderer;
+
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.gui.component.CWCheckBoxMenuItem;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CalendarUtil;
 import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWCheckBoxMenuItem;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWPopupMenu;
+import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.component.JNotNullLabel;
 import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
 import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
@@ -21,26 +43,7 @@ import cw.boardingschoolmanagement.gui.ui.ColoredPanelUI;
 import cw.customermanagementmodul.gui.CustomerSelectorPresentationModel.CustomerSelectorFilterExtentionPointHelper;
 import cw.customermanagementmodul.gui.renderer.ActiveCustomerTableCellRenderer;
 import cw.customermanagementmodul.gui.renderer.GenderTableCellRenderer;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.FlowLayout;
-import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map.Entry;
-import javax.swing.JPanel;
-import javax.swing.JTable;
-import javax.swing.table.TableCellRenderer;
-import cw.customermanagementmodul.pojo.Customer;
-import java.awt.BorderLayout;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeListener;
-import java.util.HashMap;
-import javax.swing.AbstractAction;
-import javax.swing.Icon;
-import javax.swing.SwingConstants;
+import cw.customermanagementmodul.persistence.Customer;
 
 /**
  * Diese Klasse ist die grafsiche Darstellung der Kundenübersichtstabelle in

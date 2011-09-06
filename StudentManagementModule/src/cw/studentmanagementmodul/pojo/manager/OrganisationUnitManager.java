@@ -1,7 +1,7 @@
 package cw.studentmanagementmodul.pojo.manager;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import java.util.List;
 import cw.studentmanagementmodul.pojo.OrganisationUnit;
 import cw.studentmanagementmodul.pojo.StudentClass;
@@ -11,7 +11,7 @@ import java.util.logging.Logger;
  * Manages OrganisationUnits
  * @author CreativeWorkers.at
  */
-public class OrganisationUnitManager extends AbstractPOJOManager<OrganisationUnit> {
+public class OrganisationUnitManager extends AbstractPersistenceManager<OrganisationUnit> {
 
     private static OrganisationUnitManager instance;
     private static Logger logger = Logger.getLogger(OrganisationUnitManager.class.getName());

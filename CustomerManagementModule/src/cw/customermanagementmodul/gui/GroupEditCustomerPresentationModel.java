@@ -1,28 +1,33 @@
 package cw.customermanagementmodul.gui;
 
-import com.jgoodies.binding.list.SelectionInList;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.event.ListDataEvent;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.Group;
-import cw.customermanagementmodul.pojo.manager.GroupManager;
-import cw.boardingschoolmanagement.app.CWUtils;
-import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.Icon;
+import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
+
+import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.ValueModel;
+
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.customermanagementmodul.persistence.Customer;
+import cw.customermanagementmodul.persistence.Group;
+import cw.customermanagementmodul.persistence.GroupManager;
 
 /**
  *
  * @author ManuelG
  */
 public class GroupEditCustomerPresentationModel
-{
+	extends CWEditPresentationModel<Group> {
 
     private Customer customer;
     private ValueModel unsaved;
@@ -37,7 +42,8 @@ public class GroupEditCustomerPresentationModel
     private PropertyChangeListener addGroupActionListener;
     private PropertyChangeListener removeGroupActionListener;
 
-    public GroupEditCustomerPresentationModel(Customer customer, ValueModel unsaved) {
+    public GroupEditCustomerPresentationModel(Customer customer, ValueModel unsaved, EntityManager entityManager) {
+    	super(entityManager);
         this.customer = customer;
         this.unsaved = unsaved;
 
@@ -48,7 +54,7 @@ public class GroupEditCustomerPresentationModel
     private void initModels() {
         selectionCustomerGroups = new SelectionInList<Group>(customer.getGroups());
         
-        List<Group> otherGroups = GroupManager.getInstance().getAll();
+        List<Group> otherGroups = GroupManager.getInstance().getAll(getEntityManager());
         otherGroups.removeAll(selectionCustomerGroups.getList());
         selectionGroups = new SelectionInList<Group>(otherGroups);
 
@@ -194,5 +200,16 @@ public class GroupEditCustomerPresentationModel
     public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
+
+	public boolean validate() {
+		return true;
+	}
+
+	public boolean save() {
+		return true;
+	}
+
+	public void cancel() {		
+	}
 
 }

@@ -28,7 +28,7 @@ import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.roommanagementmodul.pojo.Bewohner;
 import cw.roommanagementmodul.pojo.BewohnerStorno;
 
@@ -42,7 +42,7 @@ public class PrintStornoPresentationModel{
     private CWHeaderInfo headerInfo;
     private Action backAction;
     private Map<Bewohner, List<AccountPosting>> bewohnerPostingMap;
-    private Map<Customer, List<AccountPosting>> customerNoBewohnerMap;
+    private Map<CustomerModel, List<AccountPosting>> customerNoBewohnerMap;
     private List<BewohnerStorno> printDataList;
     private JasperReport jasperReport;
     private JRDataSource ds;
@@ -51,7 +51,7 @@ public class PrintStornoPresentationModel{
     private String printHeader;
 
     public PrintStornoPresentationModel(Map<Bewohner, List<AccountPosting>> bewohnerPostingMap,
-            Map<Customer, List<AccountPosting>> customerNoBewohnerMap, CWHeaderInfo headerInfo, String printHeader) {
+            Map<CustomerModel, List<AccountPosting>> customerNoBewohnerMap, CWHeaderInfo headerInfo, String printHeader) {
 
         this.printHeader=printHeader;
         this.bewohnerPostingMap = bewohnerPostingMap;
@@ -107,10 +107,10 @@ public class PrintStornoPresentationModel{
     private void prepareData() {
         printDataList = new ArrayList<BewohnerStorno>();
         List<Bewohner> bewohnerList = getBewohnerSelection();
-        List<Customer> customerList = getCustomerSelection();
+        List<CustomerModel> customerList = getCustomerSelection();
         List<AccountPosting> postingList;
         Bewohner bewohner;
-        Customer customer;
+        CustomerModel customer;
 
         for (int i = 0; i < bewohnerList.size(); i++) {
             bewohner = bewohnerList.get(i);
@@ -138,15 +138,15 @@ public class PrintStornoPresentationModel{
         return bewohnerList;
     }
 
-    private List<Customer> getCustomerSelection() {
-        List<Customer> customerList = new ArrayList<Customer>();
+    private List<CustomerModel> getCustomerSelection() {
+        List<CustomerModel> customerList = new ArrayList<CustomerModel>();
         Map map = customerNoBewohnerMap;
         Set keySet = map.keySet();
 
         Iterator iterator = keySet.iterator();
 
         while (iterator.hasNext()) {
-            customerList.add((Customer) iterator.next());
+            customerList.add((CustomerModel) iterator.next());
         }
         return customerList;
     }

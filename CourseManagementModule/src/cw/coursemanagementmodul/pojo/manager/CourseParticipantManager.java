@@ -6,19 +6,19 @@ import java.util.List;
 import javax.persistence.NoResultException;
 
 import cw.boardingschoolmanagement.app.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPOJOManager;
+import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import cw.coursemanagementmodul.pojo.Activity;
 import cw.coursemanagementmodul.pojo.Course;
 import cw.coursemanagementmodul.pojo.CourseAddition;
 import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.Subject;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 
 /**
  *
  * @author André Salmhofer
  */
-public class CourseParticipantManager extends AbstractPOJOManager<CourseParticipant> {
+public class CourseParticipantManager extends AbstractPersistenceManager<CourseParticipant> {
 
     private static CourseParticipantManager instance;
 
@@ -37,7 +37,7 @@ public class CourseParticipantManager extends AbstractPOJOManager<CourseParticip
         return HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant c order by c.customer.surname;").getResultList();
     }
 
-    public List<CourseParticipant> getAll(Customer customer) {
+    public List<CourseParticipant> getAll(CustomerModel customer) {
         return HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant c where c.customer.id = " + customer.getId()).getResultList();
     }
     
@@ -88,7 +88,7 @@ public class CourseParticipantManager extends AbstractPOJOManager<CourseParticip
      * @param customer
      * @return Kursteilnehmer - Kunde ist ein Kursteilnehmer, null - Kunde ist kein Kursteilnehmer
      */
-    public CourseParticipant get(Customer customer) {
+    public CourseParticipant get(CustomerModel customer) {
         CourseParticipant coursePart = null;
         try {
             coursePart = (CourseParticipant) HibernateUtil.getEntityManager().createQuery("FROM CourseParticipant where customer.active = true AND customer.id=" + customer.getId()).getSingleResult();

@@ -14,7 +14,8 @@ import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.gui.CustomerManagementPresentationModel;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -293,7 +294,7 @@ public class BewohnerPresentationModel
     private void gebSelectedItem(EventObject e) {
         //final Bewohner b = getBewohnerSelection().getSelection();
         final GebuehrZuordnung gb = new GebuehrZuordnung();
-        Customer c = bewohnerSelection.getSelection().getCustomer();
+        CustomerModel c = bewohnerSelection.getSelection().getCustomer();
         gb.setBewohner(bewohnerSelection.getSelection());
         final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: " + c.getSurname() + " " + c.getForename(), "Hier können Sie alle Gebühren verwalten, die zu einem Bewohner zugeordnet sind."));
         final GebBewohnerView gebView = new GebBewohnerView(model);
@@ -317,7 +318,7 @@ public class BewohnerPresentationModel
     }
 
     private void gebZuordnungSelectedItem(EventObject e) {
-        Customer c = bewohnerSelection.getSelection().getCustomer();
+        CustomerModel c = bewohnerSelection.getSelection().getCustomer();
         final GebZuordnungBewohnerPresentationModel model = new GebZuordnungBewohnerPresentationModel(this.getBewohnerSelection().getSelection(), new CWHeaderInfo("Gebühren Übersicht: " + c.getSurname() + " " + c.getForename(), "Übersicht aller Gebühren die diesem Bewohner zugeordnet sind."));
         final GebZuordnungBewohnerView detailView = new GebZuordnungBewohnerView(model);
         model.addButtonListener(new ButtonListener() {

@@ -13,7 +13,7 @@ import cw.coursemanagementmodul.pojo.CourseParticipant;
 import cw.coursemanagementmodul.pojo.CoursePosting;
 import cw.coursemanagementmodul.pojo.manager.CourseParticipantManager;
 import cw.coursemanagementmodul.pojo.manager.CoursePostingManager;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 
 /**
  *
@@ -30,7 +30,7 @@ public class CoursePostingEditPostingPostingCategoryExtention implements EditPos
 
     public void initPresentationModel(EditPostingPresentationModel postingModel){
         this.postingModel = postingModel;
-        Customer customer = ((AccountPosting)postingModel.getBean()).getCustomer();
+        CustomerModel customer = ((AccountPosting)postingModel.getBean()).getCustomer();
         List<CourseParticipant> courseParticipants = CourseParticipantManager.getInstance().getAll(customer);
         model = new CourseParticipantForPostingPresentationModel(courseParticipants.get(0), postingModel.getUnsaved(), postingModel);
         view = new CourseParticipantForPostingView(model);

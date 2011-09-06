@@ -3,7 +3,7 @@ package cw.studentmanagementmodul.extention;
 import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtentionPoint;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.studentmanagementmodul.gui.StudentCustomerSelectorFilterExtentionPresentationModel;
 import cw.studentmanagementmodul.gui.StudentCustomerSelectorFilterExtentionView;
 import cw.studentmanagementmodul.pojo.Student;
@@ -47,14 +47,14 @@ public class StudentCustomerSelectorFilterExtention
         model.getStudentClassSelection().addValueChangeListener(changeListener);
     }
 
-    public List<Customer> filter(List<Customer> customers) {
+    public List<CustomerModel> filter(List<CustomerModel> customers) {
 
         if((Integer)model.getOption().getValue() != NO_MATTER) {
             
             Object[] customersArray =  customers.toArray();
 
             for (int i = 0, l=customersArray.length; i < l; i++) {
-                Customer customer = (Customer)customersArray[i];
+                CustomerModel customer = (CustomerModel)customersArray[i];
 
                 // Get the student object
                 Student student = StudentManager.getInstance().get(customer);

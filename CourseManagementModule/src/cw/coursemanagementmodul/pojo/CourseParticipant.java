@@ -14,7 +14,7 @@ import javax.persistence.OneToOne;
 import com.jgoodies.binding.beans.Model;
 
 import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 
 /**
  *
@@ -26,7 +26,7 @@ public class CourseParticipant extends Model
 {
     
     private Long id                             = null;
-    private Customer customer                   = null;
+    private CustomerModel customer                   = null;
     private List<CourseAddition> courseList     = new ArrayList<CourseAddition>();;
     
     public final static String PROPERTYNAME_ID          = "id";
@@ -36,17 +36,17 @@ public class CourseParticipant extends Model
     public CourseParticipant() {
     }
 
-    public CourseParticipant(Customer customer) {
+    public CourseParticipant(CustomerModel customer) {
         this.customer = customer;
     }
 
     @OneToOne(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.REMOVE})
-    public Customer getCustomer() {
+    public CustomerModel getCustomer() {
         return customer;
     }
 
-    public void setCustomer(Customer costumer) {
-        Customer old = this.customer;
+    public void setCustomer(CustomerModel costumer) {
+        CustomerModel old = this.customer;
         this.customer = costumer;
         firePropertyChange(PROPERTYNAME_COSTUMER, old, costumer);
     }

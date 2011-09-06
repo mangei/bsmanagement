@@ -8,7 +8,8 @@ import cw.accountmanagementmodul.pojo.Posting;
 import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.util.List;
-import cw.customermanagementmodul.pojo.Customer;
+
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.accountmanagementmodul.pojo.PostingGroup;
 import cw.accountmanagementmodul.pojo.manager.PostingGroupManager;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import org.jdesktop.swingx.treetable.TreeTableModel;
  */
 public class PostingOverviewPresentationModel {
 
-    private Customer customer;
+    private CustomerModel customer;
     private CWHeaderInfo headerInfo;
 
     private SelectionInList<Posting> postingSelection;

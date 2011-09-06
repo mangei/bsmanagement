@@ -18,7 +18,7 @@ import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.customermanagementmodul.pojo.Customer;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.roommanagementmodul.pojo.Bewohner;
 
 /**
@@ -88,7 +88,7 @@ public class StornoResultView extends CWView {
         }
 
         //Falls ein Bewohner gelöscht wurde, aber der Customer noch vorhanden ist wird der Storno trotzdem durchgeführt
-        List<Customer> customerList = model.getCustomerNoBewohner();
+        List<CustomerModel> customerList = model.getCustomerNoBewohner();
         for (int i = 0; i < customerList.size(); i++) {
             bewohnerPanel = createKundePanel(customerList.get(i), model.getCustomerNoBewohnerMap().get(customerList.get(i)));
             builder.add(bewohnerPanel, cc.xy(1, j));
@@ -173,7 +173,7 @@ public class StornoResultView extends CWView {
         return panel;
     }
 
-    public CWView createKundePanel(Customer c, List<AccountPosting> postingList) {
+    public CWView createKundePanel(CustomerModel c, List<AccountPosting> postingList) {
 
 
         CWView panel = CWComponentFactory.createView();

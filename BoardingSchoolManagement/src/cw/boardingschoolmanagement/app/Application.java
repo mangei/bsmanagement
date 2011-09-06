@@ -36,16 +36,16 @@ import org.jvnet.substance.utils.SubstanceConstants;
  * 
  * @author Manuel Geier (CreativeWorkers)
  */
-public class BoardingSchoolManagement {
+public class Application {
 
-    private static BoardingSchoolManagement instance;
-    private static Logger logger = Logger.getLogger(BoardingSchoolManagement.class.getName());
+    private static Application instance;
+    private static Logger logger = Logger.getLogger(Application.class.getName());
     private ApplicationListenerSupport applicationListenerSupport = new ApplicationListenerSupport();
 
     private static boolean applicationStarted = false;
 
     public static void main(String[] args) {
-        BoardingSchoolManagement.getInstance().start();
+        Application.getInstance().start();
     }
 
     /**
@@ -53,9 +53,9 @@ public class BoardingSchoolManagement {
      * initalisiert sie.
      * @return BoardingSchoolManagement
      */
-    public static BoardingSchoolManagement getInstance() {
+    public static Application getInstance() {
         if (instance == null) {
-            instance = new BoardingSchoolManagement();
+            instance = new Application();
         }
         return instance;
     }
@@ -63,7 +63,7 @@ public class BoardingSchoolManagement {
     /**
      * Constructor
      */
-    private BoardingSchoolManagement() {
+    private Application() {
     }
 
     /**
@@ -206,7 +206,7 @@ public class BoardingSchoolManagement {
             GUIManager.getInstance().getMainFrame().setVisible(true);
 
         } catch (UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BoardingSchoolManagement.class.getName()).log(Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Application.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -242,7 +242,7 @@ public class BoardingSchoolManagement {
                 )) {
 
             public void actionPerformed(ActionEvent e) {
-                BoardingSchoolManagement.getInstance().close();
+                Application.getInstance().close();
             }
         });
 

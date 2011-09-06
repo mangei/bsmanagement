@@ -12,8 +12,8 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
-import cw.customermanagementmodul.pojo.Customer;
-import cw.customermanagementmodul.pojo.manager.CustomerManager;
+import cw.customermanagementmodul.persistence.CustomerManager;
+import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.studentmanagementmodul.pojo.Student;
 import cw.studentmanagementmodul.pojo.StudentClass;
 import cw.studentmanagementmodul.pojo.manager.StudentClassManager;
@@ -40,7 +40,7 @@ implements Modul
         // Wenn ein Kunde gelöscht wird, wird der Student mitgelöscht
         CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
-                Customer customer = (Customer) evt.getSource();
+                CustomerModel customer = (CustomerModel) evt.getSource();
                 Student student = StudentManager.getInstance().get(customer);
                 if(student != null) {
                     StudentManager.getInstance().delete(student);
