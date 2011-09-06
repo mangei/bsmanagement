@@ -322,19 +322,6 @@ public class CustomerSelectorPresentationModel
     ////////////////////////////////////////////////////////////////////////////
     // Other classes
     ////////////////////////////////////////////////////////////////////////////
-    public class NoGroup extends Group {
-
-        private String name;
-
-        public NoGroup(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public String toString() {
-            return name;
-        }
-    }
 
     public static class CustomerTableModel extends AbstractTableModel {
 

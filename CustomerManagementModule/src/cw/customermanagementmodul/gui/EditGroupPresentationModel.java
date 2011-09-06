@@ -55,6 +55,8 @@ public class EditGroupPresentationModel
 
         saveButtonAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/customermanagementmodul/images/disk_16.png"));
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
+    
+        getEntityManager().getTransaction().begin();
     }
 
     private void initEventHandling() {
@@ -111,8 +113,9 @@ public class EditGroupPresentationModel
         }
         public void actionPerformed(ActionEvent e) {
             triggerCommit();
-            unsaved.setValue(false);
-            support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
+            if(save()) {
+            	support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
+            }
         }
     }
 
@@ -130,9 +133,10 @@ public class EditGroupPresentationModel
                i = JOptionPane.showOptionDialog(null, "Daten wurden geändert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,null,  options, options[0] );
             }
             if(i == 0) {
-                triggerCommit();
+                save();
             }
             if(i == 0 || i == 1) {
+            	cancel();
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
         }
@@ -172,11 +176,21 @@ public class EditGroupPresentationModel
 	}
 
 	public boolean save() {
-		return true;
+		
+		boolean valid = validate(getErrorMessages()); 		
+		if(valid) {
+
+			triggerCommit();
+			getEntityManager().getTransaction().commit();
+
+            unsaved.setValue(false);
+		}
+        
+		return valid;
 	}
 
 	public void cancel() {
-		
+		getEntityManager().getTransaction().rollback();
 	}
 
 }

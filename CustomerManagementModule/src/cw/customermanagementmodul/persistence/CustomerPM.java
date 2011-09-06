@@ -36,7 +36,11 @@ public class CustomerPM
     }
     
     public Customer create(EntityManager entityManager) {
-    	return new CustomerImpl(entityManager);
+    	Customer customer = new CustomerImpl(entityManager);
+    	entityManager.getTransaction().begin();
+    	entityManager.persist(customer);
+    	entityManager.getTransaction().commit();
+    	return customer;
     }
 
     public int countAll(EntityManager entityManager) {
