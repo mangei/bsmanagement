@@ -1,23 +1,28 @@
 package cw.customermanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.CWUtils;
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.ModulManager;
-import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtentionPoint;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.EntityManager;
 import javax.swing.JComponent;
+
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.ModulManager;
+import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtentionPoint;
 
 /**
  *
  * @author CreativeWorkers.at
  */
 public class CustomerOverviewEditCustomerPresentationModel
-{
+	extends CWPresentationModel {
 
     private EditCustomerPresentationModel editCustomerPresentationModel;
     private ValueModel unsaved;
@@ -25,8 +30,9 @@ public class CustomerOverviewEditCustomerPresentationModel
 
     private List<CustomerOverviewEditCustomerExtentionPoint> customerOverviewEditCustomerExtentions;
 
-    public CustomerOverviewEditCustomerPresentationModel(EditCustomerPresentationModel editCustomerPresentationModel) {
-        this.editCustomerPresentationModel = editCustomerPresentationModel;
+    public CustomerOverviewEditCustomerPresentationModel(EditCustomerPresentationModel editCustomerPresentationModel, EntityManager entityManager) {
+        super(entityManager);
+    	this.editCustomerPresentationModel = editCustomerPresentationModel;
 
         initModels();
         initEventHandling();

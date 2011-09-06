@@ -1,23 +1,29 @@
 package cw.boardingschoolmanagement.gui;
 
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.app.CalendarUtil;
 import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.persistence.EntityManager;
+
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+
+import cw.boardingschoolmanagement.app.CalendarUtil;
 
 /**
  *
  * @author ManuelG
  */
-public class WelcomeHomeExtentionPresentationModel {
+public class WelcomeHomeExtentionPresentationModel
+	extends CWPresentationModel {
     
     private ValueModel welcomeMessageValueModel;
     private ValueModel timeMessageValueModel;
     private Timer timer;
 
-    public WelcomeHomeExtentionPresentationModel() {
+    public WelcomeHomeExtentionPresentationModel(EntityManager entityManager) {
+    	super(entityManager);
         initModels();
         initEventHandling();
     }

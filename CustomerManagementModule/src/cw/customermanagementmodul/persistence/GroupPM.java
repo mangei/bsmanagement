@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 
-import cw.boardingschoolmanagement.app.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 
 /**
@@ -13,17 +12,17 @@ import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
  * 
  * @author Manuel Geier
  */
-public class GroupManager extends AbstractPersistenceManager<Group> {
+public class GroupPM extends AbstractPersistenceManager<Group> {
 
-    private static GroupManager instance;
-    private static Logger logger = Logger.getLogger(GroupManager.class.getName());
+    private static GroupPM instance;
+    private static Logger logger = Logger.getLogger(GroupPM.class.getName());
     
-    private GroupManager() {
+    private GroupPM() {
     }
     
-    public static GroupManager getInstance() {
+    public static GroupPM getInstance() {
         if(instance == null) {
-            instance = new GroupManager();
+            instance = new GroupPM();
         }
         return instance;
     }
@@ -38,5 +37,15 @@ public class GroupManager extends AbstractPersistenceManager<Group> {
 
 	public List<Group> getAll(EntityManager entityManager) {
 		return entityManager.createQuery("FROM Group").getResultList();
+	}
+
+	public List<Group> getAllGroupsByCustomer(Customer customer, EntityManager entityManager) {
+		return entityManager.createQuery(
+				"FROM " +
+					Group.ENTITY_NAME + 
+				" WHERE " +
+					Group.PROPERTYNAME_CUSTOMERS
+					// TODO Not finished
+		).getResultList();
 	}
 }

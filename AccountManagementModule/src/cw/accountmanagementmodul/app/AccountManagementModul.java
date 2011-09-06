@@ -11,7 +11,7 @@ import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
 import cw.boardingschoolmanagement.interfaces.Modul;
-import cw.customermanagementmodul.persistence.CustomerManager;
+import cw.customermanagementmodul.persistence.CustomerPM;
 import cw.customermanagementmodul.persistence.model.CustomerModel;
 import java.awt.event.ActionEvent;
 import javax.swing.AbstractAction;
@@ -136,7 +136,7 @@ public class AccountManagementModul
 //        });
 
         // Wenn ein Kunde gelöscht wird, das dazugehörige Konto löschen.
-        CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
+        CustomerPM.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
                 CustomerModel customer = (CustomerModel) evt.getSource();
 

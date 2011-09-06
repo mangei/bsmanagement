@@ -20,7 +20,7 @@ import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.persistence.Group;
-import cw.customermanagementmodul.persistence.GroupManager;
+import cw.customermanagementmodul.persistence.GroupPM;
 
 /**
  *
@@ -51,7 +51,7 @@ public class GroupManagementPresentationModel
         editGroupAction = new EditGroupAction("Gruppe bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/group_edit.png"));
         removeGroupAction = new RemoveGroupAction("Gruppe löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/group_remove.png"));
 
-        groupSelection = new SelectionInList<Group>(GroupManager.getInstance().getAll(getEntityManager()));
+        groupSelection = new SelectionInList<Group>(GroupPM.getInstance().getAll(getEntityManager()));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
                 new ArrayList(),
@@ -131,7 +131,7 @@ public class GroupManagementPresentationModel
 
                 public void buttonPressed(ButtonEvent evt) {
                     if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                        GroupManager.getInstance().save(group);
+                        GroupPM.getInstance().save(group);
                         if (customerAlreadyCreated) {
                             GUIManager.getStatusbar().setTextAndFadeOut("Gruppe wurde aktualisiert.");
                         } else {
@@ -180,7 +180,7 @@ public class GroupManagementPresentationModel
 
                 public void buttonPressed(ButtonEvent evt) {
                     if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                        GroupManager.getInstance().update(group);
+                        GroupPM.getInstance().update(group);
                         GUIManager.getStatusbar().setTextAndFadeOut("Gruppe wurde aktualisiert.");
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
@@ -217,7 +217,7 @@ public class GroupManagementPresentationModel
 
                 groupSelection.getList().remove(group);
                 customerSelectorPresentationModel.getCustomerSelection().getList().clear();
-                GroupManager.getInstance().delete(group);
+                GroupPM.getInstance().delete(group);
 
 
                 GUIManager.getStatusbar().setTextAndFadeOut("Gruppe '" + name + "' wurde gelöscht.");

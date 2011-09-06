@@ -1,18 +1,22 @@
 package cw.customermanagementmodul.extention;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
 import com.jgoodies.binding.value.ValueModel;
+
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtentionPoint;
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionPresentationModel;
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionView;
-import cw.customermanagementmodul.persistence.model.CustomerModel;
-import cw.customermanagementmodul.persistence.model.GroupModel;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
+import cw.customermanagementmodul.persistence.Customer;
+import cw.customermanagementmodul.persistence.Group;
+import cw.customermanagementmodul.persistence.GroupPM;
 
 
 
@@ -26,13 +30,15 @@ public class GroupCustomerSelectorFilterExtention
     private GroupCustomerSelectorFilterExtentionPresentationModel model;
     private GroupCustomerSelectorFilterExtentionView view;
     private ValueModel change;
+    private EntityManager entityManager;
 
     private ListSelectionListener changeListener;
 
-    public void init(final ValueModel change) {
+    public void init(final ValueModel change, EntityManager entityManager) {
         this.change = change;
+        this.entityManager = entityManager;
 
-        model = new GroupCustomerSelectorFilterExtentionPresentationModel();
+        model = new GroupCustomerSelectorFilterExtentionPresentationModel(entityManager);
         view = new GroupCustomerSelectorFilterExtentionView(model);
     }
 
@@ -46,13 +52,13 @@ public class GroupCustomerSelectorFilterExtention
         });
     }
 
-    public List<CustomerModel> filter(List<CustomerModel> costumers) {
+    public List<Customer> filter(List<Customer> costumers) {
 
         // Die Erweiterung die eine Änderung feststellt, meldet dies an die Tabelle
         // diese ruft dann die filter-methode dieser Erweiterungen auf
         // Danach wird die Tabelle aktualisiert
 
-        List<GroupModel> groups = new ArrayList<GroupModel>();
+        List<Group> groups = new ArrayList<Group>();
 
 
         // TODO Prüfen ob das so stimmt mit dem Gruppen auswählen
@@ -81,7 +87,7 @@ public class GroupCustomerSelectorFilterExtention
 
             for (int i = iMin; i <= iMax; i++) {
                 if (model.getGroupSelectionModel().isSelectedIndex(i)) {
-                    groups.add((GroupModel)model.getGroupSelection().getElementAt(i));
+                    groups.add((Group)model.getGroupSelection().getElementAt(i));
                }
             }
         }
@@ -89,21 +95,19 @@ public class GroupCustomerSelectorFilterExtention
 
         // Choose the costumers
 
-        Iterator<GroupModel> itGroups;
-        Iterator<CustomerModel> itCostumers = costumers.iterator();
-        List<CustomerModel> newCostumers = new ArrayList<CustomerModel>();
-        CustomerModel costumer;
-        GroupModel group;
+        Iterator<Group> itGroups;
+        Iterator<Customer> itCustomers = costumers.iterator();
+        List<Customer> newCostumers = new ArrayList<Customer>();
+        Customer customer;
+        Group group;
 
         System.out.println("anz: " + costumers.size());
 
         // Check all costumers
-        while (itCostumers.hasNext()) {
+        while (itCustomers.hasNext()) {
 
             // Get one costumer to check
-            costumer = itCostumers.next();
-            
-            System.out.println("Costumer: " + costumer.getForename());
+            customer = itCustomers.next();
 
             // Iterate throu all selected groups
             itGroups = groups.iterator();
@@ -116,12 +120,8 @@ public class GroupCustomerSelectorFilterExtention
                 // Get one group
                 group = itGroups.next();
 
-
-                System.out.println("Group: " + group.getName() + " + Costumer: " + costumer.getForename() + " = " + costumer.getGroups().contains(group));
-
-
                 // Check if the costumer, has the group
-                if(costumer.getGroups().contains(group)) {
+                if(GroupPM.getInstance().getAllGroupsByCustomer(customer, entityManager).contains(group)) {
                     contains = true;
                     break;
                 }
@@ -129,8 +129,8 @@ public class GroupCustomerSelectorFilterExtention
 
             // If the costumer, isn't in one of the selected groups
             if(contains) {
-                System.out.println("add: " + costumer.getForename());
-                newCostumers.add(costumer);
+                System.out.println("add: " + customer.getForename());
+                newCostumers.add(customer);
             }
         }
 

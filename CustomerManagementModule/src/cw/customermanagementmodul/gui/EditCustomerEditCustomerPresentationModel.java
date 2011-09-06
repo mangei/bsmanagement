@@ -9,9 +9,10 @@ import javax.swing.Action;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.customermanagementmodul.persistence.Customer;
-import cw.customermanagementmodul.persistence.CustomerManager;
+import cw.customermanagementmodul.persistence.CustomerPM;
 
 /**
  *
@@ -49,11 +50,11 @@ public class EditCustomerEditCustomerPresentationModel
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
         );
 
-        titleList               = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_TITLE, getEntityManager());
-        postOfficeNumberList    = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_POSTOFFICENUMBER, getEntityManager());
-        cityList                = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_CITY, getEntityManager());
-        provinceList            = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_PROVINCE, getEntityManager());
-        countryList             = CustomerManager.getInstance().getList(Customer.PROPERTYNAME_COUNTRY, getEntityManager());
+        titleList               = CustomerPM.getInstance().getList(Customer.PROPERTYNAME_TITLE, getEntityManager());
+        postOfficeNumberList    = CustomerPM.getInstance().getList(Customer.PROPERTYNAME_POSTOFFICENUMBER, getEntityManager());
+        cityList                = CustomerPM.getInstance().getList(Customer.PROPERTYNAME_CITY, getEntityManager());
+        provinceList            = CustomerPM.getInstance().getList(Customer.PROPERTYNAME_PROVINCE, getEntityManager());
+        countryList             = CustomerPM.getInstance().getList(Customer.PROPERTYNAME_COUNTRY, getEntityManager());
 
     }
 
@@ -131,9 +132,9 @@ public class EditCustomerEditCustomerPresentationModel
         String postOfficeNumber = (String) editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).getValue();
 
         if(!postOfficeNumber.isEmpty()) {
-            String city = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_POSTOFFICENUMBER, postOfficeNumber, Customer.PROPERTYNAME_CITY, getEntityManager());
-            String province = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_POSTOFFICENUMBER, postOfficeNumber, Customer.PROPERTYNAME_PROVINCE, getEntityManager());
-            String country = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_POSTOFFICENUMBER, postOfficeNumber, Customer.PROPERTYNAME_COUNTRY, getEntityManager());
+            String city = CustomerPM.getInstance().getResult(Customer.PROPERTYNAME_POSTOFFICENUMBER, postOfficeNumber, Customer.PROPERTYNAME_CITY, getEntityManager());
+            String province = CustomerPM.getInstance().getResult(Customer.PROPERTYNAME_POSTOFFICENUMBER, postOfficeNumber, Customer.PROPERTYNAME_PROVINCE, getEntityManager());
+            String country = CustomerPM.getInstance().getResult(Customer.PROPERTYNAME_POSTOFFICENUMBER, postOfficeNumber, Customer.PROPERTYNAME_COUNTRY, getEntityManager());
 
             if(city != null &&
                     ((String)editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_CITY).getValue()).isEmpty()) {
@@ -156,9 +157,9 @@ public class EditCustomerEditCustomerPresentationModel
         String city = (String) editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_CITY).getValue();
 
         if(!city.isEmpty()) {
-            String postOfficeNumber = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_CITY, city, Customer.PROPERTYNAME_POSTOFFICENUMBER, getEntityManager());
-            String province = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_CITY, city, Customer.PROPERTYNAME_PROVINCE, getEntityManager());
-            String country = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_CITY, city, Customer.PROPERTYNAME_COUNTRY, getEntityManager());
+            String postOfficeNumber = CustomerPM.getInstance().getResult(Customer.PROPERTYNAME_CITY, city, Customer.PROPERTYNAME_POSTOFFICENUMBER, getEntityManager());
+            String province = CustomerPM.getInstance().getResult(Customer.PROPERTYNAME_CITY, city, Customer.PROPERTYNAME_PROVINCE, getEntityManager());
+            String country = CustomerPM.getInstance().getResult(Customer.PROPERTYNAME_CITY, city, Customer.PROPERTYNAME_COUNTRY, getEntityManager());
 
             if(postOfficeNumber != null &&
                     ((String)editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).getValue()).isEmpty()) {
@@ -189,7 +190,7 @@ public class EditCustomerEditCustomerPresentationModel
         String province = (String) editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_PROVINCE).getValue();
 
         if(!province.isEmpty()) {
-            String country = CustomerManager.getInstance().getResult(Customer.PROPERTYNAME_PROVINCE, province, Customer.PROPERTYNAME_COUNTRY, getEntityManager());
+            String country = CustomerPM.getInstance().getResult(Customer.PROPERTYNAME_PROVINCE, province, Customer.PROPERTYNAME_COUNTRY, getEntityManager());
 
             if(country != null &&
                     ((String)editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_COUNTRY).getValue()).isEmpty()) {
@@ -202,7 +203,7 @@ public class EditCustomerEditCustomerPresentationModel
         }
     }
 
-	public boolean validate() {
+	public boolean validate(List<CWErrorMessage> errorMessages) {
 		return true;
 	}
 

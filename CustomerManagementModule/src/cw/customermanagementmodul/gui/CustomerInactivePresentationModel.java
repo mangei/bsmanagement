@@ -20,7 +20,7 @@ import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.persistence.Customer;
-import cw.customermanagementmodul.persistence.CustomerManager;
+import cw.customermanagementmodul.persistence.CustomerPM;
 
 /**
  * @author Manuel Geier (CreativeWorkers)
@@ -49,7 +49,7 @@ public class CustomerInactivePresentationModel
         deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
-                CustomerManager.getInstance().getAllInactive(getEntityManager()),
+                CustomerPM.getInstance().getAllInactive(getEntityManager()),
                 "cw.customerboardingmanagement.CustomerInactiveView.customerTableState",
                 getEntityManager());
 
@@ -119,7 +119,7 @@ public class CustomerInactivePresentationModel
 
                 customerSelectorPresentationModel.remove(customer);
                 
-                CustomerManager.getInstance().remove(customer, getEntityManager());
+                CustomerPM.getInstance().remove(customer, getEntityManager());
                 
                 getEntityManager().getTransaction().commit();
             	

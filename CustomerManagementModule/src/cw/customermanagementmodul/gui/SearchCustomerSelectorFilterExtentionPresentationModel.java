@@ -1,21 +1,27 @@
 package cw.customermanagementmodul.gui;
 
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
 import java.awt.event.ActionEvent;
+
+import javax.persistence.EntityManager;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
 
 /**
  * @author CreativeWorkers.at
  */
 public class SearchCustomerSelectorFilterExtentionPresentationModel
-{
+	extends CWPresentationModel {
 
     private ValueModel searchModel;
     private Action clearAction;
 
-    public SearchCustomerSelectorFilterExtentionPresentationModel() {
+    public SearchCustomerSelectorFilterExtentionPresentationModel(EntityManager entityManager) {
+    	super(entityManager);
         initModels();
         initEventHandling();
     }

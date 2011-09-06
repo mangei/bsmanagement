@@ -2,6 +2,8 @@ package cw.customermanagementmodul.extention.point;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import com.jgoodies.binding.value.ValueModel;
 
 import cw.boardingschoolmanagement.gui.component.CWPanel;
@@ -13,7 +15,7 @@ import cw.customermanagementmodul.persistence.Customer;
  * @author ManuelG
  */
 public interface CustomerSelectorFilterExtentionPoint extends Extention {
-    public void init(ValueModel change);
+    public void init(ValueModel change, EntityManager entityManager);
     public void initEventHandling();
     public List<Customer> filter(List<Customer> costumers);
     public CWPanel getView();

@@ -23,6 +23,7 @@ import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.comparator.PriorityComparator;
 import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
@@ -62,7 +63,7 @@ public class EditCustomerPresentationModel
         // initialize extentions
         editCustomerGUITabExtentions = getExtentions();
         for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
-            extention.initPresentationModel(this);
+            extention.initPresentationModel(this, getEntityManager());
         }
 
         // top button actions
@@ -321,7 +322,7 @@ public class EditCustomerPresentationModel
         }
     }
     
-    public boolean validate() {
+    public boolean validate(List<CWErrorMessage> errorMessages) {
     	clearErrorMessages();
     	
     	// validate
@@ -348,7 +349,7 @@ public class EditCustomerPresentationModel
 
     public boolean save() {
         
-    	boolean valid = validate();
+    	boolean valid = validate(getErrorMessages());
     	
     	if(valid) {
 

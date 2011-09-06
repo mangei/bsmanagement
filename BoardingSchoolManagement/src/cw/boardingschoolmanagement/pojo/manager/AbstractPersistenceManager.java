@@ -30,7 +30,7 @@ public abstract class AbstractPersistenceManager<T extends CWPersistence>
     }
     
     public void remove(T persistence, EntityManager entityManager) {
-    	cascadeListenerSupport.fireCascadeDelete(persistence);
+    	cascadeListenerSupport.fireCascadeDelete(persistence, entityManager);
     	entityManager.remove(persistence);
     }
 

@@ -1,9 +1,12 @@
 package cw.boardingschoolmanagement.gui;
 
-import cw.boardingschoolmanagement.extention.point.HomeExtentionPoint;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.persistence.EntityManager;
 import javax.swing.JPanel;
+
+import cw.boardingschoolmanagement.extention.point.HomeExtentionPoint;
 import cw.boardingschoolmanagement.manager.ModulManager;
 
 /**
@@ -11,11 +14,12 @@ import cw.boardingschoolmanagement.manager.ModulManager;
  * @author Manuel Geier (CreativeWorkers)
  */
 public class HomePresentationModel
-{
+	extends CWPresentationModel {
 
     private List<HomeExtentionPoint> homeExtentions;
 
-    public HomePresentationModel() {
+    public HomePresentationModel(EntityManager entityManager) {
+    	super(entityManager);
         initModels();
         initEventHandling();
     }
@@ -23,7 +27,7 @@ public class HomePresentationModel
     public void initModels() {
         List<HomeExtentionPoint> aList = getExtentions();
         for (HomeExtentionPoint ex : aList) {
-            ex.initPresentationModel(this);
+            ex.initPresentationModel(this, getEntityManager());
         }
     }
 

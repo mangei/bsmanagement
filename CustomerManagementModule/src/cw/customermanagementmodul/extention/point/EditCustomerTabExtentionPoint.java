@@ -2,6 +2,8 @@ package cw.customermanagementmodul.extention.point;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
 import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.interfaces.Extention;
@@ -19,7 +21,7 @@ public interface EditCustomerTabExtentionPoint
      * To initialize the PresentationModel
      * @param editCustomerModel represents the main model with the extentions in it
      */
-    public void initPresentationModel(EditCustomerPresentationModel editCustomerModel);
+    public void initPresentationModel(EditCustomerPresentationModel editCustomerModel, EntityManager entityManager);
 
     /**
      * The panel you want to add in an new tab. <br>
