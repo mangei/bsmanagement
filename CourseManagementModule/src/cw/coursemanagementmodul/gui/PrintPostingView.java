@@ -29,11 +29,11 @@ public class PrintPostingView extends CWView
         componentContainer = CWComponentFactory.createComponentContainer();
 
         bBack = CWComponentFactory.createButton(model.getBackAction());
-        bBack.setText("Zurück");
+        bBack.setText("Zurueck");
 
         bBack.setToolTipText(CWComponentFactory.createToolTip(
-                "Zurück",
-                "Hier kehren Sie in zur Gebührenlauf-Detailansicht zurück!",
+                "Zurueck",
+                "Hier kehren Sie in zur Gebuehrenlauf-Detailansicht zurueck!",
                 "cw/coursemanagementmodul/images/back.png"));
 
         viewer = new JRViewer(model.getJasperPrint());

@@ -54,14 +54,14 @@ public class PostingRunsPresentationModel
     public void initModels() {
 
         headerInfo = new CWHeaderInfo(
-                "Gebührenlaufübersicht",
-                "<html>Sie befinden in der Übersichtsmaske der bereits gebuchten Gebührenläufe!<br/>"
+                "Gebuehrenlaufuebersicht",
+                "<html>Sie befinden in der Uebersichtsmaske der bereits gebuchten Gebuehrenläufe!<br/>"
                 + "Hier können Sie einen Buchungslauf wieder stornieren!<html>",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/posting.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/posting.png"));
 
-        //Anlegen der Aktionen, für die Buttons
-        backButtonAction = new BackButtonAction("Zurück");
+        //Anlegen der Aktionen, fuer die Buttons
+        backButtonAction = new BackButtonAction("Zurueck");
         stornoAction = new StornoAction("Stornieren");
         detailAction = new DetailAction("Detailansicht");
     }
@@ -192,7 +192,7 @@ public class PostingRunsPresentationModel
         public String getColumnName(int column) {
             switch (column) {
                 case 0:
-                    return "Gebührenlaufname";
+                    return "Gebuehrenlaufname";
                 case 1:
                     return "Gesamtbetrag";
                 case 2:

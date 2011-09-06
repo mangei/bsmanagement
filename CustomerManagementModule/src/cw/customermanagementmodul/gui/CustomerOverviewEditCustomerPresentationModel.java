@@ -48,8 +48,8 @@ public class CustomerOverviewEditCustomerPresentationModel
         }
 
         headerInfo = new CWHeaderInfo(
-                "Kunden�bersicht",
-                "Hier haben Sie alle Informationen für den Kunden im Überblick.",
+                "Kundenuebersicht",
+                "Hier haben Sie alle Informationen fuer den Kunden im Ueberblick.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
         );

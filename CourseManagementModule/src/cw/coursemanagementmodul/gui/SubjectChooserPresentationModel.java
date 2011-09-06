@@ -54,15 +54,15 @@ public class SubjectChooserPresentationModel
     public void initModels() {
         buttonEvent = new ButtonEvent(ButtonEvent.OK_BUTTON);
 
-        //Anlegen der Aktionen, für die Buttons
-        addButtonAction = new AddAction("Hinzufügen");
+        //Anlegen der Aktionen, fuer die Buttons
+        addButtonAction = new AddAction("Hinzufuegen");
         cancelButtonAction = new CancelButtonAction("Schließen");
         subjectSelection = new SelectionInList<Subject>(SubjectManager.getInstance().getAll());
         support = new ButtonListenerSupport();
 
         headerInfo = new CWHeaderInfo(
-                "Kursgegenstand hinzufügen!",
-                "Hier können Sie Gegenstände zum markierten Kurs hinzufügen!",
+                "Kursgegenstand hinzufuegen!",
+                "Hier können Sie Gegenstände zum markierten Kurs hinzufuegen!",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"));
     }

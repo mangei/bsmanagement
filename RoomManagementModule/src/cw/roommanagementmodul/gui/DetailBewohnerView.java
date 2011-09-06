@@ -54,7 +54,7 @@ public class DetailBewohnerView extends CWView
     private void initComponents() {
 
         bBack = CWComponentFactory.createButton(model.getBackAction());
-        bBack.setText("Zurück");
+        bBack.setText("Zurueck");
 
         Bewohner b = model.getBewohner();
         CustomerModel c = b.getCustomer();

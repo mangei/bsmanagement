@@ -11,7 +11,7 @@ import javax.persistence.Id;
  * @author Jeitler Dominik6
  */
 
-//Dient zur besseren Einteilung der Gebühren
+//Dient zur besseren Einteilung der Gebuehren
 @Entity
 public class GebuehrenKategorie extends Model implements AnnotatedClass{
 

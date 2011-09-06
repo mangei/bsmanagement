@@ -57,13 +57,13 @@ public class ActivityChooserView extends CWView
         cancelButton = CWComponentFactory.createButton(model.getCancelButtonAction());
 
         addButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Hinzufügen",
-                "Hier können Sie die selektierte Aktivität zum Kurs hinzufügen!",
+                "Hinzufuegen",
+                "Hier können Sie die selektierte Aktivität zum Kurs hinzufuegen!",
                 "cw/coursemanagementmodul/images/activity_add.png"));
 
         cancelButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Schließen",
-                "Hier kehren Sie zur Ferienkursübersicht zurück!",
+                "Hier kehren Sie zur Ferienkursuebersicht zurueck!",
                 "cw/coursemanagementmodul/images/cancel.png"));
 
         activityTable = CWComponentFactory.createTable("Es wurden noch keine Aktivitäten angelegt!");
@@ -82,7 +82,7 @@ public class ActivityChooserView extends CWView
     //**************************************************************************
 
     //**************************************************************************
-    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
+    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurueck
     //**************************************************************************
     private void buildView(){
 

@@ -69,11 +69,11 @@ public class EditCourseView extends CWView
                 "cw/coursemanagementmodul/images/save.png"));
         saveAndCloseButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Speichern u. Schließen",
-                "Hier wird der Kurs gespeichert und anschließend in die Kursübersichts gewechselt!",
+                "Hier wird der Kurs gespeichert und anschließend in die Kursuebersichts gewechselt!",
                 "cw/coursemanagementmodul/images/save_cancel.png"));
         cancelButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Abbrechen",
-                "Hier kehren Sie zur Kursübersicht zurück!",
+                "Hier kehren Sie zur Kursuebersicht zurueck!",
                 "cw/coursemanagementmodul/images/cancel.png"));
         
         beginDate = CWComponentFactory.createDateChooser(model.getBufferedModel(Course.PROPERTYNAME_BEGINDATE));
@@ -100,7 +100,7 @@ public class EditCourseView extends CWView
     }
 
     //**************************************************************************
-    //Diese Methode gibt die Maske des EditPanels in Form einse JPanels zurück
+    //Diese Methode gibt die Maske des EditPanels in Form einse JPanels zurueck
     //**************************************************************************
     private void buildView() {
 

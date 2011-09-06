@@ -42,8 +42,8 @@ public class StudentEditCustomerPresentationModel
 
     private void initModels() {
         headerInfo = new CWHeaderInfo(
-                "Schüler",
-                "Verwalten Sie Schulinformationen für einen Kunden.",
+                "Schueler",
+                "Verwalten Sie Schulinformationen fuer einen Kunden.",
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png"),
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png")
         );
@@ -83,7 +83,7 @@ public class StudentEditCustomerPresentationModel
                     (StudentClass)getBufferedValue(Student.PROPERTYNAME_STUDENTCLASS),
                     new CWHeaderInfo(
                         "Klasse auswählen",
-                        "Wählen Sie eine Klasse aus, die Sie dem Schüler zuweisen wollen.",
+                        "Wählen Sie eine Klasse aus, die Sie dem Schueler zuweisen wollen.",
                         CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_search.png"),
                         CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_search.png")
                     )

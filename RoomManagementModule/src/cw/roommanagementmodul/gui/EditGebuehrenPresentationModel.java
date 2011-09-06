@@ -150,7 +150,7 @@ public class EditGebuehrenPresentationModel
                 saveGebuehr();
             }
             if (i == 0 || i == 1) {
-                //         GUIManager.lastView();  // Zur Übersicht wechseln
+                //         GUIManager.lastView();  // Zur Uebersicht wechseln
 //                GUIManager.removeView(); // Diese View nicht merken
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
@@ -166,7 +166,7 @@ public class EditGebuehrenPresentationModel
 
         public void actionPerformed(ActionEvent e) {
             saveGebuehr();
-//            GUIManager.lastView();  // Zur Übersicht wechseln
+//            GUIManager.lastView();  // Zur Uebersicht wechseln
 //            GUIManager.removeView(); // Diese View nicht merken
             support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
         }

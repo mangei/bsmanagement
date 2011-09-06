@@ -65,7 +65,7 @@ public class CourseManagementModul implements Modul{
             }
         });
 
-        JButton accountingButton = new JButton("Gebührenlauf");
+        JButton accountingButton = new JButton("Gebuehrenlauf");
         accountingButton.setIcon(CWUtils.loadIcon("cw/coursemanagementmodul/images/accounting.png"));
         accountingButton.addActionListener(new ActionListener() {
 
@@ -100,7 +100,7 @@ public class CourseManagementModul implements Modul{
         menuPanel.addItem(accountingButton, "course");
         menuPanel.addItem(accountingHistoryButton, "course");
 
-        //Dere Geier --> Bitte nicht löschen --> wird für Kursbuchungen benötigt!!!
+        //Dere Geier --> Bitte nicht löschen --> wird fuer Kursbuchungen benötigt!!!
         if(PostingCategoryManager.getInstance().get("Kurs-Buchung") == null) {
             PostingCategory category = new PostingCategory();
             category.setName("Kurs-Buchung");

@@ -1,13 +1,14 @@
 package cw.customermanagementmodul.gui;
 
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWList;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 
 /**
  *

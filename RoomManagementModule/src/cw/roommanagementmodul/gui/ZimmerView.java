@@ -42,7 +42,7 @@ public class ZimmerView extends CWView{
         bDelete.setText("Löschen");
 
         bBack = CWComponentFactory.createButton(model.getBackAction());
-        bBack.setText("Zurück");
+        bBack.setText("Zurueck");
         bPrint = CWComponentFactory.createButton(model.getPrintAction());
         bPrint.setText("Drucken");
 

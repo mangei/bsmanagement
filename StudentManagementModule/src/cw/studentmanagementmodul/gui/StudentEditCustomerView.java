@@ -36,7 +36,7 @@ public class StudentEditCustomerView extends CWView
     }
 
     private void initComponents() {
-        cIsStudent              = CWComponentFactory.createCheckBox(model.getBufferedModel(Student.PROPERTYNAME_ACTIVE), "Kunde ist ein Schüler?");
+        cIsStudent              = CWComponentFactory.createCheckBox(model.getBufferedModel(Student.PROPERTYNAME_ACTIVE), "Kunde ist ein Schueler?");
         bStudentClassChooser    = CWComponentFactory.createButton(model.getStudentClassChooserAction());
         lStudentClass           = CWComponentFactory.createLabel(model.getBufferedModel(Student.PROPERTYNAME_STUDENTCLASS));
 
@@ -64,7 +64,7 @@ public class StudentEditCustomerView extends CWView
     private void buildView() {
         
         this.setHeaderInfo(model.getHeaderInfo());
-        this.setName("Schüler");
+        this.setName("Schueler");
         
         FormLayout layout = new FormLayout(
                 "pref, 4dlu, pref, 20dlu, left:pref:grow",

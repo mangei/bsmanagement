@@ -115,16 +115,16 @@ public class EditCoursePartView extends CWView
         deleteActivityButton = CWComponentFactory.createButton(model.getRemoveActivityButtonAction());
 
         courseButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Kurs hinzufügen",
-                "Hier können Sie einen Kurs hinzufügen!",
+                "Kurs hinzufuegen",
+                "Hier können Sie einen Kurs hinzufuegen!",
                 "cw/coursemanagementmodul/images/course.png"));
         activityButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Aktivität hinzufügen",
-                "Hier können Sie zum selektierten Kurs eine Aktivität hinzufügen!",
+                "Aktivität hinzufuegen",
+                "Hier können Sie zum selektierten Kurs eine Aktivität hinzufuegen!",
                 "cw/coursemanagementmodul/images/activity_add.png"));
         subjectButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Gegenstand hinzufügen",
-                "Hier können Sie zum selektierten Kurs einen Kursgegenstand hinzufügen!",
+                "Gegenstand hinzufuegen",
+                "Hier können Sie zum selektierten Kurs einen Kursgegenstand hinzufuegen!",
                 "cw/coursemanagementmodul/images/subject_add.png"));
 
         deleteCourseButton.setToolTipText(CWComponentFactory.createToolTip(
@@ -190,7 +190,7 @@ public class EditCoursePartView extends CWView
     }
 
     //**************************************************************************
-    //Diese Methode gibt die Maske des EditPanels in Form einse JPanels zurück
+    //Diese Methode gibt die Maske des EditPanels in Form einse JPanels zurueck
     //**************************************************************************
     private void buildView(){
 

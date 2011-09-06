@@ -140,11 +140,11 @@ public class CoursePostingView extends CWView
 
         accountingButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Buchen",
-                "Hier könne Sie eine Buchung durchführen!",
+                "Hier könne Sie eine Buchung durchfuehren!",
                 "cw/coursemanagementmodul/images/start.png"));
         postingRunsButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Gebührenläufe",
-                "Hier sehen Sie alle bereits gebuchten Gebührenläufe!",
+                "Gebuehrenläufe",
+                "Hier sehen Sie alle bereits gebuchten Gebuehrenläufe!",
                 "cw/coursemanagementmodul/images/postingRuns.png"));
 
         componentContainer = CWComponentFactory.createComponentContainer();
@@ -185,7 +185,7 @@ public class CoursePostingView extends CWView
     }
 
     //**************************************************************************
-    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
+    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurueck
     //**************************************************************************
     private void buildView(){
 

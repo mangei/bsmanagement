@@ -64,7 +64,7 @@ public class ActivityPresentationModel
                 "Sie befinden sich im Aktivitätsbereich. Hier können Sie Aktivitäten anlegen",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
-        //Anlegen der Aktionen, für die Buttons
+        //Anlegen der Aktionen, fuer die Buttons
         newButtonAction = new NewAction("Neu");
         editButtonAction = new EditAction("Bearbeiten");
         deleteButtonAction = new DeleteAction("Löschen");

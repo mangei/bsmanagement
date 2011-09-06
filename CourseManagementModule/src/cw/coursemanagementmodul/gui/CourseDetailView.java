@@ -79,8 +79,8 @@ public class CourseDetailView extends CWView
                 "Druckt die in der Tabelle angezeigten Kursteilnehmer!",
                 "cw/coursemanagementmodul/images/print.png"));
         cancelButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Zurück",
-                "Zurück zur Kursübersicht!",
+                "Zurueck",
+                "Zurueck zur Kursuebersicht!",
                 "cw/coursemanagementmodul/images/back.png"));
         
         coursePartTable = CWComponentFactory.createTable("Keine Kursteilnehmer zum selektierten Kurs vorhanden!");
@@ -125,7 +125,7 @@ public class CourseDetailView extends CWView
     }
 
     //**************************************************************************
-    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
+    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurueck
     //**************************************************************************
     private void buildView(){
         this.setHeaderInfo(detailModel.getHeaderInfo());

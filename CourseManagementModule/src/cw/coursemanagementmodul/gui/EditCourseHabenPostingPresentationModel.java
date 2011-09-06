@@ -86,7 +86,7 @@ public class EditCourseHabenPostingPresentationModel {
         postingCategorySelection.setSelection(((AccountPosting)postingModel.getBean()).getPostingCategory());
 
         //Setzen der Voreinstellungen
-        postingModel.getBufferedModel(AccountPosting.PROPERTYNAME_DESCRIPTION).setValue(courseAddition.getCourse().getName() + " für "
+        postingModel.getBufferedModel(AccountPosting.PROPERTYNAME_DESCRIPTION).setValue(courseAddition.getCourse().getName() + " fuer "
                 + coursePart.getCustomer().getForename() + " "
                 + coursePart.getCustomer().getSurname());
         postingModel.setBufferedValue(AccountPosting.PROPERTYNAME_AMOUNT, courseAddition.getCourse().getPrice()

@@ -40,11 +40,11 @@ public class BewohnerView extends CWView
     private void initComponents() {
 
         bGeb = CWComponentFactory.createButton(model.getGebAction());
-        bGeb.setText("Neue Gebühr");
+        bGeb.setText("Neue Gebuehr");
         bDelete = CWComponentFactory.createButton(model.getDeleteAction());
         bDelete.setText("Löschen");
         bGebZuordnung = CWComponentFactory.createButton(model.getGebuehrZuordnungAction());
-        bGebZuordnung.setText("Übersicht");
+        bGebZuordnung.setText("Uebersicht");
         bDetail = CWComponentFactory.createButton(model.getDetailAction());
         bDetail.setText("Bearbeiten");
         bKaution = CWComponentFactory.createButton(model.getKautionAction());

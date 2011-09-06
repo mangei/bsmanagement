@@ -97,8 +97,8 @@ public class CourseChooserPresentationModel
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
 
-        //Anlegen der Aktionen, für die Buttons
-        addButtonAction = new AddAction("Hinzufügen");
+        //Anlegen der Aktionen, fuer die Buttons
+        addButtonAction = new AddAction("Hinzufuegen");
         cancelButtonAction = new CancelButtonAction("Schließen");
         courseSelection = new SelectionInList<Course>(CourseManager.getInstance().getAll());
         support = new ButtonListenerSupport();

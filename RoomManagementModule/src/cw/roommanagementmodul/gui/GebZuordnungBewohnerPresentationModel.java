@@ -176,7 +176,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
 
         public void actionPerformed(ActionEvent e) {
 
-            int check = JOptionPane.showConfirmDialog(null, "Gebühren Zuordnung wirklich löschen?", "Löschen", JOptionPane.YES_NO_OPTION);
+            int check = JOptionPane.showConfirmDialog(null, "Gebuehren Zuordnung wirklich löschen?", "Löschen", JOptionPane.YES_NO_OPTION);
             if (check == JOptionPane.YES_OPTION) {
                 final GebuehrZuordnung gb = gebuehrZuordnungSelection.getSelection();
                 gebuehrZuordnungManager.delete(gb);
@@ -193,7 +193,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.changeToLastView();  // Zur Übersicht wechseln
+            GUIManager.changeToLastView();  // Zur Uebersicht wechseln
 
         }
     }
@@ -203,7 +203,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
         final GebuehrZuordnung gb = new GebuehrZuordnung();
         CustomerModel c = bewohner.getCustomer();
         gb.setBewohner(bewohner);
-        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: "+c.getSurname() + " " + c.getForename(),"Hier können Sie einem Bewohner eine Gebühr zuordnen."));
+        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: "+c.getSurname() + " " + c.getForename(),"Hier können Sie einem Bewohner eine Gebuehr zuordnen."));
         final GebBewohnerView gebView = new GebBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -225,7 +225,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
     private void editSelectedItem(EventObject e) {
         final GebuehrZuordnung gb = gebuehrZuordnungSelection.getSelection();
         CustomerModel c = bewohner.getCustomer();
-        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: "+c.getSurname() + " " + c.getForename(),"Hier können Sie alle Gebühren verwalten, die zu einem Bewohner zugeordnet sind."));
+        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: "+c.getSurname() + " " + c.getForename(),"Hier können Sie alle Gebuehren verwalten, die zu einem Bewohner zugeordnet sind."));
         final GebBewohnerView editView = new GebBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -288,7 +288,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
         public String getColumnName(int column) {
             switch (column) {
                 case 0:
-                    return "Gebühr";
+                    return "Gebuehr";
                 case 1:
                     return "Von";
                 case 2:

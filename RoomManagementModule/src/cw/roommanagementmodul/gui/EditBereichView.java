@@ -42,7 +42,7 @@ public class EditBereichView extends CWView
 
     private void initComponents() {
         lName = CWComponentFactory.createLabel("Name: ");
-        lParentBereich = CWComponentFactory.createLabel("Übergeordneter Bereich: ");
+        lParentBereich = CWComponentFactory.createLabel("Uebergeordneter Bereich: ");
 
         //ComboBox
         parentComboBox = CWComponentFactory.createComboBox(model.getBereichList());
@@ -54,7 +54,7 @@ public class EditBereichView extends CWView
                 parentComboBox.setSelectedItem(model.getVaterBereich());
                 model.getUnsaved().setValue(false);
             } else {
-                JOptionPane.showMessageDialog(null, "Im ausgewählten Bereich kann kein untergeordneter Bereich hinzugefügt werden," +
+                JOptionPane.showMessageDialog(null, "Im ausgewählten Bereich kann kein untergeordneter Bereich hinzugefuegt werden," +
                         " weil sich in diesem Bereich bereits Zimmer befinden!");
                 parentComboBox.setSelectedItem(model.getBereichManager().getRoot());
                 model.getUnsaved().setValue(false);

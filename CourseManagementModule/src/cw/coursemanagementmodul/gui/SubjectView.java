@@ -49,7 +49,7 @@ public class SubjectView extends CWView
 
         newButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Neu",
-                "Hier können Sie einen neuen Kursgegenstand hinzufügen!",
+                "Hier können Sie einen neuen Kursgegenstand hinzufuegen!",
                 "cw/coursemanagementmodul/images/subject_add.png"));
         editButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Bearbeiten",

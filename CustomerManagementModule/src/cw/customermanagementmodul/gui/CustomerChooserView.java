@@ -1,10 +1,12 @@
 package cw.customermanagementmodul.gui;
 
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import com.l2fprod.common.swing.JButtonBar;
-import cw.boardingschoolmanagement.gui.component.CWButton;
-import cw.boardingschoolmanagement.gui.component.CWView;
 import java.awt.BorderLayout;
+
+import com.l2fprod.common.swing.JButtonBar;
+
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWView;
 
 /**
  *

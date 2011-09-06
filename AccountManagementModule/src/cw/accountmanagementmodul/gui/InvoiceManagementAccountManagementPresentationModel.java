@@ -53,7 +53,7 @@ public class InvoiceManagementAccountManagementPresentationModel
     public void initModels() {
         headerInfo = new CWHeaderInfo(
                 "Rechnungen",
-                "Rechnungsübersicht",
+                "Rechnungsuebersicht",
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/invoice.png"),
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/invoice.png")
         );
@@ -61,7 +61,7 @@ public class InvoiceManagementAccountManagementPresentationModel
         buttonListenerSupport = new ButtonListenerSupport();
         
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/accountmanagementmodul/images/cancel.png"));
-        saveAction = new SaveAction("Hinzufügen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_lightning.png"));
+        saveAction = new SaveAction("Hinzufuegen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_lightning.png"));
 
         invoiceSelection = new SelectionInList<Invoice>(account.getInvoices());
     }

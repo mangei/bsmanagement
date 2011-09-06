@@ -62,7 +62,7 @@ public class GroupManagementPresentationModel
 
         headerInfo = new CWHeaderInfo(
                 "Gruppen verwalten",
-                "Sie befinden sich Gruppenverwaltungsbereich. Hier haben Sie einen Überblick über alle Gruppen und den zugewiesenen Kunden.",
+                "Sie befinden sich Gruppenverwaltungsbereich. Hier haben Sie einen Ueberblick ueber alle Gruppen und den zugewiesenen Kunden.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/group.png"),
                 CWUtils.loadIcon("cw/customermanagementmodul/images/group.png")
         );

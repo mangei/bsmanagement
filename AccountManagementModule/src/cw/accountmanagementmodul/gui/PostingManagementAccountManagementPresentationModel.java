@@ -84,7 +84,7 @@ public class PostingManagementAccountManagementPresentationModel {
 
         headerInfo = new CWHeaderInfo(
                 "Buchungen",
-                "Hier sehen sie eine Übersicht über alle Buchungen für Ihren Kunden.",
+                "Hier sehen sie eine Uebersicht ueber alle Buchungen fuer Ihren Kunden.",
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/posting.png"),
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/posting.png")
         );
@@ -143,7 +143,7 @@ public class PostingManagementAccountManagementPresentationModel {
             accountPostings.removeAll(postingGroups.get(i).getPostings());
         }
 
-        // Alles zusammenfügen
+        // Alles zusammenfuegen
         List<Posting> pIList = new ArrayList<Posting>(accountPostings);
         pIList.addAll(postingGroups);
 
@@ -335,8 +335,8 @@ public class PostingManagementAccountManagementPresentationModel {
             final EditPostingPresentationModel model = new EditPostingPresentationModel(
                     accountPosting,
                     new CWHeaderInfo(
-                        "Buchung hinzufügen",
-                        "<html>Fügen Sie eine neue Buchung für '<b>" + account.getCustomer().getForename() + " " + account.getCustomer().getSurname() + "</b>' hinzu.</html>",
+                        "Buchung hinzufuegen",
+                        "<html>Fuegen Sie eine neue Buchung fuer '<b>" + account.getCustomer().getForename() + " " + account.getCustomer().getSurname() + "</b>' hinzu.</html>",
                         CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png"),
                         CWUtils.loadIcon("cw/customermanagementmodul/images/posting_add.png")
                     ));

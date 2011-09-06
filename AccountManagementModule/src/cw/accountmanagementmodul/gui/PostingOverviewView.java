@@ -43,8 +43,8 @@ public class PostingOverviewView extends CWView
     }
 
     private void buildView() {
-        this.setHeaderInfo(new CWHeaderInfo("Buchungsübersicht"));
-        this.setName("Buchungsübersicht");
+        this.setHeaderInfo(new CWHeaderInfo("Buchungsuebersicht"));
+        this.setName("Buchungsuebersicht");
 
         // Main layout
         FormLayout layout = new FormLayout(

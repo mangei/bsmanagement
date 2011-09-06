@@ -46,7 +46,7 @@ public class BewohnerEditCustomerTabExtention implements EditCustomerTabExtentio
         }
         if (model.getCheckBoxState() == ItemEvent.SELECTED) {
 
-            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprüft werden kann
+            //Stunde - Minute - Sekunde auf 0 setzten damit auf Gleichheit geprueft werden kann
             Calendar von = new GregorianCalendar();
             von.setTimeInMillis(b.getVon().getTime());
             Calendar vonC = new GregorianCalendar(von.get(Calendar.YEAR), von.get(Calendar.MONTH), von.get(Calendar.DATE));
@@ -113,7 +113,7 @@ public class BewohnerEditCustomerTabExtention implements EditCustomerTabExtentio
     public List<String> validate() {
         ArrayList<String> l = new ArrayList<String>();
         if (model.getCheckBoxState() == ItemEvent.SELECTED && (model.getBufferedModel(Bewohner.PROPERTYNAME_ZIMMER).getValue() == null || model.getBufferedModel(Bewohner.PROPERTYNAME_VON).getValue() == null)) {
-            l.add("In der Registerkarte Zimmer müssen die Attribute Einzugsdatum und Zimmer gesetzt sein!");
+            l.add("In der Registerkarte Zimmer muessen die Attribute Einzugsdatum und Zimmer gesetzt sein!");
         }
         if (model.getCheckBoxState() == ItemEvent.SELECTED && checkChrono() == false) {
             l.add("In der Registerkarte Zimmer muss sich das Bis-Datum chronologisch nach dem Von-Datum befinden.");

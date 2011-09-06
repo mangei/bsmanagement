@@ -36,8 +36,8 @@ public class PostingOverviewPresentationModel {
 //        loadPostings();
 
         headerInfo = new CWHeaderInfo(
-                "Buchungsübersicht",
-                "Hier sehen sie eine Übersicht über alle Buchungen für Ihren Kunden.",
+                "Buchungsuebersicht",
+                "Hier sehen sie eine Uebersicht ueber alle Buchungen fuer Ihren Kunden.",
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/posting.png"),
                 CWUtils.loadIcon("cw/accountmanagementmodul/images/posting.png")
         );
@@ -61,7 +61,7 @@ public class PostingOverviewPresentationModel {
 //            postings.removeAll(postingGroups.get(i).getPostings());
 //        }
 
-        // Alles zusammenfügen
+        // Alles zusammenfuegen
 //        List<PostingInterface> pIList = new ArrayList<PostingInterface>(postings);
         List<Posting> pIList = new ArrayList<Posting>(postingGroups);
         pIList.addAll(postingGroups);

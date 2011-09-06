@@ -58,7 +58,7 @@ public class SubjectPresentationModel
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"));
         
-        //Anlegen der Aktionen, für die Buttons
+        //Anlegen der Aktionen, fuer die Buttons
         newButtonAction = new NewAction("Neu");
         editButtonAction = new EditAction("Bearbeiten");
         deleteButtonAction = new DeleteAction("Löschen");

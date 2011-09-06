@@ -36,7 +36,7 @@ public class CustomerPM
     }
     
     public Customer create(EntityManager entityManager) {
-    	Customer customer = new CustomerImpl(entityManager);
+    	Customer customer = new Customer(entityManager);
     	entityManager.getTransaction().begin();
     	entityManager.persist(customer);
     	entityManager.getTransaction().commit();

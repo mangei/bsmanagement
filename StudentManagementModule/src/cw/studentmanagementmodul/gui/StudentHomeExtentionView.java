@@ -39,7 +39,7 @@ public class StudentHomeExtentionView extends CWView
     }
 
     private void buildView() {
-        this.setHeaderInfo(new CWHeaderInfo("Schülerinformationen"));
+        this.setHeaderInfo(new CWHeaderInfo("Schuelerinformationen"));
 
         FormLayout layout = new FormLayout(
                 "pref",

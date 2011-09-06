@@ -67,11 +67,11 @@ public class EditActivityView extends CWView
                 "cw/coursemanagementmodul/images/save.png"));
         saveAndCloseButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Speichern u. Schließen",
-                "Hier wird die Aktivität gespeichert und anschließend in die Aktivitätsübersicht gewechselt!",
+                "Hier wird die Aktivität gespeichert und anschließend in die Aktivitätsuebersicht gewechselt!",
                 "cw/coursemanagementmodul/images/save_cancel.png"));
         cancelButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Abbrechen",
-                "Hier kehren Sie zur Aktivitätsübersicht zurück!",
+                "Hier kehren Sie zur Aktivitätsuebersicht zurueck!",
                 "cw/coursemanagementmodul/images/cancel.png"));
         
         cancelButton.addActionListener(new ActionListener() {
@@ -100,7 +100,7 @@ public class EditActivityView extends CWView
     }
     
     //**************************************************************************
-    //Diese Methode gibt die Maske des EditPanels in Form einse JPanels zurück
+    //Diese Methode gibt die Maske des EditPanels in Form einse JPanels zurueck
     //**************************************************************************
     private void buildView() {
         this.setHeaderInfo(model.getHeaderInfo());

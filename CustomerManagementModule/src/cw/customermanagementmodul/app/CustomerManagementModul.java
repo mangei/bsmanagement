@@ -3,7 +3,6 @@ package cw.customermanagementmodul.app;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;

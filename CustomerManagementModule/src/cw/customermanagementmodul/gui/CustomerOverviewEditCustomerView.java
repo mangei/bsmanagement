@@ -1,11 +1,14 @@
 package cw.customermanagementmodul.gui;
 
+import java.util.List;
+
+import javax.swing.JComponent;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWView;
-import java.util.List;
-import javax.swing.JComponent;
 
 /**
  *

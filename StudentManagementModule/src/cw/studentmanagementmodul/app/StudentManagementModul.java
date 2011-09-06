@@ -20,7 +20,7 @@ import cw.studentmanagementmodul.pojo.manager.StudentClassManager;
 import cw.studentmanagementmodul.pojo.manager.StudentManager;
 
 /**
- * Das Schülermodul
+ * Das Schuelermodul
  * @author CreativeWorkers.at
  */
 public class StudentManagementModul

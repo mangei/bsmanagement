@@ -35,17 +35,17 @@ public class GebZuordnungBewohnerView extends CWView{
     private void initComponents() {
 
         bNew = CWComponentFactory.createButton(model.getNewAction());
-        bNew.setText("Neue Gebühr");
+        bNew.setText("Neue Gebuehr");
         bDelete = CWComponentFactory.createButton(model.getDeleteAction());
         bDelete.setText("Löschen");
         bEdit = CWComponentFactory.createButton(model.getEditAction());
         bEdit.setText("Bearbeiten");
         bBack = CWComponentFactory.createButton(model.getBackAction());
-        bBack.setText("Zurück");
+        bBack.setText("Zurueck");
 
 
         String zuordnungenTableStateName = "cw.roommanagementmodul.GebZuordnunglBewohnerView.zuordnungTableState";
-        tZuordnung = CWComponentFactory.createTable(model.createZuordnungTableModel(model.getGebuehrZuordnungSelection()), "keine Gebühr Zuordnungen vorhanden",zuordnungenTableStateName);
+        tZuordnung = CWComponentFactory.createTable(model.createZuordnungTableModel(model.getGebuehrZuordnungSelection()), "keine Gebuehr Zuordnungen vorhanden",zuordnungenTableStateName);
 
 
         tZuordnung.setSelectionModel(new SingleListSelectionAdapter(new CWTableSelectionConverter(

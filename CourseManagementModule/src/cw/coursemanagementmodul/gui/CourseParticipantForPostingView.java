@@ -93,7 +93,7 @@ public class CourseParticipantForPostingView extends CWPanel
     }
 
     //**************************************************************************
-    //Diese Methode gibt die Maske des EditPanels in Form einse JPanels zurück
+    //Diese Methode gibt die Maske des EditPanels in Form einse JPanels zurueck
     //**************************************************************************
     private void buildView(){
         FormLayout layout = new FormLayout("fill:pref:grow, 15dlu, fill:pref:grow, 4dlu, pref",

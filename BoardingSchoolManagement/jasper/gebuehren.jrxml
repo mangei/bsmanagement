@@ -40,7 +40,7 @@
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<text><![CDATA[Gebühr
+				<text><![CDATA[Gebuehr
                 ]]></text>
 			</staticText>
 			<staticText>

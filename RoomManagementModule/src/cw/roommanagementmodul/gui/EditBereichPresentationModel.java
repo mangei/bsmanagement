@@ -232,7 +232,7 @@ public class EditBereichPresentationModel
                 getUnsaved().setValue(false);
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
             } else {
-                JOptionPane.showMessageDialog(null, "Es muss ein Übergeordneter Bereich ausgewählt sein!");
+                JOptionPane.showMessageDialog(null, "Es muss ein Uebergeordneter Bereich ausgewählt sein!");
             }
 
         }
@@ -260,7 +260,7 @@ public class EditBereichPresentationModel
                 saveBereich();
             }
             if (i == 0 || i == 1) {
-                //         GUIManager.lastView();  // Zur Übersicht wechseln
+                //         GUIManager.lastView();  // Zur Uebersicht wechseln
 //                GUIManager.removeView(); // Diese View nicht merken
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
@@ -280,7 +280,7 @@ public class EditBereichPresentationModel
                 saveBereich();
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
             } else {
-                JOptionPane.showMessageDialog(null, "Es muss ein Übergeordneter Bereich ausgewählt sein!");
+                JOptionPane.showMessageDialog(null, "Es muss ein Uebergeordneter Bereich ausgewählt sein!");
             }
 
         }

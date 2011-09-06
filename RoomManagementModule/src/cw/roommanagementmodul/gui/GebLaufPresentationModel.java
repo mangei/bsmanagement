@@ -289,7 +289,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                 GUIManager.changeView(laufResultView, true);
 
             } else {
-                JOptionPane.showMessageDialog(null, "Für den Storno-Lauf muss ein Gebührenlauf ausgewählt sein!");
+                JOptionPane.showMessageDialog(null, "Fuer den Storno-Lauf muss ein Gebuehrenlauf ausgewählt sein!");
             }
         }
 
@@ -330,12 +330,12 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
                 String laufString;
                 if (betriebsart == true) {
-                    laufString = new String("Gebühren Lauf - " + monthStr + " " + yearInt);
+                    laufString = new String("Gebuehren Lauf - " + monthStr + " " + yearInt);
                 } else {
                     laufString = new String("Test Lauf - " + monthStr + " " + yearInt);
                 }
 
-                final LaufResultPresentationModel model = new LaufResultPresentationModel(selection, new CWHeaderInfo(laufString, "Ergebnis des Gebühren Lauf"));
+                final LaufResultPresentationModel model = new LaufResultPresentationModel(selection, new CWHeaderInfo(laufString, "Ergebnis des Gebuehren Lauf"));
                 final LaufResultView laufResultView = new LaufResultView(model);
                 model.addButtonListener(new ButtonListener() {
 
@@ -392,10 +392,10 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                     }
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Schwerwiegender Fehler! \nEs wurde keine Buchung durchgeführt", "Fehler", JOptionPane.WARNING_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Schwerwiegender Fehler! \nEs wurde keine Buchung durchgefuehrt", "Fehler", JOptionPane.WARNING_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(null, "Mit diesem Datum wurde bereits ein Gebührenlauf durchgeführt!");
+            JOptionPane.showMessageDialog(null, "Mit diesem Datum wurde bereits ein Gebuehrenlauf durchgefuehrt!");
             return false;
         }
 

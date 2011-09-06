@@ -52,7 +52,7 @@ public class Application {
     }
 
     /**
-     * Liefert die Instanz der Klasse BoardingShcoolManagement zurück, bzw.
+     * Liefert die Instanz der Klasse BoardingShcoolManagement zurueck, bzw.
      * initalisiert sie.
      * @return BoardingSchoolManagement
      */
@@ -215,7 +215,7 @@ public class Application {
 
 /**
  * Läd die grundlegenten Komponenten der GUI(Sidebar mit Startseite,
- * Topmenü mit den Mennüpunkten: Beenden, Konfiguration).
+ * Topmenue mit den Mennuepunkten: Beenden, Konfiguration).
  *
  */
     private void initGUI() {
@@ -290,7 +290,7 @@ public class Application {
 //
 //        // Add an About-Button to the HeaderMenu
 //        GUIManager.getInstance().getHeader().addHeaderMenuItem(new AbstractAction(
-//                "Über",
+//                "Ueber",
 //                CWUtils.loadIcon("cw/boardingschoolmanagement/images/about.png")
 //                ) {
 //
@@ -362,7 +362,7 @@ public class Application {
         applicationListenerSupport.removeApplicationListener(applicationListener);
     }
     /**
-     * Hinzufügen der ApplicationListener
+     * Hinzufuegen der ApplicationListener
      * @param applicationListener Aktionlistern eines bestimmten Swing-Objekt
      */
     public void addApplicationListener(ApplicationListener applicationListener) {

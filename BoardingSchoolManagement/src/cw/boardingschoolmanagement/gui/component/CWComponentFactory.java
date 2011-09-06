@@ -901,7 +901,7 @@ public class CWComponentFactory {
         if(panel == null) {
             throw new NullPointerException("panel is null");
         }
-        return createBackView(panel, "Zurück");
+        return createBackView(panel, "Zurueck");
     }
 
     public static CWBackView createBackView(CWPanel panel, String backText) {

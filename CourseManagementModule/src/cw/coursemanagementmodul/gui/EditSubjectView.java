@@ -57,11 +57,11 @@ public class EditSubjectView extends CWView
                 "cw/coursemanagementmodul/images/save.png"));
         saveAndCloseButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Speichern u. Schließen",
-                "Hier wird der Kursgegenstand gespeichert und anschließend in die Gegenstandsübersicht gewechselt!",
+                "Hier wird der Kursgegenstand gespeichert und anschließend in die Gegenstandsuebersicht gewechselt!",
                 "cw/coursemanagementmodul/images/save_cancel.png"));
         cancelButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Abbrechen",
-                "Hier kehren Sie zur Kursgegenstandsübersicht zurück!",
+                "Hier kehren Sie zur Kursgegenstandsuebersicht zurueck!",
                 "cw/coursemanagementmodul/images/cancel.png"));
         
         cancelButton.addActionListener(new ActionListener() {
@@ -85,7 +85,7 @@ public class EditSubjectView extends CWView
     }
 
     //**************************************************************************
-    //Diese Methode gibt die Maske des EditPanels in Form einse JPanels zurück
+    //Diese Methode gibt die Maske des EditPanels in Form einse JPanels zurueck
     //**************************************************************************
     private void buildView(){
 

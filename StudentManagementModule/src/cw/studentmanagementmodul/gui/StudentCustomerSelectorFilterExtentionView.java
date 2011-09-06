@@ -65,7 +65,7 @@ public class StudentCustomerSelectorFilterExtentionView extends CWPanel
 
         PanelBuilder builder = new PanelBuilder(layout, this);
 
-        builder.addLabel("Schüler:",    cc.xy(1, 1));
+        builder.addLabel("Schueler:",    cc.xy(1, 1));
         builder.add(rbNoMatter,         cc.xy(3, 1));
         builder.add(rbInactive,         cc.xy(5, 1));
         builder.add(rbActive,           cc.xy(7, 1));

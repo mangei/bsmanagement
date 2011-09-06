@@ -54,7 +54,7 @@ public class UpdateConfigurationPresentationModel
                 CWUtils.loadIcon("cw/boardingschoolmanagement/images/update.png")
         );
 
-        checkAction = new CheckAction("Jetzt prüfen!");
+        checkAction = new CheckAction("Jetzt pruefen!");
         updateAction = new UpdateAction("Jetzt aktualisieren!");
 
         updateInfoList = new SelectionInList<UpdateInfo>();

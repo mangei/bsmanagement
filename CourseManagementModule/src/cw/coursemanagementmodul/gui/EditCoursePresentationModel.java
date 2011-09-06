@@ -215,7 +215,7 @@ public class EditCoursePresentationModel
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
             }
             else{
-                JOptionPane.showMessageDialog(null, "Das Beginndatum liegt über dem Enddatum!");
+                JOptionPane.showMessageDialog(null, "Das Beginndatum liegt ueber dem Enddatum!");
             }
         }
     }
@@ -224,7 +224,7 @@ public class EditCoursePresentationModel
     //**************************************************************************
     //Methoden die in den oben angelegten Klassen zum
     // + Speichern
-    // + Zurücksetzen
+    // + Zuruecksetzen
     // + Speichern & Schließen
     //dienen
     //**************************************************************************

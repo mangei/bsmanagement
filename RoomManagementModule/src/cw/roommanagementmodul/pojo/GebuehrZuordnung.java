@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
  * @author Jeitler Dominik
  */
 
-//stellt die Verbindung zwischen einer Gebühr und einem Kunden in einem gewissen Zeitraum dar
+//stellt die Verbindung zwischen einer Gebuehr und einem Kunden in einem gewissen Zeitraum dar
 @Entity
 public class GebuehrZuordnung extends Model implements AnnotatedClass{
 

@@ -49,7 +49,7 @@ public class ActivityView extends CWView
 
         newButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Neu",
-                "Hier können Sie einen neue Aktivität hinzufügen!",
+                "Hier können Sie einen neue Aktivität hinzufuegen!",
                 "cw/coursemanagementmodul/images/activity_add.png"));
         editButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Bearbeiten",
@@ -81,7 +81,7 @@ public class ActivityView extends CWView
     }
     
     //**************************************************************************
-    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
+    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurueck
     //**************************************************************************
     private void buildView(){
         this.setHeaderInfo(model.getHeaderInfo());

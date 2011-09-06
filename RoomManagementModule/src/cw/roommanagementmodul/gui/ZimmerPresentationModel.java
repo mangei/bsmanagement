@@ -221,7 +221,7 @@ public class ZimmerPresentationModel {
             bereichModel.getTreeModel().setRoot(bereichModel.getRootTree());
             bereichModel.initTree(bereichModel.getRootTree());
             bereichModel.getTreeModel().reload();
-            GUIManager.changeToLastView();  // Zur Übersicht wechseln
+            GUIManager.changeToLastView();  // Zur Uebersicht wechseln
 
 
         }

@@ -13,7 +13,6 @@ import java.util.Map.Entry;
 import javax.persistence.EntityManager;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.GroupLayout.Group;
 import javax.swing.ListModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.TableModel;
@@ -28,8 +27,8 @@ import cw.customermanagementmodul.extention.point.CustomerSelectorFilterExtentio
 import cw.customermanagementmodul.persistence.Customer;
 
 /**
- * Diese Klasse beinhaltet alle Funktionen und Methoden die für
- * die Kundenübersichtstabelle der Kundenverwaltung benötigt werden.
+ * Diese Klasse beinhaltet alle Funktionen und Methoden die fuer
+ * die Kundenuebersichtstabelle der Kundenverwaltung benötigt werden.
  *
  * @author CreativeWorkers.at
  */

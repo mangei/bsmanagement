@@ -49,16 +49,16 @@ public class PostingRunsView extends CWView
         detailButton    = CWComponentFactory.createButton(model.getDetailAction());
 
         backButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Zurück",
-                "Hier kehren Sie wieder in den Kurs-Gebührenlauf zurück!",
+                "Zurueck",
+                "Hier kehren Sie wieder in den Kurs-Gebuehrenlauf zurueck!",
                 "cw/coursemanagementmodul/images/back.png"));
         stornoButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Stornieren",
-                "Hier wird der selektierte Gebührenlauf storniert!",
+                "Hier wird der selektierte Gebuehrenlauf storniert!",
                 "cw/coursemanagementmodul/images/posting_delete.png"));
         detailButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Detailansicht",
-                "Hier erhalten Sie eine detailierte Detailansicht zum selektierten Gebührenlauf!",
+                "Hier erhalten Sie eine detailierte Detailansicht zum selektierten Gebuehrenlauf!",
                 "cw/coursemanagementmodul/images/lupe.png"));
         
         runTable = CWComponentFactory.createTable("Es wurden noch keine Kursläufe erzeugt!");
@@ -85,7 +85,7 @@ public class PostingRunsView extends CWView
     }
 
     //**************************************************************************
-    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurück
+    //Diese Methode gibt die Maske des StartPanels in Form einse JPanels zurueck
     //**************************************************************************
     private void buildView(){
 

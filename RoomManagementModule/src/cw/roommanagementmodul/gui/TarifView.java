@@ -41,7 +41,7 @@ public class TarifView extends CWView {
         bEdit = CWComponentFactory.createButton(model.getEditAction());
         bEdit.setText("Bearbeiten");
         bBack = CWComponentFactory.createButton(model.getBackAction());
-        bBack.setText("Zurück");
+        bBack.setText("Zurueck");
 
 
         String tarifTableStateName = "cw.roommanagementmodul.TarifView.tarifTableState";
