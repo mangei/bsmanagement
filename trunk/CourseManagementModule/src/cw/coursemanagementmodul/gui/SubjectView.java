@@ -49,18 +49,18 @@ public class SubjectView extends CWView
 
         newButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Neu",
-                "Hier können Sie einen neuen Kursgegenstand hinzufuegen!",
+                "Hier koennen Sie einen neuen Kursgegenstand hinzufuegen!",
                 "cw/coursemanagementmodul/images/subject_add.png"));
         editButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Bearbeiten",
-                "Hier können Sie einen selektierten Kursgegenstand ändern!",
+                "Hier koennen Sie einen selektierten Kursgegenstand aendern!",
                 "cw/coursemanagementmodul/images/subject_edit.png"));
         deleteButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Löschen",
-                "Hier können Sie einen selektierten Kursgegenstand löschen!",
+                "Loeschen",
+                "Hier koennen Sie einen selektierten Kursgegenstand loeschen!",
                 "cw/coursemanagementmodul/images/subject_delete.png"));
         
-        subjectTable = CWComponentFactory.createTable("Keine Gegenstände vorhanden!");
+        subjectTable = CWComponentFactory.createTable("Keine Gegenstaende vorhanden!");
         subjectTable.setModel(model.createSubjectTableModel(model.getSubjectSelection()));
         subjectTable.setSelectionModel(
                 new SingleListSelectionAdapter(

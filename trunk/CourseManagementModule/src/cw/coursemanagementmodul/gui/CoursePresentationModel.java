@@ -58,14 +58,14 @@ public class CoursePresentationModel
     public void initModels() {
         headerInfo = new CWHeaderInfo(
                 "Kurs",
-                "Sie befinden sich im Kursverwaltungsbereich. Hier können Sie Kurse anlegen",
+                "Sie befinden sich im Kursverwaltungsbereich. Hier koennen Sie Kurse anlegen",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
         
         //Anlegen der Aktionen, fuer die Buttons
         newButtonAction = new NewAction("Neu");
         editButtonAction = new EditAction("Bearbeiten");
-        deleteButtonAction = new DeleteAction("Löschen");
+        deleteButtonAction = new DeleteAction("Loeschen");
         detailButtonAction = new DetailAction("Detailansicht");
         
         courseSelection = new SelectionInList<Course>(CourseManager.getInstance().getAll());
@@ -166,7 +166,7 @@ public class CoursePresentationModel
     //**************************************************************************
     
     //**************************************************************************
-    //Private Klasse, die Events behandelt, die das Löschen
+    //Private Klasse, die Events behandelt, die das Loeschen
     //von Kursen beinhaltet
     //**************************************************************************
     private class DeleteAction
@@ -185,21 +185,21 @@ public class CoursePresentationModel
                 
                 List<CourseParticipant> courseParts = CourseParticipantManager.getInstance().getAll(c);
                 if(courseParts.size() > 0){
-                    JOptionPane.showMessageDialog(null, "<html>Löschen des Kurses "
-                            + c.getName() + " nicht möglich!<br/>"
+                    JOptionPane.showMessageDialog(null, "<html>Loeschen des Kurses "
+                            + c.getName() + " nicht moeglich!<br/>"
                             + "Der Kurs wird noch von ein oder mehreren Kunden verwendet!</html>");
                 }
                 else{
-                    int ret = JOptionPane.showConfirmDialog(null, "Wollen Sie den Kurs wirklich löschen?");
+                    int ret = JOptionPane.showConfirmDialog(null, "Wollen Sie den Kurs wirklich loeschen?");
                     if(ret == JOptionPane.OK_OPTION){
                         courseSelection.getList().remove(c);
                         CourseManager.getInstance().delete(c);
 
-                        GUIManager.setLoadingScreenText("Kurs wird gelöscht...");
+                        GUIManager.setLoadingScreenText("Kurs wird geloescht...");
                         GUIManager.setLoadingScreenVisible(true);
                         
                         GUIManager.setLoadingScreenVisible(false);
-                        GUIManager.getStatusbar().setTextAndFadeOut("Der Kurs wurde gelöscht!");
+                        GUIManager.getStatusbar().setTextAndFadeOut("Der Kurs wurde geloescht!");
                     }
                 }
             }
@@ -207,7 +207,7 @@ public class CoursePresentationModel
     //**************************************************************************
     
     //**************************************************************************
-    //Private Klasse, die Events behandelt, die das Löschen
+    //Private Klasse, die Events behandelt, die das Loeschen
     //von Kursen beinhaltet
     //**************************************************************************
     private class DetailAction
@@ -325,7 +325,7 @@ public class CoursePresentationModel
     }
     
     //**************************************************************************
-    //Regelt das Editieren (Verändern) von Kursen
+    //Regelt das Editieren (Veraendern) von Kursen
     //(Doppelclick oder Ändern-Button)
     //**************************************************************************
     private void editSelectedItem(EventObject e) {

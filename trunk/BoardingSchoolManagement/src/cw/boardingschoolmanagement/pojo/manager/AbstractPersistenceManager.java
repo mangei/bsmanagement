@@ -2,10 +2,10 @@ package cw.boardingschoolmanagement.pojo.manager;
 
 import javax.persistence.EntityManager;
 
-import cw.boardingschoolmanagement.app.CWPersistence;
-import cw.boardingschoolmanagement.app.CascadeListener;
-import cw.boardingschoolmanagement.app.CascadeListenerSupport;
-import cw.boardingschoolmanagement.app.PersistenceManager;
+import cw.boardingschoolmanagement.perstistence.CWPersistence;
+import cw.boardingschoolmanagement.perstistence.CascadeListener;
+import cw.boardingschoolmanagement.perstistence.CascadeListenerSupport;
+import cw.boardingschoolmanagement.perstistence.PersistenceManager;
 
 /**
  * Basic class for all persistence managers.
@@ -69,11 +69,11 @@ public abstract class AbstractPersistenceManager<T extends CWPersistence>
 //    }
 //
 //    /**
-//     * Delete Funktion zum löschen von Objekten aus der Datenbank. Wurde als
+//     * Delete Funktion zum loeschen von Objekten aus der Datenbank. Wurde als
 //     * Template realiserit.
 //     *
-//     * @param obj - Enthält das zu löschende Objekt
-//     * @return Liefert true wenn löschen erfolgreich war, false wenn ein Fehler aufgetreten ist
+//     * @param obj - Enthaelt das zu loeschende Objekt
+//     * @return Liefert true wenn loeschen erfolgreich war, false wenn ein Fehler aufgetreten ist
 //     */
 //    public boolean delete(T obj) {
 //        if (obj == null) {
@@ -104,7 +104,7 @@ public abstract class AbstractPersistenceManager<T extends CWPersistence>
 //    /**
 //     * Speichert die Änderung eines Datensatzens in die Datenbank.
 //     *
-//     * @param obj - Objekt das geändert Wurde
+//     * @param obj - Objekt das geaendert Wurde
 //     * @return true - Änderung erfolgreich, false - Änderung nicht erfolgreich
 //     */
 //    public boolean update(T obj) {

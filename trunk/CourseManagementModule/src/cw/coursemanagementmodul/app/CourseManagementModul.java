@@ -7,12 +7,12 @@ import java.util.List;
 import javax.swing.JButton;
 
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.app.CascadeEvent;
-import cw.boardingschoolmanagement.app.CascadeListener;
 import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
+import cw.boardingschoolmanagement.perstistence.CascadeEvent;
+import cw.boardingschoolmanagement.perstistence.CascadeListener;
 import cw.coursemanagementmodul.gui.ActivityPresentationModel;
 import cw.coursemanagementmodul.gui.ActivityView;
 import cw.coursemanagementmodul.gui.CoursePostingPresentationModel;
@@ -47,7 +47,7 @@ public class CourseManagementModul implements Modul{
             }
         });
         
-        JButton activityButton = new JButton("Aktivität");
+        JButton activityButton = new JButton("Aktivitaet");
         activityButton.setIcon(CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
         activityButton.addActionListener(new ActionListener() {
 
@@ -100,7 +100,7 @@ public class CourseManagementModul implements Modul{
         menuPanel.addItem(accountingButton, "course");
         menuPanel.addItem(accountingHistoryButton, "course");
 
-        //Dere Geier --> Bitte nicht löschen --> wird fuer Kursbuchungen benötigt!!!
+        //Dere Geier --> Bitte nicht loeschen --> wird fuer Kursbuchungen benoetigt!!!
         if(PostingCategoryManager.getInstance().get("Kurs-Buchung") == null) {
             PostingCategory category = new PostingCategory();
             category.setName("Kurs-Buchung");

@@ -122,7 +122,7 @@ public class CWStatusBar
     }
 
     /**
-     * Zeigt einen Text in der Statusbar und lässt ihn wieder verschwinden
+     * Zeigt einen Text in der Statusbar und laesst ihn wieder verschwinden
      */
     public void setTextAndFadeOut(String text) {
         stopStatusTextTimer();

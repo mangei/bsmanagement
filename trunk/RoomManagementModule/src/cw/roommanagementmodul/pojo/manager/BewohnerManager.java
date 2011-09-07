@@ -4,7 +4,7 @@
  */
 package cw.roommanagementmodul.pojo.manager;
 
-import cw.boardingschoolmanagement.app.HibernateUtil;
+import cw.boardingschoolmanagement.perstistence.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.roommanagementmodul.pojo.Bewohner;

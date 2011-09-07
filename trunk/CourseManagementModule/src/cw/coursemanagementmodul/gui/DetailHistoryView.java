@@ -62,7 +62,7 @@ public class DetailHistoryView extends CWView
     private void initComponents(){
         currencyFormat = NumberFormat.getCurrencyInstance();
 
-        accountingTable = CWComponentFactory.createTable("Es wurden noch keine Buchungen zum Kursteilnehmer getätigt!");
+        accountingTable = CWComponentFactory.createTable("Es wurden noch keine Buchungen zum Kursteilnehmer getaetigt!");
         accountingTable.setModel(model.createCoursePostingTableModel(model.getPostings()));
         accountingTable.setSelectionModel(
                 new SingleListSelectionAdapter(

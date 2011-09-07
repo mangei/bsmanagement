@@ -44,8 +44,8 @@ public class CourseParticipantForPostingView extends CWPanel
     //**************************************************************************
     //Initialisieren der oben definierten Komponenten
     //Bei den meisten Komponenten kann man den PropertyName als Paramenter
-    //mitgeben. Bei Datum-Komponenten ist dies jedoch nicht möglich. Hierzu
-    //wird die Methode connect() von der Klasse PropertyConnector benötigt.
+    //mitgeben. Bei Datum-Komponenten ist dies jedoch nicht moeglich. Hierzu
+    //wird die Methode connect() von der Klasse PropertyConnector benoetigt.
     //**************************************************************************
     private void initComponents(){
         courseTable = CWComponentFactory.createTable("Kein Kurs zugewiesen!");
@@ -57,7 +57,7 @@ public class CourseParticipantForPostingView extends CWPanel
                         model.getCourseSelection().getSelectionIndexHolder(),
                         courseTable)));
 
-        activityTable = CWComponentFactory.createTable("Keine Aktivität zugewiesen!");
+        activityTable = CWComponentFactory.createTable("Keine Aktivitaet zugewiesen!");
         activityTable.setPreferredScrollableViewportSize(new Dimension(10, 30));
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));//TODO-mit ValueModel
         activityTable.setSelectionModel(
@@ -104,9 +104,9 @@ public class CourseParticipantForPostingView extends CWPanel
         
         panelBuilder.addSeparator("Ferienkurse", cc.xyw(1, 1, 3));
         panelBuilder.add(new JScrollPane(courseTable), cc.xyw(1, 3, 3));
-        panelBuilder.addSeparator("Aktivitäten", cc.xy(1, 5));
+        panelBuilder.addSeparator("Aktivitaeten", cc.xy(1, 5));
         panelBuilder.add(new JScrollPane(activityTable), cc.xy(1, 7));
-        panelBuilder.addSeparator("Gegenstände", cc.xy(3, 5));
+        panelBuilder.addSeparator("Gegenstaende", cc.xy(3, 5));
         panelBuilder.add(new JScrollPane(subjectTable), cc.xy(3, 7));
         panelBuilder.add(vorschlagButton, cc.xy(1, 9));
         panelBuilder.setOpaque(false);

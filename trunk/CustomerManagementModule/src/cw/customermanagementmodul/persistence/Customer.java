@@ -13,7 +13,7 @@ import javax.persistence.Temporal;
 
 import org.hibernate.annotations.Type;
 
-import cw.boardingschoolmanagement.app.CWPersistenceImpl;
+import cw.boardingschoolmanagement.perstistence.CWPersistence;
 
 /**
  * Implementation of persistence 'Customer'
@@ -23,7 +23,7 @@ import cw.boardingschoolmanagement.app.CWPersistenceImpl;
 @Entity(name=Customer.ENTITY_NAME)
 @Table(name=Customer.TABLE_NAME)
 public class Customer
-        extends CWPersistenceImpl {
+        extends CWPersistence {
 
     // Properties - Constants
     public final static String ENTITY_NAME = "customer";

@@ -48,7 +48,7 @@ public class StudentEditCustomerPresentationModel
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png")
         );
 
-        studentClassChooserAction = new StudentClassChooserAction("Klasse auswählen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_search.png"));
+        studentClassChooserAction = new StudentClassChooserAction("Klasse auswaehlen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_search.png"));
     }
 
     private void initEventHandling() {
@@ -82,8 +82,8 @@ public class StudentEditCustomerPresentationModel
             final StudentClassChooserPresentationModel model = new StudentClassChooserPresentationModel(
                     (StudentClass)getBufferedValue(Student.PROPERTYNAME_STUDENTCLASS),
                     new CWHeaderInfo(
-                        "Klasse auswählen",
-                        "Wählen Sie eine Klasse aus, die Sie dem Schueler zuweisen wollen.",
+                        "Klasse auswaehlen",
+                        "Waehlen Sie eine Klasse aus, die Sie dem Schueler zuweisen wollen.",
                         CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_search.png"),
                         CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_search.png")
                     )

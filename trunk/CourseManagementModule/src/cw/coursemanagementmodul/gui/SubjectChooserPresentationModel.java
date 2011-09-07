@@ -62,7 +62,7 @@ public class SubjectChooserPresentationModel
 
         headerInfo = new CWHeaderInfo(
                 "Kursgegenstand hinzufuegen!",
-                "Hier können Sie Gegenstände zum markierten Kurs hinzufuegen!",
+                "Hier koennen Sie Gegenstaende zum markierten Kurs hinzufuegen!",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"));
     }

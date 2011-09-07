@@ -92,8 +92,8 @@ public class CourseChooserPresentationModel
 
         headerInfo = new CWHeaderInfo(
                 "Alle Ferienkurse",
-                "<html>Sie befinden sich im Kurs-Auswahlbereich.<br/>Hier können Sie dem Kursteilnehmer" +
-                " einen Kurs mit beliebig vielen Aktivitäten und Gegenständen zuweisen!</html>",
+                "<html>Sie befinden sich im Kurs-Auswahlbereich.<br/>Hier koennen Sie dem Kursteilnehmer" +
+                " einen Kurs mit beliebig vielen Aktivitaeten und Gegenstaenden zuweisen!</html>",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
 

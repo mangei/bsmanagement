@@ -70,7 +70,7 @@ public class DeleteOrganisationUnitView extends CWView
 
     private void buildView() {
 
-        this.setHeaderInfo(new CWHeaderInfo("Bereich löschen"));
+        this.setHeaderInfo(new CWHeaderInfo("Bereich loeschen"));
 
         CWButtonPanel buttonPanel = this.getButtonPanel();
         buttonPanel.add(bOk);
@@ -84,7 +84,7 @@ public class DeleteOrganisationUnitView extends CWView
         CellConstraints cc = new CellConstraints();
 
         builder.add(rbDeleteAll, cc.xy(2, 1));
-        builder.addLabel("Bereich mit allen Unterbereichen/Klassen löschen.", cc.xy(4, 1));
+        builder.addLabel("Bereich mit allen Unterbereichen/Klassen loeschen.", cc.xy(4, 1));
         builder.add(rbMoveAll, cc.xy(2, 3));
         builder.addLabel("Unterbereiche/Klassen in anderen Bereich verschieben:", cc.xy(4, 3));
         builder.add(cbOrganisationUnits, cc.xy(4, 5));

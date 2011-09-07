@@ -204,7 +204,7 @@ public class BereichPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final Bereich b = new Bereich();
-            final EditBereichPresentationModel model = new EditBereichPresentationModel(b, new CWHeaderInfo("Bereich erstellen","Hier können Sie einen neuen Bereich erstellen"), selectedBereich);
+            final EditBereichPresentationModel model = new EditBereichPresentationModel(b, new CWHeaderInfo("Bereich erstellen","Hier koennen Sie einen neuen Bereich erstellen"), selectedBereich);
             final EditBereichView editView = new EditBereichView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -263,9 +263,9 @@ public class BereichPresentationModel {
                 selectedBereich=(Bereich)rootTree.getUserObject();
             } else {
                 if (b.getParentBereich() != null) {
-                    JOptionPane.showMessageDialog(null, "Löschen nicht möglich! \nEs befinden sich Zimmer in dieser Bereichsstruktur.");
+                    JOptionPane.showMessageDialog(null, "Loeschen nicht moeglich! \nEs befinden sich Zimmer in dieser Bereichsstruktur.");
                 } else {
-                    JOptionPane.showMessageDialog(null, "Internat kann nicht gelöscht werden.");
+                    JOptionPane.showMessageDialog(null, "Internat kann nicht geloescht werden.");
                 }
 
 
@@ -296,7 +296,7 @@ public class BereichPresentationModel {
 
     private void editSelectedItem(EventObject e) {
         final Bereich b = selectedBereich;
-        final EditBereichPresentationModel model = new EditBereichPresentationModel(b, new CWHeaderInfo("Bereich bearbeiten","Hier können Sie einen bestehenden Bereich bearbeiten"), null);
+        final EditBereichPresentationModel model = new EditBereichPresentationModel(b, new CWHeaderInfo("Bereich bearbeiten","Hier koennen Sie einen bestehenden Bereich bearbeiten"), null);
         final EditBereichView editView = new EditBereichView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -459,7 +459,7 @@ public class BereichPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final Zimmer z = new Zimmer();
-            final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new CWHeaderInfo("Zimmer erstellen","Hier können Sie ein neues Zimmer erstellen"),selectedBereich);
+            final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new CWHeaderInfo("Zimmer erstellen","Hier koennen Sie ein neues Zimmer erstellen"),selectedBereich);
             final EditZimmerView editView = new EditZimmerView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -523,7 +523,7 @@ public class BereichPresentationModel {
 
             } else {
                 Object[] options = {"Ok"};
-                JOptionPane.showOptionDialog(null, "Zimmer " + z.getName() + " enthält Bewohner!", "Warnung", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                JOptionPane.showOptionDialog(null, "Zimmer " + z.getName() + " enthaelt Bewohner!", "Warnung", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             }
 
         }
@@ -531,7 +531,7 @@ public class BereichPresentationModel {
 
     private void editZimmerSelectedItem(EventObject e) {
         final Zimmer z = selectedZimmer;
-        final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new CWHeaderInfo("Zimmer bearbeiten","Hier können Sie ein bestehndes Zimmer bearbeiten"));
+        final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new CWHeaderInfo("Zimmer bearbeiten","Hier koennen Sie ein bestehndes Zimmer bearbeiten"));
         final EditZimmerView editView = new EditZimmerView(model);
         model.addButtonListener(new ButtonListener() {
 

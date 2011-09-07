@@ -176,7 +176,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
 
         public void actionPerformed(ActionEvent e) {
 
-            int check = JOptionPane.showConfirmDialog(null, "Gebuehren Zuordnung wirklich löschen?", "Löschen", JOptionPane.YES_NO_OPTION);
+            int check = JOptionPane.showConfirmDialog(null, "Gebuehren Zuordnung wirklich loeschen?", "Loeschen", JOptionPane.YES_NO_OPTION);
             if (check == JOptionPane.YES_OPTION) {
                 final GebuehrZuordnung gb = gebuehrZuordnungSelection.getSelection();
                 gebuehrZuordnungManager.delete(gb);
@@ -203,7 +203,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
         final GebuehrZuordnung gb = new GebuehrZuordnung();
         CustomerModel c = bewohner.getCustomer();
         gb.setBewohner(bewohner);
-        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: "+c.getSurname() + " " + c.getForename(),"Hier können Sie einem Bewohner eine Gebuehr zuordnen."));
+        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: "+c.getSurname() + " " + c.getForename(),"Hier koennen Sie einem Bewohner eine Gebuehr zuordnen."));
         final GebBewohnerView gebView = new GebBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -225,7 +225,7 @@ public class GebZuordnungBewohnerPresentationModel extends PresentationModel<Bew
     private void editSelectedItem(EventObject e) {
         final GebuehrZuordnung gb = gebuehrZuordnungSelection.getSelection();
         CustomerModel c = bewohner.getCustomer();
-        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: "+c.getSurname() + " " + c.getForename(),"Hier können Sie alle Gebuehren verwalten, die zu einem Bewohner zugeordnet sind."));
+        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: "+c.getSurname() + " " + c.getForename(),"Hier koennen Sie alle Gebuehren verwalten, die zu einem Bewohner zugeordnet sind."));
         final GebBewohnerView editView = new GebBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 

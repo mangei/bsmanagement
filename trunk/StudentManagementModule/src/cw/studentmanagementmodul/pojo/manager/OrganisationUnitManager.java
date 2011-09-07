@@ -1,6 +1,6 @@
 package cw.studentmanagementmodul.pojo.manager;
 
-import cw.boardingschoolmanagement.app.HibernateUtil;
+import cw.boardingschoolmanagement.perstistence.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import java.util.List;
 import cw.studentmanagementmodul.pojo.OrganisationUnit;
@@ -51,19 +51,19 @@ public class OrganisationUnitManager extends AbstractPersistenceManager<Organisa
     @Override
     public boolean delete(OrganisationUnit o) {
 
-        // Löschen der darunterliegenden Bereiche
+        // Loeschen der darunterliegenden Bereiche
         List<OrganisationUnit> children = o.getChildren();
         for(int i=0, l=children.size(); i<l; i++) {
             delete(children.get(i));
         }
 
-        // Löschen der darin befindlichen Klassen
+        // Loeschen der darin befindlichen Klassen
         List<StudentClass> studentClasses = o.getStudentClasses();
         for(int i=0, l=studentClasses.size(); i<l; i++) {
             StudentClassManager.getInstance().delete(studentClasses.get(i));
         }
 
-        // Den Bereich selbst löschen
+        // Den Bereich selbst loeschen
         return super.delete(o);
     }
 

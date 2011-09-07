@@ -77,7 +77,7 @@ public class PostingManagementAccountManagementPresentationModel {
         editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_edit.png"));
         reversePostingAction = new ReversePostingAction("Stornieren", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_delete.png"));
         balancePostingAction = new BalancePostingAction("Ausgleichen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_go.png"));
-//        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_delete.png"));
+//        deleteAction = new DeleteAction("Loeschen", CWUtils.loadIcon("cw/accountmanagementmodul/images/posting_delete.png"));
 
         postingSelection = new SelectionInList<Posting>();
         loadPostings();
@@ -137,7 +137,7 @@ public class PostingManagementAccountManagementPresentationModel {
         List<AccountPosting> accountPostings = PostingManager.getInstance().getAll(account);
         List<PostingGroup> postingGroups = PostingGroupManager.getInstance().getAll();
         System.out.println("Gruppen: " + postingGroups.size());
-        // Alle doppelte Buchungen löschen, die bereits in den Buchungsgruppen vorhanden sind
+        // Alle doppelte Buchungen loeschen, die bereits in den Buchungsgruppen vorhanden sind
         for(int i=0, l=postingGroups.size(); i<l; i++) {
             System.out.println("Gruppe: " + postingGroups.get(i).getName());
             accountPostings.removeAll(postingGroups.get(i).getPostings());
@@ -514,7 +514,7 @@ public class PostingManagementAccountManagementPresentationModel {
 //        }
 //
 //        public void actionPerformed(ActionEvent e) {
-//            GUIManager.setLoadingScreenText("Buchung wird gelöscht...");
+//            GUIManager.setLoadingScreenText("Buchung wird geloescht...");
 //            GUIManager.setLoadingScreenVisible(true);
 //
 //                    Posting a = postingSelection.getSelection();
@@ -604,7 +604,7 @@ public class PostingManagementAccountManagementPresentationModel {
                 true,
                 new CWHeaderInfo(
                         "Buchung bearbeiten",
-                        "Hier können Sie die Buchung bearbeiten.",
+                        "Hier koennen Sie die Buchung bearbeiten.",
                         CWUtils.loadIcon("cw/customermanagementmodul/images/posting_edit.png"),
                         CWUtils.loadIcon("cw/customermanagementmodul/images/posting_edit.png")
                 ));

@@ -56,15 +56,15 @@ public class CourseView extends CWView
 
         newButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Neu",
-                "Hier können Sie einen neuen Kurs hinzufuegen!",
+                "Hier koennen Sie einen neuen Kurs hinzufuegen!",
                 "cw/coursemanagementmodul/images/course_add.png"));
         editButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Bearbeiten",
-                "Hier können Sie einen selektierten Kurs ändern!",
+                "Hier koennen Sie einen selektierten Kurs aendern!",
                 "cw/coursemanagementmodul/images/course_edit.png"));
         deleteButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Löschen",
-                "Hier können Sie einen selektierten Kurs löschen!",
+                "Loeschen",
+                "Hier koennen Sie einen selektierten Kurs loeschen!",
                 "cw/coursemanagementmodul/images/course_delete.png"));
         detailButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Detailansicht",

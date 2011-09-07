@@ -251,7 +251,7 @@ public class CourseParticipantForPostingPresentationModel
         public String getColumnName(int column) {
             switch (column) {
                 case 0:
-                    return "Aktivitätsname";
+                    return "Aktivitaetsname";
                 case 1:
                     return "Beschreibung";
                 default:

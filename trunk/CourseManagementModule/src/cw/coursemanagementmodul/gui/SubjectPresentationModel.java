@@ -54,14 +54,14 @@ public class SubjectPresentationModel
 
         headerInfo = new CWHeaderInfo(
                 "Kursgegenstand",
-                "Sie befinden sich im Kursgegenstandsbereich. Hier können Sie Kursgegenstände anlegen",
+                "Sie befinden sich im Kursgegenstandsbereich. Hier koennen Sie Kursgegenstaende anlegen",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/subject.png"));
         
         //Anlegen der Aktionen, fuer die Buttons
         newButtonAction = new NewAction("Neu");
         editButtonAction = new EditAction("Bearbeiten");
-        deleteButtonAction = new DeleteAction("Löschen");
+        deleteButtonAction = new DeleteAction("Loeschen");
         
         subjectSelection = new SelectionInList<Subject>(SubjectManager.getInstance().getAll());
     }
@@ -160,7 +160,7 @@ public class SubjectPresentationModel
     //**************************************************************************
     
     //**************************************************************************
-    //Private Klasse, die Events behandelt, die das Löschen
+    //Private Klasse, die Events behandelt, die das Loeschen
     //von Kursen beinhaltet
     //**************************************************************************
     private class DeleteAction
@@ -178,22 +178,22 @@ public class SubjectPresentationModel
             Subject s = subjectSelection.getSelection();
             List<CourseParticipant> courseParts = CourseParticipantManager.getInstance().getAll(s);
             if(courseParts.size() > 0){
-                JOptionPane.showMessageDialog(null, "<html>Löschen des Kursgegenstands "
-                        + s.getName() + " nicht möglich!<br/>"
+                JOptionPane.showMessageDialog(null, "<html>Loeschen des Kursgegenstands "
+                        + s.getName() + " nicht moeglich!<br/>"
                         + "Der Kursgegenstand wird noch von ein oder mehreren Kunden verwendet!</html>");
             }
             else{
-                int ret = JOptionPane.showConfirmDialog(null, "Wollen Sie den Kursgegenstand wirklich löschen?");
+                int ret = JOptionPane.showConfirmDialog(null, "Wollen Sie den Kursgegenstand wirklich loeschen?");
                 
                 if(ret == JOptionPane.OK_OPTION){
                     subjectSelection.getList().remove(s);
                     SubjectManager.getInstance().delete(s);
 
-                    GUIManager.setLoadingScreenText("Kursgegenstand wird gelöscht...");
+                    GUIManager.setLoadingScreenText("Kursgegenstand wird geloescht...");
                     GUIManager.setLoadingScreenVisible(true);
                     
                     GUIManager.setLoadingScreenVisible(false);
-                    GUIManager.getStatusbar().setTextAndFadeOut("Der Kursgegenstand wurde gelöscht!");
+                    GUIManager.getStatusbar().setTextAndFadeOut("Der Kursgegenstand wurde geloescht!");
                 }
             }
         }
@@ -280,7 +280,7 @@ public class SubjectPresentationModel
     }
     
     //**************************************************************************
-    //Regelt das Editieren (Verändern) von Kursen
+    //Regelt das Editieren (Veraendern) von Kursen
     //(Doppelclick oder Ändern-Button)
     //**************************************************************************
     private void editSelectedItem(EventObject e) {

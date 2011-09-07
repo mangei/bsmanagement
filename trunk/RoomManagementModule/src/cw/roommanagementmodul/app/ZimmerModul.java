@@ -10,12 +10,12 @@ import javax.swing.JButton;
 import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.accountmanagementmodul.pojo.manager.PostingManager;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.app.CascadeEvent;
-import cw.boardingschoolmanagement.app.CascadeListener;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
+import cw.boardingschoolmanagement.perstistence.CascadeEvent;
+import cw.boardingschoolmanagement.perstistence.CascadeListener;
 import cw.customermanagementmodul.persistence.CustomerPM;
 import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.roommanagementmodul.gui.BereichPresentationModel;
@@ -123,7 +123,7 @@ public class ZimmerModul implements Modul {
 
                 bereichManager = BereichManager.getInstance();
 
-                GUIManager.changeView(new BereichView(new BereichPresentationModel(bereichManager, new CWHeaderInfo("Bereich Verwaltung", "Hier können Sie anhand des Baumes die Zimmer und Bereiche bearbeiten", CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/door.png")))));
+                GUIManager.changeView(new BereichView(new BereichPresentationModel(bereichManager, new CWHeaderInfo("Bereich Verwaltung", "Hier koennen Sie anhand des Baumes die Zimmer und Bereiche bearbeiten", CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/door.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
 
@@ -149,7 +149,7 @@ public class ZimmerModul implements Modul {
 
                 gebuehrenManager = GebuehrenManager.getInstance();
 
-                GUIManager.changeView(new GebuehrenView(new GebuehrenPresentationModel(gebuehrenManager, new CWHeaderInfo("Gebuehren Verwaltung", "Hier können Sie die Gebuehren, Kategorien und Tarife verwalten", CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/money.png")))));
+                GUIManager.changeView(new GebuehrenView(new GebuehrenPresentationModel(gebuehrenManager, new CWHeaderInfo("Gebuehren Verwaltung", "Hier koennen Sie die Gebuehren, Kategorien und Tarife verwalten", CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/money.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
 
@@ -173,7 +173,7 @@ public class ZimmerModul implements Modul {
 
 
 
-                GUIManager.changeView(new GebLaufView(new GebLaufPresentationModel(gebLauf, new CWHeaderInfo("Gebuehren Lauf", "Hier können Sie denn Gebuehren oder Storno Lauf durchfuehren", CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png")))));
+                GUIManager.changeView(new GebLaufView(new GebLaufPresentationModel(gebLauf, new CWHeaderInfo("Gebuehren Lauf", "Hier koennen Sie denn Gebuehren oder Storno Lauf durchfuehren", CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
             }

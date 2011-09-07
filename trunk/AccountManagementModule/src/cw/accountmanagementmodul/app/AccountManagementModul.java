@@ -5,11 +5,11 @@ import cw.accountmanagementmodul.gui.PostingOverviewView;
 import cw.accountmanagementmodul.pojo.Account;
 import cw.accountmanagementmodul.pojo.manager.AccountManager;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.app.CascadeEvent;
-import cw.boardingschoolmanagement.app.CascadeListener;
 import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
+import cw.boardingschoolmanagement.perstistence.CascadeEvent;
+import cw.boardingschoolmanagement.perstistence.CascadeListener;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.customermanagementmodul.persistence.CustomerPM;
 import cw.customermanagementmodul.persistence.model.CustomerModel;
@@ -52,14 +52,14 @@ public class AccountManagementModul
         }), "posting");
 
         sideMenu.addItem(new JButton(new AbstractAction(
-                "Buchungsläufe", CWUtils.loadIcon("cw/accountmanagementmodul/images/postingcycle.png")) {
+                "Buchungslaeufe", CWUtils.loadIcon("cw/accountmanagementmodul/images/postingcycle.png")) {
 
             {
-                putValue(Action.SHORT_DESCRIPTION, "Buchungsläufe verwalten");
+                putValue(Action.SHORT_DESCRIPTION, "Buchungslaeufe verwalten");
             }
 
             public void actionPerformed(ActionEvent e) {
-                GUIManager.setLoadingScreenText("Buchungsläufe werden geladen...");
+                GUIManager.setLoadingScreenText("Buchungslaeufe werden geladen...");
                 GUIManager.setLoadingScreenVisible(true);
 
                 PostingOverviewPresentationModel model = new PostingOverviewPresentationModel();
@@ -110,7 +110,7 @@ public class AccountManagementModul
         }), "posting");
 
         // Nicht mehr notwendig
-//        // Wenn eine Buchungskategorie gelöscht wird, die Buchungskategorie der Buchungen
+//        // Wenn eine Buchungskategorie geloescht wird, die Buchungskategorie der Buchungen
 //        // die diese Buchungskategorie hatten auf null setzen.
 //        PostingCategoryManager.getInstance().addCascadeListener(new CascadeListener() {
 //            public void deleteAction(CascadeEvent evt) {
@@ -122,7 +122,7 @@ public class AccountManagementModul
 //            }
 //        });
 
-//        // Wenn ein Kunden gelöscht wird, alle dazugehörigen Buchungen löschen.
+//        // Wenn ein Kunden geloescht wird, alle dazugehoerigen Buchungen loeschen.
 //        CustomerManager.getInstance().addCascadeListener(new CascadeListener() {
 //            public void deleteAction(CascadeEvent evt) {
 //                Customer customer = (Customer) evt.getSource();
@@ -135,7 +135,7 @@ public class AccountManagementModul
 //            }
 //        });
 
-        // Wenn ein Kunde gelöscht wird, das dazugehörige Konto löschen.
+        // Wenn ein Kunde geloescht wird, das dazugehoerige Konto loeschen.
         CustomerPM.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
                 CustomerModel customer = (CustomerModel) evt.getSource();
@@ -147,18 +147,18 @@ public class AccountManagementModul
         });
 
 
-        // Wenn das Konto gelöscht wird, alle dazugehörigen Buchungen und
-        // Buchungsgruppen löschen.
+        // Wenn das Konto geloescht wird, alle dazugehoerigen Buchungen und
+        // Buchungsgruppen loeschen.
 
-        // Wenn das Konto gelöscht wird, alle dazugehörigen Kautionen löschen.
+        // Wenn das Konto geloescht wird, alle dazugehoerigen Kautionen loeschen.
 
-        // Wenn das Konto gelöscht wird, alle dazugehörigen Rechnungen löschen.
+        // Wenn das Konto geloescht wird, alle dazugehoerigen Rechnungen loeschen.
 
-        // Wenn eine Rechnug gelöscht wird, alle dazugehörigen RechnungensPosten löschen.
-        // Pruefen ob die Buchung noch vorhanden ist, da sie schon gelöscht worden sein könnte,
-        // wenn ein Konto gelöscht wird.
+        // Wenn eine Rechnug geloescht wird, alle dazugehoerigen RechnungensPosten loeschen.
+        // Pruefen ob die Buchung noch vorhanden ist, da sie schon geloescht worden sein koennte,
+        // wenn ein Konto geloescht wird.
 
-        // Wenn ein Buchung gelöscht wird, diese aus den Buchungsläufen entfernen.
+        // Wenn ein Buchung geloescht wird, diese aus den Buchungslaeufen entfernen.
 
         
 

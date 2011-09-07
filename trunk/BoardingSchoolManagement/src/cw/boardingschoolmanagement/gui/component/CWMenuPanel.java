@@ -172,7 +172,7 @@ public class CWMenuPanel
      * Fuegt eine Kategorie zur Sidepare hinzu
      * @param name Name of the category
      * @param key Key of the category
-     * @param priority Anordnungsreihenfolge, je höher der Wert dest weiter oben im Baum wird die Kategorie angelegt
+     * @param priority Anordnungsreihenfolge, je hoeher der Wert dest weiter oben im Baum wird die Kategorie angelegt
      * @return this JMenuPanel
      */
     public CWMenuPanel addCategory(String name, String key, int priority) {

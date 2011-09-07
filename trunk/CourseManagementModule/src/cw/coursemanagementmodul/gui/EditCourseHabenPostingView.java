@@ -147,11 +147,11 @@ public class EditCourseHabenPostingView extends CWView
         builder.add(customerStreetLabel, cc.xy(3, 13));
         builder.add(customerPLZLabel, cc.xy(3, 15));
 
-        builder.addSeparator("Aktivitäten zu "
+        builder.addSeparator("Aktivitaeten zu "
                 + model.getCourseAddition().getCourse().getName(), cc.xyw(1, 17, 5));
         builder.add(new JScrollPane(activityTable), cc.xyw(1, 19, 5));
 
-         builder.addSeparator("Gegenstände zu "
+         builder.addSeparator("Gegenstaende zu "
                 + model.getCourseAddition().getCourse().getName(), cc.xyw(1, 21, 5));
         builder.add(new JScrollPane(subjectTable), cc.xyw(1, 23, 5));
     }

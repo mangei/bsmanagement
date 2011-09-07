@@ -56,7 +56,7 @@ public class PostingOverviewPresentationModel {
 //        List<Posting> postings = PostingManager.getInstance().getAll();
         List<PostingGroup> postingGroups = PostingGroupManager.getInstance().getAll();
 
-        // Alle doppelte Buchungen löschen, die bereits in den Buchungsgruppen vorhanden sind
+        // Alle doppelte Buchungen loeschen, die bereits in den Buchungsgruppen vorhanden sind
 //        for(int i=0, l=postingGroups.size(); i<l; i++) {
 //            postings.removeAll(postingGroups.get(i).getPostings());
 //        }

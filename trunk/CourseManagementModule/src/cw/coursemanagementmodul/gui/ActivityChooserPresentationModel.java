@@ -58,7 +58,7 @@ public class ActivityChooserPresentationModel
     private void initModels() {
         buttonEvent = new ButtonEvent(ButtonEvent.OK_BUTTON);
 
-        headerInfo = new CWHeaderInfo("Aktivität hinzufuegen", "Hier können Sie Aktivitäten " +
+        headerInfo = new CWHeaderInfo("Aktivitaet hinzufuegen", "Hier koennen Sie Aktivitaeten " +
                 "zum markierten Kurs hinzufuegen!",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
@@ -192,9 +192,9 @@ public class ActivityChooserPresentationModel
         public String getColumnName(int column) {
             switch (column) {
                 case 0:
-                    return "Aktivitätsname";
+                    return "Aktivitaetsname";
                 case 1:
-                    return "Aktivitätsbeschreibung";
+                    return "Aktivitaetsbeschreibung";
                 case 2:
                     return "Preis";
                 default:

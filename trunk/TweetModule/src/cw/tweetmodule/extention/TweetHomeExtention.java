@@ -56,7 +56,7 @@ public class TweetHomeExtention
 
                     if(username == null || username.isEmpty() || password == null || password.isEmpty()) {
                         view.getContentPanel().removeAll();
-                        view.getContentPanel().add(new JLabel("Verbindungsdaten sind nicht vollständig. Ändern Sie diese in den Einstellungen"), BorderLayout.CENTER);
+                        view.getContentPanel().add(new JLabel("Verbindungsdaten sind nicht vollstaendig. Ändern Sie diese in den Einstellungen"), BorderLayout.CENTER);
                         view.getContentPanel().revalidate();
                         return;
                     }

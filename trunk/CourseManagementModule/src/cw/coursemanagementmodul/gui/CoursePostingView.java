@@ -90,7 +90,7 @@ public class CoursePostingView extends CWView
         dateFormat = DateFormat.getDateInstance();
         currencyFormat = NumberFormat.getCurrencyInstance();
 
-        coursePartTable = CWComponentFactory.createTable("Keine Kursteilnehmer ausgewählt!");
+        coursePartTable = CWComponentFactory.createTable("Keine Kursteilnehmer ausgewaehlt!");
         coursePartTable.setColumnControlVisible(true);
         coursePartTable.setAutoCreateRowSorter(true);
         coursePartTable.setPreferredScrollableViewportSize(new Dimension(10,10));
@@ -140,11 +140,11 @@ public class CoursePostingView extends CWView
 
         accountingButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Buchen",
-                "Hier könne Sie eine Buchung durchfuehren!",
+                "Hier koenne Sie eine Buchung durchfuehren!",
                 "cw/coursemanagementmodul/images/start.png"));
         postingRunsButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Gebuehrenläufe",
-                "Hier sehen Sie alle bereits gebuchten Gebuehrenläufe!",
+                "Gebuehrenlaeufe",
+                "Hier sehen Sie alle bereits gebuchten Gebuehrenlaeufe!",
                 "cw/coursemanagementmodul/images/postingRuns.png"));
 
         componentContainer = CWComponentFactory.createComponentContainer();

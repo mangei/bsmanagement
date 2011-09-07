@@ -58,7 +58,7 @@ public class ActivityChooserView extends CWView
 
         addButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Hinzufuegen",
-                "Hier können Sie die selektierte Aktivität zum Kurs hinzufuegen!",
+                "Hier koennen Sie die selektierte Aktivitaet zum Kurs hinzufuegen!",
                 "cw/coursemanagementmodul/images/activity_add.png"));
 
         cancelButton.setToolTipText(CWComponentFactory.createToolTip(
@@ -66,7 +66,7 @@ public class ActivityChooserView extends CWView
                 "Hier kehren Sie zur Ferienkursuebersicht zurueck!",
                 "cw/coursemanagementmodul/images/cancel.png"));
 
-        activityTable = CWComponentFactory.createTable("Es wurden noch keine Aktivitäten angelegt!");
+        activityTable = CWComponentFactory.createTable("Es wurden noch keine Aktivitaeten angelegt!");
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));
         activityTable.setSelectionModel(
                 new SingleListSelectionAdapter(
@@ -96,7 +96,7 @@ public class ActivityChooserView extends CWView
         CellConstraints cc = new CellConstraints();
 
         PanelBuilder panelBuilder = new PanelBuilder(mainLayout, this.getContentPanel());
-        panelBuilder.addSeparator("Aktivitätstabelle", cc.xy(1, 1));
+        panelBuilder.addSeparator("Aktivitaetstabelle", cc.xy(1, 1));
         panelBuilder.add(new JScrollPane(activityTable), cc.xy(1, 3));
     }
 

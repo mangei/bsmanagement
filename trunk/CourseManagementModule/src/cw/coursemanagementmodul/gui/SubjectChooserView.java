@@ -51,7 +51,7 @@ public class SubjectChooserView extends CWView
 
         addButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Hinzufuegen",
-                "Hier können Sie den selektierten Kursgegenstand zum Kurs hinzufuegen!",
+                "Hier koennen Sie den selektierten Kursgegenstand zum Kurs hinzufuegen!",
                 "cw/coursemanagementmodul/images/subject_add.png"));
 
         cancelButton.setToolTipText(CWComponentFactory.createToolTip(
@@ -59,7 +59,7 @@ public class SubjectChooserView extends CWView
                 "Hier kehren Sie zur Ferienkursuebersicht zurueck!",
                 "cw/coursemanagementmodul/images/cancel.png"));
 
-        subjectTable = CWComponentFactory.createTable("Es wurden noch keine Gegenstände angelegt!");
+        subjectTable = CWComponentFactory.createTable("Es wurden noch keine Gegenstaende angelegt!");
         subjectTable.setModel(model.createSubjectTableModel(model.getSubjectSelection()));
         subjectTable.setSelectionModel(
                 new SingleListSelectionAdapter(

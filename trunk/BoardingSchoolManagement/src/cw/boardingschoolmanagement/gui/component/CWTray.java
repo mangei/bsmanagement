@@ -17,7 +17,7 @@ import javax.swing.event.PopupMenuListener;
 import javax.swing.event.PopupMenuEvent;
 
 /**
- * Ein Swing TrayIcon welches die regulären AWT-Komponenten ueberschreibt und
+ * Ein Swing TrayIcon welches die regulaeren AWT-Komponenten ueberschreibt und
  * durch neue Swing-Komponenten ersetzt.
  */
 public class CWTray

@@ -69,7 +69,7 @@ public class EditCourseHabenPostingPresentationModel {
         headerInfo = new CWHeaderInfo(
                 "Kurs bearbeiten",
                 "<html>Sie befinden sich im Kursbuchungsbereich!<br/>"
-                + "Hier können Sie eine Habenbuchung tätigen!<html>",
+                + "Hier koennen Sie eine Habenbuchung taetigen!<html>",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/posting.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/posting.png"));
 
@@ -125,7 +125,7 @@ public class EditCourseHabenPostingPresentationModel {
     }
     
     /**
-     * Wenn sich ein Document ändert, wird saved auf false gesetzt
+     * Wenn sich ein Document aendert, wird saved auf false gesetzt
      */
     public class SaveListener implements PropertyChangeListener {
         
@@ -183,7 +183,7 @@ public class EditCourseHabenPostingPresentationModel {
             int i = 1;
             if((Boolean)unsaved.getValue() == true) {
                 Object[] options = { "Speichern", "Nicht Speichern", "Abbrechen" };
-               i = JOptionPane.showOptionDialog(null, "Daten wurden geändert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,null,  options, options[0] );
+               i = JOptionPane.showOptionDialog(null, "Daten wurden geaendert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,null,  options, options[0] );
             }
             if(i == 0) {
                 save();
@@ -254,7 +254,7 @@ public class EditCourseHabenPostingPresentationModel {
         public String getColumnName(int column) {
             switch (column) {
                 case 0:
-                    return "Aktivitätsname";
+                    return "Aktivitaetsname";
                 case 1:
                     return "Beschreibung";
                 default:

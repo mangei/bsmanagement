@@ -119,7 +119,7 @@ public class GebuehrenPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final Gebuehr g = new Gebuehr();
-            final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new CWHeaderInfo("Gebuehr erstellen", "Hier können Sie eine neue Gebuehr erstellen"));
+            final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new CWHeaderInfo("Gebuehr erstellen", "Hier koennen Sie eine neue Gebuehr erstellen"));
             final EditGebuehrenView editView = new EditGebuehrenView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -223,7 +223,7 @@ public class GebuehrenPresentationModel {
         public void actionPerformed(ActionEvent e) {
             Gebuehr g = getGebuehrenSelection().getSelection();
 
-            int i = JOptionPane.showConfirmDialog(null, "Gebuehr löschen?", "Löschen", JOptionPane.OK_CANCEL_OPTION);
+            int i = JOptionPane.showConfirmDialog(null, "Gebuehr loeschen?", "Loeschen", JOptionPane.OK_CANCEL_OPTION);
             if (i == JOptionPane.OK_OPTION) {
                 gebuehrenManager.delete(g);
                 gebuehrenSelection.setList(gebuehrenManager.getAll());
@@ -255,7 +255,7 @@ public class GebuehrenPresentationModel {
 
     private void editSelectedItem(EventObject e) {
         final Gebuehr g = getGebuehrenSelection().getSelection();
-        final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new CWHeaderInfo("Gebuehr bearbeiten", "Hier können Sie eine vorhandene Gebuehr bearbeiten"));
+        final EditGebuehrenPresentationModel model = new EditGebuehrenPresentationModel(g, new CWHeaderInfo("Gebuehr bearbeiten", "Hier koennen Sie eine vorhandene Gebuehr bearbeiten"));
         final EditGebuehrenView editView = new EditGebuehrenView(model);
         model.addButtonListener(new ButtonListener() {
 

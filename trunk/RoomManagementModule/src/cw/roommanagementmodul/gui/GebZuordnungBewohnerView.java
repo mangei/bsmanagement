@@ -37,7 +37,7 @@ public class GebZuordnungBewohnerView extends CWView{
         bNew = CWComponentFactory.createButton(model.getNewAction());
         bNew.setText("Neue Gebuehr");
         bDelete = CWComponentFactory.createButton(model.getDeleteAction());
-        bDelete.setText("Löschen");
+        bDelete.setText("Loeschen");
         bEdit = CWComponentFactory.createButton(model.getEditAction());
         bEdit.setText("Bearbeiten");
         bBack = CWComponentFactory.createButton(model.getBackAction());

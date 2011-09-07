@@ -39,7 +39,7 @@ public class GebuehrenView extends CWView {
         bEdit = CWComponentFactory.createButton(model.getEditAction());
         bEdit.setText("Bearbeiten");
         bDelete = CWComponentFactory.createButton(model.getDeleteAction());
-        bDelete.setText("Löschen");
+        bDelete.setText("Loeschen");
         bKategorie = CWComponentFactory.createButton(model.getKategorieAction());
         bKategorie.setText("Kategorien");
         bTarif = CWComponentFactory.createButton(model.getTarifAction());

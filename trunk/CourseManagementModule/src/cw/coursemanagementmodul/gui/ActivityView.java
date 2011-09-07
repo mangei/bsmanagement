@@ -49,18 +49,18 @@ public class ActivityView extends CWView
 
         newButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Neu",
-                "Hier können Sie einen neue Aktivität hinzufuegen!",
+                "Hier koennen Sie einen neue Aktivitaet hinzufuegen!",
                 "cw/coursemanagementmodul/images/activity_add.png"));
         editButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Bearbeiten",
-                "Hier können Sie eine selektierte Aktivität ändern!",
+                "Hier koennen Sie eine selektierte Aktivitaet aendern!",
                 "cw/coursemanagementmodul/images/activity_edit.png"));
         deleteButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Löschen",
-                "Hier können Sie eine selektierte Aktivität löschen!",
+                "Loeschen",
+                "Hier koennen Sie eine selektierte Aktivitaet loeschen!",
                 "cw/coursemanagementmodul/images/activity_delete.png"));
         
-        activityTable = CWComponentFactory.createTable("Keine Aktivitäten vorhanden!");
+        activityTable = CWComponentFactory.createTable("Keine Aktivitaeten vorhanden!");
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));
         activityTable.setSelectionModel(
                 new SingleListSelectionAdapter(

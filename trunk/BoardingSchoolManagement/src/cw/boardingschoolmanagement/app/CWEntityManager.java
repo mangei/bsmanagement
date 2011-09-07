@@ -2,14 +2,15 @@ package cw.boardingschoolmanagement.app;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.FlushModeType;
 import javax.swing.JOptionPane;
 
 import org.hibernate.ejb.Ejb3Configuration;
+import org.hibernate.loader.custom.EntityFetchReturn;
 
 public class CWEntityManager {
 
 	private static EntityManagerFactory entityManagerFactory;
-    private static EntityManager entityManager;
     private static Ejb3Configuration configuration;
 	
     static {
@@ -62,7 +63,6 @@ public class CWEntityManager {
         try {
 
             entityManagerFactory = configuration.buildEntityManagerFactory();
-            entityManager = entityManagerFactory.createEntityManager();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,37 +76,34 @@ public class CWEntityManager {
      * Close entityManager and entityFactory
      */
     static void close() {
-        entityManager.close();
         entityManagerFactory.close();
     }
 
-    public static EntityManager getEntityManager() {
-        if(entityManager == null || !entityManager.isOpen()) {
-            JOptionPane.showMessageDialog(null, "EntityManager is null or not open.", "Fehler", JOptionPane.ERROR_MESSAGE);
+//    public static EntityManager getEntityManager() {
+//        if(entityManager == null || !entityManager.isOpen()) {
+//            JOptionPane.showMessageDialog(null, "EntityManager is null or not open.", "Fehler", JOptionPane.ERROR_MESSAGE);
+////            System.exit(0);
+//        }
+//        return entityManager;
+//    }
+    
+    public static EntityManager createEntityManager() {
+        if(entityManagerFactory == null || !entityManagerFactory.isOpen()) {
+            JOptionPane.showMessageDialog(null, "EntityManagerFactory is null or not open.", "Fehler", JOptionPane.ERROR_MESSAGE);
 //            System.exit(0);
+            return null;
+        } else {
+        	EntityManager newEntityManager = entityManagerFactory.createEntityManager();
+			newEntityManager.setFlushMode(FlushModeType.COMMIT);
+        	return newEntityManager;
         }
-        return entityManager;
     }
     
-    /**
-     * Begin transaction
-     */
-    public static void beginTransaction() {
-    	entityManager.getTransaction().begin();
-    }
-    
-    /**
-     * Commit transaction
-     */
-    public static void commitTransaction() {
-    	entityManager.getTransaction().commit();
-    }
-    
-    /**
-     * Rollback transaction
-     */
-    public static void rollbackTransaction() {
-    	entityManager.getTransaction().rollback();
+    public static void closeEntityManager(EntityManager entityManager) {
+    	if(entityManager != null && !entityManager.isOpen()) {
+    		entityManager.flush();
+    		entityManager.close();
+    	}
     }
 	
 }

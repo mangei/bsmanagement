@@ -28,7 +28,7 @@ import cw.customermanagementmodul.persistence.Customer;
 
 /**
  * Diese Klasse beinhaltet alle Funktionen und Methoden die fuer
- * die Kundenuebersichtstabelle der Kundenverwaltung benötigt werden.
+ * die Kundenuebersichtstabelle der Kundenverwaltung benoetigt werden.
  *
  * @author CreativeWorkers.at
  */
@@ -95,7 +95,7 @@ public class CustomerSelectorPresentationModel
 //        customerTableModel = new CustomerTableModel(customerSelection);
 
         filterSwitcherAction = new FilterSwitcherAction("Filter ein-/ausblenden");
-        filterChooserAction = new FilterChooserAction("Filter auswählen...");
+        filterChooserAction = new FilterChooserAction("Filter auswaehlen...");
 
         filterSwitcherModel = new ValueHolder(false);
         activeFilterCountModel = new ValueHolder(0);

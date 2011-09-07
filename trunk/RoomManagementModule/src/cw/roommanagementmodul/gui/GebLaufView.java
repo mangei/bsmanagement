@@ -155,7 +155,7 @@ public class GebLaufView extends CWView implements ItemListener{
 
             //Unbedingt Ueberarbeiten:
             //Je nachdem ob Storno aktiviert oder deaktiviert ist sollen die
-            //dazu gehörigen Komponenten enabled oder disabled werden
+            //dazu gehoerigen Komponenten enabled oder disabled werden
             if ((model.getStornoInt() + 1) % 2 == 0) {
                 lMonat.setEnabled(false);
                 monatComboBox.setEnabled(false);

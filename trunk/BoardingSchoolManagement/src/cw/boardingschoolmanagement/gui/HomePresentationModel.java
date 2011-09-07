@@ -3,9 +3,9 @@ package cw.boardingschoolmanagement.gui;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.swing.JPanel;
 
+import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.extention.point.HomeExtentionPoint;
 import cw.boardingschoolmanagement.manager.ModulManager;
 
@@ -18,8 +18,8 @@ public class HomePresentationModel
 
     private List<HomeExtentionPoint> homeExtentions;
 
-    public HomePresentationModel(EntityManager entityManager) {
-    	super(entityManager);
+    public HomePresentationModel() {
+    	super(CWEntityManager.createEntityManager());
         initModels();
         initEventHandling();
     }
@@ -39,6 +39,8 @@ public class HomePresentationModel
         for (HomeExtentionPoint ex : aList) {
             ex.dispose();
         }
+        
+        CWEntityManager.closeEntityManager(getEntityManager());
     }
 
     public List<HomeExtentionPoint> getExtentions() {

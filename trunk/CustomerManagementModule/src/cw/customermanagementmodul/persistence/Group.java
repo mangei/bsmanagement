@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import cw.boardingschoolmanagement.app.CWPersistenceImpl;
+import cw.boardingschoolmanagement.perstistence.CWPersistence;
 
 /**
  * Implementation of persistence 'Group'
@@ -21,7 +21,7 @@ import cw.boardingschoolmanagement.app.CWPersistenceImpl;
 @Entity(name=Group.ENTITY_NAME)
 @Table(name=Group.TABLE_NAME)
 public class Group
-        extends CWPersistenceImpl {
+        extends CWPersistence {
 
 	// Properties - Constants
     public final static String ENTITY_NAME = "groups";

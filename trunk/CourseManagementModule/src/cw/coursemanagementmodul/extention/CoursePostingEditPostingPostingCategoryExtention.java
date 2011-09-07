@@ -60,7 +60,7 @@ public class CoursePostingEditPostingPostingCategoryExtention implements EditPos
         List<String> list = new ArrayList<String>();
         
         if(!model.getCourseSelection().hasSelection() && postingModel.getPostingCategorySelection().getSelection().getKey().equals("Kurs-Buchung")){
-            list.add("Es wurden keine Zeile ausgewählt!");
+            list.add("Es wurden keine Zeile ausgewaehlt!");
         }
 
         return list;

@@ -206,16 +206,16 @@ public class BewohnerPresentationModel
         public void actionPerformed(ActionEvent e) {
             Bewohner b = getBewohnerSelection().getSelection();
 
-            int k = JOptionPane.showConfirmDialog(null, "Bewohner: " + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + " wirklich löschen?", "LÖSCHEN", JOptionPane.OK_CANCEL_OPTION);
+            int k = JOptionPane.showConfirmDialog(null, "Bewohner: " + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + " wirklich loeschen?", "LÖSCHEN", JOptionPane.OK_CANCEL_OPTION);
             if (k == JOptionPane.OK_OPTION) {
 
                 boolean checkKaution = true;
                 if (b.getKautionStatus() == Bewohner.EINGEZAHLT) {
-                    JOptionPane.showMessageDialog(null, "Bewohner kann nicht gelöscht werden, da der Status der Kaution EINGEZAHLT ist!", "Kaution", JOptionPane.OK_OPTION);
+                    JOptionPane.showMessageDialog(null, "Bewohner kann nicht geloescht werden, da der Status der Kaution EINGEZAHLT ist!", "Kaution", JOptionPane.OK_OPTION);
                     checkKaution = false;
                 }
                     if (b.getKautionStatus() == Bewohner.NICHT_EINGEZAHLT) {
-                    JOptionPane.showMessageDialog(null, "Bewohner kann nicht gelöscht werden, da der Status der Kaution Nicht Eingezahlt ist!", "Kaution", JOptionPane.OK_OPTION);
+                    JOptionPane.showMessageDialog(null, "Bewohner kann nicht geloescht werden, da der Status der Kaution Nicht Eingezahlt ist!", "Kaution", JOptionPane.OK_OPTION);
                     checkKaution = false;
                 }
                 if (checkKaution) {
@@ -296,7 +296,7 @@ public class BewohnerPresentationModel
         final GebuehrZuordnung gb = new GebuehrZuordnung();
         CustomerModel c = bewohnerSelection.getSelection().getCustomer();
         gb.setBewohner(bewohnerSelection.getSelection());
-        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: " + c.getSurname() + " " + c.getForename(), "Hier können Sie alle Gebuehren verwalten, die zu einem Bewohner zugeordnet sind."));
+        final GebBewohnerPresentationModel model = new GebBewohnerPresentationModel(gb, new CWHeaderInfo("Bewohner: " + c.getSurname() + " " + c.getForename(), "Hier koennen Sie alle Gebuehren verwalten, die zu einem Bewohner zugeordnet sind."));
         final GebBewohnerView gebView = new GebBewohnerView(model);
         model.addButtonListener(new ButtonListener() {
 

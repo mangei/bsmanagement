@@ -20,8 +20,8 @@ public class TweetConfigurationExtention implements ConfigurationExtentionPoint 
     private TweetConfigurationView view;
 
     /**
-     * Läd die Unternehmensdaten aus der Configdatei und speichert diese in
-     * das zuständige POJO(BusinessData).
+     * Laed die Unternehmensdaten aus der Configdatei und speichert diese in
+     * das zustaendige POJO(BusinessData).
      *
      * @param configurationModel
      */

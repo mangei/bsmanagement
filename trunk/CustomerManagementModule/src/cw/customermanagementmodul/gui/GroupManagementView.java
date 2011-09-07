@@ -52,7 +52,7 @@ public class GroupManagementView extends CWView
 //        liGroups.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 //            public void valueChanged(ListSelectionEvent e) {
 //                if(liGroups.getSelectionModel().isSelectionEmpty()) {
-//                    liCustomers.setEmptyText("Bitte Gruppe auswählen");
+//                    liCustomers.setEmptyText("Bitte Gruppe auswaehlen");
 //                } else if(liCustomers.getModel().getSize() == 0) {
 //                    liCustomers.setEmptyText("Keine Kunden in dieser Gruppe vorhanden");
 //                }

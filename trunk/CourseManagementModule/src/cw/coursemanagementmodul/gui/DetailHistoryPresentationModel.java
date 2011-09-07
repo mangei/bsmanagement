@@ -58,7 +58,7 @@ public class DetailHistoryPresentationModel
 
         headerInfoSaldo = new CWHeaderInfo(
                 "Buchungsuebersicht fuer den Kurs",
-                "Sie befinden sich im Kursverwaltungsbereich. Hier können Sie Kurse anlegen",
+                "Sie befinden sich im Kursverwaltungsbereich. Hier koennen Sie Kurse anlegen",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
 

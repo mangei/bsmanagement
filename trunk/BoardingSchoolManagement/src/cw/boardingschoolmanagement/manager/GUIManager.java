@@ -129,7 +129,7 @@ public class GUIManager {
         frame.setGlassPane(glassPane = new CWLoadingGlass(frame.getRootPane(), false));
 
         // Um den richtigen Mauszeiger anzuzeigen, da beim Look'n&Feel nach dem
-        // ändern der Größe ein falscher Cursor angezeigt wird.
+        // aendern der Groeße ein falscher Cursor angezeigt wird.
         frame.addComponentListener(new ComponentAdapter() {
 
             @Override
@@ -198,7 +198,7 @@ public class GUIManager {
     }
 
     /**
-     * Generiert die Oberfläche
+     * Generiert die Oberflaeche
      */
     private void generateGUI() {
         frame.setLayout(new BorderLayout());
@@ -379,7 +379,7 @@ public class GUIManager {
         // Pruefen ob es nicht leer ist.. zb beim 1. Mal
         if (gM.shownView != null) {
 
-            // Nur ändern, wenn es nicht schon angezeigt wird
+            // Nur aendern, wenn es nicht schon angezeigt wird
             if (gM.shownView.equals(view)) {
                 return;
             }
@@ -389,7 +389,7 @@ public class GUIManager {
                 // Alte Speichern
                 gM.lastViews.push(gM.shownView);
             } else {
-                // Die alten löschen, wenn sie nicht gespeichert werden sollen
+                // Die alten loeschen, wenn sie nicht gespeichert werden sollen
 
                 // Pop the old ones and dispose them if they are Disposable
                 for (int i = 0, l = gM.lastViews.size(); i < l; i++) {

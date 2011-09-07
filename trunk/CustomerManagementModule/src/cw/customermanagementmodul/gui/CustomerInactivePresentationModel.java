@@ -46,7 +46,7 @@ public class CustomerInactivePresentationModel
         buttonListenerSupport = new ButtonListenerSupport();
 
         activateAction = new ActivateAction("Aktivieren", CWUtils.loadIcon("cw/customermanagementmodul/images/user_active_go.png"));
-        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
+        deleteAction = new DeleteAction("Loeschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
                 CustomerPM.getInstance().getAllInactive(getEntityManager()),
@@ -107,12 +107,12 @@ public class CustomerInactivePresentationModel
 
         public void actionPerformed(ActionEvent e) {
 
-            GUIManager.setLoadingScreenText("Kunden löschen...");
+            GUIManager.setLoadingScreenText("Kunden loeschen...");
             GUIManager.setLoadingScreenVisible(true);
 
             Customer customer = customerSelectorPresentationModel.getSelectedCustomer();
 
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich den ausgewählten Kunden löschen?", "Kunden löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich den ausgewaehlten Kunden loeschen?", "Kunden loeschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (i == JOptionPane.OK_OPTION) {
 
             	getEntityManager().getTransaction().begin();
@@ -126,7 +126,7 @@ public class CustomerInactivePresentationModel
                 String statusBarText;
                 String forename = customer.getForename();
                 String surname = customer.getSurname();
-                statusBarText = "'" + forename + " " + surname + "' wurde gelöscht.";
+                statusBarText = "'" + forename + " " + surname + "' wurde geloescht.";
 
                 GUIManager.getStatusbar().setTextAndFadeOut(statusBarText);
             }

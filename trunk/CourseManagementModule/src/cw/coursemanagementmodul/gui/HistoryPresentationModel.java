@@ -76,7 +76,7 @@ public class HistoryPresentationModel
 
         headerInfoComboBox = headerInfoComboBox = new CWHeaderInfo(
                 "Buchungshistorie",
-                "<html>Sie befinden sich im Kursbuchungsbereich. Hier können Sie die Historie der Kursbuchungen betrachten!<br/>Wählen Sie bitte zunächst den Kurs aus!</html>",
+                "<html>Sie befinden sich im Kursbuchungsbereich. Hier koennen Sie die Historie der Kursbuchungen betrachten!<br/>Waehlen Sie bitte zunaechst den Kurs aus!</html>",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/courseHistory.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/courseHistory.png"));
 

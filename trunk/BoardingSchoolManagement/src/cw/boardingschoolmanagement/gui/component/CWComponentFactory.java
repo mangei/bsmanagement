@@ -789,7 +789,7 @@ public class CWComponentFactory {
         }
 
 
-        // Wenn sich das Model ändert, auch die Anzeige ändern. Umgekehrt darf es nicht sein, da das Model, den Wert verwaltet und nicht die Anzeige
+        // Wenn sich das Model aendert, auch die Anzeige aendern. Umgekehrt darf es nicht sein, da das Model, den Wert verwaltet und nicht die Anzeige
         
         // Eine neue Variable muss erstellt werden, da die alte nicht final sein kann
         final ValueModel newValueModel2 = newValueModel;

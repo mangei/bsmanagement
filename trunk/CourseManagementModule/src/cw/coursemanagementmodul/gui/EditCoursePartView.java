@@ -70,8 +70,8 @@ public class EditCoursePartView extends CWView
     //**************************************************************************
     //Initialisieren der oben definierten Komponenten
     //Bei den meisten Komponenten kann man den PropertyName als Paramenter
-    //mitgeben. Bei Datum-Komponenten ist dies jedoch nicht möglich. Hierzu
-    //wird die Methode connect() von der Klasse PropertyConnector benötigt.
+    //mitgeben. Bei Datum-Komponenten ist dies jedoch nicht moeglich. Hierzu
+    //wird die Methode connect() von der Klasse PropertyConnector benoetigt.
     //**************************************************************************
     private void initComponents(){
         currencyFormat = DecimalFormat.getCurrencyInstance();
@@ -85,7 +85,7 @@ public class EditCoursePartView extends CWView
                         model.getCourseSelection().getSelectionIndexHolder(),
                         courseTable)));
 
-        activityTable = CWComponentFactory.createTable("Keine Aktivität zugewiesen!");
+        activityTable = CWComponentFactory.createTable("Keine Aktivitaet zugewiesen!");
         activityTable.setPreferredScrollableViewportSize(new Dimension(10, 50));
         activityTable.setModel(model.createActivityTableModel(model.getActivitySelection()));//TODO-mit ValueModel
         activityTable.setSelectionModel(
@@ -116,28 +116,28 @@ public class EditCoursePartView extends CWView
 
         courseButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Kurs hinzufuegen",
-                "Hier können Sie einen Kurs hinzufuegen!",
+                "Hier koennen Sie einen Kurs hinzufuegen!",
                 "cw/coursemanagementmodul/images/course.png"));
         activityButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Aktivität hinzufuegen",
-                "Hier können Sie zum selektierten Kurs eine Aktivität hinzufuegen!",
+                "Aktivitaet hinzufuegen",
+                "Hier koennen Sie zum selektierten Kurs eine Aktivitaet hinzufuegen!",
                 "cw/coursemanagementmodul/images/activity_add.png"));
         subjectButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Gegenstand hinzufuegen",
-                "Hier können Sie zum selektierten Kurs einen Kursgegenstand hinzufuegen!",
+                "Hier koennen Sie zum selektierten Kurs einen Kursgegenstand hinzufuegen!",
                 "cw/coursemanagementmodul/images/subject_add.png"));
 
         deleteCourseButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Kurs löschen",
-                "Hier können Sie den selektierten Kurs löschen!",
+                "Kurs loeschen",
+                "Hier koennen Sie den selektierten Kurs loeschen!",
                 "cw/coursemanagementmodul/images/course_delete.png"));
         deleteSubjectButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Gegenstand löschen",
-                "Hier können Sie zum selektierten Kurs einen Kursgegenstand löschen!",
+                "Gegenstand loeschen",
+                "Hier koennen Sie zum selektierten Kurs einen Kursgegenstand loeschen!",
                 "cw/coursemanagementmodul/images/subject_delete.png"));
         deleteActivityButton.setToolTipText(CWComponentFactory.createToolTip(
-                "Aktivität löschen",
-                "Hier können Sie zum selektierten Kurs eine Aktivität löschen!",
+                "Aktivitaet loeschen",
+                "Hier koennen Sie zum selektierten Kurs eine Aktivitaet loeschen!",
                 "cw/coursemanagementmodul/images/activity_delete.png"));
 
         soll = CWComponentFactory.createLabel("Sollbetrag:");
@@ -237,9 +237,9 @@ public class EditCoursePartView extends CWView
 
         panelBuilder.addSeparator("Ferienkurse", cc.xyw(1, 1, 3));
         panelBuilder.add(new JScrollPane(courseTable), cc.xyw(1, 3, 3));
-        panelBuilder.addSeparator("Aktivitäten", cc.xy(1, 5));
+        panelBuilder.addSeparator("Aktivitaeten", cc.xy(1, 5));
         panelBuilder.add(new JScrollPane(activityTable), cc.xy(1, 9));
-        panelBuilder.addSeparator("Gegenstände", cc.xy(3, 5));
+        panelBuilder.addSeparator("Gegenstaende", cc.xy(3, 5));
         panelBuilder.add(subjectButtonPanel, cc.xy(3, 7));
         panelBuilder.add(activityButtonPanel, cc.xy(1, 7));
         panelBuilder.add(new JScrollPane(subjectTable), cc.xy(3, 9));

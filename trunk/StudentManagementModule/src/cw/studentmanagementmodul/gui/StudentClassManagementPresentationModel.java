@@ -68,7 +68,7 @@ public class StudentClassManagementPresentationModel
 
         headerInfo = new CWHeaderInfo(
                 "Klassenverwaltung",
-                "Verwalten Sie ihre Klassen in einer beliebigen Struktur mit Hilfe von Bereichen. Lassen Sie sich die Schueler ein Klasse anzeigen und Schueler automatisch in die nächste Klasse aufsteigen lassen.",
+                "Verwalten Sie ihre Klassen in einer beliebigen Struktur mit Hilfe von Bereichen. Lassen Sie sich die Schueler ein Klasse anzeigen und Schueler automatisch in die naechste Klasse aufsteigen lassen.",
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png"),
                 CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass.png")
         );
@@ -76,10 +76,10 @@ public class StudentClassManagementPresentationModel
         studentClassTreeNodeMap = new HashMap<Object, MutableTreeNode>();
         newOrganisationUnitAction = new NewOrganisationUnitAction("Bereich erstellen", CWUtils.loadIcon("cw/studentmanagementmodul/images/organisationUnit_add.png"));
         editOrganisationUnitAction = new EditOrganisationUnitAction("Bereich bearbeiten", CWUtils.loadIcon("cw/studentmanagementmodul/images/organisationUnit_edit.png"));
-        removeOrganisationUnitAction = new RemoveOrganisationUnitAction("Bereich löschen", CWUtils.loadIcon("cw/studentmanagementmodul/images/organisationUnit_remove.png"));
+        removeOrganisationUnitAction = new RemoveOrganisationUnitAction("Bereich loeschen", CWUtils.loadIcon("cw/studentmanagementmodul/images/organisationUnit_remove.png"));
         newStudentClassAction = new NewStudentClassAction("Klasse erstellen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_add.png"));
         editStudentClassAction = new EditStudentClassAction("Klasse bearbeiten", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_edit.png"));
-        removeStudentClassAction = new RemoveStudentClassAction("Klasse löschen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_remove.png"));
+        removeStudentClassAction = new RemoveStudentClassAction("Klasse loeschen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_remove.png"));
         viewStudentsAction = new ViewStudentsActionAction("Schueler anzeigen", CWUtils.loadIcon("cw/studentmanagementmodul/images/student.png"));
         moveUpStudentClassAction = new MoveUpStudentClassAction("Schueler aufsteigen", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_up.png"));
 
@@ -256,7 +256,7 @@ public class StudentClassManagementPresentationModel
             final DefaultMutableTreeNode node = (DefaultMutableTreeNode) studentClassTreeSelectionModel.getSelectionPath().getLastPathComponent();
             final OrganisationUnit organisationUnit = (OrganisationUnit) node.getUserObject();
 
-            // Wenn sie die bereiche ändern, das element verschieben
+            // Wenn sie die bereiche aendern, das element verschieben
             final PropertyChangeListener organisationUnitChanged;
             organisationUnit.addPropertyChangeListener(OrganisationUnit.PROPERTYNAME_PARENT, organisationUnitChanged = new PropertyChangeListener() {
 
@@ -492,7 +492,7 @@ public class StudentClassManagementPresentationModel
                 }
             }
 
-            // Wenn sie die bereiche ändern, das element verschieben
+            // Wenn sie die bereiche aendern, das element verschieben
             final PropertyChangeListener organisationUnitChanged;
             studentClass.addPropertyChangeListener(StudentClass.PROPERTYNAME_ORGANISATIONUNIT, organisationUnitChanged = new PropertyChangeListener() {
 
@@ -534,7 +534,7 @@ public class StudentClassManagementPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.setLoadingScreenText("Klasse löschen...");
+            GUIManager.setLoadingScreenText("Klasse loeschen...");
             GUIManager.setLoadingScreenVisible(true);
 
             if (!studentClassTreeSelectionModel.isSelectionEmpty()) {
@@ -542,9 +542,9 @@ public class StudentClassManagementPresentationModel
                 Object object = node.getUserObject();
                 if (object instanceof StudentClass) {
 
-                    int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die Klasse löschen, dabei verlassen alle Schueler die Klasse.", "Klasse löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+                    int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die Klasse loeschen, dabei verlassen alle Schueler die Klasse.", "Klasse loeschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
                     if (i == JOptionPane.OK_OPTION) {
-                        GUIManager.setLoadingScreenText("Klasse wird gelöscht...");
+                        GUIManager.setLoadingScreenText("Klasse wird geloescht...");
 
                         studentClassTreeModel.removeNodeFromParent(node);
                         StudentClassManager.getInstance().delete((StudentClass) object);
@@ -596,12 +596,12 @@ public class StudentClassManagementPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.setLoadingScreenText("Schueler in die nächste Klasse aufsteigen lassen...");
+            GUIManager.setLoadingScreenText("Schueler in die naechste Klasse aufsteigen lassen...");
             GUIManager.setLoadingScreenVisible(true);
 
             int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich alle Schueler aufsteigen lassen? Einige Schueler verlassen dabei die Klasse.", "Schueler aufsteigen lassen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (i == JOptionPane.OK_OPTION) {
-                GUIManager.setLoadingScreenText("Schueler steigen in die nächste Klasse auf...");
+                GUIManager.setLoadingScreenText("Schueler steigen in die naechste Klasse auf...");
 
                 List<Student> list = StudentManager.getInstance().getAll();
                 Student student;

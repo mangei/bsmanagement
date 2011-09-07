@@ -63,8 +63,8 @@ public class GroupEditCustomerPresentationModel
         removeGroupAction = new RemoveGroupAction("Entfernen", CWUtils.loadIcon("cw/customermanagementmodul/images/arrow_right.png"));
     
         headerInfo = new CWHeaderInfo(
-                "Gruppenzugehörigkeit",
-                "Hier können Sie die Gruppenzugehörigkeiten fuer den Kunden einstellen.",
+                "Gruppenzugehoerigkeit",
+                "Hier koennen Sie die Gruppenzugehoerigkeiten fuer den Kunden einstellen.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/group.png"),
                 CWUtils.loadIcon("cw/customermanagementmodul/images/group.png")
         );

@@ -232,7 +232,7 @@ public class EditBereichPresentationModel
                 getUnsaved().setValue(false);
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
             } else {
-                JOptionPane.showMessageDialog(null, "Es muss ein Uebergeordneter Bereich ausgewählt sein!");
+                JOptionPane.showMessageDialog(null, "Es muss ein Uebergeordneter Bereich ausgewaehlt sein!");
             }
 
         }
@@ -254,7 +254,7 @@ public class EditBereichPresentationModel
             int i = 1;
             if ((Boolean) getUnsaved().getValue() == true) {
                 Object[] options = {"Speichern", "Nicht Speichern", "Abbrechen"};
-                i = JOptionPane.showOptionDialog(null, "Daten wurden geändert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                i = JOptionPane.showOptionDialog(null, "Daten wurden geaendert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             }
             if (i == 0) {
                 saveBereich();
@@ -280,7 +280,7 @@ public class EditBereichPresentationModel
                 saveBereich();
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
             } else {
-                JOptionPane.showMessageDialog(null, "Es muss ein Uebergeordneter Bereich ausgewählt sein!");
+                JOptionPane.showMessageDialog(null, "Es muss ein Uebergeordneter Bereich ausgewaehlt sein!");
             }
 
         }
