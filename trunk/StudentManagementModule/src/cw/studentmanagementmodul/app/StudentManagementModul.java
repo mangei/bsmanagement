@@ -10,9 +10,9 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
-import cw.boardingschoolmanagement.perstistence.CascadeEvent;
-import cw.boardingschoolmanagement.perstistence.CascadeListener;
-import cw.customermanagementmodul.persistence.CustomerPM;
+import cw.boardingschoolmanagement.persistence.CascadeEvent;
+import cw.boardingschoolmanagement.persistence.CascadeListener;
+import cw.customermanagementmodul.persistence.PMCustomer;
 import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.studentmanagementmodul.pojo.Student;
 import cw.studentmanagementmodul.pojo.StudentClass;
@@ -38,7 +38,7 @@ implements Modul
         }), "school");
 
         // Wenn ein Kunde geloescht wird, wird der Student mitgeloescht
-        CustomerPM.getInstance().addCascadeListener(new CascadeListener() {
+        PMCustomer.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
                 CustomerModel customer = (CustomerModel) evt.getSource();
                 Student student = StudentManager.getInstance().get(customer);

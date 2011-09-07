@@ -13,34 +13,36 @@ import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
  * 
  * @author Manuel Geier
  */
-public class CustomerPM	
+public class PMCustomer	
 	extends AbstractPersistenceManager<Customer> {
 
-	private static CustomerPM instance;
-    private static Logger logger = Logger.getLogger(CustomerPM.class.getName());
+	private static PMCustomer instance;
+    private static Logger logger = Logger.getLogger(PMCustomer.class.getName());
     
     /**
      * Private constructor; class is a singleton
      */
-    private CustomerPM() {} 
+    private PMCustomer() {} 
     
     /**
      * Return an instance of CustumerManager
      * @return CustomerManager
      */
-    public static CustomerPM getInstance() {
+    public static PMCustomer getInstance() {
     	if(instance == null) {
-    		instance = new CustomerPM();
+    		instance = new PMCustomer();
     	}
     	return instance;
     }
     
     public Customer create(EntityManager entityManager) {
     	Customer customer = new Customer(entityManager);
-    	entityManager.getTransaction().begin();
     	entityManager.persist(customer);
-    	entityManager.getTransaction().commit();
     	return customer;
+    }
+    
+    public Customer get(Long id, EntityManager entityManager) {
+    	return entityManager.find(Customer.class, id);
     }
 
     public int countAll(EntityManager entityManager) {

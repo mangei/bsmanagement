@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.persistence.NoResultException;
 
-import cw.boardingschoolmanagement.perstistence.HibernateUtil;
+import cw.boardingschoolmanagement.persistence.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import cw.coursemanagementmodul.pojo.Activity;
 import cw.coursemanagementmodul.pojo.Course;

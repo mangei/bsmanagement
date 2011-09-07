@@ -9,7 +9,7 @@ import javax.persistence.OneToOne;
 import com.jgoodies.binding.beans.Model;
 
 import cw.accountmanagementmodul.pojo.AccountPosting;
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+import cw.boardingschoolmanagement.persistence.AnnotatedClass;
 
 /**
  *

@@ -5,7 +5,9 @@
 package cw.roommanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+
+import cw.boardingschoolmanagement.persistence.AnnotatedClass;
+
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

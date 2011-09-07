@@ -2,10 +2,10 @@ package cw.boardingschoolmanagement.pojo.manager;
 
 import javax.persistence.EntityManager;
 
-import cw.boardingschoolmanagement.perstistence.CWPersistence;
-import cw.boardingschoolmanagement.perstistence.CascadeListener;
-import cw.boardingschoolmanagement.perstistence.CascadeListenerSupport;
-import cw.boardingschoolmanagement.perstistence.PersistenceManager;
+import cw.boardingschoolmanagement.persistence.CWPersistence;
+import cw.boardingschoolmanagement.persistence.CascadeListener;
+import cw.boardingschoolmanagement.persistence.CascadeListenerSupport;
+import cw.boardingschoolmanagement.persistence.PersistenceManager;
 
 /**
  * Basic class for all persistence managers.
@@ -32,6 +32,8 @@ public abstract class AbstractPersistenceManager<T extends CWPersistence>
     public void remove(T persistence, EntityManager entityManager) {
     	cascadeListenerSupport.fireCascadeDelete(persistence, entityManager);
     	entityManager.remove(persistence);
+    	entityManager.getTransaction().commit();
+    	entityManager.getTransaction().begin();
     }
 
 //    /**
@@ -102,10 +104,10 @@ public abstract class AbstractPersistenceManager<T extends CWPersistence>
 //    }
 //
 //    /**
-//     * Speichert die Änderung eines Datensatzens in die Datenbank.
+//     * Speichert die Aenderung eines Datensatzens in die Datenbank.
 //     *
 //     * @param obj - Objekt das geaendert Wurde
-//     * @return true - Änderung erfolgreich, false - Änderung nicht erfolgreich
+//     * @return true - Aenderung erfolgreich, false - Aenderung nicht erfolgreich
 //     */
 //    public boolean update(T obj) {
 //        System.out.println(obj);

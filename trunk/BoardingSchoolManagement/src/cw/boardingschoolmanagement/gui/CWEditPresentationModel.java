@@ -10,8 +10,13 @@ import com.jgoodies.binding.PresentationModel;
 public abstract class CWEditPresentationModel<T>
 	extends PresentationModel<T> {
 
+	public enum Mode {
+		NEW, EDIT
+	}
+	
 	private EntityManager entityManager;
 	private List<CWErrorMessage> errorMessages = new ArrayList<CWErrorMessage>();
+	private Mode mode;
 	
 	public CWEditPresentationModel(EntityManager entityManager) {
 		this(null, entityManager);
@@ -36,6 +41,14 @@ public abstract class CWEditPresentationModel<T>
 	
 	public void clearErrorMessages() {
 		errorMessages.clear();
+	}
+	
+	public Mode getMode() {
+		return mode;
+	}
+	
+	public void setMode(Mode mode) {
+		this.mode = mode;
 	}
 	
 	public abstract boolean validate(List<CWErrorMessage> errorMessages);

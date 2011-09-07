@@ -13,7 +13,7 @@ import javax.persistence.Temporal;
 
 import org.hibernate.annotations.Type;
 
-import cw.boardingschoolmanagement.perstistence.CWPersistence;
+import cw.boardingschoolmanagement.persistence.CWPersistence;
 
 /**
  * Implementation of persistence 'Customer'

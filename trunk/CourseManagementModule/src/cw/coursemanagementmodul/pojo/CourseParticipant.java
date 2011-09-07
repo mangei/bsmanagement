@@ -13,7 +13,7 @@ import javax.persistence.OneToOne;
 
 import com.jgoodies.binding.beans.Model;
 
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+import cw.boardingschoolmanagement.persistence.AnnotatedClass;
 import cw.customermanagementmodul.persistence.model.CustomerModel;
 
 /**

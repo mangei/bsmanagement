@@ -1,4 +1,4 @@
-package cw.boardingschoolmanagement.interfaces;
+package cw.boardingschoolmanagement.persistence;
 
 /**
  * If an class uses Annotations for Hibernate, you have to implement this Interface.

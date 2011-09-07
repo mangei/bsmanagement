@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import cw.boardingschoolmanagement.perstistence.CWPersistence;
+import cw.boardingschoolmanagement.persistence.CWPersistence;
 
 /**
  * Implementation of persistence 'Guardian'

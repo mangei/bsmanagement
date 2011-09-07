@@ -1,4 +1,4 @@
-package cw.boardingschoolmanagement.perstistence;
+package cw.boardingschoolmanagement.persistence;
 
 import java.util.EventObject;
 

@@ -85,7 +85,7 @@ public class EditCustomerView extends CWView
         // Load dynamic components in tabs
         List<EditCustomerTabExtentionPoint> lEx = model.getExtentions();
         EditCustomerTabExtentionPoint ex;
-        Class activeEx = (Class) model.getProperties().get("activeExtention");
+        //Class activeEx = (Class) model.getProperties().get("activeExtention");
         for(int i=0, l=lEx.size(); i<l; i++) {
             ex = lEx.get(i);
 //            ex.getView().setPreferredSize(tabs.getSize());
@@ -97,9 +97,9 @@ public class EditCustomerView extends CWView
                 tabs.setIconAt(i, ((CWView) ex.getView()).getHeaderInfo().getIcon());
             }
             
-            if (activeEx != null && ex.getClass().equals(activeEx)) {
-                tabs.setSelectedIndex(i);
-            }
+//            if (activeEx != null && ex.getClass().equals(activeEx)) {
+//                tabs.setSelectedIndex(i);
+//            }
         }
         
         this.getContentPanel().add(tabs, BorderLayout.CENTER);

@@ -1,4 +1,4 @@
-package cw.boardingschoolmanagement.perstistence;
+package cw.boardingschoolmanagement.persistence;
 
 import javax.persistence.EntityManager;
 
@@ -6,7 +6,7 @@ import cw.boardingschoolmanagement.app.CWModel;
 import cw.boardingschoolmanagement.app.adaptable.IAdaptable;
 import cw.boardingschoolmanagement.app.adaptable.IAdapterManager;
 import cw.boardingschoolmanagement.app.adaptable.ITypedAdaptable;
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+import cw.boardingschoolmanagement.app.adaptable.ITypedAdapterSupport;
 
 /**
  * Basic class for all persistence objects
@@ -18,17 +18,18 @@ public class CWPersistence
 	implements ITypedAdaptable, AnnotatedClass {
 
 	private EntityManager entityManager;
+	private ITypedAdapterSupport iTypedAdaptableSupport = new ITypedAdapterSupport();
 	
 	protected CWPersistence(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 	
 	public IAdaptable getAdapter(Class adaptableClass) {
-		return IAdapterManager.getAdapter(this, adaptableClass);
+		return iTypedAdaptableSupport.getAdapter(adaptableClass);
 	}
 	
 	public <T> T getTypedAdapter(Class<T> adaptableClass) {
-		return (T) getAdapter(adaptableClass);
+		return iTypedAdaptableSupport.getTypedAdapter(adaptableClass);
 	}
 	
 	public EntityManager getEntityManager() {

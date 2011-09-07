@@ -1,4 +1,4 @@
-package cw.boardingschoolmanagement.perstistence;
+package cw.boardingschoolmanagement.persistence;
 
 /**
  * Adapter class of the CascadeListener interface

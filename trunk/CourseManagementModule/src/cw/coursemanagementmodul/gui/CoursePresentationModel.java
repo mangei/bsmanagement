@@ -326,7 +326,7 @@ public class CoursePresentationModel
     
     //**************************************************************************
     //Regelt das Editieren (Veraendern) von Kursen
-    //(Doppelclick oder Ändern-Button)
+    //(Doppelclick oder Aendern-Button)
     //**************************************************************************
     private void editSelectedItem(EventObject e) {
         GUIManager.getInstance().lockMenu();

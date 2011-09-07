@@ -19,8 +19,9 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.customermanagementmodul.logic.BoCustomer;
 import cw.customermanagementmodul.persistence.Customer;
-import cw.customermanagementmodul.persistence.CustomerPM;
+import cw.customermanagementmodul.persistence.PMCustomer;
 
 /**
  * @author Manuel Geier (CreativeWorkers)
@@ -49,7 +50,7 @@ public class CustomerInactivePresentationModel
         deleteAction = new DeleteAction("Loeschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
-                CustomerPM.getInstance().getAllInactive(getEntityManager()),
+                PMCustomer.getInstance().getAllInactive(getEntityManager()),
                 "cw.customerboardingmanagement.CustomerInactiveView.customerTableState",
                 getEntityManager());
 
@@ -81,16 +82,11 @@ public class CustomerInactivePresentationModel
 
         public void actionPerformed(ActionEvent e) {
 
-            Customer c = customerSelectorPresentationModel.getSelectedCustomer();
+            Customer customer = customerSelectorPresentationModel.getSelectedCustomer();
             
-            getEntityManager().getTransaction().begin();
+            BoCustomer.activate(customer.getId());
             
-            c.setActive(true);
-            c.setInactiveDate(null);
-            
-            getEntityManager().getTransaction().commit();
-            
-            customerSelectorPresentationModel.remove(c);
+            customerSelectorPresentationModel.remove(customer);
 
             GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde wieder aktiviert.");
 
@@ -115,13 +111,9 @@ public class CustomerInactivePresentationModel
             int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich den ausgewaehlten Kunden loeschen?", "Kunden loeschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (i == JOptionPane.OK_OPTION) {
 
-            	getEntityManager().getTransaction().begin();
-
                 customerSelectorPresentationModel.remove(customer);
                 
-                CustomerPM.getInstance().remove(customer, getEntityManager());
-                
-                getEntityManager().getTransaction().commit();
+                BoCustomer.remove(customer.getId());
             	
                 String statusBarText;
                 String forename = customer.getForename();

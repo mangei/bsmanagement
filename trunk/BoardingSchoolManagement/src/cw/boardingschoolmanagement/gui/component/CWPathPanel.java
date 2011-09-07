@@ -133,9 +133,11 @@ public class CWPathPanel extends JPanel {
 
         CWHeaderInfo headerInfo = view.getHeaderInfo();
         
-        label.setText(headerInfo.getHeaderText());
-        label.setToolTipText(headerInfo.getDescription());
-        label.setIcon(headerInfo.getSmallIcon());
+        if(headerInfo != null) {
+	        label.setText(headerInfo.getHeaderText());
+	        label.setToolTipText(headerInfo.getDescription());
+	        label.setIcon(headerInfo.getSmallIcon());
+        }
 
         return label;
     }

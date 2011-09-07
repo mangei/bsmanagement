@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import cw.boardingschoolmanagement.perstistence.CWPersistence;
+import cw.boardingschoolmanagement.persistence.CWPersistence;
 
 /**
  * Implementation of persistence 'Group'

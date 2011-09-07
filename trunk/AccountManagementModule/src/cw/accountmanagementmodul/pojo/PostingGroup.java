@@ -1,6 +1,7 @@
 package cw.accountmanagementmodul.pojo;
 
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+import cw.boardingschoolmanagement.persistence.AnnotatedClass;
+
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.Entity;

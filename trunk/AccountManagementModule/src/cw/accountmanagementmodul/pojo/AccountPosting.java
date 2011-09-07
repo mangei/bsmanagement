@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+import cw.boardingschoolmanagement.persistence.AnnotatedClass;
 
 /**rivate Long id;
  * This is an Posting-Class which representes one Posting.<br>

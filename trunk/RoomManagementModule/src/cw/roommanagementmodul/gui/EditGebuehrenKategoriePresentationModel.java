@@ -134,7 +134,7 @@ public class EditGebuehrenKategoriePresentationModel
             int i = 1;
             if ((Boolean) unsaved.getValue() == true) {
                 Object[] options = {"Speichern", "Nicht Speichern", "Abbrechen"};
-                i = JOptionPane.showOptionDialog(null, "Daten wurden geaendert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                i = JOptionPane.showOptionDialog(null, "Daten wurden geaendert. Wollen Sie die Aenderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             }
             if (i == 0) {
                 saveGebuehrenKat();
