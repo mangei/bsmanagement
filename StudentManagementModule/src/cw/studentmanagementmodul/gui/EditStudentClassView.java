@@ -80,7 +80,7 @@ public class EditStudentClassView extends CWView
         builder.add(tfName, cc.xy(3, 1));
         builder.addLabel("Bereich:", cc.xy(1, 3));
         builder.add(cbOrganisationUnit, cc.xy(3, 3));
-        builder.addLabel("Nächste Klasse:", cc.xy(1, 5));
+        builder.addLabel("Naechste Klasse:", cc.xy(1, 5));
         builder.add(cbNextStudentClass, cc.xy(3, 5));
     }
 

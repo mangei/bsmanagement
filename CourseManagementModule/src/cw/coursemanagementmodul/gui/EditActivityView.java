@@ -49,7 +49,7 @@ public class EditActivityView extends CWView
     }
     
     private void initComponents(){
-        nameLabel = CWComponentFactory.createLabel("Aktivität-Name");
+        nameLabel = CWComponentFactory.createLabel("Aktivitaet-Name");
         descLabel = CWComponentFactory.createLabel("Beschreibung");
         amountLabel = CWComponentFactory.createLabel("Preis");
         
@@ -63,15 +63,15 @@ public class EditActivityView extends CWView
 
         saveButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Speichern",
-                "Hier wird die Aktivität gespeichert!",
+                "Hier wird die Aktivitaet gespeichert!",
                 "cw/coursemanagementmodul/images/save.png"));
         saveAndCloseButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Speichern u. Schließen",
-                "Hier wird die Aktivität gespeichert und anschließend in die Aktivitätsuebersicht gewechselt!",
+                "Hier wird die Aktivitaet gespeichert und anschließend in die Aktivitaetsuebersicht gewechselt!",
                 "cw/coursemanagementmodul/images/save_cancel.png"));
         cancelButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Abbrechen",
-                "Hier kehren Sie zur Aktivitätsuebersicht zurueck!",
+                "Hier kehren Sie zur Aktivitaetsuebersicht zurueck!",
                 "cw/coursemanagementmodul/images/cancel.png"));
         
         cancelButton.addActionListener(new ActionListener() {

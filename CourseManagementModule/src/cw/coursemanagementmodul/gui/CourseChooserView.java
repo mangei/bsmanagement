@@ -84,7 +84,7 @@ public class CourseChooserView extends CWView
 
         addButton.setToolTipText(CWComponentFactory.createToolTip(
                 "Hinzufuegen",
-                "Hier können Sie den selektierten Kurs mit allen Aktivitäten und Gegenständen hinzufuegen!",
+                "Hier koennen Sie den selektierten Kurs mit allen Aktivitaeten und Gegenstaenden hinzufuegen!",
                 "cw/coursemanagementmodul/images/course_add.png"));
         
         cancelButton.setToolTipText(CWComponentFactory.createToolTip(
@@ -184,9 +184,9 @@ public class CourseChooserView extends CWView
         panelBuilder.add(new JScrollPane(courseTable), cc.xyw(1, 3, 5));
         panelBuilder.addSeparator("Detailansicht des Kurses", cc.xy(1, 5));
         panelBuilder.add(detailPanel, cc.xy(1, 7));
-        panelBuilder.addSeparator("Aktivitäten des Kurses", cc.xy(3, 5));
+        panelBuilder.addSeparator("Aktivitaeten des Kurses", cc.xy(3, 5));
         panelBuilder.add(activityList, cc.xy(3, 7));
-        panelBuilder.addSeparator("Gegenstände des Kurses", cc.xy(5, 5));
+        panelBuilder.addSeparator("Gegenstaende des Kurses", cc.xy(5, 5));
         panelBuilder.add(subjectList, cc.xy(5, 7));
     }
 

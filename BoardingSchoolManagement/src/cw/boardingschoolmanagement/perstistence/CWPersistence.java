@@ -1,22 +1,25 @@
-package cw.boardingschoolmanagement.app;
+package cw.boardingschoolmanagement.perstistence;
 
 import javax.persistence.EntityManager;
 
+import cw.boardingschoolmanagement.app.CWModel;
 import cw.boardingschoolmanagement.app.adaptable.IAdaptable;
 import cw.boardingschoolmanagement.app.adaptable.IAdapterManager;
+import cw.boardingschoolmanagement.app.adaptable.ITypedAdaptable;
+import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
 
 /**
  * Basic class for all persistence objects
  * 
  * @author Manuel Geier
  */
-public class CWPersistenceImpl
+public class CWPersistence
 	extends CWModel
-	implements CWPersistence {
+	implements ITypedAdaptable, AnnotatedClass {
 
 	private EntityManager entityManager;
 	
-	public CWPersistenceImpl(EntityManager entityManager) {
+	protected CWPersistence(EntityManager entityManager) {
 		this.entityManager = entityManager;
 	}
 	

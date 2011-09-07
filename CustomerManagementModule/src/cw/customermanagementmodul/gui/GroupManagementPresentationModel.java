@@ -15,6 +15,7 @@ import com.jgoodies.binding.list.SelectionInList;
 
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
@@ -40,8 +41,8 @@ public class GroupManagementPresentationModel
     private SelectionEmptyHandler selectionEmptyHandler;
     private PropertyChangeListener groupChangeListener;
 
-    public GroupManagementPresentationModel(EntityManager entityManager) {
-    	super(entityManager);
+    public GroupManagementPresentationModel() {
+    	super(CWEntityManager.createEntityManager());
         initModels();
         initEventHandling();
     }
@@ -49,7 +50,7 @@ public class GroupManagementPresentationModel
     private void initModels() {
         newGroupAction = new NewGroupAction("Neue Gruppe", CWUtils.loadIcon("cw/customermanagementmodul/images/group_add.png"));
         editGroupAction = new EditGroupAction("Gruppe bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/group_edit.png"));
-        removeGroupAction = new RemoveGroupAction("Gruppe löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/group_remove.png"));
+        removeGroupAction = new RemoveGroupAction("Gruppe loeschen", CWUtils.loadIcon("cw/customermanagementmodul/images/group_remove.png"));
 
         groupSelection = new SelectionInList<Group>(GroupPM.getInstance().getAll(getEntityManager()));
 
@@ -101,6 +102,8 @@ public class GroupManagementPresentationModel
     public void dispose() {
         groupSelection.removePropertyChangeListener(selectionEmptyHandler);
         groupSelection.removeValueChangeListener(groupChangeListener);
+
+        CWEntityManager.closeEntityManager(getEntityManager());
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -210,12 +213,12 @@ public class GroupManagementPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.setLoadingScreenText("Gruppe löschen...");
+            GUIManager.setLoadingScreenText("Gruppe loeschen...");
             GUIManager.setLoadingScreenVisible(true);
 
             Group group = groupSelection.getSelection();
 
-            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die Gruppe '" + group.getName() + "' löschen?", "Gruppe löschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
+            int i = JOptionPane.showConfirmDialog(null, "Wollen Sie wirklich die Gruppe '" + group.getName() + "' loeschen?", "Gruppe loeschen", JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE);
             if (i == JOptionPane.OK_OPTION) {
                 
                 String name = group.getName();
@@ -230,7 +233,7 @@ public class GroupManagementPresentationModel
                 getEntityManager().getTransaction().commit();
 
 
-                GUIManager.getStatusbar().setTextAndFadeOut("Gruppe '" + name + "' wurde gelöscht.");
+                GUIManager.getStatusbar().setTextAndFadeOut("Gruppe '" + name + "' wurde geloescht.");
             }
 
             GUIManager.setLoadingScreenVisible(false);

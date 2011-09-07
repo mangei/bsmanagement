@@ -55,8 +55,8 @@ public class PostingRunsPresentationModel
 
         headerInfo = new CWHeaderInfo(
                 "Gebuehrenlaufuebersicht",
-                "<html>Sie befinden in der Uebersichtsmaske der bereits gebuchten Gebuehrenläufe!<br/>"
-                + "Hier können Sie einen Buchungslauf wieder stornieren!<html>",
+                "<html>Sie befinden in der Uebersichtsmaske der bereits gebuchten Gebuehrenlaeufe!<br/>"
+                + "Hier koennen Sie einen Buchungslauf wieder stornieren!<html>",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/posting.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/posting.png"));
 

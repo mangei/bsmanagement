@@ -65,7 +65,7 @@ public class EditCoursePresentationModel
 
         headerInfo = new CWHeaderInfo(
                 "Kurs bearbeiten",
-                "Sie befinden sich im Kursbereich. Hier können Sie Kursdaten eigeben!",
+                "Sie befinden sich im Kursbereich. Hier koennen Sie Kursdaten eigeben!",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/course.png"));
 
@@ -160,7 +160,7 @@ public class EditCoursePresentationModel
             System.out.println(" --> " + unsaved.getValue());
             if((Boolean)unsaved.getValue() == true) {
                 Object[] options = { "Speichern", "Nicht Speichern", "Abbrechen" };
-                i = JOptionPane.showOptionDialog(null, "Daten wurden geändert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,null,  options, options[0] );
+                i = JOptionPane.showOptionDialog(null, "Daten wurden geaendert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,null,  options, options[0] );
             }
             if(i == 0) {
                 saveCourse();

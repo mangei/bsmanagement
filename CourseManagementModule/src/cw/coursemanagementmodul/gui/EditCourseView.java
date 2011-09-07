@@ -48,8 +48,8 @@ public class EditCourseView extends CWView
     //**************************************************************************
     //Initialisieren der oben definierten Komponenten
     //Bei den meisten Komponenten kann man den PropertyName als Paramenter
-    //mitgeben. Bei Datum-Komponenten ist dies jedoch nicht möglich. Hierzu
-    //wird die Methode connect() von der Klasse PropertyConnector benötigt.
+    //mitgeben. Bei Datum-Komponenten ist dies jedoch nicht moeglich. Hierzu
+    //wird die Methode connect() von der Klasse PropertyConnector benoetigt.
     //**************************************************************************
     private void initComponents(){
         nameLabel = CWComponentFactory.createLabel("Kursname");

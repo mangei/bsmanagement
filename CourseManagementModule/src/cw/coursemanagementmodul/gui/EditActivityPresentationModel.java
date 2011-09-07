@@ -61,8 +61,8 @@ public class EditActivityPresentationModel
     public void initModels(){
 
         headerInfo = new CWHeaderInfo(
-                "Aktivität bearbeiten",
-                "Sie befinden sich im Aktivitätsbereich. Hier können Sie Aktivitätsdaten eigeben!",
+                "Aktivitaet bearbeiten",
+                "Sie befinden sich im Aktivitaetsbereich. Hier koennen Sie Aktivitaetsdaten eigeben!",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
 
@@ -153,7 +153,7 @@ public class EditActivityPresentationModel
             System.out.println(" --> " + unsaved.getValue());
             if((Boolean)unsaved.getValue() == true) {
                 Object[] options = { "Speichern", "Nicht Speichern", "Abbrechen" };
-                i = JOptionPane.showOptionDialog(null, "Daten wurden geändert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,null,  options, options[0] );
+                i = JOptionPane.showOptionDialog(null, "Daten wurden geaendert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE,null,  options, options[0] );
             }
             if(i == 0) {
                 saveActivity();
@@ -171,7 +171,7 @@ public class EditActivityPresentationModel
     //**************************************************************************
     
     //**************************************************************************
-    //Klasse zum Speichern und Schließen des Aktivität-Formulars
+    //Klasse zum Speichern und Schließen des Aktivitaet-Formulars
     //**************************************************************************
     private class SaveAndCloseButtonAction extends AbstractAction{
         {

@@ -26,9 +26,9 @@ public class CalendarUtil {
     public static String SATURDAY_SHORT = "Sa";
     public static String SUNDAY_SHORT = "So";
 
-    public static String JANUARY = "Jänner";
+    public static String JANUARY = "Jaenner";
     public static String FEBRUARY = "Februar";
-    public static String MARCH = "März";
+    public static String MARCH = "Maerz";
     public static String APRIL = "April";
     public static String MAY = "Mai";
     public static String JUNE = "Juni";
@@ -39,9 +39,9 @@ public class CalendarUtil {
     public static String NOVEMBER = "November";
     public static String DECEMBER = "Dezember";
 
-    public static String JANUARY_SHORT = "Jän";
+    public static String JANUARY_SHORT = "Jaen";
     public static String FEBRUARY_SHORT = "Feb";
-    public static String MARCH_SHORT = "Mär";
+    public static String MARCH_SHORT = "Maer";
     public static String APRIL_SHORT = "Apr";
     public static String MAY_SHORT = "Mai";
     public static String JUNE_SHORT = "Jun";

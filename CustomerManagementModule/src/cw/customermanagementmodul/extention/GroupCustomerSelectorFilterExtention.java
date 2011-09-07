@@ -61,7 +61,7 @@ public class GroupCustomerSelectorFilterExtention
         List<Group> groups = new ArrayList<Group>();
 
 
-        // TODO Pruefen ob das so stimmt mit dem Gruppen auswählen
+        // TODO Pruefen ob das so stimmt mit dem Gruppen auswaehlen
 
 
                                      //////////

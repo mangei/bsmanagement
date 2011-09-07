@@ -87,7 +87,7 @@ public class StornoResultView extends CWView {
             j = j + 2;
         }
 
-        //Falls ein Bewohner gelöscht wurde, aber der Customer noch vorhanden ist wird der Storno trotzdem durchgefuehrt
+        //Falls ein Bewohner geloescht wurde, aber der Customer noch vorhanden ist wird der Storno trotzdem durchgefuehrt
         List<CustomerModel> customerList = model.getCustomerNoBewohner();
         for (int i = 0; i < customerList.size(); i++) {
             bewohnerPanel = createKundePanel(customerList.get(i), model.getCustomerNoBewohnerMap().get(customerList.get(i)));

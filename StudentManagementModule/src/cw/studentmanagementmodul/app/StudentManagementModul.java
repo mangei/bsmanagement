@@ -1,8 +1,6 @@
 package cw.studentmanagementmodul.app;
 
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.app.CascadeEvent;
-import cw.boardingschoolmanagement.app.CascadeListener;
 import cw.studentmanagementmodul.gui.StudentClassManagementPresentationModel;
 import cw.studentmanagementmodul.gui.StudentClassManagementView;
 import cw.boardingschoolmanagement.interfaces.Modul;
@@ -12,6 +10,8 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
+import cw.boardingschoolmanagement.perstistence.CascadeEvent;
+import cw.boardingschoolmanagement.perstistence.CascadeListener;
 import cw.customermanagementmodul.persistence.CustomerPM;
 import cw.customermanagementmodul.persistence.model.CustomerModel;
 import cw.studentmanagementmodul.pojo.Student;
@@ -37,7 +37,7 @@ implements Modul
             }
         }), "school");
 
-        // Wenn ein Kunde gelöscht wird, wird der Student mitgelöscht
+        // Wenn ein Kunde geloescht wird, wird der Student mitgeloescht
         CustomerPM.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
                 CustomerModel customer = (CustomerModel) evt.getSource();
@@ -48,7 +48,7 @@ implements Modul
             }
         });
 
-        // Wenn eine Klasse gelöscht wird, wird die Klasse der Studenten auf null gesetzt
+        // Wenn eine Klasse geloescht wird, wird die Klasse der Studenten auf null gesetzt
         // und der Student inaktiv gesetzt
         StudentClassManager.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {

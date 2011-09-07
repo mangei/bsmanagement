@@ -1,4 +1,4 @@
-package cw.boardingschoolmanagement.app;
+package cw.boardingschoolmanagement.perstistence;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;

@@ -71,11 +71,11 @@ public class BewohnerEditCustomerTabExtention implements EditCustomerTabExtentio
         if (model.getCheckBoxState() == ItemEvent.DESELECTED) {
              boolean checkKaution = true;
                 if (b.getKautionStatus() == Bewohner.EINGEZAHLT) {
-                    JOptionPane.showMessageDialog(null, "Bewohner kann nicht gelöscht werden, da der Status der Kaution EINGEZAHLT ist!", "Kaution", JOptionPane.OK_OPTION);
+                    JOptionPane.showMessageDialog(null, "Bewohner kann nicht geloescht werden, da der Status der Kaution EINGEZAHLT ist!", "Kaution", JOptionPane.OK_OPTION);
                     checkKaution = false;
                 }
                     if (b.getKautionStatus() == Bewohner.NICHT_EINGEZAHLT) {
-                    JOptionPane.showMessageDialog(null, "Bewohner kann nicht gelöscht werden, da der Status der Kaution Nicht Eingezahlt ist!", "Kaution", JOptionPane.OK_OPTION);
+                    JOptionPane.showMessageDialog(null, "Bewohner kann nicht geloescht werden, da der Status der Kaution Nicht Eingezahlt ist!", "Kaution", JOptionPane.OK_OPTION);
                     checkKaution = false;
                 }
                 if (checkKaution==true) {

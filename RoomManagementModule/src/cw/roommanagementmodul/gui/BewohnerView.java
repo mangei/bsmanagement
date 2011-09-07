@@ -42,7 +42,7 @@ public class BewohnerView extends CWView
         bGeb = CWComponentFactory.createButton(model.getGebAction());
         bGeb.setText("Neue Gebuehr");
         bDelete = CWComponentFactory.createButton(model.getDeleteAction());
-        bDelete.setText("Löschen");
+        bDelete.setText("Loeschen");
         bGebZuordnung = CWComponentFactory.createButton(model.getGebuehrZuordnungAction());
         bGebZuordnung.setText("Uebersicht");
         bDetail = CWComponentFactory.createButton(model.getDetailAction());

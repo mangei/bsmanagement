@@ -3,7 +3,7 @@ package cw.boardingschoolmanagement.app;
 import java.util.EventListener;
 
 /**
- * Listener der anzeigt wenn etwas Programm geschieht(z.B. Buttons betätigen)
+ * Listener der anzeigt wenn etwas Programm geschieht(z.B. Buttons betaetigen)
  *
  * @see ApplicationAdapter
  *

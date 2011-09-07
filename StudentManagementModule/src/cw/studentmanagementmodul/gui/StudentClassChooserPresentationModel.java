@@ -57,7 +57,7 @@ public class StudentClassChooserPresentationModel
 
     private void initModels() {
         studentClassTreeNodeMap = new HashMap<Object, DefaultMutableTreeNode>();
-        okAction = new OkAction("Auswählen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/accept.png"));
+        okAction = new OkAction("Auswaehlen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/accept.png"));
 //        noClassAction = new NoClassAction("Keine Klasse", CWUtils.loadIcon("cw/studentmanagementmodul/images/studentClass_inactive.png"));
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/boardingschoolmanagement/images/cancel.png"));
 

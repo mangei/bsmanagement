@@ -45,7 +45,7 @@ public class EditCustomerEditCustomerPresentationModel
 
         headerInfo = new CWHeaderInfo(
                 "Allgemein",
-                "Hier können sie allgemeine Kundeninformationen eingeben.",
+                "Hier koennen sie allgemeine Kundeninformationen eingeben.",
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
                 CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
         );

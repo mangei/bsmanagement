@@ -146,7 +146,7 @@ public class ZimmerPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final Zimmer z = new Zimmer();
-            final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new CWHeaderInfo("Zimmer erstellen", "Hier können Sie ein neus Zimmer erstellen"));
+            final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new CWHeaderInfo("Zimmer erstellen", "Hier koennen Sie ein neus Zimmer erstellen"));
             final EditZimmerView editView = new EditZimmerView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -194,7 +194,7 @@ public class ZimmerPresentationModel {
                 zimmerSelection.setList(zimmerManager.getAll());
             } else {
                 Object[] options = {"Ok"};
-                JOptionPane.showOptionDialog(null, "Zimmer " + z.getName() + " enthält Bewohner!", "Warnung", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                JOptionPane.showOptionDialog(null, "Zimmer " + z.getName() + " enthaelt Bewohner!", "Warnung", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             }
 
         }
@@ -236,7 +236,7 @@ public class ZimmerPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
 
-            final PrintZimmerPresentationModel model = new PrintZimmerPresentationModel(zimmerSelection.getList(), new CWHeaderInfo("Zimmer Liste drucken", "Hier können Sie die aktuelle Zimmer Liste ausdrucken oder speichern."));
+            final PrintZimmerPresentationModel model = new PrintZimmerPresentationModel(zimmerSelection.getList(), new CWHeaderInfo("Zimmer Liste drucken", "Hier koennen Sie die aktuelle Zimmer Liste ausdrucken oder speichern."));
             final PrintZimmerView printView = new PrintZimmerView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -332,7 +332,7 @@ public class ZimmerPresentationModel {
 
     private void editSelectedItem(EventObject e) {
         final Zimmer z = zimmerSelection.getSelection();
-        final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new CWHeaderInfo("Zimmer bearbeiten", "Hier können Sie ein bestehendes Zimmer bearbeiten"));
+        final EditZimmerPresentationModel model = new EditZimmerPresentationModel(z, new CWHeaderInfo("Zimmer bearbeiten", "Hier koennen Sie ein bestehendes Zimmer bearbeiten"));
         final EditZimmerView editView = new EditZimmerView(model);
         model.addButtonListener(new ButtonListener() {
 

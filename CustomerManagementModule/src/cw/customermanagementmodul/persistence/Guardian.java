@@ -8,7 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import cw.boardingschoolmanagement.app.CWPersistenceImpl;
+import cw.boardingschoolmanagement.perstistence.CWPersistence;
 
 /**
  * Implementation of persistence 'Guardian'
@@ -18,7 +18,7 @@ import cw.boardingschoolmanagement.app.CWPersistenceImpl;
 @Entity(name=Guardian.ENTITY_NAME)
 @Table(name=Guardian.TABLE_NAME)
 public class Guardian
-        extends CWPersistenceImpl {
+        extends CWPersistence {
 
 	// Properties - Constants
     public final static String ENTITY_NAME = "guardian";

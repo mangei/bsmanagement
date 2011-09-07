@@ -24,8 +24,8 @@ public class BusinessDataConfigurationExtention implements ConfigurationExtentio
 
 
     /**
-     * Läd die Unternehmensdaten aus der Configdatei und speichert diese in
-     * das zuständige POJO(BusinessData).
+     * Laed die Unternehmensdaten aus der Configdatei und speichert diese in
+     * das zustaendige POJO(BusinessData).
      *
      * @param configurationModel
      */

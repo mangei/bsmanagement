@@ -42,7 +42,7 @@ public class DeleteOrganisationUnitPresentationModel
 
     private void initModels() {
         buttonListenerSupport = new ButtonListenerSupport();
-        okAction = new OkAction("Bestätigen", CWUtils.loadIcon("cw/studentmanagementmodul/images/accept.png"));
+        okAction = new OkAction("Bestaetigen", CWUtils.loadIcon("cw/studentmanagementmodul/images/accept.png"));
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/studentmanagementmodul/images/cancel.png"));
         deleteAllAction = new DeleteAllAction();
         moveAllAction = new MoveAllAction();

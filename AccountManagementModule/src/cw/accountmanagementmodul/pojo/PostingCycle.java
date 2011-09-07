@@ -9,7 +9,7 @@ import java.util.List;
  * Ein PostingCycle (zD Buchungskreis) ist eine Zusammenfassung mehrerer Buchungen
  * die auf einmal gebucht werden. Ein Buchungskreis hat eine eindeutige Nummer
  * eine Bezeichnung zur besseren Nachvollziehbarkeit und die Liste der Buchungen
- * die zu diesem Buchungskreis gehören.
+ * die zu diesem Buchungskreis gehoeren.
  * @author ManuelG
  */
 public class PostingCycle

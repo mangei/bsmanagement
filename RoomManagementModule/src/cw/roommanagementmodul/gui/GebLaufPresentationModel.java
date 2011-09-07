@@ -89,9 +89,9 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         gebLaufList = new SelectionInList<GebLauf>(gebLaufManager.getAllOrdered());
         mList = new ArrayList();
 
-        mList.add("Jänner");
+        mList.add("Jaenner");
         mList.add("Februar");
-        mList.add("März");
+        mList.add("Maerz");
         mList.add("April");
         mList.add("Mai");
         mList.add("Juni");
@@ -289,7 +289,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                 GUIManager.changeView(laufResultView, true);
 
             } else {
-                JOptionPane.showMessageDialog(null, "Fuer den Storno-Lauf muss ein Gebuehrenlauf ausgewählt sein!");
+                JOptionPane.showMessageDialog(null, "Fuer den Storno-Lauf muss ein Gebuehrenlauf ausgewaehlt sein!");
             }
         }
 
@@ -422,13 +422,13 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
         String month = monatList.getSelection().toString();
 
-        if (month.equals("Jänner")) {
+        if (month.equals("Jaenner")) {
             return 1;
         }
         if (month.equals("Februar")) {
             return 2;
         }
-        if (month.equals("März")) {
+        if (month.equals("Maerz")) {
             return 3;
         }
         if (month.equals("April")) {
@@ -566,8 +566,8 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
     /**
      * FocusAdapter der die Eingabe die im Jahresfeld in der GebLaufView
-     * getätigt wurde in eine Variable speichert.
-     * Wird ausgelöst sobald das bearbeitet Feld den Focus verliert.
+     * getaetigt wurde in eine Variable speichert.
+     * Wird ausgeloest sobald das bearbeitet Feld den Focus verliert.
      */
     private class YearFocus
             extends FocusAdapter {

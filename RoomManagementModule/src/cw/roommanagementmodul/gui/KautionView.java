@@ -41,7 +41,7 @@ public class KautionView extends CWView {
         bEdit = CWComponentFactory.createButton(model.getEditAction());
         bEdit.setText("Bearbeiten");
         bDelete = CWComponentFactory.createButton(model.getDeleteAction());
-        bDelete.setText("Löschen");
+        bDelete.setText("Loeschen");
         bBack = CWComponentFactory.createButton(model.getBackAction());
         bBack.setText("Zurueck");
 

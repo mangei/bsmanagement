@@ -174,7 +174,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr>{
         }
 
         public void actionPerformed(ActionEvent e) {
-             int i = JOptionPane.showConfirmDialog(null, "Tarif wirklich löschen?","Löschen",JOptionPane.OK_CANCEL_OPTION);
+             int i = JOptionPane.showConfirmDialog(null, "Tarif wirklich loeschen?","Loeschen",JOptionPane.OK_CANCEL_OPTION);
             if (i == JOptionPane.OK_OPTION) {
                 Gebuehr g=tarifSelection.getSelection().getGebuehr();
                 tarifManager.delete(tarifSelection.getSelection());
@@ -203,7 +203,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr>{
     private void newSelectedItem(EventObject e) {
         final Tarif t = new Tarif();
         t.setGebuehr(gebuehr);
-        final EditTarifPresentationModel model = new EditTarifPresentationModel(t,new CWHeaderInfo("Tarif erstellen","Hier können Sie einen neuen Tarif erstellen"));
+        final EditTarifPresentationModel model = new EditTarifPresentationModel(t,new CWHeaderInfo("Tarif erstellen","Hier koennen Sie einen neuen Tarif erstellen"));
         final EditTarifView gebView = new EditTarifView(model);
         model.addButtonListener(new ButtonListener() {
 
@@ -224,7 +224,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr>{
 
     private void editSelectedItem(EventObject e) {
         final Tarif t= tarifSelection.getSelection();
-        final EditTarifPresentationModel model = new EditTarifPresentationModel(t,new CWHeaderInfo("Tarif bearbeiten","Hier können Sie einen bestehenden Tarif bearbeiten"));
+        final EditTarifPresentationModel model = new EditTarifPresentationModel(t,new CWHeaderInfo("Tarif bearbeiten","Hier koennen Sie einen bestehenden Tarif bearbeiten"));
         final EditTarifView editView = new EditTarifView(model);
         model.addButtonListener(new ButtonListener() {
             public void buttonPressed(ButtonEvent evt) {

@@ -14,6 +14,7 @@ import javax.swing.event.ListSelectionListener;
 
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
@@ -41,8 +42,8 @@ public class CustomerManagementPresentationModel
     private CWHeaderInfo headerInfo;
     private SelectionHandler selectionHandler;
 
-    public CustomerManagementPresentationModel(EntityManager entityManager) {
-    	super(entityManager);
+    public CustomerManagementPresentationModel() {
+    	super(CWEntityManager.createEntityManager());
         initModels();
         initEventHandling();
     }
@@ -50,7 +51,7 @@ public class CustomerManagementPresentationModel
     public void initModels() {
         newAction = new NewAction("Neu", CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png"));
         editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"));
-        deleteAction = new DeleteAction("Löschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
+        deleteAction = new DeleteAction("Loeschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
         inactiveAction = new InactivesAction("Inaktiv setzen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactive_go.png"));
         viewInactivesAction = new ViewInactivesAction("Inaktive anzeigen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactives.png"));
         printAction = new PrintAction("Drucken", CWUtils.loadIcon("cw/coursemanagementmodul/images/print.png"));
@@ -83,6 +84,8 @@ public class CustomerManagementPresentationModel
         deleteAction = null;
         inactiveAction = null;
         viewInactivesAction = null;
+        
+        CWEntityManager.closeEntityManager(getEntityManager());
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -217,17 +220,17 @@ public class CustomerManagementPresentationModel
 
         public void actionPerformed(ActionEvent e) {
 
-            GUIManager.setLoadingScreenText("Kunden löschen...");
+            GUIManager.setLoadingScreenText("Kunden loeschen...");
             GUIManager.setLoadingScreenVisible(true);
 
             Customer customer = customerSelectorPresentationModel.getSelectedCustomer();
 
-            String[] options = {"Inaktiv setzen", "Löschen", "Abbrechen"};
+            String[] options = {"Inaktiv setzen", "Loeschen", "Abbrechen"};
 
             int i = JOptionPane.showOptionDialog(
                     null,
-                    "Wollen Sie wirklich den ausgewählten Kunden löschen oder nur deaktivieren?",
-                    "Kunden löschen",
+                    "Wollen Sie wirklich den ausgewaehlten Kunden loeschen oder nur deaktivieren?",
+                    "Kunden loeschen",
                     JOptionPane.OK_OPTION,
                     JOptionPane.WARNING_MESSAGE,
                     null,
@@ -246,7 +249,7 @@ public class CustomerManagementPresentationModel
                 String statusBarText;
                 String forename = customer.getForename();
                 String surname = customer.getSurname();
-                statusBarText = "'" + forename + " " + surname + "' wurde gelöscht.";
+                statusBarText = "'" + forename + " " + surname + "' wurde geloescht.";
 
                 GUIManager.getStatusbar().setTextAndFadeOut(statusBarText);
             } else if (i == 0) {
@@ -264,7 +267,7 @@ public class CustomerManagementPresentationModel
     }
 
     /**
-     * Innere Klasse die zum inaktive setzen der Kunden benötigt wird.
+     * Innere Klasse die zum inaktive setzen der Kunden benoetigt wird.
      */
     private class InactivesAction
             extends AbstractAction {

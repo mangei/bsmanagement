@@ -47,7 +47,7 @@ public class BereichView extends CWView
         bEdit = CWComponentFactory.createButton(model.getEditAction());
         bEdit.setText("Bearbeiten");
         bDelete = CWComponentFactory.createButton(model.getDeleteAction());
-        bDelete.setText("Löschen");
+        bDelete.setText("Loeschen");
 
 
         bZimmerNew = CWComponentFactory.createButton(model.getNewZimmerAction());
@@ -55,7 +55,7 @@ public class BereichView extends CWView
         bZimmerEdit = CWComponentFactory.createButton(model.getEditZimmerAction());
         bZimmerEdit.setText("Bearbeiten");
         bZimmerDelete = CWComponentFactory.createButton(model.getDeleteZimmerAction());
-        bZimmerDelete.setText("Löschen");
+        bZimmerDelete.setText("Loeschen");
 
         viewZimmerTabelle = CWComponentFactory.createButton(model.getViewTabelleAction());
         viewZimmerTabelle.setText("Zimmer Tabelle");

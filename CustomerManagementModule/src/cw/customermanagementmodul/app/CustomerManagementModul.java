@@ -7,14 +7,13 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JButton;
 
-import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.app.CascadeEvent;
-import cw.boardingschoolmanagement.app.CascadeListener;
 import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
+import cw.boardingschoolmanagement.perstistence.CascadeEvent;
+import cw.boardingschoolmanagement.perstistence.CascadeListener;
 import cw.customermanagementmodul.gui.CustomerManagementPresentationModel;
 import cw.customermanagementmodul.gui.CustomerManagementView;
 import cw.customermanagementmodul.gui.GroupManagementPresentationModel;
@@ -50,7 +49,7 @@ public class CustomerManagementModul
                 GUIManager.setLoadingScreenText("Kunden werden geladen...");
                 GUIManager.setLoadingScreenVisible(true);
 
-                CustomerManagementPresentationModel model = new CustomerManagementPresentationModel(CWEntityManager.getEntityManager());
+                CustomerManagementPresentationModel model = new CustomerManagementPresentationModel();
                 CustomerManagementView view = new CustomerManagementView(model);
 
                 GUIManager.changeView(view);
@@ -85,7 +84,7 @@ public class CustomerManagementModul
                 GUIManager.setLoadingScreenText("Gruppen werden geladen...");
                 GUIManager.setLoadingScreenVisible(true);
 
-                GroupManagementPresentationModel model = new GroupManagementPresentationModel(CWEntityManager.getEntityManager());
+                GroupManagementPresentationModel model = new GroupManagementPresentationModel();
                 GroupManagementView view = new GroupManagementView(model);
 
                 CWUtils.showDialog(view);
@@ -94,7 +93,7 @@ public class CustomerManagementModul
             }
         }), "manage");
 
-//        // Wenn eine Gruppe gelöscht wird, diese Gruppe aus der Gruppenliste der Kunden löschen.
+//        // Wenn eine Gruppe geloescht wird, diese Gruppe aus der Gruppenliste der Kunden loeschen.
 //        GroupPM.getInstance().addCascadeListener(new CascadeListener() {
 //            public void deleteAction(CascadeEvent evt) {
 //                Group group = (Group) evt.getSource();
@@ -105,7 +104,7 @@ public class CustomerManagementModul
 //            }
 //        });
 
-        // Wenn ein Kunde gelöscht wird, diesen Kunden aus den Kundenlisten der Gruppen löschen.
+        // Wenn ein Kunde geloescht wird, diesen Kunden aus den Kundenlisten der Gruppen loeschen.
         CustomerPM.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
                 Customer customer = (Customer) evt.getSource();

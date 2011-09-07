@@ -45,7 +45,7 @@ public class ConfigurationPresentationModel extends PresentationModel
     }
 
     /**
-     * Baut die grafische Oberfläche des Einstellungsfesterns auf
+     * Baut die grafische Oberflaeche des Einstellungsfesterns auf
      */
     public void initModels() {
         saveAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/boardingschoolmanagement/images/save.png"));
@@ -60,7 +60,7 @@ public class ConfigurationPresentationModel extends PresentationModel
 
         headerInfo = new CWHeaderInfo(
                 "Einstellungen",
-                "Hier können Sie Ihre Einstellungen vornehmen.",
+                "Hier koennen Sie Ihre Einstellungen vornehmen.",
                 CWUtils.loadIcon("cw/boardingschoolmanagement/images/configuration.png"),
                 CWUtils.loadIcon("cw/boardingschoolmanagement/images/configuration.png")
         );
@@ -145,7 +145,7 @@ public class ConfigurationPresentationModel extends PresentationModel
             int i = 1;
             if ((Boolean) isChanged()) {
                 Object[] options = {"Speichern", "Nicht Speichern", "Abbrechen"};
-                i = JOptionPane.showOptionDialog(null, "Daten wurden geändert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                i = JOptionPane.showOptionDialog(null, "Daten wurden geaendert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             }
             if (i == 0) {
                 // If the save-method doesn't worked, because of an error, to nothing

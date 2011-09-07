@@ -61,7 +61,7 @@ public class PostingRunsView extends CWView
                 "Hier erhalten Sie eine detailierte Detailansicht zum selektierten Gebuehrenlauf!",
                 "cw/coursemanagementmodul/images/lupe.png"));
         
-        runTable = CWComponentFactory.createTable("Es wurden noch keine Kursläufe erzeugt!");
+        runTable = CWComponentFactory.createTable("Es wurden noch keine Kurslaeufe erzeugt!");
         runTable.setModel(model.createPostingRunTableModel(model.getPostingRunList()));
         runTable.setSelectionModel(
                 new SingleListSelectionAdapter(

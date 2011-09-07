@@ -106,7 +106,7 @@ public class TestRunView extends CWView
             namePanel.add(new JLabel(street), cc.xy(1, 3));
             namePanel.add(new JLabel(postal), cc.xy(1, 5));
 
-            calculationPanel.add(new JLabel("Aktivitäten:"), cc.xy(1, 3));
+            calculationPanel.add(new JLabel("Aktivitaeten:"), cc.xy(1, 3));
             calculationPanel.add(new JLabel(courseAddition.getCourse().getName()), cc.xy(1, 1));
             calculationPanel.add(new JLabel("Gesamtpreis:"), cc.xy(1, 5));
             calculationPanel.add(new JLabel("€ " + numberFormat.format(getTotalActivityAmount(courseAddition))), cc.xy(3, 3, CellConstraints.RIGHT, CellConstraints.TOP));
@@ -143,12 +143,12 @@ public class TestRunView extends CWView
                 vertSubject += 2;
             }
 
-            activityPanel.add(new JLabel("Gesamtaktivitäspreis: "), cc.xy(1, vertActivity));
+            activityPanel.add(new JLabel("Gesamtaktivitaespreis: "), cc.xy(1, vertActivity));
             activityPanel.add(new JLabel("<html><b>€ " + numberFormat.format(getTotalActivityAmount(courseAddition)) + "</b></html>"), cc.xy(3, vertActivity));
 
             panelBuilder.add(new JLabel("<html><b>Anschrift</b></html>"), cc.xy(1, vert));
-            panelBuilder.add(new JLabel("<html><b>Aktivitäten</b></html>"), cc.xy(3, vert));
-            panelBuilder.add(new JLabel("<html><b>Kursgegenstände</b></html>"), cc.xy(5, vert));
+            panelBuilder.add(new JLabel("<html><b>Aktivitaeten</b></html>"), cc.xy(3, vert));
+            panelBuilder.add(new JLabel("<html><b>Kursgegenstaende</b></html>"), cc.xy(5, vert));
             panelBuilder.add(new JLabel("<html><b>Gesamtkalkulation</b></html>"), cc.xy(7, vert));
 
             vert += 2;

@@ -54,7 +54,7 @@ public class EditBereichView extends CWView
                 parentComboBox.setSelectedItem(model.getVaterBereich());
                 model.getUnsaved().setValue(false);
             } else {
-                JOptionPane.showMessageDialog(null, "Im ausgewählten Bereich kann kein untergeordneter Bereich hinzugefuegt werden," +
+                JOptionPane.showMessageDialog(null, "Im ausgewaehlten Bereich kann kein untergeordneter Bereich hinzugefuegt werden," +
                         " weil sich in diesem Bereich bereits Zimmer befinden!");
                 parentComboBox.setSelectedItem(model.getBereichManager().getRoot());
                 model.getUnsaved().setValue(false);

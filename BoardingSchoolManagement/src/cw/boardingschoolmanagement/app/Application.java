@@ -34,7 +34,7 @@ import cw.boardingschoolmanagement.manager.PropertiesManager;
  * BoardingSchoolManagement - Mainprogramm. <br />
  * Hauptklasse des Programmes welches das Programm systematisch aufbaut, die
  * grafischen Elemente initalisiert, einzelne Module initalisiert und die
- * Konfiguration läd.
+ * Konfiguration laed.
  * Implementiert als Singleton
  * 
  * @author Manuel Geier (CreativeWorkers)
@@ -70,8 +70,8 @@ public class Application {
     }
 
     /**
-     * Startet die Application, läd das look'n Feel, die Konfiguration , läd und initalisiert die Module
-     * , läd und initalisiert die grafische Oberfläche, stellt die Verbindung zur Datenbank her.
+     * Startet die Application, laed das look'n Feel, die Konfiguration , laed und initalisiert die Module
+     * , laed und initalisiert die grafische Oberflaeche, stellt die Verbindung zur Datenbank her.
      *
      */
     private void start() {
@@ -187,7 +187,7 @@ public class Application {
         ////////////////////////////////////////////////////////////////////
         // Load the GUI
         ////////////////////////////////////////////////////////////////////
-            ss.setText("Oberfläche wird geladen...");
+            ss.setText("Oberflaeche wird geladen...");
             GUIManager.initGUIManager("Internatsverwaltung");
 
         ////////////////////////////////////////////////////////////////////
@@ -213,11 +213,11 @@ public class Application {
         }
     }
 
-/**
- * Läd die grundlegenten Komponenten der GUI(Sidebar mit Startseite,
- * Topmenue mit den Mennuepunkten: Beenden, Konfiguration).
- *
- */
+	/**
+	 * Laed die grundlegenten Komponenten der GUI(Sidebar mit Startseite,
+	 * Topmenue mit den Mennuepunkten: Beenden, Konfiguration).
+	 *
+	 */
     private void initGUI() {
         CWMenuPanel sideMenu = MenuManager.getSideMenu();
 
@@ -232,7 +232,7 @@ public class Application {
             public void actionPerformed(ActionEvent e) {
 //                GUIManager.setLoadingScreenText("Startseite werden geladen...");
 //                GUIManager.setLoadingScreenVisible(true);
-                GUIManager.changeView(new HomeView(new HomePresentationModel(CWEntityManager.getEntityManager())));
+                GUIManager.changeView(new HomeView(new HomePresentationModel()));
 //                GUIManager.setLoadingScreenVisible(false);
             }
         }), "home", true);

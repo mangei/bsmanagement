@@ -1,7 +1,7 @@
 package cw.accountmanagementmodul.pojo.manager;
 
 import cw.accountmanagementmodul.pojo.Account;
-import cw.boardingschoolmanagement.app.HibernateUtil;
+import cw.boardingschoolmanagement.perstistence.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import java.util.List;
 import cw.accountmanagementmodul.pojo.PostingGroup;

@@ -81,14 +81,14 @@ public class CoursePostingPresentationModel
     public void initModels() {
         headerInfo = new CWHeaderInfo(
                 "Kursbuchungen",
-                "Sie befinden sich im Kursbuchungsbereich. Hier können Sie Kursbuchungen tätigen",
+                "Sie befinden sich im Kursbuchungsbereich. Hier koennen Sie Kursbuchungen taetigen",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/accounting.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/accounting.png"));
         //Anlegen der Aktionen, fuer die Buttons
         postingAction = new PostingAction("Buchen");
         normalRadioButtonAction = new NormalRadioButtonAction("Echtlauf");
         testRadioButtonAction = new TestRadioButtonAction("Testlauf");
-        runsAction = new RunsAction("Gebuehrenläufe");
+        runsAction = new RunsAction("Gebuehrenlaeufe");
 
         coursePartSelection = new SelectionInList<CourseParticipant>();
         courseSelection = new SelectionInList<Course>(CourseManager.getInstance().getAll());

@@ -66,7 +66,7 @@ public class BewohnerEditCustomerTabExtentionPresentationModel
     }
 
     private void initModels() {
-        headerInfo = new CWHeaderInfo("Zimmer Zuweisung", "Hier können Sie einem Kunden ein Zimmer zuweisen und machen ihn damit zu einem Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"));
+        headerInfo = new CWHeaderInfo("Zimmer Zuweisung", "Hier koennen Sie einem Kunden ein Zimmer zuweisen und machen ihn damit zu einem Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"));
 
         checkBoxModel = new ValueHolder();
         checkBoxListener= new CheckBoxListener();

@@ -54,7 +54,7 @@ public class CustomerChooserPresentationModel
 
     private void initModels() {
 
-        okAction = new OkAction("Auswählen", CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"));
+        okAction = new OkAction("Auswaehlen", CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"));
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(getEntityManager());

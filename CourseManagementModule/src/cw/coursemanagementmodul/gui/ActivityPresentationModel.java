@@ -60,14 +60,14 @@ public class ActivityPresentationModel
     //**************************************************************************
     private void initModels() {
         headerInfo = new CWHeaderInfo(
-                "Aktivität",
-                "Sie befinden sich im Aktivitätsbereich. Hier können Sie Aktivitäten anlegen",
+                "Aktivitaet",
+                "Sie befinden sich im Aktivitaetsbereich. Hier koennen Sie Aktivitaeten anlegen",
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"),
                 CWUtils.loadIcon("cw/coursemanagementmodul/images/activity.png"));
         //Anlegen der Aktionen, fuer die Buttons
         newButtonAction = new NewAction("Neu");
         editButtonAction = new EditAction("Bearbeiten");
-        deleteButtonAction = new DeleteAction("Löschen");
+        deleteButtonAction = new DeleteAction("Loeschen");
         
         activitySelection = new SelectionInList<Activity>(ActivityManager.getInstance().getAll());
     }
@@ -127,9 +127,9 @@ public class ActivityPresentationModel
                 if(evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     ActivityManager.getInstance().save(activity);
                     if(activityAlreadyCreated) {
-                        GUIManager.getStatusbar().setTextAndFadeOut("Aktivität wurde aktualisiert.");
+                        GUIManager.getStatusbar().setTextAndFadeOut("Aktivitaet wurde aktualisiert.");
                     } else {
-                        GUIManager.getStatusbar().setTextAndFadeOut("Aktivität wurde erstellt.");
+                        GUIManager.getStatusbar().setTextAndFadeOut("Aktivitaet wurde erstellt.");
                         activitySelection.getList().add(activity);
                         activitySelection.fireSelectedContentsChanged();
                         activityAlreadyCreated = true;
@@ -170,7 +170,7 @@ public class ActivityPresentationModel
     //**************************************************************************
     
     //**************************************************************************
-    //Private Klasse, die Events behandelt, die das Löschen
+    //Private Klasse, die Events behandelt, die das Loeschen
     //von Kursen beinhaltet
     //**************************************************************************
     private class DeleteAction
@@ -189,21 +189,21 @@ public class ActivityPresentationModel
             List<CourseParticipant> courseParts = CourseParticipantManager.getInstance().getAll(activity);
             
             if(courseParts.size() > 0){
-                    JOptionPane.showMessageDialog(null, "<html>Löschen der Aktivität "
-                            + activity.getName() + " nicht möglich!<br/>"
-                            + "Diese Aktivität wird noch von ein oder mehreren Kunden verwendet!</html>");
+                    JOptionPane.showMessageDialog(null, "<html>Loeschen der Aktivitaet "
+                            + activity.getName() + " nicht moeglich!<br/>"
+                            + "Diese Aktivitaet wird noch von ein oder mehreren Kunden verwendet!</html>");
             }
             else{
-                int ret = JOptionPane.showConfirmDialog(null, "Wollen Sie die Aktivität wirklich löschen?");
+                int ret = JOptionPane.showConfirmDialog(null, "Wollen Sie die Aktivitaet wirklich loeschen?");
                 if(ret == JOptionPane.OK_OPTION){
                     activitySelection.getList().remove(activity);
                     ActivityManager.getInstance().delete(activity);
 
-                    GUIManager.setLoadingScreenText("Aktivität wird gelöscht...");
+                    GUIManager.setLoadingScreenText("Aktivitaet wird geloescht...");
                     GUIManager.setLoadingScreenVisible(true);
 
                     GUIManager.setLoadingScreenVisible(false);
-                    GUIManager.getStatusbar().setTextAndFadeOut("Die Aktivität wurde gelöscht!");
+                    GUIManager.getStatusbar().setTextAndFadeOut("Die Aktivitaet wurde geloescht!");
                 }
             }
         }
@@ -260,7 +260,7 @@ public class ActivityPresentationModel
         public String getColumnName(int column) {
             switch (column) {
                 case 0:
-                    return "Aktivität-Name";
+                    return "Aktivitaet-Name";
                 case 1:
                     return "Beschreibung";
                 case 2:
@@ -298,7 +298,7 @@ public class ActivityPresentationModel
     }
     
     //**************************************************************************
-    //Regelt das Editieren (Verändern) von Kursen
+    //Regelt das Editieren (Veraendern) von Kursen
     //(Doppelclick oder Ändern-Button)
     //**************************************************************************
     private void editSelectedItem(EventObject e) {
@@ -313,7 +313,7 @@ public class ActivityPresentationModel
             public void buttonPressed(ButtonEvent evt) {
                 if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     ActivityManager.getInstance().save(activity);
-                    GUIManager.getStatusbar().setTextAndFadeOut("Aktivität wurde aktualisiert.");
+                    GUIManager.getStatusbar().setTextAndFadeOut("Aktivitaet wurde aktualisiert.");
                 }
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     GUIManager.getInstance().unlockMenu();

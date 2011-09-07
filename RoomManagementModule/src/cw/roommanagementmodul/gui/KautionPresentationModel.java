@@ -183,7 +183,7 @@ public class KautionPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final Kaution k = new Kaution();
-            final EditKautionPresentationModel model = new EditKautionPresentationModel(k, new CWHeaderInfo("Kaution erstellen", "Hier können Sie eine Kaution erstellen"));
+            final EditKautionPresentationModel model = new EditKautionPresentationModel(k, new CWHeaderInfo("Kaution erstellen", "Hier koennen Sie eine Kaution erstellen"));
             final EditKautionView editView = new EditKautionView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -226,14 +226,14 @@ public class KautionPresentationModel {
 
             Kaution k = kautionSelection.getSelection();
 
-            int check = JOptionPane.showConfirmDialog(null, "Kaution wirklich löschen?", "Löschen", JOptionPane.YES_NO_OPTION);
+            int check = JOptionPane.showConfirmDialog(null, "Kaution wirklich loeschen?", "Loeschen", JOptionPane.YES_NO_OPTION);
             if (check == JOptionPane.YES_OPTION) {
                 boolean existBewohner = bewohnerManager.existKaution(k);
                 if (existBewohner == false) {
                     kautionManager.delete(k);
                     kautionSelection.setList(kautionManager.getAll());
                 }else{
-                    JOptionPane.showMessageDialog(null,"Kaution kann nicht gelöscht werden da sie noch von " +
+                    JOptionPane.showMessageDialog(null,"Kaution kann nicht geloescht werden da sie noch von " +
                             "Bewohnern benutzt wird!" , "Kaution", JOptionPane.OK_OPTION);
                 }
 
@@ -286,7 +286,7 @@ public class KautionPresentationModel {
 
     private void editSelectedItem(EventObject e) {
         final Kaution k = this.getKautionSelection().getSelection();
-        final EditKautionPresentationModel model = new EditKautionPresentationModel(k, new CWHeaderInfo("Kaution bearbeiten", "Hier können Sie ein Kaution bearbeiten"));
+        final EditKautionPresentationModel model = new EditKautionPresentationModel(k, new CWHeaderInfo("Kaution bearbeiten", "Hier koennen Sie ein Kaution bearbeiten"));
         final EditKautionView editView = new EditKautionView(model);
         model.addButtonListener(new ButtonListener() {
 

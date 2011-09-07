@@ -144,7 +144,7 @@ public class GebuehrenKategoriePresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             final GebuehrenKategorie gk = new GebuehrenKategorie();
-            final EditGebuehrenKategoriePresentationModel model = new EditGebuehrenKategoriePresentationModel(gk, new CWHeaderInfo("Kategorie erstellen", "Hier können Sie eine neue Gebuehren Kategorie erstellen"));
+            final EditGebuehrenKategoriePresentationModel model = new EditGebuehrenKategoriePresentationModel(gk, new CWHeaderInfo("Kategorie erstellen", "Hier koennen Sie eine neue Gebuehren Kategorie erstellen"));
             final EditGebuehrenKategorieView editView = new EditGebuehrenKategorieView(model);
             model.addButtonListener(new ButtonListener() {
 
@@ -186,7 +186,7 @@ public class GebuehrenKategoriePresentationModel {
         public void actionPerformed(ActionEvent e) {
             GebuehrenKategorie gk = gebuehrenKatSelection.getSelection();
 
-            int check = JOptionPane.showConfirmDialog(null, "Kategorie wirklich löschen?", "Löschen", JOptionPane.YES_NO_OPTION);
+            int check = JOptionPane.showConfirmDialog(null, "Kategorie wirklich loeschen?", "Loeschen", JOptionPane.YES_NO_OPTION);
             if (check == JOptionPane.YES_OPTION) {
                 gebKatManager.delete(gk);
                 gebuehrenKatSelection.setList(gebKatManager.getAll());
@@ -240,7 +240,7 @@ public class GebuehrenKategoriePresentationModel {
 
     private void editSelectedItem(EventObject e) {
         final GebuehrenKategorie gk = this.getGebuehrenKatSelection().getSelection();
-        final EditGebuehrenKategoriePresentationModel model = new EditGebuehrenKategoriePresentationModel(gk, new CWHeaderInfo("Kategorie bearbeiten", "Hier können Sie eine bestehende Gebuehren Kategorie bearbeiten"));
+        final EditGebuehrenKategoriePresentationModel model = new EditGebuehrenKategoriePresentationModel(gk, new CWHeaderInfo("Kategorie bearbeiten", "Hier koennen Sie eine bestehende Gebuehren Kategorie bearbeiten"));
         final EditGebuehrenKategorieView editView = new EditGebuehrenKategorieView(model);
         model.addButtonListener(new ButtonListener() {
 

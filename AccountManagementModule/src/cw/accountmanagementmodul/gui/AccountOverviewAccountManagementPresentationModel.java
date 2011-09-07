@@ -53,7 +53,7 @@ public class AccountOverviewAccountManagementPresentationModel
     }
 
     /**
-     * Wenn sich ein Document ändert, wird saved auf false gesetzt
+     * Wenn sich ein Document aendert, wird saved auf false gesetzt
      */
     public class SaveListener implements PropertyChangeListener {
 

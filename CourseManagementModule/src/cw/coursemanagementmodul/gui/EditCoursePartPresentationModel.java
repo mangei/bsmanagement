@@ -204,15 +204,15 @@ public class EditCoursePartPresentationModel
 
         courseChooserButtonAction = new CourseChooserButtonAction("Kurs hinzufuegen");
         activityButtonAction =
-                new ActivityButtonAction("Aktivität hinzufuegen");
+                new ActivityButtonAction("Aktivitaet hinzufuegen");
         subjectButtonAction =
                 new SubjectButtonAction("Gegenstand hinzufuegen");
         removeSubjectButtonAction =
-                new RemoveSubjectButtonAction("Gegenstand löschen");
+                new RemoveSubjectButtonAction("Gegenstand loeschen");
         removeCourseButtonAction =
-                new RemoveButtonAction("Kurs löschen");
+                new RemoveButtonAction("Kurs loeschen");
         removeActivityButtonAction =
-                new RemoveActivityButtonAction("Aktivität löschen");
+                new RemoveActivityButtonAction("Aktivitaet loeschen");
 
         support =
                 new ButtonListenerSupport();
@@ -406,7 +406,7 @@ public class EditCoursePartPresentationModel
                             updateActionEnablement();
                             GUIManager.changeToLastView();
                         } else {
-                            JOptionPane.showMessageDialog(view, "Diese Aktivität wurde bereits hinzugefuegt.");
+                            JOptionPane.showMessageDialog(view, "Diese Aktivitaet wurde bereits hinzugefuegt.");
                         }
                     }
                 }
@@ -461,7 +461,7 @@ public class EditCoursePartPresentationModel
 
         public void actionPerformed(ActionEvent e) {
             if (!isCourseAlreadyPosted()) {
-                int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Kurs (" + courseAdditionSelection.getSelection().getCourse().getName() + ") " + " des Kursteilnehmers " + coursePart.getCustomer().getForename() + " " + coursePart.getCustomer().getSurname() + " wirklich löschen?");
+                int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Kurs (" + courseAdditionSelection.getSelection().getCourse().getName() + ") " + " des Kursteilnehmers " + coursePart.getCustomer().getForename() + " " + coursePart.getCustomer().getSurname() + " wirklich loeschen?");
                 if (check == JOptionPane.OK_OPTION) {
                     CourseAddition cA = courseAdditionSelection.getSelection();
                     courseAdditionSelection.getList().remove(cA);
@@ -470,7 +470,7 @@ public class EditCoursePartPresentationModel
                     CourseAdditionManager.getInstance().delete(cA);
                 }
             } else {
-                JOptionPane.showMessageDialog(null, "Der Kurs wurde bereits gebucht und kann somit nicht mehr gelöscht werden!");
+                JOptionPane.showMessageDialog(null, "Der Kurs wurde bereits gebucht und kann somit nicht mehr geloescht werden!");
             }
         }
     }
@@ -486,7 +486,7 @@ public class EditCoursePartPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Gegenstand (" + subjectSelection.getSelection().getName() + ") " + " fuer den Kurs " + courseAdditionSelection.getSelection().getCourse().getName() + " wirklich löschen?");
+            int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diesen Gegenstand (" + subjectSelection.getSelection().getName() + ") " + " fuer den Kurs " + courseAdditionSelection.getSelection().getCourse().getName() + " wirklich loeschen?");
             if (check == JOptionPane.OK_OPTION) {
                 Subject subject = subjectSelection.getSelection();
                 subjectSelection.getList().remove(subject);
@@ -508,7 +508,7 @@ public class EditCoursePartPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diese Aktivität (" + activitySelection.getSelection().getName() + ") " + " fuer den Kurs " + courseAdditionSelection.getSelection().getCourse().getName() + " wirklich löschen?");
+            int check = JOptionPane.showConfirmDialog(null, "Wollen Sie diese Aktivitaet (" + activitySelection.getSelection().getName() + ") " + " fuer den Kurs " + courseAdditionSelection.getSelection().getCourse().getName() + " wirklich loeschen?");
             if (check == JOptionPane.OK_OPTION) {
                 Activity activity = activitySelection.getSelection();
                 activitySelection.getList().remove(activity);
@@ -645,7 +645,7 @@ public class EditCoursePartPresentationModel
         public String getColumnName(int column) {
             switch (column) {
                 case 0:
-                    return "Aktivitätsname";
+                    return "Aktivitaetsname";
                 case 1:
                     return "Beschreibung";
                 case 2:
