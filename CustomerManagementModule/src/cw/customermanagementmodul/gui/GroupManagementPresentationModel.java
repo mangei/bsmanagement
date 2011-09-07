@@ -21,7 +21,7 @@ import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.persistence.Group;
-import cw.customermanagementmodul.persistence.GroupPM;
+import cw.customermanagementmodul.persistence.PMGroup;
 
 /**
  *
@@ -52,7 +52,7 @@ public class GroupManagementPresentationModel
         editGroupAction = new EditGroupAction("Gruppe bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/group_edit.png"));
         removeGroupAction = new RemoveGroupAction("Gruppe loeschen", CWUtils.loadIcon("cw/customermanagementmodul/images/group_remove.png"));
 
-        groupSelection = new SelectionInList<Group>(GroupPM.getInstance().getAll(getEntityManager()));
+        groupSelection = new SelectionInList<Group>(PMGroup.getInstance().getAll(getEntityManager()));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
                 new ArrayList(),
@@ -121,7 +121,7 @@ public class GroupManagementPresentationModel
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            final Group group = GroupPM.getInstance().create(getEntityManager());
+            final Group group = PMGroup.getInstance().create(getEntityManager());
 
             final EditGroupPresentationModel model = new EditGroupPresentationModel(
                     group,
@@ -147,7 +147,7 @@ public class GroupManagementPresentationModel
                     }
                     if(evt.getType() == ButtonEvent.EXIT_BUTTON) {
                     	getEntityManager().getTransaction().begin();
-                    	GroupPM.getInstance().remove(group, getEntityManager());
+                    	PMGroup.getInstance().remove(group, getEntityManager());
                     	getEntityManager().getTransaction().commit();
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
@@ -228,7 +228,7 @@ public class GroupManagementPresentationModel
                 
                 getEntityManager().getTransaction().begin();
                 
-                GroupPM.getInstance().remove(group, getEntityManager());
+                PMGroup.getInstance().remove(group, getEntityManager());
                 
                 getEntityManager().getTransaction().commit();
 

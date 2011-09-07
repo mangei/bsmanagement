@@ -16,7 +16,7 @@ import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionPresen
 import cw.customermanagementmodul.gui.GroupCustomerSelectorFilterExtentionView;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.Group;
-import cw.customermanagementmodul.persistence.GroupPM;
+import cw.customermanagementmodul.persistence.PMGroup;
 
 
 
@@ -54,7 +54,7 @@ public class GroupCustomerSelectorFilterExtention
 
     public List<Customer> filter(List<Customer> costumers) {
 
-        // Die Erweiterung die eine Änderung feststellt, meldet dies an die Tabelle
+        // Die Erweiterung die eine Aenderung feststellt, meldet dies an die Tabelle
         // diese ruft dann die filter-methode dieser Erweiterungen auf
         // Danach wird die Tabelle aktualisiert
 
@@ -121,7 +121,7 @@ public class GroupCustomerSelectorFilterExtention
                 group = itGroups.next();
 
                 // Check if the costumer, has the group
-                if(GroupPM.getInstance().getAllGroupsByCustomer(customer, entityManager).contains(group)) {
+                if(PMGroup.getInstance().getAllGroupsByCustomer(customer, entityManager).contains(group)) {
                     contains = true;
                     break;
                 }

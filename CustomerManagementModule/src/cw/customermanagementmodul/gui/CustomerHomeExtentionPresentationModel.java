@@ -6,7 +6,7 @@ import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 
 import cw.boardingschoolmanagement.gui.CWPresentationModel;
-import cw.customermanagementmodul.persistence.CustomerPM;
+import cw.customermanagementmodul.persistence.PMCustomer;
 
 /**
  *
@@ -24,7 +24,7 @@ public class CustomerHomeExtentionPresentationModel
     }
 
     private void initModels() {
-        sizeCustomersValueModel = new ValueHolder("Kunden: " + CustomerPM.getInstance().countActive(getEntityManager()));
+        sizeCustomersValueModel = new ValueHolder("Kunden: " + PMCustomer.getInstance().countActive(getEntityManager()));
     }
 
     private void initEventHandling() {

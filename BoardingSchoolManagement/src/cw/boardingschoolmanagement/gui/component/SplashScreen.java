@@ -39,7 +39,7 @@ public class SplashScreen extends JFrame {
 
         this.picture = picture;
 
-        setTitle("Loading...");
+        setTitle("Starten...");
         setIconImage(CWUtils.loadImage("cw/boardingschoolmanagement/images/building.png"));
     }
     

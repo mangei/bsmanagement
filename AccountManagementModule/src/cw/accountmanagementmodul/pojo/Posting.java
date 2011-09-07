@@ -12,7 +12,7 @@ import javax.persistence.Temporal;
 
 import com.jgoodies.binding.beans.Model;
 
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+import cw.boardingschoolmanagement.persistence.AnnotatedClass;
 
 /**
  * Simple posting. It has a name, an amount, a creationDate and a type. <br>

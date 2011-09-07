@@ -20,6 +20,7 @@ import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.comparator.PriorityComparator;
 import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
@@ -29,6 +30,7 @@ import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.persistence.Customer;
+import cw.customermanagementmodul.persistence.PMCustomer;
 
 /**
  *
@@ -38,7 +40,6 @@ public class EditCustomerPresentationModel
         extends CWEditPresentationModel<Customer>
 {
 
-    private PresentationModelProperties properties;
     private ValueModel unsaved;
     private CWHeaderInfo headerInfo;
     private Action saveAction;
@@ -51,8 +52,26 @@ public class EditCustomerPresentationModel
     public EditCustomerPresentationModel(PresentationModelProperties properties, EntityManager entityManager) {
         super((Customer)properties.get("customer"), entityManager);
         this.headerInfo = properties.getHeaderInfo();
-        this.properties = properties;
 
+        initModels();
+        initEventHandling();
+    }
+    
+    public EditCustomerPresentationModel() {
+        this(null);
+    }
+    
+    public EditCustomerPresentationModel(Long customerId) {
+        super(CWEntityManager.createEntityManager());
+
+        if(customerId == null) {
+        	setBean(PMCustomer.getInstance().create(getEntityManager()));
+        	setMode(Mode.NEW);
+        } else {
+        	setBean(PMCustomer.getInstance().get(customerId, getEntityManager()));
+        	setMode(Mode.EDIT);
+        }
+        
         initModels();
         initEventHandling();
     }
@@ -71,9 +90,6 @@ public class EditCustomerPresentationModel
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
 
         support = new ButtonListenerSupport();
-        
-        // begin transaction
-        getEntityManager().getTransaction().begin();
     }
 
     public void initEventHandling() {
@@ -177,7 +193,6 @@ public class EditCustomerPresentationModel
 //        actionButtonListener = null;
 //        saveListener = null;
 
-        release();
     }
 
     /**
@@ -252,10 +267,6 @@ public class EditCustomerPresentationModel
         return null;
     }
 
-    public PresentationModelProperties getProperties() {
-        return properties;
-    }
-
     public void removeButtonListener(ButtonListener listener) {
         support.removeButtonListener(listener);
     }
@@ -307,7 +318,7 @@ public class EditCustomerPresentationModel
             int i = 1;
             if ((Boolean) unsaved.getValue() == true) {
                 Object[] options = {"Speichern", "Nicht Speichern", "Abbrechen"};
-                i = JOptionPane.showOptionDialog(null, "Daten wurden geaendert. Wollen Sie die Änderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+                i = JOptionPane.showOptionDialog(null, "Daten wurden geaendert. Wollen Sie die Aenderungen speichern?", "Speichern", JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
             }
             if (i == 0) {
 
@@ -317,6 +328,7 @@ public class EditCustomerPresentationModel
                 }
             }
             if (i == 0 || i == 1) {
+            	cancel();
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
         }
@@ -333,7 +345,7 @@ public class EditCustomerPresentationModel
             extention.validate(getErrorMessages());
         }
     	
-    	return hasErrorMessages();
+    	return !hasErrorMessages();
     }
     
     public void cancel() {
@@ -343,8 +355,15 @@ public class EditCustomerPresentationModel
             extention.cancel();
         }
 
-        // revert all changes
-        getEntityManager().getTransaction().rollback();
+        if(getMode() == Mode.NEW) {
+        	PMCustomer.getInstance().remove(getBean(), getEntityManager());
+        	getEntityManager().getTransaction().commit();
+        } else if(getMode() == Mode.EDIT) {
+	        // revert all changes
+	        getEntityManager().getTransaction().rollback();
+        }
+
+    	CWEntityManager.closeEntityManager(getEntityManager());
     }
 
     public boolean save() {
@@ -363,6 +382,7 @@ public class EditCustomerPresentationModel
 	
 	        // Commit all changes
 	        getEntityManager().getTransaction().commit();
+	        CWEntityManager.closeEntityManager(getEntityManager());
 	        
 	        unsaved.setValue(false);
     	}

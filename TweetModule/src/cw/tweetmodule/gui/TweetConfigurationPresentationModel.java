@@ -43,7 +43,7 @@ public class TweetConfigurationPresentationModel
     private void initModels() {
         headerInfo = new CWHeaderInfo(
                 "Tweet",
-                "Ändern Sie hier ihre Verbindungsdaten.",
+                "Aendern Sie hier ihre Verbindungsdaten.",
                 CWUtils.loadIcon("cw/tweetmodule/images/twitter11.png"),
                 CWUtils.loadIcon("cw/tweetmodule/images/twitter11.png")
         );

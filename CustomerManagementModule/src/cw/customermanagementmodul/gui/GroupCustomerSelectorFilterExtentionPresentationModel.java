@@ -12,7 +12,7 @@ import javax.swing.event.ListSelectionListener;
 
 import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.customermanagementmodul.persistence.Group;
-import cw.customermanagementmodul.persistence.GroupPM;
+import cw.customermanagementmodul.persistence.PMGroup;
 
 /**
  * @author CreativeWorkers.at
@@ -33,7 +33,7 @@ public class GroupCustomerSelectorFilterExtentionPresentationModel
 
     public void initModels() {
         groupSelection = new DefaultListModel();
-        List<Group> groupList = GroupPM.getInstance().getAll(getEntityManager());
+        List<Group> groupList = PMGroup.getInstance().getAll(getEntityManager());
         for (int i = 0, l = groupList.size(); i < l; i++) {
             groupSelection.addElement(groupList.get(i));
         }

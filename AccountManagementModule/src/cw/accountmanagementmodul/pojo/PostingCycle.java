@@ -1,7 +1,9 @@
 package cw.accountmanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+
+import cw.boardingschoolmanagement.persistence.AnnotatedClass;
+
 import java.util.ArrayList;
 import java.util.List;
 

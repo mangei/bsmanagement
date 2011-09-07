@@ -2,7 +2,9 @@
 package cw.studentmanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+
+import cw.boardingschoolmanagement.persistence.AnnotatedClass;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

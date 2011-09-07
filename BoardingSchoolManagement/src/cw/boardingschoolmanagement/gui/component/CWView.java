@@ -267,8 +267,11 @@ public class CWView extends CWPanel {
 
     public void setHeaderInfo(CWHeaderInfo headerInfo) {
         this.headerInfo = headerInfo;
-        setName(headerInfo.getHeaderText());
         headerInfoPanel.setHeaderInfo(headerInfo);
+        
+    	if(headerInfo != null) {
+	        setName(headerInfo.getHeaderText());
+    	}
     }
 
     public void setInnerPanelBorder(Border border) {
@@ -440,13 +443,17 @@ public class CWView extends CWPanel {
         public void setHeaderInfo(CWHeaderInfo headerInfo) {
             this.headerInfo = headerInfo;
 
-            // Entferne das HTML-Markup, denn es wird automatisch hinzugefuegt.
-            headerInfo.getDescription().toLowerCase().replace("<html>", "");
-            headerInfo.getDescription().toLowerCase().replace("</html>", "");
-            headerInfo.getDescription().toLowerCase().replace("<body>", "");
-            headerInfo.getDescription().toLowerCase().replace("</body>", "");
-            
-            updateHeaderInfo();
+            if(headerInfo != null) {
+	            // Entferne das HTML-Markup, denn es wird automatisch hinzugefuegt.
+	            headerInfo.getDescription().toLowerCase().replace("<html>", "");
+	            headerInfo.getDescription().toLowerCase().replace("</html>", "");
+	            headerInfo.getDescription().toLowerCase().replace("<body>", "");
+	            headerInfo.getDescription().toLowerCase().replace("</body>", "");
+	            
+	            updateHeaderInfo();
+            } else {
+            	clearHeaderInfo();
+            }
         }
 
         private void updateHeaderInfo() {
@@ -471,6 +478,12 @@ public class CWView extends CWPanel {
             }
 
             repaint();
+        }
+        
+        private void clearHeaderInfo() {
+        	lHeaderText.setText("");
+        	lDescription.setText("");
+        	lImage.setIcon(null);
         }
     }
 

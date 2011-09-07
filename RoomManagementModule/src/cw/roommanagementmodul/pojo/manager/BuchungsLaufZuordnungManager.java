@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 
 import cw.accountmanagementmodul.pojo.AccountPosting;
-import cw.boardingschoolmanagement.perstistence.HibernateUtil;
+import cw.boardingschoolmanagement.persistence.HibernateUtil;
 import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import cw.roommanagementmodul.pojo.BuchungsLaufZuordnung;
 import cw.roommanagementmodul.pojo.GebLauf;

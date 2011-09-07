@@ -21,7 +21,7 @@ import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.Group;
-import cw.customermanagementmodul.persistence.GroupPM;
+import cw.customermanagementmodul.persistence.PMGroup;
 
 /**
  *
@@ -53,9 +53,9 @@ public class GroupEditCustomerPresentationModel
     }
 
     private void initModels() {
-        selectionCustomerGroups = new SelectionInList<Group>(GroupPM.getInstance().getAllGroupsByCustomer(customer, getEntityManager()));
+        selectionCustomerGroups = new SelectionInList<Group>(PMGroup.getInstance().getAllGroupsByCustomer(customer, getEntityManager()));
         
-        List<Group> otherGroups = GroupPM.getInstance().getAll(getEntityManager());
+        List<Group> otherGroups = PMGroup.getInstance().getAll(getEntityManager());
         otherGroups.removeAll(selectionCustomerGroups.getList());
         selectionGroups = new SelectionInList<Group>(otherGroups);
 

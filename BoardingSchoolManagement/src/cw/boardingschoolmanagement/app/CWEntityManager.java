@@ -34,7 +34,7 @@ public class CWEntityManager {
             // H2
             setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect").
             setProperty("hibernate.connection.driver_class", "org.h2.Driver").
-            setProperty("hibernate.connection.url", "jdbc:h2:database/internat").
+            setProperty("hibernate.connection.url", "jdbc:h2:database/internat;AUTO_SERVER=TRUE ").
             setProperty("hibernate.connection.username", "sa").
             setProperty("hibernate.connection.password", "").
 
@@ -87,6 +87,10 @@ public class CWEntityManager {
 //        return entityManager;
 //    }
     
+    /**
+     * Creates a new EntityManager
+     * @return EntityManager
+     */
     public static EntityManager createEntityManager() {
         if(entityManagerFactory == null || !entityManagerFactory.isOpen()) {
             JOptionPane.showMessageDialog(null, "EntityManagerFactory is null or not open.", "Fehler", JOptionPane.ERROR_MESSAGE);
@@ -95,10 +99,15 @@ public class CWEntityManager {
         } else {
         	EntityManager newEntityManager = entityManagerFactory.createEntityManager();
 			newEntityManager.setFlushMode(FlushModeType.COMMIT);
+			newEntityManager.getTransaction().begin();
         	return newEntityManager;
         }
     }
     
+    /**
+     * Flushes and closes an entityManager
+     * @param entityManager EntityManager
+     */
     public static void closeEntityManager(EntityManager entityManager) {
     	if(entityManager != null && !entityManager.isOpen()) {
     		entityManager.flush();
@@ -106,4 +115,12 @@ public class CWEntityManager {
     	}
     }
 	
+    /**
+     * Commits the current transactions and begins a new one
+     * @param entityManager EntityManager
+     */
+    public static void commit(EntityManager entityManager) {
+    	entityManager.getTransaction().commit();
+    	entityManager.getTransaction().begin();
+    }
 }

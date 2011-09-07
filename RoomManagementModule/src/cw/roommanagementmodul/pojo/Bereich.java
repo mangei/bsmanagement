@@ -1,7 +1,9 @@
 package cw.roommanagementmodul.pojo;
 
 import com.jgoodies.binding.beans.Model;
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+
+import cw.boardingschoolmanagement.persistence.AnnotatedClass;
+
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;

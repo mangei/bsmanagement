@@ -12,17 +12,17 @@ import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
  * 
  * @author Manuel Geier
  */
-public class GroupPM extends AbstractPersistenceManager<Group> {
+public class PMGroup extends AbstractPersistenceManager<Group> {
 
-    private static GroupPM instance;
-    private static Logger logger = Logger.getLogger(GroupPM.class.getName());
+    private static PMGroup instance;
+    private static Logger logger = Logger.getLogger(PMGroup.class.getName());
     
-    private GroupPM() {
+    private PMGroup() {
     }
     
-    public static GroupPM getInstance() {
+    public static PMGroup getInstance() {
         if(instance == null) {
-            instance = new GroupPM();
+            instance = new PMGroup();
         }
         return instance;
     }

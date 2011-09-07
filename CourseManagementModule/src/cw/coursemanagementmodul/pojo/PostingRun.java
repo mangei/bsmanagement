@@ -11,7 +11,7 @@ import javax.persistence.OneToMany;
 
 import com.jgoodies.binding.beans.Model;
 
-import cw.boardingschoolmanagement.interfaces.AnnotatedClass;
+import cw.boardingschoolmanagement.persistence.AnnotatedClass;
 
 /**
  *
