@@ -1,9 +1,8 @@
 package cw.boardingschoolmanagement.app.adaptable;
 
-public class IAdapterSupport
-	implements IAdaptable {
+public class IAdapterSupport {
 
-	public IAdaptable getAdapter(Class adaptableClass) {
-		return IAdapterManager.getAdapter(this, adaptableClass);
+	public IAdaptable getAdapter(IAdaptable baseObj, Class adaptableClass) {
+		return IAdapterManager.getAdapter(baseObj, adaptableClass);
 	}
 }

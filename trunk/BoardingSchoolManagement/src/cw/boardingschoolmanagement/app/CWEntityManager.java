@@ -6,7 +6,6 @@ import javax.persistence.FlushModeType;
 import javax.swing.JOptionPane;
 
 import org.hibernate.ejb.Ejb3Configuration;
-import org.hibernate.loader.custom.EntityFetchReturn;
 
 public class CWEntityManager {
 
@@ -122,5 +121,14 @@ public class CWEntityManager {
     public static void commit(EntityManager entityManager) {
     	entityManager.getTransaction().commit();
     	entityManager.getTransaction().begin();
+    }
+
+    /**
+     * Rollbacks the current transactions. <br>
+     * Attention: The EntityManager is after that not usable anymore and needs to be closed!
+     * @param entityManager EntityManager
+     */
+    public static void rollback(EntityManager entityManager) {
+    	entityManager.getTransaction().rollback();
     }
 }

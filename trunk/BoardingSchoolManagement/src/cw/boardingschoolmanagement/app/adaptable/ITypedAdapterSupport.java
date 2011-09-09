@@ -1,10 +1,9 @@
 package cw.boardingschoolmanagement.app.adaptable;
 
 public class ITypedAdapterSupport
-	extends IAdapterSupport
-		implements ITypedAdaptable {
+	extends IAdapterSupport{
 	
-	public <T> T getTypedAdapter(Class<T> adaptableClass) {
-		return (T) getAdapter(adaptableClass);
+	public <T> T getTypedAdapter(IAdaptable baseObj, Class<T> adaptableClass) {
+		return (T) getAdapter(baseObj, adaptableClass);
 	}
 }
