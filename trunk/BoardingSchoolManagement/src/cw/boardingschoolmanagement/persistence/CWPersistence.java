@@ -34,4 +34,8 @@ public class CWPersistence
 	public EntityManager getEntityManager() {
 		return entityManager;
 	}
+
+	EntityManager setEntityManager(EntityManager entityManager) {
+		return this.entityManager = entityManager;
+	}
 }

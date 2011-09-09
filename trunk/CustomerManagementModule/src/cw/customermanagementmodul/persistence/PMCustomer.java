@@ -6,7 +6,7 @@ import java.util.logging.Logger;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 
-import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
+import cw.boardingschoolmanagement.persistence.AbstractPersistenceManager;
 
 /**
  * Manages Customers
@@ -75,34 +75,34 @@ public class PMCustomer
     }
 
     public List<Customer> getAll(EntityManager entityManager) {
-        return entityManager.createQuery(
+        return setEntityManager(entityManager.createQuery(
         		"FROM " + 
         			Customer.ENTITY_NAME + 
         		" ORDER BY " +
         			Customer.PROPERTYNAME_SURNAME)
-        .getResultList();
+        .getResultList(), entityManager);
     }
 
     public List<Customer> getAllActive(EntityManager entityManager) {
-        return entityManager.createQuery(
+        return setEntityManager(entityManager.createQuery(
         		"FROM " + 
         			Customer.ENTITY_NAME +
         		" WHERE " + 
         			Customer.PROPERTYNAME_ACTIVE + "=true " +
         		" ORDER BY " + 
         			Customer.PROPERTYNAME_SURNAME)
-        .getResultList();
+        .getResultList(), entityManager);
     }
 
     public List<Customer> getAllInactive(EntityManager entityManager) {
-        return entityManager.createQuery(
+        return setEntityManager(entityManager.createQuery(
         		"FROM " + 
         			Customer.ENTITY_NAME + 
         		" WHERE " + 
         			Customer.PROPERTYNAME_ACTIVE + "=false" +
         		" ORDER BY " + 
         			Customer.PROPERTYNAME_SURNAME)
-        .getResultList();
+        .getResultList(), entityManager);
     }
 
     public List<String> getList(String attribute, EntityManager entityManager) {

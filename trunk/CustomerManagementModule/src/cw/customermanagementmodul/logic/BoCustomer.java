@@ -1,7 +1,5 @@
 package cw.customermanagementmodul.logic;
 
-import javax.persistence.EntityManager;
-
 import cw.boardingschoolmanagement.logic.CWBo;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.PMCustomer;

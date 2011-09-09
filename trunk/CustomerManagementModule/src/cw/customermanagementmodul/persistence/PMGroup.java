@@ -5,7 +5,7 @@ import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
 
-import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
+import cw.boardingschoolmanagement.persistence.AbstractPersistenceManager;
 
 /**
  * Manages Groups
@@ -41,19 +41,19 @@ public class PMGroup extends AbstractPersistenceManager<Group> {
     }
 
 	public List<Group> getAll(EntityManager entityManager) {
-		return entityManager.createQuery(
+		return setEntityManager(entityManager.createQuery(
 				"FROM " + 
 					Group.ENTITY_NAME
-		).getResultList();
+		).getResultList(), entityManager);
 	}
 
 	public List<Group> getAllGroupsByCustomer(Customer customer, EntityManager entityManager) {
-		return entityManager.createQuery(
+		return setEntityManager(entityManager.createQuery(
 				"FROM " +
 					Group.ENTITY_NAME /*+ 
 				" WHERE " +
 					Group.PROPERTYNAME_CUSTOMERS
 					// TODO Not finished*/
-		).getResultList();
+		).getResultList(), entityManager);
 	}
 }

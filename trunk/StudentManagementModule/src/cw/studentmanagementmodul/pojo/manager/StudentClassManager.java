@@ -1,7 +1,7 @@
 package cw.studentmanagementmodul.pojo.manager;
 
+import cw.boardingschoolmanagement.persistence.AbstractPersistenceManager;
 import cw.boardingschoolmanagement.persistence.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import java.util.List;
 import cw.studentmanagementmodul.pojo.OrganisationUnit;
 import cw.studentmanagementmodul.pojo.StudentClass;
