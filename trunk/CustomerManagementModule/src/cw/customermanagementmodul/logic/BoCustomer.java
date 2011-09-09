@@ -37,13 +37,13 @@ public class BoCustomer extends CWBo<Customer> {
 	 * Activates the customer
 	 */
 	public void activate() {
-		getPersistence().setActive(false);
+		getPersistence().setActive(true);
 	}
 	
 	/**
 	 * Deactivates the customer
 	 */
 	public void deactivate() {
-		getPersistence().setActive(true);
+		getPersistence().setActive(false);
 	}
 }
