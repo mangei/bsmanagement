@@ -4,8 +4,8 @@
  */
 package cw.roommanagementmodul.pojo.manager;
 
+import cw.boardingschoolmanagement.persistence.AbstractPersistenceManager;
 import cw.boardingschoolmanagement.persistence.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import cw.roommanagementmodul.pojo.Gebuehr;
 import cw.roommanagementmodul.pojo.GebuehrenKategorie;
 import java.util.List;

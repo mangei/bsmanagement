@@ -1,11 +1,9 @@
-package cw.boardingschoolmanagement.pojo.manager;
+package cw.boardingschoolmanagement.persistence;
+
+import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import cw.boardingschoolmanagement.persistence.CWPersistence;
-import cw.boardingschoolmanagement.persistence.CascadeListener;
-import cw.boardingschoolmanagement.persistence.CascadeListenerSupport;
-import cw.boardingschoolmanagement.persistence.PersistenceManager;
 
 /**
  * Basic class for all persistence managers.
@@ -36,8 +34,20 @@ public abstract class AbstractPersistenceManager<TPersistence extends CWPersiste
     	}
     }
     
+    protected TPersistence setEntityManager(TPersistence persistence, EntityManager entityManager) {
+    	persistence.setEntityManager(entityManager);
+    	return persistence;
+    }
+    
+    protected List<TPersistence> setEntityManager(List<TPersistence> persistencList, EntityManager entityManager) {
+    	for(TPersistence persistence: persistencList) {
+    		persistence.setEntityManager(entityManager);
+    	}
+    	return persistencList;
+    }
+    
     public TPersistence get(Long id, EntityManager entityManager) {
-    	return entityManager.find(persistenceClass, id);
+    	return setEntityManager(entityManager.find(persistenceClass, id), entityManager);
     }
     
     public void remove(TPersistence persistence) {

@@ -71,7 +71,7 @@ public class CustomerSelectorPresentationModel
 
     public CustomerSelectorPresentationModel(List<Customer> customers, boolean filtering, String customerTableStateName, EntityManager entityManager) {
         super(entityManager);
-    	this.customers = new ArrayList(customers);
+    	this.customers = new ArrayList<Customer>(customers);
         this.filterEnabledModel = new ValueHolder(filtering);
         this.customerTableStateName = customerTableStateName;
 
@@ -86,7 +86,7 @@ public class CustomerSelectorPresentationModel
         valueChangeListenerDisposeMap = new HashMap<ValueModel, PropertyChangeListener>();
 
         if(customers != null) {
-            customerSelection = new SelectionInList<Customer>((ArrayList)customers.clone());
+            customerSelection = new SelectionInList<Customer>((ArrayList<Customer>)customers.clone());
         } else {
             customers = new ArrayList<Customer>();
             customerSelection = new SelectionInList<Customer>();

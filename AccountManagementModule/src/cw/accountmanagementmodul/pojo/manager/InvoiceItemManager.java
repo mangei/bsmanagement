@@ -2,8 +2,8 @@ package cw.accountmanagementmodul.pojo.manager;
 
 import cw.accountmanagementmodul.pojo.Invoice;
 import cw.accountmanagementmodul.pojo.InvoiceItem;
+import cw.boardingschoolmanagement.persistence.AbstractPersistenceManager;
 import cw.boardingschoolmanagement.persistence.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import java.util.List;
 import java.util.logging.Logger;
 

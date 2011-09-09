@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.boardingschoolmanagement.persistence.AbstractPersistenceManager;
 import cw.boardingschoolmanagement.persistence.HibernateUtil;
-import cw.boardingschoolmanagement.pojo.manager.AbstractPersistenceManager;
 import cw.coursemanagementmodul.pojo.CoursePosting;
 
 /**
