@@ -2,7 +2,6 @@ package cw.customermanagementmodul.logic;
 
 import javax.persistence.EntityManager;
 
-import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.logic.CWBo;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.PMCustomer;
@@ -13,50 +12,40 @@ import cw.customermanagementmodul.persistence.PMCustomer;
  * @author Manuel Geier
  */
 public class BoCustomer extends CWBo<Customer> {
-
+	
+	/**
+	 * Basic constructor
+	 * @param customer Customer
+	 */
 	public BoCustomer(Customer customer) {
 		super(customer);
 	}
 	
 	/**
-	 * Removes a customer
-	 * @param customerId Long
+	 * Returns the persistence
 	 */
-	public static void remove(Long customerId) {
-		EntityManager entityManager = CWEntityManager.createEntityManager();
-		
-		Customer customer = PMCustomer.getInstance().get(customerId, entityManager);
-		PMCustomer.getInstance().remove(customer, entityManager);
-		
-		CWEntityManager.commit(entityManager);
-		CWEntityManager.closeEntityManager(entityManager);
+	public Customer getPersistence() {
+		return (Customer) getBaseClass();
 	}
 	
 	/**
-	 * Activates a customer
-	 * @param customerId Long
+	 * Removes the customer which is adapted from
 	 */
-	public static void activate(Long customerId) {
-		EntityManager entityManager = CWEntityManager.createEntityManager();
-		
-		Customer customer = PMCustomer.getInstance().get(customerId, entityManager);
-		customer.setActive(true);
-		
-		CWEntityManager.commit(entityManager);
-		CWEntityManager.closeEntityManager(entityManager);
+	public void remove() {
+		PMCustomer.getInstance().remove(getPersistence());
 	}
-
+	
 	/**
-	 * Deactivate a customer
-	 * @param customerId Long
+	 * Activates the customer
 	 */
-	public static void deactivate(Long customerId) {
-		EntityManager entityManager = CWEntityManager.createEntityManager();
-		
-		Customer customer = PMCustomer.getInstance().get(customerId, entityManager);
-		customer.setActive(false);
-		
-		CWEntityManager.commit(entityManager);
-		CWEntityManager.closeEntityManager(entityManager);
+	public void activate() {
+		getPersistence().setActive(false);
+	}
+	
+	/**
+	 * Deactivates the customer
+	 */
+	public void deactivate() {
+		getPersistence().setActive(true);
 	}
 }

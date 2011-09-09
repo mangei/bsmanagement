@@ -31,8 +31,8 @@ public class CascadeListenerSupport {
 	listeners.remove(listener);
     }
 
-    public void fireCascadeDelete(Object obj, EntityManager entityManager) {
-        fireCascadeDelete(new CascadeEvent(obj, CascadeEvent.TYPE_DELETE, entityManager));
+    public void fireCascadeDelete(CWPersistence persistence) {
+        fireCascadeDelete(new CascadeEvent(persistence, CascadeEvent.TYPE_DELETE));
     }
 
     public void fireCascadeDelete(CascadeEvent evt) {

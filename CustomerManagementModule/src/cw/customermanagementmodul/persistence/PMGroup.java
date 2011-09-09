@@ -18,6 +18,7 @@ public class PMGroup extends AbstractPersistenceManager<Group> {
     private static Logger logger = Logger.getLogger(PMGroup.class.getName());
     
     private PMGroup() {
+    	super(Group.class);
     }
     
     public static PMGroup getInstance() {

@@ -29,6 +29,7 @@ import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
 import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
+import cw.customermanagementmodul.logic.BoCustomer;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.PMCustomer;
 
@@ -356,8 +357,9 @@ public class EditCustomerPresentationModel
         }
 
         if(getMode() == Mode.NEW) {
-        	PMCustomer.getInstance().remove(getBean(), getEntityManager());
-        	getEntityManager().getTransaction().commit();
+        	BoCustomer boCustomer = getBean().getTypedAdapter(BoCustomer.class);
+        	boCustomer.remove();
+        	CWEntityManager.commit(getEntityManager());
         } else if(getMode() == Mode.EDIT) {
 	        // revert all changes
 	        getEntityManager().getTransaction().rollback();

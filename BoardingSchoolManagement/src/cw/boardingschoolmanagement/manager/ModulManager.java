@@ -3,7 +3,7 @@ package cw.boardingschoolmanagement.manager;
 import cw.boardingschoolmanagement.app.ClassPathHacker;
 import cw.boardingschoolmanagement.exception.ManifestException;
 import cw.boardingschoolmanagement.interfaces.Extention;
-import cw.boardingschoolmanagement.interfaces.Modul;
+import cw.boardingschoolmanagement.module.Module;
 import cw.boardingschoolmanagement.persistence.AnnotatedClass;
 
 import java.io.File;
@@ -178,8 +178,8 @@ public class ModulManager {
      * Initializes all modules and calls the init-method
      */
     public static void initModules() {
-        ServiceLoader<Modul> modules = ServiceLoader.load(Modul.class);
-        for (Modul m : modules) {
+        ServiceLoader<Module> modules = ServiceLoader.load(Module.class);
+        for (Module m : modules) {
             m.init();
         }
     }

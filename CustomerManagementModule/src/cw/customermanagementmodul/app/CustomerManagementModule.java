@@ -9,11 +9,11 @@ import javax.swing.JButton;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.adaptable.IAdapterManager;
-import cw.boardingschoolmanagement.app.adaptable.IAdapterSingletonFactory;
+import cw.boardingschoolmanagement.app.adaptable.IAdapterObjectFactory;
 import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
-import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
+import cw.boardingschoolmanagement.module.Module;
 import cw.boardingschoolmanagement.persistence.CascadeEvent;
 import cw.boardingschoolmanagement.persistence.CascadeListener;
 import cw.customermanagementmodul.gui.CustomerManagementPresentationModel;
@@ -22,27 +22,38 @@ import cw.customermanagementmodul.gui.GroupManagementPresentationModel;
 import cw.customermanagementmodul.gui.GroupManagementView;
 import cw.customermanagementmodul.logic.BoCustomer;
 import cw.customermanagementmodul.persistence.Customer;
-import cw.customermanagementmodul.persistence.PMCustomer;
 import cw.customermanagementmodul.persistence.Group;
+import cw.customermanagementmodul.persistence.PMCustomer;
 import cw.customermanagementmodul.persistence.PMGroup;
 
 /**
- * The CostumerManagement Modul
- * @author CreativeWorkers.at
+ * The costumer management module
+ * @author Manuel Geier
  */
-public class CustomerManagementModul
-        implements Modul {
+public class CustomerManagementModule
+        implements Module {
 
-    public CustomerManagementModul() {
+    public CustomerManagementModule() {
     }
 
+    /**
+     * Initates the module
+     */
     public void init() {
+    	
+    	/**
+    	 * Mapping
+    	 */
     	
     	IAdapterManager.registerAdapter(
     			Customer.class, 
-    			IAdapterSingletonFactory.createFactory(
+    			IAdapterObjectFactory.createFactory(
     					BoCustomer.class));
     	
+    	
+    	/**
+    	 * Navigation
+    	 */
     	
         CWMenuPanel sideMenu = MenuManager.getSideMenu();
 
@@ -103,6 +114,11 @@ public class CustomerManagementModul
             }
         }), "manage");
 
+        
+        /**
+         * Cascade
+         */
+        
 //        // Wenn eine Gruppe geloescht wird, diese Gruppe aus der Gruppenliste der Kunden loeschen.
 //        GroupPM.getInstance().addCascadeListener(new CascadeListener() {
 //            public void deleteAction(CascadeEvent evt) {
@@ -114,17 +130,16 @@ public class CustomerManagementModul
 //            }
 //        });
 
-        // Wenn ein Kunde geloescht wird, diesen Kunden aus den Kundenlisten der Gruppen loeschen.
+        // If we remove a customer, we also need to remove this customer out of the customerlist of the groups it is in.
         PMCustomer.getInstance().addCascadeListener(new CascadeListener() {
             public void deleteAction(CascadeEvent evt) {
                 Customer customer = (Customer) evt.getSource();
                 
-                List<Group> groups = PMGroup.getInstance().getAllGroupsByCustomer(customer, evt.getEntityManager());
+                List<Group> groups = PMGroup.getInstance().getAllGroupsByCustomer(customer, customer.getEntityManager());
 
                 for(Group group : groups) {
                     group.getCustomers().remove(customer);
                 }
-
             }
         });
 

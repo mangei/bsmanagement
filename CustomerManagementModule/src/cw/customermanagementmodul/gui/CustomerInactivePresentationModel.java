@@ -15,6 +15,7 @@ import javax.swing.event.ListSelectionListener;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
@@ -83,8 +84,9 @@ public class CustomerInactivePresentationModel
         public void actionPerformed(ActionEvent e) {
 
             Customer customer = customerSelectorPresentationModel.getSelectedCustomer();
-            
-            BoCustomer.activate(customer.getId());
+            BoCustomer boCustomer  = customer.getTypedAdapter(BoCustomer.class);
+            boCustomer.activate();
+            CWEntityManager.commit(getEntityManager());
             
             customerSelectorPresentationModel.remove(customer);
 
@@ -113,7 +115,9 @@ public class CustomerInactivePresentationModel
 
                 customerSelectorPresentationModel.remove(customer);
                 
-                BoCustomer.remove(customer.getId());
+                BoCustomer boCustomer = customer.getTypedAdapter(BoCustomer.class);
+                boCustomer.remove();
+                CWEntityManager.commit(getEntityManager());
             	
                 String statusBarText;
                 String forename = customer.getForename();

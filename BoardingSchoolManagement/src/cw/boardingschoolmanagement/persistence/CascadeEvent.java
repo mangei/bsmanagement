@@ -2,8 +2,6 @@ package cw.boardingschoolmanagement.persistence;
 
 import java.util.EventObject;
 
-import javax.persistence.EntityManager;
-
 /**
  * Descripes an CascadeEvent.
  *
@@ -14,8 +12,6 @@ import javax.persistence.EntityManager;
  * @author Manuel Geier (CreativeWorkers)
  */
 public class CascadeEvent extends EventObject {
-
-	private EntityManager entityManager;
 	
     public static final int TYPE_DELETE = 3001;
 //    public static final int TYPE_UPDATE = 3002;
@@ -29,10 +25,9 @@ public class CascadeEvent extends EventObject {
 //    private int referentialAction;
     private int type;
 
-    public CascadeEvent(Object source, int type, EntityManager entityManager) {
+    public CascadeEvent(CWPersistence source, int type) {
         super(source);
         this.type = type;
-        this.entityManager = entityManager;
 //        this.referentialAction = referentialAction;
     }
 
@@ -40,8 +35,8 @@ public class CascadeEvent extends EventObject {
         return type;
     }
     
-    public EntityManager getEntityManager() {
-		return entityManager;
+    public CWPersistence getPersistence() {
+		return (CWPersistence) super.getSource();
 	}
 
 //    public int getReferentialAction() {

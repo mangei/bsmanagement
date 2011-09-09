@@ -22,7 +22,9 @@ public class PMCustomer
     /**
      * Private constructor; class is a singleton
      */
-    private PMCustomer() {} 
+    private PMCustomer() {
+    	super(Customer.class);
+    } 
     
     /**
      * Return an instance of CustumerManager
@@ -39,10 +41,6 @@ public class PMCustomer
     	Customer customer = new Customer(entityManager);
     	entityManager.persist(customer);
     	return customer;
-    }
-    
-    public Customer get(Long id, EntityManager entityManager) {
-    	return entityManager.find(Customer.class, id);
     }
 
     public int countAll(EntityManager entityManager) {
