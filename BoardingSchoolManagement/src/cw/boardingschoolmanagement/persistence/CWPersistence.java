@@ -24,11 +24,11 @@ public class CWPersistence
 	}
 	
 	public IAdaptable getAdapter(Class adaptableClass) {
-		return iTypedAdaptableSupport.getAdapter(adaptableClass);
+		return iTypedAdaptableSupport.getAdapter(this, adaptableClass);
 	}
 	
 	public <T> T getTypedAdapter(Class<T> adaptableClass) {
-		return iTypedAdaptableSupport.getTypedAdapter(adaptableClass);
+		return iTypedAdaptableSupport.getTypedAdapter(this, adaptableClass);
 	}
 	
 	public EntityManager getEntityManager() {
