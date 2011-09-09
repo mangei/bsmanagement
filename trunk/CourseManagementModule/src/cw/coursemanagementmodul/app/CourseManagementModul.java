@@ -8,9 +8,9 @@ import javax.swing.JButton;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
-import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
+import cw.boardingschoolmanagement.module.Module;
 import cw.boardingschoolmanagement.persistence.CascadeEvent;
 import cw.boardingschoolmanagement.persistence.CascadeListener;
 import cw.coursemanagementmodul.gui.ActivityPresentationModel;
@@ -32,7 +32,7 @@ import cw.customermanagementmodul.persistence.model.CustomerModel;
  *
  * @author André Salmhofer (CreativeWorkers)
  */
-public class CourseManagementModul implements Modul{
+public class CourseManagementModul implements Module{
 
     public void init() {
         CWMenuPanel menuPanel = MenuManager.getSideMenu();

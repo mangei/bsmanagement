@@ -24,6 +24,7 @@ import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import cw.customermanagementmodul.extention.EditCustomerEditCustomerTabExtention;
 import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtentionPoint;
 import cw.customermanagementmodul.logic.BoCustomer;
+import cw.customermanagementmodul.logic.BoGroup;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.PMCustomer;
 
@@ -245,7 +246,9 @@ public class CustomerManagementPresentationModel
             	customerSelectorPresentationModel.remove(customer);
             	
             	// Remove entity
-            	BoCustomer.remove(customer.getId());
+            	BoCustomer boCustomer = customer.getTypedAdapter(BoCustomer.class);
+            	boCustomer.remove();
+           	 	CWEntityManager.commit(getEntityManager());
             	
                 String statusBarText;
                 String forename = customer.getForename();
@@ -257,7 +260,9 @@ public class CustomerManagementPresentationModel
 
                 customerSelectorPresentationModel.remove(customer);
                 
-                BoCustomer.deactivate(customer.getId());
+                BoCustomer boCustomer = customer.getTypedAdapter(BoCustomer.class);
+                boCustomer.deactivate();
+                CWEntityManager.commit(getEntityManager());
             }
 
             GUIManager.setLoadingScreenVisible(false);
@@ -286,7 +291,9 @@ public class CustomerManagementPresentationModel
             Customer c = customerSelectorPresentationModel.getSelectedCustomer();
             customerSelectorPresentationModel.remove(c);
 
-            BoCustomer.deactivate(c.getId());
+            BoCustomer boCustomer = c.getTypedAdapter(BoCustomer.class);
+            boCustomer.deactivate();
+            CWEntityManager.commit(getEntityManager());
 
             GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde deaktiviert.");
         }

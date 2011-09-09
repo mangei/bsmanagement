@@ -11,9 +11,9 @@ import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.accountmanagementmodul.pojo.manager.PostingManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.interfaces.Modul;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
+import cw.boardingschoolmanagement.module.Module;
 import cw.boardingschoolmanagement.persistence.CascadeEvent;
 import cw.boardingschoolmanagement.persistence.CascadeListener;
 import cw.customermanagementmodul.persistence.PMCustomer;
@@ -40,7 +40,7 @@ import cw.roommanagementmodul.pojo.manager.GebuehrenManager;
 /**
  * @author Jeitler Dominik
  */
-public class ZimmerModul implements Modul {
+public class ZimmerModul implements Module {
 
     private CustomerModel customer;
     private Bewohner bewohner;
@@ -49,7 +49,7 @@ public class ZimmerModul implements Modul {
         return "zimmer";
     }
 
-    public Modul createModul(Object obj) {
+    public Module createModul(Object obj) {
 //        Costumer c = (Costumer)obj;
 //        ZimmerModul modul = new ZimmerModul();
 //        modul.setCostumer(c);

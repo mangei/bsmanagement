@@ -5,7 +5,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
-import javax.persistence.EntityManager;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -20,6 +19,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.customermanagementmodul.logic.BoGroup;
 import cw.customermanagementmodul.persistence.Group;
 import cw.customermanagementmodul.persistence.PMGroup;
 
@@ -146,9 +146,10 @@ public class GroupManagementPresentationModel
                         }
                     }
                     if(evt.getType() == ButtonEvent.EXIT_BUTTON) {
-                    	getEntityManager().getTransaction().begin();
-                    	PMGroup.getInstance().remove(group, getEntityManager());
-                    	getEntityManager().getTransaction().commit();
+                    	
+                    	 BoGroup boGroup = group.getTypedAdapter(BoGroup.class);
+                    	 boGroup.remove();
+                    	 CWEntityManager.commit(getEntityManager());
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         model.removeButtonListener(this);
@@ -226,12 +227,9 @@ public class GroupManagementPresentationModel
                 groupSelection.getList().remove(group);
                 customerSelectorPresentationModel.getCustomerSelection().getList().clear();
                 
-                getEntityManager().getTransaction().begin();
-                
-                PMGroup.getInstance().remove(group, getEntityManager());
-                
-                getEntityManager().getTransaction().commit();
-
+                BoGroup boGroup = group.getTypedAdapter(BoGroup.class);
+	           	boGroup.remove();
+	           	CWEntityManager.commit(getEntityManager());
 
                 GUIManager.getStatusbar().setTextAndFadeOut("Gruppe '" + name + "' wurde geloescht.");
             }

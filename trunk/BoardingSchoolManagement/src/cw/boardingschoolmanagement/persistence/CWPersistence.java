@@ -3,9 +3,8 @@ package cw.boardingschoolmanagement.persistence;
 import javax.persistence.EntityManager;
 
 import cw.boardingschoolmanagement.app.CWModel;
+import cw.boardingschoolmanagement.app.adaptable.CWIAdaptable;
 import cw.boardingschoolmanagement.app.adaptable.IAdaptable;
-import cw.boardingschoolmanagement.app.adaptable.IAdapterManager;
-import cw.boardingschoolmanagement.app.adaptable.ITypedAdaptable;
 import cw.boardingschoolmanagement.app.adaptable.ITypedAdapterSupport;
 
 /**
@@ -15,7 +14,7 @@ import cw.boardingschoolmanagement.app.adaptable.ITypedAdapterSupport;
  */
 public class CWPersistence
 	extends CWModel
-	implements ITypedAdaptable, AnnotatedClass {
+	implements CWIAdaptable, AnnotatedClass {
 
 	private EntityManager entityManager;
 	private ITypedAdapterSupport iTypedAdaptableSupport = new ITypedAdapterSupport();
