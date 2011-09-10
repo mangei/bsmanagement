@@ -58,13 +58,15 @@ public class GroupEditCustomerView extends CWView
                 "pref:grow, pref, 4dlu, pref, pref:grow"
         );
 
-        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
 
         builder.add(CWComponentFactory.createView("Aktive Gruppen", liCustomerGroups), cc.xywh(1, 1, 1, 5));
         builder.add(bAdd,               cc.xy(3, 2));
         builder.add(bRemove,            cc.xy(3, 4));
         builder.add(CWComponentFactory.createView("Andere Gruppen", liGroups), cc.xywh(5, 1, 1, 5));
+    
+        addToContentPanel(builder.getPanel(), true);
     }
 
     @Override

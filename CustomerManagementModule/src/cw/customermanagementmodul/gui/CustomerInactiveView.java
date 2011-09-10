@@ -46,9 +46,8 @@ public class CustomerInactiveView extends CWView
 
         this.getButtonPanel().add(bActivate);
         this.getButtonPanel().add(bDelete);
-
-        this.getContentPanel().setLayout(new BorderLayout());
-        this.getContentPanel().add(customerSelectorView, BorderLayout.CENTER);
+        
+        addToContentPanel(customerSelectorView, true);
     }
 
     @Override

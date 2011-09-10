@@ -269,23 +269,28 @@ public class CWView extends CWPanel {
     		return;
     	}
     	
+    	comp.setOpaque(false);
+    	
+    	// set grow attribute
     	if(shouldGrow) {
     		comp.putClientProperty(KEY_PANEL_GROW, Boolean.TRUE);
     	}
     	
+    	// Build layout
     	int countComp = contentPanel.getComponentCount();
+    	Component[] oldComponents = contentPanel.getComponents();
     	
     	StringBuilder formRowLayoutString = new StringBuilder();;
     	for(int i=0; i<countComp; i++) {
     		
-    		JComponent c = (JComponent) contentPanel.getComponents()[i];
+    		JComponent c = (JComponent) oldComponents[i];
     		Object obj = c.getClientProperty(KEY_PANEL_GROW);
     		
     		if(obj instanceof Boolean && ((Boolean) obj) == Boolean.TRUE) {
 	    		if(i == 0) {
-	        		formRowLayoutString.append("pref:grow");
+	        		formRowLayoutString.append("fill:pref:grow");
 	    		} else {
-	        		formRowLayoutString.append(", 4dlu, pref:grow");
+	        		formRowLayoutString.append(", 4dlu, fill:pref:grow");
 	    		}
     		} else {
     			if(i == 0) {
@@ -298,9 +303,9 @@ public class CWView extends CWPanel {
     	
     	if(shouldGrow) {
     		if(countComp == 0) {
-        		formRowLayoutString.append("pref:grow");
+        		formRowLayoutString.append("fill:pref:grow");
     		} else {
-        		formRowLayoutString.append(", 4dlu, pref:grow");
+        		formRowLayoutString.append(", 4dlu, fill:pref:grow");
     		}
 		} else {
 			if(countComp == 0) {
@@ -311,19 +316,24 @@ public class CWView extends CWPanel {
 		}
     	
     	FormLayout newLayout = new FormLayout(
-                "pref",
+                "pref:grow",
                 formRowLayoutString.toString());
 
-        PanelBuilder builder = new PanelBuilder(newLayout);
+        PanelBuilder builder = new PanelBuilder(newLayout, contentPanel);
         CellConstraints cc = new CellConstraints();
 
+        // Add old components
         for(int i=0; i<countComp; i++) {
-        	builder.add(contentPanel.getComponents()[i], cc.xy(1, (i*2+1)));
+        	builder.add(oldComponents[i], cc.xy(1, (i*2+1)));
         }
+        
+        // Add new component
+        builder.add(comp, cc.xy(1, (countComp*2+1)));
     	
-    	contentPanel.removeAll();
-    	contentPanel.setLayout(newLayout);
-    	contentPanel.add(builder.getPanel());
+        // Refresh
+//    	contentPanel.removeAll();
+//    	contentPanel.setLayout(newLayout);
+//    	contentPanel.add(builder.getPanel());
     }
 
     public JScrollPane getContentScrollPane() {

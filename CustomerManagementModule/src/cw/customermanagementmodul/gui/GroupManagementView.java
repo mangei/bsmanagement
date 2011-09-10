@@ -74,12 +74,14 @@ public class GroupManagementView extends CWView
                 "fill:pref:grow"
         );
 
-        PanelBuilder builder = new PanelBuilder(layout, getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
 
         builder.add(liGroups, cc.xy(1,1));
 //        builder.add(liCustomers, cc.xy(3,1));
         builder.add(customerSelectorView, cc.xy(3,1));
+        
+        addToContentPanel(builder.getPanel(), true);
     }
 
     @Override

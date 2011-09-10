@@ -101,9 +101,8 @@ public class CustomerManagementView extends CWView
 //                }
 //            }
 //        }));
-
-        this.getContentPanel().setLayout(new BorderLayout());
-        this.getContentPanel().add(customerSelectorView, BorderLayout.CENTER);
+        
+        addToContentPanel(customerSelectorView, true);
     }
 
     @Override

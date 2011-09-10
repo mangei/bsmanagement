@@ -52,7 +52,7 @@ public class CustomerChooserView extends CWView
         buttonBar.add(bOk);
         buttonBar.add(bCancel);
 
-        this.getContentPanel().add(customerSelectorView, BorderLayout.CENTER);
+        addToContentPanel(customerSelectorView, true);
     }
 
     @Override

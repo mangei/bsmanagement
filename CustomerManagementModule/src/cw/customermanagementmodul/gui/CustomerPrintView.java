@@ -52,7 +52,7 @@ public class CustomerPrintView extends CWView{
     private void buildView() {
         //this.setHeaderInfo(model.getHeaderInfo());
         this.getButtonPanel().add(bBack);
-        this.getContentPanel().add(viewer);
+        addToContentPanel(viewer, true);
     }
 
     @Override
