@@ -265,6 +265,10 @@ public class CWView extends CWPanel {
     
     public void addToContentPanel(JComponent comp, boolean shouldGrow) {
     	
+    	if(comp == null) {
+    		return;
+    	}
+    	
     	if(shouldGrow) {
     		comp.putClientProperty(KEY_PANEL_GROW, Boolean.TRUE);
     	}
@@ -291,6 +295,20 @@ public class CWView extends CWPanel {
 	    		}
     		}
     	}
+    	
+    	if(shouldGrow) {
+    		if(countComp == 0) {
+        		formRowLayoutString.append("pref:grow");
+    		} else {
+        		formRowLayoutString.append(", 4dlu, pref:grow");
+    		}
+		} else {
+			if(countComp == 0) {
+        		formRowLayoutString.append("pref");
+    		} else {
+        		formRowLayoutString.append(", 4dlu, pref");
+    		}
+		}
     	
     	FormLayout newLayout = new FormLayout(
                 "pref",
