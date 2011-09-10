@@ -33,7 +33,7 @@ public class CWEntityManager {
             // H2
             setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect").
             setProperty("hibernate.connection.driver_class", "org.h2.Driver").
-            setProperty("hibernate.connection.url", "jdbc:h2:database/internat;AUTO_SERVER=TRUE ").
+            setProperty("hibernate.connection.url", "jdbc:h2:database/internat2;AUTO_SERVER=TRUE ").
             setProperty("hibernate.connection.username", "sa").
             setProperty("hibernate.connection.password", "").
 

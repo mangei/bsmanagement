@@ -51,12 +51,14 @@ public class CustomerOverviewEditCustomerView extends CWView
                 "fill:pref:grow",
                 rowLayoutString.toString());
 
-        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
 
         for(int i=0, l=extentionComponents.size(); i<l; i++) {
             builder.add(extentionComponents.get(i), cc.xy(1, i*2+1));
         }
+        
+        addToContentPanel(builder.getPanel());
     }
 
     @Override

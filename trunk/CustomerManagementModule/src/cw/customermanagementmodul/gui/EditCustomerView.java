@@ -102,7 +102,9 @@ public class EditCustomerView extends CWView
 //            }
         }
         
-        this.getContentPanel().add(tabs, BorderLayout.CENTER);
+        addToContentPanel(tabs, true);
+        
+        loadViewExtentions();
     }
 
     @Override

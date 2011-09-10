@@ -46,10 +46,12 @@ public class CustomerHomeExtentionView extends CWView
                 "pref",
                 "pref"
         );
-        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
 
         CellConstraints cc = new CellConstraints();
         builder.add(lSizeCustomers, cc.xy(1, 1));
+        
+        addToContentPanel(builder.getPanel(), true);
     }
 
     @Override

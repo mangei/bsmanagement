@@ -61,11 +61,13 @@ public class EditGroupView extends CWView
                 "pref, 4dlu, pref:grow",
                 "pref");
 
-        PanelBuilder builder = new PanelBuilder(layout, getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
 
         builder.addLabel("Name:", cc.xy(1, 1));
         builder.add(tfName, cc.xy(3, 1));
+        
+        addToContentPanel(builder.getPanel(), true);
     }
 
     @Override
