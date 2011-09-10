@@ -12,7 +12,8 @@ import cw.customermanagementmodul.gui.CustomerHomeExtentionView;
  *
  * @author ManuelG
  */
-public class CustomerHomeExtention implements HomeExtentionPoint {
+public class CustomerHomeExtention
+	implements HomeExtentionPoint {
 
     private CustomerHomeExtentionPresentationModel model;
     private CustomerHomeExtentionView view;

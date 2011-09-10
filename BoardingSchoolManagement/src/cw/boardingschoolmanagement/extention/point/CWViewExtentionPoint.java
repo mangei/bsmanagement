@@ -1,15 +1,14 @@
 package cw.boardingschoolmanagement.extention.point;
 
-import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.boardingschoolmanagement.interfaces.Extention;
+import cw.boardingschoolmanagement.extention.CWIExtention;
 
 /**
  *
  * @author Manuel Geier
  */
-public interface CWViewExtentionPoint
-        extends Extention {
+public interface CWViewExtentionPoint<TView>
+        extends CWIExtention {
 
-	public Class getExtentionViewClass();
-    public void execute(CWView view);
+	public Class getViewExtention();
+    public void execute(TView view);
 }

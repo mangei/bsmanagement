@@ -57,6 +57,8 @@ public class ConfigurationView extends CWView
     private void buildView() {
         this.setHeaderInfo(model.getHeaderInfo());
 
+        JPanel masterPanel = new JPanel(new BorderLayout());
+        
         CWButtonPanel buttonPanel = this.getButtonPanel();
         buttonPanel.add(bSave);
         buttonPanel.add(bCancel);
@@ -124,8 +126,10 @@ public class ConfigurationView extends CWView
             cardPanel.add(ex.getView(), Integer.toString(i));
         }
 
-        this.getContentPanel().add(buttonBarPanel, BorderLayout.WEST);
-        this.getContentPanel().add(cardPanel, BorderLayout.CENTER);
+        masterPanel.add(buttonBarPanel, BorderLayout.WEST);
+        masterPanel.add(cardPanel, BorderLayout.CENTER);
+        
+        addToContentPanel(masterPanel, true);
     }
 
     @Override

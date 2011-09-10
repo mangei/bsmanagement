@@ -935,7 +935,7 @@ public class CWComponentFactory {
         }
         CWView view = new CWView(headerInfo);
         if (comp != null) {
-            view.getContentPanel().add(comp, BorderLayout.CENTER);
+            view.addToContentPanel(comp);
         }
         return view;
     }

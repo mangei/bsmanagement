@@ -2,7 +2,7 @@ package cw.boardingschoolmanagement.manager;
 
 import cw.boardingschoolmanagement.app.ClassPathHacker;
 import cw.boardingschoolmanagement.exception.ManifestException;
-import cw.boardingschoolmanagement.interfaces.Extention;
+import cw.boardingschoolmanagement.extention.CWIExtention;
 import cw.boardingschoolmanagement.module.Module;
 import cw.boardingschoolmanagement.persistence.AnnotatedClass;
 
@@ -234,15 +234,15 @@ public class ModulManager {
      * @param specificExtention Class of the specificated extention
      * @return List of the specificated extention class
      */
-    public static List<? extends Extention> getExtentions(Class specificExtention) {
+    public static List<? extends CWIExtention> getExtentions(Class specificExtention) {
 
         System.out.println("getExtentions(" + specificExtention.getName() + "): ");
 
-        List<Extention> spezExList = new ArrayList<Extention>();
-        ServiceLoader<Extention> exList = ServiceLoader.load(specificExtention);
+        List<CWIExtention> spezExList = new ArrayList<CWIExtention>();
+        ServiceLoader<CWIExtention> exList = ServiceLoader.load(specificExtention);
 
         // Run throu all extentions
-        for (Extention ex : exList) {
+        for (CWIExtention ex : exList) {
             
             try {
                 // Add it to the list

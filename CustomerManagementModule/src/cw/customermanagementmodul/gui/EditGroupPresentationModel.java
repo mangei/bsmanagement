@@ -5,7 +5,6 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -17,11 +16,14 @@ import com.jgoodies.binding.value.ValueModel;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
 import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.customermanagementmodul.logic.BoGroup;
 import cw.customermanagementmodul.persistence.Group;
+import cw.customermanagementmodul.persistence.PMGroup;
 
 /**
  *
@@ -41,10 +43,21 @@ public class EditGroupPresentationModel
     private SaveListener saveListener;
     private PropertyChangeListener unsavedListener;
 
-    public EditGroupPresentationModel(Group group, CWHeaderInfo headerInfo, EntityManager entityManager) {
-    	super(group, entityManager);
-        this.headerInfo = headerInfo;
+    public EditGroupPresentationModel() {
+		this(null);
+	}
+    
+    public EditGroupPresentationModel(Long groupId) {
+        super(CWEntityManager.createEntityManager());
 
+        if(groupId == null) {
+        	setBean(PMGroup.getInstance().create(getEntityManager()));
+        	setMode(Mode.NEW);
+        } else {
+        	setBean(PMGroup.getInstance().get(groupId, getEntityManager()));
+        	setMode(Mode.EDIT);
+        }
+        
         initModels();
         initEventHandling();
     }
@@ -53,10 +66,14 @@ public class EditGroupPresentationModel
         unsaved = new ValueHolder();
         support = new ButtonListenerSupport();
 
+        if(isNewMode()) {
+        	headerInfo = new CWHeaderInfo("Gruppe erstellen");
+        } else if(isEditMode()) {
+        	headerInfo = new CWHeaderInfo("Gruppe bearbeiten");
+        }
+        
         saveButtonAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/customermanagementmodul/images/disk_16.png"));
         cancelButtonAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
-    
-        getEntityManager().getTransaction().begin();
     }
 
     private void initEventHandling() {
@@ -82,6 +99,8 @@ public class EditGroupPresentationModel
         unsaved.removeValueChangeListener(unsavedListener);
 
         release();
+        
+        CWEntityManager.closeEntityManager(getEntityManager());
     }
 
 
@@ -190,7 +209,20 @@ public class EditGroupPresentationModel
 	}
 
 	public void cancel() {
-		getEntityManager().getTransaction().rollback();
+		
+		if(isNewMode()) {
+        	
+        	BoGroup boGroup = getBean().getTypedAdapter(BoGroup.class);
+        	boGroup.remove();
+        	CWEntityManager.commit(getEntityManager());
+			
+        } else if(isEditMode()) {
+        	
+        	CWEntityManager.rollback(getEntityManager());
+        	
+        }
+		
+		CWEntityManager.closeEntityManager(getEntityManager());
 	}
 
 }

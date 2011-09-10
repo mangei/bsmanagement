@@ -1,7 +1,7 @@
 package cw.customermanagementmodul.extention.point;
 
+import cw.boardingschoolmanagement.extention.CWIExtention;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.boardingschoolmanagement.interfaces.Extention;
 import cw.boardingschoolmanagement.interfaces.Priority;
 import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationModel;
 
@@ -10,7 +10,7 @@ import cw.customermanagementmodul.gui.CustomerOverviewEditCustomerPresentationMo
  * @author Manuel Geier
  */
 public interface CustomerOverviewEditCustomerExtentionPoint
-        extends Extention, Priority{
+        extends CWIExtention, Priority{
 
     public void initPresentationModel(CustomerOverviewEditCustomerPresentationModel customerOverviewEditCustomerPresentationModel);
 

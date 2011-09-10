@@ -52,13 +52,15 @@ public class HomeView extends CWView
                 "fill:pref:grow",
                 rows.toString()
         );
-        PanelBuilder builder = new PanelBuilder(layout, getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
 
         for(int i=0,l=panels.size(); i<l; i++) {
             builder.add(panels.get(i));
             builder.nextRow();
             builder.nextRow();
         }
+        
+        addToContentPanel(builder.getPanel());
     }
 
     @Override

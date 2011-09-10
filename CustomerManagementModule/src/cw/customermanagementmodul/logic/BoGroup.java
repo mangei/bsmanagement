@@ -5,7 +5,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import cw.boardingschoolmanagement.logic.CWBo;
+import cw.boardingschoolmanagement.logic.CWBoPersistence;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.Group;
 import cw.customermanagementmodul.persistence.PMGroup;
@@ -15,7 +15,7 @@ import cw.customermanagementmodul.persistence.PMGroup;
  * 
  * @author Manuel Geier
  */
-public class BoGroup extends CWBo<Group> {
+public class BoGroup extends CWBoPersistence<Group> {
 	
 	/**
 	 * Basic constructor

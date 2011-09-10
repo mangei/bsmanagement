@@ -30,9 +30,7 @@ public class PMGroup extends AbstractPersistenceManager<Group> {
 
 	public Group create(EntityManager entityManager) {
 		Group group = new Group(entityManager);
-    	entityManager.getTransaction().begin();
 		entityManager.persist(group);
-    	entityManager.getTransaction().commit();
 		return group;
 	}
     

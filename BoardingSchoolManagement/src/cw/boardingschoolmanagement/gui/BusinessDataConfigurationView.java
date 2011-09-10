@@ -70,7 +70,7 @@ public class BusinessDataConfigurationView extends CWView
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu"
         );
         CellConstraints cc = new CellConstraints();
-        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
         builder.addLabel("Name:",           cc.xy(1, 1));
         builder.add(tfName,                 cc.xy(3, 1));
         builder.addLabel("Straße:",         cc.xy(1, 3));
@@ -89,6 +89,8 @@ public class BusinessDataConfigurationView extends CWView
         builder.add(tfEmail,                cc.xy(3, 15));
         builder.addLabel("DVR-Nummer:",     cc.xy(1, 17));
         builder.add(tfDvrNumber,            cc.xy(3, 17));
+        
+        addToContentPanel(builder.getPanel());
     }
 
     @Override

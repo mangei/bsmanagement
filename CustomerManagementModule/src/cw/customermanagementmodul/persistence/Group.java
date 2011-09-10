@@ -1,5 +1,6 @@
 package cw.customermanagementmodul.persistence;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
@@ -36,7 +37,7 @@ public class Group
     private String name;
     private boolean deletable;
     private Group parent;
-    private List<Customer> customers;
+    private List<Customer> customers = new ArrayList<Customer>();
 
     public Group() {
 		super(null);

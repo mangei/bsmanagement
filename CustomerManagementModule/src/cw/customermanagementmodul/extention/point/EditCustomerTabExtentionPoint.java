@@ -4,9 +4,9 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
+import cw.boardingschoolmanagement.extention.CWIExtention;
 import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.boardingschoolmanagement.interfaces.Extention;
 import cw.boardingschoolmanagement.interfaces.Priority;
 import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
 
@@ -15,7 +15,7 @@ import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
  * @author Manuel Geier
  */
 public interface EditCustomerTabExtentionPoint
-        extends Extention, Priority{
+        extends CWIExtention, Priority{
 
     /**
      * To initialize the PresentationModel

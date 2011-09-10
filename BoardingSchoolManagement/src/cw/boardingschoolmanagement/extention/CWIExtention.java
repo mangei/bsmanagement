@@ -1,11 +1,11 @@
-package cw.boardingschoolmanagement.interfaces;
+package cw.boardingschoolmanagement.extention;
 
 /**
  * Dient zur Erleichterung des Umgangs mit verschiedenen Klassen die dieses
  * Interface implementieren.
  *
- * @author ManuelG
+ * @author Manuel Geier
  */
-public interface Extention {
+public interface CWIExtention {
 
 }

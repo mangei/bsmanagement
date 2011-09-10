@@ -222,6 +222,7 @@ public class EditCustomerEditCustomerView extends CWView
     }
     
     private void buildView() {
+    	
         this.setHeaderInfo(model.getHeaderInfo());
 //        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 //        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
@@ -230,7 +231,7 @@ public class EditCustomerEditCustomerView extends CWView
                 "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
 
-        PanelBuilder builder = new PanelBuilder(layout,this.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
 
         int row = 1;
         row+=2;
@@ -275,6 +276,10 @@ public class EditCustomerEditCustomerView extends CWView
 
         builder.addSeparator("<html><b>Bemerkung</b></html>",   cc.xyw(1, row+=2, 8));
         builder.add(taComment,              cc.xyw(1, row+=2, 8));
+        
+        addToContentPanel(builder.getPanel());
+        
+        loadViewExtentions();
     }
 
     @Override

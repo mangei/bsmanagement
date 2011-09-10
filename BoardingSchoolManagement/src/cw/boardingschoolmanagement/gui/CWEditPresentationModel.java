@@ -51,6 +51,14 @@ public abstract class CWEditPresentationModel<T>
 		this.mode = mode;
 	}
 	
+	public boolean isNewMode() {
+		return mode == Mode.NEW;
+	}
+	
+	public boolean isEditMode() {
+		return mode == Mode.EDIT;
+	}
+	
 	public abstract boolean validate(List<CWErrorMessage> errorMessages);
 	public abstract boolean save();
 	public abstract void cancel();

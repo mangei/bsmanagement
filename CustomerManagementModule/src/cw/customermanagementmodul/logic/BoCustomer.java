@@ -1,6 +1,7 @@
 package cw.customermanagementmodul.logic;
 
 import cw.boardingschoolmanagement.logic.CWBo;
+import cw.boardingschoolmanagement.logic.CWBoPersistence;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.PMCustomer;
 
@@ -9,7 +10,7 @@ import cw.customermanagementmodul.persistence.PMCustomer;
  * 
  * @author Manuel Geier
  */
-public class BoCustomer extends CWBo<Customer> {
+public class BoCustomer extends CWBoPersistence<Customer> {
 	
 	/**
 	 * Basic constructor
