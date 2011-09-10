@@ -34,12 +34,12 @@ public abstract class AbstractPersistenceManager<TPersistence extends CWPersiste
     	}
     }
     
-    protected TPersistence setEntityManager(TPersistence persistence, EntityManager entityManager) {
+    public TPersistence setEntityManager(TPersistence persistence, EntityManager entityManager) {
     	persistence.setEntityManager(entityManager);
     	return persistence;
     }
     
-    protected List<TPersistence> setEntityManager(List<TPersistence> persistencList, EntityManager entityManager) {
+    public List<TPersistence> setEntityManager(List<TPersistence> persistencList, EntityManager entityManager) {
     	for(TPersistence persistence: persistencList) {
     		persistence.setEntityManager(entityManager);
     	}

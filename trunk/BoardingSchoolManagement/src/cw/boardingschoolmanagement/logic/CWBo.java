@@ -5,20 +5,19 @@ import javax.persistence.EntityManager;
 import cw.boardingschoolmanagement.app.adaptable.CWIAdaptable;
 import cw.boardingschoolmanagement.app.adaptable.IAdaptable;
 import cw.boardingschoolmanagement.app.adaptable.ITypedAdapterSupport;
-import cw.boardingschoolmanagement.persistence.CWPersistence;
 
 /**
  * Basis Business Object class
  * 
  * @author Manuel Geier
  */
-public abstract class CWBo<T extends CWIAdaptable>
+public abstract class CWBo
 	implements CWIAdaptable {
 
 	private ITypedAdapterSupport iTypedAdaptableSupport = new ITypedAdapterSupport();
-	private T baseClass;
+	private CWIAdaptable baseClass;
 	
-	public CWBo(T baseClass) {
+	public CWBo(CWIAdaptable baseClass) {
 		this.baseClass = baseClass;
 	}
 	
@@ -38,6 +37,4 @@ public abstract class CWBo<T extends CWIAdaptable>
 		return baseClass.
 			getEntityManager();
 	}
-	
-	public abstract CWPersistence getPersistence();
 }

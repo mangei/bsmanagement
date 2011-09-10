@@ -121,14 +121,11 @@ public class GroupManagementPresentationModel
             GUIManager.setLoadingScreenText("Formular wird geladen...");
             GUIManager.setLoadingScreenVisible(true);
 
-            final Group group = PMGroup.getInstance().create(getEntityManager());
-
-            final EditGroupPresentationModel model = new EditGroupPresentationModel(
-                    group,
-                    new CWHeaderInfo("Gruppe erstellen"),
-                    getEntityManager());
+            final EditGroupPresentationModel model = new EditGroupPresentationModel();
             final EditGroupView editView = new EditGroupView(model);
 
+            final Group group = model.getBean();
+            
             model.addButtonListener(new ButtonListener() {
                 boolean customerAlreadyCreated = false;
 
@@ -144,12 +141,6 @@ public class GroupManagementPresentationModel
                             int idx = groupSelection.getList().indexOf(group);
                             groupSelection.fireIntervalAdded(idx, idx);
                         }
-                    }
-                    if(evt.getType() == ButtonEvent.EXIT_BUTTON) {
-                    	
-                    	 BoGroup boGroup = group.getTypedAdapter(BoGroup.class);
-                    	 boGroup.remove();
-                    	 CWEntityManager.commit(getEntityManager());
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         model.removeButtonListener(this);
@@ -179,11 +170,8 @@ public class GroupManagementPresentationModel
 
             final Group group = groupSelection.getSelection();
 
-            final EditGroupPresentationModel model = new EditGroupPresentationModel(
-                    group,
-                    new CWHeaderInfo("Gruppe bearbeiten"),
-                    getEntityManager()
-            );
+            final EditGroupPresentationModel model = new EditGroupPresentationModel(group.getId());
+
             final EditGroupView editView = new EditGroupView(model);
             model.addButtonListener(new ButtonListener() {
 

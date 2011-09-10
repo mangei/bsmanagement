@@ -77,13 +77,15 @@ public class UpdateConfigurationView extends CWView
                 "pref, 4dlu, pref, pref, 4dlu, fill:pref:grow"
         );
         CellConstraints cc = new CellConstraints();
-        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
         builder.add(pCheck, cc.xy(1, 1));
         builder.add(pUpdateText, cc.xy(1, 3));
         builder.add(pUpdateButton, cc.xy(1, 4));
         builder.add(CWComponentFactory.createScrollPane(tUpdates), cc.xy(1, 6));
 //        builder.addLabel("Position: ", cc.xy(2, 5));
 //        builder.add(cbPathPosition, cc.xy(3, 5));
+        
+        addToContentPanel(builder.getPanel());
     }
 
     @Override

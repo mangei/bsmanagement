@@ -50,11 +50,13 @@ public class WelcomeHomeExtentionView extends CWView
                 "fill:pref:grow",
                 "pref, 4dlu, pref"
         );
-        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
 
         CellConstraints cc = new CellConstraints();
         builder.add(lWelcomeMessage, cc.xy(1, 1));
         builder.add(lTimeMessage, cc.xy(1, 3));
+        
+        addToContentPanel(builder.getPanel());
     }
 
     @Override

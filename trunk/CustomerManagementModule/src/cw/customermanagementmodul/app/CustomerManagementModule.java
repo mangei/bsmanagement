@@ -21,6 +21,7 @@ import cw.customermanagementmodul.gui.CustomerManagementView;
 import cw.customermanagementmodul.gui.GroupManagementPresentationModel;
 import cw.customermanagementmodul.gui.GroupManagementView;
 import cw.customermanagementmodul.logic.BoCustomer;
+import cw.customermanagementmodul.logic.BoGroup;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.Group;
 import cw.customermanagementmodul.persistence.PMCustomer;
@@ -49,6 +50,11 @@ public class CustomerManagementModule
     			Customer.class, 
     			IAdapterObjectFactory.createFactory(
     					BoCustomer.class));
+    	
+    	IAdapterManager.registerAdapter(
+    			Group.class, 
+    			IAdapterObjectFactory.createFactory(
+    					BoGroup.class));
     	
     	
     	/**
@@ -108,8 +114,8 @@ public class CustomerManagementModule
                 GroupManagementPresentationModel model = new GroupManagementPresentationModel();
                 GroupManagementView view = new GroupManagementView(model);
 
-                CWUtils.showDialog(view);
-//                GUIManager.changeView(view);
+//                CWUtils.showDialog(view);
+                GUIManager.changeView(view);
                 GUIManager.setLoadingScreenVisible(false);
             }
         }), "manage");

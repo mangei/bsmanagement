@@ -66,11 +66,13 @@ public class GeneralConfigurationView extends CWView
                 "pref, 2dlu, pref, 2dlu, pref"
         );
         CellConstraints cc = new CellConstraints();
-        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
         builder.addSeparator("Benutzeroberflaeche", cc.xyw(1, 1, 4));
         builder.add(cPathActive, cc.xyw(1, 3, 4));
         builder.addLabel("Position: ", cc.xy(2, 5));
         builder.add(cbPathPosition, cc.xy(3, 5));
+        
+        addToContentPanel(builder.getPanel());
     }
 
     @Override

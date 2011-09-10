@@ -46,6 +46,8 @@ import cw.boardingschoolmanagement.manager.ModulManager;
  */
 public class CWView extends CWPanel {
 
+	private static final String KEY_PANEL_GROW = "KEY_PANEL_GROW";
+	
     private JPanel buttonPanel;
     private CWButtonPanel leftButtonPanel;
     private CWButtonPanel rightButtonPanel;
@@ -120,7 +122,7 @@ public class CWView extends CWPanel {
 
         // ContentPanel
         contentPanel = CWComponentFactory.createPanel();
-        contentPanel.setLayout(new BorderLayout());
+        contentPanel.setLayout(new FormLayout());
         contentPanel.setBorder(null);
 
         contentScrollPane = CWComponentFactory.createScrollPane(contentPanel);
@@ -253,8 +255,57 @@ public class CWView extends CWPanel {
      * Default LayoutManager is  the BorderLayout.
      * @return JPanel ContentPanel
      */
-    public JPanel getContentPanel() {
+    private JPanel getContentPanel() {
         return contentPanel;
+    }
+    
+    public void addToContentPanel(JComponent comp) {
+    	addToContentPanel(comp, false);
+    }
+    
+    public void addToContentPanel(JComponent comp, boolean shouldGrow) {
+    	
+    	if(shouldGrow) {
+    		comp.putClientProperty(KEY_PANEL_GROW, Boolean.TRUE);
+    	}
+    	
+    	int countComp = contentPanel.getComponentCount();
+    	
+    	StringBuilder formRowLayoutString = new StringBuilder();;
+    	for(int i=0; i<countComp; i++) {
+    		
+    		JComponent c = (JComponent) contentPanel.getComponents()[i];
+    		Object obj = c.getClientProperty(KEY_PANEL_GROW);
+    		
+    		if(obj instanceof Boolean && ((Boolean) obj) == Boolean.TRUE) {
+	    		if(i == 0) {
+	        		formRowLayoutString.append("pref:grow");
+	    		} else {
+	        		formRowLayoutString.append(", 4dlu, pref:grow");
+	    		}
+    		} else {
+    			if(i == 0) {
+	        		formRowLayoutString.append("pref");
+	    		} else {
+	        		formRowLayoutString.append(", 4dlu, pref");
+	    		}
+    		}
+    	}
+    	
+    	FormLayout newLayout = new FormLayout(
+                "pref",
+                formRowLayoutString.toString());
+
+        PanelBuilder builder = new PanelBuilder(newLayout);
+        CellConstraints cc = new CellConstraints();
+
+        for(int i=0; i<countComp; i++) {
+        	builder.add(contentPanel.getComponents()[i], cc.xy(1, (i*2+1)));
+        }
+    	
+    	contentPanel.removeAll();
+    	contentPanel.setLayout(newLayout);
+    	contentPanel.add(builder.getPanel());
     }
 
     public JScrollPane getContentScrollPane() {
@@ -278,13 +329,11 @@ public class CWView extends CWPanel {
         mainPanel.setBorder(border);
     }
     
-    protected void loadExtentions() {
-    	//super.loadExtentions();
-    	
-    	loadExtentions(this);
+    protected void loadViewExtentions() {    	
+    	loadViewExtentions(this);
     }
     
-    protected final void loadExtentions(CWView view) {
+    protected final void loadViewExtentions(CWView view) {
     	
     	// Load extentions with view.getClass()
     	// and call with view object as parameter
@@ -295,7 +344,7 @@ public class CWView extends CWPanel {
     	for(CWViewExtentionPoint ex: viewExtentions) {
     		
     		// Check base class
-    		if(ex.getExtentionViewClass().equals(view.getClass())) {
+    		if(ex.getViewExtention().equals(view.getClass())) {
     			
     			// Execute extention
     			ex.execute(view);

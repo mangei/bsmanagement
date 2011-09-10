@@ -356,14 +356,14 @@ public class EditCustomerPresentationModel
             extention.cancel();
         }
 
-        if(getMode() == Mode.NEW) {
+        if(isNewMode()) {
         	
         	// remove the customer, if we cancel a new one
         	BoCustomer boCustomer = getBean().getTypedAdapter(BoCustomer.class);
         	boCustomer.remove();
         	CWEntityManager.commit(getEntityManager());
         	
-        } else if(getMode() == Mode.EDIT) {
+        } else if(isEditMode()) {
         	
 	        // revert all changes
 	        CWEntityManager.rollback(getEntityManager());
