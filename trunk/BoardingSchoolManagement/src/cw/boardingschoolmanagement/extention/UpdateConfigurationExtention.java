@@ -1,12 +1,15 @@
 package cw.boardingschoolmanagement.extention;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.swing.Icon;
+
 import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.UpdateConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.UpdateConfigurationView;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
-import java.util.List;
-import javax.swing.Icon;
 
 /**
  *
@@ -18,7 +21,7 @@ public class UpdateConfigurationExtention
     private UpdateConfigurationPresentationModel model;
     private UpdateConfigurationView view;
 
-    public void initPresentationModel(ConfigurationPresentationModel configurationModel) {
+    public void initPresentationModel(ConfigurationPresentationModel configurationModel, EntityManager entityManager) {
         model = new UpdateConfigurationPresentationModel(configurationModel);
         view = new UpdateConfigurationView(model);
     }

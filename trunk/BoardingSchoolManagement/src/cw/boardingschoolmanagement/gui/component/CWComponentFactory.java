@@ -932,9 +932,6 @@ public class CWComponentFactory {
     }
 
     public static CWView createView(CWIPresentationModel model, CWHeaderInfo headerInfo, JComponent comp) {
-    	if(model == null) {
-            throw new NullPointerException("model is null");
-        }
     	if (headerInfo == null) {
             headerInfo = new CWHeaderInfo();
         }

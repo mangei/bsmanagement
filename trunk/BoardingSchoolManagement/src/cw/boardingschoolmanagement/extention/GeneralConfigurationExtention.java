@@ -1,5 +1,11 @@
 package cw.boardingschoolmanagement.extention;
 
+import java.util.HashMap;
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.swing.Icon;
+
 import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.GeneralConfigurationPresentationModel;
@@ -7,9 +13,6 @@ import cw.boardingschoolmanagement.gui.GeneralConfigurationView;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.PropertiesManager;
-import java.util.HashMap;
-import java.util.List;
-import javax.swing.Icon;
 
 /**
  *
@@ -22,7 +25,7 @@ public class GeneralConfigurationExtention
     private GeneralConfigurationView view;
     private HashMap generalConfigruationMap;
 
-    public void initPresentationModel(ConfigurationPresentationModel configurationModel) {
+    public void initPresentationModel(ConfigurationPresentationModel configurationModel, EntityManager entityManager) {
         generalConfigruationMap = new HashMap();
         generalConfigruationMap.put("pathPanelActive", Boolean.parseBoolean(PropertiesManager.getProperty("configuration.general.pathPanelActive")));
         generalConfigruationMap.put("pathPanelPosition", PropertiesManager.getProperty("configuration.general.pathPanelPosition"));

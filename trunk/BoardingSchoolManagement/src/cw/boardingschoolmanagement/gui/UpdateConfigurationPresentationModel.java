@@ -31,6 +31,7 @@ import org.jdom.input.SAXBuilder;
  * @author ManuelG
  */
 public class UpdateConfigurationPresentationModel
+	extends CWPresentationModel
 {
 
     private ConfigurationPresentationModel configurationPresentationModel;
@@ -41,7 +42,8 @@ public class UpdateConfigurationPresentationModel
     private SelectionInList<UpdateInfo> updateInfoList;
 
     public UpdateConfigurationPresentationModel(ConfigurationPresentationModel configurationPresentationModel) {
-        this.configurationPresentationModel = configurationPresentationModel;
+    	super(null);
+    	this.configurationPresentationModel = configurationPresentationModel;
         initModels();
         initEventHandling();
     }

@@ -18,6 +18,7 @@ import com.jgoodies.binding.beans.Model;
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.comparator.PriorityComparator;
 import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
@@ -30,7 +31,7 @@ import cw.boardingschoolmanagement.manager.ModulManager;
  * @author Manuel Geier
  */
 public class ConfigurationPresentationModel
-	extends CWPresentationModel
+	extends CWEditPresentationModel
 {
     private CWHeaderInfo headerInfo;
     private List<ConfigurationExtentionPoint> configurationExtentions;
@@ -42,7 +43,7 @@ public class ConfigurationPresentationModel
  *Konstruktor
  */
     public ConfigurationPresentationModel() {
-        super(new Model() {});
+        super(new Model() {}, CWEntityManager.createEntityManager(), ConfigurationView.class);
         initModels();
         initEventHandling();
     }
@@ -58,7 +59,7 @@ public class ConfigurationPresentationModel
 
         configurationExtentions = getExtentions();
         for (ConfigurationExtentionPoint extention : configurationExtentions) {
-            extention.initPresentationModel(this);
+            extention.initPresentationModel(this, getEntityManager());
         }
 
         headerInfo = new CWHeaderInfo(
@@ -85,6 +86,8 @@ public class ConfigurationPresentationModel
         for (ConfigurationExtentionPoint ex : configurationExtentions) {
             ex.dispose();
         }
+        
+        CWEntityManager.closeEntityManager(getEntityManager());
     }
 
     public List<JComponent> getExtentionComponents() {
@@ -130,7 +133,8 @@ public class ConfigurationPresentationModel
         public void actionPerformed(ActionEvent e) {
 
             // Fire only when the save-method worked correct
-            if (save()) {
+            if (isValid()) {
+            	save();
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
             }
 
@@ -152,7 +156,8 @@ public class ConfigurationPresentationModel
             }
             if (i == 0) {
                 // If the save-method doesn't worked, because of an error, to nothing
-                if (!save()) {
+                if (isValid()) {
+                	save();
                     return;
                 }
             }
@@ -162,46 +167,20 @@ public class ConfigurationPresentationModel
         }
     }
 
-    public boolean save() {
+    public void save() {
         boolean valid = true;
-
-        List<ConfigurationExtentionPoint> extentions = getExtentions();
-        List<String> errorMessages = new ArrayList<String>();
-        for (ConfigurationExtentionPoint extention : extentions) {
-            List<String> errorList = extention.validate();
-            if (errorList != null) {
-                if (errorList.size() > 0) {
-                    valid = false;
-                    errorMessages.addAll(errorList);
-                }
-            }
-        }
-
-        if (!valid) {
-
-            StringBuffer buffer = new StringBuffer("<html>");
-
-            for (String message : errorMessages) {
-                buffer.append(message);
-                buffer.append("<br>");
-            }
-
-            buffer.append("</html>");
-
-            JOptionPane.showMessageDialog(null, buffer.toString(), "Fehler und Warnungen", JOptionPane.ERROR_MESSAGE);
-
-            return false;
-        }
 
         triggerCommit();
 
+		List<ConfigurationExtentionPoint> extentions = getExtentions();
         for (ConfigurationExtentionPoint extention : extentions) {
             extention.save();
         }
+        
+        saveExtentions();
 
         setChanged(true);
 
-        return true;
     }
 
     @Override
@@ -236,5 +215,45 @@ public class ConfigurationPresentationModel
     public Action getSaveAction() {
         return saveAction;
     }
+    
+    @Override
+	public boolean validate(List errorMessages) {
+		
+		// TODO refactor validation
+//		List<ConfigurationExtentionPoint> extentions = getExtentions();
+//        List<String> errorMessages = new ArrayList<String>();
+//        for (ConfigurationExtentionPoint extention : extentions) {
+//            List<String> errorList = extention.validate();
+//            if (errorList != null) {
+//                if (errorList.size() > 0) {
+//                    valid = false;
+//                    errorMessages.addAll(errorList);
+//                }
+//            }
+//        }
+//
+//        if (!valid) {
+//
+//            StringBuffer buffer = new StringBuffer("<html>");
+//
+//            for (String message : errorMessages) {
+//                buffer.append(message);
+//                buffer.append("<br>");
+//            }
+//
+//            buffer.append("</html>");
+//
+//            JOptionPane.showMessageDialog(null, buffer.toString(), "Fehler und Warnungen", JOptionPane.ERROR_MESSAGE);
+//
+//        }
+		
+		validateExtentions(errorMessages);
+		return !hasErrorMessages();
+	}
+
+    
+	public void cancel() {
+		cancelExtentions();
+	}
 
 }
