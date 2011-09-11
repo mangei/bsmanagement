@@ -22,6 +22,7 @@ import cw.customermanagementmodul.gui.GroupManagementPresentationModel;
 import cw.customermanagementmodul.gui.GroupManagementView;
 import cw.customermanagementmodul.logic.BoCustomer;
 import cw.customermanagementmodul.logic.BoGroup;
+import cw.customermanagementmodul.logic.BoGuardian;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.Group;
 import cw.customermanagementmodul.persistence.PMCustomer;
@@ -55,6 +56,11 @@ public class CustomerManagementModule
     			Group.class, 
     			IAdapterObjectFactory.createFactory(
     					BoGroup.class));
+    	
+    	IAdapterManager.registerAdapter(
+    			BoCustomer.class, 
+    			IAdapterObjectFactory.createFactory(
+    					BoGuardian.class));
     	
     	
     	/**
