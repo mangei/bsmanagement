@@ -125,10 +125,9 @@ public class CWView extends CWPanel {
         contentPanel.setLayout(new FormLayout());
         contentPanel.setBorder(null);
 
-        contentScrollPane = CWComponentFactory.createScrollPane(contentPanel);
-        contentScrollPane.setBorder(null);
-        
         if(contentScrolls) {
+        	contentScrollPane = CWComponentFactory.createScrollPane(contentPanel);
+            contentScrollPane.setBorder(null);
             mainPanel.add(contentScrollPane, BorderLayout.CENTER);
         } else {
             mainPanel.add(contentPanel, BorderLayout.CENTER);
@@ -266,7 +265,7 @@ public class CWView extends CWPanel {
     public void addToContentPanel(JComponent comp, boolean shouldGrow) {
     	
     	if(comp == null) {
-    		return;
+    		throw new NullPointerException("comp is null");
     	}
     	
     	comp.setOpaque(false);
@@ -288,35 +287,35 @@ public class CWView extends CWPanel {
     		
     		if(obj instanceof Boolean && ((Boolean) obj) == Boolean.TRUE) {
 	    		if(i == 0) {
-	        		formRowLayoutString.append("fill:pref:grow");
+	        		formRowLayoutString.append("fill:default:grow");
 	    		} else {
-	        		formRowLayoutString.append(", 4dlu, fill:pref:grow");
+	        		formRowLayoutString.append(", 4dlu, fill:default:grow");
 	    		}
     		} else {
     			if(i == 0) {
-	        		formRowLayoutString.append("pref");
+	        		formRowLayoutString.append("default");
 	    		} else {
-	        		formRowLayoutString.append(", 4dlu, pref");
+	        		formRowLayoutString.append(", 4dlu, default");
 	    		}
     		}
     	}
     	
     	if(shouldGrow) {
     		if(countComp == 0) {
-        		formRowLayoutString.append("fill:pref:grow");
+        		formRowLayoutString.append("fill:default:grow");
     		} else {
-        		formRowLayoutString.append(", 4dlu, fill:pref:grow");
+        		formRowLayoutString.append(", 4dlu, fill:default:grow");
     		}
 		} else {
 			if(countComp == 0) {
-        		formRowLayoutString.append("pref");
+        		formRowLayoutString.append("default");
     		} else {
-        		formRowLayoutString.append(", 4dlu, pref");
+        		formRowLayoutString.append(", 4dlu, default");
     		}
 		}
     	
     	FormLayout newLayout = new FormLayout(
-                "pref:grow",
+                "fill:default:grow",
                 formRowLayoutString.toString());
 
         PanelBuilder builder = new PanelBuilder(newLayout, contentPanel);
