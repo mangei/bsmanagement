@@ -1,21 +1,24 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import com.jidesoft.swing.JideSwingUtilities;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.ui.CWButtonPanelButtonUI;
 import java.awt.BorderLayout;
-import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.Color;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicPanelUI;
+
+import com.jidesoft.swing.JideSwingUtilities;
+
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.ui.CWButtonPanelButtonUI;
+import cw.boardingschoolmanagement.manager.GUIManager;
 
 /**
  *
@@ -26,27 +29,28 @@ public class CWBackView
 {
 
     private String backText;
-    private JComponent comp;
+    private CWView innerView;
     private CWHeaderInfo headerInfo;
 
-    CWBackView(JComponent comp) {
-        this(comp, "");
+    CWBackView(CWView innerView) {
+        this(innerView, "");
     }
 
-    CWBackView(JComponent comp, String backText) {
-        if (comp == null) {
+    CWBackView(CWView innerView, String backText) {
+    	super(null);
+        if (innerView == null) {
             throw new NullPointerException("panel is null");
         }
 
-        if (comp instanceof CWView) {
-            headerInfo = ((CWView) comp).getHeaderInfo();
+        if (innerView instanceof CWView) {
+            headerInfo = ((CWView) innerView).getHeaderInfo();
         }
 
         this.setLayout(new BorderLayout());
         this.backText = backText;
-        this.comp = comp;
+        this.innerView = innerView;
 
-        this.add(comp, BorderLayout.CENTER);
+        this.add(innerView, BorderLayout.CENTER);
 
         JPanel topPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 0, 0));
         topPanel.setOpaque(false);
@@ -89,8 +93,8 @@ public class CWBackView
 
     @Override
     public void dispose() {
-        if(comp instanceof CWView) {
-            ((CWView)comp).dispose();
+        if(innerView instanceof CWView) {
+            ((CWView)innerView).dispose();
         }
     }
 }

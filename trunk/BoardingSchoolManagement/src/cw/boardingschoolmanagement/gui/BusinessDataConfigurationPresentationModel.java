@@ -1,12 +1,14 @@
 package cw.boardingschoolmanagement.gui;
 
-import com.jgoodies.binding.PresentationModel;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.pojo.BusinessData;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
+
+import javax.persistence.EntityManager;
+
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.pojo.BusinessData;
 
 /**
  *
@@ -15,7 +17,7 @@ import java.util.List;
  *
  */
 public class BusinessDataConfigurationPresentationModel
-    extends PresentationModel<BusinessData>
+    extends CWEditPresentationModel<BusinessData>
 {
 
     private BusinessData businessData;
@@ -29,9 +31,8 @@ public class BusinessDataConfigurationPresentationModel
      * @param businessData POJO
      * @param configurationPresentationModel
      */
-
-    public BusinessDataConfigurationPresentationModel(BusinessData businessData, ConfigurationPresentationModel configurationPresentationModel) {
-        super(businessData);
+    public BusinessDataConfigurationPresentationModel(BusinessData businessData, ConfigurationPresentationModel configurationPresentationModel, EntityManager entityManager) {
+        super(businessData, entityManager, BusinessDataConfigurationView.class);
         this.businessData = businessData;
         this.configurationPresentationModel = configurationPresentationModel;
         initModels();
@@ -92,7 +93,19 @@ public class BusinessDataConfigurationPresentationModel
     }
 
     public void save() {
+    	saveExtentions();
         triggerCommit();
     }
+
+	@Override
+	public boolean validate(List<CWErrorMessage> errorMessages) {
+		validateExtentions(errorMessages);
+		return !hasErrorMessages();
+	}
+
+	@Override
+	public void cancel() {
+		cancelExtentions();
+	}
 
 }

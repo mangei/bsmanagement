@@ -25,7 +25,8 @@ import cw.customermanagementmodul.persistence.Customer;
  *
  * @author Manuel Geier
  */
-public class EditCustomerEditCustomerView extends CWView
+public class EditCustomerEditCustomerView 
+	extends CWView<EditCustomerEditCustomerPresentationModel>
 {
     private EditCustomerEditCustomerPresentationModel model;
 

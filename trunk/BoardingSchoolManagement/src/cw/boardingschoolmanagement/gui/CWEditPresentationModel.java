@@ -11,7 +11,8 @@ import cw.boardingschoolmanagement.extention.point.CWEditViewExtentionPoint;
 import cw.boardingschoolmanagement.manager.ModulManager;
 
 public abstract class CWEditPresentationModel<TPersistence>
-	extends PresentationModel<TPersistence> {
+	extends PresentationModel<TPersistence>
+	implements CWIPresentationModel {
 
 	public enum Mode {
 		NEW, EDIT

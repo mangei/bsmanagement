@@ -2,7 +2,8 @@ package cw.boardingschoolmanagement.gui;
 
 import javax.persistence.EntityManager;
 
-public abstract class CWPresentationModel {
+public abstract class CWPresentationModel
+	implements CWIPresentationModel {
 
 	private EntityManager entityManager;
 	

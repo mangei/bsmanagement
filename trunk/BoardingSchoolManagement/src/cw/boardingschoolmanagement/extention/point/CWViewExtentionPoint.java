@@ -1,7 +1,8 @@
 package cw.boardingschoolmanagement.extention.point;
 
+import javax.persistence.EntityManager;
+
 import cw.boardingschoolmanagement.extention.CWIExtention;
-import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
 
 /**
  *
@@ -11,5 +12,5 @@ public interface CWViewExtentionPoint<TView>
         extends CWIExtention {
 
 	public Class getViewExtentionClass();
-    public void execute(TView view);
+    public void init(TView view, EntityManager entityManager);
 }

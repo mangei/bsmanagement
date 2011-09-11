@@ -1,5 +1,6 @@
 package cw.customermanagementmodul.extention;
 
+import javax.persistence.EntityManager;
 import javax.swing.JLabel;
 
 import cw.boardingschoolmanagement.extention.point.CWEditViewExtentionPoint;
@@ -20,8 +21,10 @@ public class GuardianLinkEditCustomerEditCustomerExtention
 	}
 
 	@Override
-	public void execute(EditCustomerEditCustomerView view) {
+	public void init(EditCustomerEditCustomerView view, EntityManager entityManager) {
 
+		model = new EditGuardianEditCustomerPresentationModel(, entityManager);
+		
 		view.addToContentPanel(new JLabel("TEST"));
 	}
 

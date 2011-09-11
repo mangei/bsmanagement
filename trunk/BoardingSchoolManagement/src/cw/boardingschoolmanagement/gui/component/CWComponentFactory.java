@@ -1,18 +1,5 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import cw.boardingschoolmanagement.app.*;
-import com.jgoodies.binding.adapter.Bindings;
-import com.jgoodies.binding.adapter.ComboBoxAdapter;
-import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
-import com.jgoodies.binding.adapter.TextComponentConnector;
-import com.jgoodies.binding.adapter.ToggleButtonAdapter;
-import com.jgoodies.binding.beans.PropertyConnector;
-import com.jgoodies.binding.list.SelectionInList;
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
-import com.toedter.calendar.JTextFieldDateEditor;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -30,6 +17,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.AbstractButton;
 import javax.swing.Action;
 import javax.swing.BorderFactory;
@@ -43,8 +31,25 @@ import javax.swing.table.TableModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.tree.TreeModel;
+
 import org.jdesktop.swingx.decorator.HighlighterFactory;
 import org.jdesktop.swingx.treetable.TreeTableModel;
+
+import com.jgoodies.binding.adapter.Bindings;
+import com.jgoodies.binding.adapter.ComboBoxAdapter;
+import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
+import com.jgoodies.binding.adapter.TextComponentConnector;
+import com.jgoodies.binding.adapter.ToggleButtonAdapter;
+import com.jgoodies.binding.beans.PropertyConnector;
+import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+import com.toedter.calendar.JTextFieldDateEditor;
+
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.app.CalendarUtil;
+import cw.boardingschoolmanagement.gui.CWIPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 
 /**
  * The factory contains all necessary components we have in our application.
@@ -897,43 +902,43 @@ public class CWComponentFactory {
         return panel;
     }
 
-    public static CWBackView createBackView(CWPanel panel) {
-        if(panel == null) {
-            throw new NullPointerException("panel is null");
-        }
-        return createBackView(panel, "Zurueck");
+    public static CWBackView createBackView(CWView view) {
+        return createBackView(view, "Zurueck");
     }
 
-    public static CWBackView createBackView(CWPanel panel, String backText) {
-        if(panel == null) {
-            throw new NullPointerException("panel is null");
+    public static CWBackView createBackView(CWView view, String backText) {
+        if(view == null) {
+            throw new NullPointerException("view is null");
         }
 
-        CWBackView backView = new CWBackView(panel, backText);
+        CWBackView backView = new CWBackView(view, backText);
         return backView;
     }
 
-    public static CWView createView() {
-        return new CWView();
+    public static CWView createView(CWIPresentationModel model) {
+        return new CWView(model);
     }
 
-    public static CWView createView(CWHeaderInfo headerInfo) {
-        return createView(headerInfo, null);
+    public static CWView createView(CWIPresentationModel model, CWHeaderInfo headerInfo) {
+        return createView(model, headerInfo, null);
     }
 
-    public static CWView createView(String headerText, JComponent comp) {
-        return createView(new CWHeaderInfo(headerText), comp);
+    public static CWView createView(CWIPresentationModel model, String headerText, JComponent comp) {
+        return createView(model, new CWHeaderInfo(headerText), comp);
     }
 
-    public static CWView createView(JComponent comp) {
-        return createView(new CWHeaderInfo(), comp);
+    public static CWView createView(CWIPresentationModel model, JComponent comp) {
+        return createView(model, new CWHeaderInfo(), comp);
     }
 
-    public static CWView createView(CWHeaderInfo headerInfo, JComponent comp) {
-        if (headerInfo == null) {
+    public static CWView createView(CWIPresentationModel model, CWHeaderInfo headerInfo, JComponent comp) {
+    	if(model == null) {
+            throw new NullPointerException("model is null");
+        }
+    	if (headerInfo == null) {
             headerInfo = new CWHeaderInfo();
         }
-        CWView view = new CWView(headerInfo);
+        CWView view = new CWView(model, headerInfo);
         if (comp != null) {
             view.addToContentPanel(comp);
         }

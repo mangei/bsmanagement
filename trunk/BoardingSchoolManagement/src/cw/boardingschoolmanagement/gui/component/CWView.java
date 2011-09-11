@@ -37,16 +37,19 @@ import com.jidesoft.swing.JideSwingUtilities;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.extention.point.CWViewExtentionPoint;
+import cw.boardingschoolmanagement.gui.CWIPresentationModel;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.ModulManager;
 
 /**
  *
- * @author ManuelG
+ * @author Manuel Geier
  */
-public class CWView extends CWPanel {
+public class CWView<TPresentationModel extends CWIPresentationModel>
+	extends CWPanel {
 
 	private static final String KEY_PANEL_GROW = "KEY_PANEL_GROW";
+	private TPresentationModel model;
 	
     private JPanel buttonPanel;
     private CWButtonPanel leftButtonPanel;
@@ -67,27 +70,31 @@ public class CWView extends CWPanel {
         LEFT, RIGHT
     };
 
-    public CWView() {
-        this(new CWHeaderInfo());
+    public CWView(TPresentationModel model) {
+        this(model, new CWHeaderInfo());
     }
 
-    public CWView(boolean contentScrolls) {
-        this(new CWHeaderInfo(), contentScrolls);
+    public CWView(TPresentationModel model, boolean contentScrolls) {
+        this(model,new CWHeaderInfo(), contentScrolls);
     }
 
-    public CWView(String headerText) {
-        this(new CWHeaderInfo(headerText));
+    public CWView(TPresentationModel model, String headerText) {
+        this(model, new CWHeaderInfo(headerText));
     }
 
-    public CWView(CWHeaderInfo headerInfo) {
-        this(headerInfo, true);
+    public CWView(TPresentationModel model, CWHeaderInfo headerInfo) {
+        this(model, headerInfo, true);
     }
 
-    public CWView(CWHeaderInfo headerInfo, boolean contentScrolls) {
+    public CWView(TPresentationModel model, CWHeaderInfo headerInfo, boolean contentScrolls) {
+        if(model == null) {
+            throw new NullPointerException("model is null");
+        }
         if(headerInfo == null) {
             throw new NullPointerException("headerInfo is null");
         }
 
+        this.model = model;
         this.headerInfo = headerInfo;
 
         setName(headerInfo.getHeaderText());
@@ -155,6 +162,9 @@ public class CWView extends CWPanel {
         this.setUI(null);
     }
 
+    public TPresentationModel getModel() {
+		return model;
+	}
 
     private CWButton bMore;
     private CWPopupMenu popMore;
@@ -374,7 +384,7 @@ public class CWView extends CWPanel {
     		if(ex.getViewExtentionClass().equals(view.getClass())) {
     			
     			// Execute extention
-    			ex.execute(view);
+    			ex.init(view, view.getModel().getEntityManager());
     		}
     	}
     	
