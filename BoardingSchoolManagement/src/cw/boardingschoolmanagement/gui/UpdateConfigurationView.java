@@ -1,32 +1,35 @@
 package cw.boardingschoolmanagement.gui;
 
+import java.awt.FlowLayout;
+
+import javax.swing.JLabel;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.renderer.UpdateStatusTableCellRenderer;
-import java.awt.FlowLayout;
-import javax.swing.JLabel;
 
 /**
  *
- * @author ManuelG
+ * @author Manuel Geier
  */
-public class UpdateConfigurationView extends CWView
+public class UpdateConfigurationView
+	extends CWView<UpdateConfigurationPresentationModel>
 {
 
-    private UpdateConfigurationPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWButton bCheck;
     private CWButton bUpdate;
     private CWTable tUpdates;
 
     public UpdateConfigurationView(UpdateConfigurationPresentationModel model) {
-        this.model = model;
+        super(model);
 
         initComponents();
         buildView();
@@ -34,9 +37,9 @@ public class UpdateConfigurationView extends CWView
     }
 
     public void initComponents() {
-        bCheck = CWComponentFactory.createButton(model.getCheckAction());
-        bUpdate = CWComponentFactory.createButton(model.getUpdateAction());
-        tUpdates = CWComponentFactory.createTable(model.getUpdatesTableModel(), "System pruefen!");
+        bCheck = CWComponentFactory.createButton(getModel().getCheckAction());
+        bUpdate = CWComponentFactory.createButton(getModel().getUpdateAction());
+        tUpdates = CWComponentFactory.createTable(getModel().getUpdatesTableModel(), "System pruefen!");
         tUpdates.getColumns(true).get(2).setCellRenderer(new UpdateStatusTableCellRenderer());
 
         componentContainer = CWComponentFactory.createComponentContainer()
@@ -61,7 +64,7 @@ public class UpdateConfigurationView extends CWView
     }
 
     private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
 
         CWPanel pCheck = CWComponentFactory.createPanel();
         pCheck.add(new JLabel("Ist Ihr System auf dem aktuellen Stand? "));
@@ -94,6 +97,6 @@ public class UpdateConfigurationView extends CWView
 
 //        cPathActive.removeItemListener(cbPathActiveListener);
 
-        model.dispose();
+        getModel().dispose();
     }
 }

@@ -12,5 +12,5 @@ public interface CWViewExtentionPoint<TView>
         extends CWIExtention {
 
 	public Class getViewExtentionClass();
-    public void init(TView view, EntityManager entityManager);
+    public void init(TView baseView, EntityManager entityManager);
 }

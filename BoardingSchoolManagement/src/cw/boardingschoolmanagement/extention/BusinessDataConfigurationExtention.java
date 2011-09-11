@@ -1,5 +1,10 @@
 package cw.boardingschoolmanagement.extention;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.swing.Icon;
+
 import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.BusinessDataConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.BusinessDataConfigurationView;
@@ -7,8 +12,6 @@ import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.manager.PropertiesManager;
 import cw.boardingschoolmanagement.pojo.BusinessData;
-import java.util.List;
-import javax.swing.Icon;
 
 /**
  *  
@@ -29,7 +32,7 @@ public class BusinessDataConfigurationExtention implements ConfigurationExtentio
      *
      * @param configurationModel
      */
-    public void initPresentationModel(ConfigurationPresentationModel configurationModel) {
+    public void initPresentationModel(ConfigurationPresentationModel configurationModel, EntityManager entityManager) {
         businessData = new BusinessData();
 
         businessData.setName(               PropertiesManager.getProperty("configuration.businessData.name",""));
@@ -42,7 +45,7 @@ public class BusinessDataConfigurationExtention implements ConfigurationExtentio
         businessData.setEmail(              PropertiesManager.getProperty("configuration.businessData.email",""));
         businessData.setDvrNumber(          PropertiesManager.getProperty("configuration.businessData.dvrNumber",""));
 
-        model = new BusinessDataConfigurationPresentationModel(businessData, configurationModel);
+        model = new BusinessDataConfigurationPresentationModel(businessData, configurationModel, entityManager);
         view = new BusinessDataConfigurationView(model);
     }
 

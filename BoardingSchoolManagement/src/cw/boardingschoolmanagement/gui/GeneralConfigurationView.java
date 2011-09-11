@@ -1,30 +1,32 @@
 package cw.boardingschoolmanagement.gui;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWCheckBox;
 import cw.boardingschoolmanagement.gui.component.CWComboBox;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 /**
  *
- * @author ManuelG
+ * @author Manuel Geier
  */
-public class GeneralConfigurationView extends CWView
+public class GeneralConfigurationView
+	extends CWView<GeneralConfigurationPresentationModel>
 {
 
-    private GeneralConfigurationPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWCheckBox cPathActive;
     private CWComboBox cbPathPosition;
     private ItemListener cbPathActiveListener;
 
     public GeneralConfigurationView(GeneralConfigurationPresentationModel model) {
-        this.model = model;
+        super(model);
 
         initComponents();
         buildView();
@@ -35,8 +37,8 @@ public class GeneralConfigurationView extends CWView
  *
  */
     public void initComponents() {
-        cPathActive = CWComponentFactory.createCheckBox(model.getPathPanelActiveModel(), "Anzeigepfad aktivieren");
-        cbPathPosition = CWComponentFactory.createComboBox(model.getPathPanelPositionSelection());
+        cPathActive = CWComponentFactory.createCheckBox(getModel().getPathPanelActiveModel(), "Anzeigepfad aktivieren");
+        cbPathPosition = CWComponentFactory.createComboBox(getModel().getPathPanelPositionSelection());
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(cPathActive)
@@ -59,7 +61,7 @@ public class GeneralConfigurationView extends CWView
     }
 
     private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
 
         FormLayout layout = new FormLayout(
                 "20dlu, pref, pref, 1dlu:grow",
@@ -81,6 +83,6 @@ public class GeneralConfigurationView extends CWView
 
         cPathActive.removeItemListener(cbPathActiveListener);
 
-        model.dispose();
+        getModel().dispose();
     }
 }

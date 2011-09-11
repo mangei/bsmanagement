@@ -1,11 +1,14 @@
 package cw.boardingschoolmanagement.extention.point;
 
+import java.util.List;
+
+import javax.persistence.EntityManager;
+import javax.swing.Icon;
+
 import cw.boardingschoolmanagement.extention.CWIExtention;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.interfaces.Priority;
-import java.util.List;
-import javax.swing.Icon;
 
 /**
  *
@@ -14,7 +17,7 @@ import javax.swing.Icon;
 public interface ConfigurationExtentionPoint
         extends CWIExtention, Priority{
 
-    public void initPresentationModel(ConfigurationPresentationModel configurationModel);
+    public void initPresentationModel(ConfigurationPresentationModel configurationModel, EntityManager entityManager);
 
     public CWPanel getView();
 

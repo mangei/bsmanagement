@@ -16,6 +16,7 @@ import java.util.List;
  * @author ManuelG
  */
 public class GeneralConfigurationPresentationModel
+	extends CWPresentationModel
 {
 
     private ConfigurationPresentationModel configurationPresentationModel;
@@ -26,7 +27,8 @@ public class GeneralConfigurationPresentationModel
     private SaveListener saveListener;
 
     public GeneralConfigurationPresentationModel(HashMap generalConfigruationMap, ConfigurationPresentationModel configurationPresentationModel) {
-        this.configurationPresentationModel = configurationPresentationModel;
+        super(null);
+    	this.configurationPresentationModel = configurationPresentationModel;
         this.generalConfigruationMap = generalConfigruationMap;
         initModels();
         initEventHandling();
