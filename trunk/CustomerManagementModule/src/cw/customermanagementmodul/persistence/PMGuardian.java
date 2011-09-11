@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 
 import cw.boardingschoolmanagement.persistence.AbstractPersistenceManager;
 
@@ -59,14 +60,21 @@ public class PMGuardian
     }
     
     public Guardian getGuardianForCustomer(Long customerId, EntityManager entityManager) {
-    	return setEntityManager((Guardian) entityManager.createQuery(
-        		"SELECT " + 
-        			"g" + 
-    			" FROM " + 
-        			Guardian.ENTITY_NAME + " g" +
-        		" WHERE " + 
-        			"g.customer.id = " + customerId)
-        .getSingleResult(), entityManager);
+    	try {
+    		return setEntityManager((Guardian) entityManager.createQuery(
+            		"SELECT " + 
+            			"g" + 
+        			" FROM " + 
+            			Guardian.ENTITY_NAME + " g" +
+            		" WHERE " +
+            			"g.customer is not null" + 
+            		" AND " + 
+            			"g.customer.id = " + customerId)
+            .getSingleResult(), entityManager);
+    		
+    	} catch(NoResultException e) {
+    		return null;
+    	}
     }
 
 }
