@@ -23,7 +23,7 @@ public class BoGuardian extends CWBoPersistence<Guardian> {
 		guardian = PMGuardian.getInstance().getGuardianForCustomer(boCustomer.getPersistence().getId(), getEntityManager());
 		
 		if(guardian == null) {
-			guardian = PMGuardian.getInstance().create(getEntityManager());
+			guardian = PMGuardian.getInstance().create(boCustomer.getPersistence(), getEntityManager());
 		}
 		
 		setPersistence(guardian);

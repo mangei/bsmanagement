@@ -1,7 +1,5 @@
 package cw.customermanagementmodul.gui;
 
-import java.awt.BorderLayout;
-
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;

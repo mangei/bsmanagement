@@ -1,6 +1,5 @@
 package cw.customermanagementmodul.logic;
 
-import cw.boardingschoolmanagement.logic.CWBo;
 import cw.boardingschoolmanagement.logic.CWBoPersistence;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.PMCustomer;
