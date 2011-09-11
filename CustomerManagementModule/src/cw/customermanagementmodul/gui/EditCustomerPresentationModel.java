@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import javax.persistence.EntityManager;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -27,7 +26,6 @@ import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
 import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
-import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.logic.BoCustomer;
 import cw.customermanagementmodul.persistence.Customer;
@@ -49,21 +47,13 @@ public class EditCustomerPresentationModel
     private List<EditCustomerTabExtentionPoint> editCustomerGUITabExtentions;
     private PropertyChangeListener actionButtonListener;
     private SaveListener saveListener;
-
-    public EditCustomerPresentationModel(PresentationModelProperties properties, EntityManager entityManager) {
-        super((Customer)properties.get("customer"), entityManager);
-        this.headerInfo = properties.getHeaderInfo();
-
-        initModels();
-        initEventHandling();
-    }
     
     public EditCustomerPresentationModel() {
         this(null);
     }
     
     public EditCustomerPresentationModel(Long customerId) {
-        super(CWEntityManager.createEntityManager());
+        super(CWEntityManager.createEntityManager(), EditCustomerView.class);
 
         if(customerId == null) {
         	setBean(PMCustomer.getInstance().create(getEntityManager()));
@@ -86,6 +76,22 @@ public class EditCustomerPresentationModel
             extention.initPresentationModel(this, getEntityManager());
         }
 
+        if(isNewMode()) {
+        	headerInfo =
+                new CWHeaderInfo(
+                "Neuer Kunde",
+                "Bearbeiten sie hier alle Kundeninformationen.",
+                CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png"),
+                CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png"));
+        } else if(isEditMode()) {
+        	headerInfo =
+                new CWHeaderInfo(
+                "Kunden bearbeiten",
+                "Bearbeiten sie hier alle Kundeninformationen.",
+                CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"),
+                CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"));
+        }
+        
         // top button actions
         saveAction = new SaveAction("Speichern", CWUtils.loadIcon("cw/customermanagementmodul/images/disk_16.png"));
         cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
@@ -302,7 +308,8 @@ public class EditCustomerPresentationModel
         public void actionPerformed(ActionEvent e) {
 
             // Fire only when the save-method worked correct
-            if(save()) {
+            if(isValid()) {
+            	save();
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
             }	
         }
@@ -324,7 +331,8 @@ public class EditCustomerPresentationModel
             if (i == 0) {
 
                 // If the save-method doesn't worked, because of an error, do nothing
-                if (save()) {
+                if (isValid()) {
+                	save();
                     return;
                 }
             }
@@ -336,15 +344,16 @@ public class EditCustomerPresentationModel
     }
     
     public boolean validate(List<CWErrorMessage> errorMessages) {
-    	clearErrorMessages();
     	
     	// validate
     	
     	
     	// call validate action for extentions
         for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
-            extention.validate(getErrorMessages());
+            extention.validate(errorMessages);
         }
+        
+        validateExtentions(errorMessages);
     	
     	return !hasErrorMessages();
     }
@@ -355,6 +364,8 @@ public class EditCustomerPresentationModel
         for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
             extention.cancel();
         }
+        
+        cancelExtentions();
 
         if(isNewMode()) {
         	
@@ -373,28 +384,23 @@ public class EditCustomerPresentationModel
     	CWEntityManager.closeEntityManager(getEntityManager());
     }
 
-    public boolean save() {
-        
-    	boolean valid = validate(getErrorMessages());
-    	
-    	if(valid) {
+    public void save() {
 
-	        // Alle Werte in das Objekt schreiben
-	        triggerCommit();
-	
-	        // Die Erweiterungen speichern lassen
-	        for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
-	            extention.save();
-	        }
-	
-	        // Commit all changes
-	        getEntityManager().getTransaction().commit();
-	        CWEntityManager.closeEntityManager(getEntityManager());
-	        
-	        unsaved.setValue(false);
-    	}
-    	
-    	return valid;
+        // Alle Werte in das Objekt schreiben
+        triggerCommit();
+
+        // Die Erweiterungen speichern lassen
+        for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
+            extention.save();
+        }
+        
+        saveExtentions();
+
+        // Commit all changes
+        getEntityManager().getTransaction().commit();
+        CWEntityManager.closeEntityManager(getEntityManager());
+        
+        unsaved.setValue(false);
     }
 
     public ValueModel getUnsaved() {

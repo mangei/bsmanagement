@@ -371,7 +371,7 @@ public class CWView extends CWPanel {
     	for(CWViewExtentionPoint ex: viewExtentions) {
     		
     		// Check base class
-    		if(ex.getViewExtention().equals(view.getClass())) {
+    		if(ex.getViewExtentionClass().equals(view.getClass())) {
     			
     			// Execute extention
     			ex.execute(view);

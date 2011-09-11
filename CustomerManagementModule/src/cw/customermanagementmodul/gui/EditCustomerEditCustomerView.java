@@ -23,7 +23,7 @@ import cw.customermanagementmodul.persistence.Customer;
 
 /**
  *
- * @author CreativeWorkers.at
+ * @author Manuel Geier
  */
 public class EditCustomerEditCustomerView extends CWView
 {

@@ -32,7 +32,7 @@ public class EditCustomerEditCustomerPresentationModel
     private List<String> countryList;
     
     public EditCustomerEditCustomerPresentationModel(EditCustomerPresentationModel editCustomerPresentationModel, EntityManager entityManager) {
-        super(entityManager);
+        super(entityManager, EditCustomerEditCustomerView.class);
     	this.editCustomerPresentationModel = editCustomerPresentationModel;
 
         initModels();
@@ -124,10 +124,6 @@ public class EditCustomerEditCustomerPresentationModel
 
     }
 
-    public boolean save() {
-    	return true;
-    }
-
     public void firePostOfficeNumberLostFocus() {
         String postOfficeNumber = (String) editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER).getValue();
 
@@ -204,9 +200,14 @@ public class EditCustomerEditCustomerPresentationModel
     }
 
 	public boolean validate(List<CWErrorMessage> errorMessages) {
-		return true;
+		return validateExtentions(errorMessages);
 	}
+	
+    public void save() {
+    	saveExtentions();
+    }
 
 	public void cancel() {
+		cancelExtentions();
 	}
 }

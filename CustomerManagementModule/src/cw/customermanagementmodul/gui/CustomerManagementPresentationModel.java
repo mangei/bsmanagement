@@ -385,65 +385,12 @@ public class CustomerManagementPresentationModel
     public CustomerSelectorPresentationModel getCustomerSelectorPresentationModel() {
         return customerSelectorPresentationModel;
     }
-
-    /**
-     * Funktion zum Aendern der Daten des Kunden.
-     *
-     * @param c
-     * @return
-     */
-    public static EditCustomerPresentationModel editCustomer(final Customer c, EntityManager entityManager) {
-        GUIManager.getInstance().lockMenu();
-        GUIManager.setLoadingScreenText("Kunde wird geladen...");
-        GUIManager.setLoadingScreenVisible(true);
-
-
-        PresentationModelProperties p = new PresentationModelProperties();
-        p.put("customer", c);
-        p.put(PresentationModelProperties.HEADERINFO,
-                new CWHeaderInfo(
-                "Kunden bearbeiten",
-                "Bearbeiten sie hier alle Informationen ueber Ihren Kunden.",
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"),
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")));
-        p.put("activeExtention", CustomerOverviewEditCustomerExtentionPoint.class);
-        final EditCustomerPresentationModel model = new EditCustomerPresentationModel(p, entityManager);
-        final EditCustomerView editView = new EditCustomerView(model);
-
-        model.addButtonListener(new ButtonListener() {
-
-            public void buttonPressed(ButtonEvent evt) {
-                if (evt.getType() == ButtonEvent.SAVE_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                    GUIManager.getStatusbar().setTextAndFadeOut("Kunde wurde aktualisiert.");
-                }
-                if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
-                    model.removeButtonListener(this);
-                    GUIManager.changeToLastView();
-                    GUIManager.getInstance().unlockMenu();
-                }
-            }
-        });
-
-        GUIManager.changeView(editView, true);
-        GUIManager.setLoadingScreenVisible(false);
-
-        return model;
-    }
     
     public static EditCustomerPresentationModel editCustomer(Long customerId) {
         GUIManager.getInstance().lockMenu();
         GUIManager.setLoadingScreenText("Kunde wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
 
-
-        PresentationModelProperties p = new PresentationModelProperties();
-        p.put(PresentationModelProperties.HEADERINFO,
-                new CWHeaderInfo(
-                "Kunden bearbeiten",
-                "Bearbeiten sie hier alle Informationen ueber Ihren Kunden.",
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"),
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png")));
-        p.put("activeExtention", CustomerOverviewEditCustomerExtentionPoint.class);
         final EditCustomerPresentationModel model = new EditCustomerPresentationModel(customerId);
         final EditCustomerView editView = new EditCustomerView(model);
 
