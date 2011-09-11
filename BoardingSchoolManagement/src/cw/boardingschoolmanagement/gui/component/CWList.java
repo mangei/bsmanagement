@@ -2,7 +2,9 @@ package cw.boardingschoolmanagement.gui.component;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
 import javax.swing.ListModel;
+
 import org.jdesktop.swingx.JXList;
 
 /**

@@ -1,14 +1,17 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import cw.boardingschoolmanagement.gui.ui.CWButtonPanelUI;
-import com.jidesoft.swing.JideSwingUtilities;
-import com.l2fprod.common.swing.JButtonBar;
 import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+
 import javax.swing.JButton;
+
+import com.jidesoft.swing.JideSwingUtilities;
+import com.l2fprod.common.swing.JButtonBar;
+
+import cw.boardingschoolmanagement.gui.ui.CWButtonPanelUI;
 
 /**
  *

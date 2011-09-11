@@ -1,26 +1,24 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import cw.boardingschoolmanagement.app.CWUtils;
-import com.jidesoft.swing.JideSwingUtilities;
-import cw.boardingschoolmanagement.gui.ui.HeaderButtonUI2;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
-import java.awt.font.FontRenderContext;
-import java.awt.font.LineMetrics;
-import java.awt.geom.AffineTransform;
+
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
+
+import com.jidesoft.swing.JideSwingUtilities;
+
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.ui.HeaderButtonUI2;
 
 /**
  *

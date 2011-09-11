@@ -1,18 +1,5 @@
 package cw.boardingschoolmanagement.manager;
 
-import cw.boardingschoolmanagement.app.ApplicationListener;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.app.Application;
-import cw.boardingschoolmanagement.gui.component.CWLoadingGlass;
-import cw.boardingschoolmanagement.exception.NotInitializedException;
-import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.boardingschoolmanagement.gui.component.CWHeader;
-import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
-import cw.boardingschoolmanagement.gui.component.CWPathPanel;
-import cw.boardingschoolmanagement.gui.component.CWPathPanel.PathPanelPosition;
-import cw.boardingschoolmanagement.gui.component.CWStatusBar;
-import cw.boardingschoolmanagement.gui.component.CWTray;
-import cw.boardingschoolmanagement.gui.ui.MainSplitPaneUI;
 import java.awt.AWTException;
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -30,6 +17,7 @@ import java.awt.event.WindowEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.LinkedList;
+
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -39,7 +27,22 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.ToolTipManager;
 import javax.swing.border.EmptyBorder;
+
 import org.jdesktop.application.SingleFrameApplication;
+
+import cw.boardingschoolmanagement.app.Application;
+import cw.boardingschoolmanagement.app.ApplicationListener;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.exception.NotInitializedException;
+import cw.boardingschoolmanagement.gui.component.CWHeader;
+import cw.boardingschoolmanagement.gui.component.CWLoadingGlass;
+import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
+import cw.boardingschoolmanagement.gui.component.CWPathPanel;
+import cw.boardingschoolmanagement.gui.component.CWPathPanel.PathPanelPosition;
+import cw.boardingschoolmanagement.gui.component.CWStatusBar;
+import cw.boardingschoolmanagement.gui.component.CWTray;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.gui.ui.MainSplitPaneUI;
 
 /**
  * Manages the Graphic User Interface (GUI) of the application.

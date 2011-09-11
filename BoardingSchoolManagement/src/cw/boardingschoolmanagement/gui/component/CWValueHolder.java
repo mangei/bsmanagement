@@ -1,9 +1,10 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import com.jgoodies.binding.value.ValueHolder;
 import java.beans.PropertyChangeListener;
 import java.beans.VetoableChangeListener;
 import java.util.HashMap;
+
+import com.jgoodies.binding.value.ValueHolder;
 
 /**
  *

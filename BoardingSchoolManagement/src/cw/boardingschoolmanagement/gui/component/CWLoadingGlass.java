@@ -1,6 +1,5 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import cw.boardingschoolmanagement.app.*;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Container;
@@ -14,10 +13,13 @@ import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.RoundRectangle2D;
+
 import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.SwingUtilities;
 import javax.swing.event.MouseInputAdapter;
+
+import cw.boardingschoolmanagement.app.CWUtils;
 
 
 /**

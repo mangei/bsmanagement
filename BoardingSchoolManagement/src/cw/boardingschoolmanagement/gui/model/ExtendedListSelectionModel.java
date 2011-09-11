@@ -1,6 +1,7 @@
 package cw.boardingschoolmanagement.gui.model;
 
 import javax.swing.DefaultListSelectionModel;
+
 import org.jdesktop.swingx.JXTable;
 
 /**

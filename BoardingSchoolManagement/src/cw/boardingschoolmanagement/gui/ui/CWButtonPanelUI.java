@@ -1,9 +1,5 @@
 package cw.boardingschoolmanagement.gui.ui;
 
-import com.l2fprod.common.swing.plaf.ButtonBarButtonUI;
-import com.l2fprod.common.swing.plaf.basic.BasicButtonBarUI;
-
-import com.l2fprod.common.swing.plaf.blue.BlueishButtonUI;
 import java.awt.Color;
 
 import javax.swing.AbstractButton;
@@ -14,6 +10,10 @@ import javax.swing.border.Border;
 import javax.swing.plaf.ColorUIResource;
 import javax.swing.plaf.ComponentUI;
 import javax.swing.plaf.UIResource;
+
+import com.l2fprod.common.swing.plaf.ButtonBarButtonUI;
+import com.l2fprod.common.swing.plaf.basic.BasicButtonBarUI;
+import com.l2fprod.common.swing.plaf.blue.BlueishButtonUI;
 
 /**
  * BlueishButtonBarUI. <br>

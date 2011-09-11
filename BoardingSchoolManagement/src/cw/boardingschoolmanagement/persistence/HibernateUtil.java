@@ -1,9 +1,5 @@
 package cw.boardingschoolmanagement.persistence;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.swing.JOptionPane;
-import org.hibernate.ejb.Ejb3Configuration;
 
 /**
  * This is an helperclass for Hibernate with some basic and necessary methods.

@@ -1,6 +1,7 @@
 package cw.boardingschoolmanagement.gui.component;
 
 import java.awt.Graphics;
+
 import javax.swing.Icon;
 import javax.swing.JLabel;
 

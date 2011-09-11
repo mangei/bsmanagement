@@ -1,7 +1,8 @@
 package cw.boardingschoolmanagement.app;
 
-import cw.boardingschoolmanagement.gui.model.ExtendedListSelectionModel;
 import javax.swing.DefaultListModel;
+
+import cw.boardingschoolmanagement.gui.model.ExtendedListSelectionModel;
 
 /**
  *

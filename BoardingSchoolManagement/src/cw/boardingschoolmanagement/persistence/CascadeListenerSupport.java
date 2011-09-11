@@ -3,8 +3,6 @@ package cw.boardingschoolmanagement.persistence;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-
 /**
  * Supports the management of CascadeListeners.
  *

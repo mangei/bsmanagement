@@ -1,7 +1,8 @@
 package cw.boardingschoolmanagement.manager;
 
-import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import javax.swing.AbstractAction;
+
+import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 
 /**
  * Manages the main menues in the application

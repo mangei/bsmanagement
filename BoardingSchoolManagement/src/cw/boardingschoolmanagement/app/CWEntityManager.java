@@ -17,11 +17,11 @@ public class CWEntityManager {
         configuration = new Ejb3Configuration().
 
             // HSQLDB
-//            setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect").
-//            setProperty("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver").
-//            setProperty("hibernate.connection.url", "jdbc:hsqldb:mem:employeemanagement").
-//            setProperty("hibernate.connection.username", "sa").
-//            setProperty("hibernate.connection.password", "").
+            setProperty("hibernate.dialect", "org.hibernate.dialect.HSQLDialect").
+            setProperty("hibernate.connection.driver_class", "org.hsqldb.jdbcDriver").
+            setProperty("hibernate.connection.url", "jdbc:hsqldb:file:database/internatHsqlDb").
+            setProperty("hibernate.connection.username", "sa").
+            setProperty("hibernate.connection.password", "").
 
             // MYSQL
 //            setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect").
@@ -31,11 +31,11 @@ public class CWEntityManager {
 //            setProperty("hibernate.connection.password", "").
 
             // H2
-            setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect").
-            setProperty("hibernate.connection.driver_class", "org.h2.Driver").
-            setProperty("hibernate.connection.url", "jdbc:h2:database/internat2;AUTO_SERVER=TRUE ").
-            setProperty("hibernate.connection.username", "sa").
-            setProperty("hibernate.connection.password", "").
+//            setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect").
+//            setProperty("hibernate.connection.driver_class", "org.h2.Driver").
+//            setProperty("hibernate.connection.url", "jdbc:h2:database/internat2;AUTO_SERVER=TRUE ").
+//            setProperty("hibernate.connection.username", "sa").
+//            setProperty("hibernate.connection.password", "").
 
 //            setProperty("hibernate.connection.pool_size", "1").
             setProperty("hibernate.connection.autocommit", "false").

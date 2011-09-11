@@ -2,6 +2,7 @@ package cw.boardingschoolmanagement.gui.model;
 
 import java.util.Collection;
 import java.util.Iterator;
+
 import javax.swing.DefaultListModel;
 
 /**

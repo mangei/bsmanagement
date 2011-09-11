@@ -1,7 +1,8 @@
 package cw.boardingschoolmanagement.comparator;
 
-import cw.boardingschoolmanagement.interfaces.Priority;
 import java.util.Comparator;
+
+import cw.boardingschoolmanagement.interfaces.Priority;
 
 /**
  *
