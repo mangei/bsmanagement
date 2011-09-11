@@ -4,7 +4,6 @@ import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.persistence.EntityManager;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
@@ -22,9 +21,7 @@ import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import cw.customermanagementmodul.extention.EditCustomerEditCustomerTabExtention;
-import cw.customermanagementmodul.extention.point.CustomerOverviewEditCustomerExtentionPoint;
 import cw.customermanagementmodul.logic.BoCustomer;
-import cw.customermanagementmodul.logic.BoGroup;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.PMCustomer;
 

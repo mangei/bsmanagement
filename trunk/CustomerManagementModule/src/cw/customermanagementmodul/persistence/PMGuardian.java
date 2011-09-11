@@ -37,8 +37,9 @@ public class PMGuardian
     	return instance;
     }
     
-    public Guardian create(EntityManager entityManager) {
+    public Guardian create(Customer customer, EntityManager entityManager) {
     	Guardian guardian = new Guardian(entityManager);
+    	guardian.setCustomer(customer);
     	entityManager.persist(guardian);
     	return guardian;
     }
