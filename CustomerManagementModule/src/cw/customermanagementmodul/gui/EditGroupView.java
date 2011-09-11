@@ -15,11 +15,9 @@ import cw.customermanagementmodul.persistence.Group;
  *
  * @author Manuel Geier (CreativeWorkers)
  */
-public class EditGroupView extends CWView
+public class EditGroupView
+	extends CWView<EditGroupPresentationModel>
 {
-
-    private EditGroupPresentationModel model;
-
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWTextField tfName;
 
@@ -27,7 +25,7 @@ public class EditGroupView extends CWView
     private CWButton bCancel;
 
     public EditGroupView(EditGroupPresentationModel model) {
-        this.model = model;
+        super(model);
 
         initComponents();
         buildView();
@@ -35,10 +33,10 @@ public class EditGroupView extends CWView
     }
 
     private void initComponents() {
-        tfName = CWComponentFactory.createTextField(model.getBufferedModel(Group.PROPERTYNAME_NAME), false);
+        tfName = CWComponentFactory.createTextField(getModel().getBufferedModel(Group.PROPERTYNAME_NAME), false);
 
-        bSave       = CWComponentFactory.createButton(model.getSaveButtonAction());
-        bCancel     = CWComponentFactory.createButton(model.getCancelButtonAction());
+        bSave       = CWComponentFactory.createButton(getModel().getSaveButtonAction());
+        bCancel     = CWComponentFactory.createButton(getModel().getCancelButtonAction());
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(tfName)
@@ -51,7 +49,7 @@ public class EditGroupView extends CWView
     }
 
     public void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
 
         CWButtonPanel buttonPanel = getButtonPanel();
         buttonPanel.add(bSave);
@@ -74,6 +72,6 @@ public class EditGroupView extends CWView
     public void dispose() {
         componentContainer.dispose();
 
-        model.dispose();
+        getModel().dispose();
     }
 }

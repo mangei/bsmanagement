@@ -28,8 +28,6 @@ import cw.customermanagementmodul.persistence.Customer;
 public class EditCustomerEditCustomerView 
 	extends CWView<EditCustomerEditCustomerPresentationModel>
 {
-    private EditCustomerEditCustomerPresentationModel model;
-
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWPanel pActive;
     private CWPanel pGender;
@@ -59,8 +57,7 @@ public class EditCustomerEditCustomerView
     private AutoCompletion countryAutoCompletion;
 
     public EditCustomerEditCustomerView(EditCustomerEditCustomerPresentationModel model) {
-        super(true);
-        this.model = model;
+        super(model, true);
 
         initComponents();
         buildView();
@@ -69,26 +66,26 @@ public class EditCustomerEditCustomerView
 
     private void initComponents() {
 
-        pActive             = CWComponentFactory.createTrueFalsePanel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_ACTIVE), "Aktiv", "Inaktiv", model.getEditCustomerPresentationModel().getModel(Customer.PROPERTYNAME_ACTIVE).booleanValue());
-        pGender             = CWComponentFactory.createTrueFalsePanel(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_GENDER), "Herr", "Frau", model.getEditCustomerPresentationModel().getModel(Customer.PROPERTYNAME_GENDER).booleanValue());
-        tfTitle             = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_TITLE), false);
-        tfForename          = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_FORENAME), false);
-        tfSurname           = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_SURNAME), false);
+        pActive             = CWComponentFactory.createTrueFalsePanel(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_ACTIVE), "Aktiv", "Inaktiv", getModel().getEditCustomerPresentationModel().getModel(Customer.PROPERTYNAME_ACTIVE).booleanValue());
+        pGender             = CWComponentFactory.createTrueFalsePanel(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_GENDER), "Herr", "Frau", getModel().getEditCustomerPresentationModel().getModel(Customer.PROPERTYNAME_GENDER).booleanValue());
+        tfTitle             = CWComponentFactory.createTextField(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_TITLE), false);
+        tfForename          = CWComponentFactory.createTextField(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_FORENAME), false);
+        tfSurname           = CWComponentFactory.createTextField(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_SURNAME), false);
 
-        dcBirthday          = CWComponentFactory.createDateChooser(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY));
+        dcBirthday          = CWComponentFactory.createDateChooser(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_BIRTHDAY));
 
-        tfStreet            = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_STREET), false);
-        tfPostOfficeNumber  = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER), false);
-        tfCity              = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_CITY), false);
-        tfCountry           = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_COUNTRY), false);
-        tfProvince          = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_PROVINCE), false);
-        tfMobilphone        = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_MOBILEPHONE), false);
-        tfLandlinephone     = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_LANDLINEPHONE), false);
-        tfFax               = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_FAX), false);
-        tfEmail             = CWComponentFactory.createTextField(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_EMAIL), false);
-        taComment           = CWComponentFactory.createTextArea(model.getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_COMMENT), false);
+        tfStreet            = CWComponentFactory.createTextField(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_STREET), false);
+        tfPostOfficeNumber  = CWComponentFactory.createTextField(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_POSTOFFICENUMBER), false);
+        tfCity              = CWComponentFactory.createTextField(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_CITY), false);
+        tfCountry           = CWComponentFactory.createTextField(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_COUNTRY), false);
+        tfProvince          = CWComponentFactory.createTextField(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_PROVINCE), false);
+        tfMobilphone        = CWComponentFactory.createTextField(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_MOBILEPHONE), false);
+        tfLandlinephone     = CWComponentFactory.createTextField(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_LANDLINEPHONE), false);
+        tfFax               = CWComponentFactory.createTextField(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_FAX), false);
+        tfEmail             = CWComponentFactory.createTextField(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_EMAIL), false);
+        taComment           = CWComponentFactory.createTextArea(getModel().getEditCustomerPresentationModel().getBufferedModel(Customer.PROPERTYNAME_COMMENT), false);
 
-        bClearLocationData = CWComponentFactory.createButton(model.getClearLocationDataAction());
+        bClearLocationData = CWComponentFactory.createButton(getModel().getClearLocationDataAction());
         bClearLocationData.setIcon(CWUtils.loadIcon("cw/customermanagementmodul/images/clear.png"));
         bClearLocationData.setRolloverIcon(CWUtils.loadIcon("cw/customermanagementmodul/images/clear_hover.png"));
         bClearLocationData.setContentAreaFilled(false);
@@ -117,11 +114,11 @@ public class EditCustomerEditCustomerView
     }
 
     private void initEventHandling() {
-        (titleAutoCompletion = new AutoCompletion(tfTitle, model.getTitleList())).setStrict(false);
-        (postOfficeNumberAutoCompletion = new AutoCompletion(tfPostOfficeNumber, model.getPostOfficeNumberList())).setStrict(false);
-        (cityAutoCompletion = new AutoCompletion(tfCity, model.getCityList())).setStrict(false);
-        (provinceAutoCompletion = new AutoCompletion(tfProvince, model.getProvinceList())).setStrict(false);
-        (countryAutoCompletion = new AutoCompletion(tfCountry, model.getCountryList())).setStrict(false);
+        (titleAutoCompletion = new AutoCompletion(tfTitle, getModel().getTitleList())).setStrict(false);
+        (postOfficeNumberAutoCompletion = new AutoCompletion(tfPostOfficeNumber, getModel().getPostOfficeNumberList())).setStrict(false);
+        (cityAutoCompletion = new AutoCompletion(tfCity, getModel().getCityList())).setStrict(false);
+        (provinceAutoCompletion = new AutoCompletion(tfProvince, getModel().getProvinceList())).setStrict(false);
+        (countryAutoCompletion = new AutoCompletion(tfCountry, getModel().getCountryList())).setStrict(false);
 
         ponacf = new PostOfficeNumberAutoCompleteFire();
         cacf = new CityAutoCompleteFire();
@@ -146,7 +143,7 @@ public class EditCustomerEditCustomerView
 
         public void focusLost(FocusEvent e) {
             if(fireable) {
-                model.firePostOfficeNumberLostFocus();
+            	getModel().firePostOfficeNumberLostFocus();
                 fireable = false;
             }
         }
@@ -175,7 +172,7 @@ public class EditCustomerEditCustomerView
 
         public void focusLost(FocusEvent e) {
             if(fireable) {
-                model.fireCityLostFocus();
+            	getModel().fireCityLostFocus();
                 fireable = false;
             }
         }
@@ -204,7 +201,7 @@ public class EditCustomerEditCustomerView
 
         public void focusLost(FocusEvent e) {
             if(fireable) {
-                model.fireProvinceLostFocus();
+            	getModel().fireProvinceLostFocus();
                 fireable = false;
             }
         }
@@ -224,7 +221,7 @@ public class EditCustomerEditCustomerView
     
     private void buildView() {
     	
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
 //        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 //        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
         
@@ -303,6 +300,6 @@ public class EditCustomerEditCustomerView
         provinceAutoCompletion.uninstallListeners();
         countryAutoCompletion.uninstallListeners();
 
-        model.dispose();
+        getModel().dispose();
     }
 }

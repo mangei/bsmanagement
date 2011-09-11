@@ -1,7 +1,5 @@
 package cw.customermanagementmodul.gui;
 
-import java.awt.BorderLayout;
-
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
@@ -9,17 +7,17 @@ import cw.boardingschoolmanagement.gui.component.CWView;
 /**
  * @author CreativeWorkers.at
  */
-public class CustomerInactiveView extends CWView
+public class CustomerInactiveView
+	extends CWView<CustomerInactivePresentationModel>
 {
 
-    private CustomerInactivePresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWButton bActivate;
     private CWButton bDelete;
     private CustomerSelectorView customerSelectorView;
 
     public CustomerInactiveView(CustomerInactivePresentationModel model) {
-        this.model = model;
+    	super(model);
 
         initComponents();
         buildView();
@@ -27,14 +25,14 @@ public class CustomerInactiveView extends CWView
     }
 
     private void initComponents() {
-        bActivate   = CWComponentFactory.createButton(model.getActivateAction());
-        bDelete     = CWComponentFactory.createButton(model.getDeleteAction());
+        bActivate   = CWComponentFactory.createButton(getModel().getActivateAction());
+        bDelete     = CWComponentFactory.createButton(getModel().getDeleteAction());
         
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bActivate)
                 .addComponent(bDelete);
 
-        customerSelectorView = new CustomerSelectorView(model.getCustomerSelectorPresentationModel());
+        customerSelectorView = new CustomerSelectorView(getModel().getCustomerSelectorPresentationModel());
     }
 
     private void initEventHandling() {
@@ -42,7 +40,7 @@ public class CustomerInactiveView extends CWView
     }
 
     private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
 
         this.getButtonPanel().add(bActivate);
         this.getButtonPanel().add(bDelete);
@@ -56,7 +54,7 @@ public class CustomerInactiveView extends CWView
 
         componentContainer.dispose();
 
-        model.dispose();
+        getModel().dispose();
     }
 
 }

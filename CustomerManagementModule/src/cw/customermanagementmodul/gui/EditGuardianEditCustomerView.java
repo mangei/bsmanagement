@@ -13,17 +13,15 @@ import cw.boardingschoolmanagement.gui.component.CWView;
  *
  * @author CreativeWorkers.at
  */
-public class EditGuardianEditCustomerView extends CWView
+public class EditGuardianEditCustomerView
+	extends CWView<EditGuardianEditCustomerPresentationModel>
 {
-    private EditGuardianEditCustomerPresentationModel model;
-
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWLabel lGuardian;
     private CWButton bChooseGuardian;
 
     public EditGuardianEditCustomerView(EditGuardianEditCustomerPresentationModel model) {
-        super(true);
-        this.model = model;
+        super(model, true);
 
         initComponents();
         buildView();
@@ -32,8 +30,8 @@ public class EditGuardianEditCustomerView extends CWView
 
     private void initComponents() {
 
-        lGuardian           = CWComponentFactory.createLabel(model.getGuardianLabelModel());
-        bChooseGuardian		= CWComponentFactory.createButton(model.getChooseGuardianAction());
+        lGuardian           = CWComponentFactory.createLabel(getModel().getGuardianLabelModel());
+        bChooseGuardian		= CWComponentFactory.createButton(getModel().getChooseGuardianAction());
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(lGuardian)
@@ -69,6 +67,6 @@ public class EditGuardianEditCustomerView extends CWView
     public void dispose() {
         componentContainer.dispose();
 
-        model.dispose();
+        getModel().dispose();
     }
 }

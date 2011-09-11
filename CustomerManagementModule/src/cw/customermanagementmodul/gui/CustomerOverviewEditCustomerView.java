@@ -14,13 +14,12 @@ import cw.boardingschoolmanagement.gui.component.CWView;
  *
  * @author CreativeWorkers.at
  */
-public class CustomerOverviewEditCustomerView extends CWView
+public class CustomerOverviewEditCustomerView
+	extends CWView<CustomerOverviewEditCustomerPresentationModel>
 {
 
-    private CustomerOverviewEditCustomerPresentationModel model;
-
     public CustomerOverviewEditCustomerView(CustomerOverviewEditCustomerPresentationModel model) {
-        this.model = model;
+        super(model);
 
         initComponents();
         buildView();
@@ -35,9 +34,9 @@ public class CustomerOverviewEditCustomerView extends CWView
     }
 
     private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
         
-        List<JComponent> extentionComponents = model.getExtentionComponents();
+        List<JComponent> extentionComponents = getModel().getExtentionComponents();
 
         StringBuilder rowLayoutString = new StringBuilder();
         for(int i=0, l=extentionComponents.size(); i<l; i++) {
@@ -63,9 +62,6 @@ public class CustomerOverviewEditCustomerView extends CWView
 
     @Override
     public void dispose() {
-        model.dispose();
-
-        // Kill references
-        model = null;
+    	getModel().dispose();
     }
 }

@@ -1,8 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
 package cw.customermanagementmodul.gui;
 
 import net.sf.jasperreports.swing.JRViewer;
@@ -14,15 +9,16 @@ import cw.boardingschoolmanagement.gui.component.CWView;
  *
  * @author tom
  */
-public class CustomerPrintView extends CWView{
+public class CustomerPrintView
+	extends CWView<CustomerPrintPresentationModel>
+{
 
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private CustomerPrintPresentationModel model;
     private CWButton bBack;
     private JRViewer viewer;
 
-    public CustomerPrintView(CustomerPrintPresentationModel m) {
-        this.model = m;
+    public CustomerPrintView(CustomerPrintPresentationModel model) {
+        super(model);
 
         initComponents();
         buildView();
@@ -32,7 +28,7 @@ public class CustomerPrintView extends CWView{
     private void initComponents() {
         componentContainer = CWComponentFactory.createComponentContainer();
 
-        bBack = CWComponentFactory.createButton(model.getBackAction());
+        bBack = CWComponentFactory.createButton(getModel().getBackAction());
         bBack.setText("Zurueck");
 
         bBack.setToolTipText(CWComponentFactory.createToolTip(
@@ -40,7 +36,7 @@ public class CustomerPrintView extends CWView{
                 " ",
                 "cw/coursemanagementmodul/images/back.png"));
 
-        viewer = new JRViewer(model.getJasperPrint());
+        viewer = new JRViewer(getModel().getJasperPrint());
 
         componentContainer.addComponent(bBack);
     }
@@ -58,7 +54,7 @@ public class CustomerPrintView extends CWView{
     @Override
     public void dispose() {
         componentContainer.dispose();
-        model.dispose();
+        getModel().dispose();
     }
 
 }

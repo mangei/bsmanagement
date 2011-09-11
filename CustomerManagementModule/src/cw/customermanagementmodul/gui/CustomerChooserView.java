@@ -1,7 +1,5 @@
 package cw.customermanagementmodul.gui;
 
-import java.awt.BorderLayout;
-
 import com.l2fprod.common.swing.JButtonBar;
 
 import cw.boardingschoolmanagement.gui.component.CWButton;
@@ -12,7 +10,8 @@ import cw.boardingschoolmanagement.gui.component.CWView;
  *
  * @author ManuelG
  */
-public class CustomerChooserView extends CWView
+public class CustomerChooserView
+	extends CWView<CustomerChooserPresentationModel>
 {
 
     private CustomerChooserPresentationModel model;
@@ -23,7 +22,7 @@ public class CustomerChooserView extends CWView
     private CustomerSelectorView customerSelectorView;
 
     public CustomerChooserView(CustomerChooserPresentationModel model) {
-        this.model = model;
+        super(model);
 
         initComponents();
         buildView();
