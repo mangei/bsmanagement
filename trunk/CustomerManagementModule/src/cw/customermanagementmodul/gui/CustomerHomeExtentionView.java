@@ -12,16 +12,15 @@ import cw.boardingschoolmanagement.gui.component.CWView;
  *
  * @author ManuelG
  */
-public class CustomerHomeExtentionView extends CWView
+public class CustomerHomeExtentionView
+	extends CWView<CustomerHomeExtentionPresentationModel>
 {
-
-    private CustomerHomeExtentionPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWLabel lSizeCustomers;
 
     public CustomerHomeExtentionView(CustomerHomeExtentionPresentationModel model) {
-        this.model = model;
+    	super(model);
 
         initComponents();
         buildView();
@@ -29,7 +28,7 @@ public class CustomerHomeExtentionView extends CWView
     }
     
     private void initComponents() {
-        lSizeCustomers = CWComponentFactory.createLabel(model.getSizeCustomersValueModel());
+        lSizeCustomers = CWComponentFactory.createLabel(getModel().getSizeCustomersValueModel());
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(lSizeCustomers);
@@ -58,7 +57,7 @@ public class CustomerHomeExtentionView extends CWView
     public void dispose() {
         componentContainer.dispose();
 
-        model.dispose();
+        getModel().dispose();
     }
 
 }

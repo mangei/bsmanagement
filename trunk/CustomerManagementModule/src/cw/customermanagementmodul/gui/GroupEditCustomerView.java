@@ -11,13 +11,11 @@ import cw.boardingschoolmanagement.gui.component.CWView;
 
 /**
  *
- * @author ManuelG
+ * @author Manuel Geier
  */
-public class GroupEditCustomerView extends CWView
+public class GroupEditCustomerView
+	extends CWView<GroupEditCustomerPresentationModel>
 {
-
-    private GroupEditCustomerPresentationModel model;
-
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWList liCustomerGroups;
     private CWList liGroups;
@@ -25,7 +23,7 @@ public class GroupEditCustomerView extends CWView
     private CWButton bRemove;
 
     public GroupEditCustomerView(GroupEditCustomerPresentationModel model) {
-        this.model = model;
+        super(model);
 
         initComponents();
         buildView();
@@ -33,10 +31,10 @@ public class GroupEditCustomerView extends CWView
     }
 
     private void initComponents() {
-        liCustomerGroups    = CWComponentFactory.createList(model.getSelectionCustomerGroups(), "Keine Gruppen vorhanden");
-        liGroups            = CWComponentFactory.createList(model.getSelectionGroups(), "Keine Gruppen vorhanden");
-        bAdd                = CWComponentFactory.createButton(model.getAddGroupAction());
-        bRemove             = CWComponentFactory.createButton(model.getRemoveGroupAction());
+        liCustomerGroups    = CWComponentFactory.createList(getModel().getSelectionCustomerGroups(), "Keine Gruppen vorhanden");
+        liGroups            = CWComponentFactory.createList(getModel().getSelectionGroups(), "Keine Gruppen vorhanden");
+        bAdd                = CWComponentFactory.createButton(getModel().getAddGroupAction());
+        bRemove             = CWComponentFactory.createButton(getModel().getRemoveGroupAction());
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bAdd)
@@ -50,7 +48,7 @@ public class GroupEditCustomerView extends CWView
     }
 
     private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
         this.setName("Gruppen");
 
         FormLayout layout = new FormLayout(
@@ -61,10 +59,10 @@ public class GroupEditCustomerView extends CWView
         PanelBuilder builder = new PanelBuilder(layout);
         CellConstraints cc = new CellConstraints();
 
-        builder.add(CWComponentFactory.createView("Aktive Gruppen", liCustomerGroups), cc.xywh(1, 1, 1, 5));
+        builder.add(CWComponentFactory.createView(null, "Aktive Gruppen", liCustomerGroups), cc.xywh(1, 1, 1, 5));
         builder.add(bAdd,               cc.xy(3, 2));
         builder.add(bRemove,            cc.xy(3, 4));
-        builder.add(CWComponentFactory.createView("Andere Gruppen", liGroups), cc.xywh(5, 1, 1, 5));
+        builder.add(CWComponentFactory.createView(null, "Andere Gruppen", liGroups), cc.xywh(5, 1, 1, 5));
     
         addToContentPanel(builder.getPanel(), true);
     }
@@ -73,7 +71,7 @@ public class GroupEditCustomerView extends CWView
     public void dispose() {
         componentContainer.dispose();
 
-        model.dispose();
+        getModel().dispose();
     }
 
 }

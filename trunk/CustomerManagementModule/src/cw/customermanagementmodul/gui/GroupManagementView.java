@@ -12,13 +12,11 @@ import cw.boardingschoolmanagement.gui.component.CWView;
 
 /**
  *
- * @author ManuelG
+ * @author Manuel Geier
  */
-public class GroupManagementView extends CWView
+public class GroupManagementView
+	extends CWView<GroupManagementPresentationModel>
 {
-
-    private GroupManagementPresentationModel model;
-
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWButton bNewGroup;
     private CWButton bEditGroup;
@@ -27,7 +25,7 @@ public class GroupManagementView extends CWView
     private CustomerSelectorView customerSelectorView;
 
     public GroupManagementView(GroupManagementPresentationModel model) {
-        this.model = model;
+        super(model);
 
         initComponents();
         buildView();
@@ -35,17 +33,17 @@ public class GroupManagementView extends CWView
     }
 
     private void initComponents() {
-        bNewGroup =     CWComponentFactory.createButton(model.getNewGroupAction());
-        bEditGroup =    CWComponentFactory.createButton(model.getEditGroupAction());
-        bRemoveGroup =  CWComponentFactory.createButton(model.getRemoveGroupAction());
-        liGroups =      CWComponentFactory.createList(model.getGroupSelection(), "Keine Gruppen vorhanden");
+        bNewGroup =     CWComponentFactory.createButton(getModel().getNewGroupAction());
+        bEditGroup =    CWComponentFactory.createButton(getModel().getEditGroupAction());
+        bRemoveGroup =  CWComponentFactory.createButton(getModel().getRemoveGroupAction());
+        liGroups =      CWComponentFactory.createList(getModel().getGroupSelection(), "Keine Gruppen vorhanden");
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bNewGroup)
                 .addComponent(bEditGroup)
                 .addComponent(bRemoveGroup);
 
-        customerSelectorView = new CustomerSelectorView(model.getCustomerSelectorPresentationModel());
+        customerSelectorView = new CustomerSelectorView(getModel().getCustomerSelectorPresentationModel());
     }
 
     private void initEventHandling() {
@@ -62,7 +60,7 @@ public class GroupManagementView extends CWView
 
     public void buildView() {
 
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
 
         CWButtonPanel buttonPanel = getButtonPanel();
         buttonPanel.add(bNewGroup);
@@ -91,6 +89,6 @@ public class GroupManagementView extends CWView
 
         componentContainer.dispose();
 
-        model.dispose();
+        getModel().dispose();
     }
 }

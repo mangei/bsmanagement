@@ -1,6 +1,5 @@
 package cw.customermanagementmodul.gui;
 
-import java.awt.BorderLayout;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.List;
@@ -18,10 +17,9 @@ import cw.customermanagementmodul.persistence.Customer;
  *
  * @author CreativeWorkers.at
  */
-public class EditCustomerView extends CWView
+public class EditCustomerView
+	extends CWView<EditCustomerPresentationModel>
 {
-
-    private EditCustomerPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
     private JideTabbedPane tabs;
@@ -31,8 +29,7 @@ public class EditCustomerView extends CWView
     private PropertyChangeListener tabsEnableListener;
 
     public EditCustomerView(EditCustomerPresentationModel model) {
-        super(false);
-        this.model = model;
+        super(model, false);
 
         initComponents();
         buildView();
@@ -40,8 +37,8 @@ public class EditCustomerView extends CWView
     }
 
     private void initComponents() {
-        bSave               = CWComponentFactory.createButton(model.getSaveAction());
-        bCancel             = CWComponentFactory.createButton(model.getCancelAction());
+        bSave               = CWComponentFactory.createButton(getModel().getSaveAction());
+        bCancel             = CWComponentFactory.createButton(getModel().getCancelAction());
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bSave)
@@ -54,8 +51,8 @@ public class EditCustomerView extends CWView
         // If it is a new Customer and there is no id, disable the tabs for the extentions
         // because the id is null
         // If the customer is saved, then enable the tabs
-        if(model.getBean().getId() == null) {
-            model.getBufferedModel(Customer.PROPERTYNAME_ID).addPropertyChangeListener(tabsEnableListener = new PropertyChangeListener() {
+        if(getModel().getBean().getId() == null) {
+        	getModel().getBufferedModel(Customer.PROPERTYNAME_ID).addPropertyChangeListener(tabsEnableListener = new PropertyChangeListener() {
                 public void propertyChange(PropertyChangeEvent evt) {
                     setTabsEnabled(true);
                 }
@@ -63,7 +60,7 @@ public class EditCustomerView extends CWView
             setTabsEnabled(false);
         }
 
-        model.getUnsaved().setValue(false);
+        getModel().getUnsaved().setValue(false);
     }
 
     private void setTabsEnabled(boolean enabled) {
@@ -73,7 +70,7 @@ public class EditCustomerView extends CWView
     }
     
     private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
 //        mainPanel.getContentScrollPane().setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 //        mainPanel.getContentScrollPane().setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         
@@ -83,7 +80,7 @@ public class EditCustomerView extends CWView
         buttonPanel.add(bCancel);
         
         // Load dynamic components in tabs
-        List<EditCustomerTabExtentionPoint> lEx = model.getExtentions();
+        List<EditCustomerTabExtentionPoint> lEx = getModel().getExtentions();
         EditCustomerTabExtentionPoint ex;
         //Class activeEx = (Class) model.getProperties().get("activeExtention");
         for(int i=0, l=lEx.size(); i<l; i++) {
@@ -109,11 +106,11 @@ public class EditCustomerView extends CWView
 
     @Override
     public void dispose() {
-        model.getBufferedModel(Customer.PROPERTYNAME_ID).removePropertyChangeListener(tabsEnableListener);
+    	getModel().getBufferedModel(Customer.PROPERTYNAME_ID).removePropertyChangeListener(tabsEnableListener);
         tabsEnableListener = null;
 
         componentContainer.dispose();
 
-        model.dispose();
+        getModel().dispose();
     }
 }

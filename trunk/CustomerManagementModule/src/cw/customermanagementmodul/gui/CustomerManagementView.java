@@ -9,10 +9,9 @@ import cw.boardingschoolmanagement.gui.component.CWView;
 /**
  * @author CreativeWorkers.at
  */
-public class CustomerManagementView extends CWView
+public class CustomerManagementView
+	extends CWView<CustomerManagementPresentationModel>
 {
-
-    private CustomerManagementPresentationModel model;
 
     private CWComponentFactory.CWComponentContainer componentContainer;
     private CWButton bNew;
@@ -23,8 +22,8 @@ public class CustomerManagementView extends CWView
     private CWButton bPrint;
     private CustomerSelectorView customerSelectorView;
 
-    public CustomerManagementView(CustomerManagementPresentationModel m) {
-        model = m;
+    public CustomerManagementView(CustomerManagementPresentationModel model) {
+    	super(model);
 
         initComponents();
         buildView();
@@ -32,12 +31,12 @@ public class CustomerManagementView extends CWView
     }
 
     private void initComponents() {
-        bNew        = CWComponentFactory.createButton(model.getNewAction());
-        bEdit       = CWComponentFactory.createButton(model.getEditAction());
-        bDelete     = CWComponentFactory.createButton(model.getDeleteAction());
-        bInactive   = CWComponentFactory.createButton(model.getInactiveAction());
-        bViewInactives   = CWComponentFactory.createButton(model.getViewInactivesAction());
-        bPrint = CWComponentFactory.createButton(model.getPrintAction());
+        bNew        = CWComponentFactory.createButton(getModel().getNewAction());
+        bEdit       = CWComponentFactory.createButton(getModel().getEditAction());
+        bDelete     = CWComponentFactory.createButton(getModel().getDeleteAction());
+        bInactive   = CWComponentFactory.createButton(getModel().getInactiveAction());
+        bViewInactives   = CWComponentFactory.createButton(getModel().getViewInactivesAction());
+        bPrint = CWComponentFactory.createButton(getModel().getPrintAction());
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bNew)
@@ -47,7 +46,7 @@ public class CustomerManagementView extends CWView
                 .addComponent(bViewInactives)
                 .addComponent(bPrint);
 
-        customerSelectorView = new CustomerSelectorView(model.getCustomerSelectorPresentationModel());
+        customerSelectorView = new CustomerSelectorView(getModel().getCustomerSelectorPresentationModel());
 
         bNew.setToolTipText(CWComponentFactory.createToolTip(
                 "Neu",
@@ -76,7 +75,7 @@ public class CustomerManagementView extends CWView
     }
 
     private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
 
         this.getButtonPanel().add(bNew);
         this.getButtonPanel().add(bEdit);
@@ -111,7 +110,7 @@ public class CustomerManagementView extends CWView
         
         componentContainer.dispose();
 
-        model.dispose();
+        getModel().dispose();
     }
 
 }
