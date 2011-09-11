@@ -1,6 +1,7 @@
 package cw.boardingschoolmanagement.extention.point;
 
 import cw.boardingschoolmanagement.extention.CWIExtention;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
 
 /**
  *
@@ -9,6 +10,6 @@ import cw.boardingschoolmanagement.extention.CWIExtention;
 public interface CWViewExtentionPoint<TView>
         extends CWIExtention {
 
-	public Class getViewExtention();
+	public Class getViewExtentionClass();
     public void execute(TView view);
 }

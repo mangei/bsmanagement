@@ -48,7 +48,7 @@ public class EditGroupPresentationModel
 	}
     
     public EditGroupPresentationModel(Long groupId) {
-        super(CWEntityManager.createEntityManager());
+        super(CWEntityManager.createEntityManager(), EditGroupView.class);
 
         if(groupId == null) {
         	setBean(PMGroup.getInstance().create(getEntityManager()));
@@ -132,7 +132,8 @@ public class EditGroupPresentationModel
         }
         public void actionPerformed(ActionEvent e) {
             triggerCommit();
-            if(save()) {
+            if(isValid()) {
+            	save();
             	support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
             }
         }
@@ -191,24 +192,25 @@ public class EditGroupPresentationModel
     }
 
 	public boolean validate(List<CWErrorMessage> errorMessages) {
-		return true;
+		
+		validateExtentions(errorMessages);
+		
+		return !hasErrorMessages();
 	}
 
-	public boolean save() {
+	public void save() {
+		triggerCommit();
+
+		saveExtentions();
 		
-		boolean valid = validate(getErrorMessages()); 		
-		if(valid) {
+		CWEntityManager.commit(getEntityManager());
 
-			triggerCommit();
-			getEntityManager().getTransaction().commit();
-
-            unsaved.setValue(false);
-		}
-        
-		return valid;
+        unsaved.setValue(false);
 	}
 
 	public void cancel() {
+		
+		cancelExtentions();
 		
 		if(isNewMode()) {
         	

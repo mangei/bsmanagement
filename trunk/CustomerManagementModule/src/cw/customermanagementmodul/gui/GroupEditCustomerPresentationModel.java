@@ -44,7 +44,7 @@ public class GroupEditCustomerPresentationModel
     private PropertyChangeListener removeGroupActionListener;
 
     public GroupEditCustomerPresentationModel(Customer customer, ValueModel unsaved, EntityManager entityManager) {
-    	super(entityManager);
+    	super(entityManager, GroupEditCustomerView.class);
         this.customer = customer;
         this.unsaved = unsaved;
 
@@ -203,14 +203,16 @@ public class GroupEditCustomerPresentationModel
     }
 
 	public boolean validate(List<CWErrorMessage> errorMessages) {
-		return true;
+		validateExtentions(errorMessages);
+		return !hasErrorMessages();
 	}
 
-	public boolean save() {
-		return true;
+	public void save() {
+		saveExtentions();
 	}
 
-	public void cancel() {		
+	public void cancel() {
+		cancelExtentions();
 	}
 
 }
