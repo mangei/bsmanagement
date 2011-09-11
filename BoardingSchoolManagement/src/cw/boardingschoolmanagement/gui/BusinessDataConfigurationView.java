@@ -1,21 +1,23 @@
 package cw.boardingschoolmanagement.gui;
 
+import javax.swing.JTextField;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.pojo.BusinessData;
-import javax.swing.JTextField;
 
 /**
  *
  * @author ManuelG
  */
-public class BusinessDataConfigurationView extends CWView
+public class BusinessDataConfigurationView
+	extends CWView<BusinessDataConfigurationPresentationModel>
 {
 
-    private BusinessDataConfigurationPresentationModel model;
     private CWComponentFactory.CWComponentContainer componentContainer;
     private JTextField tfName;
     private JTextField tfPostOfficeNumber;
@@ -28,7 +30,7 @@ public class BusinessDataConfigurationView extends CWView
     private JTextField tfDvrNumber;
 
     public BusinessDataConfigurationView(BusinessDataConfigurationPresentationModel model) {
-        this.model = model;
+    	super(model);
 
         initComponents();
         buildView();
@@ -36,15 +38,15 @@ public class BusinessDataConfigurationView extends CWView
     }
 
     public void initComponents() {
-        tfName              = CWComponentFactory.createTextField(model.getBufferedModel(BusinessData.PROPERTYNAME_NAME));
-        tfPostOfficeNumber  = CWComponentFactory.createTextField(model.getBufferedModel(BusinessData.PROPERTYNAME_POSTOFFICENUMBER));
-        tfCity              = CWComponentFactory.createTextField(model.getBufferedModel(BusinessData.PROPERTYNAME_CITY));
-        tfStreet            = CWComponentFactory.createTextField(model.getBufferedModel(BusinessData.PROPERTYNAME_STREET));
-        tfLandlinehone      = CWComponentFactory.createTextField(model.getBufferedModel(BusinessData.PROPERTYNAME_LANDLINEPHONE));
-        tfMobilephone       = CWComponentFactory.createTextField(model.getBufferedModel(BusinessData.PROPERTYNAME_MOBILEPHONE));
-        tfFax               = CWComponentFactory.createTextField(model.getBufferedModel(BusinessData.PROPERTYNAME_FAX));
-        tfEmail             = CWComponentFactory.createTextField(model.getBufferedModel(BusinessData.PROPERTYNAME_EMAIL));
-        tfDvrNumber         = CWComponentFactory.createTextField(model.getBufferedModel(BusinessData.PROPERTYNAME_DVRNUMBER));
+        tfName              = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_NAME));
+        tfPostOfficeNumber  = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_POSTOFFICENUMBER));
+        tfCity              = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_CITY));
+        tfStreet            = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_STREET));
+        tfLandlinehone      = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_LANDLINEPHONE));
+        tfMobilephone       = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_MOBILEPHONE));
+        tfFax               = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_FAX));
+        tfEmail             = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_EMAIL));
+        tfDvrNumber         = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_DVRNUMBER));
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(tfName)
@@ -63,7 +65,7 @@ public class BusinessDataConfigurationView extends CWView
     }
 
     private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
 
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, pref:grow",
@@ -97,6 +99,6 @@ public class BusinessDataConfigurationView extends CWView
     public void dispose() {
         componentContainer.dispose();
 
-        model.dispose();
+        getModel().dispose();
     }
 }

@@ -21,7 +21,8 @@ import javax.swing.JPanel;
  *
  * @author ManuelG
  */
-public class ConfigurationView extends CWView
+public class ConfigurationView
+	extends CWView<ConfigurationPresentationModel>
 {
 
     private ConfigurationPresentationModel model;
@@ -33,7 +34,7 @@ public class ConfigurationView extends CWView
     private static final String CARD_KEY = "cardKey";
 
     public ConfigurationView(ConfigurationPresentationModel model) {
-        super(false);
+        super(model, false);
         this.model = model;
 
         initComponents();

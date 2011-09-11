@@ -1,7 +1,20 @@
 package cw.boardingschoolmanagement.gui;
 
-import com.jgoodies.binding.PresentationModel;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.Icon;
+import javax.swing.JComponent;
+import javax.swing.JOptionPane;
+
 import com.jgoodies.binding.beans.Model;
+
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
@@ -10,24 +23,14 @@ import cw.boardingschoolmanagement.comparator.PriorityComparator;
 import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.ModulManager;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.Icon;
-import javax.swing.JComponent;
-import javax.swing.JOptionPane;
 
 /**
- *Bildschirmmaske des Konfigurationsfensters
+ * Bildschirmmaske des Konfigurationsfensters
  *
- * @author ManuelG
+ * @author Manuel Geier
  */
-public class ConfigurationPresentationModel extends PresentationModel
+public class ConfigurationPresentationModel
+	extends CWPresentationModel
 {
     private CWHeaderInfo headerInfo;
     private List<ConfigurationExtentionPoint> configurationExtentions;
