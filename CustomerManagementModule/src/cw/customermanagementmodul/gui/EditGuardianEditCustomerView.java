@@ -7,6 +7,7 @@ import com.jgoodies.forms.layout.FormLayout;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWView;
 
 /**
@@ -17,8 +18,9 @@ public class EditGuardianEditCustomerView
 	extends CWView<EditGuardianEditCustomerPresentationModel>
 {
     private CWComponentFactory.CWComponentContainer componentContainer;
-    private CWLabel lGuardian;
-    private CWButton bChooseGuardian;
+    public CWPanel panel;
+    public CWLabel lGuardian;
+    public CWButton bChooseGuardian;
 
     public EditGuardianEditCustomerView(EditGuardianEditCustomerPresentationModel model) {
         super(model, true);
@@ -45,20 +47,18 @@ public class EditGuardianEditCustomerView
     private void buildView() {
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, 100dlu, 4dlu, pref",
-                "pref");
+                "pref, 4dlu, pref");
 
-        PanelBuilder builder = new PanelBuilder(layout);
+        panel = new CWPanel();
+        
+        PanelBuilder builder = new PanelBuilder(layout, panel);
 
         int row = 1;
-        row+=2;
-
         CellConstraints cc = new CellConstraints();
         builder.addSeparator("<html><b>Erziehungsberechtigter</b></html>",  cc.xyw(1, row, 5));
         builder.addLabel("Erziehungsberechtigte Person:", 	cc.xy(1, row+=2));
         builder.add(lGuardian,                				cc.xy(3, row));
         builder.add(bChooseGuardian,                		cc.xy(5, row));
-        
-        addToContentPanel(builder.getPanel());
         
         loadViewExtentions();
     }

@@ -42,7 +42,7 @@ public class EditGuardianEditCustomerPresentationModel
 
     public void initModels() {
     	
-    	chooseGuardianAction = new ChooseGuardianAction("");
+    	chooseGuardianAction = new ChooseGuardianAction("Erziehungsberechtigten auswählen...");
     	guardianLabelModel = new ValueHolder("");
 
     }

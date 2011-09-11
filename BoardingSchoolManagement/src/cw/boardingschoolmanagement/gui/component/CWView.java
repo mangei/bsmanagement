@@ -87,9 +87,6 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
     }
 
     public CWView(TPresentationModel model, CWHeaderInfo headerInfo, boolean contentScrolls) {
-        if(model == null) {
-            throw new NullPointerException("model is null");
-        }
         if(headerInfo == null) {
             throw new NullPointerException("headerInfo is null");
         }

@@ -25,7 +25,7 @@ public class GuardianLinkEditCustomerEditCustomerExtention
 		model = new EditGuardianEditCustomerPresentationModel(baseView.getModel().getEditCustomerPresentationModel(), entityManager);
 		view = new EditGuardianEditCustomerView(model);
 		
-		baseView.addToContentPanel(view);
+		baseView.addToContentPanel(view.panel);
 	}
 
 	public CWEditPresentationModel getModel() {
