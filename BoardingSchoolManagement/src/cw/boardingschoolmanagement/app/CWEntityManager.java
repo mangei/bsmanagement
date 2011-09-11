@@ -38,7 +38,7 @@ public class CWEntityManager {
 //            setProperty("hibernate.connection.password", "").
 
 //            setProperty("hibernate.connection.pool_size", "1").
-            setProperty("hibernate.connection.autocommit", "false").
+//            setProperty("hibernate.connection.autocommit", "false").
 //            setProperty("hibernate.cache.provider_class", "org.hibernate.cache.HashtableCacheProvider").
             setProperty("hibernate.hbm2ddl.auto", "update").
             setProperty("hibernate.show_sql", "true");
