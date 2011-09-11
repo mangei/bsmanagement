@@ -1,6 +1,7 @@
 package cw.boardingschoolmanagement.gui.model;
 
 import java.util.Collection;
+
 import javax.swing.table.DefaultTableModel;
 
 /**

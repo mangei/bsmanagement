@@ -2,8 +2,10 @@ package cw.boardingschoolmanagement.gui.component;
 
 import java.util.Hashtable;
 import java.util.Vector;
+
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreeNode;
+
 import org.jdesktop.swingx.JXTree;
 
 /**

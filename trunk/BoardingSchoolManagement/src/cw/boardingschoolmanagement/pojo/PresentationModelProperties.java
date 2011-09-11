@@ -1,7 +1,8 @@
 package cw.boardingschoolmanagement.pojo;
 
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.util.HashMap;
+
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 
 /**
  *

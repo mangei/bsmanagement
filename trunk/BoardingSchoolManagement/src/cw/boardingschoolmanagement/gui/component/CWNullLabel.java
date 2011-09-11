@@ -1,10 +1,10 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import com.jgoodies.binding.value.ValueModel;
 import java.awt.Color;
-import java.awt.Font;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+
+import com.jgoodies.binding.value.ValueModel;
 
 /**
  *

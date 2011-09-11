@@ -1,8 +1,10 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import com.jidesoft.swing.CheckBoxList;
 import java.util.Vector;
+
 import javax.swing.ListModel;
+
+import com.jidesoft.swing.CheckBoxList;
 
 /**
  *

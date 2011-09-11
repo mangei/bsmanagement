@@ -1,6 +1,7 @@
 package cw.boardingschoolmanagement.gui.component;
 
 import java.text.Format;
+
 import javax.swing.JFormattedTextField;
 
 /**

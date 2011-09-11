@@ -1,15 +1,17 @@
 package cw.boardingschoolmanagement.gui;
 
-import com.jgoodies.binding.list.SelectionInList;
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWPathPanel;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
 import java.util.List;
+
+import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWPathPanel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 
 /**
  *

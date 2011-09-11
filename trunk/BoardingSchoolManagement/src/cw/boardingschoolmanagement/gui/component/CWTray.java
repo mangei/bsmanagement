@@ -2,10 +2,10 @@ package cw.boardingschoolmanagement.gui.component;
 
 import java.awt.AWTEvent;
 import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.TrayIcon;
 import java.awt.EventQueue;
+import java.awt.Point;
 import java.awt.Toolkit;
+import java.awt.TrayIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,8 +13,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JDialog;
 import javax.swing.JPopupMenu;
 import javax.swing.SwingUtilities;
-import javax.swing.event.PopupMenuListener;
 import javax.swing.event.PopupMenuEvent;
+import javax.swing.event.PopupMenuListener;
 
 /**
  * Ein Swing TrayIcon welches die regulaeren AWT-Komponenten ueberschreibt und

@@ -1,11 +1,5 @@
 package cw.boardingschoolmanagement.manager;
 
-import cw.boardingschoolmanagement.app.ClassPathHacker;
-import cw.boardingschoolmanagement.exception.ManifestException;
-import cw.boardingschoolmanagement.extention.CWIExtention;
-import cw.boardingschoolmanagement.module.Module;
-import cw.boardingschoolmanagement.persistence.AnnotatedClass;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Modifier;
@@ -17,7 +11,14 @@ import java.util.ServiceLoader;
 import java.util.jar.JarFile;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.hibernate.ejb.Ejb3Configuration;
+
+import cw.boardingschoolmanagement.app.ClassPathHacker;
+import cw.boardingschoolmanagement.exception.ManifestException;
+import cw.boardingschoolmanagement.extention.CWIExtention;
+import cw.boardingschoolmanagement.module.Module;
+import cw.boardingschoolmanagement.persistence.AnnotatedClass;
 
 /**
  * Manages all modules of the application

@@ -4,22 +4,26 @@ package cw.boardingschoolmanagement.gui.component;
  *
  * @author Manuel Geier
  */
-import com.jidesoft.swing.JideSwingUtilities;
-import cw.boardingschoolmanagement.manager.PropertiesManager;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import javax.swing.Icon;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.util.Timer;
 import java.util.TimerTask;
+
 import javax.swing.BorderFactory;
+import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
 import org.jdesktop.swingx.JXStatusBar;
+
+import com.jidesoft.swing.JideSwingUtilities;
+
+import cw.boardingschoolmanagement.manager.PropertiesManager;
 
 
 public class CWStatusBar

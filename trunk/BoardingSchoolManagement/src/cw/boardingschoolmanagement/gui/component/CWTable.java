@@ -1,19 +1,22 @@
 package cw.boardingschoolmanagement.gui.component;
 
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.io.File;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.table.TableModel;
+
+import org.jdesktop.swingx.JXTable;
+import org.jdesktop.swingx.table.ColumnControlButton;
+
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.ObjectSaver;
 import cw.boardingschoolmanagement.app.XProperties;
 import cw.boardingschoolmanagement.app.XProperties.XTableState;
 import cw.boardingschoolmanagement.manager.PropertiesManager;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.event.ActionEvent;
-import java.io.File;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.table.TableModel;
-import org.jdesktop.swingx.JXTable;
-import org.jdesktop.swingx.table.ColumnControlButton;
 
 /**
  * This is a extended JXTable with following additional features: <br>

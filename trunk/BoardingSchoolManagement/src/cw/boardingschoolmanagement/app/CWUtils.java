@@ -1,7 +1,5 @@
 package cw.boardingschoolmanagement.app;
 
-import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -10,8 +8,12 @@ import java.sql.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.logging.Logger;
+
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
+
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.boardingschoolmanagement.manager.GUIManager;
 
 /**
  * Helperclass with helpful functions

@@ -814,9 +814,6 @@ public class CWComponentFactory {
             label.setText(null);
         }
 
-
-        System.out.println("newValueModel.getValue(): " + newValueModel.getValue() + ", " + (newValueModel.getValue() == null));
-
         if(icon != null) {
             label.setIcon(icon);
         }

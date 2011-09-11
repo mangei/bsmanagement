@@ -1,14 +1,16 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import com.jidesoft.swing.JideSwingUtilities;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.net.URL;
+
 import javax.swing.JComponent;
 import javax.swing.JToolTip;
 import javax.swing.plaf.basic.BasicToolTipUI;
+
+import com.jidesoft.swing.JideSwingUtilities;
 
 /**
  *

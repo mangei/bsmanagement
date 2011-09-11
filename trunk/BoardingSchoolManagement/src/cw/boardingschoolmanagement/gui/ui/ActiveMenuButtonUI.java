@@ -4,15 +4,16 @@
  */
 package cw.boardingschoolmanagement.gui.ui;
 
-import com.jidesoft.swing.JideSwingUtilities;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Insets;
 import java.awt.Rectangle;
+
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.plaf.basic.BasicLabelUI;
+
+import com.jidesoft.swing.JideSwingUtilities;
 
 /**
  *

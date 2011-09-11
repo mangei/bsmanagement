@@ -1,6 +1,7 @@
 package cw.boardingschoolmanagement.gui.component;
 
 import java.util.Vector;
+
 import javax.swing.ComboBoxModel;
 import javax.swing.JComboBox;
 

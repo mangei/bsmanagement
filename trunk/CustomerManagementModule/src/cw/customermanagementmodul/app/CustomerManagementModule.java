@@ -25,8 +25,10 @@ import cw.customermanagementmodul.logic.BoGroup;
 import cw.customermanagementmodul.logic.BoGuardian;
 import cw.customermanagementmodul.persistence.Customer;
 import cw.customermanagementmodul.persistence.Group;
+import cw.customermanagementmodul.persistence.Guardian;
 import cw.customermanagementmodul.persistence.PMCustomer;
 import cw.customermanagementmodul.persistence.PMGroup;
+import cw.customermanagementmodul.persistence.PMGuardian;
 
 /**
  * The costumer management module
@@ -152,6 +154,17 @@ public class CustomerManagementModule
                 for(Group group : groups) {
                     group.getCustomers().remove(customer);
                 }
+            }
+        });
+        
+     // If we remove a customer, also remove Guardian
+        PMCustomer.getInstance().addCascadeListener(new CascadeListener() {
+            public void deleteAction(CascadeEvent evt) {
+                Customer customer = (Customer) evt.getSource();
+                
+                Guardian guardian = PMGuardian.getInstance().getGuardianForCustomer(customer.getId(), customer.getEntityManager());
+
+        		PMGuardian.getInstance().remove(guardian);
             }
         });
 

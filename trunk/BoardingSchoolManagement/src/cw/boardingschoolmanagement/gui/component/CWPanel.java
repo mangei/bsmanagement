@@ -2,6 +2,7 @@ package cw.boardingschoolmanagement.gui.component;
 
 import java.awt.FlowLayout;
 import java.awt.LayoutManager;
+
 import javax.swing.JPanel;
 
 /**

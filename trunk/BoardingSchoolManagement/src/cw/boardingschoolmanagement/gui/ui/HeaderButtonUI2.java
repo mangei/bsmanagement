@@ -15,6 +15,7 @@ import java.awt.Shape;
 import java.awt.geom.Area;
 import java.awt.geom.Rectangle2D;
 import java.awt.geom.RoundRectangle2D;
+
 import javax.swing.AbstractButton;
 import javax.swing.BorderFactory;
 import javax.swing.ButtonModel;
@@ -146,12 +147,12 @@ public class HeaderButtonUI2 extends BasicButtonUI {
                     cBottom = PRESSED_BOTTOM;
                 }
 
-                System.out.println("---");
-                System.out.println("isArmed:    " + model.isArmed());
-                System.out.println("isRollover: " + model.isRollover());
-                System.out.println("isPressed:  " + model.isPressed());
-                System.out.println("isEnabled:  " + model.isEnabled());
-                System.out.println("isSelected: " + model.isSelected());
+//                System.out.println("---");
+//                System.out.println("isArmed:    " + model.isArmed());
+//                System.out.println("isRollover: " + model.isRollover());
+//                System.out.println("isPressed:  " + model.isPressed());
+//                System.out.println("isEnabled:  " + model.isEnabled());
+//                System.out.println("isSelected: " + model.isSelected());
             }
             else if (model.isPressed()) {
                 cBorder = PRESSED_BORDER;

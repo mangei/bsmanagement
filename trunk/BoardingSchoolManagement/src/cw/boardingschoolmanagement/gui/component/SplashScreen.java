@@ -1,13 +1,15 @@
 package cw.boardingschoolmanagement.gui.component;
 
-import cw.boardingschoolmanagement.app.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Toolkit;
+
 import javax.swing.JFrame;
+
+import cw.boardingschoolmanagement.app.CWUtils;
 
 /**
  * The start-splashscreen of the application

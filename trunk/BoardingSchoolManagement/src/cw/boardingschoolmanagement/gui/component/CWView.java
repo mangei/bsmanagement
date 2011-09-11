@@ -179,8 +179,8 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
         buttonPanel.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                System.out.println("size: " + e.getComponent().getSize());
-                System.out.println("pref: " + e.getComponent().getPreferredSize());
+//                System.out.println("size: " + e.getComponent().getSize());
+//                System.out.println("pref: " + e.getComponent().getPreferredSize());
                 
                 Component comp = e.getComponent();
                 int size = comp.getSize().width;
@@ -188,7 +188,7 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
 
                 if(size < pref) {
                     bMore.setVisible(true);
-                    System.out.println("dooo");
+//                    System.out.println("dooo");
                 } else {
                     bMore.setVisible(false);
                 }
