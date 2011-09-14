@@ -20,32 +20,28 @@ public class GeneralConfigurationView
 	extends CWView<GeneralConfigurationPresentationModel>
 {
 
-    private CWComponentFactory.CWComponentContainer componentContainer;
     private CWCheckBox cPathActive;
     private CWComboBox cbPathPosition;
     private ItemListener cbPathActiveListener;
 
     public GeneralConfigurationView(GeneralConfigurationPresentationModel model) {
         super(model);
-
-        initComponents();
-        buildView();
-        initEventHandling();
     }
-/**
- * Initalisiert die grafischen Elemente der Konfigurationsmaske
- *
- */
+    
+	/**
+	 * Initalisiert die grafischen Elemente der Konfigurationsmaske
+	 *
+	 */
     public void initComponents() {
+    	super.initComponents();
+    	
         cPathActive = CWComponentFactory.createCheckBox(getModel().getPathPanelActiveModel(), "Anzeigepfad aktivieren");
         cbPathPosition = CWComponentFactory.createComboBox(getModel().getPathPanelPositionSelection());
 
-        componentContainer = CWComponentFactory.createComponentContainer()
+        getComponentContainer()
                 .addComponent(cPathActive)
                 .addComponent(cbPathPosition);
-    }
-
-    public void initEventHandling() {
+        
         cPathActive.addItemListener(cbPathActiveListener = new ItemListener() {
             public void itemStateChanged(ItemEvent e) {
 //                if(e.getStateChange() == ItemEvent.SELECTED) {
@@ -57,10 +53,11 @@ public class GeneralConfigurationView
             }
         });
         cbPathPosition.setEnabled(cPathActive.isSelected());
-        
     }
 
-    private void buildView() {
+    public void buildView() {
+    	super.buildView();
+    	
         this.setHeaderInfo(getModel().getHeaderInfo());
 
         FormLayout layout = new FormLayout(
@@ -79,10 +76,7 @@ public class GeneralConfigurationView
 
     @Override
     public void dispose() {
-        componentContainer.dispose();
-
-        cPathActive.removeItemListener(cbPathActiveListener);
-
-        getModel().dispose();
+    	cPathActive.removeItemListener(cbPathActiveListener);
+        super.dispose();
     }
 }

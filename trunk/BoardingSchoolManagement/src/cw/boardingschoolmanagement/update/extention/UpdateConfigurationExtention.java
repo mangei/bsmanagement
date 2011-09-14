@@ -1,4 +1,4 @@
-package cw.boardingschoolmanagement.extention;
+package cw.boardingschoolmanagement.update.extention;
 
 import java.util.List;
 
@@ -7,9 +7,9 @@ import javax.swing.Icon;
 
 import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
-import cw.boardingschoolmanagement.gui.UpdateConfigurationPresentationModel;
-import cw.boardingschoolmanagement.gui.UpdateConfigurationView;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.boardingschoolmanagement.update.gui.UpdateConfigurationPresentationModel;
+import cw.boardingschoolmanagement.update.gui.UpdateConfigurationView;
 
 /**
  *

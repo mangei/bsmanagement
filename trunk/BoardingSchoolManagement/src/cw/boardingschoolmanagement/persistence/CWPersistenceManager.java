@@ -10,13 +10,13 @@ import javax.persistence.EntityManager;
  *
  * @author Manuel Geier
  */
-public abstract class AbstractPersistenceManager<TPersistence extends CWPersistence>
+public abstract class CWPersistenceManager<TPersistence extends CWPersistence>
 	implements PersistenceManager<TPersistence> {
 
     protected CascadeListenerSupport cascadeListenerSupport;
     protected Class<TPersistence> persistenceClass;
 
-    public AbstractPersistenceManager(Class<TPersistence> clazz) {
+    public CWPersistenceManager(Class<TPersistence> clazz) {
     	persistenceClass = clazz;
     	
         cascadeListenerSupport = new CascadeListenerSupport();

@@ -25,6 +25,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
+import javax.swing.SwingUtilities;
 import javax.swing.ToolTipManager;
 import javax.swing.border.EmptyBorder;
 
@@ -267,7 +268,7 @@ public class GUIManager {
             tray = new CWTray(trayIcon);
 
             tray.getPopupMenu().add(new JMenuItem(new AbstractAction(
-                    "Öffnen",
+                    "Oeffnen",
                     CWUtils.loadIcon("cw/boardingschoolmanagement/images/application_view_list.png")) {
 
                 public void actionPerformed(ActionEvent e) {
@@ -360,8 +361,8 @@ public class GUIManager {
      * Changes the shown view
      * @param view New View
      */
-    public static void changeView(CWView view) {
-        changeView(view, false);
+    public static synchronized void changeViewTo(CWView view) {
+        changeViewTo(view, false);
     }
 
     /**
@@ -376,80 +377,97 @@ public class GUIManager {
      * @param view New View
      * @param saveOldView Whether the old view will be saved or not
      */
-    public static void changeView(CWView view, boolean saveOldView) {
-        GUIManager gM = getInstance();
+    public static synchronized void changeViewTo(final CWView view, final boolean saveOldView) {
+    	SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
+				GUIManager gM = getInstance();
 
-        // Pruefen ob es nicht leer ist.. zb beim 1. Mal
-        if (gM.shownView != null) {
+		        // Pruefen ob es nicht leer ist.. zb beim 1. Mal
+		        if (gM.shownView != null) {
 
-            // Nur aendern, wenn es nicht schon angezeigt wird
-            if (gM.shownView.equals(view)) {
-                return;
-            }
+		            // Nur aendern, wenn es nicht schon angezeigt wird
+		            if (gM.shownView.equals(view)) {
+		                return;
+		            }
 
-            // Alte Speichern
-            if (saveOldView) {
-                // Alte Speichern
-                gM.lastViews.push(gM.shownView);
-            } else {
-                // Die alten loeschen, wenn sie nicht gespeichert werden sollen
+		            // Alte Speichern
+		            if (saveOldView) {
+		                // Alte Speichern
+		                gM.lastViews.push(gM.shownView);
+		            } else {
+		                // Die alten loeschen, wenn sie nicht gespeichert werden sollen
 
-                // Pop the old ones and dispose them if they are Disposable
-                for (int i = 0, l = gM.lastViews.size(); i < l; i++) {
-                    CWView oldView = gM.lastViews.pop();
-                    oldView.dispose();
-                }
+		                // Pop the old ones and dispose them if they are Disposable
+		                for (int i = 0, l = gM.lastViews.size(); i < l; i++) {
+		                    CWView oldView = gM.lastViews.pop();
+		                    oldView.dispose();
+		                }
 
-                // Dispose the current view
-                gM.shownView.dispose();
+		                // Dispose the current view
+		                gM.shownView.dispose();
 
-//              not necessary
-//                gM.lastComponents.clear();
-            }
+//		              not necessary
+//		                gM.lastComponents.clear();
+		            }
 
-            // Von der Ansicht entfernen
-            gM.componentView.removeAll();
+		            // Von der Ansicht entfernen
+		            gM.componentView.removeAll();
 
-        }
+		        }
 
-        // Neue Ansicht
-        gM.shownView = view;
+		        // Neue Ansicht
+		        view.initComponents();
+		        view.buildView();
+		        gM.shownView = view;
+		        
 
-        // Hinzufuegen
-        gM.componentView.add(gM.shownView, BorderLayout.CENTER);
+		        // Hinzufuegen
+		        gM.componentView.add(gM.shownView, BorderLayout.CENTER);
 
-        gM.componentView.revalidate();
-        gM.componentView.repaint();
+		        gM.componentView.revalidate();
+		        gM.componentView.repaint();
 
-        gM.reloadPath();
+		        gM.reloadPath();
+			}
+		});
+        
     }
 
     /**
-     * Shows the last compontent
+     * Shows the previous compontent and removes the current one.
      */
-    public static void changeToLastView() {
-        GUIManager gM = getInstance();
-        if (!gM.lastViews.isEmpty()) {
+    public static synchronized void changeToPreviousView() {
+    	SwingUtilities.invokeLater(new Runnable() {
+			
+			@Override
+			public void run() {
 
-            // Von der Ansicht entfernen
-            gM.componentView.removeAll();
+		        GUIManager gM = getInstance();
+		        if (!gM.lastViews.isEmpty()) {
 
-            gM.shownView.dispose();
-            System.gc();
+		            // Von der Ansicht entfernen
+		            gM.componentView.removeAll();
 
-            // Neue Ansicht
-            gM.shownView = gM.lastViews.pop();
+		            gM.shownView.dispose();
+		            System.gc();
 
-            // Hinzufuegen
-            gM.componentView.add(gM.shownView, BorderLayout.CENTER);
+		            // Neue Ansicht
+		            gM.shownView = gM.lastViews.pop();
 
-            // Neu zeichnen lassen
-            gM.componentView.validate();
-            gM.componentView.repaint();
+		            // Hinzufuegen
+		            gM.componentView.add(gM.shownView, BorderLayout.CENTER);
 
-            // Pfadanzeige aktualisieren
-            gM.reloadPath();
-        }
+		            // Neu zeichnen lassen
+		            gM.componentView.validate();
+		            gM.componentView.repaint();
+
+		            // Pfadanzeige aktualisieren
+		            gM.reloadPath();
+		        }
+			}
+		});
     }
 //
 //    /**
@@ -463,18 +481,18 @@ public class GUIManager {
 //    }
 
     /**
-     * Removes the last component, when it was saved
+     * Removes the previous component, when it was saved
      */
-    public static void removeLastView() {
+    public static synchronized void removePreviousView() {
         CWView view = getInstance().lastViews.pop();
         view.dispose();
         System.gc();
     }
 
     /**
-     * Removes all components
+     * Removes all previous components
      */
-    public static void removeAllLastViews() {
+    public static synchronized void removeAllPreviousViews() {
         LinkedList<CWView> views = getInstance().lastViews;
 
         for (CWView view : views) {
@@ -493,12 +511,22 @@ public class GUIManager {
         return getInstance().statusbar;
     }
 
-    public static void setLoadingScreenVisible(boolean visible) {
-        getInstance().glassPane.setVisible(visible);
+    public static synchronized void setLoadingScreenVisible(final boolean visible) {
+    	SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+				getInstance().glassPane.setVisible(visible);
+			}
+		});
     }
 
-    public static void setLoadingScreenText(String text) {
-        getInstance().glassPane.setText(text);
+    public static synchronized void setLoadingScreenText(final String text) {
+    	SwingUtilities.invokeLater(new Runnable() {
+			@Override
+			public void run() {
+		        getInstance().glassPane.setText(text);
+			}
+		});
     }
 
     public CWHeader getHeader() {
@@ -506,14 +534,14 @@ public class GUIManager {
     }
     private int lockCount = 0;
 
-    public void lockMenu() {
+    public synchronized void lockMenu() {
         if (lockCount == 0) {
             MenuManager.getSideMenu().lock();
         }
         lockCount++;
     }
 
-    public void unlockMenu() {
+    public synchronized void unlockMenu() {
         if (lockCount == 1) {
             MenuManager.getSideMenu().unlock();
         }

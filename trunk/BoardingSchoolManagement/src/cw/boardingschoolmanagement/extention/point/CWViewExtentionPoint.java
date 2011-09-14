@@ -1,7 +1,5 @@
 package cw.boardingschoolmanagement.extention.point;
 
-import javax.persistence.EntityManager;
-
 import cw.boardingschoolmanagement.extention.CWIExtention;
 
 /**
@@ -11,6 +9,8 @@ import cw.boardingschoolmanagement.extention.CWIExtention;
 public interface CWViewExtentionPoint<TView>
         extends CWIExtention {
 
-	public Class getViewExtentionClass();
-    public void init(TView baseView, EntityManager entityManager);
+	public Class<?> getViewExtentionClass();
+    public void initComponents(TView baseView);
+    public void buildView();
+    public void dispose();
 }

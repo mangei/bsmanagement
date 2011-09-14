@@ -23,7 +23,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.comparator.PriorityComparator;
 import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.ModulManager;
+import cw.boardingschoolmanagement.manager.ModuleManager;
 
 /**
  * Bildschirmmaske des Konfigurationsfensters
@@ -100,7 +100,7 @@ public class ConfigurationPresentationModel
 
     public List<ConfigurationExtentionPoint> getExtentions() {
         if (configurationExtentions == null) {
-            configurationExtentions = (List<ConfigurationExtentionPoint>) ModulManager.getExtentions(ConfigurationExtentionPoint.class);
+            configurationExtentions = (List<ConfigurationExtentionPoint>) ModuleManager.getExtentions(ConfigurationExtentionPoint.class);
 
             Collections.sort(configurationExtentions, new PriorityComparator());
 

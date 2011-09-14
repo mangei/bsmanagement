@@ -18,7 +18,6 @@ public class BusinessDataConfigurationView
 	extends CWView<BusinessDataConfigurationPresentationModel>
 {
 
-    private CWComponentFactory.CWComponentContainer componentContainer;
     private JTextField tfName;
     private JTextField tfPostOfficeNumber;
     private JTextField tfCity;
@@ -31,13 +30,11 @@ public class BusinessDataConfigurationView
 
     public BusinessDataConfigurationView(BusinessDataConfigurationPresentationModel model) {
     	super(model);
-
-        initComponents();
-        buildView();
-        initEventHandling();
     }
 
     public void initComponents() {
+    	super.initComponents();
+    	
         tfName              = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_NAME));
         tfPostOfficeNumber  = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_POSTOFFICENUMBER));
         tfCity              = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_CITY));
@@ -48,7 +45,7 @@ public class BusinessDataConfigurationView
         tfEmail             = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_EMAIL));
         tfDvrNumber         = CWComponentFactory.createTextField(getModel().getBufferedModel(BusinessData.PROPERTYNAME_DVRNUMBER));
 
-        componentContainer = CWComponentFactory.createComponentContainer()
+        getComponentContainer()
                 .addComponent(tfName)
                 .addComponent(tfPostOfficeNumber)
                 .addComponent(tfCity)
@@ -60,11 +57,9 @@ public class BusinessDataConfigurationView
                 .addComponent(tfDvrNumber);
     }
 
-    public void initEventHandling() {
-        
-    }
-
-    private void buildView() {
+    public void buildView() {
+    	super.buildView();
+    	
         this.setHeaderInfo(getModel().getHeaderInfo());
 
         FormLayout layout = new FormLayout(
@@ -97,8 +92,6 @@ public class BusinessDataConfigurationView
 
     @Override
     public void dispose() {
-        componentContainer.dispose();
-
-        getModel().dispose();
+        super.dispose();
     }
 }

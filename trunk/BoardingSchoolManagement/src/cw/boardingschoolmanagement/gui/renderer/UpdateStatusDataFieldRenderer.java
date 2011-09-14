@@ -5,21 +5,22 @@ import java.awt.Component;
 import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.model.CWDataFieldRenderer;
 
 /**
+ * Renderer for the update status
  *
- * @author ManuelG
+ * @author Manuel Geier
  */
-public class UpdateStatusTableCellRenderer extends DefaultTableCellRenderer {
+public class UpdateStatusDataFieldRenderer extends CWDataFieldRenderer {
 
     private JLabel cell;
     private Icon updateIcon;
     private Icon okIcon;
 
-    public UpdateStatusTableCellRenderer() {
+    public UpdateStatusDataFieldRenderer() {
         updateIcon  = CWUtils.loadIcon("cw/boardingschoolmanagement/images/update_needUpdate.png");
         okIcon      = CWUtils.loadIcon("cw/boardingschoolmanagement/images/update_ok.png");
     }

@@ -58,7 +58,7 @@ public class CWBackView
         JButton backButton = new JButton(new AbstractAction(backText, CWUtils.loadIcon("cw/boardingschoolmanagement/images/arrow_left.png")) {
 
             public void actionPerformed(ActionEvent e) {
-                GUIManager.changeToLastView();
+                GUIManager.changeToPreviousView();
             }
         });
         backButton.setUI(new CWButtonPanelButtonUI());
@@ -90,11 +90,28 @@ public class CWBackView
             JideSwingUtilities.fillGradient((Graphics2D) g, rect, lightGrayColor, Color.WHITE, true);
         }
     }
+    
+    @Override
+    public void initComponents() {
+    	super.initComponents();
+    	if(innerView instanceof CWView) {
+            ((CWView)innerView).initComponents();
+        }
+    }
+    
+    @Override
+    public void buildView() {
+    	super.buildView();
+    	if(innerView instanceof CWView) {
+            ((CWView)innerView).buildView();
+        }
+    }
 
     @Override
     public void dispose() {
         if(innerView instanceof CWView) {
             ((CWView)innerView).dispose();
         }
+        super.dispose();
     }
 }

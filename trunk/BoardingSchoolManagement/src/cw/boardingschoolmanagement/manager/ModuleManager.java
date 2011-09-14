@@ -16,7 +16,6 @@ import org.hibernate.ejb.Ejb3Configuration;
 
 import cw.boardingschoolmanagement.app.ClassPathHacker;
 import cw.boardingschoolmanagement.exception.ManifestException;
-import cw.boardingschoolmanagement.extention.CWIExtention;
 import cw.boardingschoolmanagement.module.Module;
 import cw.boardingschoolmanagement.persistence.AnnotatedClass;
 
@@ -25,20 +24,20 @@ import cw.boardingschoolmanagement.persistence.AnnotatedClass;
  *
  * @author Manuel Geier (CreativeWorkers)
  */
-public class ModulManager {
+public class ModuleManager {
 
-    private static ModulManager instance = null;
+    private static ModuleManager instance = null;
 
-    private ModulManager() {
+    private ModuleManager() {
     }
 
     /**
      * Returns an instance of the ModulManager
      * @return ModulManager
      */
-    public static ModulManager getInstance() {
+    public static ModuleManager getInstance() {
         if (instance == null) {
-            instance = new ModulManager();
+            instance = new ModuleManager();
         }
         return instance;
     }
@@ -111,7 +110,7 @@ public class ModulManager {
                     modulesList.add(modulWithDependencies);
 
                 } catch (IOException ex) {
-                    Logger.getLogger(ModulManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ModuleManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -166,7 +165,7 @@ public class ModulManager {
                     System.out.println("  " + checkedModulesList.get(i).getName());
 
                 } catch (IOException ex) {
-                    Logger.getLogger(ModulManager.class.getName()).log(Level.SEVERE, null, ex);
+                    Logger.getLogger(ModuleManager.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
 
@@ -235,24 +234,24 @@ public class ModulManager {
      * @param specificExtention Class of the specificated extention
      * @return List of the specificated extention class
      */
-    public static List<? extends CWIExtention> getExtentions(Class specificExtention) {
+    public static <T> List<T> getExtentions(Class<T> specificExtention) {
 
         System.out.println("getExtentions(" + specificExtention.getName() + "): ");
 
-        List<CWIExtention> spezExList = new ArrayList<CWIExtention>();
-        ServiceLoader<CWIExtention> exList = ServiceLoader.load(specificExtention);
+        List<T> spezExList = new ArrayList<T>();
+        ServiceLoader<T> exList = (ServiceLoader<T>) ServiceLoader.load(specificExtention);
 
         // Run throu all extentions
-        for (CWIExtention ex : exList) {
+        for (T ex : exList) {
             
             try {
                 // Add it to the list
-                spezExList.add(ex.getClass().newInstance());
+                spezExList.add((T) ex.getClass().newInstance());
                 System.out.println("  " + ex.toString());
             } catch (InstantiationException ex1) {
-                Logger.getLogger(ModulManager.class.getName()).log(Level.SEVERE, null, ex1);
+                Logger.getLogger(ModuleManager.class.getName()).log(Level.SEVERE, null, ex1);
             } catch (IllegalAccessException ex1) {
-                Logger.getLogger(ModulManager.class.getName()).log(Level.SEVERE, null, ex1);
+                Logger.getLogger(ModuleManager.class.getName()).log(Level.SEVERE, null, ex1);
             }
 
         }
