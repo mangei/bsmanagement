@@ -15,32 +15,27 @@ import cw.boardingschoolmanagement.gui.component.CWView;
 public class WelcomeHomeExtentionView
 	extends CWView<WelcomeHomeExtentionPresentationModel>
 {
-    private CWComponentFactory.CWComponentContainer componentContainer;
     private CWLabel lWelcomeMessage;
     private CWLabel lTimeMessage;
 
     public WelcomeHomeExtentionView(WelcomeHomeExtentionPresentationModel model) {
         super(model);
-
-        initComponents();
-        buildView();
-        initEventHandling();
     }
     
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
+    	
         lWelcomeMessage = CWComponentFactory.createLabel(getModel().getWelcomeMessageValueModel());
         lTimeMessage = CWComponentFactory.createLabel(getModel().getTimeMessageValueModel());
 
-        componentContainer = CWComponentFactory.createComponentContainer()
+        getComponentContainer()
                 .addComponent(lWelcomeMessage)
                 .addComponent(lTimeMessage);
     }
-
-    private void initEventHandling() {
-        
-    }
-
-    private void buildView() {
+    
+    public void buildView() {
+    	super.buildView();
+    	
         this.setHeaderInfo(new CWHeaderInfo(
                 "Willkommen"
         ));
@@ -60,8 +55,6 @@ public class WelcomeHomeExtentionView
 
     @Override
     public void dispose() {
-        componentContainer.dispose();
-
-        getModel().dispose();
+        super.dispose();
     }
 }

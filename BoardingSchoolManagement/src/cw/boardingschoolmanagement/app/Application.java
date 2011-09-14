@@ -26,7 +26,7 @@ import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import cw.boardingschoolmanagement.gui.component.SplashScreen;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
-import cw.boardingschoolmanagement.manager.ModulManager;
+import cw.boardingschoolmanagement.manager.ModuleManager;
 import cw.boardingschoolmanagement.manager.PropertiesManager;
 
 
@@ -37,7 +37,7 @@ import cw.boardingschoolmanagement.manager.PropertiesManager;
  * Konfiguration laed.
  * Implementiert als Singleton
  * 
- * @author Manuel Geier (CreativeWorkers)
+ * @author Manuel Geier
  */
 public class Application {
 
@@ -48,7 +48,15 @@ public class Application {
     private static boolean applicationStarted = false;
 
     public static void main(String[] args) {
-        Application.getInstance().start();
+    	
+    	// Run application in its own thread
+        new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
+				Application.getInstance().start();
+			}
+		}, "BSM Application Thread").start();
     }
 
     /**
@@ -175,8 +183,8 @@ public class Application {
         // Load modules
         ////////////////////////////////////////////////////////////////////
             ss.setText("Module werden geladen...");
-            ModulManager.loadModules();
-            ModulManager.registerAnnotationClasses(CWEntityManager.getConfiguration());
+            ModuleManager.loadModules();
+            ModuleManager.registerAnnotationClasses(CWEntityManager.getConfiguration());
 
         ////////////////////////////////////////////////////////////////////
         // Connect to database
@@ -199,7 +207,7 @@ public class Application {
         // Initialize modules
         ////////////////////////////////////////////////////////////////////
             ss.setText("Module werden initialisiert...");
-            ModulManager.initModules();
+            ModuleManager.initModules();
 
         ////////////////////////////////////////////////////////////////////
         // Close the splashscreen and show the application
@@ -230,10 +238,10 @@ public class Application {
             }
             
             public void actionPerformed(ActionEvent e) {
-//                GUIManager.setLoadingScreenText("Startseite werden geladen...");
-//                GUIManager.setLoadingScreenVisible(true);
-                GUIManager.changeView(new HomeView(new HomePresentationModel()));
-//                GUIManager.setLoadingScreenVisible(false);
+                GUIManager.setLoadingScreenText("Startseite werden geladen...");
+                GUIManager.setLoadingScreenVisible(true);
+                GUIManager.changeViewTo(new HomeView(new HomePresentationModel()));
+                GUIManager.setLoadingScreenVisible(false);
             }
         }), "home", true);
 

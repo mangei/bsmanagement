@@ -1,4 +1,4 @@
-package cw.boardingschoolmanagement.gui;
+package cw.boardingschoolmanagement.update.gui;
 
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
@@ -18,7 +18,6 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.table.AbstractTableModel;
-import javax.swing.table.TableModel;
 
 import org.jdom.Document;
 import org.jdom.Element;
@@ -28,7 +27,11 @@ import org.jdom.input.SAXBuilder;
 import com.jgoodies.binding.list.SelectionInList;
 
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
+import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.gui.model.CWDataModel;
+import cw.boardingschoolmanagement.update.pojo.UpdateInformation;
 
 /**
  *
@@ -42,8 +45,7 @@ public class UpdateConfigurationPresentationModel
     private CWHeaderInfo headerInfo;
     private Action checkAction;
     private Action updateAction;
-    private TableModel updatesTableModel;
-    private SelectionInList<UpdateInfo> updateInfoList;
+    private CWDataModel<UpdateInformation> updateDataModel;
 
     public UpdateConfigurationPresentationModel(ConfigurationPresentationModel configurationPresentationModel) {
     	super(null);
@@ -63,8 +65,7 @@ public class UpdateConfigurationPresentationModel
         checkAction = new CheckAction("Jetzt pruefen!");
         updateAction = new UpdateAction("Jetzt aktualisieren!");
 
-        updateInfoList = new SelectionInList<UpdateInfo>();
-        updatesTableModel = new UpdatesTableModel(updateInfoList);
+        updateDataModel = new CWDataModel<UpdateInformation>(null, UpdateInformation.class);
     }
 
     private void initEventHandling() {
@@ -166,10 +167,8 @@ public class UpdateConfigurationPresentationModel
                             malformedURLException.printStackTrace();
                         }
 
-                        System.out.println("up:" + updateInfoList);
-
-                        updateInfoList.getList().add(
-                                new UpdateInfo(
+                        updateDataModel.add(
+                                new UpdateInformation(
                                     titleElement.getText(),
                                     versionElement.getText(),
                                     "1.1.3",
@@ -216,9 +215,9 @@ public class UpdateConfigurationPresentationModel
 
         public void actionPerformed(ActionEvent e) {
 
-            for(int i=0, l=updateInfoList.getSize(); i<l; i++) {
+            for(int i=0, l=updateDataModel.getSize(); i<l; i++) {
                 
-                UpdateInfo info = updateInfoList.getList().get(i);
+                UpdateInformation info = updateDataModel.get(i).getElement();
                 System.out.println(info);
 
                 FileInputStream in = null;
@@ -263,9 +262,9 @@ public class UpdateConfigurationPresentationModel
     private class UpdatesTableModel
             extends AbstractTableModel {
 
-        private SelectionInList<UpdateInfo> updateInfoList;
+        private SelectionInList<UpdateInformation> updateInfoList;
 
-        public UpdatesTableModel(SelectionInList<UpdateInfo> updateInfos) {
+        public UpdatesTableModel(SelectionInList<UpdateInformation> updateInfos) {
             this.updateInfoList = updateInfos;
         }
 
@@ -281,7 +280,7 @@ public class UpdateConfigurationPresentationModel
 
         @Override
         public Object getValueAt(int rowIndex, int columnIndex) {
-            UpdateInfo info = updateInfoList.getList().get(rowIndex);
+            UpdateInformation info = updateInfoList.getList().get(rowIndex);
             switch(columnIndex) {
                 case 0:
                     return info.getName();
@@ -318,58 +317,6 @@ public class UpdateConfigurationPresentationModel
         
     }
 
-    private class UpdateInfo {
-        private String name;
-        private String version;
-        private String systemVersion;
-        private Date releaseDate;
-        private Date buildDate;
-        private URL downloadURL;
-
-        public UpdateInfo(String name, String version, String systemVersion, Date releaseDate, Date buildDate, URL downloadURL) {
-            this.name = name;
-            this.version = version;
-            this.systemVersion = systemVersion;
-            this.releaseDate = releaseDate;
-            this.buildDate = buildDate;
-            this.downloadURL = downloadURL;
-        }
-
-        public Date getBuildDate() {
-            return buildDate;
-        }
-
-        public URL getDownloadURL() {
-            return downloadURL;
-        }
-
-        public String getName() {
-            return name;
-        }
-
-        public Date getReleaseDate() {
-            return releaseDate;
-        }
-
-        public String getVersion() {
-            return version;
-        }
-
-        public String getSystemVersion() {
-            return systemVersion;
-        }
-
-        @Override
-        public String toString() {
-            StringBuffer str = new StringBuffer();
-            str.append("URL: ");
-            str.append(downloadURL);
-            return str.toString();
-        }
-
-    }
-
-
     public CWHeaderInfo getHeaderInfo() {
         return headerInfo;
     }
@@ -382,8 +329,8 @@ public class UpdateConfigurationPresentationModel
         return updateAction;
     }
 
-    public TableModel getUpdatesTableModel() {
-        return updatesTableModel;
+    public CWDataModel<UpdateInformation> getUpdatesTableModel() {
+        return updateDataModel;
     }
 
     

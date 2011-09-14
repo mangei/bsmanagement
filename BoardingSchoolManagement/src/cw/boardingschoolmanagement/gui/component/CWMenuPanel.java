@@ -16,6 +16,7 @@ import javax.swing.JList;
 import javax.swing.JMenuItem;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
+import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -471,14 +472,26 @@ public class CWMenuPanel
     public void lock() {
         if (isEnabled()) {
             this.setEnabled(false);
-            this.repaint();
+            SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					CWMenuPanel.this.repaint();
+				}
+			});
         }
     }
 
     public void unlock() {
         if (!isEnabled()) {
             this.setEnabled(true);
-            this.repaint();
+            SwingUtilities.invokeLater(new Runnable() {
+				
+				@Override
+				public void run() {
+					CWMenuPanel.this.repaint();
+				}
+			});
         }
     }
 }

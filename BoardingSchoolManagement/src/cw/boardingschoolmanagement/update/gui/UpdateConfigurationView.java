@@ -1,4 +1,4 @@
-package cw.boardingschoolmanagement.gui;
+package cw.boardingschoolmanagement.update.gui;
 
 import java.awt.FlowLayout;
 
@@ -13,7 +13,7 @@ import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.boardingschoolmanagement.gui.renderer.UpdateStatusTableCellRenderer;
+import cw.boardingschoolmanagement.gui.renderer.UpdateStatusDataFieldRenderer;
 
 /**
  *
@@ -23,32 +23,27 @@ public class UpdateConfigurationView
 	extends CWView<UpdateConfigurationPresentationModel>
 {
 
-    private CWComponentFactory.CWComponentContainer componentContainer;
     private CWButton bCheck;
     private CWButton bUpdate;
     private CWTable tUpdates;
 
     public UpdateConfigurationView(UpdateConfigurationPresentationModel model) {
         super(model);
-
-        initComponents();
-        buildView();
-        initEventHandling();
     }
 
     public void initComponents() {
+    	super.initComponents();
+    	
         bCheck = CWComponentFactory.createButton(getModel().getCheckAction());
         bUpdate = CWComponentFactory.createButton(getModel().getUpdateAction());
         tUpdates = CWComponentFactory.createTable(getModel().getUpdatesTableModel(), "System pruefen!");
-        tUpdates.getColumns(true).get(2).setCellRenderer(new UpdateStatusTableCellRenderer());
+        tUpdates.getColumns(true).get(2).setCellRenderer(new UpdateStatusDataFieldRenderer());
 
-        componentContainer = CWComponentFactory.createComponentContainer()
+        getComponentContainer()
                 .addComponent(bCheck)
                 .addComponent(bUpdate)
                 .addComponent(tUpdates);
-    }
-
-    public void initEventHandling() {
+        
 //        cPathActive.addItemListener(cbPathActiveListener = new ItemListener() {
 //            public void itemStateChanged(ItemEvent e) {
 ////                if(e.getStateChange() == ItemEvent.SELECTED) {
@@ -59,11 +54,12 @@ public class UpdateConfigurationView
 //                cbPathPosition.setEnabled(cPathActive.isSelected());
 //            }
 //        });
-//        cbPathPosition.setEnabled(cPathActive.isSelected());
-        
+//        cbPathPosition.setEnabled(cPathActive.isSelected());    
     }
-
-    private void buildView() {
+    
+    public void buildView() {
+    	super.buildView();
+    	
         this.setHeaderInfo(getModel().getHeaderInfo());
 
         CWPanel pCheck = CWComponentFactory.createPanel();
@@ -93,10 +89,7 @@ public class UpdateConfigurationView
 
     @Override
     public void dispose() {
-        componentContainer.dispose();
-
 //        cPathActive.removeItemListener(cbPathActiveListener);
-
-        getModel().dispose();
+    	super.dispose();
     }
 }

@@ -8,7 +8,7 @@ import javax.persistence.EntityManager;
 import com.jgoodies.binding.PresentationModel;
 
 import cw.boardingschoolmanagement.extention.point.CWEditViewExtentionPoint;
-import cw.boardingschoolmanagement.manager.ModulManager;
+import cw.boardingschoolmanagement.manager.ModuleManager;
 
 public abstract class CWEditPresentationModel<TPersistence>
 	extends PresentationModel<TPersistence>
@@ -75,7 +75,7 @@ public abstract class CWEditPresentationModel<TPersistence>
 	public abstract void cancel();
 	
 	public boolean validateExtentions(List<CWErrorMessage> errorMessages) {
-		List<CWEditViewExtentionPoint> exList = (List<CWEditViewExtentionPoint>) ModulManager.getExtentions(CWEditViewExtentionPoint.class);
+		List<CWEditViewExtentionPoint> exList = (List<CWEditViewExtentionPoint>) ModuleManager.getExtentions(CWEditViewExtentionPoint.class);
 		
 		boolean valid = true;
 		
@@ -91,7 +91,7 @@ public abstract class CWEditPresentationModel<TPersistence>
 	}
 	
 	public void saveExtentions() {
-		List<CWEditViewExtentionPoint> exList = (List<CWEditViewExtentionPoint>) ModulManager.getExtentions(CWEditViewExtentionPoint.class);
+		List<CWEditViewExtentionPoint> exList = (List<CWEditViewExtentionPoint>) ModuleManager.getExtentions(CWEditViewExtentionPoint.class);
 		
 		for(CWEditViewExtentionPoint ex : exList) {
 			if(viewClass.equals(ex.getViewExtentionClass().getClass())) {
@@ -101,7 +101,7 @@ public abstract class CWEditPresentationModel<TPersistence>
 	}
 	
 	public void cancelExtentions() {
-		List<CWEditViewExtentionPoint> exList = (List<CWEditViewExtentionPoint>) ModulManager.getExtentions(CWEditViewExtentionPoint.class);
+		List<CWEditViewExtentionPoint> exList = (List<CWEditViewExtentionPoint>) ModuleManager.getExtentions(CWEditViewExtentionPoint.class);
 		
 		for(CWEditViewExtentionPoint ex : exList) {
 			if(viewClass.equals(ex.getViewExtentionClass().getClass())) {

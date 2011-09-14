@@ -27,7 +27,6 @@ import javax.swing.JScrollPane;
 import javax.swing.ListModel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.TableModel;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.tree.TreeModel;
@@ -50,6 +49,9 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CalendarUtil;
 import cw.boardingschoolmanagement.gui.CWIPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.gui.model.CWDataField;
+import cw.boardingschoolmanagement.gui.model.CWDataFieldRenderer;
+import cw.boardingschoolmanagement.gui.model.CWDataModel;
 
 /**
  * The factory contains all necessary components we have in our application.
@@ -79,7 +81,7 @@ public class CWComponentFactory {
     private CWComponentFactory() {
     }
 
-    public static CWComponentContainer createComponentContainer() {
+    static CWComponentContainer createComponentContainer() {
         return new CWComponentContainer();
     }
 
@@ -143,6 +145,10 @@ public class CWComponentFactory {
                     ((CWPanel) comp).removeAll();
                     ((CWPanel) comp).setLayout(null);
                     ((CWPanel) comp).setUI(null);
+                }
+                
+                if (comp instanceof CWView) {
+                	((CWView) comp).dispose();
                 }
 
                 TextComponentConnector textComponentConnector = (TextComponentConnector) comp.getClientProperty(TEXT_COMPONENT_CONNECTOR_KEY);
@@ -231,21 +237,27 @@ public class CWComponentFactory {
         return dc;
     }
 
-    public static CWTable createTable(String emptyText) {
-        return createTable(null, emptyText, null);
+    public static CWTable createTable(CWDataModel<?> dataModel, final String emptyText) {
+        return createTable(dataModel, emptyText, null);
     }
 
-    public static CWTable createTable(TableModel tableModel, final String emptyText) {
-        return createTable(tableModel, emptyText, null);
-    }
-
-    public static CWTable createTable(TableModel tableModel, final String emptyText, String tableStateName) {
+    public static CWTable createTable(CWDataModel<?> dataModel, final String emptyText, String tableStateName) {
         CWTable table;
 
-        if (tableModel != null) {
-            table = new CWTable(tableModel);
+        if (dataModel != null) {
+            table = new CWTable(dataModel);
         } else {
             table = new CWTable();
+        }
+        
+        List<CWDataField> dataFields = dataModel.getDataFields();
+        int fieldCount = dataFields.size();
+        for(int i=0; i<fieldCount; i++) {
+        	CWDataField df = dataFields.get(i);
+        	CWDataFieldRenderer renderer = df.getFieldRenderer();
+        	if(renderer != null) {
+        		table.getColumns(true).get(i).setCellRenderer(renderer);
+        	}
         }
 
         table.setColumnControlVisible(true);
@@ -932,7 +944,8 @@ public class CWComponentFactory {
     	if (headerInfo == null) {
             headerInfo = new CWHeaderInfo();
         }
-        CWView view = new CWView(model, headerInfo);
+        CWView view = new CWView(model);
+        view.setHeaderInfo(headerInfo);
         if (comp != null) {
             view.addToContentPanel(comp);
         }

@@ -8,30 +8,31 @@ import java.util.GregorianCalendar;
 
 import javax.swing.JLabel;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableCellRenderer;
 
 import cw.boardingschoolmanagement.app.CalendarUtil;
+import cw.boardingschoolmanagement.gui.model.CWDataFieldRenderer;
 
 /**
+ * Renderer for Date and Time
  *
- * @author ManuelG
+ * @author Manuel Geier
  */
-public class DateTimeTableCellRenderer extends DefaultTableCellRenderer {
+public class DateTimeDataFieldRenderer extends CWDataFieldRenderer {
 
     private JLabel cell;
     private boolean dateOnly;
     private String dateFormat;
     private boolean useDateFormat = false;
 
-    public DateTimeTableCellRenderer() {
+    public DateTimeDataFieldRenderer() {
         this(false);
     }
 
-    public DateTimeTableCellRenderer(boolean dateOnly) {
+    public DateTimeDataFieldRenderer(boolean dateOnly) {
         this.dateOnly = dateOnly;
     }
 
-    public DateTimeTableCellRenderer(String dateFormat) {
+    public DateTimeDataFieldRenderer(String dateFormat) {
         this.useDateFormat = true;
         this.dateFormat = dateFormat;
     }

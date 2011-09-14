@@ -26,10 +26,6 @@ import cw.boardingschoolmanagement.manager.GUIManager;
 public class ConfigurationView
 	extends CWView<ConfigurationPresentationModel>
 {
-
-    private ConfigurationPresentationModel model;
-
-    private CWComponentFactory.CWComponentContainer componentContainer;
     private JButton bSave;
     private JButton bCancel;
 
@@ -37,28 +33,23 @@ public class ConfigurationView
 
     public ConfigurationView(ConfigurationPresentationModel model) {
         super(model, false);
-        this.model = model;
-
-        initComponents();
-        buildView();
-        initEventHandling();
     }
 
-    private void initComponents() {
-        bSave               = CWComponentFactory.createButton(model.getSaveAction());
-        bCancel             = CWComponentFactory.createButton(model.getCancelAction());
+    public void initComponents() {
+    	super.initComponents();
+    	
+        bSave               = CWComponentFactory.createButton(getModel().getSaveAction());
+        bCancel             = CWComponentFactory.createButton(getModel().getCancelAction());
 
-        componentContainer = CWComponentFactory.createComponentContainer()
+        getComponentContainer()
                 .addComponent(bSave)
                 .addComponent(bCancel);
     }
 
-    private void initEventHandling() {
-
-    }
-
-    private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+    public void buildView() {
+    	super.buildView();
+    	
+        this.setHeaderInfo(getModel().getHeaderInfo());
 
         JPanel masterPanel = new JPanel(new BorderLayout());
         
@@ -84,14 +75,14 @@ public class ConfigurationView
         final CardLayout cardLayout = new CardLayout();
         final JPanel cardPanel = CWComponentFactory.createPanel(cardLayout);
 
-        List<ConfigurationExtentionPoint> extentions = model.getExtentions();
+        List<ConfigurationExtentionPoint> extentions = getModel().getExtentions();
         for(int i=0, l=extentions.size(); i<l; i++) {
             // Get the component
             ConfigurationExtentionPoint ex = extentions.get(i);
 
             // Create the button
             JButton button = new JButton(ex.getButtonName());
-            componentContainer.addComponent(button);
+            getComponentContainer().addComponent(button);
             button.putClientProperty("roundCorners", Boolean.FALSE);
 
             // Set the right icon
@@ -137,8 +128,6 @@ public class ConfigurationView
 
     @Override
     public void dispose() {
-        componentContainer.dispose();
-
-        model.dispose();
+    	super.dispose();
     }
 }

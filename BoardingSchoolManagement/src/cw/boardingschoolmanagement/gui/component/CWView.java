@@ -15,6 +15,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.ContainerAdapter;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.AbstractAction;
@@ -34,12 +35,14 @@ import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 import com.jidesoft.swing.JideSwingUtilities;
+import com.jidesoft.swing.JideTabbedPane;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.extention.point.CWViewExtentionPoint;
 import cw.boardingschoolmanagement.gui.CWIPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory.CWComponentContainer;
 import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.boardingschoolmanagement.manager.ModulManager;
+import cw.boardingschoolmanagement.manager.ModuleManager;
 
 /**
  *
@@ -50,7 +53,7 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
 
 	private static final String KEY_PANEL_GROW = "KEY_PANEL_GROW";
 	private TPresentationModel model;
-	
+	private boolean displayPanelsInTabs = false;
     private JPanel buttonPanel;
     private CWButtonPanel leftButtonPanel;
     private CWButtonPanel rightButtonPanel;
@@ -60,6 +63,9 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
     private JPanel mainPanel;
     private CWHeaderInfoPanel headerInfoPanel;
     private CWHeaderInfo headerInfo;
+    private JideTabbedPane contentTabs;
+    private CWComponentContainer componentContainer;
+    private List<CWViewExtentionPoint> viewExtentions = new ArrayList<CWViewExtentionPoint>();
 
     // Alignment of the header
     public static final int LEFT = JLabel.LEFT;
@@ -71,30 +77,13 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
     };
 
     public CWView(TPresentationModel model) {
-        this(model, new CWHeaderInfo());
+        this(model, true);
     }
 
     public CWView(TPresentationModel model, boolean contentScrolls) {
-        this(model,new CWHeaderInfo(), contentScrolls);
-    }
-
-    public CWView(TPresentationModel model, String headerText) {
-        this(model, new CWHeaderInfo(headerText));
-    }
-
-    public CWView(TPresentationModel model, CWHeaderInfo headerInfo) {
-        this(model, headerInfo, true);
-    }
-
-    public CWView(TPresentationModel model, CWHeaderInfo headerInfo, boolean contentScrolls) {
-        if(headerInfo == null) {
-            throw new NullPointerException("headerInfo is null");
-        }
 
         this.model = model;
-        this.headerInfo = headerInfo;
 
-        setName(headerInfo.getHeaderText());
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(0, 0, 0, 0));
 
@@ -141,6 +130,30 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
 
         // Borderline
         setBorder(BorderFactory.createLineBorder(GUIManager.BORDER_COLOR));
+        
+        componentContainer = CWComponentFactory.createComponentContainer();
+        
+        loadViewExtentions();
+    }
+    
+    /**
+     * Initializes all components from the view.<br>
+     * All subclasses need to call this method at the beginning.
+     */
+    public void initComponents() {
+    	for(CWViewExtentionPoint ex : viewExtentions) {
+    		ex.initComponents(this);
+    	}
+    }
+    
+    /**
+     * Builds the view.<br>
+     * All subclasses need to call this method at the beginning.
+     */
+    public void buildView() {
+    	for(CWViewExtentionPoint ex : viewExtentions) {
+    		ex.buildView();
+    	}
     }
 
     public void dispose() {
@@ -157,6 +170,12 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
         this.removeAll();
         this.setLayout(null);
         this.setUI(null);
+        
+        componentContainer.dispose();
+        
+        if(model != null) {
+        	model.dispose();
+        }
     }
 
     public TPresentationModel getModel() {
@@ -201,7 +220,7 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
     }
 
     private void disposeButtonPanelEventHandling() {
-
+    	
     }
     
 //    @Override
@@ -270,9 +289,24 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
     }
     
     public void addToContentPanel(JComponent comp, boolean shouldGrow) {
-    	
     	if(comp == null) {
     		throw new NullPointerException("comp is null");
+    	}
+    	
+    	if(displayPanelsInTabs) {
+    		addToContentPanelAsTab(comp, shouldGrow);
+    	} else {
+    		addToContentPanelAsPanel(comp, shouldGrow);
+    	}
+    	
+    }
+    
+    private void addToContentPanelAsPanel(JComponent comp, boolean shouldGrow) {
+    	
+    	// If it is an CWView, we add it to the componentContainer, because it also 
+    	// needs to be disposed.
+    	if(comp instanceof CWView) {
+        	componentContainer.addComponent(comp);
     	}
     	
     	comp.setOpaque(false);
@@ -335,11 +369,22 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
         
         // Add new component
         builder.add(comp, cc.xy(1, (countComp*2+1)));
+    }
+    
+    private void addToContentPanelAsTab(JComponent comp, boolean shouldGrow) {
+    	// Load dynamic components in tabs
     	
-        // Refresh
-//    	contentPanel.removeAll();
-//    	contentPanel.setLayout(newLayout);
-//    	contentPanel.add(builder.getPanel());
+    	if(contentTabs == null) {
+    		contentTabs = new JideTabbedPane();
+    		addToContentPanelAsPanel(contentTabs, true);
+    	}
+      
+    	if(comp instanceof CWView) {
+    		contentTabs.addTab(comp.getName(),((CWView) comp).getHeaderInfo().getIcon(), comp);
+    	} else {
+    		contentTabs.addTab(comp.getName(), comp);
+    	}
+    	
     }
 
     public JScrollPane getContentScrollPane() {
@@ -363,25 +408,27 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
         mainPanel.setBorder(border);
     }
     
-    protected void loadViewExtentions() {    	
-    	loadViewExtentions(this);
+    protected CWComponentContainer getComponentContainer() {
+    	if(componentContainer == null) {
+    		componentContainer = CWComponentFactory.createComponentContainer();
+    	}
+    	return componentContainer;
     }
     
-    protected final void loadViewExtentions(CWView view) {
+    private final void loadViewExtentions() {
     	
     	// Load extentions with view.getClass()
     	// and call with view object as parameter
     	
-    	List<CWViewExtentionPoint> viewExtentions = (List<CWViewExtentionPoint>) 
-    		ModulManager.getExtentions(CWViewExtentionPoint.class);
+    	List<CWViewExtentionPoint> allViewExtentions = (List<CWViewExtentionPoint>) 
+    		ModuleManager.getExtentions(CWViewExtentionPoint.class);
     	
-    	for(CWViewExtentionPoint ex: viewExtentions) {
+    	for(CWViewExtentionPoint ex: allViewExtentions) {
     		
     		// Check base class
-    		if(ex.getViewExtentionClass().equals(view.getClass())) {
+    		if(ex.getViewExtentionClass().equals(this.getClass())) {
     			
-    			// Execute extention
-    			ex.init(view, view.getModel().getEntityManager());
+    			viewExtentions.add(ex);
     		}
     	}
     	
@@ -474,11 +521,6 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
             setOpaque(false);
 
             lHeaderText = new JLabel();
-            if(headerInfo.getDescription().isEmpty()) {
-                lHeaderText.setFont(getFont().deriveFont(Font.BOLD, (float) 12));
-            } else {
-                lHeaderText.setFont(getFont().deriveFont(Font.BOLD, (float) 13));
-            }
             lHeaderText.setForeground(new Color(56, 61, 65));
 
             lDescription = new JLabel();
@@ -497,45 +539,62 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
             builder.add(lDescription, cc.xy(5, 3));
             builder.add(lImage, cc.xywh(2, 2, 1, 2));
 
+            headerInfoChangeListener = new PropertyChangeListener() {
+                public void propertyChange(PropertyChangeEvent evt) {
+                    CWHeaderInfoPanel.this.updateHeaderInfo();
+                }
+            };
+            
             setHeaderInfo(headerInfo);
             
-            initEventHandling();
         }
 
         public void dispose() {
             disposeEventHandling();
         }
 
-        private void initEventHandling() {
-            // If a info element is changed, update the header panel
-            headerInfo.addPropertyChangeListener(headerInfoChangeListener = new PropertyChangeListener() {
-                public void propertyChange(PropertyChangeEvent evt) {
-                    CWHeaderInfoPanel.this.updateHeaderInfo();
-                }
-            });
-        }
-
         private void disposeEventHandling() {
-            headerInfo.removePropertyChangeListener(headerInfoChangeListener);
-        }
-
-        public CWHeaderInfo getHeaderInfo() {
-            return headerInfo;
+        	if(headerInfo != null ) {
+        		headerInfo.removePropertyChangeListener(headerInfoChangeListener);
+        	}
         }
 
         public void setHeaderInfo(CWHeaderInfo headerInfo) {
-            this.headerInfo = headerInfo;
-
-            if(headerInfo != null) {
-	            // Entferne das HTML-Markup, denn es wird automatisch hinzugefuegt.
-	            headerInfo.getDescription().toLowerCase().replace("<html>", "");
-	            headerInfo.getDescription().toLowerCase().replace("</html>", "");
-	            headerInfo.getDescription().toLowerCase().replace("<body>", "");
-	            headerInfo.getDescription().toLowerCase().replace("</body>", "");
-	            
-	            updateHeaderInfo();
-            } else {
-            	clearHeaderInfo();
+        	
+            if(this.headerInfo != headerInfo) {
+            	
+            	CWHeaderInfo old = this.headerInfo;
+            	this.headerInfo = headerInfo;
+            	
+            	if(headerInfo != null) {
+                	
+                	if(headerInfo.getDescription().isEmpty()) {
+                        lHeaderText.setFont(getFont().deriveFont(Font.BOLD, (float) 12));
+                    } else {
+                        lHeaderText.setFont(getFont().deriveFont(Font.BOLD, (float) 13));
+                    }
+                	
+    	            // Entferne das HTML-Markup, denn es wird automatisch hinzugefuegt.
+    	            headerInfo.getDescription().toLowerCase().replace("<html>", "");
+    	            headerInfo.getDescription().toLowerCase().replace("</html>", "");
+    	            headerInfo.getDescription().toLowerCase().replace("<body>", "");
+    	            headerInfo.getDescription().toLowerCase().replace("</body>", "");
+    	            
+    	            updateHeaderInfo();
+                	setVisible(true);
+    	            
+                } else {
+                	clearHeaderInfo();
+                	setVisible(false);
+                }
+                
+            	// change Event
+            	if(old != null) {
+            		old.removePropertyChangeListener(headerInfoChangeListener);
+            	}
+            	if(headerInfo != null) {
+            		headerInfo.addPropertyChangeListener(headerInfoChangeListener);
+            	}
             }
         }
 
