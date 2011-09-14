@@ -1,3 +1,3 @@
-cw.customermanagementmodul.persistence.Customer
-cw.customermanagementmodul.persistence.Group
-cw.customermanagementmodul.persistence.Guardian
+cw.customermanagementmodul.customer.persistence.Customer
+cw.customermanagementmodul.group.persistence.Group
+cw.customermanagementmodul.guardian.persistence.Guardian

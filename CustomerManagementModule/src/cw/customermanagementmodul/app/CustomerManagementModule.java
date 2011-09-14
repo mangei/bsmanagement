@@ -16,19 +16,19 @@ import cw.boardingschoolmanagement.manager.MenuManager;
 import cw.boardingschoolmanagement.module.Module;
 import cw.boardingschoolmanagement.persistence.CascadeEvent;
 import cw.boardingschoolmanagement.persistence.CascadeListener;
-import cw.customermanagementmodul.gui.CustomerManagementPresentationModel;
-import cw.customermanagementmodul.gui.CustomerManagementView;
-import cw.customermanagementmodul.gui.GroupManagementPresentationModel;
-import cw.customermanagementmodul.gui.GroupManagementView;
-import cw.customermanagementmodul.logic.BoCustomer;
-import cw.customermanagementmodul.logic.BoGroup;
-import cw.customermanagementmodul.logic.BoGuardian;
-import cw.customermanagementmodul.persistence.Customer;
-import cw.customermanagementmodul.persistence.Group;
-import cw.customermanagementmodul.persistence.Guardian;
-import cw.customermanagementmodul.persistence.PMCustomer;
-import cw.customermanagementmodul.persistence.PMGroup;
-import cw.customermanagementmodul.persistence.PMGuardian;
+import cw.customermanagementmodul.customer.gui.CustomerManagementPresentationModel;
+import cw.customermanagementmodul.customer.gui.CustomerManagementView;
+import cw.customermanagementmodul.customer.logic.BoCustomer;
+import cw.customermanagementmodul.customer.persistence.Customer;
+import cw.customermanagementmodul.customer.persistence.PMCustomer;
+import cw.customermanagementmodul.group.gui.GroupManagementPresentationModel;
+import cw.customermanagementmodul.group.gui.GroupManagementView;
+import cw.customermanagementmodul.group.logic.BoGroup;
+import cw.customermanagementmodul.group.persistence.Group;
+import cw.customermanagementmodul.group.persistence.PMGroup;
+import cw.customermanagementmodul.guardian.logic.BoGuardian;
+import cw.customermanagementmodul.guardian.persistence.Guardian;
+import cw.customermanagementmodul.guardian.persistence.PMGuardian;
 
 /**
  * The costumer management module
@@ -87,7 +87,7 @@ public class CustomerManagementModule
                 CustomerManagementPresentationModel model = new CustomerManagementPresentationModel();
                 CustomerManagementView view = new CustomerManagementView(model);
 
-                GUIManager.changeView(view);
+                GUIManager.changeViewTo(view);
                 GUIManager.setLoadingScreenVisible(false);
 
                 model = null;
@@ -123,7 +123,7 @@ public class CustomerManagementModule
                 GroupManagementView view = new GroupManagementView(model);
 
 //                CWUtils.showDialog(view);
-                GUIManager.changeView(view);
+                GUIManager.changeViewTo(view);
                 GUIManager.setLoadingScreenVisible(false);
             }
         }), "manage");
