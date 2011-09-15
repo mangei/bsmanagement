@@ -9,7 +9,7 @@ import javax.swing.JButton;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.adaptable.IAdapterManager;
-import cw.boardingschoolmanagement.app.adaptable.IAdapterObjectFactory;
+import cw.boardingschoolmanagement.app.adaptable.IAdapterRequestFactory;
 import cw.boardingschoolmanagement.gui.component.CWMenuPanel;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.MenuManager;
@@ -51,17 +51,17 @@ public class CustomerManagementModule
     	
     	IAdapterManager.registerAdapter(
     			Customer.class, 
-    			IAdapterObjectFactory.createFactory(
+    			IAdapterRequestFactory.createFactory(
     					BoCustomer.class));
     	
     	IAdapterManager.registerAdapter(
     			Group.class, 
-    			IAdapterObjectFactory.createFactory(
+    			IAdapterRequestFactory.createFactory(
     					BoGroup.class));
     	
     	IAdapterManager.registerAdapter(
     			BoCustomer.class, 
-    			IAdapterObjectFactory.createFactory(
+    			IAdapterRequestFactory.createFactory(
     					BoGuardian.class));
     	
     	
@@ -149,7 +149,7 @@ public class CustomerManagementModule
             public void deleteAction(CascadeEvent evt) {
                 Customer customer = (Customer) evt.getSource();
                 
-                List<Group> groups = PMGroup.getInstance().getAllGroupsByCustomer(customer, customer.getEntityManager());
+                List<Group> groups = PMGroup.getInstance().getAllForCustomer(customer.getId(), customer.getEntityManager());
 
                 for(Group group : groups) {
                     group.getCustomers().remove(customer);

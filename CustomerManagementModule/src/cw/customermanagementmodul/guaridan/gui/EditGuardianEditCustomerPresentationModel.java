@@ -8,6 +8,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.swing.Action;
 
+import com.jgoodies.binding.value.Trigger;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 
@@ -33,14 +34,9 @@ public class EditGuardianEditCustomerPresentationModel
     private PropertyChangeListener guardianChangeListener;
     private PropertyChangeListener changeListener;
     
-    public EditGuardianEditCustomerPresentationModel(EditCustomerPresentationModel editCustomerPresentationModel, EntityManager entityManager) {
-        super(entityManager, EditGuardianEditCustomerView.class);
+    public EditGuardianEditCustomerPresentationModel(Guardian guardian, EditCustomerPresentationModel editCustomerPresentationModel, EntityManager entityManager) {
+        super(guardian, entityManager, EditGuardianEditCustomerView.class);
     	this.editCustomerPresentationModel = editCustomerPresentationModel;
-
-    	BoCustomer boCustomer = editCustomerPresentationModel.getBean().getTypedAdapter(BoCustomer.class);
-    	BoGuardian boGuardian = boCustomer.getTypedAdapter(BoGuardian.class);
-    	
-    	setBean(boGuardian.getPersistence());
     	
         initModels();
         initEventHandling();
@@ -49,7 +45,7 @@ public class EditGuardianEditCustomerPresentationModel
     public void initModels() {
     	
     	chooseGuardianAction = new ChooseGuardianAction("Erziehungsberechtigten auswählen...");
-    	guardianLabelModel = new ValueHolder("Keine gewählt");
+    	guardianLabelModel = new ValueHolder("Keine gewähltx");
 
     }
 
@@ -59,16 +55,17 @@ public class EditGuardianEditCustomerPresentationModel
     	guardianChangeListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
+				System.out.println("GSADFSADF");
 				Customer customer = (Customer)evt.getNewValue();
 				if(customer != null) {
 					guardianLabelModel.setValue(customer.getForename() + " " + customer.getSurname());
 				} else {
-					guardianLabelModel.setValue("Keine gewählt");
+					guardianLabelModel.setValue("Keine gewähltwww");
 				}
 			}
 		};
 		getBufferedModel(Guardian.PROPERTYNAME_GUARDIAN).addValueChangeListener(guardianChangeListener);
-
+		
     	changeListener = new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
@@ -76,14 +73,14 @@ public class EditGuardianEditCustomerPresentationModel
 			}
 		};
         getBufferedModel(Guardian.PROPERTYNAME_LEGITIMATE).addValueChangeListener(changeListener);
-    	getBufferedModel(Guardian.PROPERTYNAME_GUARDIAN).addPropertyChangeListener(changeListener);
+    	getBufferedModel(Guardian.PROPERTYNAME_GUARDIAN).addValueChangeListener(changeListener);
     }
 
     public void dispose() {
-    	getBufferedModel(Guardian.PROPERTYNAME_GUARDIAN).removePropertyChangeListener(guardianChangeListener);
+    	getBufferedModel(Guardian.PROPERTYNAME_GUARDIAN).removeValueChangeListener(guardianChangeListener);
     	
     	getBufferedModel(Guardian.PROPERTYNAME_LEGITIMATE).removeValueChangeListener(changeListener);
-    	getBufferedModel(Guardian.PROPERTYNAME_GUARDIAN).removePropertyChangeListener(changeListener);
+    	getBufferedModel(Guardian.PROPERTYNAME_GUARDIAN).removeValueChangeListener(changeListener);
     }
 
     public Action getChooseGuardianAction() {
@@ -110,8 +107,9 @@ public class EditGuardianEditCustomerPresentationModel
 
         public void action(ActionEvent e) {
         	Customer selectedCustomer = BoCustomer.selectCustomer(getEntityManager());
-        	System.out.println(selectedCustomer);
+        	System.out.println("X: " + getBufferedModel(Guardian.PROPERTYNAME_GUARDIAN));
         	getBufferedModel(Guardian.PROPERTYNAME_GUARDIAN).setValue(selectedCustomer);
+        	System.out.println("Y: " + getBufferedModel(Guardian.PROPERTYNAME_GUARDIAN));
         }
 
     }

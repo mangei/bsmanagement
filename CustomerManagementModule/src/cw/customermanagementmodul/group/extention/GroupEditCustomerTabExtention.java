@@ -1,6 +1,6 @@
 package cw.customermanagementmodul.group.extention;
 
-import cw.boardingschoolmanagement.extention.point.CWViewExtentionPoint;
+import cw.boardingschoolmanagement.extention.point.CWIViewExtentionPoint;
 import cw.customermanagementmodul.customer.gui.EditCustomerView;
 import cw.customermanagementmodul.group.gui.GroupEditCustomerPresentationModel;
 import cw.customermanagementmodul.group.gui.GroupEditCustomerView;
@@ -10,17 +10,12 @@ import cw.customermanagementmodul.group.gui.GroupEditCustomerView;
  * @author Manuel Geier
  */
 public class GroupEditCustomerTabExtention
-        implements CWViewExtentionPoint<EditCustomerView> {
+        implements CWIViewExtentionPoint<EditCustomerView> {
 
     private GroupEditCustomerPresentationModel model;
     private GroupEditCustomerView view;
     private EditCustomerView baseView;
     
-    @Override
-	public Class<?> getViewExtentionClass() {
-		return EditCustomerView.class;
-	}
-
 	@Override
 	public void initComponents(EditCustomerView baseView) {
 		this.baseView = baseView;
@@ -39,6 +34,11 @@ public class GroupEditCustomerTabExtention
 	@Override
 	public void dispose() {
 		view.dispose();
+	}
+
+	@Override
+	public Class<?> getExtentionClass() {
+		return EditCustomerView.class;
 	}
     
 }

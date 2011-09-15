@@ -4,7 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 
-import cw.boardingschoolmanagement.extention.point.CWViewExtentionPoint;
+import cw.boardingschoolmanagement.extention.point.CWIViewExtentionPoint;
 import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.customermanagementmodul.customer.gui.EditCustomerEditCustomerPresentationModel;
@@ -17,14 +17,14 @@ import cw.customermanagementmodul.customer.gui.EditCustomerView;
  * @author Manuel Geier
  */
 public class EditCustomerEditCustomerTabExtention
-        implements CWViewExtentionPoint<EditCustomerView> {
+        implements CWIViewExtentionPoint<EditCustomerView> {
 
     private EditCustomerEditCustomerPresentationModel model;
     private EditCustomerEditCustomerView view;
     private EditCustomerView baseView;
 
 	@Override
-	public Class<?> getViewExtentionClass() {
+	public Class<?> getExtentionClass() {
 		return EditCustomerView.class;
 	}
 
