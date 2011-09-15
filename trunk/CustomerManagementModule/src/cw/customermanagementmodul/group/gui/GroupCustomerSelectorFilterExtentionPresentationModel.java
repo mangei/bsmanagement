@@ -113,7 +113,7 @@ public class GroupCustomerSelectorFilterExtentionPresentationModel
  
     }
 
-    public void dispose() {
+    public void release() {
         groupSelectionModel.removeListSelectionListener(groupSelectionListener);
     }
 

@@ -157,7 +157,7 @@ public class CustomerSelectorPresentationModel
         }
     }
 
-    public void dispose() {
+    public void release() {
         if(filterChange != null) {
             filterChange.removeValueChangeListener(filterChangeListener);
         }

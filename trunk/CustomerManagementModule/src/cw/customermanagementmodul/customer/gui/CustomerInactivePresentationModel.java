@@ -67,7 +67,7 @@ public class CustomerInactivePresentationModel
         updateActionEnablement();
     }
 
-    public void dispose() {
+    public void release() {
         customerSelectorPresentationModel.getCustomerDataModel().removeValueChangeListener(selectionHandler);
     }
 

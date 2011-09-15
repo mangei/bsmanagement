@@ -3,7 +3,7 @@ package cw.customermanagementmodul.customer.gui.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import cw.boardingschoolmanagement.extention.point.CWDataModelExtentionPoint;
+import cw.boardingschoolmanagement.extention.point.CWIDataModelExtentionPoint;
 import cw.boardingschoolmanagement.gui.model.CWDataField;
 import cw.boardingschoolmanagement.gui.model.CWDataFieldRenderer;
 import cw.boardingschoolmanagement.gui.model.CWDataRow;
@@ -18,7 +18,7 @@ import cw.customermanagementmodul.customer.persistence.Customer;
  *
  */
 public class CustomerDataModel /*extends CWTableModel*/
-	implements CWDataModelExtentionPoint<Customer>
+	implements CWIDataModelExtentionPoint<Customer>
 {
 
 	public Class<Customer> getBaseClass() {

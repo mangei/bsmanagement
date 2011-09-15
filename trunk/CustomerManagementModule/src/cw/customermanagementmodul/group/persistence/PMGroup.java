@@ -46,13 +46,13 @@ public class PMGroup extends CWPersistenceManager<Group> {
 		).getResultList(), entityManager);
 	}
 
-	public List<Group> getAllGroupsByCustomer(Customer customer, EntityManager entityManager) {
+	public List<Group> getAllForCustomer(Long customerId, EntityManager entityManager) {
 		return setEntityManager(entityManager.createQuery(
 				"FROM " +
 					Group.ENTITY_NAME /*+ 
 				" WHERE " +
-					Group.PROPERTYNAME_CUSTOMERS
-					// TODO Not finished*/
+					Group.PROPERTYNAME_CUSTOMERS + "."*/
+					// TODO Finish that
 		).getResultList(), entityManager);
 	}
 }

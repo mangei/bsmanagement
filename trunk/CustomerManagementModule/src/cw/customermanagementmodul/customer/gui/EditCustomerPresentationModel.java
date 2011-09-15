@@ -348,10 +348,6 @@ public class EditCustomerPresentationModel
     	// validate
     	
     	
-    	// call validate action for extentions
-        for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
-            extention.validate(errorMessages);
-        }
         
         validateExtentions(errorMessages);
     	
@@ -359,11 +355,6 @@ public class EditCustomerPresentationModel
     }
     
     public void cancel() {
-    	
-//    	// Die Erweiterungen speichern lassen
-//        for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
-//            extention.cancel();
-//        }
         
         cancelExtentions();
 
@@ -385,14 +376,10 @@ public class EditCustomerPresentationModel
     }
 
     public void save() {
+    	super.save();
 
         // Alle Werte in das Objekt schreiben
         triggerCommit();
-
-        // Die Erweiterungen speichern lassen
-        for (EditCustomerTabExtentionPoint extention : editCustomerGUITabExtentions) {
-            extention.save();
-        }
         
         saveExtentions();
 
