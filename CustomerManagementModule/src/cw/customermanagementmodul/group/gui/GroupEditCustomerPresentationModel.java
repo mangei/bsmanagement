@@ -53,7 +53,7 @@ public class GroupEditCustomerPresentationModel
     }
 
     private void initModels() {
-        selectionCustomerGroups = new SelectionInList<Group>(PMGroup.getInstance().getAllGroupsByCustomer(customer, getEntityManager()));
+        selectionCustomerGroups = new SelectionInList<Group>(PMGroup.getInstance().getAllForCustomer(customer.getId(), getEntityManager()));
         
         List<Group> otherGroups = PMGroup.getInstance().getAll(getEntityManager());
         otherGroups.removeAll(selectionCustomerGroups.getList());

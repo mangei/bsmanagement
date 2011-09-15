@@ -27,8 +27,8 @@ public class PMCustomer
     } 
     
     /**
-     * Return an instance of CustumerManager
-     * @return CustomerManager
+     * Return an instance of PMCustomer
+     * @return PMCustomer
      */
     public static PMCustomer getInstance() {
     	if(instance == null) {

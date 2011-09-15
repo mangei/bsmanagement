@@ -1,11 +1,9 @@
 package cw.customermanagementmodul.customer.logic;
 
-import java.lang.reflect.InvocationTargetException;
-
 import javax.persistence.EntityManager;
-import javax.swing.SwingUtilities;
 
-import com.jgoodies.forms.util.Utilities;
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
 
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
@@ -63,81 +61,56 @@ public class BoCustomer extends CWBoPersistence<Customer> {
 	 * Opens an dialog to select a customer
 	 * @return customer
 	 */
-	public static Customer selectCustomer(final EntityManager entityManager) {
-		Long customerId;
+	public synchronized static Customer selectCustomer(final EntityManager entityManager) {
+		final ValueModel customerId = new ValueHolder();
 		Customer customer = null;
 		
 		GUIManager.getInstance().lockMenu();
         GUIManager.setLoadingScreenText("Kundenselector wird geladen...");
         GUIManager.setLoadingScreenVisible(true);
+        
+        final Thread t = Thread.currentThread();
 		
-        class MyRunnable implements Runnable {
-			
-        	public Long customerId;
-        	
-			public void run() {
-				
-				final CustomerChooserPresentationModel model = new CustomerChooserPresentationModel();
-				CustomerChooserView view = new CustomerChooserView(model);
-				
-		        model.addButtonListener(new ButtonListener() {
+		final CustomerChooserPresentationModel model = new CustomerChooserPresentationModel();
+		CustomerChooserView view = new CustomerChooserView(model);
+		
+        model.addButtonListener(new ButtonListener() {
 
-		            public void buttonPressed(ButtonEvent evt) {
-		                if (evt.getType() == ButtonEvent.OK_BUTTON) {
-		                	Customer customer = model.getSelectedCustomer();
-		                	if(customer != null) {
-		                		customerId = customer.getId();
-		                	}
-		                    model.getSelectedCustomer();
-		                }
-		                if (evt.getType() == ButtonEvent.OK_BUTTON || evt.getType() == ButtonEvent.CANCEL_BUTTON) {
+            public void buttonPressed(ButtonEvent evt) {
+                if (evt.getType() == ButtonEvent.OK_BUTTON) {
+                	Customer customer = model.getSelectedCustomer();
+                	if(customer != null) {
+                		customerId.setValue(customer.getId());
+                	}
+                    model.getSelectedCustomer();
+                }
+                if (evt.getType() == ButtonEvent.OK_BUTTON || evt.getType() == ButtonEvent.CANCEL_BUTTON) {
 
-		                	model.removeButtonListener(this);
-		                    GUIManager.changeToPreviousView();
-		                    GUIManager.getInstance().unlockMenu();
-//		                    DoThread.this.interrupt();
-		                }
-		            }
-		        });
+                	model.removeButtonListener(this);
+                    GUIManager.changeToPreviousView();
+                    GUIManager.getInstance().unlockMenu();
+                    
+                    synchronized (t) {
+	                    t.notify();
+                    }
+                    
+                }
+            }
+        });
 
-		        GUIManager.changeViewTo(view, true);
-		        GUIManager.setLoadingScreenVisible(false);
-				
-//				while(!isInterrupted()) {
-//					try {
-//						sleep(100);
-//					} catch (InterruptedException e) {
-//						e.printStackTrace();
-//					}
-//				}
+        GUIManager.changeViewTo(view, true);
+        GUIManager.setLoadingScreenVisible(false);
+		
+        synchronized(t) {
+	        try {
+				t.wait();
+			} catch (InterruptedException e1) {
+				e1.printStackTrace();
 			}
-		};
-		
-//		DoThread thread = new DoThread();
-//		
-//		thread.start();
-//		try {
-//			thread.join();
-//		} catch (InterruptedException e) {
-//			e.printStackTrace();
-//		}
-		
-		MyRunnable r = new MyRunnable();
-		
-		try {
-			SwingUtilities.invokeAndWait(r);
-		} catch (InvocationTargetException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		customerId = r.customerId;
-		
-		if(customerId != null) {
-			customer = PMCustomer.getInstance().get(customerId, entityManager);
+        }
+		        
+		if(customerId.getValue() != null) {
+			customer = PMCustomer.getInstance().get((Long) customerId.getValue(), entityManager);
 		}
 		
 		return customer;

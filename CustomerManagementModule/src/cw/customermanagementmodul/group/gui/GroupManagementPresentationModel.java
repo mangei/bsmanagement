@@ -100,7 +100,7 @@ public class GroupManagementPresentationModel
         updateActionEnablement();
     }
 
-    public void dispose() {
+    public void release() {
         groupSelection.removePropertyChangeListener(selectionEmptyHandler);
         groupSelection.removeValueChangeListener(groupChangeListener);
 

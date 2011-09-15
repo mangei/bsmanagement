@@ -63,7 +63,7 @@ public class CustomerChooserPresentationModel
         // Nothing to do
     }
 
-    public void dispose() {
+    public void release() {
         CWEntityManager.closeEntityManager(getEntityManager());
     }
 

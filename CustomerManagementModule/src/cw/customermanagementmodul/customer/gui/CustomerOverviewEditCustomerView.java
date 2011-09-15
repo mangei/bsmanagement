@@ -57,6 +57,6 @@ public class CustomerOverviewEditCustomerView
 
     @Override
     public void dispose() {
-    	getModel().dispose();
+    	super.dispose();
     }
 }

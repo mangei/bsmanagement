@@ -33,7 +33,7 @@ public class GeneralCustomerOverviewEditCustomerPresentationModel
         return customerOverviewEditCustomerPresentationModel.getEditCustomerPresentationModel();
     }
 
-    public void dispose() {
+    public void release() {
     }
 
 }

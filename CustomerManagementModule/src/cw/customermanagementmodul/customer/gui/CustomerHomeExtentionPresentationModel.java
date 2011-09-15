@@ -31,7 +31,7 @@ public class CustomerHomeExtentionPresentationModel
         // Nothing to do
     }
 
-    public void dispose() {
+    public void release() {
         // Nothing to do
     }
 

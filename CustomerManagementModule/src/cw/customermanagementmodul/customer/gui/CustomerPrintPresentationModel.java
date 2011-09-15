@@ -106,6 +106,6 @@ public class CustomerPrintPresentationModel
      * Gibt den Speicher frei.
      *
      */
-    public void dispose() {
+    public void release() {
     }
 }

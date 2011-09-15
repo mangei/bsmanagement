@@ -59,7 +59,7 @@ public class CustomerOverviewEditCustomerPresentationModel
     public void initEventHandling() {
     }
 
-    public void dispose() {
+    public void release() {
         customerOverviewEditCustomerExtentions = getExtentions();
         for (CustomerOverviewEditCustomerExtentionPoint extention : customerOverviewEditCustomerExtentions) {
             extention.dispose();

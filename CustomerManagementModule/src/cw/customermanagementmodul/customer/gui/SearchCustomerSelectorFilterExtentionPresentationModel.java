@@ -35,7 +35,7 @@ public class SearchCustomerSelectorFilterExtentionPresentationModel
         // Nothing do to
     }
 
-    public void dispose() {
+    public void release() {
         // Nothing to do
     }
 
