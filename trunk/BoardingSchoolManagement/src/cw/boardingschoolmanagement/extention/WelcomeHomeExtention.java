@@ -24,17 +24,18 @@ public class WelcomeHomeExtention
 	public Class<?> getExtentionClass() {
 		return HomeView.class;
 	}
-	
-	public void init(HomeView baseView) {
-		this.baseView = baseView;
-		
-		model = new WelcomeHomeExtentionPresentationModel(baseView.getModel().getEntityManager());
-        view = new WelcomeHomeExtentionView(model, baseView);
-	}
 
 	@Override
 	public CWView<?> getView() {
 		return view;
+	}
+
+	@Override
+	public void initView(HomeView baseView) {
+		this.baseView = baseView;
+		
+		model = new WelcomeHomeExtentionPresentationModel(baseView.getModel().getEntityManager());
+        view = new WelcomeHomeExtentionView(model, baseView);
 	}
 	
 	

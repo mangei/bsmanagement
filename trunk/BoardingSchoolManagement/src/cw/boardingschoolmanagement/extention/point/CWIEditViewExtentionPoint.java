@@ -10,9 +10,9 @@ import cw.boardingschoolmanagement.gui.component.CWView;
  *
  * @author Manuel Geier
  */
-public interface CWIEditViewExtentionPoint<TBaseView extends CWView<?>, TPresentationModel extends CWIEditPresentationModel>
+public interface CWIEditViewExtentionPoint<TBaseView extends CWView<?>, TBasePresentationModel extends CWIEditPresentationModel>
         extends 
-        	CWIEditPresentationModelExtentionPoint<TPresentationModel>,
+        	CWIEditPresentationModelExtentionPoint<TBasePresentationModel>,
         	CWIViewExtentionPoint<TBaseView>,
         	CWIMultiTypedExtention {
 	

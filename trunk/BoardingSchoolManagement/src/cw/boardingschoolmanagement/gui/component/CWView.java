@@ -425,7 +425,7 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
     	
     	for(CWIViewExtentionPoint ex: allViewExtentions) {
     		viewExtentions.add(ex);
-    		ex.init(this);
+    		ex.initView(this);
     	}
     	
     }

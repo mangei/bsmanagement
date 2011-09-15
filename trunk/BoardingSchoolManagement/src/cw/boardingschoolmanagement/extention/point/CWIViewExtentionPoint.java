@@ -1,7 +1,6 @@
 package cw.boardingschoolmanagement.extention.point;
 
 import cw.boardingschoolmanagement.extention.CWITypedExtention;
-import cw.boardingschoolmanagement.gui.HomeView;
 import cw.boardingschoolmanagement.gui.component.CWView;
 
 /**
@@ -11,9 +10,6 @@ import cw.boardingschoolmanagement.gui.component.CWView;
 public interface CWIViewExtentionPoint<TBaseView extends CWView<?>>
         extends CWITypedExtention {
 
-	public void init(TBaseView baseView);
+	public void initView(TBaseView baseView);
     public CWView<?> getView();
-//    public void initComponents(TView baseView);
-//    public void buildView();
-//    public void dispose();
 }

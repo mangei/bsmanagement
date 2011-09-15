@@ -9,5 +9,4 @@ import cw.boardingschoolmanagement.gui.CWIEditPresentationModel;
 public interface CWIEditPresentationModelExtentionPoint<TBasePresentationModel extends CWIEditPresentationModel>
         extends CWIPresentationModelExtentionPoint<TBasePresentationModel> {
 	
-	public TBasePresentationModel getModel();
 }
