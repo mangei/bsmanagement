@@ -1,45 +1,41 @@
 package cw.boardingschoolmanagement.extention;
 
-import javax.persistence.EntityManager;
-
-import cw.boardingschoolmanagement.extention.point.CWViewExtentionPoint;
+import cw.boardingschoolmanagement.extention.point.CWIViewExtentionPoint;
+import cw.boardingschoolmanagement.gui.CWIPresentationModel;
 import cw.boardingschoolmanagement.gui.HomeView;
 import cw.boardingschoolmanagement.gui.WelcomeHomeExtentionPresentationModel;
 import cw.boardingschoolmanagement.gui.WelcomeHomeExtentionView;
+import cw.boardingschoolmanagement.gui.component.CWView;
 
 /**
  *
  * @author Manuel Geier
  */
 public class WelcomeHomeExtention
-    implements CWViewExtentionPoint<HomeView> {
+    implements 
+    	CWIViewExtentionPoint<HomeView>
+    {
 
     private WelcomeHomeExtentionPresentationModel model;
     private WelcomeHomeExtentionView view;
     private HomeView baseView;
     
 	@Override
-	public Class<?> getViewExtentionClass() {
+	public Class<?> getExtentionClass() {
 		return HomeView.class;
 	}
 	
-	@Override
-	public void initComponents(HomeView baseView) {
+	public void init(HomeView baseView) {
 		this.baseView = baseView;
 		
 		model = new WelcomeHomeExtentionPresentationModel(baseView.getModel().getEntityManager());
-        view = new WelcomeHomeExtentionView(model);
-        view.initComponents();
+        view = new WelcomeHomeExtentionView(model, baseView);
+	}
+
+	@Override
+	public CWView<?> getView() {
+		return view;
 	}
 	
-	@Override
-	public void buildView() {
-		view.buildView();
-		baseView.addToContentPanel(view);
-	}
 	
-	@Override
-	public void dispose() {
-		view.dispose();
-	}
 }

@@ -21,7 +21,7 @@ public class HomePresentationModel
     public void initEventHandling() {
     }
 
-    public void dispose() {
+    public void release() {
         CWEntityManager.closeEntityManager(getEntityManager());
     }
 

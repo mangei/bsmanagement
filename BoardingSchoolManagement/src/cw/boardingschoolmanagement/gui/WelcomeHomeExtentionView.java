@@ -17,9 +17,12 @@ public class WelcomeHomeExtentionView
 {
     private CWLabel lWelcomeMessage;
     private CWLabel lTimeMessage;
+    private HomeView baseView;
 
-    public WelcomeHomeExtentionView(WelcomeHomeExtentionPresentationModel model) {
+    public WelcomeHomeExtentionView(WelcomeHomeExtentionPresentationModel model, HomeView baseView) {
         super(model);
+        
+        this.baseView = baseView;
     }
     
     public void initComponents() {
@@ -50,7 +53,7 @@ public class WelcomeHomeExtentionView
         builder.add(lWelcomeMessage, cc.xy(1, 1));
         builder.add(lTimeMessage, cc.xy(1, 3));
         
-        addToContentPanel(builder.getPanel());
+        baseView.addToContentPanel(builder.getPanel());
     }
 
     @Override

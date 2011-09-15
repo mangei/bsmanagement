@@ -13,7 +13,7 @@ import javax.swing.table.AbstractTableModel;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueModel;
 
-import cw.boardingschoolmanagement.extention.point.CWDataModelExtentionPoint;
+import cw.boardingschoolmanagement.extention.point.CWIDataModelExtentionPoint;
 import cw.boardingschoolmanagement.manager.ModuleManager;
 
 /**
@@ -80,8 +80,8 @@ public class CWDataModel<T> extends AbstractTableModel
 	
 	private void loadDataFields() {
 		
-		List<CWDataModelExtentionPoint> exList = ModuleManager.getExtentions(CWDataModelExtentionPoint.class);
-		for(CWDataModelExtentionPoint<T> ex : exList) {
+		List<CWIDataModelExtentionPoint> exList = ModuleManager.getExtentions(CWIDataModelExtentionPoint.class);
+		for(CWIDataModelExtentionPoint<T> ex : exList) {
 			if(ex.getBaseClass().equals(baseClass)) {
 				fields.addAll(ex.getFieldList());
 			}

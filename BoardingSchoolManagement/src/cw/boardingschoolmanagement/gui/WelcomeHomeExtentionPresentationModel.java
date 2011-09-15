@@ -62,7 +62,7 @@ public class WelcomeHomeExtentionPresentationModel
         
     }
 
-    public void dispose() {
+    public void release() {
         timer.cancel();
     }
 
