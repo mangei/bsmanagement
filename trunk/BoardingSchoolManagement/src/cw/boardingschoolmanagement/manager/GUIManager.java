@@ -130,7 +130,7 @@ public class GUIManager {
 //        shownComponent.setBorder(BorderFactory.createMatteBorder(1, 0, 0, 1, new Color(178,187,200)));
 
         // GlassPane for the loading screen
-        frame.setGlassPane(glassPane = new CWLoadingGlass(frame.getRootPane(), false));
+        frame.setGlassPane(glassPane = new CWLoadingGlass(frame.getRootPane(), true));
 
         // Um den richtigen Mauszeiger anzuzeigen, da beim Look'n&Feel nach dem
         // aendern der Groeße ein falscher Cursor angezeigt wird.
