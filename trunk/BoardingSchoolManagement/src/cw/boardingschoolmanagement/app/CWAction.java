@@ -29,14 +29,14 @@ public abstract class CWAction extends AbstractAction {
 
 	@Override
 	public void actionPerformed(final ActionEvent e) {
-//		new Thread(new Runnable() {
-//			
-//			@Override
-//			public void run() {
+		new Thread(new Runnable() {
+			
+			@Override
+			public void run() {
 				action(e);
-//			}
-//			
-//		}, (String) super.getValue(Action.NAME)).start();
+			}
+			
+		}, (String) super.getValue(Action.NAME)).start();
 	}
 
 	/**

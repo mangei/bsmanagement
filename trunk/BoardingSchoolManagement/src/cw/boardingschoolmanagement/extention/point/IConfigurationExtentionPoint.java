@@ -14,7 +14,7 @@ import cw.boardingschoolmanagement.interfaces.Priority;
  *
  * @author Manuel Geier
  */
-public interface ConfigurationExtentionPoint
+public interface IConfigurationExtentionPoint
         extends CWIExtention, Priority{
 
     public void initPresentationModel(ConfigurationPresentationModel configurationModel, EntityManager entityManager);

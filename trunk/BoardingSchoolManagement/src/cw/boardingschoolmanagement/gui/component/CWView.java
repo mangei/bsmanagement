@@ -38,7 +38,7 @@ import com.jidesoft.swing.JideSwingUtilities;
 import com.jidesoft.swing.JideTabbedPane;
 
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.extention.point.CWViewExtentionPoint;
+import cw.boardingschoolmanagement.extention.point.CWIViewExtentionPoint;
 import cw.boardingschoolmanagement.gui.CWIPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory.CWComponentContainer;
 import cw.boardingschoolmanagement.manager.GUIManager;
@@ -65,7 +65,7 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
     private CWHeaderInfo headerInfo;
     private JideTabbedPane contentTabs;
     private CWComponentContainer componentContainer;
-    private List<CWViewExtentionPoint> viewExtentions = new ArrayList<CWViewExtentionPoint>();
+    private List<CWIViewExtentionPoint> viewExtentions = new ArrayList<CWIViewExtentionPoint>();
 
     // Alignment of the header
     public static final int LEFT = JLabel.LEFT;
@@ -141,8 +141,8 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
      * All subclasses need to call this method at the beginning.
      */
     public void initComponents() {
-    	for(CWViewExtentionPoint ex : viewExtentions) {
-    		ex.initComponents(this);
+    	for(CWIViewExtentionPoint ex : viewExtentions) {
+    		ex.getView().initComponents();
     	}
     }
     
@@ -151,8 +151,8 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
      * All subclasses need to call this method at the beginning.
      */
     public void buildView() {
-    	for(CWViewExtentionPoint ex : viewExtentions) {
-    		ex.buildView();
+    	for(CWIViewExtentionPoint ex : viewExtentions) {
+    		ex.getView().buildView();
     	}
     }
 
@@ -174,7 +174,7 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
         componentContainer.dispose();
         
         if(model != null) {
-        	model.dispose();
+        	model.release();
         }
     }
 
@@ -420,16 +420,12 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
     	// Load extentions with view.getClass()
     	// and call with view object as parameter
     	
-    	List<CWViewExtentionPoint> allViewExtentions = (List<CWViewExtentionPoint>) 
-    		ModuleManager.getExtentions(CWViewExtentionPoint.class);
+    	List<CWIViewExtentionPoint> allViewExtentions = (List<CWIViewExtentionPoint>) 
+    		ModuleManager.getExtentions(CWIViewExtentionPoint.class, this.getClass());
     	
-    	for(CWViewExtentionPoint ex: allViewExtentions) {
-    		
-    		// Check base class
-    		if(ex.getViewExtentionClass().equals(this.getClass())) {
-    			
-    			viewExtentions.add(ex);
-    		}
+    	for(CWIViewExtentionPoint ex: allViewExtentions) {
+    		viewExtentions.add(ex);
+    		ex.init(this);
     	}
     	
     }

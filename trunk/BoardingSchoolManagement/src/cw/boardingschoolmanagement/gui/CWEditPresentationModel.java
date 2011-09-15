@@ -7,12 +7,12 @@ import javax.persistence.EntityManager;
 
 import com.jgoodies.binding.PresentationModel;
 
-import cw.boardingschoolmanagement.extention.point.CWEditViewExtentionPoint;
+import cw.boardingschoolmanagement.extention.point.CWIEditPresentationModelExtentionPoint;
 import cw.boardingschoolmanagement.manager.ModuleManager;
 
 public abstract class CWEditPresentationModel<TPersistence>
 	extends PresentationModel<TPersistence>
-	implements CWIPresentationModel {
+	implements CWIEditPresentationModel {
 
 	public enum Mode {
 		NEW, EDIT
@@ -70,20 +70,26 @@ public abstract class CWEditPresentationModel<TPersistence>
     	return validate(getErrorMessages());
     }
 	
-	public abstract boolean validate(List<CWErrorMessage> errorMessages);
-	public abstract void save();
-	public abstract void cancel();
+	public boolean validate(List<CWErrorMessage> errorMessages) {
+		return true;
+	}
+	
+	public void save() {
+		
+	}
+	
+	public void cancel() {
+		
+	}
 	
 	public boolean validateExtentions(List<CWErrorMessage> errorMessages) {
-		List<CWEditViewExtentionPoint> exList = (List<CWEditViewExtentionPoint>) ModuleManager.getExtentions(CWEditViewExtentionPoint.class);
+		List<CWIEditPresentationModelExtentionPoint> exList = (List<CWIEditPresentationModelExtentionPoint>) ModuleManager.getExtentions(CWIEditPresentationModelExtentionPoint.class);
 		
 		boolean valid = true;
 		
-		for(CWEditViewExtentionPoint ex : exList) {
-			if(viewClass.equals(ex.getViewExtentionClass().getClass())) {
-				if(ex.getModel().validate(errorMessages) == false) {
-					valid = false;
-				}
+		for(CWIEditPresentationModelExtentionPoint ex : exList) {
+			if(ex.getModel().validate(errorMessages) == false) {
+				valid = false;
 			}
 		}
 		
@@ -91,22 +97,18 @@ public abstract class CWEditPresentationModel<TPersistence>
 	}
 	
 	public void saveExtentions() {
-		List<CWEditViewExtentionPoint> exList = (List<CWEditViewExtentionPoint>) ModuleManager.getExtentions(CWEditViewExtentionPoint.class);
+		List<CWIEditPresentationModelExtentionPoint> exList = (List<CWIEditPresentationModelExtentionPoint>) ModuleManager.getExtentions(CWIEditPresentationModelExtentionPoint.class, this.getClass());
 		
-		for(CWEditViewExtentionPoint ex : exList) {
-			if(viewClass.equals(ex.getViewExtentionClass().getClass())) {
-				ex.getModel().save();
-			}
+		for(CWIEditPresentationModelExtentionPoint ex : exList) {
+			ex.getModel().save();
 		}
 	}
 	
 	public void cancelExtentions() {
-		List<CWEditViewExtentionPoint> exList = (List<CWEditViewExtentionPoint>) ModuleManager.getExtentions(CWEditViewExtentionPoint.class);
+		List<CWIEditPresentationModelExtentionPoint> exList = (List<CWIEditPresentationModelExtentionPoint>) ModuleManager.getExtentions(CWIEditPresentationModelExtentionPoint.class);
 		
-		for(CWEditViewExtentionPoint ex : exList) {
-			if(viewClass.equals(ex.getViewExtentionClass().getClass())) {
-				ex.getModel().cancel();
-			}
+		for(CWIEditPresentationModelExtentionPoint ex : exList) {
+			ex.getModel().cancel();
 		}
 	}
 	

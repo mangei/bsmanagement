@@ -5,5 +5,5 @@ import javax.persistence.EntityManager;
 public interface CWIPresentationModel {
 
 	public EntityManager getEntityManager();
-	public void dispose();
+	public void release();
 }

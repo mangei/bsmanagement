@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.swing.Icon;
 
-import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
+import cw.boardingschoolmanagement.extention.point.IConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.BusinessDataConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.BusinessDataConfigurationView;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
@@ -19,7 +19,7 @@ import cw.boardingschoolmanagement.pojo.BusinessData;
  *
  * @author ManuelG
  */
-public class BusinessDataConfigurationExtention implements ConfigurationExtentionPoint {
+public class BusinessDataConfigurationExtention implements IConfigurationExtentionPoint {
 
     private BusinessData businessData;
     private BusinessDataConfigurationPresentationModel model;

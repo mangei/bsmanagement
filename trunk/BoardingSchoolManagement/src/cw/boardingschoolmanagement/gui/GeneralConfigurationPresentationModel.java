@@ -61,12 +61,13 @@ public class GeneralConfigurationPresentationModel
         pathPanelPositionSelection.addValueChangeListener(saveListener);
     }
 
-    public void dispose() {
-        pathPanelActiveModel.removeValueChangeListener(saveListener);
+    @Override
+	public void release() {
+    	pathPanelActiveModel.removeValueChangeListener(saveListener);
         pathPanelPositionSelection.removeValueChangeListener(saveListener);
         pathPanelPositionSelection.release();
-    }
-
+	}
+ 
     public class SaveListener implements PropertyChangeListener {
 
         public void propertyChange(PropertyChangeEvent evt) {
@@ -100,6 +101,6 @@ public class GeneralConfigurationPresentationModel
 
     public SelectionInList<String> getPathPanelPositionSelection() {
         return pathPanelPositionSelection;
-    }
+    }	
 
 }
