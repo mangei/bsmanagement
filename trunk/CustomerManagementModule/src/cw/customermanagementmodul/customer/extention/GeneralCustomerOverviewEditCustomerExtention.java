@@ -1,8 +1,7 @@
 package cw.customermanagementmodul.customer.extention;
 
-import cw.boardingschoolmanagement.extention.point.CWViewExtentionPoint;
+import cw.boardingschoolmanagement.extention.point.CWIViewExtentionPoint;
 import cw.customermanagementmodul.customer.gui.CustomerOverviewEditCustomerView;
-import cw.customermanagementmodul.customer.gui.EditCustomerView;
 import cw.customermanagementmodul.customer.gui.GeneralCustomerOverviewEditCustomerPresentationModel;
 import cw.customermanagementmodul.customer.gui.GeneralCustomerOverviewEditCustomerView;
 
@@ -11,14 +10,14 @@ import cw.customermanagementmodul.customer.gui.GeneralCustomerOverviewEditCustom
  * @author Manuel Geier
  */
 public class GeneralCustomerOverviewEditCustomerExtention
-        implements CWViewExtentionPoint<CustomerOverviewEditCustomerView> {
+        implements CWIViewExtentionPoint<CustomerOverviewEditCustomerView> {
 
     private GeneralCustomerOverviewEditCustomerPresentationModel model;
     private GeneralCustomerOverviewEditCustomerView view;
     private CustomerOverviewEditCustomerView baseView;
     
     @Override
-	public Class<?> getViewExtentionClass() {
+	public Class<?> getExtentionClass() {
 		return CustomerOverviewEditCustomerView.class;
 	}
 

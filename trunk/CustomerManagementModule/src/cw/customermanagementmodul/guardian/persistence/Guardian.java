@@ -63,7 +63,9 @@ public class Guardian
     }
 
     public void setId(Long id) {
+    	Long old = this.id;
         this.id = id;
+        firePropertyChange(PROPERTYNAME_ID, old, id);
     }
 
 	public boolean isLegitimate() {
@@ -71,7 +73,9 @@ public class Guardian
 	}
 
 	public void setLegitimate(boolean legitimate) {
+		boolean old = this.legitimate;
 		this.legitimate = legitimate;
+		firePropertyChange(PROPERTYNAME_LEGITIMATE, old, legitimate);
 	}
 
     @OneToOne
@@ -80,7 +84,9 @@ public class Guardian
 	}
 
 	public void setCustomer(Customer customer) {
+		Customer old = this.customer;
 		this.customer = customer;
+		firePropertyChange(PROPERTYNAME_CUSTOMER, old, customer);
 	}
 
     @OneToOne
@@ -89,7 +95,9 @@ public class Guardian
 	}
 
 	public void setGuardian(Customer guardian) {
+		Customer old = this.guardian;
 		this.guardian = guardian;
+		firePropertyChange(PROPERTYNAME_GUARDIAN, old, guardian);
 	}
 
 }

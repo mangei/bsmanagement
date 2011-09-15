@@ -121,7 +121,7 @@ public class GroupCustomerSelectorFilterExtention
                 group = itGroups.next();
 
                 // Check if the costumer, has the group
-                if(PMGroup.getInstance().getAllGroupsByCustomer(customer, entityManager).contains(group)) {
+                if(PMGroup.getInstance().getAllForCustomer(customer.getId(), entityManager).contains(group)) {
                     contains = true;
                     break;
                 }

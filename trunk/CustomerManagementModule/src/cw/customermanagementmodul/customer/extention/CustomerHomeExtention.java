@@ -1,6 +1,6 @@
 package cw.customermanagementmodul.customer.extention;
 
-import cw.boardingschoolmanagement.extention.point.CWViewExtentionPoint;
+import cw.boardingschoolmanagement.extention.point.CWIViewExtentionPoint;
 import cw.boardingschoolmanagement.gui.HomeView;
 import cw.customermanagementmodul.customer.gui.CustomerHomeExtentionPresentationModel;
 import cw.customermanagementmodul.customer.gui.CustomerHomeExtentionView;
@@ -10,14 +10,14 @@ import cw.customermanagementmodul.customer.gui.CustomerHomeExtentionView;
  * @author ManuelG
  */
 public class CustomerHomeExtention
-	implements CWViewExtentionPoint<HomeView> {
+	implements CWIViewExtentionPoint<HomeView> {
 
     private CustomerHomeExtentionPresentationModel model;
     private CustomerHomeExtentionView view;
     private HomeView baseView;
 
 	@Override
-	public Class<?> getViewExtentionClass() {
+	public Class<?> getExtentionClass() {
 		return HomeView.class;
 	}
 

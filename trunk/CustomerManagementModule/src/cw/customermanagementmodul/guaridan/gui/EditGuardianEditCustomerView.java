@@ -9,6 +9,7 @@ import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.customermanagementmodul.customer.gui.EditCustomerEditCustomerView;
 
 /**
  *
@@ -18,12 +19,14 @@ public class EditGuardianEditCustomerView
 	extends CWView<EditGuardianEditCustomerPresentationModel>
 {
 
+	private EditCustomerEditCustomerView baseView;
     public CWPanel panel;
     public CWLabel lGuardian;
     public CWButton bChooseGuardian;
 
-    public EditGuardianEditCustomerView(EditGuardianEditCustomerPresentationModel model) {
+    public EditGuardianEditCustomerView(EditGuardianEditCustomerPresentationModel model, EditCustomerEditCustomerView baseView) {
         super(model, true);
+        this.baseView = baseView;
     }
 
     public void initComponents() {
@@ -54,6 +57,8 @@ public class EditGuardianEditCustomerView
         builder.addLabel("Erziehungsberechtigte Person:", 	cc.xy(1, row+=2));
         builder.add(lGuardian,                				cc.xy(3, row));
         builder.add(bChooseGuardian,                		cc.xy(5, row));
+        
+        baseView.addToContentPanel(builder.getPanel());
     }
 
     @Override
