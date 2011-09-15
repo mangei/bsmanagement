@@ -16,6 +16,8 @@ import org.hibernate.ejb.Ejb3Configuration;
 
 import cw.boardingschoolmanagement.app.ClassPathHacker;
 import cw.boardingschoolmanagement.exception.ManifestException;
+import cw.boardingschoolmanagement.extention.CWIMultiTypedExtention;
+import cw.boardingschoolmanagement.extention.CWITypedExtention;
 import cw.boardingschoolmanagement.module.Module;
 import cw.boardingschoolmanagement.persistence.AnnotatedClass;
 
@@ -229,12 +231,16 @@ public class ModuleManager {
         }
     }
 
+    public static <T> List<T> getExtentions(Class<T> specificExtention) {
+    	return getExtentions(specificExtention, null);
+    }
+    
     /**
      * Return all Extentions by a specificated extention class
      * @param specificExtention Class of the specificated extention
      * @return List of the specificated extention class
      */
-    public static <T> List<T> getExtentions(Class<T> specificExtention) {
+    public static <T> List<T> getExtentions(Class<T> specificExtention, Class<?> baseExtentionClass) {
 
         System.out.println("getExtentions(" + specificExtention.getName() + "): ");
 
@@ -244,10 +250,40 @@ public class ModuleManager {
         // Run throu all extentions
         for (T ex : exList) {
             
+        	boolean addToList = false;
+        	
             try {
-                // Add it to the list
-                spezExList.add((T) ex.getClass().newInstance());
-                System.out.println("  " + ex.toString());
+            	if(baseExtentionClass != null) {
+            		
+            		if(ex instanceof CWIMultiTypedExtention) {
+            		// Check multiple types
+            			List<Class<?>> allowedTypes = ((CWIMultiTypedExtention)ex).getExtentionClassList();
+            			
+            			for(int i=0; i<allowedTypes.size(); i++) {
+            				Class<?> allowedType = allowedTypes.get(i);
+            				if(allowedType.equals(baseExtentionClass)) {
+            					addToList = true;
+            				}
+            			}
+            			
+            		} else if(ex instanceof CWITypedExtention) {
+            		// Check type
+            			Class<?> allowedType = ((CWITypedExtention)ex).getExtentionClass();
+            			if(allowedType.equals(baseExtentionClass)) {
+        					addToList = true;
+        				}
+            		}
+            	} else {
+            	// No specific type needed
+            		addToList = true;
+            	}
+            	
+            	if(addToList) {
+            		// Add it to the list
+                    spezExList.add((T) ex.getClass().newInstance());
+                    System.out.println("  " + ex.toString());
+            	}
+            	
             } catch (InstantiationException ex1) {
                 Logger.getLogger(ModuleManager.class.getName()).log(Level.SEVERE, null, ex1);
             } catch (IllegalAccessException ex1) {

@@ -71,7 +71,7 @@ public class UpdateConfigurationPresentationModel
     private void initEventHandling() {
     }
 
-    public void dispose() {
+    public void release() {
     }
 
     public List<String> validate() {

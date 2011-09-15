@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.swing.Icon;
 
-import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
+import cw.boardingschoolmanagement.extention.point.IConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.update.gui.UpdateConfigurationPresentationModel;
@@ -16,7 +16,7 @@ import cw.boardingschoolmanagement.update.gui.UpdateConfigurationView;
  * @author ManuelG
  */
 public class UpdateConfigurationExtention
-        implements ConfigurationExtentionPoint {
+        implements IConfigurationExtentionPoint {
 
     private UpdateConfigurationPresentationModel model;
     private UpdateConfigurationView view;
