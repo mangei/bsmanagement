@@ -1,9 +1,9 @@
 package cw.boardingschoolmanagement.extention;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.swing.Icon;
+
+import com.jgoodies.validation.ValidationResult;
 
 import cw.boardingschoolmanagement.extention.point.IConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.BusinessDataConfigurationPresentationModel;
@@ -75,7 +75,7 @@ public class BusinessDataConfigurationExtention implements IConfigurationExtenti
         PropertiesManager.setProperty("configuration.businessData.dvrNumber",         businessData.getDvrNumber());
     }
 
-    public List<String> validate() {
+    public ValidationResult validate() {
         return model.validate();
     }
 

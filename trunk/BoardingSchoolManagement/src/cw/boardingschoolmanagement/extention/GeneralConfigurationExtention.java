@@ -1,10 +1,11 @@
 package cw.boardingschoolmanagement.extention;
 
 import java.util.HashMap;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.swing.Icon;
+
+import com.jgoodies.validation.ValidationResult;
 
 import cw.boardingschoolmanagement.extention.point.IConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
@@ -46,8 +47,8 @@ public class GeneralConfigurationExtention
         PropertiesManager.setProperty("configuration.general.pathPanelPosition", model.getPathPanelPosition().name());
     }
 
-    public List<String> validate() {
-        return null;
+    public ValidationResult validate() {
+        return ValidationResult.EMPTY;
     }
 
     public void dispose() {

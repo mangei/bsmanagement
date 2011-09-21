@@ -122,8 +122,10 @@ public class ConfigurationView
 
         masterPanel.add(buttonBarPanel, BorderLayout.WEST);
         masterPanel.add(cardPanel, BorderLayout.CENTER);
+
+        this.addToContentPanel(masterPanel);
         
-        addToContentPanel(masterPanel, true);
+        addToContentPanel(this, true);
     }
 
     @Override

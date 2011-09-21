@@ -54,12 +54,12 @@ import cw.boardingschoolmanagement.gui.model.CWDataFieldRenderer;
 import cw.boardingschoolmanagement.gui.model.CWDataModel;
 
 /**
- * The factory contains all necessary components we have in our application.
+ * The factory contains all necessary components which exist in the application.
  * It contains the support of binding properties and new features of components.
  * All components we use in the application, should only be created with this
  * Factory.
  *
- * @author Manuel Geier (CreativeWorkers)
+ * @author Manuel Geier
  */
 public class CWComponentFactory {
 
@@ -148,7 +148,7 @@ public class CWComponentFactory {
                 }
                 
                 if (comp instanceof CWView) {
-                	((CWView) comp).dispose();
+                	((CWView<?>) comp).dispose();
                 }
 
                 TextComponentConnector textComponentConnector = (TextComponentConnector) comp.getClientProperty(TEXT_COMPONENT_CONNECTOR_KEY);
@@ -289,7 +289,7 @@ public class CWComponentFactory {
         return treetable;
     }
 
-    public static CWList createList(ListModel listModel) {
+    public static CWList createList(ListModel<?> listModel) {
         if(listModel == null) {
             throw new NullPointerException("listModel is null");
         }
@@ -301,11 +301,11 @@ public class CWComponentFactory {
         return list;
     }
 
-    public static CWList createList(SelectionInList selectionInList) {
+    public static CWList createList(SelectionInList<?> selectionInList) {
         return createList(selectionInList, "");
     }
 
-    public static CWList createList(SelectionInList selectionInList, final String emptyText) {
+    public static CWList createList(SelectionInList<?> selectionInList, final String emptyText) {
         if(selectionInList == null) {
             throw new NullPointerException("selectionInList is null");
         }
@@ -924,31 +924,17 @@ public class CWComponentFactory {
         return backView;
     }
 
-    public static CWView createView(CWIPresentationModel model) {
+    public static CWView<?> createView(CWIPresentationModel model) {
         return new CWView(model);
     }
 
     public static CWView createView(CWIPresentationModel model, CWHeaderInfo headerInfo) {
-        return createView(model, headerInfo, null);
-    }
-
-    public static CWView createView(CWIPresentationModel model, String headerText, JComponent comp) {
-        return createView(model, new CWHeaderInfo(headerText), comp);
-    }
-
-    public static CWView createView(CWIPresentationModel model, JComponent comp) {
-        return createView(model, new CWHeaderInfo(), comp);
-    }
-
-    public static CWView createView(CWIPresentationModel model, CWHeaderInfo headerInfo, JComponent comp) {
     	if (headerInfo == null) {
             headerInfo = new CWHeaderInfo();
         }
         CWView view = new CWView(model);
         view.setHeaderInfo(headerInfo);
-        if (comp != null) {
-            view.addToContentPanel(comp);
-        }
+        
         return view;
     }
 

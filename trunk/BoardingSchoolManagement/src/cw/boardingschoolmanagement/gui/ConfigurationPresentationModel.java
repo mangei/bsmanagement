@@ -14,6 +14,7 @@ import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import com.jgoodies.binding.beans.Model;
+import com.jgoodies.validation.ValidationResult;
 
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
@@ -133,7 +134,7 @@ public class ConfigurationPresentationModel
         public void actionPerformed(ActionEvent e) {
 
             // Fire only when the save-method worked correct
-            if (isValid()) {
+            if (!validate().hasErrors()) {
             	save();
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_BUTTON));
             }
@@ -156,7 +157,7 @@ public class ConfigurationPresentationModel
             }
             if (i == 0) {
                 // If the save-method doesn't worked, because of an error, to nothing
-                if (isValid()) {
+                if (!validate().hasErrors()) {
                 	save();
                     return;
                 }
@@ -165,22 +166,6 @@ public class ConfigurationPresentationModel
                 support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
             }
         }
-    }
-
-    public void save() {
-        boolean valid = true;
-
-        triggerCommit();
-
-		List<IConfigurationExtentionPoint> extentions = getExtentions();
-        for (IConfigurationExtentionPoint extention : extentions) {
-            extention.save();
-        }
-        
-        saveExtentions();
-
-        setChanged(true);
-
     }
 
     @Override
@@ -215,9 +200,23 @@ public class ConfigurationPresentationModel
     public Action getSaveAction() {
         return saveAction;
     }
-    
-    @Override
-	public boolean validate(List errorMessages) {
+		
+	public void save() {
+        triggerCommit();
+
+		List<IConfigurationExtentionPoint> extentions = getExtentions();
+        for (IConfigurationExtentionPoint extention : extentions) {
+            extention.save();
+        }
+        
+        super.save();
+
+        setChanged(true);
+    }
+
+	@Override
+	public ValidationResult validate() {
+		ValidationResult validationResult = super.validate();
 		
 		// TODO refactor validation
 //		List<ConfigurationExtentionPoint> extentions = getExtentions();
@@ -247,13 +246,12 @@ public class ConfigurationPresentationModel
 //
 //        }
 		
-		validateExtentions(errorMessages);
-		return !hasErrorMessages();
+		return validationResult;
 	}
 
-    
+	@Override
 	public void cancel() {
-		cancelExtentions();
+		super.cancel();
 	}
 
 }

@@ -1,9 +1,9 @@
 package cw.boardingschoolmanagement.extention.point;
 
-import java.util.List;
-
 import javax.persistence.EntityManager;
 import javax.swing.Icon;
+
+import com.jgoodies.validation.ValidationResult;
 
 import cw.boardingschoolmanagement.extention.CWIExtention;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
@@ -23,7 +23,7 @@ public interface IConfigurationExtentionPoint
 
     public void save();
 
-    public List<String> validate();
+    public ValidationResult validate();
 
     public void dispose();
 

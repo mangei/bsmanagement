@@ -3,6 +3,7 @@ package cw.boardingschoolmanagement.gui.component;
 import javax.swing.Action;
 import javax.swing.Icon;
 import javax.swing.JRadioButton;
+import javax.swing.JToolTip;
 
 /**
  *
@@ -41,4 +42,9 @@ public class CWRadioButton extends JRadioButton{
     CWRadioButton() {
     }
 
+
+    @Override
+    public JToolTip createToolTip() {
+        return new CWToolTip();
+    }
 }

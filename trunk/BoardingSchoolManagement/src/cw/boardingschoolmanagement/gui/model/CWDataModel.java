@@ -81,7 +81,7 @@ public class CWDataModel<T> extends AbstractTableModel
 	private void loadDataFields() {
 		
 		List<CWIDataModelExtentionPoint> exList = ModuleManager.getExtentions(CWIDataModelExtentionPoint.class);
-		for(CWIDataModelExtentionPoint<T> ex : exList) {
+		for(CWIDataModelExtentionPoint ex : exList) {
 			if(ex.getBaseClass().equals(baseClass)) {
 				fields.addAll(ex.getFieldList());
 			}
@@ -256,6 +256,5 @@ public class CWDataModel<T> extends AbstractTableModel
 	public void removeValueChangeListener(PropertyChangeListener l) {
 		selectionInList.removeValueChangeListener(l);
 	}
-	
 	
 }
