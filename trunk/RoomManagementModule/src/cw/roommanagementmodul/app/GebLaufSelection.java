@@ -1,18 +1,20 @@
 package cw.roommanagementmodul.app;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.jgoodies.binding.beans.Model;
+
 import cw.roommanagementmodul.geblauf.BewohnerGebSelection;
 import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
 import cw.roommanagementmodul.geblauf.GebTarifSelection;
 import cw.roommanagementmodul.geblauf.GebuehrAnm;
-import java.util.ArrayList;
-import java.util.List;
-import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.GebuehrZuordnung;
-import cw.roommanagementmodul.pojo.Tarif;
-import cw.roommanagementmodul.pojo.manager.BewohnerManager;
-import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
-import cw.roommanagementmodul.pojo.manager.TarifManager;
+import cw.roommanagementmodul.persistence.Bewohner;
+import cw.roommanagementmodul.persistence.GebuehrZuordnung;
+import cw.roommanagementmodul.persistence.PMBewohner;
+import cw.roommanagementmodul.persistence.PMGebuehrZuordnung;
+import cw.roommanagementmodul.persistence.PMTarif;
+import cw.roommanagementmodul.persistence.Tarif;
 
 /**
  *
@@ -23,17 +25,17 @@ public class GebLaufSelection extends Model {
     private long abrMonat;
     private int jahr;
     private int monat;
-    private BewohnerManager bewohnerManager;
-    private TarifManager tarifManager;
-    private GebuehrZuordnungManager gebZuordnungManager;
+    private PMBewohner bewohnerManager;
+    private PMTarif tarifManager;
+    private PMGebuehrZuordnung gebZuordnungManager;
     private BewohnerTarifSelection bewohnerTarifSelection;
     public final static String PROPERTYNAME_JAHR = "jahr";
     public final static String PROPERTYNAME_MONAT = "monat";
 
     public GebLaufSelection() {
-        bewohnerManager = BewohnerManager.getInstance();
-        tarifManager = TarifManager.getInstance();
-        gebZuordnungManager = GebuehrZuordnungManager.getInstance();
+        bewohnerManager = PMBewohner.getInstance();
+        tarifManager = PMTarif.getInstance();
+        gebZuordnungManager = PMGebuehrZuordnung.getInstance();
     }
 
     public BewohnerTarifSelection startSelection(long abrMonat) {

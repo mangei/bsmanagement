@@ -5,11 +5,13 @@
 
 package cw.roommanagementmodul.geblauf;
 
-import com.jgoodies.binding.beans.Model;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import cw.roommanagementmodul.pojo.Bewohner;
+
+import com.jgoodies.binding.beans.Model;
+
+import cw.roommanagementmodul.persistence.Bewohner;
 
 /**
  *
