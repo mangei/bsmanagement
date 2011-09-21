@@ -1,45 +1,48 @@
-
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.PresentationModel;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ComboBoxModel;
+import javax.swing.JOptionPane;
+
 import com.jgoodies.binding.adapter.ComboBoxAdapter;
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
 import com.toedter.calendar.JDateChooser;
+
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.ComboBoxModel;
-import javax.swing.JOptionPane;
-import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
-import cw.roommanagementmodul.pojo.manager.GebuehrenManager;
-import cw.roommanagementmodul.pojo.Bereich;
-import cw.roommanagementmodul.pojo.GebuehrZuordnung;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWDateChooser;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.roommanagementmodul.persistence.Bereich;
+import cw.roommanagementmodul.persistence.GebuehrZuordnung;
+import cw.roommanagementmodul.persistence.PMGebuehr;
+import cw.roommanagementmodul.persistence.PMGebuehrZuordnung;
 
 /**
  *
  * @author Dominik
  */
-public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuordnung>
-                {
+public class GebBewohnerPresentationModel
+	extends CWEditPresentationModel<GebuehrZuordnung>
+{
 
     private GebuehrZuordnung gebuehrZuordnung;
     private ButtonListenerSupport support;
-    private GebuehrZuordnungManager gebZuordnungManager;
-    private GebuehrenManager gebuehrManager;
+    private PMGebuehrZuordnung gebZuordnungManager;
+    private PMGebuehr gebuehrManager;
     private String headerText;
     private Action saveButtonAction;
     private Action cancelButtonAction;
@@ -57,8 +60,8 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         saveListener= new  SaveListener();
         this.gebuehrZuordnung = gebuehrZuordnung;
         headerText = "-";
-        gebZuordnungManager = GebuehrZuordnungManager.getInstance();
-        gebuehrManager = GebuehrenManager.getInstance();
+        gebZuordnungManager = PMGebuehrZuordnung.getInstance();
+        gebuehrManager = PMGebuehr.getInstance();
         initModels();
         initEventHandling();
     }
@@ -68,8 +71,8 @@ public class GebBewohnerPresentationModel extends PresentationModel<GebuehrZuord
         saveListener= new  SaveListener();
         this.headerInfo = header;
         this.gebuehrZuordnung = gb;
-        gebZuordnungManager = GebuehrZuordnungManager.getInstance();
-        gebuehrManager = GebuehrenManager.getInstance();
+        gebZuordnungManager = PMGebuehrZuordnung.getInstance();
+        gebuehrManager = PMGebuehr.getInstance();
         initModels();
         initEventHandling();
     }

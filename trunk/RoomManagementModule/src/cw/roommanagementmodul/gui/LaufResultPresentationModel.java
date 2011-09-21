@@ -1,28 +1,32 @@
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.PresentationModel;
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import cw.roommanagementmodul.pojo.Bewohner;
+
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
+import cw.roommanagementmodul.persistence.Bewohner;
 
 /**
  *
  * @author Dominik
  */
-public class LaufResultPresentationModel extends PresentationModel<BewohnerTarifSelection> {
+public class LaufResultPresentationModel
+	extends CWEditPresentationModel<BewohnerTarifSelection>
+{
 
     private BewohnerTarifSelection tarifSelection;
     private Action backAction;
@@ -143,11 +147,11 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         model.removeButtonListener(this);
-                        GUIManager.changeToLastView();
+                        GUIManager.changeToPreviousView();
                     }
                 }
             });
-            GUIManager.changeView(printView, true);
+            GUIManager.changeViewTo(printView, true);
 
         }
     }
@@ -160,7 +164,7 @@ public class LaufResultPresentationModel extends PresentationModel<BewohnerTarif
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.changeToLastView();  // Zur Uebersicht wechseln
+            GUIManager.changeToPreviousView();  // Zur Uebersicht wechseln
 //                GUIManager.removeView(); // Diese View nicht merken
         //support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
 

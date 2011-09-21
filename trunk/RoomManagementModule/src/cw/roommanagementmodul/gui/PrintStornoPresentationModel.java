@@ -26,23 +26,26 @@ import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.customermanagementmodul.persistence.model.CustomerModel;
-import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.BewohnerStorno;
+import cw.customermanagementmodul.customer.persistence.Customer;
+import cw.roommanagementmodul.persistence.Bewohner;
+import cw.roommanagementmodul.persistence.BewohnerStorno;
 
 /**
  *
  * @author Dominik
  */
-public class PrintStornoPresentationModel{
+public class PrintStornoPresentationModel
+	extends CWPresentationModel
+{
 
     private ButtonListenerSupport support;
     private CWHeaderInfo headerInfo;
     private Action backAction;
     private Map<Bewohner, List<AccountPosting>> bewohnerPostingMap;
-    private Map<CustomerModel, List<AccountPosting>> customerNoBewohnerMap;
+    private Map<Customer, List<AccountPosting>> customerNoBewohnerMap;
     private List<BewohnerStorno> printDataList;
     private JasperReport jasperReport;
     private JRDataSource ds;
@@ -51,7 +54,7 @@ public class PrintStornoPresentationModel{
     private String printHeader;
 
     public PrintStornoPresentationModel(Map<Bewohner, List<AccountPosting>> bewohnerPostingMap,
-            Map<CustomerModel, List<AccountPosting>> customerNoBewohnerMap, CWHeaderInfo headerInfo, String printHeader) {
+            Map<Customer, List<AccountPosting>> customerNoBewohnerMap, CWHeaderInfo headerInfo, String printHeader) {
 
         this.printHeader=printHeader;
         this.bewohnerPostingMap = bewohnerPostingMap;
@@ -194,7 +197,7 @@ public class PrintStornoPresentationModel{
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.changeToLastView();  // Zur Uebersicht wechseln
+            GUIManager.changeToPreviousView();  // Zur Uebersicht wechseln
         }
     }
 }

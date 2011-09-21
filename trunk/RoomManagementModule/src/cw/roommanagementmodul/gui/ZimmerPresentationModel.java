@@ -1,17 +1,5 @@
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.adapter.AbstractTableAdapter;
-import com.jgoodies.binding.list.SelectionInList;
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.roommanagementmodul.pojo.Bereich;
-import cw.roommanagementmodul.pojo.manager.ZimmerManager;
-import cw.roommanagementmodul.pojo.Zimmer;
-import cw.roommanagementmodul.pojo.manager.BereichManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -19,6 +7,7 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.EventObject;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
@@ -27,13 +16,30 @@ import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 
+import com.jgoodies.binding.adapter.AbstractTableAdapter;
+import com.jgoodies.binding.list.SelectionInList;
+
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.roommanagementmodul.persistence.Bereich;
+import cw.roommanagementmodul.persistence.PMBereich;
+import cw.roommanagementmodul.persistence.PMZimmer;
+import cw.roommanagementmodul.persistence.Zimmer;
+
 /**
  *
  * @author Dominik
  */
-public class ZimmerPresentationModel {
+public class ZimmerPresentationModel
+	extends CWPresentationModel
+{
 
-    private ZimmerManager zimmerManager;
+    private PMZimmer zimmerManager;
     private Action newAction;
     private Action editAction;
     private Action deleteAction;
@@ -46,7 +52,7 @@ public class ZimmerPresentationModel {
     private SelectionEmptyHandler selectionEmptyHandler;
     private DoubleClickHandler doubleClickHandler;
 
-    public ZimmerPresentationModel(ZimmerManager zimmerManager, CWHeaderInfo header, BereichPresentationModel bereichModel) {
+    public ZimmerPresentationModel(PMZimmer zimmerManager, CWHeaderInfo header, BereichPresentationModel bereichModel) {
         this.bereichModel = bereichModel;
         this.zimmerManager = zimmerManager;
         this.headerInfo = header;
@@ -157,12 +163,12 @@ public class ZimmerPresentationModel {
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         model.removeButtonListener(this);
                         zimmerSelection.setList(zimmerManager.getAll());
-                        GUIManager.changeToLastView();
+                        GUIManager.changeToPreviousView();
                         GUIManager.getStatusbar().setTextAndFadeOut("Zimmer wurde erstellt.");
                     }
                 }
             });
-            GUIManager.changeView(editView, true);
+            GUIManager.changeViewTo(editView, true);
         }
     }
 
@@ -209,7 +215,7 @@ public class ZimmerPresentationModel {
 
         public void actionPerformed(ActionEvent e) {
             Bereich internatBereich;
-            BereichManager bereichManager = BereichManager.getInstance();
+            PMBereich bereichManager = PMBereich.getInstance();
             if (bereichManager.existRoot() == false) {
                 internatBereich = new Bereich("Internat", null);
                 bereichManager.save(internatBereich);
@@ -221,7 +227,7 @@ public class ZimmerPresentationModel {
             bereichModel.getTreeModel().setRoot(bereichModel.getRootTree());
             bereichModel.initTree(bereichModel.getRootTree());
             bereichModel.getTreeModel().reload();
-            GUIManager.changeToLastView();  // Zur Uebersicht wechseln
+            GUIManager.changeToPreviousView();  // Zur Uebersicht wechseln
 
 
         }
@@ -245,11 +251,11 @@ public class ZimmerPresentationModel {
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         model.removeButtonListener(this);
-                        GUIManager.changeToLastView();
+                        GUIManager.changeToPreviousView();
                     }
                 }
             });
-            GUIManager.changeView(printView, true);
+            GUIManager.changeViewTo(printView, true);
 
 
         }
@@ -345,11 +351,11 @@ public class ZimmerPresentationModel {
 
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     model.removeButtonListener(this);
-                    GUIManager.changeToLastView();
+                    GUIManager.changeToPreviousView();
                 }
 
             }
         });
-        GUIManager.changeView(editView, true);
+        GUIManager.changeViewTo(editView, true);
     }
 }

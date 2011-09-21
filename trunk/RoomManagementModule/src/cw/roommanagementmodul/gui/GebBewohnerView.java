@@ -1,16 +1,18 @@
 package cw.roommanagementmodul.gui;
 
+import javax.swing.JPanel;
+
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWButton;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import javax.swing.JPanel;
-import cw.roommanagementmodul.pojo.GebuehrZuordnung;
+import cw.roommanagementmodul.persistence.GebuehrZuordnung;
 
 /**
  *
@@ -56,7 +58,7 @@ public class GebBewohnerView extends CWView
         bCancel.setText("Abbrechen");
 
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
-        bSaveCancel.setText("Speichern u. Schließen");
+        bSaveCancel.setText("Speichern u. Schliessen");
 
 
         cbGebuehr = CWComponentFactory.createComboBox(model.getGebuehrList());

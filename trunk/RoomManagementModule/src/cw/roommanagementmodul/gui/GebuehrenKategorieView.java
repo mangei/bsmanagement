@@ -1,10 +1,11 @@
 package cw.roommanagementmodul.gui;
 
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.CWView;
 import java.awt.BorderLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWList;
+import cw.boardingschoolmanagement.gui.component.CWView;
 
 /**
  *

@@ -1,26 +1,28 @@
 package cw.roommanagementmodul.gui;
 
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWCheckBox;
 import cw.boardingschoolmanagement.gui.component.CWComboBox;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWDateChooser;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.roommanagementmodul.pojo.Bewohner;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
-import javax.swing.JPanel;
+import cw.roommanagementmodul.persistence.Bewohner;
 
 /**
  *
  * @author Dominik
  */
-public class BewohnerEditCustomerTabExtentionView extends CWView
+public class BewohnerEditCustomerTabExtentionView
+	extends CWView<BewohnerEditCustomerTabExtentionPresentationModel>
 {
 
-    BewohnerEditCustomerTabExtentionPresentationModel model;
     private CWLabel lbBereich;
     private CWLabel lbZimmer;
     private CWLabel lbEinzDat;
@@ -33,21 +35,16 @@ public class BewohnerEditCustomerTabExtentionView extends CWView
     private CWDateChooser dcEinzugsdatum;
     private CWDateChooser dcAuszugsdatum;
     private CWCheckBox boxBewohner;
-    private CWComponentFactory.CWComponentContainer componentContainer;
     private ItemListener bewohnerItemListener;
     private CWComboBox cbKaution;
     private CWComboBox cbKautionStatus;
 
-
     public BewohnerEditCustomerTabExtentionView(BewohnerEditCustomerTabExtentionPresentationModel model) {
-        this.model = model;
-
-        initComponents();
-        buildView();
-        initEventHandling();
+    	super(model);
     }
 
     public void initComponents() {
+    	super.initComponents();
 
         lbBereich = CWComponentFactory.createLabel("Bereich: ");
         lbZimmer = CWComponentFactory.createLabel("Zimmer");
@@ -57,34 +54,34 @@ public class BewohnerEditCustomerTabExtentionView extends CWView
         lbKautionStatus = CWComponentFactory.createLabel("Kaution Status: ");
         lbBewohner = CWComponentFactory.createLabel("Bewohner");
 
-        cbBereich = CWComponentFactory.createComboBox(model.getBereichList());
-        cbZimmer = CWComponentFactory.createComboBox(model.getZimmerList());
-        cbKaution=CWComponentFactory.createComboBox(model.getKautionList());
+        cbBereich = CWComponentFactory.createComboBox(getModel().getBereichList());
+        cbZimmer = CWComponentFactory.createComboBox(getModel().getZimmerList());
+        cbKaution=CWComponentFactory.createComboBox(getModel().getKautionList());
         cbKaution.addItemListener(new ItemListener(){
 
             public void itemStateChanged(ItemEvent e) {
-                if(model.getBewohner().getKaution()!=null){
+                if(getModel().getBewohner().getKaution()!=null){
                     cbKautionStatus.setEnabled(true);
                 }else{
                     cbKautionStatus.setEnabled(false);
                 }
             }
         });
-        boxBewohner = CWComponentFactory.createCheckBox(model.getCheckBoxModel(), "Bewohner");
+        boxBewohner = CWComponentFactory.createCheckBox(getModel().getCheckBoxModel(), "Bewohner");
         boxBewohner.setSelected(false);
         bewohnerItemListener=new BewohnerItemListener();
         boxBewohner.addItemListener(bewohnerItemListener);
-        dcEinzugsdatum = CWComponentFactory.createDateChooser(model.getBufferedModel(Bewohner.PROPERTYNAME_VON));
-        dcAuszugsdatum = CWComponentFactory.createDateChooser(model.getBufferedModel(Bewohner.PROPERTYNAME_BIS));
+        dcEinzugsdatum = CWComponentFactory.createDateChooser(getModel().getBufferedModel(Bewohner.PROPERTYNAME_VON));
+        dcAuszugsdatum = CWComponentFactory.createDateChooser(getModel().getBufferedModel(Bewohner.PROPERTYNAME_BIS));
 
-        cbKautionStatus = CWComponentFactory.createComboBox(model.getKautionStadi());
+        cbKautionStatus = CWComponentFactory.createComboBox(getModel().getKautionStadi());
 
 
-        if(model.getBewohner().getKaution()==null){
+        if(getModel().getBewohner().getKaution()==null){
             cbKautionStatus.setEnabled(false);
             cbKautionStatus.setSelectedIndex(0);
         }else{
-            switch(model.getBewohner().getKautionStatus()){
+            switch(getModel().getBewohner().getKautionStatus()){
                 case Bewohner.NICHT_EINGEZAHLT: cbKautionStatus.setSelectedIndex(0);
                 break;
                 case Bewohner.EINGEZAHLT: cbKautionStatus.setSelectedIndex(1);
@@ -96,10 +93,10 @@ public class BewohnerEditCustomerTabExtentionView extends CWView
 
             }
         }
-        cbKautionStatus.addItemListener(model.getKautionListener());
+        cbKautionStatus.addItemListener(getModel().getKautionListener());
 
 
-        componentContainer = CWComponentFactory.createComponentContainer()
+        getComponentContainer()
                 .addComponent(lbBereich)
                 .addComponent(lbZimmer)
                 .addComponent(lbEinzDat)
@@ -116,7 +113,7 @@ public class BewohnerEditCustomerTabExtentionView extends CWView
                 .addComponent(dcAuszugsdatum);
 
 
-        if (model.getCheckBoxState() != ItemEvent.SELECTED) {
+        if (getModel().getCheckBoxState() != ItemEvent.SELECTED) {
             cbBereich.setEnabled(false);
             cbZimmer.setEnabled(false);
             dcEinzugsdatum.setEnabled(false);
@@ -133,24 +130,19 @@ public class BewohnerEditCustomerTabExtentionView extends CWView
 
     }
 
-    private void initEventHandling() {
+    public void buildView() {
+    	super.buildView();
         
-    }
-
-    private void buildView() {
-        
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
         this.setName("Zimmer");
 
         FormLayout layout = new FormLayout("right:pref, 4dlu, 50dlu:grow, 4dlu, right:pref, 4dlu, 50dlu:grow",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 20dlu, pref, 4dlu, pref, 4dlu, pref");
 
-        this.getContentPanel().setLayout(layout);
-
         CellConstraints cc = new CellConstraints();
         //builder.addSeparator("Allgemein:", cc.xyw(1, 1, 7));
 
-        JPanel contentPanel = this.getContentPanel();
+        CWPanel contentPanel = CWComponentFactory.createPanel(layout);
         contentPanel.add(boxBewohner, cc.xy(1, 3));
         contentPanel.add(lbBereich, cc.xy(1, 5));
         contentPanel.add(lbZimmer, cc.xy(1, 7));
@@ -165,7 +157,8 @@ public class BewohnerEditCustomerTabExtentionView extends CWView
         contentPanel.add(dcAuszugsdatum, cc.xy(3, 11));
         contentPanel.add(cbKaution, cc.xy(3, 13));
         contentPanel.add(cbKautionStatus, cc.xy(3, 15));
-
+        
+        addToContentPanel(contentPanel);
     }
 
     public class BewohnerItemListener implements ItemListener {
@@ -181,7 +174,7 @@ public class BewohnerEditCustomerTabExtentionView extends CWView
                 lbZimmer.setEnabled(false);
                 lbAuszDat.setEnabled(false);
                 lbEinzDat.setEnabled(false);
-                model.getCheckBoxModel().setValue(false);
+                getModel().getCheckBoxModel().setValue(false);
                 lbKautionStatus.setEnabled(false);
                 lbKaution.setEnabled(false);
                 cbKaution.setEnabled(false);
@@ -196,11 +189,11 @@ public class BewohnerEditCustomerTabExtentionView extends CWView
                 lbZimmer.setEnabled(true);
                 lbAuszDat.setEnabled(true);
                 lbEinzDat.setEnabled(true);
-                model.getCheckBoxModel().setValue(true);
+                getModel().getCheckBoxModel().setValue(true);
                 lbKautionStatus.setEnabled(true);
                 lbKaution.setEnabled(true);
                 cbKaution.setEnabled(true);
-                if(model.getBewohner().getKaution()!=null){
+                if(getModel().getBewohner().getKaution()!=null){
                     cbKautionStatus.setEnabled(true);
                 }
             }
@@ -211,8 +204,8 @@ public class BewohnerEditCustomerTabExtentionView extends CWView
     @Override
     public void dispose() {
         boxBewohner.removeItemListener(bewohnerItemListener);
-        componentContainer.dispose();
-        model.dispose();
+        
+        super.dispose();
     }
 
 }

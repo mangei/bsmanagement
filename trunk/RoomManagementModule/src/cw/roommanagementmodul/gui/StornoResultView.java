@@ -18,8 +18,7 @@ import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.customermanagementmodul.persistence.model.CustomerModel;
-import cw.roommanagementmodul.pojo.Bewohner;
+import cw.roommanagementmodul.persistence.Bewohner;
 
 /**
  *

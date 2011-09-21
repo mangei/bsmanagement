@@ -1,18 +1,21 @@
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.forms.layout.CellConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import cw.boardingschoolmanagement.gui.component.CWButton;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
-import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
-import cw.boardingschoolmanagement.gui.component.CWLabel;
-import cw.boardingschoolmanagement.gui.component.CWView;
+import java.util.Date;
+
 import javax.swing.JPanel;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import cw.roommanagementmodul.pojo.Tarif;
-import java.util.Date;
+
+import com.jgoodies.forms.layout.CellConstraints;
+import com.jgoodies.forms.layout.FormLayout;
+
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
+import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.roommanagementmodul.persistence.Tarif;
 
 /**
  *
@@ -49,7 +52,7 @@ public class EditTarifView extends CWView
         bCancel.setText("Abbrechen");
 
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
-        bSaveCancel.setText("Speichern u. Schließen");
+        bSaveCancel.setText("Speichern u. Schliessen");
 
         lAb = CWComponentFactory.createLabel("Von: ");
         lBis = CWComponentFactory.createLabel("Bis: ");

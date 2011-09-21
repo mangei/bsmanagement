@@ -1,41 +1,45 @@
-
 package cw.roommanagementmodul.gui;
 
 
-import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.adapter.AbstractTableAdapter;
-import com.jgoodies.binding.list.SelectionInList;
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.text.DecimalFormat;
 import java.util.EventObject;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
-import cw.roommanagementmodul.pojo.Gebuehr;
-import cw.roommanagementmodul.pojo.Tarif;
-import cw.roommanagementmodul.pojo.manager.TarifManager;
-import java.text.DecimalFormat;
+
+import com.jgoodies.binding.adapter.AbstractTableAdapter;
+import com.jgoodies.binding.list.SelectionInList;
+
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.roommanagementmodul.persistence.Gebuehr;
+import cw.roommanagementmodul.persistence.PMTarif;
+import cw.roommanagementmodul.persistence.Tarif;
 
 /**
  *
  * @author Dominik
  */
-public class TarifPresentationModel extends PresentationModel<Gebuehr>{
+public class TarifPresentationModel
+	extends CWEditPresentationModel<Gebuehr>
+{
 
-    private TarifManager tarifManager;
+    private PMTarif tarifManager;
     private Action newAction;
     private Action editAction;
     private Action deleteAction;
@@ -54,7 +58,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr>{
         numberFormat = new DecimalFormat("#0.00");
         doubleClickHandler=new DoubleClickHandler();
         selectionEmptyHandler=new SelectionEmptyHandler();
-        this.tarifManager = TarifManager.getInstance();
+        this.tarifManager = PMTarif.getInstance();
         initModels();
         this.initEventHandling();
     }
@@ -63,7 +67,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr>{
         super(gebuehr);
         this.gebuehr = gebuehr;
         numberFormat = new DecimalFormat("#0.00");
-        this.tarifManager = TarifManager.getInstance();
+        this.tarifManager = PMTarif.getInstance();
         selectionEmptyHandler=new SelectionEmptyHandler();
         this.headerInfo=header;
         initModels();
@@ -193,7 +197,7 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr>{
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.changeToLastView();  // Zur Uebersicht wechseln
+            GUIManager.changeToPreviousView();  // Zur Uebersicht wechseln
 //                GUIManager.removeView(); // Diese View nicht merken
         //support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
 
@@ -215,11 +219,11 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr>{
                 }
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     model.removeButtonListener(this);
-                    GUIManager.changeToLastView();
+                    GUIManager.changeToPreviousView();
                 }
             }
         });
-        GUIManager.changeView(gebView, true);
+        GUIManager.changeViewTo(gebView, true);
     }
 
     private void editSelectedItem(EventObject e) {
@@ -235,11 +239,11 @@ public class TarifPresentationModel extends PresentationModel<Gebuehr>{
                 }
                 if(evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     model.removeButtonListener(this);
-                    GUIManager.changeToLastView();
+                    GUIManager.changeToPreviousView();
                 }
             }
         });
-        GUIManager.changeView(editView,true);
+        GUIManager.changeViewTo(editView,true);
     }
 
     public TableModel createZuordnungTableModel(ListModel listModel) {

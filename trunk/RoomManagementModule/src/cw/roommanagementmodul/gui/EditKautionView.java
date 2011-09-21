@@ -1,7 +1,10 @@
 package cw.roommanagementmodul.gui;
 
+import javax.swing.JPanel;
+
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
@@ -9,8 +12,7 @@ import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import javax.swing.JPanel;
-import cw.roommanagementmodul.pojo.Kaution;
+import cw.roommanagementmodul.persistence.Kaution;
 
 /**
  *
@@ -52,7 +54,7 @@ public class EditKautionView extends CWView
         bCancel.setText("Abbrechen");
 
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
-        bSaveCancel.setText("Speichern&Schließen");
+        bSaveCancel.setText("Speichern&Schliessen");
 
         componentContainer=CWComponentFactory.createComponentContainer()
                 .addComponent(lName)

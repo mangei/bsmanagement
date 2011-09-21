@@ -1,13 +1,5 @@
 package cw.roommanagementmodul.gui;
 
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
-import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.BewohnerGeb;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,8 +9,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+
 import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JasperCompileManager;
@@ -27,12 +21,23 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRSaver;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
+import cw.roommanagementmodul.persistence.Bewohner;
+import cw.roommanagementmodul.persistence.BewohnerGeb;
 
 /**
  *
  * @author Dominik
  */
-public class PrintGebLaufPresentationModel {
+public class PrintGebLaufPresentationModel
+	extends CWPresentationModel
+{
 
     private BewohnerTarifSelection bewohnerTarifSelection;
     private CWHeaderInfo headerInfo;
@@ -226,7 +231,7 @@ public class PrintGebLaufPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.changeToLastView();  // Zur Uebersicht wechseln
+            GUIManager.changeToPreviousView();  // Zur Uebersicht wechseln
         }
     }
 }

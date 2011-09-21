@@ -1,19 +1,22 @@
 package cw.roommanagementmodul.gui;
 
+import java.util.List;
+
+import javax.swing.JPanel;
+
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWButton;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWIntegerTextField;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.roommanagementmodul.pojo.Bereich;
-import javax.swing.JPanel;
-import cw.roommanagementmodul.pojo.Zimmer;
-import java.util.List;
+import cw.roommanagementmodul.persistence.Bereich;
+import cw.roommanagementmodul.persistence.Zimmer;
 
 /**
  *
@@ -64,7 +67,7 @@ public class EditZimmerView extends CWView
         bCancel.setText("Abbrechen");
 
         bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
-        bSaveCancel.setText("Speichern u. Schließen");
+        bSaveCancel.setText("Speichern u. Schliessen");
 
 
         cbBereich = CWComponentFactory.createComboBox(model.getBereichList());

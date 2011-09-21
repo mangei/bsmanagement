@@ -1,22 +1,25 @@
 package cw.roommanagementmodul.gui;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.text.DecimalFormat;
+import java.util.List;
+
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.roommanagementmodul.geblauf.GebTarifSelection;
-import java.awt.Color;
-import java.awt.Font;
-import java.util.List;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import cw.roommanagementmodul.pojo.Bewohner;
-import java.awt.Dimension;
-import java.text.DecimalFormat;
-import javax.swing.JOptionPane;
-import javax.swing.JScrollPane;
+import cw.roommanagementmodul.persistence.Bewohner;
 
 /**
  *
@@ -96,7 +99,7 @@ public class LaufResultView extends CWView {
         this.getContentPanel().add(scroll);
 
         if (warningNoGebuehr) {
-            JOptionPane.showMessageDialog(null, "Es sind Bewohner vorhanden die keine Gebuehr fuer dieses Datum zugewießen bekommen haben.", "Warunung", JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Es sind Bewohner vorhanden die keine Gebuehr fuer dieses Datum zugewiessen bekommen haben.", "Warunung", JOptionPane.INFORMATION_MESSAGE);
         }
     }
 

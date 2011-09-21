@@ -1,12 +1,5 @@
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.list.SelectionInList;
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -14,20 +7,33 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.EventObject;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.SwingUtilities;
-import cw.roommanagementmodul.pojo.manager.GebuehrenKatManager;
-import cw.roommanagementmodul.pojo.GebuehrenKategorie;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import com.jgoodies.binding.list.SelectionInList;
+
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.roommanagementmodul.persistence.GebuehrenKategorie;
+import cw.roommanagementmodul.persistence.PMGebuehrenKat;
 
 /**
  *
  * @author Dominik
  */
-public class GebuehrenKategoriePresentationModel {
+public class GebuehrenKategoriePresentationModel
+	extends CWPresentationModel
+{
 
-    private GebuehrenKatManager gebKatManager;
+    private PMGebuehrenKat gebKatManager;
     private Action newAction;
     private Action editAction;
     private Action deleteAction;
@@ -38,7 +44,7 @@ public class GebuehrenKategoriePresentationModel {
     private SelectionEmptyHandler selectionEmptyHandler;
     private DoubleClickHandler doubleClickHandler;
 
-    public GebuehrenKategoriePresentationModel(GebuehrenKatManager gebKatManager) {
+    public GebuehrenKategoriePresentationModel(PMGebuehrenKat gebKatManager) {
         selectionEmptyHandler = new SelectionEmptyHandler();
         this.gebKatManager = gebKatManager;
         doubleClickHandler = new DoubleClickHandler();
@@ -46,7 +52,7 @@ public class GebuehrenKategoriePresentationModel {
         this.initEventHandling();
     }
 
-    public GebuehrenKategoriePresentationModel(GebuehrenKatManager gebKatManager, CWHeaderInfo header) {
+    public GebuehrenKategoriePresentationModel(PMGebuehrenKat gebKatManager, CWHeaderInfo header) {
         this.gebKatManager = gebKatManager;
         selectionEmptyHandler = new SelectionEmptyHandler();
         doubleClickHandler = new DoubleClickHandler();
@@ -112,11 +118,11 @@ public class GebuehrenKategoriePresentationModel {
         this.deleteAction = deleteAction;
     }
 
-    public GebuehrenKatManager getGebKatManager() {
+    public PMGebuehrenKat getGebKatManager() {
         return gebKatManager;
     }
 
-    public void setGebKatManager(GebuehrenKatManager gebKatManager) {
+    public void setGebKatManager(PMGebuehrenKat gebKatManager) {
         this.gebKatManager = gebKatManager;
     }
 
@@ -155,12 +161,12 @@ public class GebuehrenKategoriePresentationModel {
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         model.removeButtonListener(this);
                         gebuehrenKatSelection.setList(gebKatManager.getAll());
-                        GUIManager.changeToLastView();
+                        GUIManager.changeToPreviousView();
                         GUIManager.getStatusbar().setTextAndFadeOut("Zimmer wurde erstellt.");
                     }
                 }
             });
-            GUIManager.changeView(editView, true);
+            GUIManager.changeViewTo(editView, true);
         }
     }
 
@@ -203,7 +209,7 @@ public class GebuehrenKategoriePresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.changeToLastView();  // Zur Uebersicht wechseln
+            GUIManager.changeToPreviousView();  // Zur Uebersicht wechseln
 //                GUIManager.removeView(); // Diese View nicht merken
         //support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
 
@@ -253,11 +259,11 @@ public class GebuehrenKategoriePresentationModel {
 
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     model.removeButtonListener(this);
-                    GUIManager.changeToLastView();
+                    GUIManager.changeToPreviousView();
                 }
 
             }
         });
-        GUIManager.changeView(editView, true);
+        GUIManager.changeViewTo(editView, true);
     }
 }

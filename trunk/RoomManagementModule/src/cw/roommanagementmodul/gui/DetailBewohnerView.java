@@ -1,27 +1,28 @@
 package cw.roommanagementmodul.gui;
 
+import java.awt.Color;
+import java.awt.Font;
+
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.customermanagementmodul.persistence.model.CustomerModel;
-
-import java.awt.Color;
-import java.awt.Font;
-import cw.roommanagementmodul.pojo.Bewohner;
+import cw.customermanagementmodul.customer.persistence.Customer;
+import cw.roommanagementmodul.persistence.Bewohner;
 
 /**
  *
  * @author Dominik
  */
-public class DetailBewohnerView extends CWView
+public class DetailBewohnerView
+	extends CWView<DetailBewohnerPresentationModel>
 {
 
-    private DetailBewohnerPresentationModel model;
     private CWButton bBack;
     private CWLabel lAnrede;
     private CWLabel lVorname;
@@ -43,21 +44,18 @@ public class DetailBewohnerView extends CWView
     private CWLabel lVon;
     private CWLabel lBis;
 
-    public DetailBewohnerView(DetailBewohnerPresentationModel m) {
-        this.model = m;
-
-        initComponents();
-        buildView();
-        initEventHandling();
+    public DetailBewohnerView(DetailBewohnerPresentationModel model) {
+        super(model);
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
 
-        bBack = CWComponentFactory.createButton(model.getBackAction());
+        bBack = CWComponentFactory.createButton(getModel().getBackAction());
         bBack.setText("Zurueck");
 
-        Bewohner b = model.getBewohner();
-        CustomerModel c = b.getCustomer();
+        Bewohner b = getModel().getBewohner();
+        Customer c = b.getCustomer();
 
         this.lAnrede = CWComponentFactory.createLabel(c.getTitle());
         this.lNachname = CWComponentFactory.createLabel(c.getSurname());
@@ -105,14 +103,13 @@ public class DetailBewohnerView extends CWView
             lBis = CWComponentFactory.createLabel(b.getBis().toString());
         }else { lBis = CWComponentFactory.createLabel("");}
         
+         // TODO componentContainer not used
     }
 
-    private void initEventHandling() {
-        
-    }
-
-    private void buildView() {
-        this.setHeaderInfo(new CWHeaderInfo(model.getHeaderText()));
+    public void buildView() {
+    	super.buildView();
+    	
+        this.setHeaderInfo(new CWHeaderInfo(getModel().getHeaderText()));
 
         CWButtonPanel buttonPanel = this.getButtonPanel();
 
@@ -122,7 +119,7 @@ public class DetailBewohnerView extends CWView
                 "right:pref, 4dlu, 50dlu:grow, 4dlu, right:pref, 4dlu, 50dlu:grow",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref,4dlu, pref,4dlu, pref,4dlu, pref");
 
-        PanelBuilder builder = new PanelBuilder(layout, this.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
 
         CellConstraints cc = new CellConstraints();
         builder.addSeparator("Allgemein:", cc.xyw(1, 1, 7));
@@ -170,10 +167,13 @@ public class DetailBewohnerView extends CWView
 
         builder.addSeparator("Bemerkung", cc.xyw(1, 35, 7));
         builder.add(lBemerkung, cc.xyw(1, 37, 7));
+        
+        addToContentPanel(builder.getPanel());
     }
 
     @Override
     public void dispose() {
         
+    	super.dispose();
     }
 }
