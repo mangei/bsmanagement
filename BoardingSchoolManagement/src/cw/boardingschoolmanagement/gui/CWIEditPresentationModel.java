@@ -1,8 +1,6 @@
 package cw.boardingschoolmanagement.gui;
 
-import java.util.List;
-
-import cw.boardingschoolmanagement.gui.CWErrorMessage;
+import com.jgoodies.validation.ValidationResult;
 
 /**
  *
@@ -11,7 +9,7 @@ import cw.boardingschoolmanagement.gui.CWErrorMessage;
 public interface CWIEditPresentationModel
 	extends CWIPresentationModel {
 	
-	public boolean validate(List<CWErrorMessage> errorMessages);
+	public ValidationResult validate();
 	public void save();
 	public void cancel();
 }

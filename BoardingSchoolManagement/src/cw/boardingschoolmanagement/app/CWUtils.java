@@ -129,8 +129,10 @@ public class CWUtils {
     public static JDialog showDialog(CWView view) {
         final JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
         d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-        d.setTitle(view.getHeaderInfo().getHeaderText());
-        d.setIconImage(((ImageIcon)view.getHeaderInfo().getSmallIcon()).getImage());
+        if(view.getHeaderInfo() != null) {
+	        d.setTitle(view.getHeaderInfo().getHeaderText());
+	        d.setIconImage(((ImageIcon)view.getHeaderInfo().getSmallIcon()).getImage());
+        }
         d.add(view);
         d.pack();
         CWUtils.centerWindow(d, GUIManager.getInstance().getMainFrame());

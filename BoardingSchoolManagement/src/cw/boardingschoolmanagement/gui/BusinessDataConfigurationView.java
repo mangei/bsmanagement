@@ -86,8 +86,10 @@ public class BusinessDataConfigurationView
         builder.add(tfEmail,                cc.xy(3, 15));
         builder.addLabel("DVR-Nummer:",     cc.xy(1, 17));
         builder.add(tfDvrNumber,            cc.xy(3, 17));
+
+        this.addToContentPanel(builder.getPanel());
         
-        addToContentPanel(builder.getPanel());
+        addToContentPanel(this);
     }
 
     @Override

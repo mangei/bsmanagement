@@ -9,9 +9,9 @@ import cw.boardingschoolmanagement.gui.model.CWDataField;
  *
  * @author Manuel Geier (CreativeWorkers)
  */
-public interface CWIDataModelExtentionPoint<T> extends CWIExtention {
+public interface CWIDataModelExtentionPoint extends CWIExtention {
 
-	public Class<T> getBaseClass();
+	public Class<?> getBaseClass();
     public List<CWDataField> getFieldList();
 	
 }

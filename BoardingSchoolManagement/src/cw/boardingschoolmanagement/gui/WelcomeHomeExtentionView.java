@@ -39,9 +39,9 @@ public class WelcomeHomeExtentionView
     public void buildView() {
     	super.buildView();
     	
-        this.setHeaderInfo(new CWHeaderInfo(
-                "Willkommen"
-        ));
+//        this.setHeaderInfo(new CWHeaderInfo(
+//                "Willkommen"
+//        ));
 
         FormLayout layout = new FormLayout(
                 "fill:pref:grow",
@@ -52,8 +52,10 @@ public class WelcomeHomeExtentionView
         CellConstraints cc = new CellConstraints();
         builder.add(lWelcomeMessage, cc.xy(1, 1));
         builder.add(lTimeMessage, cc.xy(1, 3));
+
+        this.addToContentPanel(builder.getPanel());
         
-        baseView.addToContentPanel(builder.getPanel());
+        baseView.addToContentPanel(this);
     }
 
     @Override

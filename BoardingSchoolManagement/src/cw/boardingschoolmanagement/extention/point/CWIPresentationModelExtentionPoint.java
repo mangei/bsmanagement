@@ -1,7 +1,6 @@
 package cw.boardingschoolmanagement.extention.point;
 
 import cw.boardingschoolmanagement.extention.CWITypedExtention;
-import cw.boardingschoolmanagement.gui.CWIEditPresentationModel;
 import cw.boardingschoolmanagement.gui.CWIPresentationModel;
 
 /**
@@ -12,5 +11,5 @@ public interface CWIPresentationModelExtentionPoint<TBasePresentationModel exten
         extends CWITypedExtention {
 
 	public void initPresentationModel(TBasePresentationModel baseModel);
-	public CWIEditPresentationModel getModel();
+	
 }

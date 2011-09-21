@@ -2,9 +2,10 @@ package cw.boardingschoolmanagement.gui;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
 
 import javax.persistence.EntityManager;
+
+import com.jgoodies.validation.ValidationResult;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
@@ -88,24 +89,20 @@ public class BusinessDataConfigurationPresentationModel
         return headerInfo;
     }
 
-    public List<String> validate() {
-        return null;
-    }
-
     public void save() {
-    	saveExtentions();
+    	super.save();
         triggerCommit();
     }
 
 	@Override
-	public boolean validate(List<CWErrorMessage> errorMessages) {
-		validateExtentions(errorMessages);
-		return !hasErrorMessages();
+	public ValidationResult validate() {
+		ValidationResult validationResult = super.validate();
+		return validationResult;
 	}
 
 	@Override
 	public void cancel() {
-		cancelExtentions();
+		super.cancel();
 	}
 
 }

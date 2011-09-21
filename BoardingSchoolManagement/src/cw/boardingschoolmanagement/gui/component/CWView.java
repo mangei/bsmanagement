@@ -34,12 +34,20 @@ import com.jgoodies.binding.beans.Model;
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+import com.jgoodies.validation.ValidationResult;
+import com.jgoodies.validation.ValidationResultModel;
+import com.jgoodies.validation.view.ValidationResultViewFactory;
 import com.jidesoft.swing.JideSwingUtilities;
 import com.jidesoft.swing.JideTabbedPane;
 
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.extention.point.CWIEditPresentationModelExtentionPoint;
+import cw.boardingschoolmanagement.extention.point.CWIEditViewExtentionPoint;
+import cw.boardingschoolmanagement.extention.point.CWIPresentationModelExtentionPoint;
 import cw.boardingschoolmanagement.extention.point.CWIViewExtentionPoint;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
 import cw.boardingschoolmanagement.gui.CWIPresentationModel;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory.CWComponentContainer;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.manager.ModuleManager;
@@ -61,11 +69,14 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
     private JScrollPane contentScrollPane;
     private JPanel contentPanel;
     private JPanel mainPanel;
+    private JPanel topInfoActionPanel;
     private CWHeaderInfoPanel headerInfoPanel;
     private CWHeaderInfo headerInfo;
     private JideTabbedPane contentTabs;
     private CWComponentContainer componentContainer;
     private List<CWIViewExtentionPoint> viewExtentions = new ArrayList<CWIViewExtentionPoint>();
+    private PropertyChangeListener validationResultChangeListener;
+    private JComponent validationResultComponent;
 
     // Alignment of the header
     public static final int LEFT = JLabel.LEFT;
@@ -79,10 +90,15 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
     public CWView(TPresentationModel model) {
         this(model, true);
     }
-
+    
     public CWView(TPresentationModel model, boolean contentScrolls) {
+    	this(model, contentScrolls, false);
+    }
+
+    public CWView(TPresentationModel model, boolean contentScrolls, boolean displayPanelsInTabs) {
 
         this.model = model;
+        this.displayPanelsInTabs = displayPanelsInTabs;
 
         setLayout(new BorderLayout());
         setBorder(new EmptyBorder(0, 0, 0, 0));
@@ -103,8 +119,7 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
 
         initButtonPanelEventHandling();
 
-        JPanel topInfoActionPanel = CWComponentFactory.createPanel(new BorderLayout());
-        topInfoActionPanel.add(headerInfoPanel = new CWHeaderInfoPanel(headerInfo), BorderLayout.NORTH);
+        topInfoActionPanel = CWComponentFactory.createPanel(new BorderLayout());
         topInfoActionPanel.add(buttonPanel, BorderLayout.SOUTH);
 
         add(topInfoActionPanel, BorderLayout.NORTH);
@@ -133,7 +148,85 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
         
         componentContainer = CWComponentFactory.createComponentContainer();
         
-        loadViewExtentions();
+        // load view extentions
+        viewExtentions = (List<CWIViewExtentionPoint>) 
+			ModuleManager.getExtentions(CWIViewExtentionPoint.class, this.getClass());
+        viewExtentions.addAll((List<CWIEditViewExtentionPoint>) 
+			ModuleManager.getExtentions(CWIEditViewExtentionPoint.class, this.getClass()));
+        
+        // inject extentions to the model
+        if(model != null && (model instanceof CWPresentationModel || model instanceof CWEditPresentationModel)) {
+        	
+        	if(model instanceof CWPresentationModel || model instanceof CWEditPresentationModel) {
+	        	// add the presentationmodel extentions
+	    		List<CWIPresentationModelExtentionPoint> exList = new ArrayList<CWIPresentationModelExtentionPoint>();
+	    		
+	    		for(int i=0; i<viewExtentions.size(); i++) {
+	    			if(viewExtentions.get(i) instanceof CWIPresentationModelExtentionPoint) {
+	    				exList.add((CWIPresentationModelExtentionPoint)viewExtentions.get(i));
+	    				((CWIPresentationModelExtentionPoint)viewExtentions.get(i)).initPresentationModel(model);
+	    			}
+	    		}
+	    		
+	    		if(model instanceof CWPresentationModel) {
+	    			((CWPresentationModel) model).setExtentions(exList);
+	    		}
+        	
+        	}
+        	if(model instanceof CWEditPresentationModel) {
+        	// CWEditPresentationModel: also add the edit presentationmodel extentions
+        		
+        		List<CWIEditPresentationModelExtentionPoint> exList = new ArrayList<CWIEditPresentationModelExtentionPoint>();
+	    		
+        		for(int i=0; i<viewExtentions.size(); i++) {
+        			if(viewExtentions.get(i) instanceof CWIEditPresentationModelExtentionPoint) {
+        				exList.add((CWIEditPresentationModelExtentionPoint)viewExtentions.get(i));
+        				((CWIEditPresentationModelExtentionPoint)viewExtentions.get(i)).initPresentationModel(model);
+        			}
+        		}
+        		
+            	((CWEditPresentationModel) model).setExtentions(exList);
+    		}
+        }
+        
+//        // initialize model extentions
+//        for(CWIViewExtentionPoint ex: viewExtentions) {
+//    		if(ex instanceof CWIPresentationModelExtentionPoint) {
+//    			((CWIPresentationModelExtentionPoint)ex).initPresentationModel(model);
+//    		}
+//    	}
+        
+        // initialize view extentions
+        for(CWIViewExtentionPoint ex: viewExtentions) {
+    		ex.initView(this);
+    	}
+        
+        // Valiation Result
+        if(model != null && model instanceof CWEditPresentationModel) {
+        	
+        	CWEditPresentationModel editModel = (CWEditPresentationModel) model;
+
+            validationResultComponent = ValidationResultViewFactory.createReportList(editModel.getValidationResultModel());
+            
+        	editModel.getValidationResultModel().addPropertyChangeListener(ValidationResultModel.PROPERTY_MESSAGES, validationResultChangeListener = new PropertyChangeListener() {
+				@Override
+				public void propertyChange(PropertyChangeEvent evt) {
+					ValidationResult validationResult = ((ValidationResultModel)evt.getSource()).getResult();
+					
+					if(validationResult.isEmpty()) {
+						mainPanel.remove(validationResultComponent);
+					} else {
+						mainPanel.add(validationResultComponent, BorderLayout.SOUTH);
+					}
+					
+//					if(validationResult != null && !validationResult.isEmpty()) {
+//						CWView v = new CWView(null);
+//						v.addToContentPanel(validationResultComponent);
+//						CWUtils.showDialog(v);
+//					}
+				}
+        	});
+        }
     }
     
     /**
@@ -158,7 +251,9 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
 
     public void dispose() {
         disposeButtonPanelEventHandling();
-        headerInfoPanel.dispose();
+        if(headerInfoPanel != null) {
+        	headerInfoPanel.dispose();
+        }
 
         leftButtonPanel.removeAll();
         leftButtonPanel.setLayout(null);
@@ -175,6 +270,11 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
         
         if(model != null) {
         	model.release();
+        	
+        	if( model instanceof CWEditPresentationModel) {
+            	CWEditPresentationModel editModel = (CWEditPresentationModel) model;
+            	editModel.getValidationResultModel().removePropertyChangeListener(validationResultChangeListener);           		
+            }
         }
     }
 
@@ -397,11 +497,21 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
 
     public void setHeaderInfo(CWHeaderInfo headerInfo) {
         this.headerInfo = headerInfo;
-        headerInfoPanel.setHeaderInfo(headerInfo);
         
     	if(headerInfo != null) {
-	        setName(headerInfo.getHeaderText());
+    		if(headerInfoPanel == null) {
+    			topInfoActionPanel.add(headerInfoPanel = new CWHeaderInfoPanel(headerInfo, this), BorderLayout.NORTH);
+    		}
+	        headerInfoPanel.setHeaderInfo(headerInfo);
+    	} else {
+    		if(headerInfoPanel != null) {
+    			topInfoActionPanel.remove(headerInfoPanel);
+    			headerInfoPanel.dispose();
+    			headerInfoPanel = null;
+    		}
     	}
+
+        
     }
 
     public void setInnerPanelBorder(Border border) {
@@ -415,25 +525,11 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
     	return componentContainer;
     }
     
-    private final void loadViewExtentions() {
-    	
-    	// Load extentions with view.getClass()
-    	// and call with view object as parameter
-    	
-    	List<CWIViewExtentionPoint> allViewExtentions = (List<CWIViewExtentionPoint>) 
-    		ModuleManager.getExtentions(CWIViewExtentionPoint.class, this.getClass());
-    	
-    	for(CWIViewExtentionPoint ex: allViewExtentions) {
-    		viewExtentions.add(ex);
-    		ex.initView(this);
-    	}
-    	
-    }
-
     public static class CWHeaderInfo
             extends Model
     {
 
+        private String panelname;
         private String headerText;
         private String description;
         private Icon icon;
@@ -452,10 +548,25 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
         }
 
         public CWHeaderInfo(String headerText, String description, Icon icon, Icon smallIcon) {
+            this(headerText, description, icon, smallIcon, headerText);
+        }
+        
+        public CWHeaderInfo(String headerText, String description, Icon icon, Icon smallIcon, String panelname) {
             this.headerText = headerText;
             this.description = description;
             this.icon = icon;
             this.smallIcon = smallIcon;
+            this.panelname = panelname;
+        }
+        
+        public String getPanelname() {
+            return panelname;
+        }
+
+        public void setPanelname(String panelname) {
+            String old = this.panelname;
+            this.panelname = panelname;
+            firePropertyChange("panelname", old, panelname);
         }
 
         public String getDescription() {
@@ -500,6 +611,7 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
     private static class CWHeaderInfoPanel
             extends CWPanel {
 
+    	private CWView baseView;
         private JLabel lHeaderText;
         private JLabel lDescription;
         private JLabel lImage;
@@ -508,8 +620,9 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
 
         private PropertyChangeListener headerInfoChangeListener;
 
-        public CWHeaderInfoPanel(CWHeaderInfo headerInfo) {
-
+        public CWHeaderInfoPanel(CWHeaderInfo headerInfo, CWView baseView) {
+        	this.baseView = baseView;
+        	
             // Build the interface
             setUI(new CWHeaderPanelUI());
             int gab = 3;
@@ -598,6 +711,7 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
             lHeaderText.setText(headerInfo.getHeaderText());
             lDescription.setText("<html><body>" + headerInfo.getDescription() + "</body></html>");
             lImage.setIcon(headerInfo.getIcon());
+            baseView.setName(headerInfo.getPanelname());
 
             // If the image is heighter than the headline + the description, stretch the headline
             // otherwise the image would be cut

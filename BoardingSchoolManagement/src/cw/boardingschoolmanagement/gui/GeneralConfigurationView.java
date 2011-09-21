@@ -71,7 +71,9 @@ public class GeneralConfigurationView
         builder.addLabel("Position: ", cc.xy(2, 5));
         builder.add(cbPathPosition, cc.xy(3, 5));
         
-        addToContentPanel(builder.getPanel());
+        this.addToContentPanel(builder.getPanel());
+        
+        addToContentPanel(this);
     }
 
     @Override
