@@ -16,26 +16,29 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.customermanagementmodul.persistence.model.CustomerModel;
-import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.manager.BewohnerManager;
+import cw.customermanagementmodul.customer.persistence.Customer;
+import cw.roommanagementmodul.persistence.Bewohner;
+import cw.roommanagementmodul.persistence.PMBewohner;
 
 /**
  *
  * @author Dominik
  */
-public class StornoResultPresentationModel {
+public class StornoResultPresentationModel
+	extends CWPresentationModel
+{
 
     private String headerText;
     private Action backAction;
     private Action printAction;
     private ButtonListenerSupport support;
     private List<AccountPosting> postingList;
-    private Map<CustomerModel, List<AccountPosting>> customerPostingMap;
+    private Map<Customer, List<AccountPosting>> customerPostingMap;
     private Map<Bewohner, List<AccountPosting>> bewohnerPostingMap;
-    private Map<CustomerModel, List<AccountPosting>> customerNoBewohnerMap;
+    private Map<Customer, List<AccountPosting>> customerNoBewohnerMap;
     private CWHeaderInfo headerInfo;
 
     public StornoResultPresentationModel(List<AccountPosting> postingList, CWHeaderInfo header) {
@@ -61,7 +64,7 @@ public class StornoResultPresentationModel {
             }
         }
 
-        BewohnerManager bewManager = BewohnerManager.getInstance();
+        PMBewohner bewManager = PMBewohner.getInstance();
         for (int i = 0; i < cList.size(); i++) {
 
             CustomerModel c = cList.get(i);
@@ -193,7 +196,7 @@ public class StornoResultPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.changeToLastView();  // Zur Uebersicht wechseln
+            GUIManager.changeToPreviousView();  // Zur Uebersicht wechseln
 //                GUIManager.removeView(); // Diese View nicht merken
         //support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
 
@@ -216,11 +219,11 @@ public class StornoResultPresentationModel {
                     }
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         model.removeButtonListener(this);
-                        GUIManager.changeToLastView();
+                        GUIManager.changeToPreviousView();
                     }
                 }
             });
-            GUIManager.changeView(printView, true);
+            GUIManager.changeViewTo(printView, true);
 
         }
     }

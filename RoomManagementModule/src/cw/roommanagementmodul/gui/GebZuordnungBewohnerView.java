@@ -1,14 +1,17 @@
 package cw.roommanagementmodul.gui;
 
+import java.awt.BorderLayout;
+
+import javax.swing.JScrollPane;
+
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
+
+import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
-import cw.boardingschoolmanagement.gui.component.CWButton;
-import cw.boardingschoolmanagement.gui.component.CWTable;
-import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
-import java.awt.BorderLayout;
-import javax.swing.JScrollPane;
+import cw.boardingschoolmanagement.gui.renderer.DateTimeDataFieldRenderer;
 
 /**
  *
@@ -52,8 +55,8 @@ public class GebZuordnungBewohnerView extends CWView{
                 model.getGebuehrZuordnungSelection().getSelectionIndexHolder(),
                 tZuordnung)));
 
-        tZuordnung.getColumnModel().getColumn(1).setCellRenderer(new DateTimeTableCellRenderer(true));
-        tZuordnung.getColumnModel().getColumn(2).setCellRenderer(new DateTimeTableCellRenderer(true));
+        tZuordnung.getColumnModel().getColumn(1).setCellRenderer(new DateTimeDataFieldRenderer(true));
+        tZuordnung.getColumnModel().getColumn(2).setCellRenderer(new DateTimeDataFieldRenderer(true));
 
         componentContainer = CWComponentFactory.createComponentContainer()
                 .addComponent(bNew)

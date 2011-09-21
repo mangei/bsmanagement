@@ -1,12 +1,5 @@
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.list.SelectionInList;
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -14,22 +7,35 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.EventObject;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.SwingUtilities;
-import cw.roommanagementmodul.pojo.Kaution;
-import cw.roommanagementmodul.pojo.manager.BewohnerManager;
-import cw.roommanagementmodul.pojo.manager.KautionManager;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
+import com.jgoodies.binding.list.SelectionInList;
+
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.roommanagementmodul.persistence.Kaution;
+import cw.roommanagementmodul.persistence.PMBewohner;
+import cw.roommanagementmodul.persistence.PMKaution;
 
 /**
  *
  * @author Dominik
  */
-public class KautionPresentationModel {
+public class KautionPresentationModel
+	extends CWPresentationModel
+{
 
-    private KautionManager kautionManager;
-    private BewohnerManager bewohnerManager;
+    private PMKaution kautionManager;
+    private PMBewohner bewohnerManager;
     private Action newAction;
     private Action editAction;
     private Action deleteAction;
@@ -41,9 +47,9 @@ public class KautionPresentationModel {
     private DoubleClickHandler doubleClickHandler;
     private CWHeaderInfo headerInfo;
 
-    KautionPresentationModel(KautionManager kautionManager, String header) {
+    KautionPresentationModel(PMKaution kautionManager, String header) {
         this.kautionManager = kautionManager;
-        bewohnerManager = BewohnerManager.getInstance();
+        bewohnerManager = PMBewohner.getInstance();
         selectionEmptyHandler = new SelectionEmptyHandler();
         this.headerText = header;
         doubleClickHandler = new DoubleClickHandler();
@@ -51,9 +57,9 @@ public class KautionPresentationModel {
         this.initEventHandling();
     }
 
-    KautionPresentationModel(KautionManager kautionManager, CWHeaderInfo header) {
+    KautionPresentationModel(PMKaution kautionManager, CWHeaderInfo header) {
         this.kautionManager = kautionManager;
-        bewohnerManager = BewohnerManager.getInstance();
+        bewohnerManager = PMBewohner.getInstance();
         selectionEmptyHandler = new SelectionEmptyHandler();
         this.headerInfo = header;
         doubleClickHandler = new DoubleClickHandler();
@@ -194,12 +200,12 @@ public class KautionPresentationModel {
                     if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                         model.removeButtonListener(this);
                         kautionSelection.setList(kautionManager.getAll());
-                        GUIManager.changeToLastView();
+                        GUIManager.changeToPreviousView();
                         GUIManager.getStatusbar().setTextAndFadeOut("Kaution wurde erstellt.");
                     }
                 }
             });
-            GUIManager.changeView(editView, true);
+            GUIManager.changeViewTo(editView, true);
         }
     }
 
@@ -249,7 +255,7 @@ public class KautionPresentationModel {
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.changeToLastView();  // Zur Uebersicht wechseln
+            GUIManager.changeToPreviousView();  // Zur Uebersicht wechseln
 //                GUIManager.removeView(); // Diese View nicht merken
         //support.fireButtonPressed(new ButtonEvent(ButtonEvent.EXIT_BUTTON));
 
@@ -299,11 +305,11 @@ public class KautionPresentationModel {
 
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     model.removeButtonListener(this);
-                    GUIManager.changeToLastView();
+                    GUIManager.changeToPreviousView();
                 }
 
             }
         });
-        GUIManager.changeView(editView, true);
+        GUIManager.changeViewTo(editView, true);
     }
 }

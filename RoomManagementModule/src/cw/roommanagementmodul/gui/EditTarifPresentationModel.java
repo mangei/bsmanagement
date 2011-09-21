@@ -1,34 +1,37 @@
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
-import com.toedter.calendar.JDateChooser;
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JOptionPane;
-import cw.roommanagementmodul.pojo.Tarif;
-import cw.roommanagementmodul.pojo.manager.TarifManager;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JOptionPane;
+
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+import com.toedter.calendar.JDateChooser;
+
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.roommanagementmodul.persistence.PMTarif;
+import cw.roommanagementmodul.persistence.Tarif;
 
 /**
  *
  * @author Dominik
  */
 public class EditTarifPresentationModel
-        extends PresentationModel<Tarif>
+        extends CWEditPresentationModel<Tarif>
 {
 
     private Tarif tarif;
@@ -37,7 +40,7 @@ public class EditTarifPresentationModel
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
     private ValueModel unsaved;
-    private TarifManager tarifManager;
+    private PMTarif tarifManager;
     private String headerText;
     private JDateChooser dcVon;
     private JDateChooser dcBis;
@@ -51,7 +54,7 @@ public class EditTarifPresentationModel
         super(tarif);
         this.tarif = tarif;
         
-        tarifManager = TarifManager.getInstance();
+        tarifManager = PMTarif.getInstance();
         this.headerInfo = header;
 
         initModels();

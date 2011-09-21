@@ -1,47 +1,46 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.adapter.ComboBoxAdapter;
-import com.jgoodies.binding.list.SelectionInList;
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ComboBoxModel;
 import javax.swing.JOptionPane;
-import cw.roommanagementmodul.pojo.manager.BereichManager;
-import cw.roommanagementmodul.pojo.Bereich;
-import cw.roommanagementmodul.pojo.Zimmer;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
+
+import com.jgoodies.binding.adapter.ComboBoxAdapter;
+import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.roommanagementmodul.persistence.Bereich;
+import cw.roommanagementmodul.persistence.PMBereich;
+import cw.roommanagementmodul.persistence.Zimmer;
 
 /**
  *
  * @author Dominik
  */
 public class EditZimmerPresentationModel 
-        extends PresentationModel<Zimmer>
+        extends CWEditPresentationModel<Zimmer>
 {
 
     private Zimmer zimmer;
     private ButtonListenerSupport support;
-    private BereichManager bereichManager;
+    private PMBereich bereichManager;
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
@@ -57,7 +56,7 @@ public class EditZimmerPresentationModel
         super(zimmer);
         buttonEnable= new ButtonEnable();
         this.zimmer = zimmer;
-        bereichManager = BereichManager.getInstance();
+        bereichManager = PMBereich.getInstance();
         this.digitDocument=new DigitDocument();
         this.headerInfo = header;
         initModels();
@@ -69,7 +68,7 @@ public class EditZimmerPresentationModel
         buttonEnable= new ButtonEnable();
         this.selectedBereich = selectedBereich;
         this.zimmer = zimmer;
-        bereichManager = BereichManager.getInstance();
+        bereichManager = PMBereich.getInstance();
         this.headerInfo = header;
         this.digitDocument=new DigitDocument();
         
@@ -172,7 +171,7 @@ public class EditZimmerPresentationModel
     /**
      * @return the bereichManager
      */
-    public BereichManager getBereichManager() {
+    public PMBereich getBereichManager() {
         return bereichManager;
     }
 

@@ -1,36 +1,39 @@
 package cw.roommanagementmodul.gui;
 
 
-import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.list.SelectionInList;
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JOptionPane;
-import cw.roommanagementmodul.pojo.Bereich;
-import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.Kaution;
-import cw.roommanagementmodul.pojo.Zimmer;
-import cw.roommanagementmodul.pojo.manager.BereichManager;
-import cw.roommanagementmodul.pojo.manager.KautionManager;
-import cw.roommanagementmodul.pojo.manager.ZimmerManager;
+
+import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.roommanagementmodul.persistence.Bereich;
+import cw.roommanagementmodul.persistence.Bewohner;
+import cw.roommanagementmodul.persistence.Kaution;
+import cw.roommanagementmodul.persistence.PMBereich;
+import cw.roommanagementmodul.persistence.PMKaution;
+import cw.roommanagementmodul.persistence.PMZimmer;
+import cw.roommanagementmodul.persistence.Zimmer;
 
 /**
  *
  * @author Dominik
  */
 public class EditBewohnerZimmerPresentationModel
-        extends PresentationModel<Bewohner>
+        extends CWEditPresentationModel<Bewohner>
 {
 
     private Bewohner bewohner;
@@ -39,9 +42,9 @@ public class EditBewohnerZimmerPresentationModel
     private Action saveButtonAction;
     private Action cancelButtonAction;
     private Action saveCancelButtonAction;
-    private ZimmerManager zimmerManager;
-    private BereichManager bereichManager;
-    private KautionManager kautionManager;
+    private PMZimmer zimmerManager;
+    private PMBereich bereichManager;
+    private PMKaution kautionManager;
     private SelectionInList<Zimmer> zimmerList;
     private SelectionInList<Bereich> bereichList;
     private String headerText;
@@ -54,9 +57,9 @@ public class EditBewohnerZimmerPresentationModel
     public EditBewohnerZimmerPresentationModel(Bewohner b, String header) {
         super(b);
         this.bewohner = b;
-        zimmerManager = ZimmerManager.getInstance();
-        bereichManager = BereichManager.getInstance();
-        kautionManager = KautionManager.getInstance();
+        zimmerManager = PMZimmer.getInstance();
+        bereichManager = PMBereich.getInstance();
+        kautionManager = PMKaution.getInstance();
         this.headerText = header;
         
         initModels();

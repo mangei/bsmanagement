@@ -17,7 +17,6 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 
-import com.jgoodies.binding.PresentationModel;
 import com.jgoodies.binding.list.SelectionInList;
 
 import cw.accountmanagementmodul.pojo.AccountPosting;
@@ -26,23 +25,26 @@ import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.app.CalendarUtil;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWIntegerTextField;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.roommanagementmodul.app.GebLaufSelection;
 import cw.roommanagementmodul.geblauf.BewohnerTarifSelection;
 import cw.roommanagementmodul.geblauf.GebTarifSelection;
-import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.BuchungsLaufZuordnung;
-import cw.roommanagementmodul.pojo.GebLauf;
-import cw.roommanagementmodul.pojo.manager.BuchungsLaufZuordnungManager;
-import cw.roommanagementmodul.pojo.manager.GebLaufManager;
+import cw.roommanagementmodul.persistence.Bewohner;
+import cw.roommanagementmodul.persistence.BuchungsLaufZuordnung;
+import cw.roommanagementmodul.persistence.GebLauf;
+import cw.roommanagementmodul.persistence.PMBuchungsLaufZuordnung;
+import cw.roommanagementmodul.persistence.PMGebLauf;
 
 /**
  *
  * @author Dominik
  */
-public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection> {
+public class GebLaufPresentationModel
+	extends CWEditPresentationModel<GebLaufSelection>
+{
 
     private GebLaufSelection gebLauf;
     private Action start;
@@ -57,7 +59,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
     private boolean laufart = true;
     private boolean betriebsart = true;
     private SelectionInList<GebLauf> gebLaufList;
-    private GebLaufManager gebLaufManager;
+    private PMGebLauf gebLaufManager;
     private int stornoInt = 1;
     private CWHeaderInfo headerInfo;
     private Integer year;
@@ -85,7 +87,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         GregorianCalendar gc = new GregorianCalendar();
         year = new Integer(gc.get(Calendar.YEAR));
 
-        gebLaufManager = GebLaufManager.getInstance();
+        gebLaufManager = PMGebLauf.getInstance();
         gebLaufList = new SelectionInList<GebLauf>(gebLaufManager.getAllOrdered());
         mList = new ArrayList();
 
@@ -230,7 +232,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
         if (checkGO == JOptionPane.YES_OPTION) {
             if (stornoGebLauf != null) {
 
-                BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
+                PMBuchungsLaufZuordnung blzManager = PMBuchungsLaufZuordnung.getInstance();
                 List<BuchungsLaufZuordnung> blzList = blzManager.getBuchungsLaufZuordnung(stornoGebLauf);
 
                 List<AccountPosting> newPostingList = new ArrayList<AccountPosting>();
@@ -283,10 +285,10 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                 model.addButtonListener(new ButtonListener() {
 
                     public void buttonPressed(ButtonEvent evt) {
-                        GUIManager.changeToLastView();
+                        GUIManager.changeToPreviousView();
                     }
                 });
-                GUIManager.changeView(laufResultView, true);
+                GUIManager.changeViewTo(laufResultView, true);
 
             } else {
                 JOptionPane.showMessageDialog(null, "Fuer den Storno-Lauf muss ein Gebuehrenlauf ausgewaehlt sein!");
@@ -340,10 +342,10 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
                 model.addButtonListener(new ButtonListener() {
 
                     public void buttonPressed(ButtonEvent evt) {
-                        GUIManager.changeToLastView();
+                        GUIManager.changeToPreviousView();
                     }
                 });
-                GUIManager.changeView(laufResultView, true);
+                GUIManager.changeViewTo(laufResultView, true);
 
             }
         }
@@ -351,7 +353,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
     private boolean startAccounting(BewohnerTarifSelection selection, GebLauf gebLauf) {
 
-        gebLaufManager = GebLaufManager.getInstance();
+        gebLaufManager = PMGebLauf.getInstance();
         if (gebLaufManager.existGebLauf(gebLauf.getAbrMonat()) == false) {
 
             GebLaufSelection gebLaufSelection = new GebLaufSelection();
@@ -367,7 +369,7 @@ public class GebLaufPresentationModel extends PresentationModel<GebLaufSelection
 
 
                     PostingManager postingManager = PostingManager.getInstance();
-                    BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
+                    PMBuchungsLaufZuordnung blzManager = PMBuchungsLaufZuordnung.getInstance();
                     for (int j = 0; j < gebTarifSelection.size(); j++) {
 
                         if (!gebTarifSelection.get(j).isWarning()) {

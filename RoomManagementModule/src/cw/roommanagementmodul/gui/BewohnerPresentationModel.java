@@ -1,20 +1,4 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package cw.roommanagementmodul.gui;
-
-import com.jgoodies.binding.adapter.AbstractTableAdapter;
-import com.jgoodies.binding.adapter.ComboBoxAdapter;
-import com.jgoodies.binding.list.SelectionInList;
-import cw.boardingschoolmanagement.app.ButtonEvent;
-import cw.boardingschoolmanagement.app.ButtonListener;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.GUIManager;
-import cw.customermanagementmodul.gui.CustomerManagementPresentationModel;
-import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
-import cw.customermanagementmodul.persistence.model.CustomerModel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -23,6 +7,7 @@ import java.awt.event.MouseListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.EventObject;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.ComboBoxModel;
@@ -31,24 +16,37 @@ import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 import javax.swing.table.TableModel;
 
-import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.GebuehrZuordnung;
-import cw.roommanagementmodul.pojo.manager.BewohnerHistoryManager;
-import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
-import cw.roommanagementmodul.pojo.manager.BewohnerManager;
-import cw.roommanagementmodul.pojo.manager.KautionManager;
+import com.jgoodies.binding.adapter.AbstractTableAdapter;
+import com.jgoodies.binding.adapter.ComboBoxAdapter;
+import com.jgoodies.binding.list.SelectionInList;
+
+import cw.boardingschoolmanagement.app.ButtonEvent;
+import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.customermanagementmodul.customer.gui.CustomerManagementPresentationModel;
+import cw.customermanagementmodul.customer.gui.EditCustomerPresentationModel;
+import cw.roommanagementmodul.persistence.Bewohner;
+import cw.roommanagementmodul.persistence.GebuehrZuordnung;
+import cw.roommanagementmodul.persistence.PMBewohner;
+import cw.roommanagementmodul.persistence.PMBewohnerHistory;
+import cw.roommanagementmodul.persistence.PMGebuehrZuordnung;
+import cw.roommanagementmodul.persistence.PMKaution;
 
 /**
  *
  * @author Dominik
  */
 public class BewohnerPresentationModel
+	extends CWPresentationModel
 {
 
-    private BewohnerManager bewohnerManager;
+    private PMBewohner bewohnerManager;
     private String headerText;
-    private GebuehrZuordnungManager gebZuordnungManager;
-    private BewohnerHistoryManager historyManager;
+    private PMGebuehrZuordnung gebZuordnungManager;
+    private PMBewohnerHistory historyManager;
     private Action gebuehrZuordnungAction;
     private Action gebAction;
     private Action deleteAction;
@@ -60,23 +58,23 @@ public class BewohnerPresentationModel
     private EditCustomerPresentationModel editCustomerModel;
     private DoubleClickHandler doubleClickHandler;
 
-    public BewohnerPresentationModel(BewohnerManager bewohnerManager) {
+    public BewohnerPresentationModel(PMBewohner bewohnerManager) {
         //super(bewohnerManager);
         this.bewohnerManager = bewohnerManager;
-        historyManager = BewohnerHistoryManager.getInstance();
-        gebZuordnungManager = GebuehrZuordnungManager.getInstance();
+        historyManager = PMBewohnerHistory.getInstance();
+        gebZuordnungManager = PMGebuehrZuordnung.getInstance();
         initModels();
         this.initEventHandling();
 
     }
 
-    public BewohnerPresentationModel(BewohnerManager bewohnerManager, CWHeaderInfo header) {
+    public BewohnerPresentationModel(PMBewohner bewohnerManager, CWHeaderInfo header) {
         //super(bewohnerManager);
         this.bewohnerManager = bewohnerManager;
 
         this.headerInfo = header;
-        historyManager = BewohnerHistoryManager.getInstance();
-        gebZuordnungManager = GebuehrZuordnungManager.getInstance();
+        historyManager = PMBewohnerHistory.getInstance();
+        gebZuordnungManager = PMGebuehrZuordnung.getInstance();
         initModels();
         this.initEventHandling();
     }
@@ -157,14 +155,14 @@ public class BewohnerPresentationModel
     /**
      * @return the bewohnerManager
      */
-    public BewohnerManager getBewohnerManager() {
+    public PMBewohner getBewohnerManager() {
         return bewohnerManager;
     }
 
     /**
      * @param bewohnerManager the bewohnerManager to set
      */
-    public void setBewohnerManager(BewohnerManager bewohnerManager) {
+    public void setBewohnerManager(PMBewohner bewohnerManager) {
         this.bewohnerManager = bewohnerManager;
     }
 
@@ -206,7 +204,7 @@ public class BewohnerPresentationModel
         public void actionPerformed(ActionEvent e) {
             Bewohner b = getBewohnerSelection().getSelection();
 
-            int k = JOptionPane.showConfirmDialog(null, "Bewohner: " + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + " wirklich loeschen?", "LÖSCHEN", JOptionPane.OK_CANCEL_OPTION);
+            int k = JOptionPane.showConfirmDialog(null, "Bewohner: " + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + " wirklich loeschen?", "LOeSCHEN", JOptionPane.OK_CANCEL_OPTION);
             if (k == JOptionPane.OK_OPTION) {
 
                 boolean checkKaution = true;
@@ -260,10 +258,10 @@ public class BewohnerPresentationModel
 
         public void actionPerformed(ActionEvent e) {
 
-            final KautionPresentationModel model = new KautionPresentationModel(KautionManager.getInstance(), new CWHeaderInfo("Kautionen Verwalten", "Uebersicht aller vorhandenen Kautionen"));
+            final KautionPresentationModel model = new KautionPresentationModel(PMKaution.getInstance(), new CWHeaderInfo("Kautionen Verwalten", "Uebersicht aller vorhandenen Kautionen"));
             final KautionView kautionView = new KautionView(model);
 
-            GUIManager.changeView(kautionView, true);
+            GUIManager.changeViewTo(kautionView, true);
 
         }
     }
@@ -309,12 +307,12 @@ public class BewohnerPresentationModel
 
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     model.removeButtonListener(this);
-                    GUIManager.changeToLastView();
+                    GUIManager.changeToPreviousView();
                 }
 
             }
         });
-        GUIManager.changeView(gebView, true);
+        GUIManager.changeViewTo(gebView, true);
     }
 
     private void gebZuordnungSelectedItem(EventObject e) {
@@ -332,12 +330,12 @@ public class BewohnerPresentationModel
 
                 if (evt.getType() == ButtonEvent.EXIT_BUTTON || evt.getType() == ButtonEvent.SAVE_EXIT_BUTTON) {
                     model.removeButtonListener(this);
-                    GUIManager.changeToLastView();
+                    GUIManager.changeToPreviousView();
                 }
 
             }
         });
-        GUIManager.changeView(detailView, true);
+        GUIManager.changeViewTo(detailView, true);
     }
 
     private class BewohnerTableModel

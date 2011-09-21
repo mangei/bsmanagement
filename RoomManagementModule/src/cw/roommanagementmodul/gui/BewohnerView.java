@@ -1,25 +1,26 @@
 package cw.roommanagementmodul.gui;
 
+import javax.swing.JScrollPane;
+
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWTable;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
-import cw.boardingschoolmanagement.gui.renderer.DateTimeTableCellRenderer;
-import java.awt.BorderLayout;
-import javax.swing.JScrollPane;
+import cw.boardingschoolmanagement.gui.renderer.DateTimeDataFieldRenderer;
 
 /**
  *
  * @author Dominik
  */
-public class BewohnerView extends CWView
+public class BewohnerView
+	extends CWView<BewohnerPresentationModel>
 {
 
-    private BewohnerPresentationModel model;
     private CWButton bGeb;
     private CWButton bDelete;
     private CWButton bGebZuordnung;
@@ -27,42 +28,38 @@ public class BewohnerView extends CWView
     private CWButton bDetail;
     private CWButton bKaution;
     private CWTable tBewohner;
-    private CWComponentFactory.CWComponentContainer componentContainer;
 
-    public BewohnerView(BewohnerPresentationModel m) {
-        this.model = m;
-
-        initComponents();
-        buildView();
-        initEventHandling();
+    public BewohnerView(BewohnerPresentationModel model) {
+        super(model);
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
 
-        bGeb = CWComponentFactory.createButton(model.getGebAction());
+        bGeb = CWComponentFactory.createButton(getModel().getGebAction());
         bGeb.setText("Neue Gebuehr");
-        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
+        bDelete = CWComponentFactory.createButton(getModel().getDeleteAction());
         bDelete.setText("Loeschen");
-        bGebZuordnung = CWComponentFactory.createButton(model.getGebuehrZuordnungAction());
+        bGebZuordnung = CWComponentFactory.createButton(getModel().getGebuehrZuordnungAction());
         bGebZuordnung.setText("Uebersicht");
-        bDetail = CWComponentFactory.createButton(model.getDetailAction());
+        bDetail = CWComponentFactory.createButton(getModel().getDetailAction());
         bDetail.setText("Bearbeiten");
-        bKaution = CWComponentFactory.createButton(model.getKautionAction());
+        bKaution = CWComponentFactory.createButton(getModel().getKautionAction());
         bKaution.setText("Kautionen");
 
         String bewohnerTableStateName = "cw.roommanagementmodul.BewohnerView.bewohnerTableState";
-        tBewohner = CWComponentFactory.createTable(model.createBewohnerTableModel(model.getBewohnerSelection()), "keine Bewohner vorhanden", bewohnerTableStateName);
+        tBewohner = CWComponentFactory.createTable(getModel().createBewohnerTableModel(getModel().getBewohnerSelection()), "keine Bewohner vorhanden", bewohnerTableStateName);
 
         tBewohner.setSelectionModel(new SingleListSelectionAdapter(new CWTableSelectionConverter(
-                model.getBewohnerSelection().getSelectionIndexHolder(),
+        		getModel().getBewohnerSelection().getSelectionIndexHolder(),
                 tBewohner)));
 
 
-        tBewohner.getColumnModel().getColumn(4).setCellRenderer(new DateTimeTableCellRenderer(true));
-        tBewohner.getColumnModel().getColumn(5).setCellRenderer(new DateTimeTableCellRenderer(true));
+        tBewohner.getColumnModel().getColumn(4).setCellRenderer(new DateTimeDataFieldRenderer(true));
+        tBewohner.getColumnModel().getColumn(5).setCellRenderer(new DateTimeDataFieldRenderer(true));
 
 
-        componentContainer = CWComponentFactory.createComponentContainer()
+        getComponentContainer()
                 .addComponent(bGeb)
                 .addComponent(bDelete)
                 .addComponent(bGebZuordnung)
@@ -70,15 +67,17 @@ public class BewohnerView extends CWView
                 .addComponent(bKaution)
                 .addComponent(tBewohner);
 
+        initEventHandling();
     }
 
     private void initEventHandling() {
-        tBewohner.addMouseListener(model.getDoubleClickHandler());
+        tBewohner.addMouseListener(getModel().getDoubleClickHandler());
     }
 
-    private void buildView() {
+    public void buildView() {
+    	super.buildView();
 
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
 
         this.getButtonPanel().add(bDetail);
         this.getButtonPanel().add(bGebZuordnung);
@@ -98,13 +97,13 @@ public class BewohnerView extends CWView
 //        list.add(sel);
 //
 //        panel.getTopPanel().add(new JObjectChooser(list, null), cc.xy(1, 1));
-        this.getContentPanel().add(new JScrollPane(tBewohner), BorderLayout.CENTER);
+        addToContentPanel(new JScrollPane(tBewohner));
     }
 
     @Override
     public void dispose() {
-        tBewohner.removeMouseListener(model.getDoubleClickHandler());
-        componentContainer.dispose();
-        model.dispose();
+        tBewohner.removeMouseListener(getModel().getDoubleClickHandler());
+        
+        super.dispose();
     }
 }

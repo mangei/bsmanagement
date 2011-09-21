@@ -1,20 +1,22 @@
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.PresentationModel;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.manager.GUIManager;
 import java.awt.event.ActionEvent;
+
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import cw.roommanagementmodul.pojo.Bewohner;
+
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.roommanagementmodul.persistence.Bewohner;
 
 /**
  *
  * @author Dominik
  */
 public class DetailBewohnerPresentationModel 
-        extends PresentationModel<Bewohner>
+        extends CWEditPresentationModel<Bewohner>
 {
 
     private Action backAction;
@@ -72,7 +74,7 @@ public class DetailBewohnerPresentationModel
         }
 
         public void actionPerformed(ActionEvent e) {
-            GUIManager.changeToLastView();  // Zur Uebersicht wechseln
+            GUIManager.changeToPreviousView();  // Zur Uebersicht wechseln
 
         }
     }

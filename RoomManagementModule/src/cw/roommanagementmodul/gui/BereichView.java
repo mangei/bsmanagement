@@ -1,71 +1,68 @@
 package cw.roommanagementmodul.gui;
 
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.roommanagementmodul.pojo.Bereich;
-import cw.roommanagementmodul.pojo.Zimmer;
-import java.awt.BorderLayout;
 import java.awt.Component;
-import javax.swing.JButton;
+
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeSelectionModel;
 
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.component.CWButton;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
+import cw.boardingschoolmanagement.gui.component.CWTree;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.roommanagementmodul.persistence.Bereich;
+import cw.roommanagementmodul.persistence.Zimmer;
+
 /**
  *
  * @author Dominik
  */
-public class BereichView extends CWView
+public class BereichView
+	extends CWView<BereichPresentationModel>
 {
 
-    private BereichPresentationModel model;
-    private JButton bNew;
-    private JButton bEdit;
-    private JButton bDelete;
-    private JButton bZimmerNew;
-    private JButton bZimmerEdit;
-    private JButton bZimmerDelete;
-    private JTree bereichTree;
-    private JButton viewZimmerTabelle;
-    private CWComponentFactory.CWComponentContainer componentContainer;
+    private CWButton bNew;
+    private CWButton bEdit;
+    private CWButton bDelete;
+    private CWButton bZimmerNew;
+    private CWButton bZimmerEdit;
+    private CWButton bZimmerDelete;
+    private CWTree bereichTree;
+    private CWButton viewZimmerTabelle;
 
-    public BereichView(BereichPresentationModel m) {
-        this.model = m;
-
-        initComponents();
-        buildView();
-        initEventHandling();
+    public BereichView(BereichPresentationModel model) {
+        super(model);
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
 
-        bNew = CWComponentFactory.createButton(model.getNewAction());
+        bNew = CWComponentFactory.createButton(getModel().getNewAction());
         bNew.setText("Neuer Bereich");
-        bEdit = CWComponentFactory.createButton(model.getEditAction());
+        bEdit = CWComponentFactory.createButton(getModel().getEditAction());
         bEdit.setText("Bearbeiten");
-        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
+        bDelete = CWComponentFactory.createButton(getModel().getDeleteAction());
         bDelete.setText("Loeschen");
 
-
-        bZimmerNew = CWComponentFactory.createButton(model.getNewZimmerAction());
+        bZimmerNew = CWComponentFactory.createButton(getModel().getNewZimmerAction());
         bZimmerNew.setText("Neues Zimmer");
-        bZimmerEdit = CWComponentFactory.createButton(model.getEditZimmerAction());
+        bZimmerEdit = CWComponentFactory.createButton(getModel().getEditZimmerAction());
         bZimmerEdit.setText("Bearbeiten");
-        bZimmerDelete = CWComponentFactory.createButton(model.getDeleteZimmerAction());
+        bZimmerDelete = CWComponentFactory.createButton(getModel().getDeleteZimmerAction());
         bZimmerDelete.setText("Loeschen");
 
-        viewZimmerTabelle = CWComponentFactory.createButton(model.getViewTabelleAction());
+        viewZimmerTabelle = CWComponentFactory.createButton(getModel().getViewTabelleAction());
         viewZimmerTabelle.setText("Zimmer Tabelle");
 
-        model.initTree(model.getRootTree());
-        bereichTree = CWComponentFactory.createTree(model.getTreeModel());
+        getModel().initTree(getModel().getRootTree());
+        bereichTree = CWComponentFactory.createTree(getModel().getTreeModel());
         bereichTree.setRootVisible(true);
 
         bereichTree.getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
-        bereichTree.addTreeSelectionListener(model.getBereichListener());
+        bereichTree.addTreeSelectionListener(getModel().getBereichListener());
         bereichTree.setShowsRootHandles(true);
 
         MyRenderer renderer = new MyRenderer();
@@ -74,17 +71,21 @@ public class BereichView extends CWView
         renderer.setLeafIcon(CWUtils.loadIcon("cw/roommanagementmodul/images/box.png"));
         bereichTree.setCellRenderer(renderer);
 
-        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bNew).addComponent(bEdit).addComponent(bDelete).addComponent(bZimmerNew).addComponent(bZimmerEdit).addComponent(bZimmerDelete).addComponent(viewZimmerTabelle).addComponent(bereichTree);
-
-
+        getComponentContainer()
+        	.addComponent(bNew)
+        	.addComponent(bEdit)
+        	.addComponent(bDelete)
+        	.addComponent(bZimmerNew)
+        	.addComponent(bZimmerEdit)
+        	.addComponent(bZimmerDelete)
+        	.addComponent(viewZimmerTabelle)
+        	.addComponent(bereichTree);
     }
 
-    private void initEventHandling() {
-
-    }
-
-    private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+    public void buildView() {
+    	super.buildView();
+    	
+        this.setHeaderInfo(getModel().getHeaderInfo());
 
         this.getButtonPanel().add(bNew);
         this.getButtonPanel().add(bEdit);
@@ -93,14 +94,15 @@ public class BereichView extends CWView
         this.getButtonPanel().add(bZimmerEdit);
         this.getButtonPanel().add(bZimmerDelete);
         this.getButtonPanel().add(viewZimmerTabelle);
-        this.getContentPanel().add(new JScrollPane(bereichTree), BorderLayout.CENTER);
+        
+        addToContentPanel(new JScrollPane(bereichTree), true);
     }
 
     @Override
     public void dispose() {
-        bereichTree.removeTreeSelectionListener(model.getBereichListener());
-        componentContainer.dispose();
-        model.dispose();
+        bereichTree.removeTreeSelectionListener(getModel().getBereichListener());
+        
+        super.dispose();
     }
 
     class MyRenderer extends DefaultTreeCellRenderer {

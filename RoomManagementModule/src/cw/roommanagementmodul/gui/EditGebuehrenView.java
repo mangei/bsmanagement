@@ -2,24 +2,25 @@ package cw.roommanagementmodul.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWButton;
-import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComboBox;
+import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import javax.swing.JPanel;
-import cw.roommanagementmodul.pojo.Gebuehr;
+import cw.roommanagementmodul.persistence.Gebuehr;
 
 /**
  *
  * @author Dominik
  */
-public class EditGebuehrenView extends CWView
+public class EditGebuehrenView
+	extends CWView<EditGebuehrenPresentationModel>
 {
 
-    private EditGebuehrenPresentationModel model;
     private CWLabel lGebuehrenName;
     private CWLabel lKategorie;
     private CWTextField tfGebuehrenName;
@@ -28,34 +29,30 @@ public class EditGebuehrenView extends CWView
     private CWButton bCancel;
     private CWButton bSaveCancel;
 
-    private CWComponentFactory.CWComponentContainer componentContainer;
-
     public EditGebuehrenView(EditGebuehrenPresentationModel model) {
-        this.model = model;
-
-        initComponents();
-        buildView();
-        initEventHandling();
+        super(model);
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
+    	
         lGebuehrenName = CWComponentFactory.createLabel("Gebuehren Name: ");
         lKategorie = CWComponentFactory.createLabel("Kategorie: ");
 
-        tfGebuehrenName = CWComponentFactory.createTextField(model.getBufferedModel(Gebuehr.PROPERTYNAME_NAME),false);
+        tfGebuehrenName = CWComponentFactory.createTextField(getModel().getBufferedModel(Gebuehr.PROPERTYNAME_NAME),false);
 
-        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(getModel().getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(getModel().getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
-        bSaveCancel.setText("Speichern u. Schließen");
+        bSaveCancel = CWComponentFactory.createButton(getModel().getSaveCancelButtonAction());
+        bSaveCancel.setText("Speichern u. Schliessen");
 
-        cbKategorie = CWComponentFactory.createComboBox(model.getGebKatList());
+        cbKategorie = CWComponentFactory.createComboBox(getModel().getGebKatList());
 
-        componentContainer= CWComponentFactory.createComponentContainer()
+        getComponentContainer()
                 .addComponent(bSave)
                 .addComponent(bCancel)
                 .addComponent(bSaveCancel)
@@ -65,18 +62,17 @@ public class EditGebuehrenView extends CWView
                 .addComponent(tfGebuehrenName);
     }
 
-    private void initEventHandling() {
-    }
-    
-     private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+     public void buildView() {
+    	 super.buildView();
+    	 
+        this.setHeaderInfo(getModel().getHeaderInfo());
         CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
-        JPanel contentPanel = this.getContentPanel();
+        CWPanel contentPanel = CWComponentFactory.createPanel();
 
         /**
          * Boxes
@@ -92,11 +88,12 @@ public class EditGebuehrenView extends CWView
 
         contentPanel.add(tfGebuehrenName, cc.xy(3, 3));
         contentPanel.add(cbKategorie, cc.xy(3, 5));
+        
+        addToContentPanel(contentPanel);
     }
 
     @Override
     public void dispose() {
-        componentContainer.dispose();
-        model.dispose();
+        super.dispose();
     }
 }

@@ -1,28 +1,31 @@
 package cw.roommanagementmodul.gui;
 
 
-import com.jgoodies.binding.PresentationModel;
+import java.awt.event.ActionEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JOptionPane;
+
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import java.awt.event.ActionEvent;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.JOptionPane;
-import cw.roommanagementmodul.pojo.GebuehrenKategorie;
+import cw.roommanagementmodul.persistence.GebuehrenKategorie;
 
 /**
  *
  * @author Dominik
  */
 public class EditGebuehrenKategoriePresentationModel
-        extends PresentationModel<GebuehrenKategorie>
+        extends CWEditPresentationModel<GebuehrenKategorie>
 {
 
     private GebuehrenKategorie gebKat;

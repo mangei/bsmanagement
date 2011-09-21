@@ -1,42 +1,45 @@
 package cw.roommanagementmodul.gui;
 
-import com.jgoodies.binding.PresentationModel;
-import com.jgoodies.binding.adapter.ComboBoxAdapter;
-import com.jgoodies.binding.list.SelectionInList;
-import com.jgoodies.binding.value.ValueHolder;
-import com.jgoodies.binding.value.ValueModel;
-import cw.boardingschoolmanagement.app.ButtonListenerSupport;
-import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.ComboBoxModel;
-import cw.roommanagementmodul.pojo.manager.BereichManager;
-import cw.roommanagementmodul.pojo.manager.BewohnerManager;
-import cw.roommanagementmodul.pojo.manager.ZimmerManager;
-import cw.roommanagementmodul.pojo.Bereich;
-import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.Zimmer;
-import cw.roommanagementmodul.pojo.manager.KautionManager;
-import java.awt.event.ItemEvent;
+
+import com.jgoodies.binding.adapter.ComboBoxAdapter;
+import com.jgoodies.binding.list.SelectionInList;
+import com.jgoodies.binding.value.ValueHolder;
+import com.jgoodies.binding.value.ValueModel;
+
+import cw.boardingschoolmanagement.app.ButtonListenerSupport;
+import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.roommanagementmodul.persistence.Bereich;
+import cw.roommanagementmodul.persistence.Bewohner;
+import cw.roommanagementmodul.persistence.PMBereich;
+import cw.roommanagementmodul.persistence.PMBewohner;
+import cw.roommanagementmodul.persistence.PMKaution;
+import cw.roommanagementmodul.persistence.PMZimmer;
+import cw.roommanagementmodul.persistence.Zimmer;
 
 /**
  *
  * @author Dominik
  */
 public class BewohnerEditCustomerTabExtentionPresentationModel
-        extends PresentationModel<Bewohner>
+        extends CWEditPresentationModel<Bewohner>
 {
 
     private Bewohner bewohner;
     private ButtonListenerSupport support;
     private ValueModel unsaved;
-    private ZimmerManager zimmerManager;
-    private BereichManager bereichManager;
-    private KautionManager kautionManager;
+    private PMZimmer zimmerManager;
+    private PMBereich bereichManager;
+    private PMKaution kautionManager;
     private SelectionInList<Zimmer> zimmerList;
     private SelectionInList<Bereich> bereichList;
     private SelectionInList<Bereich> kautionList;
@@ -50,13 +53,13 @@ public class BewohnerEditCustomerTabExtentionPresentationModel
     private SelectionInList<String> kautionStadi;
     private KautionStatusItemListener kautionListener;
 
-    public BewohnerEditCustomerTabExtentionPresentationModel(BewohnerManager bewohnerManager, Bewohner b, ValueModel unsaved) {
+    public BewohnerEditCustomerTabExtentionPresentationModel(PMBewohner bewohnerManager, Bewohner b, ValueModel unsaved) {
         super(b);
         this.bewohner = b;
         checkBoxState = ItemEvent.DESELECTED;
-        zimmerManager = ZimmerManager.getInstance();
-        bereichManager = BereichManager.getInstance();
-        kautionManager= KautionManager.getInstance();
+        zimmerManager = PMZimmer.getInstance();
+        bereichManager = PMBereich.getInstance();
+        kautionManager= PMKaution.getInstance();
         kautionListener= new KautionStatusItemListener();
         this.unsaved = unsaved;
 

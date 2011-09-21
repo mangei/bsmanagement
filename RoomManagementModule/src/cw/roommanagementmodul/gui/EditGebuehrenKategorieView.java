@@ -2,53 +2,51 @@ package cw.roommanagementmodul.gui;
 
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
+
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import javax.swing.JPanel;
-import cw.roommanagementmodul.pojo.GebuehrenKategorie;
+import cw.roommanagementmodul.persistence.GebuehrenKategorie;
 
 /**
  *
  * @author Dominik
  */
-public class EditGebuehrenKategorieView extends CWView
+public class EditGebuehrenKategorieView
+	extends CWView<EditGebuehrenKategoriePresentationModel>
 {
 
-    private EditGebuehrenKategoriePresentationModel model;
     private CWButton bSave;
     private CWButton bCancel;
     private CWButton bSaveCancel;
     private CWLabel lKatName;
     private CWTextField tfKatName;
-    private CWComponentFactory.CWComponentContainer componentContainer;
 
     public EditGebuehrenKategorieView(EditGebuehrenKategoriePresentationModel model) {
-        this.model = model;
-
-        initComponents();
-        buildView();
-        initEventHandling();
+        super(model);
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
+    	
         lKatName = CWComponentFactory.createLabel("Bezeichnung: ");
 
-        tfKatName = CWComponentFactory.createTextField(model.getBufferedModel(GebuehrenKategorie.PROPERTYNAME_NAME), false);
+        tfKatName = CWComponentFactory.createTextField(getModel().getBufferedModel(GebuehrenKategorie.PROPERTYNAME_NAME), false);
 
-        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(getModel().getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(getModel().getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
-        bSaveCancel.setText("Speichern u. Schließen");
+        bSaveCancel = CWComponentFactory.createButton(getModel().getSaveCancelButtonAction());
+        bSaveCancel.setText("Speichern u. Schliessen");
 
-        componentContainer = CWComponentFactory.createComponentContainer()
+        getComponentContainer()
                 .addComponent(lKatName)
                 .addComponent(tfKatName)
                 .addComponent(bSave)
@@ -57,19 +55,17 @@ public class EditGebuehrenKategorieView extends CWView
 
     }
 
-    private void initEventHandling() {
-    }
+    public void buildView() {
+    	super.buildView();
 
-    private void buildView() {
-
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
         CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
-        JPanel contentPanel = this.getContentPanel();
+        CWPanel contentPanel = CWComponentFactory.createPanel();
 
         /**
          * Boxes
@@ -82,11 +78,12 @@ public class EditGebuehrenKategorieView extends CWView
         CellConstraints cc = new CellConstraints();
         contentPanel.add(lKatName, cc.xy(1, 3));
         contentPanel.add(tfKatName, cc.xy(3, 3));
+        
+        addToContentPanel(contentPanel);
     }
 
     @Override
     public void dispose() {
-        componentContainer.dispose();
-        model.dispose();
+    	super.dispose();
     }
 }
