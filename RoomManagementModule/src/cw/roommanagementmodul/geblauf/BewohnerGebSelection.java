@@ -6,7 +6,8 @@
 package cw.roommanagementmodul.geblauf;
 
 import java.util.List;
-import cw.roommanagementmodul.pojo.Bewohner;
+
+import cw.roommanagementmodul.persistence.Bewohner;
 
 /**
  *

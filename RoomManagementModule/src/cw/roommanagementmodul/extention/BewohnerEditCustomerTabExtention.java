@@ -1,40 +1,43 @@
 package cw.roommanagementmodul.extention;
 
-import cw.boardingschoolmanagement.gui.component.CWPanel;
-import cw.roommanagementmodul.gui.*;
-import cw.customermanagementmodul.extention.point.EditCustomerTabExtentionPoint;
-import cw.customermanagementmodul.gui.EditCustomerPresentationModel;
-import cw.customermanagementmodul.persistence.model.CustomerModel;
-
-import java.util.List;
-import javax.swing.JComponent;
-import cw.roommanagementmodul.pojo.manager.BewohnerManager;
-import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.Zimmer;
-import cw.roommanagementmodul.pojo.manager.BewohnerHistoryManager;
 import java.awt.event.ItemEvent;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
+
 import javax.swing.JOptionPane;
+
+import cw.boardingschoolmanagement.extention.point.CWIEditViewExtentionPoint;
+import cw.boardingschoolmanagement.gui.CWIEditPresentationModel;
+import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.customermanagementmodul.customer.gui.EditCustomerPresentationModel;
+import cw.customermanagementmodul.customer.gui.EditCustomerView;
+import cw.customermanagementmodul.customer.persistence.Customer;
+import cw.roommanagementmodul.gui.BewohnerEditCustomerTabExtentionPresentationModel;
+import cw.roommanagementmodul.gui.BewohnerEditCustomerTabExtentionView;
+import cw.roommanagementmodul.persistence.Bewohner;
+import cw.roommanagementmodul.persistence.PMBewohner;
+import cw.roommanagementmodul.persistence.PMBewohnerHistory;
+import cw.roommanagementmodul.persistence.Zimmer;
 
 /**
  *
  * @author Dominik
  */
-public class BewohnerEditCustomerTabExtention implements EditCustomerTabExtentionPoint {
+public class BewohnerEditCustomerTabExtention 
+	implements CWIEditViewExtentionPoint<EditCustomerView, EditCustomerPresentationModel> {
 
-    private BewohnerManager bewohnerManager;
+    private PMBewohner bewohnerManager;
     private BewohnerEditCustomerTabExtentionView view;
-    private BewohnerHistoryManager historyManager;
+    private PMBewohnerHistory historyManager;
     private BewohnerEditCustomerTabExtentionPresentationModel model;
     private Bewohner b;
-    private CustomerModel c;
+    private Customer c;
     private Zimmer tempZimmer;
 
-    public CWPanel getView() {
-        view=new BewohnerEditCustomerTabExtentionView(model);
+    public CWView<?> getView() {
         return view;
     }
 
@@ -106,10 +109,6 @@ public class BewohnerEditCustomerTabExtention implements EditCustomerTabExtentio
         return true;
     }
 
-    public void reset() {
-        model.triggerFlush();
-    }
-
     public List<String> validate() {
         ArrayList<String> l = new ArrayList<String>();
         if (model.getCheckBoxState() == ItemEvent.SELECTED && (model.getBufferedModel(Bewohner.PROPERTYNAME_ZIMMER).getValue() == null || model.getBufferedModel(Bewohner.PROPERTYNAME_VON).getValue() == null)) {
@@ -122,11 +121,34 @@ public class BewohnerEditCustomerTabExtention implements EditCustomerTabExtentio
         return l;
     }
 
-    public void initPresentationModel(EditCustomerPresentationModel editCustomerModel) {
-        bewohnerManager = BewohnerManager.getInstance();
-        historyManager = BewohnerHistoryManager.getInstance();
-        c = editCustomerModel.getBean();
-        b = bewohnerManager.getBewohner(editCustomerModel.getBean());
+    public CWIEditPresentationModel getModel() {
+        return model;
+    }
+
+	@Override
+	public Class<?> getExtentionClass() {
+		return null;
+	}
+
+	@Override
+	public void initView(EditCustomerView baseView) {
+		view = new BewohnerEditCustomerTabExtentionView(model);
+	}
+
+	@Override
+	public List<Class<?>> getExtentionClassList() {
+		List<Class<?>> list = new ArrayList<Class<?>>();
+		list.add(EditCustomerView.class);
+		list.add(EditCustomerPresentationModel.class);
+		return list;
+	}
+
+	@Override
+	public void initPresentationModel(EditCustomerPresentationModel baseModel) {
+		bewohnerManager = PMBewohner.getInstance();
+        historyManager = PMBewohnerHistory.getInstance();
+        c = baseModel.getBean();
+        b = bewohnerManager.getBewohner(baseModel.getBean());
         if (b == null) {
             b = new Bewohner();
         } else {
@@ -134,19 +156,7 @@ public class BewohnerEditCustomerTabExtention implements EditCustomerTabExtentio
         }
 
 
-        model = new BewohnerEditCustomerTabExtentionPresentationModel(bewohnerManager, b, editCustomerModel.getUnsaved());
-    }
-
-      public void dispose() {
-        view.dispose();
-    }
-
-    public int priority() {
-        return 0;
-    }
-
-    public Object getModel() {
-        return model;
-    }
+        model = new BewohnerEditCustomerTabExtentionPresentationModel(bewohnerManager, b, baseModel.getUnsaved());
+	}
 
 }

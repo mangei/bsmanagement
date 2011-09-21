@@ -5,7 +5,7 @@
 
 package cw.roommanagementmodul.geblauf;
 
-import cw.roommanagementmodul.pojo.Tarif;
+import cw.roommanagementmodul.persistence.Tarif;
 
 /**
  *

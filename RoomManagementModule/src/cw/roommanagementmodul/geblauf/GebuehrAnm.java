@@ -5,7 +5,7 @@
 
 package cw.roommanagementmodul.geblauf;
 
-import cw.roommanagementmodul.pojo.Gebuehr;
+import cw.roommanagementmodul.persistence.Gebuehr;
 
 /**
  *

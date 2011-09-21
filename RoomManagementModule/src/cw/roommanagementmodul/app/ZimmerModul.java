@@ -16,8 +16,8 @@ import cw.boardingschoolmanagement.manager.MenuManager;
 import cw.boardingschoolmanagement.module.Module;
 import cw.boardingschoolmanagement.persistence.CascadeEvent;
 import cw.boardingschoolmanagement.persistence.CascadeListener;
-import cw.customermanagementmodul.persistence.PMCustomer;
-import cw.customermanagementmodul.persistence.model.CustomerModel;
+import cw.customermanagementmodul.customer.persistence.Customer;
+import cw.customermanagementmodul.customer.persistence.PMCustomer;
 import cw.roommanagementmodul.gui.BereichPresentationModel;
 import cw.roommanagementmodul.gui.BereichView;
 import cw.roommanagementmodul.gui.BewohnerPresentationModel;
@@ -26,44 +26,31 @@ import cw.roommanagementmodul.gui.GebLaufPresentationModel;
 import cw.roommanagementmodul.gui.GebLaufView;
 import cw.roommanagementmodul.gui.GebuehrenPresentationModel;
 import cw.roommanagementmodul.gui.GebuehrenView;
-import cw.roommanagementmodul.pojo.Bewohner;
-import cw.roommanagementmodul.pojo.BuchungsLaufZuordnung;
-import cw.roommanagementmodul.pojo.Gebuehr;
-import cw.roommanagementmodul.pojo.GebuehrenKategorie;
-import cw.roommanagementmodul.pojo.manager.BereichManager;
-import cw.roommanagementmodul.pojo.manager.BewohnerManager;
-import cw.roommanagementmodul.pojo.manager.BuchungsLaufZuordnungManager;
-import cw.roommanagementmodul.pojo.manager.GebuehrZuordnungManager;
-import cw.roommanagementmodul.pojo.manager.GebuehrenKatManager;
-import cw.roommanagementmodul.pojo.manager.GebuehrenManager;
+import cw.roommanagementmodul.images.ImageDefinitionRoom;
+import cw.roommanagementmodul.persistence.Bewohner;
+import cw.roommanagementmodul.persistence.BuchungsLaufZuordnung;
+import cw.roommanagementmodul.persistence.Gebuehr;
+import cw.roommanagementmodul.persistence.GebuehrenKategorie;
+import cw.roommanagementmodul.persistence.PMBereich;
+import cw.roommanagementmodul.persistence.PMBewohner;
+import cw.roommanagementmodul.persistence.PMBuchungsLaufZuordnung;
+import cw.roommanagementmodul.persistence.PMGebuehr;
+import cw.roommanagementmodul.persistence.PMGebuehrZuordnung;
+import cw.roommanagementmodul.persistence.PMGebuehrenKat;
 
 /**
  * @author Jeitler Dominik
  */
 public class ZimmerModul implements Module {
 
-    private CustomerModel customer;
+    private Customer customer;
     private Bewohner bewohner;
 
-    public String getModulName() {
-        return "zimmer";
-    }
-
-    public Module createModul(Object obj) {
-//        Costumer c = (Costumer)obj;
-//        ZimmerModul modul = new ZimmerModul();
-//        modul.setCostumer(c);
-//        BewohnerCollection bewohnerCollection = (BewohnerCollection)CollectionManager.getCollection(BewohnerCollection.class);
-//        modul.setBewohner(bewohnerCollection.getBewohner(this.getCostumer()));
-//        return modul;
-        return null;
-    }
-
-    public CustomerModel getCustomer() {
+    public Customer getCustomer() {
         return customer;
     }
 
-    public void setCustomer(CustomerModel customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
@@ -76,7 +63,6 @@ public class ZimmerModul implements Module {
     }
 
     public void init() {
-        System.out.println("hihohi");
         MenuManager.getSideMenu().addCategory("ZIMMER VERWALTUNG", "bewohner", 2);
 
         MenuManager.getSideMenu().addItem(new JButton(new AbstractAction(
@@ -84,10 +70,9 @@ public class ZimmerModul implements Module {
 
             {
                 putValue(Action.SHORT_DESCRIPTION, "Bewohner verwalten");
-                putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png"));
-//                    putValue( Action.LARGE_ICON_KEY, IconManager.getIcon("user", 32) );
+                putValue(Action.SMALL_ICON, CWUtils.loadIcon(ImageDefinitionRoom.BEWOHNER));
             }
-            BewohnerManager bewohnerManager;
+            PMBewohner bewohnerManager;
 
             public void actionPerformed(ActionEvent e) {
 
@@ -95,9 +80,9 @@ public class ZimmerModul implements Module {
                 GUIManager.setLoadingScreenVisible(true);
 
 
-                bewohnerManager = BewohnerManager.getInstance();
+                bewohnerManager = PMBewohner.getInstance();
 
-                GUIManager.changeView(new BewohnerView(new BewohnerPresentationModel(bewohnerManager, new CWHeaderInfo("Bewohner Verwaltung", "Uebersicht aller Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png")))));
+                GUIManager.changeViewTo(new BewohnerView(new BewohnerPresentationModel(bewohnerManager, new CWHeaderInfo("Bewohner Verwaltung", "Uebersicht aller Bewohner", CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/user_orange.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
             }
@@ -109,10 +94,9 @@ public class ZimmerModul implements Module {
 
             {
                 putValue(Action.SHORT_DESCRIPTION, "Zimmer verwalten");
-                putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"));
-//                    putValue( Action.LARGE_ICON_KEY, IconManager.getIcon("user", 32) );
+                putValue(Action.SMALL_ICON, CWUtils.loadIcon(ImageDefinitionRoom.ZIMMER));
             }
-            BereichManager bereichManager;
+            PMBereich bereichManager;
 
             public void actionPerformed(ActionEvent e) {
 
@@ -121,9 +105,9 @@ public class ZimmerModul implements Module {
 
 
 
-                bereichManager = BereichManager.getInstance();
+                bereichManager = PMBereich.getInstance();
 
-                GUIManager.changeView(new BereichView(new BereichPresentationModel(bereichManager, new CWHeaderInfo("Bereich Verwaltung", "Hier koennen Sie anhand des Baumes die Zimmer und Bereiche bearbeiten", CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/door.png")))));
+                GUIManager.changeViewTo(new BereichView(new BereichPresentationModel(bereichManager, new CWHeaderInfo("Bereich Verwaltung", "Hier koennen Sie anhand des Baumes die Zimmer und Bereiche bearbeiten", CWUtils.loadIcon("cw/roommanagementmodul/images/door.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/door.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
 
@@ -136,10 +120,9 @@ public class ZimmerModul implements Module {
 
             {
                 putValue(Action.SHORT_DESCRIPTION, "Gebuehren verwalten");
-                putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"));
-//                    putValue( Action.LARGE_ICON_KEY, IconManager.getIcon("user", 32) );
+                putValue(Action.SMALL_ICON, CWUtils.loadIcon(ImageDefinitionRoom.GEBUEHR));
             }
-            GebuehrenManager gebuehrenManager;
+            PMGebuehr gebuehrenManager;
 
             public void actionPerformed(ActionEvent e) {
 
@@ -147,9 +130,9 @@ public class ZimmerModul implements Module {
                 GUIManager.setLoadingScreenVisible(true);
 
 
-                gebuehrenManager = GebuehrenManager.getInstance();
+                gebuehrenManager = PMGebuehr.getInstance();
 
-                GUIManager.changeView(new GebuehrenView(new GebuehrenPresentationModel(gebuehrenManager, new CWHeaderInfo("Gebuehren Verwaltung", "Hier koennen Sie die Gebuehren, Kategorien und Tarife verwalten", CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/money.png")))));
+                GUIManager.changeViewTo(new GebuehrenView(new GebuehrenPresentationModel(gebuehrenManager, new CWHeaderInfo("Gebuehren Verwaltung", "Hier koennen Sie die Gebuehren, Kategorien und Tarife verwalten", CWUtils.loadIcon("cw/roommanagementmodul/images/money.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/money.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
 
@@ -161,7 +144,7 @@ public class ZimmerModul implements Module {
 
             {
                 putValue(Action.SHORT_DESCRIPTION, "Gebuehren Lauf");
-                putValue(Action.SMALL_ICON, CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png"));
+                putValue(Action.SMALL_ICON, CWUtils.loadIcon(ImageDefinitionRoom.GEBUEHREN_LAUF));
 //                    putValue( Action.LARGE_ICON_KEY, IconManager.getIcon("user", 32) );
             }
 
@@ -173,7 +156,7 @@ public class ZimmerModul implements Module {
 
 
 
-                GUIManager.changeView(new GebLaufView(new GebLaufPresentationModel(gebLauf, new CWHeaderInfo("Gebuehren Lauf", "Hier koennen Sie denn Gebuehren oder Storno Lauf durchfuehren", CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png")))));
+                GUIManager.changeViewTo(new GebLaufView(new GebLaufPresentationModel(gebLauf, new CWHeaderInfo("Gebuehren Lauf", "Hier koennen Sie denn Gebuehren oder Storno Lauf durchfuehren", CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png"), CWUtils.loadIcon("cw/roommanagementmodul/images/cog_go.png")))));
                 GUIManager.setLoadingScreenVisible(false);
 
             }
@@ -182,8 +165,8 @@ public class ZimmerModul implements Module {
         PMCustomer.getInstance().addCascadeListener(new CascadeListener() {
 
             public void deleteAction(CascadeEvent evt) {
-                CustomerModel c = (CustomerModel) evt.getSource();
-                BewohnerManager bewManager = BewohnerManager.getInstance();
+                Customer c = (Customer) evt.getSource();
+                PMBewohner bewManager = PMBewohner.getInstance();
 
                 Bewohner b = bewManager.getBewohner(c);
 
@@ -198,7 +181,7 @@ public class ZimmerModul implements Module {
 
             public void deleteAction(CascadeEvent evt) {
                 AccountPosting p = (AccountPosting) evt.getSource();
-                BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
+                PMBuchungsLaufZuordnung blzManager = PMBuchungsLaufZuordnung.getInstance();
 
 
                 BuchungsLaufZuordnung blz = blzManager.getBuchungsLaufZuordnung(p);
@@ -209,24 +192,24 @@ public class ZimmerModul implements Module {
             }
         });
 
-        BewohnerManager.getInstance().addCascadeListener(new CascadeListener() {
+        PMBewohner.getInstance().addCascadeListener(new CascadeListener() {
 
             public void deleteAction(CascadeEvent evt) {
                 Bewohner b = (Bewohner) evt.getSource();
-                GebuehrZuordnungManager gebZuordnungManager = GebuehrZuordnungManager.getInstance();
+                PMGebuehrZuordnung gebZuordnungManager = PMGebuehrZuordnung.getInstance();
                 //TODO ueberlegen
                 gebZuordnungManager.removeGebuehrZuordnung(b);
             }
         });
 
-        GebuehrenManager.getInstance().addCascadeListener(new CascadeListener() {
+        PMGebuehr.getInstance().addCascadeListener(new CascadeListener() {
 
             public void deleteAction(CascadeEvent evt) {
                 Gebuehr g = (Gebuehr) evt.getSource();
-                GebuehrZuordnungManager gebZuordnungManager = GebuehrZuordnungManager.getInstance();
+                PMGebuehrZuordnung gebZuordnungManager = PMGebuehrZuordnung.getInstance();
                 gebZuordnungManager.removeGebuehrZuordnung(g);
 
-                BuchungsLaufZuordnungManager blzManager = BuchungsLaufZuordnungManager.getInstance();
+                PMBuchungsLaufZuordnung blzManager = PMBuchungsLaufZuordnung.getInstance();
                 List<BuchungsLaufZuordnung> blzList = blzManager.getBuchungsLaufZuordnung(g);
                 for (int i = 0; i < blzList.size(); i++) {
                     blzList.get(i).setGebuehr(null);
@@ -234,12 +217,12 @@ public class ZimmerModul implements Module {
             }
         });
 
-        GebuehrenKatManager.getInstance().addCascadeListener(new CascadeListener() {
+        PMGebuehrenKat.getInstance().addCascadeListener(new CascadeListener() {
 
             public void deleteAction(CascadeEvent evt) {
 
                 GebuehrenKategorie k = (GebuehrenKategorie) evt.getSource();
-                GebuehrenManager gebManager = GebuehrenManager.getInstance();
+                PMGebuehr gebManager = PMGebuehr.getInstance();
                 List<Gebuehr> gebList = gebManager.getGebuehr(k);
 
                 for (int i = 0; i < gebList.size(); i++) {
