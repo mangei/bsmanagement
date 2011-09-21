@@ -18,8 +18,11 @@ public class CustomerOverviewEditCustomerView
 	extends CWView<CustomerOverviewEditCustomerPresentationModel>
 {
 
-    public CustomerOverviewEditCustomerView(CustomerOverviewEditCustomerPresentationModel model) {
+	private EditCustomerView baseView;
+	
+    public CustomerOverviewEditCustomerView(CustomerOverviewEditCustomerPresentationModel model, EditCustomerView baseView) {
         super(model);
+        this.baseView = baseView;
     }
 
     public void initComponents() {
@@ -51,8 +54,10 @@ public class CustomerOverviewEditCustomerView
         for(int i=0, l=extentionComponents.size(); i<l; i++) {
             builder.add(extentionComponents.get(i), cc.xy(1, i*2+1));
         }
+
+        this.addToContentPanel(builder.getPanel());
         
-        addToContentPanel(builder.getPanel());
+        baseView.addToContentPanel(this);
     }
 
     @Override

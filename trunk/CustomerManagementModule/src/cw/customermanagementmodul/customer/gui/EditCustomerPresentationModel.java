@@ -3,30 +3,24 @@ package cw.customermanagementmodul.customer.gui;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import com.jgoodies.validation.ValidationMessage;
+import com.jgoodies.validation.ValidationResult;
 
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.comparator.PriorityComparator;
 import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
-import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.ModuleManager;
-import cw.customermanagementmodul.customer.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.customer.logic.BoCustomer;
 import cw.customermanagementmodul.customer.persistence.Customer;
 import cw.customermanagementmodul.customer.persistence.PMCustomer;
@@ -44,7 +38,6 @@ public class EditCustomerPresentationModel
     private Action saveAction;
     private Action cancelAction;
     private ButtonListenerSupport support;
-    private List<EditCustomerTabExtentionPoint> editCustomerGUITabExtentions;
     private PropertyChangeListener actionButtonListener;
     private SaveListener saveListener;
     
@@ -225,11 +218,11 @@ public class EditCustomerPresentationModel
 //        return comps;
 //    }
 
-    public List<EditCustomerTabExtentionPoint> getExtentions() {
-        if (editCustomerGUITabExtentions == null) {
-            editCustomerGUITabExtentions = (List<EditCustomerTabExtentionPoint>) ModuleManager.getExtentions(EditCustomerTabExtentionPoint.class);
-
-            Collections.sort(editCustomerGUITabExtentions, new PriorityComparator());
+//    public List<EditCustomerTabExtentionPoint> getExtentions() {
+//        if (editCustomerGUITabExtentions == null) {
+//            editCustomerGUITabExtentions = (List<EditCustomerTabExtentionPoint>) ModuleManager.getExtentions(EditCustomerTabExtentionPoint.class);
+//
+//            Collections.sort(editCustomerGUITabExtentions, new PriorityComparator());
 
 //            for(EditCustomerTabExtention ex: editCustomerGUITabExtentions) {
 //                System.out.println(ex);
@@ -258,21 +251,21 @@ public class EditCustomerPresentationModel
 //            for(EditCustomerTabExtention ex: editCustomerGUITabExtentions) {
 //                System.out.println(ex);
 //            }
-
-        }
-        return editCustomerGUITabExtentions;
-    }
-
-    public EditCustomerTabExtentionPoint getExtention(Class extentionClass) {
-
-        for (EditCustomerTabExtentionPoint ex : editCustomerGUITabExtentions) {
-            if (extentionClass.isInstance(ex)) {
-                return ex;
-            }
-        }
-
-        return null;
-    }
+//
+//        }
+//        return editCustomerGUITabExtentions;
+//    }
+//
+//    public EditCustomerTabExtentionPoint getExtention(Class extentionClass) {
+//
+//        for (EditCustomerTabExtentionPoint ex : editCustomerGUITabExtentions) {
+//            if (extentionClass.isInstance(ex)) {
+//                return ex;
+//            }
+//        }
+//
+//        return null;
+//    }
 
     public void removeButtonListener(ButtonListener listener) {
         support.removeButtonListener(listener);
@@ -343,20 +336,33 @@ public class EditCustomerPresentationModel
         }
     }
     
-    public boolean validate(List<CWErrorMessage> errorMessages) {
+    private boolean isValid() {
+    	ValidationResult validationResult = validate();
+    	
+    	if(validationResult.hasErrors()) {
+    		
+    		System.out.println("Errors: ");
+    		for(ValidationMessage m : validationResult.getErrors()) {
+    			System.out.println(m);
+    		}
+    		
+    		return false;
+    	}
+    	return true;
+    }
+    
+    public ValidationResult validate() {
+    	ValidationResult validationResult = super.validate();
     	
     	// validate
     	
     	
-        
-        validateExtentions(errorMessages);
-    	
-    	return !hasErrorMessages();
+    	getValidationResultModel().setResult(validationResult);
+    	return validationResult;
     }
     
     public void cancel() {
-        
-        cancelExtentions();
+        super.cancel();
 
         if(isNewMode()) {
         	
@@ -380,8 +386,6 @@ public class EditCustomerPresentationModel
 
         // Alle Werte in das Objekt schreiben
         triggerCommit();
-        
-        saveExtentions();
 
         // Commit all changes
         getEntityManager().getTransaction().commit();

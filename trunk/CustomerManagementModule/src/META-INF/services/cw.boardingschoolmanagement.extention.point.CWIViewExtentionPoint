@@ -1,0 +1,8 @@
+#Home
+cw.customermanagementmodul.customer.extention.CustomerHomeExtention
+
+#EditCustomer
+cw.customermanagementmodul.customer.extention.CustomerOverviewEditCustomerTabExtention
+
+#CustomerOverviewEditCustomer
+cw.customermanagementmodul.customer.extention.GeneralCustomerOverviewEditCustomerExtention

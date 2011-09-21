@@ -14,10 +14,10 @@ import javax.swing.event.ListDataListener;
 
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueModel;
+import com.jgoodies.validation.ValidationResult;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
-import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.customermanagementmodul.customer.persistence.Customer;
 import cw.customermanagementmodul.group.persistence.Group;
@@ -27,7 +27,7 @@ import cw.customermanagementmodul.group.persistence.PMGroup;
  *
  * @author ManuelG
  */
-public class GroupEditCustomerPresentationModel
+public class EditGroupEditCustomerPresentationModel
 	extends CWEditPresentationModel<Group> {
 
     private Customer customer;
@@ -43,8 +43,8 @@ public class GroupEditCustomerPresentationModel
     private PropertyChangeListener addGroupActionListener;
     private PropertyChangeListener removeGroupActionListener;
 
-    public GroupEditCustomerPresentationModel(Customer customer, ValueModel unsaved, EntityManager entityManager) {
-    	super(entityManager, GroupEditCustomerView.class);
+    public EditGroupEditCustomerPresentationModel(Customer customer, ValueModel unsaved, EntityManager entityManager) {
+    	super(entityManager, EditGroupEditCustomerView.class);
         this.customer = customer;
         this.unsaved = unsaved;
 
@@ -202,17 +202,18 @@ public class GroupEditCustomerPresentationModel
         return headerInfo;
     }
 
-	public boolean validate(List<CWErrorMessage> errorMessages) {
-		validateExtentions(errorMessages);
-		return !hasErrorMessages();
+	public ValidationResult validate() {
+		ValidationResult validationResult = super.validate();
+		
+		return validationResult;
 	}
 
 	public void save() {
-		saveExtentions();
+		super.save();
 	}
 
 	public void cancel() {
-		cancelExtentions();
+		super.cancel();
 	}
 
 }

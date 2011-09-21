@@ -1,16 +1,13 @@
 package cw.customermanagementmodul.customer.gui;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
 
-import com.jidesoft.swing.JideTabbedPane;
+import com.jgoodies.validation.view.ValidationResultViewFactory;
 
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
-import cw.customermanagementmodul.customer.extention.point.EditCustomerTabExtentionPoint;
 import cw.customermanagementmodul.customer.persistence.Customer;
 
 /**
@@ -28,7 +25,7 @@ public class EditCustomerView
     private PropertyChangeListener tabsEnableListener;
 
     public EditCustomerView(EditCustomerPresentationModel model) {
-        super(model, false);
+        super(model, false, true);
     }
 
     public void initComponents() {
@@ -36,7 +33,7 @@ public class EditCustomerView
     	
         bSave               = CWComponentFactory.createButton(getModel().getSaveAction());
         bCancel             = CWComponentFactory.createButton(getModel().getCancelAction());
-
+        
         getComponentContainer()
                 .addComponent(bSave)
                 .addComponent(bCancel);
@@ -71,6 +68,13 @@ public class EditCustomerView
         
         buttonPanel.add(bSave);
         buttonPanel.add(bCancel);
+        
+        addToContentPanel(ValidationResultViewFactory.createReportList(getModel().getValidationResultModel()));
+        addToContentPanel(ValidationResultViewFactory.createReportIconAndTextPane(getModel().getValidationResultModel()));
+        addToContentPanel(ValidationResultViewFactory.createReportTextPane(getModel().getValidationResultModel()));
+        addToContentPanel(ValidationResultViewFactory.createReportIconAndTextLabel(getModel().getValidationResultModel()));
+        addToContentPanel(ValidationResultViewFactory.createReportIconLabel(getModel().getValidationResultModel()));
+        addToContentPanel(ValidationResultViewFactory.createReportTextArea(getModel().getValidationResultModel()));
     }
 
     @Override

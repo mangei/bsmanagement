@@ -8,10 +8,11 @@ import javax.swing.JTable;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.model.CWDataFieldRenderer;
+import cw.customermanagementmodul.customer.images.ImageDefinitionCustomer;
 
 /**
  *
- * @author ManuelG
+ * @author Manuel Geier
  */
 public class ActiveDataFieldRenderer extends CWDataFieldRenderer {
 
@@ -20,8 +21,8 @@ public class ActiveDataFieldRenderer extends CWDataFieldRenderer {
     private Icon inactiveIcon;
 
     public ActiveDataFieldRenderer() {
-        activeIcon = CWUtils.loadIcon("cw/customermanagementmodul/images/user.png");
-        inactiveIcon = CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactive.png");
+        activeIcon = CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER);
+        inactiveIcon = CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_INACTIVE);
     }
 
     @Override

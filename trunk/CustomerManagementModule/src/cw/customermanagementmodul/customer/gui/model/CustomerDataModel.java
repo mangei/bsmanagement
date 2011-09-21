@@ -17,11 +17,11 @@ import cw.customermanagementmodul.customer.persistence.Customer;
  * @author Manuel Geier
  *
  */
-public class CustomerDataModel /*extends CWTableModel*/
-	implements CWIDataModelExtentionPoint<Customer>
+public class CustomerDataModel
+	implements CWIDataModelExtentionPoint
 {
 
-	public Class<Customer> getBaseClass() {
+	public Class<?> getBaseClass() {
 		return Customer.class;
 	}
 

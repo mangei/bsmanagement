@@ -29,6 +29,7 @@ public class EditCustomerEditCustomerView
 	extends CWView<EditCustomerEditCustomerPresentationModel>
 {
 
+	private EditCustomerView baseView;
     private CWPanel pActive;
     private CWPanel pGender;
     private CWTextField tfTitle;
@@ -56,8 +57,9 @@ public class EditCustomerEditCustomerView
     private AutoCompletion provinceAutoCompletion;
     private AutoCompletion countryAutoCompletion;
 
-    public EditCustomerEditCustomerView(EditCustomerEditCustomerPresentationModel model) {
+    public EditCustomerEditCustomerView(EditCustomerEditCustomerPresentationModel model, EditCustomerView baseView) {
         super(model, true);
+        this.baseView = baseView;
     }
 
     public void initComponents() {
@@ -273,8 +275,10 @@ public class EditCustomerEditCustomerView
 
         builder.addSeparator("<html><b>Bemerkung</b></html>",   cc.xyw(1, row+=2, 8));
         builder.add(taComment,              cc.xyw(1, row+=2, 8));
+
+        this.addToContentPanel(builder.getPanel());
         
-        addToContentPanel(builder.getPanel());
+        baseView.addToContentPanel(this);
     }
 
     @Override

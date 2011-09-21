@@ -1,0 +1,4 @@
+#EditCustomer
+cw.customermanagementmodul.customer.extention.EditCustomerEditCustomerTabExtention
+cw.customermanagementmodul.group.extention.EditGroupEditCustomerTabExtention
+cw.customermanagementmodul.guardian.extention.GuardianLinkEditCustomerEditCustomerExtention

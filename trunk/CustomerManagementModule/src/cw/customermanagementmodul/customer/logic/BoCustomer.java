@@ -7,6 +7,7 @@ import com.jgoodies.binding.value.ValueModel;
 
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.logic.CWBoPersistence;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.customermanagementmodul.customer.gui.CustomerChooserPresentationModel;
@@ -56,12 +57,19 @@ public class BoCustomer extends CWBoPersistence<Customer> {
 	public void deactivate() {
 		getPersistence().setActive(false);
 	}
-	
+
 	/**
 	 * Opens an dialog to select a customer
 	 * @return customer
 	 */
-	public synchronized static Customer selectCustomer(final EntityManager entityManager) {
+	public static Customer selectCustomer(final EntityManager entityManager) {
+		return selectCustomer(entityManager, null);
+	}
+	/**
+	 * Opens an dialog to select a customer
+	 * @return customer
+	 */
+	public synchronized static Customer selectCustomer(final EntityManager entityManager, CWHeaderInfo headerInfo) {
 		final ValueModel customerId = new ValueHolder();
 		Customer customer = null;
 		
@@ -73,6 +81,7 @@ public class BoCustomer extends CWBoPersistence<Customer> {
 		
 		final CustomerChooserPresentationModel model = new CustomerChooserPresentationModel();
 		CustomerChooserView view = new CustomerChooserView(model);
+		view.setHeaderInfo(headerInfo);
 		
         model.addButtonListener(new ButtonListener() {
 

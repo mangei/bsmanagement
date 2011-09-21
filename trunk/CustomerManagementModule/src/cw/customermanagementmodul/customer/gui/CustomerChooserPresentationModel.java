@@ -15,6 +15,8 @@ import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.images.CWImageDefinition;
+import cw.customermanagementmodul.customer.images.ImageDefinitionCustomer;
 import cw.customermanagementmodul.customer.persistence.Customer;
 import cw.customermanagementmodul.customer.persistence.PMCustomer;
 
@@ -26,7 +28,6 @@ public class CustomerChooserPresentationModel
 	extends CWPresentationModel {
 
     private List<Customer> customerList;
-    private CWHeaderInfo headerInfo;
     private ButtonListenerSupport buttonListenerSupport = new ButtonListenerSupport();
 
     private Action okAction;
@@ -52,8 +53,8 @@ public class CustomerChooserPresentationModel
 
     private void initModels() {
 
-        okAction = new OkAction("Auswaehlen", CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"));
-        cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon("cw/customermanagementmodul/images/cancel.png"));
+        okAction = new OkAction("Auswaehlen", CWUtils.loadIcon(CWImageDefinition.OK));
+        cancelAction = new CancelAction("Abbrechen", CWUtils.loadIcon(CWImageDefinition.CANCEL));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(customerList, getEntityManager());
         
@@ -115,10 +116,6 @@ public class CustomerChooserPresentationModel
 
     public Action getOkAction() {
         return okAction;
-    }
-
-    public CWHeaderInfo getHeaderInfo() {
-        return headerInfo;
     }
 
     public Customer getSelectedCustomer() {
