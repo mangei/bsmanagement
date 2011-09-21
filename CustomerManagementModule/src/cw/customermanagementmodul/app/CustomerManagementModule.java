@@ -18,11 +18,13 @@ import cw.boardingschoolmanagement.persistence.CascadeEvent;
 import cw.boardingschoolmanagement.persistence.CascadeListener;
 import cw.customermanagementmodul.customer.gui.CustomerManagementPresentationModel;
 import cw.customermanagementmodul.customer.gui.CustomerManagementView;
+import cw.customermanagementmodul.customer.images.ImageDefinitionCustomer;
 import cw.customermanagementmodul.customer.logic.BoCustomer;
 import cw.customermanagementmodul.customer.persistence.Customer;
 import cw.customermanagementmodul.customer.persistence.PMCustomer;
 import cw.customermanagementmodul.group.gui.GroupManagementPresentationModel;
 import cw.customermanagementmodul.group.gui.GroupManagementView;
+import cw.customermanagementmodul.group.images.ImageDefinitionGroup;
 import cw.customermanagementmodul.group.logic.BoGroup;
 import cw.customermanagementmodul.group.persistence.Group;
 import cw.customermanagementmodul.group.persistence.PMGroup;
@@ -73,7 +75,7 @@ public class CustomerManagementModule
 
         sideMenu.addCategory("Verwaltung", "manage", 10);
         sideMenu.addItem(new JButton(new AbstractAction(
-                "Kunden", CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")) {
+                "Kunden", CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER)) {
 
             {
                 putValue(Action.SHORT_DESCRIPTION, "Kunden verwalten");
@@ -109,7 +111,7 @@ public class CustomerManagementModule
         }), "manage");
 
         sideMenu.addItem(new JButton(new AbstractAction(
-                "Gruppen", CWUtils.loadIcon("cw/customermanagementmodul/images/group.png")) {
+                "Gruppen", CWUtils.loadIcon(ImageDefinitionGroup.GROUP)) {
 
             {
                 putValue(Action.SHORT_DESCRIPTION, "Gruppen verwalten");

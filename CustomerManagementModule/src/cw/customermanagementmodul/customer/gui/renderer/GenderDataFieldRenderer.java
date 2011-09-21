@@ -8,6 +8,7 @@ import javax.swing.JTable;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.model.CWDataFieldRenderer;
+import cw.customermanagementmodul.customer.images.ImageDefinitionCustomer;
 
 /**
  *
@@ -20,8 +21,8 @@ public class GenderDataFieldRenderer extends CWDataFieldRenderer {
     private Icon femaleIcon;
 
     public GenderDataFieldRenderer() {
-        maleIcon = CWUtils.loadIcon("cw/customermanagementmodul/images/male.png");
-        femaleIcon = CWUtils.loadIcon("cw/customermanagementmodul/images/female.png");
+        maleIcon = CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_GENDER_MALE);
+        femaleIcon = CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_GENDER_FEMALE);
     }
 
     @Override

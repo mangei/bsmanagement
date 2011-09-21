@@ -20,7 +20,6 @@ public class EditGuardianEditCustomerView
 {
 
 	private EditCustomerEditCustomerView baseView;
-    public CWPanel panel;
     public CWLabel lGuardian;
     public CWButton bChooseGuardian;
 
@@ -46,10 +45,8 @@ public class EditGuardianEditCustomerView
         FormLayout layout = new FormLayout(
                 "right:pref, 4dlu, 100dlu, 4dlu, pref",
                 "pref, 4dlu, pref");
-
-        panel = new CWPanel();
         
-        PanelBuilder builder = new PanelBuilder(layout, panel);
+        PanelBuilder builder = new PanelBuilder(layout);
 
         int row = 1;
         CellConstraints cc = new CellConstraints();
@@ -57,6 +54,8 @@ public class EditGuardianEditCustomerView
         builder.addLabel("Erziehungsberechtigte Person:", 	cc.xy(1, row+=2));
         builder.add(lGuardian,                				cc.xy(3, row));
         builder.add(bChooseGuardian,                		cc.xy(5, row));
+
+        this.addToContentPanel(builder.getPanel());
         
         baseView.addToContentPanel(builder.getPanel());
     }

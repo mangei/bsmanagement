@@ -18,9 +18,11 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.images.CWImageDefinition;
 import cw.boardingschoolmanagement.manager.GUIManager;
 import cw.boardingschoolmanagement.pojo.PresentationModelProperties;
 import cw.customermanagementmodul.customer.extention.EditCustomerEditCustomerTabExtention;
+import cw.customermanagementmodul.customer.images.ImageDefinitionCustomer;
 import cw.customermanagementmodul.customer.logic.BoCustomer;
 import cw.customermanagementmodul.customer.persistence.Customer;
 import cw.customermanagementmodul.customer.persistence.PMCustomer;
@@ -51,12 +53,12 @@ public class CustomerManagementPresentationModel
     }
 
     public void initModels() {
-        newAction = new NewAction("Neu", CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png"));
-        editAction = new EditAction("Bearbeiten", CWUtils.loadIcon("cw/customermanagementmodul/images/user_edit.png"));
-        deleteAction = new DeleteAction("Loeschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
-        inactiveAction = new InactivesAction("Inaktiv setzen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactive_go.png"));
-        viewInactivesAction = new ViewInactivesAction("Inaktive anzeigen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactives.png"));
-        printAction = new PrintAction("Drucken", CWUtils.loadIcon("cw/coursemanagementmodul/images/print.png"));
+        newAction = new NewAction("Neu", CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_NEW));
+        editAction = new EditAction("Bearbeiten", CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_EDIT));
+        deleteAction = new DeleteAction("Loeschen", CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_REMOVE));
+        inactiveAction = new InactivesAction("Inaktiv setzen", CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_INACTIVE_GO));
+        viewInactivesAction = new ViewInactivesAction("Inaktive anzeigen", CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_INACTIVES));
+        printAction = new PrintAction("Drucken", CWUtils.loadIcon(CWImageDefinition.PRINT));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
                 PMCustomer.getInstance().getAllActive(getEntityManager()),
@@ -67,8 +69,8 @@ public class CustomerManagementPresentationModel
         headerInfo = new CWHeaderInfo(
                 "Kunden verwalten",
                 "Sie befinden sich Kundenverwaltungsbereich. Hier haben Sie einen Ueberblick ueber alle Kunden.",
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user.png"),
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user.png")
+                CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER),
+                CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER)
         );
     }
 
@@ -112,8 +114,8 @@ public class CustomerManagementPresentationModel
                     new CWHeaderInfo(
                     "Kunden erstellen",
                     "Bearbeiten sie hier alle Informationen ueber Ihren Kunden.",
-                    CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png"),
-                    CWUtils.loadIcon("cw/customermanagementmodul/images/user_add.png")));
+                    CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_NEW),
+                    CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_NEW)));
             p.put("activeExtention", EditCustomerEditCustomerTabExtention.class);
 
             final EditCustomerPresentationModel model = new EditCustomerPresentationModel();
@@ -329,9 +331,6 @@ public class CustomerManagementPresentationModel
     }
     
     private class PrintAction extends CWAction {
-        {
-            putValue( Action.SMALL_ICON, CWUtils.loadIcon("cw/coursemanagementmodul/images/print.png") );
-        }
 
         private PrintAction(String name, Icon icon) {
             super(name, icon);

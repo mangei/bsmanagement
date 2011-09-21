@@ -7,9 +7,12 @@ import javax.persistence.EntityManager;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 
+import com.jgoodies.common.base.Strings;
+import com.jgoodies.validation.ValidationResult;
+import com.jgoodies.validation.util.ValidationUtils;
+
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
-import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.customermanagementmodul.customer.persistence.Customer;
 import cw.customermanagementmodul.customer.persistence.PMCustomer;
@@ -198,16 +201,27 @@ public class EditCustomerEditCustomerPresentationModel
 //            getBufferedModel(Customer.PROPERTYNAME_COUNTRY).setValue(country);
         }
     }
-
-	public boolean validate(List<CWErrorMessage> errorMessages) {
-		return validateExtentions(errorMessages);
+	
+	public ValidationResult validate() {
+		
+		ValidationResult validationResult = super.validate();
+		
+		if(Strings.isEmpty((String)editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_FORENAME).getValue())) {
+			validationResult.addError("Vorname darf nicht leer sein.");
+		}
+		
+		if(Strings.isEmpty((String)editCustomerPresentationModel.getBufferedModel(Customer.PROPERTYNAME_SURNAME).getValue())) {
+			validationResult.addError("Nachname darf nicht leer sein.");
+		}
+		
+		return validationResult;
 	}
 	
     public void save() {
-    	saveExtentions();
+    	super.save();
     }
 
 	public void cancel() {
-		cancelExtentions();
+		super.cancel();
 	}
 }

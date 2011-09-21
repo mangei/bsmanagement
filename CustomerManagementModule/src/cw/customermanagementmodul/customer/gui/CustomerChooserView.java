@@ -41,8 +41,7 @@ public class CustomerChooserView
     	super.buildView();
     	
     	customerSelectorView.buildView();
-    	
-        this.setHeaderInfo(getModel().getHeaderInfo());
+    	this.setName("Kunden auswählen");
         
         JButtonBar buttonBar = this.getButtonPanel();
         buttonBar.add(bOk);

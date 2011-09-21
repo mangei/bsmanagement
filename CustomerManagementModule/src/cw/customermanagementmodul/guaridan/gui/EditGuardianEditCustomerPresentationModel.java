@@ -3,22 +3,20 @@ package cw.customermanagementmodul.guaridan.gui;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.swing.Action;
 
-import com.jgoodies.binding.value.Trigger;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import com.jgoodies.validation.ValidationResult;
 
 import cw.boardingschoolmanagement.app.CWAction;
 import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
-import cw.boardingschoolmanagement.gui.CWErrorMessage;
+import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.customermanagementmodul.customer.gui.EditCustomerPresentationModel;
 import cw.customermanagementmodul.customer.logic.BoCustomer;
 import cw.customermanagementmodul.customer.persistence.Customer;
-import cw.customermanagementmodul.guardian.logic.BoGuardian;
 import cw.customermanagementmodul.guardian.persistence.Guardian;
 
 /**
@@ -45,7 +43,7 @@ public class EditGuardianEditCustomerPresentationModel
     public void initModels() {
     	
     	chooseGuardianAction = new ChooseGuardianAction("Erziehungsberechtigten auswählen...");
-    	guardianLabelModel = new ValueHolder("Keine gewähltx");
+    	guardianLabelModel = new ValueHolder("Keine gewählt");
 
     }
 
@@ -106,24 +104,26 @@ public class EditGuardianEditCustomerPresentationModel
         }
 
         public void action(ActionEvent e) {
-        	Customer selectedCustomer = BoCustomer.selectCustomer(getEntityManager());
-        	System.out.println("X: " + getBufferedModel(Guardian.PROPERTYNAME_GUARDIAN));
+        	Customer selectedCustomer = BoCustomer.selectCustomer(getEntityManager(),
+        			new CWHeaderInfo(
+        					"Erziehungsberechtigen auswählen",
+        					"Wählen Sie den Erziehungsberechtigten aus."));
         	getBufferedModel(Guardian.PROPERTYNAME_GUARDIAN).setValue(selectedCustomer);
-        	System.out.println("Y: " + getBufferedModel(Guardian.PROPERTYNAME_GUARDIAN));
         }
 
     }
 
     public void save() {
-    	saveExtentions();
+    	super.save();
     }
     
-	public boolean validate(List<CWErrorMessage> errorMessages) {
-		validateExtentions(errorMessages);
-		return !hasErrorMessages();
+	public ValidationResult validate() {
+		ValidationResult validationResult = super.validate();
+		
+		return validationResult;
 	}
 
 	public void cancel() {
-		cancelExtentions();
+		super.cancel();
 	}
 }

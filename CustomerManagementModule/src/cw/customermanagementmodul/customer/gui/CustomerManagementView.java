@@ -97,7 +97,7 @@ public class CustomerManagementView
 //                }
 //            }
 //        }));
-        
+
         addToContentPanel(customerSelectorView, true);
     }
 

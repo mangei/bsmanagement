@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cw.boardingschoolmanagement.extention.point.CWIEditViewExtentionPoint;
-import cw.boardingschoolmanagement.gui.CWIPresentationModel;
+import cw.boardingschoolmanagement.gui.CWIEditPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.customermanagementmodul.customer.gui.EditCustomerEditCustomerPresentationModel;
 import cw.customermanagementmodul.customer.gui.EditCustomerEditCustomerView;
@@ -34,7 +34,7 @@ public class GuardianLinkEditCustomerEditCustomerExtention
 	}
 
 	@Override
-	public CWIPresentationModel getModel() {
+	public CWIEditPresentationModel getModel() {
 		return model;
 	}
 

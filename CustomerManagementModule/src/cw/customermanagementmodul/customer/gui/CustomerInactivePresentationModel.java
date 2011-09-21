@@ -20,6 +20,7 @@ import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.customermanagementmodul.customer.images.ImageDefinitionCustomer;
 import cw.customermanagementmodul.customer.logic.BoCustomer;
 import cw.customermanagementmodul.customer.persistence.Customer;
 import cw.customermanagementmodul.customer.persistence.PMCustomer;
@@ -47,8 +48,8 @@ public class CustomerInactivePresentationModel
     public void initModels() {
         buttonListenerSupport = new ButtonListenerSupport();
 
-        activateAction = new ActivateAction("Reaktivieren", CWUtils.loadIcon("cw/customermanagementmodul/images/user_active_go.png"));
-        deleteAction = new DeleteAction("Loeschen", CWUtils.loadIcon("cw/customermanagementmodul/images/user_delete.png"));
+        activateAction = new ActivateAction("Reaktivieren", CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_ACTIVE_GO));
+        deleteAction = new DeleteAction("Loeschen", CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_REMOVE));
 
         customerSelectorPresentationModel = new CustomerSelectorPresentationModel(
                 PMCustomer.getInstance().getAllInactive(getEntityManager()),
@@ -58,8 +59,8 @@ public class CustomerInactivePresentationModel
         headerInfo = new CWHeaderInfo(
                 "Inaktive Kunden",
                 "Hier sehen Sie alle inaktiven Kunden die sich noch im System befinden.",
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactives.png"),
-                CWUtils.loadIcon("cw/customermanagementmodul/images/user_inactives.png"));
+                CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_INACTIVES),
+                CWUtils.loadIcon(ImageDefinitionCustomer.CUSTOMER_INACTIVES));
     }
 
     private void initEventHandling() {

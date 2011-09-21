@@ -3,7 +3,6 @@ package cw.customermanagementmodul.group.gui;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -12,6 +11,7 @@ import javax.swing.JOptionPane;
 
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import com.jgoodies.validation.ValidationResult;
 
 import cw.boardingschoolmanagement.app.ButtonEvent;
 import cw.boardingschoolmanagement.app.ButtonListener;
@@ -19,7 +19,6 @@ import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
-import cw.boardingschoolmanagement.gui.CWErrorMessage;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.customermanagementmodul.group.logic.BoGroup;
 import cw.customermanagementmodul.group.persistence.Group;
@@ -132,7 +131,7 @@ public class EditGroupPresentationModel
         }
         public void actionPerformed(ActionEvent e) {
             triggerCommit();
-            if(isValid()) {
+            if(!validate().hasErrors()) {
             	save();
             	support.fireButtonPressed(new ButtonEvent(ButtonEvent.SAVE_EXIT_BUTTON));
             }
@@ -191,17 +190,16 @@ public class EditGroupPresentationModel
         return headerInfo;
     }
 
-	public boolean validate(List<CWErrorMessage> errorMessages) {
+    public ValidationResult validate() {
+		ValidationResult validationResult = super.validate();
 		
-		validateExtentions(errorMessages);
-		
-		return !hasErrorMessages();
+		return validationResult;
 	}
 
 	public void save() {
 		triggerCommit();
 
-		saveExtentions();
+		super.save();
 		
 		CWEntityManager.commit(getEntityManager());
 
@@ -209,8 +207,7 @@ public class EditGroupPresentationModel
 	}
 
 	public void cancel() {
-		
-		cancelExtentions();
+		super.cancel();
 		
 		if(isNewMode()) {
         	

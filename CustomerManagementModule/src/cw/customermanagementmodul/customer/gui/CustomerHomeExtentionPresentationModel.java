@@ -24,7 +24,7 @@ public class CustomerHomeExtentionPresentationModel
     }
 
     private void initModels() {
-        sizeCustomersValueModel = new ValueHolder("Kunden: " + PMCustomer.getInstance().countActive(getEntityManager()));
+        sizeCustomersValueModel = new ValueHolder("<html>Es befinden sich <b>" + PMCustomer.getInstance().countActive(getEntityManager()) + " Kunden</b> im System.</html>");
     }
 
     private void initEventHandling() {

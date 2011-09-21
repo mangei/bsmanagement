@@ -19,6 +19,7 @@ public class GeneralCustomerOverviewEditCustomerView
 	extends CWView<GeneralCustomerOverviewEditCustomerPresentationModel>
 {
 
+	private CustomerOverviewEditCustomerView baseView;
     private CWLabel lActive;
     private CWLabel lGender;
     private CWLabel lTitle;
@@ -36,8 +37,9 @@ public class GeneralCustomerOverviewEditCustomerView
     private CWLabel lEmail;
     private CWLabel lComment;
 
-    public GeneralCustomerOverviewEditCustomerView(GeneralCustomerOverviewEditCustomerPresentationModel model) {
+    public GeneralCustomerOverviewEditCustomerView(GeneralCustomerOverviewEditCustomerPresentationModel model, CustomerOverviewEditCustomerView baseView) {
         super(model);
+        this.baseView = baseView;
     }
 
     public void initComponents() {
@@ -110,7 +112,7 @@ public class GeneralCustomerOverviewEditCustomerView
                 "right:pref, 4dlu, 100dlu, 4dlu, right:pref, 4dlu, 100dlu, pref:grow",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
 
-        PanelBuilder builder = new PanelBuilder(layout, this);
+        PanelBuilder builder = new PanelBuilder(layout);
 
         int row = 1;
         row+=2;
@@ -154,6 +156,10 @@ public class GeneralCustomerOverviewEditCustomerView
 
         builder.addSeparator("Bemerkung",   cc.xyw(1, row+=2, 8));
         builder.add(lComment,               cc.xyw(1, row+=2, 8));
+
+        this.addToContentPanel(builder.getPanel());
+        
+        baseView.addToContentPanel(this);
     }
 
     public void dispose() {
