@@ -237,59 +237,63 @@ public class ModuleManager {
     
     /**
      * Return all Extentions by a specificated extention class
-     * @param specificExtention Class of the specificated extention
+     * @param baseExtentionClass Class of the specificated extention
      * @return List of the specificated extention class
      */
-    public static <T> List<T> getExtentions(Class<T> specificExtention, Class<?> baseExtentionClass) {
+    public static <T> List<T> getExtentions(Class<T> baseExtentionClass, Class<?> specificExtentionClass) {
 
-        System.out.println("getExtentions(" + specificExtention.getName() + "): ");
+        System.out.println("getExtentions(" + baseExtentionClass.getName() + ", " + ((specificExtentionClass != null) ? specificExtentionClass.getName() : null) + "): ");
 
         List<T> spezExList = new ArrayList<T>();
-        ServiceLoader<T> exList = (ServiceLoader<T>) ServiceLoader.load(specificExtention);
-
-        // Run throu all extentions
-        for (T ex : exList) {
-            
-        	boolean addToList = false;
-        	
-            try {
-            	if(baseExtentionClass != null) {
-            		
-            		if(ex instanceof CWIMultiTypedExtention) {
-            		// Check multiple types
-            			List<Class<?>> allowedTypes = ((CWIMultiTypedExtention)ex).getExtentionClassList();
-            			
-            			for(int i=0; i<allowedTypes.size(); i++) {
-            				Class<?> allowedType = allowedTypes.get(i);
-            				if(allowedType.equals(baseExtentionClass)) {
-            					addToList = true;
-            				}
-            			}
-            			
-            		} else if(ex instanceof CWITypedExtention) {
-            		// Check type
-            			Class<?> allowedType = ((CWITypedExtention)ex).getExtentionClass();
-            			if(allowedType.equals(baseExtentionClass)) {
-        					addToList = true;
-        				}
-            		}
-            	} else {
-            	// No specific type needed
-            		addToList = true;
-            	}
-            	
-            	if(addToList) {
-            		// Add it to the list
-                    spezExList.add((T) ex.getClass().newInstance());
-                    System.out.println("  " + ex.toString());
-            	}
-            	
-            } catch (InstantiationException ex1) {
-                Logger.getLogger(ModuleManager.class.getName()).log(Level.SEVERE, null, ex1);
-            } catch (IllegalAccessException ex1) {
-                Logger.getLogger(ModuleManager.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-
+        try {
+	        ServiceLoader<T> exList = (ServiceLoader<T>) ServiceLoader.load(baseExtentionClass);
+	        
+	        // Run throu all extentions
+	        for (T ex : exList) {
+	            
+	        	boolean addToList = false;
+	        	
+	            try {
+	            	if(specificExtentionClass != null) {
+	            		
+	            		if(ex instanceof CWIMultiTypedExtention) {
+	            		// Check multiple types
+	            			List<Class<?>> allowedTypes = ((CWIMultiTypedExtention)ex).getExtentionClassList();
+	            			
+	            			for(int i=0; i<allowedTypes.size(); i++) {
+	            				Class<?> allowedType = allowedTypes.get(i);
+	            				if(allowedType.equals(specificExtentionClass)) {
+	            					addToList = true;
+	            				}
+	            			}
+	            			
+	            		} else if(ex instanceof CWITypedExtention) {
+	            		// Check type
+	            			Class<?> allowedType = ((CWITypedExtention)ex).getExtentionClass();
+	            			if(allowedType.equals(specificExtentionClass)) {
+	        					addToList = true;
+	        				}
+	            		}
+	            	} else {
+	            	// No specific type needed
+	            		addToList = true;
+	            	}
+	            	
+	            	if(addToList) {
+	            		// Add it to the list
+	                    spezExList.add((T) ex.getClass().newInstance());
+	                    System.out.println("  " + ex.toString());
+	            	}
+	            	
+	            } catch (InstantiationException ex1) {
+	                Logger.getLogger(ModuleManager.class.getName()).log(Level.SEVERE, null, ex1);
+	            } catch (IllegalAccessException ex1) {
+	                Logger.getLogger(ModuleManager.class.getName()).log(Level.SEVERE, null, ex1);
+	            }
+	
+	        }
+        } catch(Exception e) {
+        	e.printStackTrace();
         }
 
         return spezExList;
