@@ -10,5 +10,6 @@ public class CWImageDefinition {
 	public static String CANCEL 							= PACKAGE + "cancel.png";
 	public static String PRINT 								= PACKAGE + "print.png";
 	public static String MORE 								= PACKAGE + "more.png";
+	public static String LOADING							= PACKAGE + "loading.gif";
 	
 }

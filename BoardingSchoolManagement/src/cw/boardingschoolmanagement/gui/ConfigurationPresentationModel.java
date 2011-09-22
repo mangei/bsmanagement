@@ -3,14 +3,10 @@ package cw.boardingschoolmanagement.gui;
 import java.awt.event.ActionEvent;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
-import javax.swing.JComponent;
 import javax.swing.JOptionPane;
 
 import com.jgoodies.binding.beans.Model;
@@ -21,10 +17,7 @@ import cw.boardingschoolmanagement.app.ButtonListener;
 import cw.boardingschoolmanagement.app.ButtonListenerSupport;
 import cw.boardingschoolmanagement.app.CWEntityManager;
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.comparator.PriorityComparator;
-import cw.boardingschoolmanagement.extention.point.IConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
-import cw.boardingschoolmanagement.manager.ModuleManager;
 
 /**
  * Bildschirmmaske des Konfigurationsfensters
@@ -35,7 +28,6 @@ public class ConfigurationPresentationModel
 	extends CWEditPresentationModel
 {
     private CWHeaderInfo headerInfo;
-    private List<IConfigurationExtentionPoint> configurationExtentions;
     private ButtonListenerSupport support;
     private Action saveAction;
     private Action cancelAction;
@@ -58,11 +50,6 @@ public class ConfigurationPresentationModel
 
         support = new ButtonListenerSupport();
 
-        configurationExtentions = getExtentions();
-        for (IConfigurationExtentionPoint extention : configurationExtentions) {
-            extention.initPresentationModel(this, getEntityManager());
-        }
-
         headerInfo = new CWHeaderInfo(
                 "Einstellungen",
                 "Hier koennen Sie Ihre Einstellungen vornehmen.",
@@ -84,40 +71,7 @@ public class ConfigurationPresentationModel
     public void dispose() {
         getTriggerChannel().removeValueChangeListener(actionButtonListener);
 
-        for (IConfigurationExtentionPoint ex : configurationExtentions) {
-            ex.dispose();
-        }
-        
         CWEntityManager.closeEntityManager(getEntityManager());
-    }
-
-    public List<JComponent> getExtentionComponents() {
-        List<JComponent> comps = new ArrayList<JComponent>();
-        for (IConfigurationExtentionPoint ex : configurationExtentions) {
-            comps.add(ex.getView());
-        }
-        return comps;
-    }
-
-    public List<IConfigurationExtentionPoint> getExtentions() {
-        if (configurationExtentions == null) {
-            configurationExtentions = (List<IConfigurationExtentionPoint>) ModuleManager.getExtentions(IConfigurationExtentionPoint.class);
-
-            Collections.sort(configurationExtentions, new PriorityComparator());
-
-        }
-        return configurationExtentions;
-    }
-
-    public IConfigurationExtentionPoint getExtention(Class extentionClass) {
-
-        for (IConfigurationExtentionPoint ex : configurationExtentions) {
-            if (extentionClass.isInstance(ex)) {
-                return ex;
-            }
-        }
-
-        return null;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -204,11 +158,6 @@ public class ConfigurationPresentationModel
 	public void save() {
         triggerCommit();
 
-		List<IConfigurationExtentionPoint> extentions = getExtentions();
-        for (IConfigurationExtentionPoint extention : extentions) {
-            extention.save();
-        }
-        
         super.save();
 
         setChanged(true);

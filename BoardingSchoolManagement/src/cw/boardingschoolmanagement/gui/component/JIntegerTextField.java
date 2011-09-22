@@ -149,7 +149,7 @@ extends JTextField
             return false;
         }
 
-        // Groeße pruefen
+        // Groesse pruefen
         if(i < min || i > max) {
             return false;
         }

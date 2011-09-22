@@ -12,7 +12,7 @@ import java.util.EventListener;
 public interface ApplicationListener extends EventListener {
     /**
      * Verwendet im GUIManager; Wird in einer Anonymen-Klasse ueberladen und
-     * schließt die Anwendung.
+     * schliesst die Anwendung.
      */
     public void applicationClosing();
 }

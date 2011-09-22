@@ -1,1 +1,6 @@
 cw.boardingschoolmanagement.extention.WelcomeHomeExtention
+
+#Configuration
+cw.boardingschoolmanagement.extention.GeneralConfigurationExtention
+cw.boardingschoolmanagement.extention.BusinessDataConfigurationExtention
+cw.boardingschoolmanagement.update.extention.UpdateConfigurationExtention

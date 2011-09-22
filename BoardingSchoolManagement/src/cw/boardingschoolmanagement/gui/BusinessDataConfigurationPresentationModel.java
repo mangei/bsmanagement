@@ -3,12 +3,11 @@ package cw.boardingschoolmanagement.gui;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 
-import javax.persistence.EntityManager;
-
 import com.jgoodies.validation.ValidationResult;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.PropertiesManager;
 import cw.boardingschoolmanagement.pojo.BusinessData;
 
 /**
@@ -32,8 +31,8 @@ public class BusinessDataConfigurationPresentationModel
      * @param businessData POJO
      * @param configurationPresentationModel
      */
-    public BusinessDataConfigurationPresentationModel(BusinessData businessData, ConfigurationPresentationModel configurationPresentationModel, EntityManager entityManager) {
-        super(businessData, entityManager, BusinessDataConfigurationView.class);
+    public BusinessDataConfigurationPresentationModel(BusinessData businessData, ConfigurationPresentationModel baseModel) {
+        super(businessData, baseModel.getEntityManager(), BusinessDataConfigurationView.class);
         this.businessData = businessData;
         this.configurationPresentationModel = configurationPresentationModel;
         initModels();
@@ -92,6 +91,16 @@ public class BusinessDataConfigurationPresentationModel
     public void save() {
     	super.save();
         triggerCommit();
+
+        PropertiesManager.setProperty("configuration.businessData.name",              businessData.getName());
+        PropertiesManager.setProperty("configuration.businessData.street",            businessData.getStreet());
+        PropertiesManager.setProperty("configuration.businessData.postOfficeNumber",  businessData.getPostOfficeNumber());
+        PropertiesManager.setProperty("configuration.businessData.city",              businessData.getCity());
+        PropertiesManager.setProperty("configuration.businessData.landlinephone",     businessData.getLandlinephone());
+        PropertiesManager.setProperty("configuration.businessData.mobilephone",       businessData.getMobilephone());
+        PropertiesManager.setProperty("configuration.businessData.fax",               businessData.getFax());
+        PropertiesManager.setProperty("configuration.businessData.email",             businessData.getEmail());
+        PropertiesManager.setProperty("configuration.businessData.dvrNumber",         businessData.getDvrNumber());
     }
 
 	@Override

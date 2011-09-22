@@ -270,7 +270,8 @@ public class Application {
 
                 final ConfigurationPresentationModel model = new ConfigurationPresentationModel();
                 ConfigurationView view = new ConfigurationView(model);
-
+                view.initComponents();
+                view.buildView();
                 
                 final JDialog d = new JDialog(GUIManager.getInstance().getMainFrame(), true);
                 d.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -309,7 +310,7 @@ public class Application {
     }
 
     /**
-     * Schießt die Anwendung, speichert die Einstellung und trennt die
+     * Schiesst die Anwendung, speichert die Einstellung und trennt die
      * Datenbankverbindung.
      */
     public void close() {
