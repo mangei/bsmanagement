@@ -101,14 +101,14 @@ public class StornoResultPresentationModel
         return bewohnerList;
     }
 
-    public List<CustomerModel> getCustomerNoBewohner() {
+    public List<Customer> getCustomerNoBewohner() {
 
-        List<CustomerModel> customerList = new ArrayList<CustomerModel>();
+        List<Customer> customerList = new ArrayList<Customer>();
         Set keySet = customerNoBewohnerMap.keySet();
         Iterator iterator = keySet.iterator();
 
         while (iterator.hasNext()) {
-            customerList.add((CustomerModel) iterator.next());
+            customerList.add((Customer) iterator.next());
         }
         return customerList;
     }

@@ -25,41 +25,38 @@ import cw.roommanagementmodul.persistence.Bewohner;
  *
  * @author Dominik
  */
-public class LaufResultView extends CWView {
+public class LaufResultView
+	extends CWView<LaufResultPresentationModel>
+{
 
-    private LaufResultPresentationModel model;
     private CWButton bBack;
     private CWButton bPrint;
-    private CWComponentFactory.CWComponentContainer componentContainer;
     private DecimalFormat numberFormat;
 
-    public LaufResultView(LaufResultPresentationModel m) {
-        this.model = m;
+    public LaufResultView(LaufResultPresentationModel model) {
+        super(model);
         numberFormat = new DecimalFormat("#0.00");
-
-        initComponents();
-        buildView();
-        initEventHandling();
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
 
-        bPrint = CWComponentFactory.createButton(model.getPrintAction());
+        bPrint = CWComponentFactory.createButton(getModel().getPrintAction());
         bPrint.setText("Drucken");
-        bBack = CWComponentFactory.createButton(model.getBackAction());
+        bBack = CWComponentFactory.createButton(getModel().getBackAction());
         bBack.setText("Zurueck");
 
-        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bPrint).addComponent(bBack);
+        getComponentContainer()
+        	.addComponent(bPrint)
+        	.addComponent(bBack);
 
     }
 
-    private void initEventHandling() {
-    }
-
-    private void buildView() {
+    public void buildView() {
+    	super.buildView();
 
         boolean warningNoGebuehr = false;
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
         this.getButtonPanel().add(bPrint);
         this.getButtonPanel().add(bBack);
 
@@ -70,7 +67,7 @@ public class LaufResultView extends CWView {
         JPanel contentPanel = new JPanel();
 
         StringBuffer row = new StringBuffer("pref, 6dlu");
-        for (int i = 1; i < model.getBewohnerAnzahl(); i++) {
+        for (int i = 1; i < getModel().getBewohnerAnzahl(); i++) {
             row.append(",pref, 6dlu");
         }
         FormLayout bewohnerLayout = new FormLayout("pref", row.toString());
@@ -80,11 +77,11 @@ public class LaufResultView extends CWView {
         PanelBuilder builder = new PanelBuilder(bewohnerLayout, contentPanel);
         CellConstraints cc = new CellConstraints();
 
-        CWView bewohnerPanel = CWComponentFactory.createView();
-        List<Bewohner> bewohnerList = model.getBewohner();
+        CWView bewohnerPanel = CWComponentFactory.createView(null);
+        List<Bewohner> bewohnerList = getModel().getBewohner();
         int j = 1;
         for (int i = 0; i < bewohnerList.size(); i++) {
-            bewohnerPanel = createBewohnerPanel(bewohnerList.get(i), model.getTarifSelection().get(bewohnerList.get(i)));
+            bewohnerPanel = createBewohnerPanel(bewohnerList.get(i), getModel().getTarifSelection().get(bewohnerList.get(i)));
             if (bewohnerPanel != null) {
                 builder.add(bewohnerPanel, cc.xy(1, j));
                 j = j + 2;
@@ -96,7 +93,8 @@ public class LaufResultView extends CWView {
 
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setPreferredSize(new Dimension(10, 10));
-        this.getContentPanel().add(scroll);
+        
+        addToContentPanel(scroll);
 
         if (warningNoGebuehr) {
             JOptionPane.showMessageDialog(null, "Es sind Bewohner vorhanden die keine Gebuehr fuer dieses Datum zugewiessen bekommen haben.", "Warunung", JOptionPane.INFORMATION_MESSAGE);
@@ -106,7 +104,7 @@ public class LaufResultView extends CWView {
     public CWView createBewohnerPanel(Bewohner b, List<GebTarifSelection> tarifSelectionList) {
 
 
-        CWView panel = CWComponentFactory.createView();
+        CWView panel = CWComponentFactory.createView(null);
         panel.setHeaderInfo(new CWHeaderInfo("" + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + "     Zimmer: " + b.getZimmer().getName() + "     Bereich: " + b.getZimmer().getBereich()));
 
         StringBuffer row = new StringBuffer("pref, 3dlu, pref, 12dlu,pref, 3dlu, pref, 12dlu");
@@ -121,7 +119,7 @@ public class LaufResultView extends CWView {
                 row.toString());      // rows
 
         CellConstraints cc = new CellConstraints();
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
 
         JLabel lTarif = new JLabel("Tarif ");
         lTarif.setFont(new Font("Arial", Font.BOLD, 12));
@@ -215,19 +213,23 @@ public class LaufResultView extends CWView {
         } else {
             summeLabel = new JLabel("FEHLER");
             summeLabel.setForeground(Color.RED);
-            model.getPrintAction().setEnabled(false);
+            getModel().getPrintAction().setEnabled(false);
         }
 
         builder.addSeparator("", cc.xyw(1, yPos, 3));
         builder.add(sumText, cc.xy(1, yPos + 2));
         builder.add(summeLabel, cc.xy(3, yPos + 2));
 
-        componentContainer.addComponent(panel);
+        panel.addToContentPanel(builder.getPanel());
+        
+        getComponentContainer()
+        	.addComponent(panel);
+        
         return panel;
     }
 
     public void dispose() {
-        componentContainer.dispose();
-        model.dispose();
+        
+    	super.dispose();
     }
 }

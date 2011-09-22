@@ -1,7 +1,5 @@
 package cw.roommanagementmodul.gui;
 
-import javax.swing.JPanel;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -10,6 +8,7 @@ import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComboBox;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.roommanagementmodul.persistence.GebuehrZuordnung;
@@ -18,10 +17,10 @@ import cw.roommanagementmodul.persistence.GebuehrZuordnung;
  *
  * @author Dominik
  */
-public class GebBewohnerView extends CWView
+public class GebBewohnerView
+	extends CWView<GebBewohnerPresentationModel>
 {
 
-    private GebBewohnerPresentationModel model;
     private CWLabel lGebuehr;
     private CWLabel lVon;
     private CWLabel lBis;
@@ -33,36 +32,32 @@ public class GebBewohnerView extends CWView
     private CWButton bCancel;
     private CWButton bSaveCancel;
 
-    private CWComponentFactory.CWComponentContainer componentContainer;
-
     public GebBewohnerView(GebBewohnerPresentationModel model) {
-        this.model = model;
-
-        initComponents();
-        buildView();
-        initEventHandling();
+        super(model);
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
+    	
         lGebuehr = CWComponentFactory.createLabel("Gebuehr: ");
         lVon = CWComponentFactory.createLabel("Von: ");
         lBis = CWComponentFactory.createLabel("Bis: ");
         lAnmerkung = CWComponentFactory.createLabel("Anmerkung: ");
 
-        tfAnmerkung = CWComponentFactory.createTextField(model.getBufferedModel(GebuehrZuordnung.PROPERTYNAME_ANMERKUNG), false);
+        tfAnmerkung = CWComponentFactory.createTextField(getModel().getBufferedModel(GebuehrZuordnung.PROPERTYNAME_ANMERKUNG), false);
 
-        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(getModel().getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(getModel().getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(getModel().getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schliessen");
 
-
-        cbGebuehr = CWComponentFactory.createComboBox(model.getGebuehrList());
-        componentContainer = CWComponentFactory.createComponentContainer()
+        cbGebuehr = CWComponentFactory.createComboBox(getModel().getGebuehrList());
+        
+        getComponentContainer()
                 .addComponent(lGebuehr)
                 .addComponent(lVon)
                 .addComponent(lBis)
@@ -74,8 +69,10 @@ public class GebBewohnerView extends CWView
                 .addComponent(cbGebuehr);
     }
 
-    private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+    public void buildView() {
+    	super.buildView();
+    	
+        this.setHeaderInfo(getModel().getHeaderInfo());
         //this.setName("Zimmer");
         
         CWButtonPanel buttonPanel = this.getButtonPanel();
@@ -83,8 +80,8 @@ public class GebBewohnerView extends CWView
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
-        JPanel contentPanel = this.getContentPanel();
-
+        
+        CWPanel contentPanel = CWComponentFactory.createPanel();
 
         FormLayout layout = new FormLayout("right:pref, 4dlu, 50dlu:grow, 4dlu, right:pref, 4dlu, 50dlu:grow",
                 "pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref, 4dlu, pref");
@@ -98,18 +95,18 @@ public class GebBewohnerView extends CWView
         contentPanel.add(lBis, cc.xy(1, 9));
         contentPanel.add(lAnmerkung, cc.xy(1, 11));
 
+        // TODO move datechooser to view
         contentPanel.add(cbGebuehr, cc.xy(3, 5));
-        contentPanel.add(model.getDcVon(), cc.xy(3, 7));
-        contentPanel.add(model.getDcBis(), cc.xy(3, 9));
+        contentPanel.add(getModel().getDcVon(), cc.xy(3, 7));
+        contentPanel.add(getModel().getDcBis(), cc.xy(3, 9));
         contentPanel.add(tfAnmerkung, cc.xy(3, 11));
-    }
-
-    private void initEventHandling() {
+        
+        addToContentPanel(contentPanel);
     }
 
     @Override
     public void dispose() {
-        componentContainer.dispose();
-        model.dispose();
+    	
+        super.dispose();
     }
 }

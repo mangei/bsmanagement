@@ -1,7 +1,5 @@
 package cw.roommanagementmodul.gui;
 
-import javax.swing.JPanel;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -10,6 +8,7 @@ import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.roommanagementmodul.persistence.Kaution;
@@ -18,10 +17,10 @@ import cw.roommanagementmodul.persistence.Kaution;
  *
  * @author Dominik
  */
-public class EditKautionView extends CWView
+public class EditKautionView
+	extends CWView<EditKautionPresentationModel>
 {
 
-    private EditKautionPresentationModel model;
     private CWButton bSave;
     private CWButton bCancel;
     private CWButton bSaveCancel;
@@ -30,33 +29,29 @@ public class EditKautionView extends CWView
     private CWTextField tfName;
     private CWCurrencyTextField tfBetrag;
 
-    private CWComponentFactory.CWComponentContainer componentContainer;
-
     public EditKautionView(EditKautionPresentationModel model) {
-        this.model = model;
-
-        initComponents();
-        buildView();
-        initEventHandling();
+    	super(model);
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
+    	
         lName = CWComponentFactory.createLabel("Name: ");
         lBetrag = CWComponentFactory.createLabel("Betrag");
 
-        tfName = CWComponentFactory.createTextField(model.getBufferedModel(Kaution.PROPERTYNAME_NAME),false);
-        tfBetrag = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Kaution.PROPERTYNAME_BETRAG));
+        tfName = CWComponentFactory.createTextField(getModel().getBufferedModel(Kaution.PROPERTYNAME_NAME),false);
+        tfBetrag = CWComponentFactory.createCurrencyTextField(getModel().getBufferedModel(Kaution.PROPERTYNAME_BETRAG));
 
-        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(getModel().getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(getModel().getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(getModel().getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern&Schliessen");
 
-        componentContainer=CWComponentFactory.createComponentContainer()
+        getComponentContainer()
                 .addComponent(lName)
                 .addComponent(lBetrag)
                 .addComponent(tfName)
@@ -66,19 +61,17 @@ public class EditKautionView extends CWView
                 .addComponent(bSaveCancel);
     }
 
-    private void initEventHandling() {
-    }
+    public void buildView() {
+    	super.buildView();
 
-    private void buildView() {
-
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
         CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
-        JPanel contentPanel = this.getContentPanel();
+        CWPanel contentPanel = CWComponentFactory.createPanel();
 
         /**
          * Boxes
@@ -93,12 +86,14 @@ public class EditKautionView extends CWView
         contentPanel.add(tfName, cc.xy(3, 3));
         contentPanel.add(lBetrag, cc.xy(1, 5));
         contentPanel.add(tfBetrag, cc.xy(3, 5));
+        
+        addToContentPanel(contentPanel);
     }
 
     @Override
     public void dispose() {
-        componentContainer.dispose();
-        model.dispose();
+    	
+        super.dispose();
     }
 
 }
