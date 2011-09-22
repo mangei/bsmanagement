@@ -37,9 +37,9 @@ public class GebLauf
     public final static String ENTITY_NAME = "geb_lauf";
     public final static String TABLE_NAME = "geb_lauf";
     public final static String PROPERTYNAME_ID 				= "id";
-    public final static String PROPERTYNAME_GEBLAUF 		= "geb_lauf";
-    public final static String PROPERTYNAME_ID 				= "id";
-    public final static String PROPERTYNAME_GEBLAUF 		= "geb_lauf";
+    public final static String PROPERTYNAME_ABRMONAT 		= "abr_monat";
+    public final static String PROPERTYNAME_CPUDATE 		= "cpu_date";
+    public final static String PROPERTYNAME_BETRIEBSART 	= "betriebsart";
     
     private GebLauf() {
     	super(null);
