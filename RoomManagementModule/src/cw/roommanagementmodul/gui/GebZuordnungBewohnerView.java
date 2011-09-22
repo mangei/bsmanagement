@@ -17,74 +17,75 @@ import cw.boardingschoolmanagement.gui.renderer.DateTimeDataFieldRenderer;
  *
  * @author Dominik
  */
-public class GebZuordnungBewohnerView extends CWView{
+public class GebZuordnungBewohnerView
+	extends CWView<GebZuordnungBewohnerPresentationModel>
+{
 
-    private GebZuordnungBewohnerPresentationModel model;
     private CWButton bNew;
     private CWButton bDelete;
     private CWButton bEdit;
     private CWButton bBack;
     private CWTable tZuordnung;
-    private CWComponentFactory.CWComponentContainer componentContainer;
 
-    public GebZuordnungBewohnerView(GebZuordnungBewohnerPresentationModel m) {
-        this.model = m;
-        initComponents();
-        buildView();
-        initEventHandling();
-
+    public GebZuordnungBewohnerView(GebZuordnungBewohnerPresentationModel model) {
+        super(model);
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
 
-        bNew = CWComponentFactory.createButton(model.getNewAction());
+        bNew = CWComponentFactory.createButton(getModel().getNewAction());
         bNew.setText("Neue Gebuehr");
-        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
+        bDelete = CWComponentFactory.createButton(getModel().getDeleteAction());
         bDelete.setText("Loeschen");
-        bEdit = CWComponentFactory.createButton(model.getEditAction());
+        bEdit = CWComponentFactory.createButton(getModel().getEditAction());
         bEdit.setText("Bearbeiten");
-        bBack = CWComponentFactory.createButton(model.getBackAction());
+        bBack = CWComponentFactory.createButton(getModel().getBackAction());
         bBack.setText("Zurueck");
 
 
         String zuordnungenTableStateName = "cw.roommanagementmodul.GebZuordnunglBewohnerView.zuordnungTableState";
-        tZuordnung = CWComponentFactory.createTable(model.createZuordnungTableModel(model.getGebuehrZuordnungSelection()), "keine Gebuehr Zuordnungen vorhanden",zuordnungenTableStateName);
+        tZuordnung = CWComponentFactory.createTable(getModel().createZuordnungTableModel(getModel().getGebuehrZuordnungSelection()), "keine Gebuehr Zuordnungen vorhanden",zuordnungenTableStateName);
 
 
         tZuordnung.setSelectionModel(new SingleListSelectionAdapter(new CWTableSelectionConverter(
-                model.getGebuehrZuordnungSelection().getSelectionIndexHolder(),
+        		getModel().getGebuehrZuordnungSelection().getSelectionIndexHolder(),
                 tZuordnung)));
 
         tZuordnung.getColumnModel().getColumn(1).setCellRenderer(new DateTimeDataFieldRenderer(true));
         tZuordnung.getColumnModel().getColumn(2).setCellRenderer(new DateTimeDataFieldRenderer(true));
 
-        componentContainer = CWComponentFactory.createComponentContainer()
+        getComponentContainer()
                 .addComponent(bNew)
                 .addComponent(bDelete)
                 .addComponent(bEdit)
                 .addComponent(bBack)
                 .addComponent(tZuordnung);
+        
+        initEventHandling();
     }
 
     private void initEventHandling() {
-        tZuordnung.addMouseListener(model.getDoubleClickHandler());
+        tZuordnung.addMouseListener(getModel().getDoubleClickHandler());
     }
 
-    private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+    public void buildView() {
+    	super.buildView();
+    	
+        this.setHeaderInfo(getModel().getHeaderInfo());
 
         this.getButtonPanel().add(bNew);
         this.getButtonPanel().add(bEdit);
         this.getButtonPanel().add(bDelete);
         this.getButtonPanel().add(bBack);
 
-        this.getContentPanel().add(new JScrollPane(tZuordnung), BorderLayout.CENTER);
+        addToContentPanel(new JScrollPane(tZuordnung));
     }
 
     @Override
     public void dispose() {
-        tZuordnung.removeMouseListener(model.getDoubleClickHandler());
-        componentContainer.dispose();
-        model.dispose();
+        tZuordnung.removeMouseListener(getModel().getDoubleClickHandler());
+        
+        super.dispose();
     }
 }

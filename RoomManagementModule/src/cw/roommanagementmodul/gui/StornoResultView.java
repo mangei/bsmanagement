@@ -18,42 +18,43 @@ import cw.accountmanagementmodul.pojo.AccountPosting;
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWView;
+import cw.customermanagementmodul.customer.persistence.Customer;
 import cw.roommanagementmodul.persistence.Bewohner;
 
 /**
  *
  * @author Dominik
  */
-public class StornoResultView extends CWView {
+public class StornoResultView
+	extends CWView<StornoResultPresentationModel>
+{
 
-    private StornoResultPresentationModel model;
     private CWButton bBack;
     private CWButton bPrint;
-    private CWComponentFactory.CWComponentContainer componentContainer;
     private DecimalFormat numberFormat;
 
-    public StornoResultView(StornoResultPresentationModel m) {
-        this.model = m;
+    public StornoResultView(StornoResultPresentationModel model) {
+        super(model);
         numberFormat = new DecimalFormat("#0.00");
-        initComponents();
-        buildView();
-        initEventHandling();
     }
 
-    private void initComponents() {
-        bBack = CWComponentFactory.createButton(model.getBackAction());
+    public void initComponents() {
+    	super.initComponents();
+    	
+        bBack = CWComponentFactory.createButton(getModel().getBackAction());
         bBack.setText("Zurueck");
-        bPrint = CWComponentFactory.createButton(model.getPrintAction());
+        bPrint = CWComponentFactory.createButton(getModel().getPrintAction());
         bPrint.setText("Drucken");
-        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bBack).addComponent(bPrint);
+        
+        getComponentContainer()
+        	.addComponent(bBack)
+        	.addComponent(bPrint);
     }
 
-    private void initEventHandling() {
-    }
+    public void buildView() {
+    	super.buildView();
 
-    private void buildView() {
-
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
         this.getButtonPanel().add(bBack);
         this.getButtonPanel().add(bPrint);
 
@@ -63,10 +64,10 @@ public class StornoResultView extends CWView {
         JPanel contentPanel = new JPanel();
 
         StringBuffer row = new StringBuffer("pref, 6dlu");
-        for (int i = 0; i < model.getBewohner().size(); i++) {
+        for (int i = 0; i < getModel().getBewohner().size(); i++) {
             row.append(",pref, 6dlu");
         }
-        for (int i = 0; i < model.getCustomerNoBewohner().size(); i++) {
+        for (int i = 0; i < getModel().getCustomerNoBewohner().size(); i++) {
             row.append(",pref, 6dlu");
         }
 
@@ -77,31 +78,31 @@ public class StornoResultView extends CWView {
         PanelBuilder builder = new PanelBuilder(bewohnerLayout, contentPanel);
         CellConstraints cc = new CellConstraints();
 
-        CWView bewohnerPanel=CWComponentFactory.createView();
-        List<Bewohner> bewohnerList = model.getBewohner();
+        CWView bewohnerPanel=CWComponentFactory.createView(null);
+        List<Bewohner> bewohnerList = getModel().getBewohner();
         int j = 1;
         for (int i = 0; i < bewohnerList.size(); i++) {
-            bewohnerPanel = createBewohnerPanel(bewohnerList.get(i), model.getBewohnerPostingMap().get(bewohnerList.get(i)));
+            bewohnerPanel = createBewohnerPanel(bewohnerList.get(i), getModel().getBewohnerPostingMap().get(bewohnerList.get(i)));
             builder.add(bewohnerPanel, cc.xy(1, j));
             j = j + 2;
         }
 
         //Falls ein Bewohner geloescht wurde, aber der Customer noch vorhanden ist wird der Storno trotzdem durchgefuehrt
-        List<CustomerModel> customerList = model.getCustomerNoBewohner();
+        List<Customer> customerList = getModel().getCustomerNoBewohner();
         for (int i = 0; i < customerList.size(); i++) {
-            bewohnerPanel = createKundePanel(customerList.get(i), model.getCustomerNoBewohnerMap().get(customerList.get(i)));
+            bewohnerPanel = createKundePanel(customerList.get(i), getModel().getCustomerNoBewohnerMap().get(customerList.get(i)));
             builder.add(bewohnerPanel, cc.xy(1, j));
             j = j + 2;
         }
 
         JScrollPane scroll = new JScrollPane(contentPanel);
         scroll.setPreferredSize(new Dimension(10, 10));
-        this.getContentPanel().add(scroll);
+        addToContentPanel(scroll);
     }
 
     public CWView createBewohnerPanel(Bewohner b, List<AccountPosting> postingList) {
 
-        CWView panel = CWComponentFactory.createView();
+        CWView panel = CWComponentFactory.createView(null);
         panel.setHeaderInfo(new CWHeaderInfo("" + b.getCustomer().getSurname() + " " + b.getCustomer().getForename() + "     Zimmer: " + b.getZimmer().getName() + "     Bereich: " + b.getZimmer().getBereich()));
 
         StringBuffer row = new StringBuffer("pref, 3dlu, pref, 12dlu,pref, 3dlu, pref, 12dlu");
@@ -116,7 +117,7 @@ public class StornoResultView extends CWView {
                 row.toString());      // rows
 
         CellConstraints cc = new CellConstraints();
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
 
         JLabel lTarif = new JLabel("Storno ");
         lTarif.setFont(new Font("Arial", Font.BOLD, 12));
@@ -168,14 +169,18 @@ public class StornoResultView extends CWView {
         builder.add(sumText, cc.xy(1, yPos + 2));
         builder.add(summeLabel, cc.xy(3, yPos + 2));
 
-        componentContainer.addComponent(panel);
+        getComponentContainer()
+        	.addComponent(panel);
+        
+        panel.addToContentPanel(builder.getPanel());
+        
         return panel;
     }
 
-    public CWView createKundePanel(CustomerModel c, List<AccountPosting> postingList) {
+    public CWView createKundePanel(Customer c, List<AccountPosting> postingList) {
 
 
-        CWView panel = CWComponentFactory.createView();
+        CWView panel = CWComponentFactory.createView(null);
         panel.setHeaderInfo(new CWHeaderInfo("Kunde: " + c.getSurname() + " " + c.getForename()));
 
         StringBuffer row = new StringBuffer("pref, 3dlu, pref, 12dlu,pref, 3dlu, pref, 12dlu");
@@ -190,7 +195,7 @@ public class StornoResultView extends CWView {
                 row.toString());      // rows
 
         CellConstraints cc = new CellConstraints();
-        PanelBuilder builder = new PanelBuilder(layout, panel.getContentPanel());
+        PanelBuilder builder = new PanelBuilder(layout);
 
         JLabel lTarif = new JLabel("Storno ");
         lTarif.setFont(new Font("Arial", Font.BOLD, 12));
@@ -242,13 +247,17 @@ public class StornoResultView extends CWView {
         builder.add(sumText, cc.xy(1, yPos + 2));
         builder.add(summeLabel, cc.xy(3, yPos + 2));
 
-        componentContainer.addComponent(panel);
+        getComponentContainer()
+        	.addComponent(panel);
+        
+        panel.addToContentPanel(builder.getPanel());
+        
         return panel;
     }
 
     @Override
     public void dispose() {
-        componentContainer.dispose();
-        model.dispose();
+        
+    	super.dispose();
     }
 }

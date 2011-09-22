@@ -2,8 +2,6 @@ package cw.roommanagementmodul.gui;
 
 import java.util.List;
 
-import javax.swing.JPanel;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -13,6 +11,7 @@ import cw.boardingschoolmanagement.gui.component.CWComboBox;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWIntegerTextField;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWTextField;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.roommanagementmodul.persistence.Bereich;
@@ -22,10 +21,10 @@ import cw.roommanagementmodul.persistence.Zimmer;
  *
  * @author Dominik
  */
-public class EditZimmerView extends CWView
+public class EditZimmerView
+	extends CWView<EditZimmerPresentationModel>
 {
 
-    private EditZimmerPresentationModel model;
     private CWLabel lZimmerName;
     private CWLabel lBettenAnzahl;
     private CWLabel lBereich;
@@ -37,49 +36,46 @@ public class EditZimmerView extends CWView
     private CWButton bSave;
     private CWButton bCancel;
     private CWButton bSaveCancel;
-    private CWComponentFactory.CWComponentContainer componentContainer;
 
     public EditZimmerView(EditZimmerPresentationModel model) {
-        this.model = model;
-
-        initComponents();
-        buildView();
-        initEventHandling();
+        super(model);
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
+    	
         lZimmerName = CWComponentFactory.createLabel("Zimmer Name: ");
         lBettenAnzahl = CWComponentFactory.createLabel("Betten Anzahl: ");
         lBereich = CWComponentFactory.createLabel("Bereich: ");
 
         //tfZimmerName = new JTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_NAME));
         //tfBettenAnzahl = new JTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN));
-        tfZimmerName = CWComponentFactory.createTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_NAME), false);
+        tfZimmerName = CWComponentFactory.createTextField(getModel().getBufferedModel(Zimmer.PROPERTYNAME_NAME), false);
 //        tfBettenAnzahl = CWComponentFactory.createTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN), false);
 //        tfBettenAnzahl.setDocument(model.getDigitDocument());
-          tfBettenAnzahl = CWComponentFactory.createIntegerTextField(model.getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN));
+          tfBettenAnzahl = CWComponentFactory.createIntegerTextField(getModel().getBufferedModel(Zimmer.PROPERTYNAME_ANZBETTEN));
 
 
-        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(getModel().getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(getModel().getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(getModel().getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schliessen");
 
 
-        cbBereich = CWComponentFactory.createComboBox(model.getBereichList());
+        cbBereich = CWComponentFactory.createComboBox(getModel().getBereichList());
         //cbBereich = new JComboBox(model.createParentBereichComboModel(model.getBereichList()));
 
-        if (model.getZimmer().getBereich() == null) {
-            List<Bereich> leafList=model.getBereichManager().getBereichLeaf();
+        if (getModel().getZimmer().getBereich() == null) {
+            List<Bereich> leafList=getModel().getBereichManager().getBereichLeaf(getModel().getEntityManager());
             cbBereich.setSelectedItem(leafList.get(0));
-            model.getUnsaved().setValue(false);
+            getModel().getUnsaved().setValue(false);
         }
 
-        componentContainer= CWComponentFactory.createComponentContainer()
+        getComponentContainer()
                 .addComponent(bSave)
                 .addComponent(bCancel)
                 .addComponent(bSaveCancel)
@@ -91,18 +87,17 @@ public class EditZimmerView extends CWView
                 .addComponent(tfBettenAnzahl);
     }
 
-    private void initEventHandling() {
-    }
-
-    private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+    public void buildView() {
+    	super.buildView();
+    	
+        this.setHeaderInfo(getModel().getHeaderInfo());
         CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
-        JPanel contentPanel = this.getContentPanel();
+        CWPanel contentPanel = CWComponentFactory.createPanel();
 
         /**
          * Boxes
@@ -123,11 +118,13 @@ public class EditZimmerView extends CWView
         contentPanel.add(cbBereich, cc.xy(3, 7));
 
 //        builder.addSeparator(lBemerkung.getText(), cc.xyw(1, 29, 7));
+        
+        addToContentPanel(contentPanel);
     }
 
     @Override
     public void dispose(){
-        componentContainer.dispose();
-        model.dispose();
+        
+    	super.dispose();
     }
 }

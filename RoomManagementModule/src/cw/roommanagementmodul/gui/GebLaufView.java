@@ -6,7 +6,6 @@ import java.awt.event.ItemListener;
 import java.text.NumberFormat;
 
 import javax.swing.ButtonGroup;
-import javax.swing.JPanel;
 
 import com.jgoodies.forms.builder.PanelBuilder;
 import com.jgoodies.forms.layout.CellConstraints;
@@ -18,6 +17,7 @@ import cw.boardingschoolmanagement.gui.component.CWComboBox;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWIntegerTextField;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWRadioButton;
 import cw.boardingschoolmanagement.gui.component.CWView;
 
@@ -25,9 +25,10 @@ import cw.boardingschoolmanagement.gui.component.CWView;
  *
  * @author Dominik
  */
-public class GebLaufView extends CWView implements ItemListener{
+public class GebLaufView
+	extends CWView<GebLaufPresentationModel>
+	implements ItemListener {
 
-    private GebLaufPresentationModel model;
     private CWLabel lLaufart;
     private CWLabel lBetiebsart;
     private CWLabel lAbrMonat;
@@ -44,23 +45,21 @@ public class GebLaufView extends CWView implements ItemListener{
     private CWComboBox gebLaufComboBox;
     private ButtonGroup laufartGroup;
     private ButtonGroup betriebsartGroup;
-    private CWComponentFactory.CWComponentContainer componentContainer;
 
     public GebLaufView(GebLaufPresentationModel model) {
-        this.model = model;
-        initComponents();
-        buildView();
+        super(model);
     }
 
     public void initComponents() {
+    	super.initComponents();
 
-        startButton = CWComponentFactory.createButton(model.getStart());
+        startButton = CWComponentFactory.createButton(getModel().getStart());
         startButton.setText("Start");
 
-        rNormal = CWComponentFactory.createRadioButton(model.getNormalLauf());
+        rNormal = CWComponentFactory.createRadioButton(getModel().getNormalLauf());
         rNormal.setText("Normal");
         rNormal.setSelected(true);
-        rStorno = CWComponentFactory.createRadioButton(model.getStornoLauf());
+        rStorno = CWComponentFactory.createRadioButton(getModel().getStornoLauf());
         rStorno.setText("Storno");
         laufartGroup = new ButtonGroup();
 
@@ -74,9 +73,9 @@ public class GebLaufView extends CWView implements ItemListener{
         laufartGroup.add(rStorno);
 
         // Test und Echtlauf vertauscht
-        rTestlauf = CWComponentFactory.createRadioButton(model.getTestLauf());
+        rTestlauf = CWComponentFactory.createRadioButton(getModel().getTestLauf());
         rTestlauf.setText("Testlauf");
-        rEchtlauf = CWComponentFactory.createRadioButton(model.getEchtLauf());
+        rEchtlauf = CWComponentFactory.createRadioButton(getModel().getEchtLauf());
         rEchtlauf.setText("Echtlauf");
         betriebsartGroup = new ButtonGroup();
         betriebsartGroup.add(rTestlauf);
@@ -88,14 +87,14 @@ public class GebLaufView extends CWView implements ItemListener{
         format.setGroupingUsed(false);
         format.setMaximumIntegerDigits(4);
 
-        jahrField = CWComponentFactory.createIntegerTextField(model.getYearFocus(),4);
+        jahrField = CWComponentFactory.createIntegerTextField(getModel().getYearFocus(),4);
 
 //        GregorianCalendar gc = new GregorianCalendar();
 //        jahrField.setText("" + gc.get(Calendar.YEAR));
 
 
-        monatComboBox = CWComponentFactory.createComboBox(model.getMonatCbModel());
-        gebLaufComboBox = CWComponentFactory.createComboBox(model.getGebLaufList());
+        monatComboBox = CWComponentFactory.createComboBox(getModel().getMonatCbModel());
+        gebLaufComboBox = CWComponentFactory.createComboBox(getModel().getGebLaufList());
 
         rNormal.addItemListener(this);
         rStorno.addItemListener(this);
@@ -103,17 +102,32 @@ public class GebLaufView extends CWView implements ItemListener{
         lGebLauf.setEnabled(false);
         gebLaufComboBox.setEnabled(false);
 
-        componentContainer = CWComponentFactory.createComponentContainer().addComponent(lLaufart).addComponent(lBetiebsart).addComponent(lAbrMonat).addComponent(lGebLauf).addComponent(lMonat).addComponent(lJahr).addComponent(rNormal).addComponent(rStorno).addComponent(startButton).addComponent(rTestlauf).addComponent(rEchtlauf).addComponent(jahrField).addComponent(gebLaufComboBox).addComponent(monatComboBox);
+        getComponentContainer()
+        	.addComponent(lLaufart)
+        	.addComponent(lBetiebsart)
+        	.addComponent(lAbrMonat)
+        	.addComponent(lGebLauf)
+        	.addComponent(lMonat)
+        	.addComponent(lJahr)
+        	.addComponent(rNormal)
+        	.addComponent(rStorno)
+        	.addComponent(startButton)
+        	.addComponent(rTestlauf)
+        	.addComponent(rEchtlauf)
+        	.addComponent(jahrField)
+        	.addComponent(gebLaufComboBox)
+        	.addComponent(monatComboBox);
     }
 
-    private void buildView() {
+    public void buildView() {
+    	super.buildView();
 
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
         CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(startButton);
 
-        JPanel contentPanel = this.getContentPanel();
+        CWPanel contentPanel = CWComponentFactory.createPanel();
 
         /**
          * Boxes
@@ -147,6 +161,7 @@ public class GebLaufView extends CWView implements ItemListener{
         builder.add(lGebLauf, cc.xy(2, 15));
         builder.add(gebLaufComboBox, cc.xy(4, 15));
 
+        addToContentPanel(contentPanel);
     }
 
     public void itemStateChanged(ItemEvent e) {
@@ -156,7 +171,7 @@ public class GebLaufView extends CWView implements ItemListener{
             //Unbedingt Ueberarbeiten:
             //Je nachdem ob Storno aktiviert oder deaktiviert ist sollen die
             //dazu gehoerigen Komponenten enabled oder disabled werden
-            if ((model.getStornoInt() + 1) % 2 == 0) {
+            if ((getModel().getStornoInt() + 1) % 2 == 0) {
                 lMonat.setEnabled(false);
                 monatComboBox.setEnabled(false);
                 lJahr.setEnabled(false);
@@ -173,17 +188,14 @@ public class GebLaufView extends CWView implements ItemListener{
                 lGebLauf.setEnabled(false);
                 gebLaufComboBox.setEnabled(false);
             }
-
-
         }
-
     }
 
     @Override
     public void dispose() {
         rNormal.removeItemListener(this);
         rStorno.removeItemListener(this);
-        componentContainer.dispose();
-        model.dispose();
+        
+        super.dispose();
     }
 }

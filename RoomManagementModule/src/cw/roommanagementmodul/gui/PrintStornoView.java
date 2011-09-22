@@ -10,40 +10,38 @@ import cw.boardingschoolmanagement.gui.component.CWView;
  *
  * @author Dominik
  */
-public class PrintStornoView extends CWView {
+public class PrintStornoView
+	extends CWView<PrintStornoPresentationModel>
+{
 
-    private PrintStornoPresentationModel model;
     private CWButton bBack;
     private JRViewer viewer;
-    private CWComponentFactory.CWComponentContainer componentContainer;
 
     public PrintStornoView(PrintStornoPresentationModel model) {
-        this.model = model;
-        initComponents();
-        buildView();
-        initEventHandling();
+        super(model);
     }
 
-    private void initComponents() {
-        bBack = CWComponentFactory.createButton(model.getBackAction());
+    public void initComponents() {
+    	super.initComponents();
+    	
+        bBack = CWComponentFactory.createButton(getModel().getBackAction());
         bBack.setText("Zurueck");
-        viewer = new JRViewer(model.getJasperPrint());
+        viewer = new JRViewer(getModel().getJasperPrint());
 
-        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bBack);
+        getComponentContainer()
+        	.addComponent(bBack);
     }
 
-    private void initEventHandling() {
-    }
+    public void buildView() {
+    	super.buildView();
 
-    private void buildView() {
-
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
         this.getButtonPanel().add(bBack);
-        this.getContentPanel().add(viewer);
+        addToContentPanel(viewer);
     }
 
     public void dispose() {
-        componentContainer.dispose();
-        model.dispose();
+        
+    	super.dispose();
     }
 }

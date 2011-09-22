@@ -1,8 +1,6 @@
 
 package cw.roommanagementmodul.gui;
 
-import java.awt.BorderLayout;
-
 import javax.swing.JScrollPane;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
@@ -17,76 +15,77 @@ import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
  *
  * @author Dominik
  */
-public class ZimmerView extends CWView{
+public class ZimmerView
+	extends CWView<ZimmerPresentationModel>
+{
 
-    private ZimmerPresentationModel model;
     private CWButton bNew;
     private CWButton bEdit;
     private CWButton bDelete;
     private CWButton bBack;
     private CWButton bPrint;
     private CWTable tZimmer;
-    private CWComponentFactory.CWComponentContainer componentContainer;
 
-    public ZimmerView(ZimmerPresentationModel m) {
-        this.model = m;
-        initComponents();
-        buildView();
-        initEventHandling();
+    public ZimmerView(ZimmerPresentationModel model) {
+        super(model);
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
 
-        bNew = CWComponentFactory.createButton(model.getNewAction());
+        bNew = CWComponentFactory.createButton(getModel().getNewAction());
         bNew.setText("Neu");
-        bEdit = CWComponentFactory.createButton(model.getEditAction());
+        bEdit = CWComponentFactory.createButton(getModel().getEditAction());
         bEdit.setText("Bearbeiten");
-        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
+        bDelete = CWComponentFactory.createButton(getModel().getDeleteAction());
         bDelete.setText("Loeschen");
 
-        bBack = CWComponentFactory.createButton(model.getBackAction());
+        bBack = CWComponentFactory.createButton(getModel().getBackAction());
         bBack.setText("Zurueck");
-        bPrint = CWComponentFactory.createButton(model.getPrintAction());
+        bPrint = CWComponentFactory.createButton(getModel().getPrintAction());
         bPrint.setText("Drucken");
 
 
         String zimmerTableStateName = "cw.roommanagementmodul.ZimmerView.zimmerTableState";
-        tZimmer = CWComponentFactory.createTable(model.createZimmerTableModel(model.getZimmerSelection()), "keine Zimmer vorhanden", zimmerTableStateName);
+        tZimmer = CWComponentFactory.createTable(getModel().createZimmerTableModel(getModel().getZimmerSelection()), "keine Zimmer vorhanden", zimmerTableStateName);
 
 
         tZimmer.setSelectionModel(new SingleListSelectionAdapter(new CWTableSelectionConverter(
-                model.getZimmerSelection().getSelectionIndexHolder(),
+        		getModel().getZimmerSelection().getSelectionIndexHolder(),
                 tZimmer)));
 
-        componentContainer= CWComponentFactory.createComponentContainer();
-        componentContainer.addComponent(bNew)
+        getComponentContainer()
+        		.addComponent(bNew)
                 .addComponent(bEdit)
                 .addComponent(bDelete)
                 .addComponent(bBack)
                 .addComponent(bPrint)
                 .addComponent(tZimmer);
+        
+        initEventHandling();
     }
 
     private void initEventHandling() {
-        tZimmer.addMouseListener(model.getDoubleClickHandler());
+        tZimmer.addMouseListener(getModel().getDoubleClickHandler());
     }
 
-    private void buildView() {
+    public void buildView() {
+    	super.buildView();
 
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
         this.getButtonPanel().add(bNew);
         this.getButtonPanel().add(bEdit);
         this.getButtonPanel().add(bDelete);
         this.getButtonPanel().add(bPrint);
         this.getButtonPanel().add(bBack);
         
-        this.getContentPanel().add(new JScrollPane(tZimmer), BorderLayout.CENTER);
+        addToContentPanel(new JScrollPane(tZimmer));
     }
 
     @Override
     public void dispose() {
-        tZimmer.removeMouseListener(model.getDoubleClickHandler());
-        componentContainer.dispose();
-        model.dispose();
+        tZimmer.removeMouseListener(getModel().getDoubleClickHandler());
+        
+        super.dispose();
     }
 }

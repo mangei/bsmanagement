@@ -16,55 +16,62 @@ import cw.boardingschoolmanagement.gui.helper.CWTableSelectionConverter;
  *
  * @author Dominik
  */
-public class GebuehrenView extends CWView {
+public class GebuehrenView
+	extends CWView<GebuehrenPresentationModel>
+{
 
-    private GebuehrenPresentationModel model;
     private CWButton bNew;
     private CWButton bEdit;
     private CWButton bDelete;
     private CWButton bKategorie;
     private CWButton bTarif;
     private CWTable tGebuehr;
-    private CWComponentFactory.CWComponentContainer componentContainer;
 
-    public GebuehrenView(GebuehrenPresentationModel m) {
-        this.model = m;
-        initComponents();
-        buildView();
-        initEventHandling();
-        
+    public GebuehrenView(GebuehrenPresentationModel model) {
+        super(model);
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
 
-        bNew = CWComponentFactory.createButton(model.getNewAction());
+        bNew = CWComponentFactory.createButton(getModel().getNewAction());
         bNew.setText("Neu");
-        bEdit = CWComponentFactory.createButton(model.getEditAction());
+        bEdit = CWComponentFactory.createButton(getModel().getEditAction());
         bEdit.setText("Bearbeiten");
-        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
+        bDelete = CWComponentFactory.createButton(getModel().getDeleteAction());
         bDelete.setText("Loeschen");
-        bKategorie = CWComponentFactory.createButton(model.getKategorieAction());
+        bKategorie = CWComponentFactory.createButton(getModel().getKategorieAction());
         bKategorie.setText("Kategorien");
-        bTarif = CWComponentFactory.createButton(model.getTarifAction());
+        bTarif = CWComponentFactory.createButton(getModel().getTarifAction());
         bTarif.setText("Tarif");
 
 
         String gebuehrenTableStateName = "cw.roommanagementmodul.GebuehrenView.gebuehrenTableState";
-        tGebuehr = CWComponentFactory.createTable(model.createGebuehrenTableModel(model.getGebuehrenSelection()), "keine Gebuehren vorhanden", gebuehrenTableStateName);
+        tGebuehr = CWComponentFactory.createTable(getModel().createGebuehrenTableModel(getModel().getGebuehrenSelection()), "keine Gebuehren vorhanden", gebuehrenTableStateName);
 
         tGebuehr.setSelectionModel(new SingleListSelectionAdapter(new CWTableSelectionConverter(
-                model.getGebuehrenSelection().getSelectionIndexHolder(),
+        		getModel().getGebuehrenSelection().getSelectionIndexHolder(),
                 tGebuehr)));
 
-        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bNew).addComponent(bEdit).addComponent(bDelete).addComponent(bKategorie).addComponent(bTarif).addComponent(tGebuehr);
+        getComponentContainer()
+        	.addComponent(bNew)
+        	.addComponent(bEdit)
+        	.addComponent(bDelete)
+        	.addComponent(bKategorie)
+        	.addComponent(bTarif)
+        	.addComponent(tGebuehr);
+        
+        initEventHandling();
     }
 
     private void initEventHandling() {
-        tGebuehr.addMouseListener(model.getDoubleClickHandler());
+        tGebuehr.addMouseListener(getModel().getDoubleClickHandler());
     }
 
-    private void buildView() {
-        this.setHeaderInfo(model.getHeaderInfo());
+    public void buildView() {
+    	super.buildView();
+    	
+        this.setHeaderInfo(getModel().getHeaderInfo());
 
         this.getButtonPanel().add(bTarif);
         this.getButtonPanel().add(bKategorie);
@@ -72,12 +79,12 @@ public class GebuehrenView extends CWView {
         this.getButtonPanel().add(bEdit);
         this.getButtonPanel().add(bDelete);
 
-        this.getContentPanel().add(new JScrollPane(tGebuehr), BorderLayout.CENTER);
+        addToContentPanel(new JScrollPane(tGebuehr));
     }
 
     @Override
     public void dispose() {
-        componentContainer.dispose();
-        model.dispose();
+        
+    	super.dispose();
     }
 }

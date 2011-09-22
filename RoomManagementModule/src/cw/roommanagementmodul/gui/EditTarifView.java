@@ -2,10 +2,6 @@ package cw.roommanagementmodul.gui;
 
 import java.util.Date;
 
-import javax.swing.JPanel;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-
 import com.jgoodies.forms.layout.CellConstraints;
 import com.jgoodies.forms.layout.FormLayout;
 
@@ -14,6 +10,7 @@ import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWCurrencyTextField;
 import cw.boardingschoolmanagement.gui.component.CWLabel;
+import cw.boardingschoolmanagement.gui.component.CWPanel;
 import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.roommanagementmodul.persistence.Tarif;
 
@@ -21,11 +18,11 @@ import cw.roommanagementmodul.persistence.Tarif;
  *
  * @author Dominik
  */
-public class EditTarifView extends CWView
+public class EditTarifView
+	extends CWView<EditTarifPresentationModel>
 {
 
-    private EditTarifPresentationModel model;
-    private CWButton bSave;
+	private CWButton bSave;
     private CWButton bCancel;
     private CWButton bSaveCancel;
     private CWLabel lAb;
@@ -33,70 +30,68 @@ public class EditTarifView extends CWView
     private CWLabel lTarif;
     private CWCurrencyTextField tfTarif;
 
-    private CWComponentFactory.CWComponentContainer componentContainer;
-
     public EditTarifView(EditTarifPresentationModel model) {
-        this.model = model;
-
-        initComponents();
-        buildView();
-        initEventHandling();
+    	super(model);
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
 
-        bSave = CWComponentFactory.createButton(model.getSaveButtonAction());
+        bSave = CWComponentFactory.createButton(getModel().getSaveButtonAction());
         bSave.setText("Speichern");
 
-        bCancel = CWComponentFactory.createButton(model.getCancelButtonAction());
+        bCancel = CWComponentFactory.createButton(getModel().getCancelButtonAction());
         bCancel.setText("Abbrechen");
 
-        bSaveCancel = CWComponentFactory.createButton(model.getSaveCancelButtonAction());
+        bSaveCancel = CWComponentFactory.createButton(getModel().getSaveCancelButtonAction());
         bSaveCancel.setText("Speichern u. Schliessen");
 
         lAb = CWComponentFactory.createLabel("Von: ");
         lBis = CWComponentFactory.createLabel("Bis: ");
         lTarif = CWComponentFactory.createLabel("Tarif: ");
 
-        tfTarif = CWComponentFactory.createCurrencyTextField(model.getBufferedModel(Tarif.PROPERTYNAME_TARIF));
+        tfTarif = CWComponentFactory.createCurrencyTextField(getModel().getBufferedModel(Tarif.PROPERTYNAME_TARIF));
 
-        if (model.getTarif().getId()==null) {
-            Date vonDate = model.getVonDate();
+        // TODO move datechooser to view
+        if (getModel().getTarif().getId()==null) {
+            Date vonDate = getModel().getVonDate();
             if (vonDate != null) {
-                model.getDcVon().setDate(vonDate);
-                model.getUnsaved().setValue(false);
+            	getModel().getDcVon().setDate(vonDate);
+                getModel().getUnsaved().setValue(false);
             }
         }
-        if(model.getTarif().getId()!=null){
-            model.setOldVon(model.getDcVon().getDate());
-            model.setOldBis(model.getDcBis().getDate());
+        if(getModel().getTarif().getId()!=null){
+        	getModel().setOldVon(getModel().getDcVon().getDate());
+        	getModel().setOldBis(getModel().getDcBis().getDate());
 
         }
-        componentContainer = CWComponentFactory.createComponentContainer()
+       
+        getComponentContainer()
                 .addComponent(lAb)
                 .addComponent(lBis)
                 .addComponent(lTarif)
                 .addComponent(bSave)
                 .addComponent(bCancel)
                 .addComponent(bSaveCancel)
-                .addComponent(model.getDcBis())
-                .addComponent(model.getDcVon())
+                .addComponent(getModel().getDcBis())
+                .addComponent(getModel().getDcVon())
                 .addComponent(tfTarif);
 
 
 
     }
 
-    private void buildView() {
+    public void buildView() {
+    	super.buildView();
         
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
         CWButtonPanel buttonPanel = this.getButtonPanel();
 
         buttonPanel.add(bSave);
         buttonPanel.add(bSaveCancel);
         buttonPanel.add(bCancel);
 
-        JPanel contentPanel = this.getContentPanel();
+        CWPanel contentPanel = CWComponentFactory.createPanel();
 
         /**
          * Boxes
@@ -111,36 +106,16 @@ public class EditTarifView extends CWView
         contentPanel.add(lBis, cc.xy(1, 5));
         contentPanel.add(lTarif, cc.xy(1, 7));
 
-        contentPanel.add(model.getDcVon(), cc.xy(3, 3));
-        contentPanel.add(model.getDcBis(), cc.xy(3, 5));
+        contentPanel.add(getModel().getDcVon(), cc.xy(3, 3));
+        contentPanel.add(getModel().getDcBis(), cc.xy(3, 5));
         contentPanel.add(tfTarif, cc.xy(3, 7));
-    }
-
-    private void initEventHandling() {
         
+        addToContentPanel(contentPanel);
     }
 
     @Override
     public void dispose() {
-        componentContainer.dispose();
-        model.dispose();
-    }
-
-    public class UpdateDocument implements DocumentListener {
-
-        public void insertUpdate(DocumentEvent e) {
-//            try {
-//                tfTarif.commitEdit();
-//            } catch (ParseException ex) {
-//                Logger.getLogger(EditTarifView.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-
-        }
-
-        public void removeUpdate(DocumentEvent e) {
-        }
-
-        public void changedUpdate(DocumentEvent e) {
-        }
+        
+    	super.dispose();
     }
 }

@@ -1,7 +1,5 @@
 package cw.roommanagementmodul.gui;
 
-import java.awt.BorderLayout;
-
 import cw.boardingschoolmanagement.gui.component.CWButton;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
 import cw.boardingschoolmanagement.gui.component.CWList;
@@ -11,58 +9,64 @@ import cw.boardingschoolmanagement.gui.component.CWView;
  *
  * @author Dominik
  */
-public class GebuehrenKategorieView extends CWView {
+public class GebuehrenKategorieView
+	extends CWView<GebuehrenKategoriePresentationModel>
+{
 
-    private GebuehrenKategoriePresentationModel model;
     private CWButton bNew;
     private CWButton bEdit;
     private CWButton bDelete;
     private CWButton bBack;
     private CWList lGebuehrenKat;
-    private CWComponentFactory.CWComponentContainer componentContainer;
 
-    public GebuehrenKategorieView(GebuehrenKategoriePresentationModel m) {
-        this.model = m;
-        initComponents();
-        buildView();
+    public GebuehrenKategorieView(GebuehrenKategoriePresentationModel model) {
+        super(model);
+    }
+
+    public void initComponents() {
+    	super.initComponents();
+    	
+        bNew = CWComponentFactory.createButton(getModel().getNewAction());
+        bNew.setText("Neu");
+        bEdit = CWComponentFactory.createButton(getModel().getEditAction());
+        bEdit.setText("Bearbeiten");
+        bDelete = CWComponentFactory.createButton(getModel().getDeleteAction());
+        bDelete.setText("Loeschen");
+        bBack = CWComponentFactory.createButton(getModel().getBackAction());
+        bBack.setText("Zurueck");
+
+        lGebuehrenKat = CWComponentFactory.createList(getModel().getGebuehrenKatSelection());
+
+        getComponentContainer()
+        	.addComponent(bNew)
+        	.addComponent(bEdit)
+        	.addComponent(bDelete)
+        	.addComponent(bBack)
+        	.addComponent(lGebuehrenKat);
+        
         initEventHandling();
     }
 
-    private void initComponents() {
-        bNew = CWComponentFactory.createButton(model.getNewAction());
-        bNew.setText("Neu");
-        bEdit = CWComponentFactory.createButton(model.getEditAction());
-        bEdit.setText("Bearbeiten");
-        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
-        bDelete.setText("Loeschen");
-        bBack = CWComponentFactory.createButton(model.getBackAction());
-        bBack.setText("Zurueck");
-
-        lGebuehrenKat = CWComponentFactory.createList(model.getGebuehrenKatSelection());
-
-        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bNew).addComponent(bEdit).addComponent(bDelete).addComponent(bBack).addComponent(lGebuehrenKat);
-
-    }
-
     private void initEventHandling() {
-        lGebuehrenKat.addMouseListener(model.getDoubleClickHandler());
+        lGebuehrenKat.addMouseListener(getModel().getDoubleClickHandler());
     }
 
-    private void buildView() {
+    public void buildView() {
+    	super.buildView();
 
-        this.setHeaderInfo(model.getHeaderInfo());
+        this.setHeaderInfo(getModel().getHeaderInfo());
         this.getButtonPanel().add(bNew);
         this.getButtonPanel().add(bEdit);
         this.getButtonPanel().add(bDelete);
         this.getButtonPanel().add(bBack);
 
-        this.getContentPanel().add(lGebuehrenKat, BorderLayout.CENTER);
+        addToContentPanel(lGebuehrenKat);
     }
 
     @Override
     public void dispose() {
-        lGebuehrenKat.removeMouseListener(model.getDoubleClickHandler());
-        componentContainer.dispose();
-        model.dispose();
+        lGebuehrenKat.removeMouseListener(getModel().getDoubleClickHandler());
+        
+        super.dispose();
     }
 }

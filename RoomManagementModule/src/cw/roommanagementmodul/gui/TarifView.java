@@ -1,7 +1,5 @@
 package cw.roommanagementmodul.gui;
 
-import java.awt.BorderLayout;
-
 import javax.swing.JScrollPane;
 
 import com.jgoodies.binding.adapter.SingleListSelectionAdapter;
@@ -17,67 +15,72 @@ import cw.boardingschoolmanagement.gui.renderer.DateTimeDataFieldRenderer;
  *
  * @author Dominik
  */
-public class TarifView extends CWView {
+public class TarifView
+	extends CWView<TarifPresentationModel>
+{
 
-    private TarifPresentationModel model;
     private CWButton bNew;
     private CWButton bDelete;
     private CWButton bEdit;
     private CWButton bBack;
     private CWTable tTarif;
-    private CWComponentFactory.CWComponentContainer componentContainer;
 
-    public TarifView(TarifPresentationModel m) {
-        this.model = m;
-        initComponents();
-        buildView();
-        initEventHandling();
+    public TarifView(TarifPresentationModel model) {
+        super(model);
     }
 
-    private void initComponents() {
+    public void initComponents() {
+    	super.initComponents();
 
-
-        bNew = CWComponentFactory.createButton(model.getNewAction());
+        bNew = CWComponentFactory.createButton(getModel().getNewAction());
         bNew.setText("Neu");
-        bDelete = CWComponentFactory.createButton(model.getDeleteAction());
+        bDelete = CWComponentFactory.createButton(getModel().getDeleteAction());
         bDelete.setText("Loeschen");
-        bEdit = CWComponentFactory.createButton(model.getEditAction());
+        bEdit = CWComponentFactory.createButton(getModel().getEditAction());
         bEdit.setText("Bearbeiten");
-        bBack = CWComponentFactory.createButton(model.getBackAction());
+        bBack = CWComponentFactory.createButton(getModel().getBackAction());
         bBack.setText("Zurueck");
 
 
         String tarifTableStateName = "cw.roommanagementmodul.TarifView.tarifTableState";
-        tTarif = CWComponentFactory.createTable(model.createZuordnungTableModel(model.getTarifSelection()), "kein Tarif vorhanden", tarifTableStateName);
+        tTarif = CWComponentFactory.createTable(getModel().createZuordnungTableModel(getModel().getTarifSelection()), "kein Tarif vorhanden", tarifTableStateName);
 
         tTarif.setSelectionModel(new SingleListSelectionAdapter(new CWTableSelectionConverter(
-                model.getTarifSelection().getSelectionIndexHolder(),
+        		getModel().getTarifSelection().getSelectionIndexHolder(),
                 tTarif)));
 
         tTarif.getColumnModel().getColumn(0).setCellRenderer(new DateTimeDataFieldRenderer(true));
         tTarif.getColumnModel().getColumn(1).setCellRenderer(new DateTimeDataFieldRenderer(true));
 
-        componentContainer = CWComponentFactory.createComponentContainer().addComponent(bNew).addComponent(bDelete).addComponent(bEdit).addComponent(bBack).addComponent(tTarif);
+        getComponentContainer()
+        	.addComponent(bNew)
+        	.addComponent(bDelete)
+        	.addComponent(bEdit)
+        	.addComponent(bBack)
+        	.addComponent(tTarif);
+        
+        initEventHandling();
     }
 
     private void initEventHandling() {
-        tTarif.addMouseListener(model.getDoubleClickHandler());
+        tTarif.addMouseListener(getModel().getDoubleClickHandler());
     }
 
-    private void buildView() {
+    public void buildView() {
+    	super.buildView();
 
         this.getButtonPanel().add(bNew);
         this.getButtonPanel().add(bEdit);
         this.getButtonPanel().add(bDelete);
         this.getButtonPanel().add(bBack);
 
-        this.getContentPanel().add(new JScrollPane(tTarif), BorderLayout.CENTER);
+        addToContentPanel(new JScrollPane(tTarif));
     }
 
     @Override
     public void dispose() {
-        tTarif.removeMouseListener(model.getDoubleClickHandler());
-        componentContainer.dispose();
-        model.dispose();
+        tTarif.removeMouseListener(getModel().getDoubleClickHandler());
+        
+        super.dispose();
     }
 }
