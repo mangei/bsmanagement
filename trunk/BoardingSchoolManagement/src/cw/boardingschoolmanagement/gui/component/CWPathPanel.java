@@ -64,7 +64,7 @@ public class CWPathPanel extends JPanel {
                 setPosition(PathPanelPosition.SOUTH);
             }
         });
-        pop.add(new AbstractAction("Pfadanzeige schließen") {
+        pop.add(new AbstractAction("Pfadanzeige schliessen") {
             public void actionPerformed(ActionEvent e) {
                 CWPathPanel.this.setVisible(false);
             }

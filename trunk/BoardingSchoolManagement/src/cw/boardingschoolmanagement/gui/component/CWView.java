@@ -235,7 +235,10 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
      */
     public void initComponents() {
     	for(CWIViewExtentionPoint ex : viewExtentions) {
-    		ex.getView().initComponents();
+    		CWView view = ex.getView();
+    		if(view != null) {
+    			view.initComponents();
+    		}
     	}
     }
     
@@ -245,11 +248,21 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
      */
     public void buildView() {
     	for(CWIViewExtentionPoint ex : viewExtentions) {
-    		ex.getView().buildView();
+    		CWView view = ex.getView();
+    		if(view != null) {
+    			view.buildView();
+    		}
     	}
     }
 
     public void dispose() {
+    	for(CWIViewExtentionPoint ex : viewExtentions) {
+    		CWView view = ex.getView();
+    		if(view != null) {
+    			view.dispose();
+    		}
+    	}
+    	
         disposeButtonPanelEventHandling();
         if(headerInfoPanel != null) {
         	headerInfoPanel.dispose();
@@ -280,6 +293,10 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
 
     public TPresentationModel getModel() {
 		return model;
+	}
+    
+    public List<CWIViewExtentionPoint> getViewExtentions() {
+		return viewExtentions;
 	}
 
     private CWButton bMore;
@@ -770,7 +787,7 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
         public void paint(Graphics g, JComponent c) {
             Rectangle rect = new Rectangle(0, 0, c.getWidth(), c.getHeight());
 
-            // Weißer Heller Verlauf
+            // Weisser Heller Verlauf
             JideSwingUtilities.fillGradient((Graphics2D) g, rect, Color.WHITE, lightGrayColor, true);
 //            JideSwingUtilities.fillGradient((Graphics2D) g, rect, new Color(234, 237, 241), new Color(255, 255, 255), true);
 
@@ -791,7 +808,7 @@ public class CWView<TPresentationModel extends CWIPresentationModel>
 //            g.setColor(new Color(201,208,218));
 //            g.fillRect(0, 0, getWidth(), getHeight());
 
-            // Weißer Heller Verlauf
+            // Weisser Heller Verlauf
 //            JideSwingUtilities.fillGradient((Graphics2D) g, rect, new Color(201, 208, 218), new Color(168, 177, 189), false);
 
 //            g.setColor(new Color(178, 187, 200));

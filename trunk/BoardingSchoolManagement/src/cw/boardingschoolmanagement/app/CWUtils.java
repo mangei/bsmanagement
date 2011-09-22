@@ -133,6 +133,8 @@ public class CWUtils {
 	        d.setTitle(view.getHeaderInfo().getHeaderText());
 	        d.setIconImage(((ImageIcon)view.getHeaderInfo().getSmallIcon()).getImage());
         }
+        view.initComponents();
+        view.buildView();
         d.add(view);
         d.pack();
         CWUtils.centerWindow(d, GUIManager.getInstance().getMainFrame());

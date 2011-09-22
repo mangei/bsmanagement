@@ -3,22 +3,24 @@ package cw.boardingschoolmanagement.gui;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.HashMap;
-import java.util.List;
 
 import com.jgoodies.binding.list.SelectionInList;
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import com.jgoodies.validation.ValidationResult;
 
 import cw.boardingschoolmanagement.app.CWUtils;
 import cw.boardingschoolmanagement.gui.component.CWPathPanel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
+import cw.boardingschoolmanagement.manager.GUIManager;
+import cw.boardingschoolmanagement.manager.PropertiesManager;
 
 /**
  *
  * @author ManuelG
  */
 public class GeneralConfigurationPresentationModel
-	extends CWPresentationModel
+	extends CWEditPresentationModel
 {
 
     private ConfigurationPresentationModel configurationPresentationModel;
@@ -29,7 +31,7 @@ public class GeneralConfigurationPresentationModel
     private SaveListener saveListener;
 
     public GeneralConfigurationPresentationModel(HashMap generalConfigruationMap, ConfigurationPresentationModel configurationPresentationModel) {
-        super(null);
+        super(null, null);
     	this.configurationPresentationModel = configurationPresentationModel;
         this.generalConfigruationMap = generalConfigruationMap;
         initModels();
@@ -91,8 +93,19 @@ public class GeneralConfigurationPresentationModel
         return headerInfo;
     }
 
-    public List<String> validate() {
-        return null;
+    public ValidationResult validate() {
+        return ValidationResult.EMPTY;
+    }
+    
+    @Override
+    public void save() {
+    	super.save();
+    	
+    	GUIManager.getInstance().getPathPanel().setPosition(getPathPanelPosition());
+        GUIManager.getInstance().setPathPanelVisible((Boolean)getPathPanelActiveModel().getValue());
+
+        PropertiesManager.setProperty("configuration.general.pathPanelActive", getPathPanelActiveModel().getValue().toString());
+        PropertiesManager.setProperty("configuration.general.pathPanelPosition", getPathPanelPosition().name());
     }
 
     public ValueModel getPathPanelActiveModel() {

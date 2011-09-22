@@ -72,8 +72,6 @@ public class GeneralConfigurationView
         builder.add(cbPathPosition, cc.xy(3, 5));
         
         this.addToContentPanel(builder.getPanel());
-        
-        addToContentPanel(this);
     }
 
     @Override

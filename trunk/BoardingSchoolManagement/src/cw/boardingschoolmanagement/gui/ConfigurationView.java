@@ -13,6 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.extention.point.CWIViewExtentionPoint;
 import cw.boardingschoolmanagement.extention.point.IConfigurationExtentionPoint;
 import cw.boardingschoolmanagement.gui.component.CWButtonPanel;
 import cw.boardingschoolmanagement.gui.component.CWComponentFactory;
@@ -75,10 +76,15 @@ public class ConfigurationView
         final CardLayout cardLayout = new CardLayout();
         final JPanel cardPanel = CWComponentFactory.createPanel(cardLayout);
 
-        List<IConfigurationExtentionPoint> extentions = getModel().getExtentions();
+        List<CWIViewExtentionPoint> extentions = getViewExtentions();
         for(int i=0, l=extentions.size(); i<l; i++) {
+        	
+        	if(!(extentions.get(i) instanceof IConfigurationExtentionPoint)) {
+        		continue;
+        	}
+        	
             // Get the component
-            IConfigurationExtentionPoint ex = extentions.get(i);
+            IConfigurationExtentionPoint ex = (IConfigurationExtentionPoint) extentions.get(i);
 
             // Create the button
             JButton button = new JButton(ex.getButtonName());
@@ -124,8 +130,6 @@ public class ConfigurationView
         masterPanel.add(cardPanel, BorderLayout.CENTER);
 
         this.addToContentPanel(masterPanel);
-        
-        addToContentPanel(this, true);
     }
 
     @Override

@@ -79,23 +79,23 @@ public class ModuleManager {
                     jarFile = new JarFile(modulDirFile.toString());
 
                     // Read Modul-Name
-                    modulName = jarFile.getManifest().getMainAttributes().getValue("Modul-Name");
+                    modulName = jarFile.getManifest().getMainAttributes().getValue("Module-Name");
                     if(modulName == null) {
-                        throw new ManifestException("Attribute 'Modul-Name' in Manifest of " + modulDirFile + " is missing.");
+                        throw new ManifestException("Attribute 'Module-Name' in Manifest of " + modulDirFile + " is missing.");
                     }
                     modulName = modulName.trim();
 
-                    System.out.println("Modul: " + modulName);
+                    System.out.println("Module: " + modulName);
 
                     // Read Modul-Dependencies
-                    modulDependencies = jarFile.getManifest().getMainAttributes().getValue("Modul-Dependencies");
+                    modulDependencies = jarFile.getManifest().getMainAttributes().getValue("Module-Dependencies");
 
                     // Create new ModulWithDependecies
                     modulWithDependencies = new ModulWithDependencies(modulName, modulDirFile);
 
                     // Wenn das Attribut fehlt
                     if (modulDependencies != null) {
-                        System.out.println("Modul '" + modulDirFile.getName() + " requires: " + modulDependencies);
+                        System.out.println("Module '" + modulDirFile.getName() + " requires: " + modulDependencies);
 
                         // Split the dependencies
                         String[] dependenciesArgs = modulDependencies.split(",");
@@ -106,7 +106,7 @@ public class ModuleManager {
                         }
 
                     } else {
-                        System.out.println("Modul '" + modulDirFile.getName() + " requires nothing");
+                        System.out.println("Module '" + modulDirFile.getName() + " requires nothing");
                     }
 
                     modulesList.add(modulWithDependencies);
@@ -180,6 +180,7 @@ public class ModuleManager {
      * Initializes all modules and calls the init-method
      */
     public static void initModules() {
+    	
         ServiceLoader<Module> modules = ServiceLoader.load(Module.class);
         for (Module m : modules) {
             m.init();

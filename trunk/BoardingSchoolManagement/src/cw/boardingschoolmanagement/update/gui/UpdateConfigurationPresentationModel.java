@@ -27,7 +27,7 @@ import org.jdom.input.SAXBuilder;
 import com.jgoodies.binding.list.SelectionInList;
 
 import cw.boardingschoolmanagement.app.CWUtils;
-import cw.boardingschoolmanagement.gui.CWPresentationModel;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.gui.model.CWDataModel;
@@ -38,7 +38,7 @@ import cw.boardingschoolmanagement.update.pojo.UpdateInformation;
  * @author ManuelG
  */
 public class UpdateConfigurationPresentationModel
-	extends CWPresentationModel
+	extends CWEditPresentationModel
 {
 
     private ConfigurationPresentationModel configurationPresentationModel;
@@ -48,10 +48,9 @@ public class UpdateConfigurationPresentationModel
     private CWDataModel<UpdateInformation> updateDataModel;
 
     public UpdateConfigurationPresentationModel(ConfigurationPresentationModel configurationPresentationModel) {
-    	super(null);
+    	super(null, null);
     	this.configurationPresentationModel = configurationPresentationModel;
         initModels();
-        initEventHandling();
     }
 
     private void initModels() {
@@ -68,14 +67,7 @@ public class UpdateConfigurationPresentationModel
         updateDataModel = new CWDataModel<UpdateInformation>(null, UpdateInformation.class);
     }
 
-    private void initEventHandling() {
-    }
-
     public void release() {
-    }
-
-    public List<String> validate() {
-        return null;
     }
 
     public class SaveListener implements PropertyChangeListener {

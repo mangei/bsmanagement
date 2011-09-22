@@ -627,10 +627,10 @@ public class CWComponentFactory {
         }
 
         CWCheckBox checkBox = new CWCheckBox(text);
-
+        System.out.println("ABS: " + valueModel.getValue());
         boolean enabled = checkBox.getModel().isEnabled();
-        checkBox.setModel(new ToggleButtonAdapter(valueModel));
         checkBox.setEnabled(enabled);
+        checkBox.setModel(new ToggleButtonAdapter(valueModel));
 
         checkBox.setOpaque(false);
         return checkBox;

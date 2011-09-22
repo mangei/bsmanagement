@@ -70,7 +70,7 @@ public class BusinessDataConfigurationView
         PanelBuilder builder = new PanelBuilder(layout);
         builder.addLabel("Name:",           cc.xy(1, 1));
         builder.add(tfName,                 cc.xy(3, 1));
-        builder.addLabel("Straße:",         cc.xy(1, 3));
+        builder.addLabel("Strasse:",         cc.xy(1, 3));
         builder.add(tfStreet,               cc.xy(3, 3));
         builder.addLabel("PLZ:",            cc.xy(1, 5));
         builder.add(tfPostOfficeNumber,     cc.xy(3, 5));
@@ -88,8 +88,6 @@ public class BusinessDataConfigurationView
         builder.add(tfDvrNumber,            cc.xy(3, 17));
 
         this.addToContentPanel(builder.getPanel());
-        
-        addToContentPanel(this);
     }
 
     @Override

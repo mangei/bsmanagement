@@ -133,7 +133,7 @@ public class GUIManager {
         frame.setGlassPane(glassPane = new CWLoadingGlass(frame.getRootPane(), true));
 
         // Um den richtigen Mauszeiger anzuzeigen, da beim Look'n&Feel nach dem
-        // aendern der Groeße ein falscher Cursor angezeigt wird.
+        // aendern der Groesse ein falscher Cursor angezeigt wird.
         frame.addComponentListener(new ComponentAdapter() {
 
             @Override
