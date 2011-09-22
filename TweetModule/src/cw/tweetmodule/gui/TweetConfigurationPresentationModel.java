@@ -1,14 +1,18 @@
 package cw.tweetmodule.gui;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import com.jgoodies.binding.value.ValueHolder;
 import com.jgoodies.binding.value.ValueModel;
+import com.jgoodies.validation.ValidationResult;
+
 import cw.boardingschoolmanagement.app.CWUtils;
+import cw.boardingschoolmanagement.gui.CWEditPresentationModel;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
 import cw.boardingschoolmanagement.gui.component.CWView.CWHeaderInfo;
 import cw.boardingschoolmanagement.manager.PropertiesManager;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.util.List;
+import cw.tweetmodule.images.ImageDefinitionTweet;
 
 /**
  *
@@ -17,12 +21,14 @@ import java.util.List;
  *
  */
 public class TweetConfigurationPresentationModel
+	extends CWEditPresentationModel
 {
 
     private ConfigurationPresentationModel configurationPresentationModel;
     private CWHeaderInfo headerInfo;
     private SaveListener saveListener;
 
+    private ValueModel activeModel;
     private ValueModel usernameModel;
     private ValueModel passwordModel;
 
@@ -32,8 +38,8 @@ public class TweetConfigurationPresentationModel
      * @param businessData POJO
      * @param configurationPresentationModel
      */
-
     public TweetConfigurationPresentationModel(ConfigurationPresentationModel configurationPresentationModel) {
+    	super(null, null);
         this.configurationPresentationModel = configurationPresentationModel;
         
         initModels();
@@ -44,22 +50,25 @@ public class TweetConfigurationPresentationModel
         headerInfo = new CWHeaderInfo(
                 "Tweet",
                 "Aendern Sie hier ihre Verbindungsdaten.",
-                CWUtils.loadIcon("cw/tweetmodule/images/twitter11.png"),
-                CWUtils.loadIcon("cw/tweetmodule/images/twitter11.png")
+                CWUtils.loadIcon(ImageDefinitionTweet.TWITTER),
+                CWUtils.loadIcon(ImageDefinitionTweet.TWITTER)
         );
 
+        activeModel = new ValueHolder(Boolean.parseBoolean(PropertiesManager.getProperty("tweetmodule.active","false")));
         usernameModel = new ValueHolder(PropertiesManager.getProperty("tweetmodule.username",""));
         passwordModel = new ValueHolder(PropertiesManager.getProperty("tweetmodule.password",""));
     }
 
     private void initEventHandling() {
         saveListener = new SaveListener();
-        
+
+        activeModel.addValueChangeListener(saveListener);
         usernameModel.addValueChangeListener(saveListener);
         passwordModel.addValueChangeListener(saveListener);
     }
 
     public void dispose() {
+        activeModel.removeValueChangeListener(saveListener);
         usernameModel.removeValueChangeListener(saveListener);
         passwordModel.removeValueChangeListener(saveListener);
     }
@@ -79,13 +88,18 @@ public class TweetConfigurationPresentationModel
         return headerInfo;
     }
 
-    public List<String> validate() {
-        return null;
+    public ValidationResult validate() {
+    	ValidationResult validationResult = new ValidationResult();
+    	
+        return validationResult;
     }
 
     public void save() {
+    	super.save();
+    	PropertiesManager.setProperty("tweetmodule.active", (String) activeModel.getValue().toString());
         PropertiesManager.setProperty("tweetmodule.username", (String) usernameModel.getValue());
         PropertiesManager.setProperty("tweetmodule.password", (String) passwordModel.getValue());
+        PropertiesManager.saveProperties();
     }
 
     public ValueModel getPasswordModel() {
@@ -95,5 +109,9 @@ public class TweetConfigurationPresentationModel
     public ValueModel getUsernameModel() {
         return usernameModel;
     }
+    
+    public ValueModel getActiveModel() {
+		return activeModel;
+	}
 
 }

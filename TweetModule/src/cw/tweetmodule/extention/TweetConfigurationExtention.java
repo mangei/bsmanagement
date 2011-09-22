@@ -1,62 +1,29 @@
 package cw.tweetmodule.extention;
 
-import cw.boardingschoolmanagement.extention.point.ConfigurationExtentionPoint;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.Icon;
+
+import cw.boardingschoolmanagement.extention.point.IConfigurationExtentionPoint;
+import cw.boardingschoolmanagement.gui.CWIEditPresentationModel;
 import cw.boardingschoolmanagement.gui.ConfigurationPresentationModel;
-import cw.boardingschoolmanagement.gui.component.CWPanel;
+import cw.boardingschoolmanagement.gui.ConfigurationView;
+import cw.boardingschoolmanagement.gui.component.CWView;
 import cw.tweetmodule.gui.TweetConfigurationPresentationModel;
 import cw.tweetmodule.gui.TweetConfigurationView;
-import java.util.List;
-import javax.swing.Icon;
 
 /**
  *  
+ * Configuration extention for tweet module
  *
- *
- * @author ManuelG
+ * @author Manuel Geier
  */
-public class TweetConfigurationExtention implements ConfigurationExtentionPoint {
+public class TweetConfigurationExtention
+	implements IConfigurationExtentionPoint<ConfigurationView, ConfigurationPresentationModel>{
 
     private TweetConfigurationPresentationModel model;
     private TweetConfigurationView view;
-
-    /**
-     * Laed die Unternehmensdaten aus der Configdatei und speichert diese in
-     * das zustaendige POJO(BusinessData).
-     *
-     * @param configurationModel
-     */
-    public void initPresentationModel(ConfigurationPresentationModel configurationModel) {
-        model = new TweetConfigurationPresentationModel(configurationModel);
-        view = new TweetConfigurationView(model);
-    }
-
-    public CWPanel getView() {
-        return view;
-    }
-
-    public Object getModel() {
-        return model;
-    }
-
-    /**
-     *  Speichert die Unternehmensdaten des BusinessData-POJOs ind die Config-Datei
-     *
-     */
-    public void save() {
-        model.save();
-    }
-
-    public List<String> validate() {
-        return model.validate();
-    }
-
-    public void dispose() {
-        view.dispose();
-    }
-
-    public int priority() {
-        return 0;
-    }
 
     public String getButtonName() {
         return "Tweet";
@@ -65,5 +32,38 @@ public class TweetConfigurationExtention implements ConfigurationExtentionPoint 
     public Icon getButtonIcon() {
         return model.getHeaderInfo().getIcon();
     }
+
+	@Override
+	public CWIEditPresentationModel getModel() {
+		return model;
+	}
+
+	@Override
+	public Class<?> getExtentionClass() {
+		return null;
+	}
+
+	@Override
+	public void initView(ConfigurationView baseView) {
+		view = new TweetConfigurationView(model);
+	}
+
+	@Override
+	public CWView<?> getView() {
+		return view;
+	}
+
+	@Override
+	public List<Class<?>> getExtentionClassList() {
+		List<Class<?>> list = new ArrayList<Class<?>>();
+		list.add(ConfigurationView.class);
+		list.add(ConfigurationPresentationModel.class);
+		return list;
+	}
+
+	@Override
+	public void initPresentationModel(ConfigurationPresentationModel baseModel) {
+		model = new TweetConfigurationPresentationModel(baseModel);
+	}
 
 }
