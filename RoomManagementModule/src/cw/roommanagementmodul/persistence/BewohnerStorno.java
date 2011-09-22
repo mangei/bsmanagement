@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 
 import cw.accountmanagementmodul.pojo.AccountPosting;
+import cw.customermanagementmodul.customer.persistence.Customer;
 
 /**
  *
@@ -20,7 +21,7 @@ public class BewohnerStorno {
     public final static String PROPERTYNAME_POSTINGLIST		= "posting_list";
     
     private Long id;
-    private CustomerModel customer;
+    private Customer customer;
     private Zimmer zimmer;
     private List<AccountPosting> postingList;
 
@@ -50,14 +51,14 @@ public class BewohnerStorno {
     /**
      * @return the customer
      */
-    public CustomerModel getCustomer() {
+    public Customer getCustomer() {
         return customer;
     }
 
     /**
      * @param customer the customer to set
      */
-    public void setCustomer(CustomerModel customer) {
+    public void setCustomer(Customer customer) {
         this.customer = customer;
     }
 
